@@ -1,25 +1,21 @@
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using StudyBuddy.Model;
 using System;
-using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using System.Linq;
-using Microsoft.EntityFrameworkCore;
-using SimpleHashing.Net;
+using StudyBuddy.Persistence;
+using System.IdentityModel.Tokens.Jwt;
 
 namespace StudyBuddy.Services
 {
     public class LoginController : Controller
     {
-        private StudyBuddyContext context;
-        private ISimpleHash simpleHash = new SimpleHash();
+        private IRepository repository;
 
-        public LoginController(StudyBuddyContext context)
+        public LoginController(IRepository repository)
         {
-            this.context = context;
+            this.repository = repository;
         }
 
         [Route("/Login/")]
@@ -29,14 +25,11 @@ namespace StudyBuddy.Services
             if (string.IsNullOrEmpty(email) || string.IsNullOrEmpty(password))
                 return Json(new { Error = "Provide email and password!"});
 
-            var list = (from obj in context.Users 
-                where obj.Email.Equals(email) select obj).AsNoTracking().ToList();
-
-            foreach (var obj in list)
-                if (simpleHash.Verify(password, obj.PasswordHash))
-                    return Json(new { Token = generateJwtToken(obj) });
-            
-            return Json(new { Error = "No user found!"});
+            var user = repository.Users.FindByEmailAndPassword(email, password);
+            if (user == null)
+                return Json(new { Error = "No user found!"});
+            else
+                return Json(new { Token = generateJwtToken(user) });
         }
 
         private string generateJwtToken(User user)

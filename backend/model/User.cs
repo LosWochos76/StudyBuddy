@@ -11,5 +11,9 @@ namespace StudyBuddy.Model
         public string PasswordHash { get; set; }
         public string Email { get; set; }
         public Role Role { get; set; }
+
+        public bool IsAdmin { get { return Role == Role.Admin; } }
+        public bool IsStudent { get { return Role == Role.Student; } }
+        public bool IsInstructor { get { return Role == Role.Instructor; } }
     }
 }

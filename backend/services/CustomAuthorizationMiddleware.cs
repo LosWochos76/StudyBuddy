@@ -7,19 +7,22 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using StudyBuddy.Model;
+using StudyBuddy.Persistence;
 
 namespace StudyBuddy.Services
 {
     public class CustomAuthorizationMiddleware
     {
         private readonly RequestDelegate next;
+        private IRepository repository;
 
-        public CustomAuthorizationMiddleware(RequestDelegate next)
+        public CustomAuthorizationMiddleware(RequestDelegate next, IRepository repository)
         {
             this.next = next;
+            this.repository = repository;
         }
 
-        public async Task InvokeAsync(HttpContext context, StudyBuddyContext db)
+        public async Task InvokeAsync(HttpContext context)
         {
             if (!context.Request.Path.StartsWithSegments("/Login"))
             {
@@ -31,7 +34,7 @@ namespace StudyBuddy.Services
                     return;
                 }
 
-                var user = GetUserFromToken(db, token);
+                var user = GetUserFromToken(token);
                 if (user == null)
                 {
                     SendError(context, "User from JWT-token not found");
@@ -52,7 +55,7 @@ namespace StudyBuddy.Services
             context.Response.WriteAsync(json, Encoding.UTF8);
         }
 
-        private User GetUserFromToken(StudyBuddyContext db, string token)
+        private User GetUserFromToken(string token)
         {
             try
             {
@@ -70,7 +73,7 @@ namespace StudyBuddy.Services
 
                 var jwtToken = (JwtSecurityToken)validatedToken;
                 int user_id = int.Parse(jwtToken.Claims.First(x => x.Type == "id").Value);
-                var user = db.Users.Find(user_id);
+                var user = repository.Users.ById(user_id);
                 return user;
             }
             catch

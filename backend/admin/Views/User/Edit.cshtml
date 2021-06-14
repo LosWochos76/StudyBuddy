@@ -1,0 +1,13 @@
+@using StudyBuddy.Model
+@model User
+@{
+    ViewData["Title"] = "Edit User";
+}
+
+<h1>Edit User</h1>
+
+<form method="POST" asp-controller="User" asp-action="Save">
+    <div asp-validation-summary="ModelOnly"></div>
+
+    
+</form>
