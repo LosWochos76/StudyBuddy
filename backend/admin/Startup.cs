@@ -40,7 +40,7 @@ namespace StudyBuddy.Admin
             {
                 app.UseHsts();
             }
-            
+
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 

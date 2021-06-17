@@ -1,0 +1,49 @@
+version: "3"
+
+services:
+  postgres:
+    image: postgres:latest
+    environment:
+      - POSTGRES_PASSWORD=secret
+    volumes:
+      - studybuddy-data:/var/lib/postgresql/data/
+
+  admin:
+    image: stuckenholz/studybuddyadmin:latest
+    environment:
+      - POSTGRESQL_HOST=postgres
+      - POSTGRESQL_USER=postgres
+      - POSTGRESQL_DATABASE=postgres
+      - POSTGRESQL_PASSWORD=secret
+      - ASPNETCORE_URLS=https://+:443;http://+:80
+      - ASPNETCORE_HTTPS_PORT=443
+      - ASPNETCORE_Kestrel__Certificates__Default__Password=secret
+      - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/aspnetapp.pfx
+    ports:
+      - 80:80
+      - 443:443
+    volumes:
+      - type: bind
+        source: ~/.aspnet/https/aspnetapp.pfx
+        target: /https/aspnetapp.pfx
+
+  services:
+    image: stuckenholz/studybuddyservices:latest
+    environment:
+      - POSTGRESQL_HOST=postgres
+      - POSTGRESQL_USER=postgres
+      - POSTGRESQL_DATABASE=postgres
+      - POSTGRESQL_PASSWORD=secret
+      - ASPNETCORE_URLS=https://+:443
+      - ASPNETCORE_HTTPS_PORT=443
+      - ASPNETCORE_Kestrel__Certificates__Default__Password=secret
+      - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/aspnetapp.pfx
+    ports:
+      - 8080:443
+    volumes:
+      - type: bind
+        source: ~/.aspnet/https/aspnetapp.pfx
+        target: /https/aspnetapp.pfx
+
+volumes:
+  studybuddy-data:  

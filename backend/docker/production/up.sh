@@ -1,3 +1,3 @@
 #!/bin/sh
 
-docker compose -f ./docker/production/environment.yaml up -d
+docker compose -f ./docker/production/docker-compose.yml up -d

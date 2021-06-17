@@ -1,3 +1,3 @@
 #!/bin/sh
 
-docker-compose -f ./docker/production/environment.yaml down
+docker-compose -f ./docker/production/docker-compose.yml down
