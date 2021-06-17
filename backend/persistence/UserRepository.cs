@@ -18,8 +18,8 @@ namespace StudyBuddy.Persistence
 
         public User ById(int id)
         {
-            var user = context.Users.Find(id);
-            return user;
+            return (from obj in context.Users where obj.ID == id select obj)
+                .AsNoTracking().FirstOrDefault();
         }
 
         public IEnumerable<User> All()
@@ -37,6 +37,23 @@ namespace StudyBuddy.Persistence
                     return obj;
             
             return null;
+        }
+
+        public User FindByEmail(string email)
+        {
+            return (from obj in context.Users 
+                where obj.Email.Equals(email) select obj).AsNoTracking().FirstOrDefault();
+        }
+
+        public void Save(User obj)
+        {
+            if (obj.ID == 0) 
+                context.Add(obj);
+            else
+                context.Users.Attach(obj).State = EntityState.Modified;
+
+            context.SaveChanges();
+            context.Entry(obj).State = EntityState.Detached;
         }
     }
 }

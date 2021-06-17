@@ -8,5 +8,7 @@ namespace StudyBuddy.Persistence
         User ById(int id);
         IEnumerable<User> All();
         User FindByEmailAndPassword(string email, string password);
+        User FindByEmail(string email);
+        void Save(User obj);
     }
 }

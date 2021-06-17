@@ -1,4 +1,7 @@
 using Microsoft.EntityFrameworkCore;
+using SimpleHashing.Net;
+using StudyBuddy.Model;
+using System.Linq;
 
 namespace StudyBuddy.Persistence
 {
@@ -7,19 +10,46 @@ namespace StudyBuddy.Persistence
         private StudyBuddyContext context;
         
         public IUserRepository Users { get; private set; }
+        public IStudyProgramRepository StudyPrograms { get; private set; }
+        public ITeamRepository Teams { get; private set; }
 
         public Repository()
         {
-            var connection_string = string.Format("Host={0};Username={1};Password={2};Database={3}",
-                Helper.GetFromEnvironmentOrDefault("POSTGRESQL_HOST", "localhost"),
-                Helper.GetFromEnvironmentOrDefault("POSTGRESQL_USER", "postgres"),
-                Helper.GetFromEnvironmentOrDefault("POSTGRESQL_PASSWORD", "secret"),
-                Helper.GetFromEnvironmentOrDefault("POSTGRESQL_DATABASE", "postgres"));
-
-            this.context = new StudyBuddyContext(connection_string);
-            this.context.Database.Migrate();
+            this.context = new StudyBuddyContext();
+            //this.context.Database.Migrate();
 
             this.Users = new UserRepository(this.context);
+            this.StudyPrograms = new StudyProgramRepository(this.context);
+            this.Teams = new TeamRepository(this.context);
+
+            this.InitializeData();
+        }
+
+        private void InitializeData()
+        {
+            var simpleHash = new SimpleHash();
+            
+            if (Users.FindByEmail("alexander.stuckenholz@hshl.de") == null)
+            {
+               Users.Save(new User {
+                    Firstname="Alexander", 
+                    Lastname="Stuckenholz",
+                    Nickname="Stucki",
+                    Email="alexander.stuckenholz@hshl.de",
+                    PasswordHash=simpleHash.Compute("secret"),
+                    Role = Role.Admin });
+            }
+
+            if (Users.FindByEmail("eva.ponick@hshl.de") == null)
+            {
+               Users.Save(new User {
+                    Firstname="Eva", 
+                    Lastname="Ponick",
+                    Nickname="Eva",
+                    Email="eva.ponick@hshl.de",
+                    PasswordHash=simpleHash.Compute("secret"),
+                    Role = Role.Admin });
+            }
         }
     }
 }

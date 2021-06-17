@@ -1,5 +1,4 @@
 using Microsoft.EntityFrameworkCore;
-using SimpleHashing.Net;
 using StudyBuddy.Model;
 
 namespace StudyBuddy.Persistence
@@ -8,10 +7,16 @@ namespace StudyBuddy.Persistence
     {
         private string connection_string;
         public DbSet<User> Users { get; set; }
+        public DbSet<StudyProgram> StudyPrograms { get; set; }
+        public DbSet<Team> Teams { get; set; }
 
-        public StudyBuddyContext(string connection_string)
+        public StudyBuddyContext() 
         {
-            this.connection_string = connection_string;
+            this.connection_string = string.Format("Host={0};Username={1};Password={2};Database={3}",
+                Helper.GetFromEnvironmentOrDefault("POSTGRESQL_HOST", "localhost"),
+                Helper.GetFromEnvironmentOrDefault("POSTGRESQL_USER", "postgres"),
+                Helper.GetFromEnvironmentOrDefault("POSTGRESQL_PASSWORD", "secret"),
+                Helper.GetFromEnvironmentOrDefault("POSTGRESQL_DATABASE", "postgres"));
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -21,18 +26,11 @@ namespace StudyBuddy.Persistence
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            var simpleHash = new SimpleHash();
             base.OnModelCreating(modelBuilder);
 
-            modelBuilder.Entity<User>()
-                .HasData(new User { 
-                    ID=1, 
-                    Firstname="Alexander", 
-                    Lastname="Stuckenholz",
-                    Nickname="Stucki",
-                    Email="alexander.stuckenholz@hshl.de",
-                    PasswordHash=simpleHash.Compute("secret"),
-                    Role = Role.Admin });
+            modelBuilder.Entity<User>();
+            modelBuilder.Entity<StudyProgram>();
+            modelBuilder.Entity<Team>();
         }
     }
 }

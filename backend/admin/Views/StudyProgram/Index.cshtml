@@ -3,3 +3,32 @@
 }
 @using System.Collections.Generic
 @using StudyBuddy.Model
+@model IEnumerable<StudyProgram>
+
+<form method="get" asp-controller="StudyProgram" asp-action="New">
+  <input class="btn btn-primary" type="submit" value="New StudyProgram">
+</form>
+
+<br>
+
+<table class="table table-bordered">
+  <thead>
+    <tr>
+      <th scope="col">Acronym</th>
+      <th scope="col">Name</th>
+    </tr>
+  </thead>
+  <tbody>
+    @foreach (var obj in @Model)
+    {
+        <tr>
+            <td>@obj.Acronym</td>
+            <td>@obj.Name</td>
+            <td>
+                <a href="/StudyProgram/Edit/@obj.ID">Edit</a>
+                <a href="/StudyProgram/Delete/@obj.ID">Delete</a>
+            </td>
+        </tr>
+    }
+  </tbody>
+</table>
