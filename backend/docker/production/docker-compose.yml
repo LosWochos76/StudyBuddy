@@ -26,6 +26,8 @@ services:
       - type: bind
         source: /home/stuckenholz/aspnetapp.pfx
         target: /https/aspnetapp.pfx
+    depends_on:
+      - postgres
 
   services:
     image: stuckenholz/studybuddyservices:latest
@@ -44,6 +46,8 @@ services:
       - type: bind
         source: /home/stuckenholz/aspnetapp.pfx
         target: /https/aspnetapp.pfx
+    depends_on:
+      - postgres
 
 volumes:
   studybuddy-data:  
