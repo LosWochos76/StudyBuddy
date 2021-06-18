@@ -1,3 +1,3 @@
 #!/bin/sh
 
-docker-compose -f ./docker/production/docker-compose.yml down
+sudo docker-compose -f /home/stuckenholz/docker-compose.yml down

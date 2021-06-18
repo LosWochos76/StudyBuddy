@@ -1,4 +1,4 @@
-version: "3"
+version: "3.2"
 
 services:
   postgres:
@@ -24,7 +24,7 @@ services:
       - 443:443
     volumes:
       - type: bind
-        source: ~/.aspnet/https/aspnetapp.pfx
+        source: /home/stuckenholz/aspnetapp.pfx
         target: /https/aspnetapp.pfx
 
   services:
@@ -42,7 +42,7 @@ services:
       - 8080:443
     volumes:
       - type: bind
-        source: ~/.aspnet/https/aspnetapp.pfx
+        source: /home/stuckenholz/aspnetapp.pfx
         target: /https/aspnetapp.pfx
 
 volumes:

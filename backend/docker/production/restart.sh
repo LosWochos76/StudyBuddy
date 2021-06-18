@@ -1,5 +1,5 @@
 #!/bin/sh
 
-docker pull stuckenholz/studybuddyadmin
-docker pull stuckenholz/studybuddyservices
-docker compose -f ./docker/production/docker-compose.yml restart
+sudo docker pull stuckenholz/studybuddyadmin
+sudo docker pull stuckenholz/studybuddyservices
+sudo docker-compose -f /home/stuckenholz/docker-compose.yml restart

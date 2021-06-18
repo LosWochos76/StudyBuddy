@@ -1,3 +1,3 @@
 #!/bin/sh
 
-docker compose -f ./docker/production/docker-compose.yml up -d
+sudo docker-compose -f /home/stuckenholz/docker-compose.yml up -d
