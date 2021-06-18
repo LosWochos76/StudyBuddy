@@ -8,5 +8,6 @@ namespace StudyBuddy.Persistence
         Team ById(int id);
         IEnumerable<Team> All();
         void Save(Team obj);
+        void Delete(int id);
     }
 }

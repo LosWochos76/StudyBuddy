@@ -5,6 +5,7 @@ using StudyBuddy.Persistence;
 
 namespace StudyBuddy.Admin.Controllers
 {
+    [Admin]
     public class StudyProgramController : Controller
     {
         private readonly ILogger<UserController> logger;
@@ -12,7 +13,7 @@ namespace StudyBuddy.Admin.Controllers
 
         public StudyProgramController(ILogger<UserController> logger, IRepository repository)
         {
-            this.logger = logger;
+            this.logger = logger; 
             this.repository = repository;
         }
 
@@ -37,12 +38,18 @@ namespace StudyBuddy.Admin.Controllers
             return View("Edit", obj);
         }
 
-        public IActionResult Save(StudyProgram obj)
+        public IActionResult Save([FromForm] StudyProgram obj)
         {
             if (!ModelState.IsValid)
                 return View("Edit", obj);
             
             this.repository.StudyPrograms.Save(obj);
+            return RedirectToAction("Index");
+        }
+
+        public IActionResult Delete(int id)
+        {
+            this.repository.StudyPrograms.Delete(id);
             return RedirectToAction("Index");
         }
     }

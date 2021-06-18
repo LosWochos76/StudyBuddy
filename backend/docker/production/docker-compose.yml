@@ -24,7 +24,7 @@ services:
       - 443:443
     volumes:
       - type: bind
-        source: /home/stuckenholz/aspnetapp.pfx
+        source: /Users/stuckenholz/.aspnet/https/aspnetapp.pfx
         target: /https/aspnetapp.pfx
 
   services:
@@ -42,7 +42,7 @@ services:
       - 8080:443
     volumes:
       - type: bind
-        source: /home/stuckenholz/aspnetapp.pfx
+        source: /Users/stuckenholz/.aspnet/https/aspnetapp.pfx
         target: /https/aspnetapp.pfx
 
 volumes:

@@ -8,5 +8,6 @@ namespace StudyBuddy.Persistence
         StudyProgram ById(int id);
         IEnumerable<StudyProgram> All();
         void Save(StudyProgram obj);
+        void Delete(int id);
     }
 }

@@ -21,6 +21,9 @@ namespace StudyBuddy.Admin
 
         public async Task InvokeAsync(HttpContext context)
         {
+            // Simulate, that a user is logged in. Remove before check-in
+            //context.Session.SetInt32("user_id", 1);
+
             if (!context.Request.Path.StartsWithSegments("/Authentication/Login"))
             {
                 if (context.Session.GetInt32("user_id").HasValue)

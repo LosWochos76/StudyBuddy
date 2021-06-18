@@ -16,7 +16,7 @@ namespace StudyBuddy.Persistence
         public Repository()
         {
             this.context = new StudyBuddyContext();
-            //this.context.Database.Migrate();
+            this.context.Database.Migrate();
 
             this.Users = new UserRepository(this.context);
             this.StudyPrograms = new StudyProgramRepository(this.context);

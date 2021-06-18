@@ -25,6 +25,16 @@ namespace StudyBuddy.Persistence
                 .AsNoTracking().FirstOrDefault();
         }
 
+        public void Delete(int id)
+        {
+            var obj = context.Teams.Find(id);
+            if (obj != null) 
+            {
+                context.Teams.Remove(obj);
+                context.SaveChanges();
+            }
+        }
+
         public void Save(Team obj)
         {
             if (obj.ID == 0) 

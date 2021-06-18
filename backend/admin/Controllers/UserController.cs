@@ -5,6 +5,7 @@ using StudyBuddy.Persistence;
 
 namespace StudyBuddy.Admin.Controllers
 {
+    [Admin]
     public class UserController : Controller
     {
         private readonly ILogger<UserController> logger;
