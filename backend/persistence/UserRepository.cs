@@ -24,7 +24,10 @@ namespace StudyBuddy.Persistence
 
         public IEnumerable<User> All()
         {
-            return context.Users.AsNoTracking().ToList<User>();
+            return context.Users
+                .OrderBy(x =>x.Lastname)
+                .ThenBy(x => x.Firstname)
+                .AsNoTracking().ToList<User>();
         }
 
         public User FindByEmailAndPassword(string email, string password)
@@ -54,6 +57,22 @@ namespace StudyBuddy.Persistence
 
             context.SaveChanges();
             context.Entry(obj).State = EntityState.Detached;
+        }
+
+        public void Delete(int id)
+        {
+            var obj = context.Users.Find(id);
+            if (obj != null) 
+            {
+                context.Users.Remove(obj);
+                context.SaveChanges();
+            }
+        }
+
+        public User FindByNickname(string nickname)
+        {
+           return (from obj in context.Users 
+                where obj.Nickname.Equals(nickname) select obj).AsNoTracking().FirstOrDefault();
         }
     }
 }

@@ -28,7 +28,11 @@ namespace StudyBuddy.Persistence
         {
             base.OnModelCreating(modelBuilder);
 
-            modelBuilder.Entity<User>();
+            modelBuilder.Entity<User>()
+                .HasOne<StudyProgram>()
+                .WithMany()
+                .HasForeignKey(s => s.ProgramID);
+
             modelBuilder.Entity<StudyProgram>();
             modelBuilder.Entity<Team>();
         }

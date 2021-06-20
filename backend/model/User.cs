@@ -23,6 +23,7 @@ namespace StudyBuddy.Model
         public string Email { get; set; }
         public Role Role { get; set; }
 
+        public int? ProgramID { get; set; }
         public StudyProgram Program { get; set; }
         public ICollection<Team> Teams { get; set; }
 

@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace StudyBuddy.Admin
 {
-    public class LoginModel
+    public class LoginViewModel
     {
         [Required]
         [EmailAddress]

@@ -21,7 +21,7 @@ namespace StudyBuddy.Admin.Controllers
             return View();
         }
 
-        public IActionResult CheckLogin(LoginModel login)
+        public IActionResult CheckLogin(LoginViewModel login)
         {
             if (!ModelState.IsValid)
                 return View("Login", login);

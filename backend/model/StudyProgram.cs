@@ -12,5 +12,18 @@ namespace StudyBuddy.Model
 
         [Required]
         public string Name { get; set; }
+
+        public string FullName 
+        {
+            get
+            {
+                return "[" + Acronym + "] - " + Name;
+            }
+        }
+
+        public override string ToString()
+        {
+            return FullName;
+        }
     }
 }

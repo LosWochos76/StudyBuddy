@@ -16,7 +16,10 @@ namespace StudyBuddy.Persistence
 
         public IEnumerable<StudyProgram> All()
         {
-            return context.StudyPrograms.AsNoTracking().ToList<StudyProgram>();
+            return context.StudyPrograms
+                .OrderBy(x =>x.Acronym)
+                .ThenBy(x => x.Name)
+                .AsNoTracking().ToList<StudyProgram>();
         }
 
         public StudyProgram ById(int id)
