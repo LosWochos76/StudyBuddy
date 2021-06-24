@@ -52,5 +52,38 @@ namespace StudyBuddy.Admin.Controllers
             this.repository.Teams.Delete(id);
             return RedirectToAction("Index");
         }
+
+        public IActionResult Members(int id)
+        {
+            var obj = repository.Teams.ById(id);
+            if (obj == null)
+                return RedirectToAction("Index");
+            
+            ViewBag.Members = repository.Users.MembersOfTeam(id);
+            ViewBag.OtherUsers = repository.Users.NotMembersOfTeam(id);
+            return View("Members", obj);
+        }
+
+        public IActionResult AddMember([FromForm] int teamID, int memberID)
+        {
+            if (teamID != 0 && memberID != 0)
+                repository.Teams.AddMember(teamID, memberID);
+
+            var obj = repository.Teams.ById(teamID);
+            ViewBag.Members = repository.Users.MembersOfTeam(teamID);
+            ViewBag.OtherUsers = repository.Users.NotMembersOfTeam(teamID);
+            return View("Members", obj);
+        }
+
+        public IActionResult RemoveMember(int teamID, int memberID)
+        {
+            if (teamID != 0 && memberID != 0)
+                repository.Teams.RemoveMember(teamID, memberID);
+
+            var obj = repository.Teams.ById(teamID);
+            ViewBag.Members = repository.Users.MembersOfTeam(teamID);
+            ViewBag.OtherUsers = repository.Users.NotMembersOfTeam(teamID);
+            return View("Members", obj);
+        }
     }
 }

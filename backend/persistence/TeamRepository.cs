@@ -1,49 +1,163 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
+using Npgsql;
 using StudyBuddy.Model;
 
 namespace StudyBuddy.Persistence
 {
-    class TeamRepository : ITeamRepository
+    class TeamRepository : SqlRepositoryBase, ITeamRepository
     {
-        private StudyBuddyContext context;
-
-        public TeamRepository(StudyBuddyContext context)
+        public TeamRepository(NpgsqlConnection connection) : base(connection)
         {
-            this.context = context;
+            if (!TableExists("teams")) 
+                CreateTeamTable();
+
+            if (!TableExists("team_members")) 
+                CreateTeamMemberTable();
         }
 
-        public IEnumerable<Team> All()
+        private void CreateTeamTable() 
         {
-            return context.Teams.AsNoTracking().ToList<Team>();
+            string sql = "create table teams (" +
+                "id serial primary key, " +
+                "name varchar(100) not null)";
+
+            using (var cmd = new NpgsqlCommand(sql, connection)) 
+            {
+                cmd.ExecuteNonQuery();
+            }
+        }
+        
+        private void CreateTeamMemberTable() 
+        {
+            string sql = "create table team_members (" +
+                "team_id int not null, " +
+                "member_id int not null)";
+
+            using (var cmd = new NpgsqlCommand(sql, connection)) 
+            {
+                cmd.ExecuteNonQuery();
+            }
+        }
+
+        private Team FromReader(NpgsqlDataReader reader)
+        {
+            var obj = new Team();
+            obj.ID = reader.GetInt32(0);
+            obj.Name = reader.GetString(1);
+            return obj;
         }
 
         public Team ById(int id)
         {
-            return (from obj in context.Teams where obj.ID == id select obj)
-                .AsNoTracking().FirstOrDefault();
+            string sql = "SELECT id,name FROM teams where id=:id";
+
+            using (var cmd = new NpgsqlCommand(sql, connection))
+            {
+                cmd.Parameters.AddWithValue(":id", id);
+
+                using (NpgsqlDataReader reader = cmd.ExecuteReader())
+                {
+                    if (reader.Read())
+                    {
+                        return FromReader(reader);
+                    }
+                }
+            }
+
+            return null;
+        }
+
+        public IEnumerable<Team> All(int from = 0, int max = 1000)
+        {
+            string sql = "SELECT id,name FROM teams limit :max offset :from";
+            
+            var cmd = new NpgsqlCommand(sql, connection);
+            cmd.Parameters.AddWithValue(":from", from);
+            cmd.Parameters.AddWithValue(":max", max);
+            var result = new List<Team>();
+
+            using (NpgsqlDataReader reader = cmd.ExecuteReader())
+            {
+                while (reader.Read())
+                {
+                    var obj = FromReader(reader);
+                    result.Add(obj);
+                }
+            }
+               
+            return result;
         }
 
         public void Delete(int id)
         {
-            var obj = context.Teams.Find(id);
-            if (obj != null) 
+            string sql = "delete from teams where id=:id";
+            using (var cmd = new NpgsqlCommand(sql, connection))
             {
-                context.Teams.Remove(obj);
-                context.SaveChanges();
+                cmd.Parameters.AddWithValue(":id", id);
+                cmd.ExecuteNonQuery();
+            }
+        }
+
+        private void Insert(Team obj)
+        {
+            string sql = "insert into teams " +
+                    "(name) values " +
+                    "(:name) RETURNING id";
+
+            using (var cmd = new NpgsqlCommand(sql, connection)) 
+            {
+                cmd.Parameters.AddWithValue(":name", obj.Name);
+                obj.ID = Convert.ToInt32(cmd.ExecuteScalar());
+            }
+        }
+
+        private void Update(Team obj)
+        {
+            string sql = "update teams set name=:name where id=:id";
+
+            using (var cmd = new NpgsqlCommand(sql, connection)) 
+            {
+                cmd.Parameters.AddWithValue(":id", obj.ID);
+                cmd.Parameters.AddWithValue(":name", obj.Name);
+                obj.ID = Convert.ToInt32(cmd.ExecuteScalar());
             }
         }
 
         public void Save(Team obj)
         {
-            if (obj.ID == 0) 
-                context.Add(obj);
+            if (obj.ID == 0)
+                Insert(obj);
             else
-                context.Teams.Attach(obj).State = EntityState.Modified;
+                Update(obj);
+        }
 
-            context.SaveChanges();
-            context.Entry(obj).State = EntityState.Detached;
+        public void AddMember(int team_id, int member_id)
+        {
+            string sql = "insert into team_members " +
+                    "(team_id,member_id) values " +
+                    "(:team_id,:member_id)";
+
+            using (var cmd = new NpgsqlCommand(sql, connection)) 
+            {
+                cmd.Parameters.AddWithValue(":team_id", team_id);
+                cmd.Parameters.AddWithValue(":member_id", member_id);
+                cmd.ExecuteNonQuery();
+            }
+        }
+
+        public void RemoveMember(int team_id, int member_id)
+        {
+            string sql = "delete from team_members where team_id=:team_id and member_id=:member_id";
+
+            using (var cmd = new NpgsqlCommand(sql, connection)) 
+            {
+                cmd.Parameters.AddWithValue(":team_id", team_id);
+                cmd.Parameters.AddWithValue(":member_id", member_id);
+                cmd.ExecuteNonQuery();
+            }
         }
     }
 }

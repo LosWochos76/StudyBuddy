@@ -6,7 +6,7 @@ namespace StudyBuddy.Persistence
     public interface IStudyProgramRepository
     {
         StudyProgram ById(int id);
-        IEnumerable<StudyProgram> All();
+        IEnumerable<StudyProgram> All(int from = 0, int max = 1000);
         void Save(StudyProgram obj);
         void Delete(int id);
     }

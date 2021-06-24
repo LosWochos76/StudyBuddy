@@ -4,8 +4,6 @@
     ViewData["Title"] = "Edit Team";
 }
 
-<h1>Edit Team</h1>
-
 <form method="POST" asp-controller="Team" asp-action="Save">
   <div asp-validation-summary="ModelOnly"></div>
   <input type="hidden" name="ID" value="@Model.ID">
@@ -15,3 +13,4 @@
   </div>
   <button type="submit" class="btn btn-primary">Ok</button>
 </form>
+

@@ -24,10 +24,16 @@ namespace StudyBuddy.Model
 
         public bool PasswordIsOk
         {
-            get { 
-                return ID == 0 && Password == PasswordRepeat || 
-                    ID != 0 && string.IsNullOrEmpty(Password) ||
-                    ID != 0 && !string.IsNullOrEmpty(Password) && Password == PasswordRepeat; }
+            get 
+            {
+                if (ID == 0 && string.IsNullOrEmpty(Password))
+                    return false;
+                
+                if (!string.IsNullOrEmpty(Password) && Password != PasswordRepeat)
+                    return false;
+                
+                return true;
+            }
         }
 
         [Required]

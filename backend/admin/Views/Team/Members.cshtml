@@ -1,0 +1,48 @@
+@using StudyBuddy.Model
+@model Team
+@{
+    ViewData["Title"] = "Members of Team";
+}
+
+<h1>Members of Team @Model.Name</h1>
+
+<table class="table table-bordered">
+  <thead>
+    <tr>
+      <th scope="col">Firstname</th>
+      <th scope="col">Lastname</th>
+      <th scope="col">Nickname</th>
+      <th scope="col">Action</th>
+    </tr>
+  </thead>
+  <tbody>
+    @foreach (var obj in @ViewBag.Members)
+    {
+        <tr>
+            <td>@obj.Firstname</td>
+            <td>@obj.Lastname</td>
+            <td>@obj.Nickname</td>
+            <td>
+                <a href="/Team/RemoveMember?teamId=@Model.ID&memberId=@obj.ID">Remove member</a>
+            </td>
+        </tr>
+    }
+  </tbody>
+</table>
+
+<form method="POST" asp-controller="Team" asp-action="AddMember">
+  <input type="hidden" name="teamID" value="@Model.ID">
+  <div class="form-group">
+      <label for="name">New team member</label>
+      <select class="custom-select" name="memberID">
+        <option value="0">Please select a new member</option>
+        @foreach (var obj in @ViewBag.OtherUsers)
+        {
+            <option value="@obj.ID">@obj.Firstname @obj.Lastname (@obj.Nickname)</option>
+        }
+      </select>
+  </div>
+
+  <button type="submit" class="btn btn-primary">Add member</button>
+    
+</form>
