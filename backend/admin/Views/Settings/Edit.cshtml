@@ -1,37 +1,32 @@
 @using StudyBuddy.Model
 @model UserViewModel
 @{
-    ViewData["Title"] = "Edit User";
+    ViewData["Title"] = "Settings";
 }
 
-<form method="POST" asp-controller="User" asp-action="Save">
+<form method="POST" asp-controller="Settings" asp-action="Save">
   <div asp-validation-summary="ModelOnly" class="text-danger"></div>
   <input type="hidden" name="ID" value="@Model.ID">
   <input type="hidden" name="PasswordHash" value="@Model.PasswordHash">
   <div class="form-group">
     <label for="name">Firstname</label>
     <input type="text" class="form-control" id="firstname" name="Firstname" value="@Model.Firstname">
-    <span asp-validation-for="Firstname" class="text-danger"></span>
   </div>
   <div class="form-group">
     <label for="name">Lastname</label>
     <input type="text" class="form-control" id="lastname" name="Lastname" value="@Model.Lastname">
-    <span asp-validation-for="Lastname" class="text-danger"></span>
   </div>
   <div class="form-group">
     <label for="name">Nickname</label>
     <input type="text" class="form-control" id="nickname" name="Nickname" value="@Model.Nickname">
-    <span asp-validation-for="Nickname" class="text-danger"></span>
   </div>
   <div class="form-group">
     <label for="name">Email</label>
     <input type="text" class="form-control" id="email" name="Email" value="@Model.Email">
-    <span asp-validation-for="Email" class="text-danger"></span>
   </div>
   <div class="form-group">
     <label for="name">Password</label>
     <input type="password" class="form-control" id="password" name="Password" value="@Model.Password">
-    <span asp-validation-for="Password" class="text-danger"></span>
   </div>
   <div class="form-group">
     <label for="name">Password repeat</label>
@@ -42,14 +37,12 @@
       <select class="custom-select" asp-for="@Model.Role" asp-items="@Model.AllRoles">
         <option>Please select a role</option>
       </select>
-      <span asp-validation-for="Role" class="text-danger"></span>
   </div>
   <div class="form-group">
       <label for="name">Study Program</label>
       <select class="custom-select" asp-for="@Model.ProgramID" asp-items="@Model.AllPrograms">
-        <option value=@null>No study program</option>
+        <option>Please select a study program</option>
       </select>
-      <span asp-validation-for="ProgramID" class="text-danger"></span>
   </div>
 
   <button type="submit" class="btn btn-primary">Ok</button>

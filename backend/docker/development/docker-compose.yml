@@ -16,7 +16,7 @@ services:
     ports:
       - 8080:80
     environment:
-      - PGADMIN_DEFAULT_EMAIL=admin@localhost
+      - PGADMIN_DEFAULT_EMAIL=admin@hshl.de
       - PGADMIN_DEFAULT_PASSWORD=secret
     volumes:
       - studybuddy-config:/var/lib/pgadmin/

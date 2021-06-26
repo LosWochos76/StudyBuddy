@@ -1,0 +1,36 @@
+@{
+    ViewData["Title"] = "Terms";
+}
+@using System.Collections.Generic
+@using StudyBuddy.Model
+@model IEnumerable<Term>
+
+<form method="get" asp-controller="Term" asp-action="New">
+  <input class="btn btn-primary" type="submit" value="New Term">
+</form>
+
+<br>
+
+<table class="table table-bordered">
+  <thead>
+    <tr>
+      <th scope="col">Shortname</th>
+      <th scope="col">Start</th>
+      <th scope="col">End</th>
+    </tr>
+  </thead>
+  <tbody>
+    @foreach (var obj in @Model)
+    {
+        <tr>
+            <td>@obj.ShortName</td>
+            <td>@obj.Start</td>
+            <td>@obj.End</td>
+            <td>
+                <a href="/Term/Edit/@obj.ID">Edit</a>
+                <a href="/Term/Delete/@obj.ID">Delete</a>
+            </td>
+        </tr>
+    }
+  </tbody>
+</table>

@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System;
+using System.Linq;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Logging;
 using StudyBuddy.Model;
@@ -20,7 +22,8 @@ namespace StudyBuddy.Admin.Controllers
 
         public IActionResult Index()
         {
-            var objects = this.repository.Users.All();
+            var user = HttpContext.Items["user"] as User;
+            var objects = this.repository.Users.All().Where(x => x.ID != user.ID).ToList();
             return View(objects);
         }
 
@@ -60,7 +63,7 @@ namespace StudyBuddy.Admin.Controllers
             
             if (!obj.PasswordIsOk)
             {
-                ModelState.AddModelError("", "Password and password repeat must be equal!");
+                ModelState.AddModelError("Password", "Password and password repeat must be equal!");
                 return View("Edit", PrepareModel(obj));
             }
 
@@ -78,6 +81,10 @@ namespace StudyBuddy.Admin.Controllers
 
         public IActionResult Delete(int id)
         {
+            var user = HttpContext.Items["user"] as User;
+            if (user.ID == id)
+                return Redirect("/User");
+
             // ToDo: Check, if user is required somewhere
 
             this.repository.Users.Delete(id);

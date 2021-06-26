@@ -5,5 +5,6 @@ namespace StudyBuddy.Persistence
         IUserRepository Users { get; }
         ITeamRepository Teams { get; }
         IStudyProgramRepository StudyPrograms { get; }
+        ITermRepository Terms { get; }
     }
 }

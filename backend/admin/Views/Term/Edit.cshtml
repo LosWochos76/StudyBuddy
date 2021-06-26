@@ -1,0 +1,28 @@
+@using StudyBuddy.Model
+@model Term
+@{
+    ViewData["Title"] = "Edit Term";
+}
+
+<form method="POST" asp-controller="Term" asp-action="Save">
+  <div asp-validation-summary="ModelOnly"></div>
+  <input type="hidden" name="ID" value="@Model.ID">
+  <div class="form-group">
+    <label for="name">Short name</label>
+    <input type="text" class="form-control" id="name" name="ShortName" value="@Model.ShortName">
+  </div>
+  <div class="form-group">
+    <label for="name">Name</label>
+    <input type="text" class="form-control" id="name" name="Name" value="@Model.Name">
+  </div>
+  <div class="form-group">
+    <label for="name">Start</label>
+    <input type="text" class="form-control" id="start" name="Name" value="@Model.Start">
+  </div>
+  <div class="form-group">
+    <label for="name">End</label>
+    <input type="text" class="form-control" id="start" name="End" value="@Model.End">
+  </div>
+  <button type="submit" class="btn btn-primary">Ok</button>
+</form>
+

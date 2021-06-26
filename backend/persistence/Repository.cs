@@ -1,4 +1,3 @@
-using Microsoft.EntityFrameworkCore;
 using Npgsql;
 using SimpleHashing.Net;
 using StudyBuddy.Model;
@@ -14,6 +13,7 @@ namespace StudyBuddy.Persistence
         public IUserRepository Users { get; private set; }
         public IStudyProgramRepository StudyPrograms { get; private set; }
         public ITeamRepository Teams { get; private set; }
+        public ITermRepository Terms { get; set; }
 
         public Repository()
         {
@@ -29,6 +29,7 @@ namespace StudyBuddy.Persistence
             this.Users = new UserRepository(this.connection);
             this.StudyPrograms = new StudyProgramRepository(this.connection);
             this.Teams = new TeamRepository(this.connection);
+            this.Terms = new TermRepository(this.connection);
 
             this.InitializeData();
         }

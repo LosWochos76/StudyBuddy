@@ -1,4 +1,3 @@
-using Microsoft.EntityFrameworkCore;
 using Npgsql;
 using SimpleHashing.Net;
 using StudyBuddy.Model;
@@ -184,7 +183,7 @@ namespace StudyBuddy.Persistence
                     cmd.Parameters.AddWithValue(":password_hash", obj.PasswordHash);
 
                 cmd.Parameters.AddWithValue(":role", (int)obj.Role);
-                cmd.Parameters.AddWithValue(":program_id", obj.ProgramID);
+                cmd.Parameters.AddWithValue(":program_id", obj.ProgramID.HasValue ? obj.ProgramID : DBNull.Value);
                 obj.ID = Convert.ToInt32(cmd.ExecuteScalar());
             }
         }
