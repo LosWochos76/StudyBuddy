@@ -47,13 +47,16 @@ namespace StudyBuddy.Model
             {
                 return new SelectList(Enum.GetValues(typeof(Role)));
             }
-         }
+        }
 
         public int? ProgramID { get; set; }
         public StudyProgram Program { get; set; }
         public SelectList AllPrograms { get; set; }
-
         public ICollection<Team> Teams { get; set; }
+
+        public int? EnrolledInTermID { get; set; }
+        public Term EnrolledInTerm { get; set; }
+        public SelectList AllTerms { get; set; }
 
         public static UserViewModel FromUser(User obj)
         {
@@ -65,6 +68,7 @@ namespace StudyBuddy.Model
             user.Email = obj.Email;
             user.Role = obj.Role;
             user.ProgramID = obj.ProgramID;
+            user.EnrolledInTermID = obj.EnrolledInTermID;
             return user;
         }
 
@@ -78,6 +82,7 @@ namespace StudyBuddy.Model
             user.Email = obj.Email;
             user.Role = obj.Role;
             user.ProgramID = obj.ProgramID;
+            user.EnrolledInTermID = obj.EnrolledInTermID;
 
             if (!string.IsNullOrEmpty(obj.Password))
             {

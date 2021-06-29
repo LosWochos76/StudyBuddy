@@ -3,9 +3,37 @@
 }
 @using System.Collections.Generic
 @using StudyBuddy.Model
+@model IEnumerable<Challenge>
 
 <form method="get" asp-controller="Challenge" asp-action="New">
   <input class="btn btn-primary" type="submit" value="New Challenge">
 </form>
 
 <br>
+
+<table class="table table-bordered">
+  <thead>
+    <tr>
+      <th scope="col">Name</th>
+      <th scope="col">Category</th>
+      <th scope="col">Points</th>
+      <th scope="col">Active</th>
+      <th scope="col">Action</th>
+    </tr>
+  </thead>
+  <tbody>
+    @foreach (var obj in @Model)
+    {
+        <tr>
+            <td>@obj.Name</td>
+            <td>@obj.Category</td>
+            <td>@obj.Points</td>
+            <td>@obj.IsActive</td>
+            <td>
+                <a href="/Challenge/Edit/@obj.ID">Edit</a>
+                <a href="/Challenge/Delete/@obj.ID">Delete</a>
+            </td>
+        </tr>
+    }
+  </tbody>
+</table>

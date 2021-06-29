@@ -17,6 +17,7 @@
       <th scope="col">Shortname</th>
       <th scope="col">Start</th>
       <th scope="col">End</th>
+      <th scope="col">Action</th>
     </tr>
   </thead>
   <tbody>
@@ -24,8 +25,8 @@
     {
         <tr>
             <td>@obj.ShortName</td>
-            <td>@obj.Start</td>
-            <td>@obj.End</td>
+            <td>@obj.Start.ToString("yyyy-MM-dd")</td>
+            <td>@obj.End.ToString("yyyy-MM-dd")</td>
             <td>
                 <a href="/Term/Edit/@obj.ID">Edit</a>
                 <a href="/Term/Delete/@obj.ID">Delete</a>

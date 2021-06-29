@@ -45,7 +45,8 @@ namespace StudyBuddy.Persistence
                 "email varchar(100) not null, " +
                 "password_hash varchar(100), " +
                 "role int not null, " + 
-                "program_id int)";
+                "program_id int, " + 
+                "enrolled_in_term_id int)";
 
             using (var cmd = new NpgsqlCommand(sql, connection)) 
             {
@@ -64,13 +65,14 @@ namespace StudyBuddy.Persistence
             obj.PasswordHash = reader.GetString(5);
             obj.Role = (Role)reader.GetInt32(6);
             obj.ProgramID = reader.IsDBNull(7) ? null : reader.GetInt32(7);
+            obj.EnrolledInTermID = reader.IsDBNull(8) ? null : reader.GetInt32(8);
             return obj;
         }
 
         public User ById(int id)
         {
             string sql = "SELECT id,firstname,lastname,nickname," + 
-                "email,password_hash,role,program_id FROM users where id=:id";
+                "email,password_hash,role,program_id,enrolled_in_term_id FROM users where id=:id";
 
             using (var cmd = new NpgsqlCommand(sql, connection))
             {
@@ -91,7 +93,7 @@ namespace StudyBuddy.Persistence
         public IEnumerable<User> All(int from = 0, int max = 1000)
         {
             string sql = "SELECT id,firstname,lastname,nickname,email,password_hash,role," +
-                "program_id FROM users order by lastname,firstname,nickname limit :max offset :from";
+                "program_id,enrolled_in_term_id FROM users order by lastname,firstname,nickname limit :max offset :from";
             
             using (var cmd = new NpgsqlCommand(sql, connection))
             {
@@ -124,7 +126,7 @@ namespace StudyBuddy.Persistence
         public User FindByEmail(string email)
         {
             string sql = "SELECT id,firstname,lastname,nickname," + 
-                "email,password_hash,role,program_id FROM users where email=:email";
+                "email,password_hash,role,program_id,enrolled_in_term_id FROM users where email=:email";
 
             using (var cmd = new NpgsqlCommand(sql, connection))
             {
@@ -145,8 +147,8 @@ namespace StudyBuddy.Persistence
         private void Insert(User obj)
         {
             string sql = "insert into users " +
-                    "(firstname,lastname,nickname,email,password_hash,role,program_id) values " +
-                    "(:firstname,:lastname,:nickname,:email,:password_hash,:role,:program_id) RETURNING id";
+                    "(firstname,lastname,nickname,email,password_hash,role,program_id,enrolled_in_term_id) values " +
+                    "(:firstname,:lastname,:nickname,:email,:password_hash,:role,:program_id,:enrolled_in_term_id) RETURNING id";
 
             using (var cmd = new NpgsqlCommand(sql, connection)) 
             {
@@ -157,6 +159,7 @@ namespace StudyBuddy.Persistence
                 cmd.Parameters.AddWithValue(":password_hash", obj.PasswordHash);
                 cmd.Parameters.AddWithValue(":role", (int)obj.Role);
                 cmd.Parameters.AddWithValue(":program_id", obj.ProgramID.HasValue ? obj.ProgramID : DBNull.Value);
+                cmd.Parameters.AddWithValue(":enrolled_in_term_id", obj.EnrolledInTermID.HasValue ? obj.EnrolledInTermID : DBNull.Value);
                 obj.ID = Convert.ToInt32(cmd.ExecuteScalar());
             }
         }
@@ -169,7 +172,7 @@ namespace StudyBuddy.Persistence
             if (!string.IsNullOrEmpty(obj.PasswordHash))
                 sql += ",password_hash=:password_hash";
             
-            sql += ",role=:role,program_id=:program_id where id=:id";
+            sql += ",role=:role,program_id=:program_id,enrolled_in_term_id=:enrolled_in_term_id where id=:id";
 
             using (var cmd = new NpgsqlCommand(sql, connection)) 
             {
@@ -184,7 +187,8 @@ namespace StudyBuddy.Persistence
 
                 cmd.Parameters.AddWithValue(":role", (int)obj.Role);
                 cmd.Parameters.AddWithValue(":program_id", obj.ProgramID.HasValue ? obj.ProgramID : DBNull.Value);
-                obj.ID = Convert.ToInt32(cmd.ExecuteScalar());
+                cmd.Parameters.AddWithValue(":enrolled_in_term_id", obj.EnrolledInTermID.HasValue ? obj.EnrolledInTermID : DBNull.Value);
+                cmd.ExecuteNonQuery();
             }
         }
 
@@ -209,7 +213,7 @@ namespace StudyBuddy.Persistence
         public User FindByNickname(string nickname)
         {
             string sql = "SELECT id,firstname,lastname,nickname," + 
-                "email,password_hash,role,program_id FROM users where nickname=:nickname";
+                "email,password_hash,role,program_id,enrolled_in_term_id FROM users where nickname=:nickname";
 
             using (var cmd = new NpgsqlCommand(sql, connection))
             {
@@ -229,7 +233,7 @@ namespace StudyBuddy.Persistence
 
         public IEnumerable<User> MembersOfTeam(int team_id)
         {
-            var sql = "select id,firstname,lastname,nickname,email,password_hash,role,program_id from team_members " +
+            var sql = "select id,firstname,lastname,nickname,email,password_hash,role,program_id,enrolled_in_term_id from team_members " +
                 "inner join users on users.id=member_id where team_id=:team_id order by lastname,firstname,nickname";
 
             using (var cmd = new NpgsqlCommand(sql, connection))
@@ -252,7 +256,7 @@ namespace StudyBuddy.Persistence
 
         public IEnumerable<User> NotMembersOfTeam(int team_id)
         {
-            var sql = "select id,firstname,lastname,nickname,email,password_hash,role,program_id " +
+            var sql = "select id,firstname,lastname,nickname,email,password_hash,role,program_id,enrolled_in_term_id " +
                 "from users where id not in (select member_id from team_members where team_id=:team_id)";
 
             using (var cmd = new NpgsqlCommand(sql, connection))

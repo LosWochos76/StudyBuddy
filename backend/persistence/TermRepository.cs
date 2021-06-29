@@ -64,7 +64,7 @@ namespace StudyBuddy.Persistence
         public IEnumerable<Term> All(int from = 0, int max = 1000)
         {
             string sql = "SELECT id,shortname,name,start_date,end_date " +
-                "FROM terms order by start_date desc limit :max offset :from";
+                "FROM terms order by start_date limit :max offset :from";
             
             var cmd = new NpgsqlCommand(sql, connection);
             cmd.Parameters.AddWithValue(":from", from);
@@ -111,16 +111,17 @@ namespace StudyBuddy.Persistence
 
         private void Update(Term obj)
         {
-            string sql = "update teams set shortname=:shortname," +
+            string sql = "update terms set shortname=:shortname," +
                 "name=:name,start_date=:start_date,end_date=:end_date where id=:id";
 
             using (var cmd = new NpgsqlCommand(sql, connection)) 
             {
+                cmd.Parameters.AddWithValue(":id", obj.ID);
                 cmd.Parameters.AddWithValue(":shortname", obj.ShortName);
                 cmd.Parameters.AddWithValue(":name", obj.Name);
                 cmd.Parameters.AddWithValue(":start_date", obj.Start.Date);
                 cmd.Parameters.AddWithValue(":end_date", obj.End.Date);
-                obj.ID = Convert.ToInt32(cmd.ExecuteScalar());
+                cmd.ExecuteNonQuery();
             }
         }
 

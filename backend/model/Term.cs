@@ -17,9 +17,17 @@ namespace StudyBuddy.Model
         public string Name { get; set; }
 
         [Required]
+        [DisplayFormat(DataFormatString = "{0:yyyy/MM/dd}")]
         public DateTime Start { get; set; }
 
         [Required]
+        [DisplayFormat(DataFormatString = "{0:yyyy/MM/dd}")]
         public DateTime End { get; set; }
+
+        public Term()
+        {
+            Start = DateTime.Now.Date;
+            End = DateTime.Now.Date;
+        }
     }
 }

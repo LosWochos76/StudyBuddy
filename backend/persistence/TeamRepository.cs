@@ -121,7 +121,7 @@ namespace StudyBuddy.Persistence
             {
                 cmd.Parameters.AddWithValue(":id", obj.ID);
                 cmd.Parameters.AddWithValue(":name", obj.Name);
-                obj.ID = Convert.ToInt32(cmd.ExecuteScalar());
+                cmd.ExecuteNonQuery();
             }
         }
 

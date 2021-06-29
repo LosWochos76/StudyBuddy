@@ -7,31 +7,14 @@ namespace StudyBuddy.Model
     public class Challenge
     {
         public int ID { get; set; }
-        
-        [Required]
-        [MaxLength(100)]
         public string Name { get; set; }
-
-        [Required]
-        [MaxLength(1000)]
         public string Description { get; set; }
-
-        [Required]
-        public int Points { get; set; }
-
-        [Required]
-        public bool IsActive { get; set; }
-
-        [Required]
-        public ChallengeCategory Category { get; set; }
-
-        [Required]
+        public int Points { get; set; } = 1;
+        public bool IsActive { get; set; } = false;
+        public ChallengeCategory Category { get; set; } = ChallengeCategory.Learning;
         public int OwnerID { get; set; }
-
-        [Required]
-        public ChallengeProve Prove { get; set; }
-
-        [Required]
-        public Term ValidFor { get; set; }
+        public DateTime Created { get; set; } = DateTime.Now.Date;
+        public ChallengeProve Prove { get; set; } = ChallengeProve.ByTrust;
+        public string TargetAudience { get; set; }
     }
 }

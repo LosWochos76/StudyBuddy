@@ -6,9 +6,9 @@ namespace StudyBuddy.Model
 {
     public enum ChallengeProve
     {
-        Trust = 1,
-        QrCode = 2,
-        Team = 3,
-        CloseToOwner = 4
+        ByTrust = 1,
+        ByQrCode = 2,
+        ByRandomTeamMember = 3,
+        ByLocationCloseToOwner = 4
     }
 }

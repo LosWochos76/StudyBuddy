@@ -1,0 +1,50 @@
+@using StudyBuddy.Model
+@model ChallengeViewModel
+@{
+    ViewData["Title"] = "Edit Challenge";
+}
+
+<form method="POST" asp-controller="Challenge" asp-action="Save">
+  <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+  <input type="hidden" name="ID" value="@Model.ID">
+  <input type="hidden" name="OwnerID" value="@Model.OwnerID">
+  <input type="hidden" name="Created" value="@Model.Created">
+  <div class="form-group">
+    <label for="name">Name</label>
+    <input type="text" class="form-control" id="name" name="Name" value="@Model.Name">
+    <span asp-validation-for="Name" class="text-danger"></span>
+  </div>
+  <div class="form-group">
+    <label for="name">Description</label>
+    <textarea class="form-control" rows="2" id="description" name="Description">@Model.Description</textarea>
+    <span asp-validation-for="Description" class="text-danger"></span>
+  </div>
+  <div class="form-group">
+    <label for="name">Points</label>
+    <input type="text" class="form-control" id="points" name="Points" value="@Model.Points">
+    <span asp-validation-for="Points" class="text-danger"></span>
+  </div>^
+  <div class="form-group">
+      <label for="name">Category</label>
+      <select class="custom-select" asp-for="@Model.Category" asp-items="@Model.AllCategories">
+      </select>
+      <span asp-validation-for="Category" class="text-danger"></span>
+  </div>
+  <div class="form-group">
+      <label for="name">Prove</label>
+      <select class="custom-select" asp-for="@Model.Prove" asp-items="@Model.AllProves">
+      </select>
+      <span asp-validation-for="Prove" class="text-danger"></span>
+  </div>
+  <div class="form-group">
+    <label for="name">Target audience</label>
+    <textarea class="form-control" rows="1" id="targetaudience" name="TargetAudience">@Model.TargetAudience</textarea>
+    <span asp-validation-for="TargetAudience" class="text-danger"></span>
+  </div>
+  <div class="form-check">
+    <input asp-for="IsActive" class="form-check-input" id="isactive">
+    <label class="form-check-label" for="isactive">Challenge is active</label>
+  </div>
+
+  <button type="submit" class="btn btn-primary">Ok</button>
+</form>

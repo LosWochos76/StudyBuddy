@@ -31,12 +31,14 @@ namespace StudyBuddy.Admin.Controllers
         {
             var user = UserViewModel.FromUser(obj);
             user.AllPrograms = new SelectList(repository.StudyPrograms.All(), "ID", "FullName");
+            user.AllTerms = new SelectList(repository.Terms.All(), "ID", "ShortName");
             return user;
         }
 
         private UserViewModel PrepareModel(UserViewModel obj)
         {
             obj.AllPrograms = new SelectList(repository.StudyPrograms.All(), "ID", "FullName");
+            obj.AllTerms = new SelectList(repository.Terms.All(), "ID", "ShortName");
             return obj;
         }
 
