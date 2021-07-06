@@ -19,7 +19,7 @@ namespace StudyBuddy.Model
         public int Points { get; set; }
 
         [Required]
-        public bool IsActive { get; set; }
+        public DateTime TargetDate { get; set; }
 
         [Required]
         public ChallengeCategory Category { get; set; }
@@ -58,7 +58,7 @@ namespace StudyBuddy.Model
             challenge.Name = obj.Name;
             challenge.Description = obj.Description;
             challenge.Points = obj.Points;
-            challenge.IsActive = obj.IsActive;
+            challenge.TargetDate = obj.TargetDate;
             challenge.Category = obj.Category;
             challenge.OwnerID = obj.OwnerID;
             challenge.Created = obj.Created;
@@ -74,7 +74,7 @@ namespace StudyBuddy.Model
             challenge.Name = obj.Name;
             challenge.Description = obj.Description;
             challenge.Points = obj.Points;
-            challenge.IsActive = obj.IsActive;
+            challenge.TargetDate = obj.TargetDate;
             challenge.Category = obj.Category;
             challenge.OwnerID = obj.OwnerID;
             challenge.Created = obj.Created;

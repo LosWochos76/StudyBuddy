@@ -4,6 +4,14 @@
     ViewData["Title"] = "Edit Team";
 }
 
+<div class="alert alert-primary" role="alert">
+  @if (Model.ID == 0) {
+    @:Create new team
+  } else {
+    @:Edit existing team
+  }
+</div>
+
 <form method="POST" asp-controller="Team" asp-action="Save">
   <div asp-validation-summary="ModelOnly"></div>
   <input type="hidden" name="ID" value="@Model.ID">

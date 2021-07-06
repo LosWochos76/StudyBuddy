@@ -32,35 +32,6 @@ namespace StudyBuddy.Persistence
             this.Teams = new TeamRepository(this.connection);
             this.Terms = new TermRepository(this.connection);
             this.Challenges = new ChallengeRepository(this.connection);
-
-            this.InitializeData();
-        }
-
-        private void InitializeData()
-        {
-            var simpleHash = new SimpleHash();
-            
-            if (Users.FindByEmail("alexander.stuckenholz@hshl.de") == null)
-            {
-               Users.Save(new User {
-                    Firstname="Alexander", 
-                    Lastname="Stuckenholz",
-                    Nickname="Stucki",
-                    Email="alexander.stuckenholz@hshl.de",
-                    PasswordHash=simpleHash.Compute("secret"),
-                    Role = Role.Admin });
-            }
-
-            if (Users.FindByEmail("eva.ponick@hshl.de") == null)
-            {
-               Users.Save(new User {
-                    Firstname="Eva", 
-                    Lastname="Ponick",
-                    Nickname="Eva",
-                    Email="eva.ponick@hshl.de",
-                    PasswordHash=simpleHash.Compute("secret"),
-                    Role = Role.Admin });
-            }
         }
 
         public void Dispose()

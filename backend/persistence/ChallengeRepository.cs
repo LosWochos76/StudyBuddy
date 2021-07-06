@@ -22,7 +22,7 @@ namespace StudyBuddy.Persistence
                 "name varchar(100) not null, " +
                 "description text, " +
                 "points smallint not null, " +
-                "is_active boolean not null, " +
+                "target_date date not null, " +
                 "category smallint not null, " +
                 "owner_id int not null, " + 
                 "created date not null, " +
@@ -42,7 +42,7 @@ namespace StudyBuddy.Persistence
             obj.Name = reader.GetString(1);
             obj.Description = reader.IsDBNull(2) ? null : reader.GetString(2);
             obj.Points = reader.GetInt32(3);
-            obj.IsActive = reader.GetBoolean(4);
+            obj.TargetDate = reader.GetDateTime(4);
             obj.Category = (ChallengeCategory)reader.GetInt32(5);
             obj.OwnerID = reader.GetInt32(6);
             obj.Created = reader.GetDateTime(7);
@@ -54,7 +54,7 @@ namespace StudyBuddy.Persistence
         public Challenge ById(int id)
         {
             string sql = "SELECT id,name,description,points," + 
-                "is_active,category,owner_id,created,prove,target_audience FROM challenges where id=:id";
+                "target_date,category,owner_id,created,prove,target_audience FROM challenges where id=:id";
 
             using (var cmd = new NpgsqlCommand(sql, connection))
             {
@@ -74,7 +74,7 @@ namespace StudyBuddy.Persistence
 
         public IEnumerable<Challenge> All(int from = 0, int max = 1000)
         {
-            string sql = "SELECT id,name,description,points,is_active,category,owner_id," + 
+            string sql = "SELECT id,name,description,points,target_date,category,owner_id," + 
                 "created,prove,target_audience FROM challenges order by created limit :max offset :from";
             
             using (var cmd = new NpgsqlCommand(sql, connection))
@@ -99,15 +99,15 @@ namespace StudyBuddy.Persistence
         private void Insert(Challenge obj)
         {
             string sql = "insert into challenges " +
-                    "(name,description,points,is_active,category,owner_id,created,prove,target_audience) values " +
-                    "(:name,:description,:points,:is_active,:category,:owner_id,:created,:prove,:target_audience) RETURNING id";
+                    "(name,description,points,target_date,category,owner_id,created,prove,target_audience) values " +
+                    "(:name,:description,:points,:target_date,:category,:owner_id,:created,:prove,:target_audience) RETURNING id";
 
             using (var cmd = new NpgsqlCommand(sql, connection)) 
             {
                 cmd.Parameters.AddWithValue(":name", obj.Name);
                 cmd.Parameters.AddWithValue(":description", string.IsNullOrEmpty(obj.Description) ? DBNull.Value : obj.Description);
                 cmd.Parameters.AddWithValue(":points", obj.Points);
-                cmd.Parameters.AddWithValue(":is_active", obj.IsActive);
+                cmd.Parameters.AddWithValue(":target_date", obj.TargetDate);
                 cmd.Parameters.AddWithValue(":category", (int)obj.Category);
                 cmd.Parameters.AddWithValue(":owner_id", obj.OwnerID);
                 cmd.Parameters.AddWithValue(":created", obj.Created);
@@ -120,7 +120,7 @@ namespace StudyBuddy.Persistence
         private void Update(Challenge obj)
         {
             string sql = "update challenges set name=:name,description=:description,points=:points," + 
-                "is_active=:is_active,category=:category,owner_id=:owner_id,created=:created,prove=:prove," +
+                "target_date=:target_date,category=:category,owner_id=:owner_id,created=:created,prove=:prove," +
                 "target_audience=:target_audience where id=:id";
 
             using (var cmd = new NpgsqlCommand(sql, connection)) 
@@ -129,7 +129,7 @@ namespace StudyBuddy.Persistence
                 cmd.Parameters.AddWithValue(":name", obj.Name);
                 cmd.Parameters.AddWithValue(":description", string.IsNullOrEmpty(obj.Description) ? DBNull.Value : obj.Description);
                 cmd.Parameters.AddWithValue(":points", obj.Points);
-                cmd.Parameters.AddWithValue(":is_active", obj.IsActive);
+                cmd.Parameters.AddWithValue(":target_date", obj.TargetDate);
                 cmd.Parameters.AddWithValue(":category", (int)obj.Category);
                 cmd.Parameters.AddWithValue(":owner_id", obj.OwnerID);
                 cmd.Parameters.AddWithValue(":created", obj.Created);

@@ -16,8 +16,8 @@
     <tr>
       <th scope="col">Name</th>
       <th scope="col">Category</th>
+      <th scope="col">Date</th>
       <th scope="col">Points</th>
-      <th scope="col">Active</th>
       <th scope="col">Action</th>
     </tr>
   </thead>
@@ -27,10 +27,11 @@
         <tr>
             <td>@obj.Name</td>
             <td>@obj.Category</td>
+            <td>@obj.TargetDate.ToString("ddd, yyyy-MM-dd")</td>
             <td>@obj.Points</td>
-            <td>@obj.IsActive</td>
             <td>
-                <a href="/Challenge/Edit/@obj.ID">Edit</a>
+                <a href="/Challenge/Edit/@obj.ID">Edit</a>&nbsp;|
+                <a href="/Challenge/Clone/@obj.ID">Clone as series</a>&nbsp;|
                 <a href="/Challenge/Delete/@obj.ID">Delete</a>
             </td>
         </tr>

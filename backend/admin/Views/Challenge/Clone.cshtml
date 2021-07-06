@@ -1,0 +1,58 @@
+@using StudyBuddy.Model
+@model Challenge
+@{
+    ViewData["Title"] = "Create clones of challenge";
+}
+
+<div class="alert alert-primary" role="alert">
+  Create clones of challenge with new target dates
+</div>
+
+<table class="table table-bordered">
+  <tbody>
+    <tr>
+      <th scope="row">Name</th>
+      <td>@Model.Name</td>
+    </tr>
+    <tr>
+      <th scope="row">Points</th>
+      <td>@Model.Points</td>
+    </tr>
+    <tr>
+      <th scope="row">Category</th>
+      <td>@Model.Category</td>
+    </tr>
+    <tr>
+      <th scope="row">Target Date</th>
+      <td>@Model.TargetDate.ToString("ddd, yyyy-MM-dd")</td>
+    </tr>
+  </tbody>
+</table>
+
+<form method="POST" asp-controller="Challenge" asp-action="CreateClones">
+  <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+  <input type="hidden" name="challenge_id" value="@Model.ID">
+
+  <div class="form-group">
+    <label for="days">Distance between new taget dates</label>
+    <select class="form-control" id="days" name="days">
+      <option value="1">1 day</option>
+      <option value="7">7 days</option>
+      <option value="14">14 days</option>
+      <option value="21">21 days</option>
+      <option value="28">28 days</option>
+    </select>
+  </div>
+
+  <div class="form-group">
+    <label for="count">Count of clones</label>
+    <select class="form-control" id="count" name="count">
+      @for (int i=1; i<=20; i++)
+      {
+        <option>@i</option>
+      }
+    </select>
+  </div>
+
+  <button type="submit" class="btn btn-primary">Ok</button>
+</form>

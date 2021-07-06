@@ -18,18 +18,10 @@ namespace StudyBuddy.Persistence
                 CreateTable();
 
                 Save(new User() { 
-                    Firstname="Alexander", 
-                    Lastname="Stuckenholz", 
-                    Nickname="Stucki",
-                    Email="alexander.stuckenholz@hshl.de",
-                    PasswordHash=simpleHash.Compute("secret"),
-                    Role=Role.Admin});
-                
-                Save(new User() { 
-                    Firstname="Eva", 
-                    Lastname="Ponick",
-                    Nickname="Eva",
-                    Email="eva.ponick@hshl.de",
+                    Firstname="Empty", 
+                    Lastname="Empty", 
+                    Nickname="Admin",
+                    Email="admin@admin.de",
                     PasswordHash=simpleHash.Compute("secret"),
                     Role=Role.Admin});
             }

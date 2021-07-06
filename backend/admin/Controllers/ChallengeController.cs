@@ -40,6 +40,9 @@ namespace StudyBuddy.Admin.Controllers
         public IActionResult Edit(int id)
         {
             var challenge = repository.Challenges.ById(id);
+            if (challenge == null)
+                return RedirectToAction("Index");
+
             var view_model = ChallengeViewModel.FromChallenge(challenge);
             return View("Edit", view_model);
         }
@@ -57,6 +60,31 @@ namespace StudyBuddy.Admin.Controllers
         public IActionResult Delete(int id)
         {
             repository.Challenges.Delete(id);
+            return RedirectToAction("Index");
+        }
+
+        public IActionResult Clone(int id)
+        {
+            var challenge = repository.Challenges.ById(id);
+            if (challenge == null)
+                return RedirectToAction("Index");
+            
+            return View("Clone", challenge);
+        }
+
+        public IActionResult CreateClones([FromForm] int challenge_id, int days, int count)
+        {
+            var challenge = repository.Challenges.ById(challenge_id);
+            if (challenge == null)
+                return RedirectToAction("Index");
+
+            for (int i=0; i<count; i++)
+            {
+                var clone = challenge.Clone();
+                clone.TargetDate = clone.TargetDate.AddDays(days * (i + 1));
+                repository.Challenges.Save(clone);
+            }
+
             return RedirectToAction("Index");
         }
     }

@@ -4,6 +4,14 @@
     ViewData["Title"] = "Edit Challenge";
 }
 
+<div class="alert alert-primary" role="alert">
+  @if (Model.ID == 0) {
+    @:Create new challenge
+  } else {
+    @:Edit existing challege
+  }
+</div>
+
 <form method="POST" asp-controller="Challenge" asp-action="Save">
   <div asp-validation-summary="ModelOnly" class="text-danger"></div>
   <input type="hidden" name="ID" value="@Model.ID">
@@ -23,7 +31,7 @@
     <label for="name">Points</label>
     <input type="text" class="form-control" id="points" name="Points" value="@Model.Points">
     <span asp-validation-for="Points" class="text-danger"></span>
-  </div>^
+  </div>
   <div class="form-group">
       <label for="name">Category</label>
       <select class="custom-select" asp-for="@Model.Category" asp-items="@Model.AllCategories">
@@ -41,10 +49,20 @@
     <textarea class="form-control" rows="1" id="targetaudience" name="TargetAudience">@Model.TargetAudience</textarea>
     <span asp-validation-for="TargetAudience" class="text-danger"></span>
   </div>
-  <div class="form-check">
-    <input asp-for="IsActive" class="form-check-input" id="isactive">
-    <label class="form-check-label" for="isactive">Challenge is active</label>
+  <div class="form-group">
+    <label for="name">Target date</label>
+    <input type="text" class="form-control" id="targetdate" name="TargetDate" value="@Model.TargetDate.ToString("yyyy-MM-dd")">
   </div>
 
   <button type="submit" class="btn btn-primary">Ok</button>
 </form>
+
+<script>
+    $(document).ready(function () {
+        $("#targetdate").datepicker({
+          changeMonth: true,
+          changeYear: true,
+          dateFormat: "yy-mm-dd"
+        });
+    });
+</script>

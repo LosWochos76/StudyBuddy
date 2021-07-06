@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - admin</title>
+    <title>@ViewData["Title"] - Backend</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" crossorigin="anonymous">
     <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
     <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
@@ -15,7 +15,7 @@
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
             <div class="container">
-                <a class="navbar-brand" asp-area="" asp-controller="User" asp-action="Index">StudyBuddy</a>
+                <a class="navbar-brand" asp-area="" asp-controller="Challenge" asp-action="Index">StudyBuddy</a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -34,7 +34,16 @@
                                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                                         <a class="dropdown-item" href="/StudyProgram">Study Programs</a>
                                         <a class="dropdown-item" href="/Term">Terms</a>
+                                        
+                                    </div>
+                                </li>
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        Users and Teams
+                                    </a>
+                                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                                         <a class="dropdown-item" href="/User">Users</a>
+                                        <a class="dropdown-item" href="/Team">Teams</a>
                                     </div>
                                 </li>
                             }
@@ -73,7 +82,7 @@
 
     <footer class="border-top footer text-muted fixed-bottom">
         <div class="container">
-            &copy; 2021 - StudyBuddy
+            &copy; 2021 - StudyBuddy - Backend Version 0.0.1
         </div>
     </footer>
     @await RenderSectionAsync("Scripts", required: false)

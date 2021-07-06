@@ -4,6 +4,14 @@
     ViewData["Title"] = "Edit Term";
 }
 
+<div class="alert alert-primary" role="alert">
+  @if (Model.ID == 0) {
+    @:Create new Term
+  } else {
+    @:Edit existing Term
+  }
+</div>
+
 <form method="POST" asp-controller="Term" asp-action="Save">
   <div asp-validation-summary="ModelOnly"></div>
   <input type="hidden" name="ID" value="@Model.ID">
