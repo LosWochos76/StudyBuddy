@@ -1,4 +1,5 @@
-﻿<!DOCTYPE html>
+﻿@inject Microsoft.Extensions.Localization.IStringLocalizer<SharedResources> Localizer
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -29,44 +30,44 @@
                             {
                                 <li class="nav-item dropdown">
                                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                        Master Data
+                                        @Localizer["Master Data"]
                                     </a>
                                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                        <a class="dropdown-item" href="/StudyProgram">Study Programs</a>
-                                        <a class="dropdown-item" href="/Term">Terms</a>
+                                        <a class="dropdown-item" href="/StudyProgram">@Localizer["Study Programs"]</a>
+                                        <a class="dropdown-item" href="/Term">@Localizer["Terms"]</a>
                                         
                                     </div>
                                 </li>
                                 <li class="nav-item dropdown">
                                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                        Users and Teams
+                                        @Localizer["Users and Teams"]
                                     </a>
                                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                        <a class="dropdown-item" href="/User">Users</a>
-                                        <a class="dropdown-item" href="/Team">Teams</a>
+                                        <a class="dropdown-item" href="/User">@Localizer["Users"]</a>
+                                        <a class="dropdown-item" href="/Team">@Localizer["Teams"]</a>
                                     </div>
                                 </li>
                             }
                         }
                         <li class="nav-item">
-                            <a class="nav-link text-dark" href="/Challenge">Challenges</a>
+                            <a class="nav-link text-dark" href="/Challenge">@Localizer["Challenges"]</a>
                         </li>
                     </ul>
                     <ul class="navbar-nav ml-auto">
                         @if (Context.Items["user"] != null)
                         {
                            <li class="nav-item">
-                               <a class="nav-link text-dark" asp-controller="Settings" asp-action="Index">Personal Settings</a>
+                               <a class="nav-link text-dark" asp-controller="Settings" asp-action="Index">@Localizer["Personal Settings"]</a>
                            </li> 
                         }
                         <li class="nav-item">
                             @if (Context.Items["user"] == null)
                             {
-                            <a class="nav-link text-dark" asp-controller="Authentication" asp-action="Login">Login</a>
+                            <a class="nav-link text-dark" asp-controller="Authentication" asp-action="Login">@Localizer["Login"]</a>
                             }
                             else
                             {
-                            <a class="nav-link text-dark" asp-controller="Authentication" asp-action="Logout">Logout</a>
+                            <a class="nav-link text-dark" asp-controller="Authentication" asp-action="Logout">@Localizer["Logout"]</a>
                             }
                         </li>
                     </ul>

@@ -1,3 +1,4 @@
+@inject Microsoft.Extensions.Localization.IStringLocalizer<SharedResources> Localizer
 @using StudyBuddy.Model
 @model Team
 @{
@@ -6,9 +7,9 @@
 
 <div class="alert alert-primary" role="alert">
   @if (Model.ID == 0) {
-    @:Create new team
+    @Localizer["Create new team"]
   } else {
-    @:Edit existing team
+    @Localizer["Edit existing team"]
   }
 </div>
 
@@ -16,9 +17,9 @@
   <div asp-validation-summary="ModelOnly"></div>
   <input type="hidden" name="ID" value="@Model.ID">
   <div class="form-group">
-    <label for="name">Name</label>
+    <label for="name">@Localizer["Name"]</label>
     <input type="text" class="form-control" id="name" name="Name" value="@Model.Name">
   </div>
-  <button type="submit" class="btn btn-primary">Ok</button>
+  <button type="submit" class="btn btn-primary">@Localizer["Ok"]</button>
 </form>
 

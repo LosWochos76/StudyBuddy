@@ -2,17 +2,21 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using StudyBuddy.Persistence;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Localization;
+using Microsoft.AspNetCore.Localization;
+using System.Threading;
+using System.Globalization;
 
 namespace StudyBuddy.Admin.Controllers
 {
     public class AuthenticationController : Controller
     {
-        private readonly ILogger<AuthenticationController> logger;
         private readonly IRepository repository;
+        private readonly IStringLocalizer<SharedResources> localizer;
 
-        public AuthenticationController(ILogger<AuthenticationController> logger, IRepository repository)
+        public AuthenticationController(IStringLocalizer<SharedResources> localizer, IRepository repository)
         {
-            this.logger = logger;
+            this.localizer = localizer;
             this.repository = repository;
         }
 

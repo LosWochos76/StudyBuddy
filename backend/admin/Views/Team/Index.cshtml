@@ -1,12 +1,13 @@
+@inject Microsoft.Extensions.Localization.IStringLocalizer<SharedResources> Localizer
 @{
-    ViewData["Title"] = "Teams";
+    ViewData["Title"] = @Localizer["Teams"];
 }
 @using System.Collections.Generic
 @using StudyBuddy.Model
 @model IEnumerable<Team>
 
 <form method="get" asp-controller="Team" asp-action="New">
-  <input class="btn btn-primary" type="submit" value="New Team">
+  <input class="btn btn-primary" type="submit" value="@Localizer["New Team"]">
 </form>
 
 <br>
@@ -14,8 +15,8 @@
 <table class="table table-bordered">
   <thead>
     <tr>
-      <th scope="col">Name</th>
-      <th scope="col">Action</th>
+      <th scope="col">@Localizer["Name"]</th>
+      <th scope="col">@Localizer["Action"]</th>
     </tr>
   </thead>
   <tbody>
@@ -24,9 +25,9 @@
         <tr>
             <td>@obj.Name</td>
             <td>
-                <a href="/Team/Edit/@obj.ID">Edit</a>&nbsp;|
-                <a href="/Team/Members/@obj.ID">Members</a>&nbsp;|
-                <a href="/Team/Delete/@obj.ID">Delete</a>
+                <a href="/Team/Edit/@obj.ID">@Localizer["Edit"]</a>&nbsp;|
+                <a href="/Team/Members/@obj.ID">@Localizer["Members"]</a>&nbsp;|
+                <a href="/Team/Delete/@obj.ID">@Localizer["Delete"]</a>
             </td>
         </tr>
     }

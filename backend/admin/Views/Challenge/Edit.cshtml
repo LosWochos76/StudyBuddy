@@ -1,3 +1,4 @@
+@inject Microsoft.Extensions.Localization.IStringLocalizer<SharedResources> Localizer
 @using StudyBuddy.Model
 @model ChallengeViewModel
 @{
@@ -6,9 +7,9 @@
 
 <div class="alert alert-primary" role="alert">
   @if (Model.ID == 0) {
-    @:Create new challenge
+    @Localizer["Create new challenge"]
   } else {
-    @:Edit existing challege
+    @Localizer["Edit existing challege"]
   }
 </div>
 
@@ -18,39 +19,39 @@
   <input type="hidden" name="OwnerID" value="@Model.OwnerID">
   <input type="hidden" name="Created" value="@Model.Created">
   <div class="form-group">
-    <label for="name">Name</label>
+    <label for="name">@Localizer["Name"]</label>
     <input type="text" class="form-control" id="name" name="Name" value="@Model.Name">
     <span asp-validation-for="Name" class="text-danger"></span>
   </div>
   <div class="form-group">
-    <label for="name">Description</label>
+    <label for="name">@Localizer["Description"]</label>
     <textarea class="form-control" rows="2" id="description" name="Description">@Model.Description</textarea>
     <span asp-validation-for="Description" class="text-danger"></span>
   </div>
   <div class="form-group">
-    <label for="name">Points</label>
+    <label for="name">@Localizer["Points"]</label>
     <input type="text" class="form-control" id="points" name="Points" value="@Model.Points">
     <span asp-validation-for="Points" class="text-danger"></span>
   </div>
   <div class="form-group">
-      <label for="name">Category</label>
+      <label for="name">@Localizer["Category"]</label>
       <select class="custom-select" asp-for="@Model.Category" asp-items="@Model.AllCategories">
       </select>
       <span asp-validation-for="Category" class="text-danger"></span>
   </div>
   <div class="form-group">
-      <label for="name">Prove</label>
+      <label for="name">@Localizer["Prove"]</label>
       <select class="custom-select" asp-for="@Model.Prove" asp-items="@Model.AllProves">
       </select>
       <span asp-validation-for="Prove" class="text-danger"></span>
   </div>
   <div class="form-group">
-    <label for="name">Target audience</label>
+    <label for="name">@Localizer["Target audience"]</label>
     <textarea class="form-control" rows="1" id="targetaudience" name="TargetAudience">@Model.TargetAudience</textarea>
     <span asp-validation-for="TargetAudience" class="text-danger"></span>
   </div>
   <div class="form-group">
-    <label for="name">Target date</label>
+    <label for="name">@Localizer["Target date"]</label>
     <input type="text" class="form-control" id="targetdate" name="TargetDate" value="@Model.TargetDate.ToString("yyyy-MM-dd")">
   </div>
 

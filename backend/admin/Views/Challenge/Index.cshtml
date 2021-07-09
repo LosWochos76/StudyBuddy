@@ -1,3 +1,4 @@
+@inject Microsoft.Extensions.Localization.IStringLocalizer<SharedResources> Localizer
 @{
     ViewData["Title"] = "Challenges";
 }
@@ -6,7 +7,7 @@
 @model IEnumerable<Challenge>
 
 <form method="get" asp-controller="Challenge" asp-action="New">
-  <input class="btn btn-primary" type="submit" value="New Challenge">
+  <input class="btn btn-primary" type="submit" value="@Localizer["New Challenge"]">
 </form>
 
 <br>
@@ -14,11 +15,11 @@
 <table class="table table-bordered">
   <thead>
     <tr>
-      <th scope="col">Name</th>
-      <th scope="col">Category</th>
-      <th scope="col">Date</th>
-      <th scope="col">Points</th>
-      <th scope="col">Action</th>
+      <th scope="col">@Localizer["Name"]</th>
+      <th scope="col">@Localizer["Category"]</th>
+      <th scope="col">@Localizer["Date"]</th>
+      <th scope="col">@Localizer["Points"]</th>
+      <th scope="col">@Localizer["Action"]</th>
     </tr>
   </thead>
   <tbody>
