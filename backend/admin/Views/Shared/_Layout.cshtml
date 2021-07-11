@@ -49,8 +49,15 @@
                                 </li>
                             }
                         }
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" href="/Challenge">@Localizer["Challenges"]</a>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                @Localizer["Game elements"]
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <a class="dropdown-item" href="/Challenge">@Localizer["Challenges"]</a>
+                                <a class="dropdown-item" href="/GameBadge">@Localizer["Badges"]</a>
+                                
+                            </div>
                         </li>
                     </ul>
                     <ul class="navbar-nav ml-auto">
@@ -83,7 +90,7 @@
 
     <footer class="border-top footer text-muted fixed-bottom">
         <div class="container">
-            &copy; 2021 - StudyBuddy - Backend Version 0.0.1
+            &copy; 2021 - StudyBuddy - Backend Version 0.0.2
         </div>
     </footer>
     @await RenderSectionAsync("Scripts", required: false)

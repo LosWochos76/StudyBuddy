@@ -19,10 +19,15 @@ namespace StudyBuddy.Model
         public int Points { get; set; }
 
         [Required]
-        public DateTime TargetDate { get; set; }
+        public DateTime ValidityStart { get; set; }
+
+        [Required]
+        public DateTime ValidityEnd { get; set; }
 
         [Required]
         public ChallengeCategory Category { get; set; }
+
+        public int? SeriesParentID { get; set; }
 
         public SelectList AllCategories
         { 
@@ -58,12 +63,14 @@ namespace StudyBuddy.Model
             challenge.Name = obj.Name;
             challenge.Description = obj.Description;
             challenge.Points = obj.Points;
-            challenge.TargetDate = obj.TargetDate;
+            challenge.ValidityStart = obj.ValidityStart;
+            challenge.ValidityEnd = obj.ValidityEnd;
             challenge.Category = obj.Category;
             challenge.OwnerID = obj.OwnerID;
             challenge.Created = obj.Created;
             challenge.Prove = obj.Prove;
             challenge.TargetAudience = obj.TargetAudience;
+            challenge.SeriesParentID = obj.SeriesParentID;
             return challenge;
         }
 
@@ -74,12 +81,14 @@ namespace StudyBuddy.Model
             challenge.Name = obj.Name;
             challenge.Description = obj.Description;
             challenge.Points = obj.Points;
-            challenge.TargetDate = obj.TargetDate;
+            challenge.ValidityStart = obj.ValidityStart;
+            challenge.ValidityEnd = obj.ValidityEnd;
             challenge.Category = obj.Category;
             challenge.OwnerID = obj.OwnerID;
             challenge.Created = obj.Created;
             challenge.Prove = obj.Prove;
             challenge.TargetAudience = obj.TargetAudience;
+            challenge.SeriesParentID = obj.SeriesParentID;
             return challenge;
         }
     }

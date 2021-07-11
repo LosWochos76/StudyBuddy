@@ -7,5 +7,6 @@ namespace StudyBuddy.Persistence
         IStudyProgramRepository StudyPrograms { get; }
         ITermRepository Terms { get; }
         IChallengeRepository Challenges { get; }
+        IGameBadgeRepository GameBadges { get; }
     }
 }

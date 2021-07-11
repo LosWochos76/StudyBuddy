@@ -1,0 +1,55 @@
+@inject Microsoft.Extensions.Localization.IStringLocalizer<SharedResources> Localizer
+@using StudyBuddy.Model
+@model GameBadge
+@{
+    ViewData["Title"] = @Localizer["Challenges of badge"];
+}
+
+<div class="alert alert-primary" role="alert">
+  @Localizer["Edit challenges of badge"]
+</div>
+
+<table class="table table-bordered">
+  <thead>
+    <tr>
+      <th scope="col">@Localizer["Name"]</th>
+      <th scope="col">@Localizer["Category"]</th>
+      <th scope="col">@Localizer["Start"]</th>
+      <th scope="col">@Localizer["End"]</th>
+      <th scope="col">@Localizer["Points"]</th>
+      <th scope="col">@Localizer["Action"]</th>
+    </tr>
+  </thead>
+  <tbody>
+    @foreach (var obj in @ViewBag.Challenges)
+    {
+        <tr>
+            <td>@obj.Name</td>
+            <td>@obj.Category</td>
+            <td>@obj.ValidityStart.ToString("ddd, yyyy-MM-dd")</td>
+            <td>@obj.ValidityEnd.ToString("ddd, yyyy-MM-dd")</td>
+            <td>@obj.Points</td>
+            <td>
+                <a href="/GameBadge/RemoveChallenge?badgeID=@Model.ID&challengeID=@obj.ID">@Localizer["Remove"]</a>
+            </td>
+        </tr>
+    }
+  </tbody>
+</table>
+
+<form method="POST" asp-controller="GameBadge" asp-action="AddChallenge">
+  <input type="hidden" name="badgeID" value="@Model.ID">
+  <div class="form-group">
+      <label for="name">@Localizer["Add challenge"]</label>
+      <select class="custom-select" name="challengeID">
+        <option value="0">@Localizer["Please select a challenge"]</option>
+        @foreach (var obj in @ViewBag.OtherChallenges)
+        {
+            <option value="@obj.ID">@obj.Name</option>
+        }
+      </select>
+  </div>
+
+  <button type="submit" class="btn btn-primary">@Localizer["Add challenge"]</button>
+    
+</form>

@@ -81,7 +81,9 @@ namespace StudyBuddy.Admin.Controllers
             for (int i=0; i<count; i++)
             {
                 var clone = challenge.Clone();
-                clone.TargetDate = clone.TargetDate.AddDays(days * (i + 1));
+                clone.ValidityStart = clone.ValidityStart.AddDays(days * (i + 1));
+                clone.ValidityEnd = clone.ValidityEnd.AddDays(days * (i + 1));
+                clone.SeriesParentID = challenge_id;
                 repository.Challenges.Save(clone);
             }
 

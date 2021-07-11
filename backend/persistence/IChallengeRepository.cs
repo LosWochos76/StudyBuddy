@@ -9,5 +9,7 @@ namespace StudyBuddy.Persistence
         IEnumerable<Challenge> All(int from = 0, int max = 1000);
         void Save(Challenge obj);
         void Delete(int id);
+        IEnumerable<Challenge> OfBadge(int badge_id);
+        IEnumerable<Challenge> NotOfBadge(int badge_id);
     }
 }

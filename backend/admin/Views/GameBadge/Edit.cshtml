@@ -1,0 +1,33 @@
+@inject Microsoft.Extensions.Localization.IStringLocalizer<SharedResources> Localizer
+@using StudyBuddy.Model
+@model GameBadge
+@{
+    ViewData["Title"] = @Localizer["Edit badge"];
+}
+
+<div class="alert alert-primary" role="alert">
+  @if (Model.ID == 0) {
+    @Localizer["Create new badge"]
+  } else {
+    @Localizer["Edit existing badge"]
+  }
+</div>
+
+<form method="POST" asp-controller="GameBadge" asp-action="Save">
+  <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+  <input type="hidden" name="ID" value="@Model.ID">
+  <input type="hidden" name="OwnerID" value="@Model.OwnerID">
+  <input type="hidden" name="Created" value="@Model.Created">
+  <div class="form-group">
+    <label for="name">@Localizer["Name"]</label>
+    <input type="text" class="form-control" id="name" name="Name" value="@Model.Name">
+    <span asp-validation-for="Name" class="text-danger"></span>
+  </div>
+  <div class="form-group">
+    <label for="days">@Localizer["Required coverage of challenges"]</label>
+    <select class="custom-select" asp-for="@Model.RequiredCoverage" asp-items="@ViewBag.Coverages">
+    </select>
+  </div>
+
+  <button type="submit" class="btn btn-primary">Ok</button>
+</form>

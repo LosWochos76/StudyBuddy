@@ -12,20 +12,24 @@
 <table class="table table-bordered">
   <tbody>
     <tr>
-      <th scope="row">Name</th>
+      <th scope="row">@Localizer["Name"]</th>
       <td>@Model.Name</td>
     </tr>
     <tr>
-      <th scope="row">Points</th>
+      <th scope="row">@Localizer["Points"]</th>
       <td>@Model.Points</td>
     </tr>
     <tr>
-      <th scope="row">Category</th>
+      <th scope="row">@Localizer["Category"]</th>
       <td>@Model.Category</td>
     </tr>
     <tr>
-      <th scope="row">Target Date</th>
-      <td>@Model.TargetDate.ToString("ddd, yyyy-MM-dd")</td>
+      <th scope="row">@Localizer["Validity  start"]</th>
+      <td>@Model.ValidityStart.ToString("ddd, yyyy-MM-dd")</td>
+    </tr>
+    <tr>
+      <th scope="row">@Localizer["Validity end"]</th>
+      <td>@Model.ValidityEnd.ToString("ddd, yyyy-MM-dd")</td>
     </tr>
   </tbody>
 </table>
@@ -35,7 +39,7 @@
   <input type="hidden" name="challenge_id" value="@Model.ID">
 
   <div class="form-group">
-    <label for="days">Distance between new taget dates</label>
+    <label for="days">Distance between dates</label>
     <select class="form-control" id="days" name="days">
       <option value="1">1 day</option>
       <option value="7">7 days</option>
@@ -46,7 +50,7 @@
   </div>
 
   <div class="form-group">
-    <label for="count">Count of clones</label>
+    <label for="count">@Localizer["Count of clones"]</label>
     <select class="form-control" id="count" name="count">
       @for (int i=1; i<=20; i++)
       {

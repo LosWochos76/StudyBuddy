@@ -13,8 +13,9 @@ namespace StudyBuddy.Persistence
         public IUserRepository Users { get; private set; }
         public IStudyProgramRepository StudyPrograms { get; private set; }
         public ITeamRepository Teams { get; private set; }
-        public ITermRepository Terms { get; set; }
-        public IChallengeRepository Challenges { get; set; }
+        public ITermRepository Terms { get; private set; }
+        public IChallengeRepository Challenges { get; private set; }
+        public IGameBadgeRepository GameBadges { get; private set; }
 
         public Repository()
         {
@@ -32,6 +33,7 @@ namespace StudyBuddy.Persistence
             this.Teams = new TeamRepository(this.connection);
             this.Terms = new TermRepository(this.connection);
             this.Challenges = new ChallengeRepository(this.connection);
+            this.GameBadges = new GameBadgeRepository(this.connection);
         }
 
         public void Dispose()

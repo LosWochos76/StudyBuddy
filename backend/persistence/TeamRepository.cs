@@ -98,6 +98,13 @@ namespace StudyBuddy.Persistence
                 cmd.Parameters.AddWithValue(":id", id);
                 cmd.ExecuteNonQuery();
             }
+
+            sql = "delete from team_members where team_id=:id";
+            using (var cmd = new NpgsqlCommand(sql, connection))
+            {
+                cmd.Parameters.AddWithValue(":id", id);
+                cmd.ExecuteNonQuery();
+            }
         }
 
         private void Insert(Team obj)
