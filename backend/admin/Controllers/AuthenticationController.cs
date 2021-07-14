@@ -30,7 +30,7 @@ namespace StudyBuddy.Admin.Controllers
             if (!ModelState.IsValid)
                 return View("Login", login);
     
-            var user = repository.Users.FindByEmailAndPassword(login.EMail, login.Password);
+            var user = repository.Users.ByEmailAndPassword(login.EMail, login.Password);
             if (user == null || user.Role == Model.Role.Student)
             {
                 ModelState.AddModelError("", "User not found");

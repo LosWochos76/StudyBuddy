@@ -106,19 +106,19 @@ namespace StudyBuddy.Persistence
             }
         }
 
-        public User FindByEmailAndPassword(string email, string password)
+        public User ByEmailAndPassword(string email, string password)
         {
-            var user = FindByEmail(email);
+            var user = ByEmail(email);
             if (user != null && simpleHash.Verify(password, user.PasswordHash))
                 return user;
             else
                 return null;
         }
 
-        public User FindByEmail(string email)
+        public User ByEmail(string email)
         {
             string sql = "SELECT id,firstname,lastname,nickname," + 
-                "email,password_hash,role,program_id,enrolled_in_term_id FROM users where email=:email";
+                "email,password_hash,role,program_id,enrolled_in_term_id FROM users where lower(email)=lower(:email)";
 
             using (var cmd = new NpgsqlCommand(sql, connection))
             {
@@ -202,10 +202,10 @@ namespace StudyBuddy.Persistence
             }
         }
 
-        public User FindByNickname(string nickname)
+        public User ByNickname(string nickname)
         {
             string sql = "SELECT id,firstname,lastname,nickname," + 
-                "email,password_hash,role,program_id,enrolled_in_term_id FROM users where nickname=:nickname";
+                "email,password_hash,role,program_id,enrolled_in_term_id FROM users where lower(nickname)=lower(:nickname)";
 
             using (var cmd = new NpgsqlCommand(sql, connection))
             {

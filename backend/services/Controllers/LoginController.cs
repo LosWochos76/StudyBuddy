@@ -25,7 +25,7 @@ namespace StudyBuddy.Services
             if (string.IsNullOrEmpty(email) || string.IsNullOrEmpty(password))
                 return Json(new { Error = "Provide email and password!"});
 
-            var user = repository.Users.FindByEmailAndPassword(email, password);
+            var user = repository.Users.ByEmailAndPassword(email, password);
             if (user == null)
                 return Json(new { Error = "No user found!"});
             else

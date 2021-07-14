@@ -1,31 +1,34 @@
 using System.Linq;
+using StudyBuddy.Model;
 using Microsoft.AspNetCore.Mvc;
 using StudyBuddy.Persistence;
 
 namespace StudyBuddy.Services
 {
-    public class UserController : Controller
+    public class ChallengeController : Controller
     {
+        private User current_user;
         private IRepository repository;
 
-        public UserController(IRepository repository)
+        public ChallengeController(IRepository repository)
         {
             this.repository = repository;
+            this.current_user = HttpContext.Items["user"] as User;
         }
 
-        [Route("/User/")]
+        [Route("/Challenge/")]
         [HttpGet]
         public IActionResult Get()
         {
-            var objects = repository.Users.All();
+            var objects = repository.Challenges.All();
             return Json(objects);
         }
 
-        [Route("/User/{id}")]
+        [Route("/Challenge/{id}")]
         [HttpGet]
         public IActionResult Get(int id)
         {
-            var obj = repository.Users.ById(id);
+            var obj = repository.Challenges.ById(id);
             return Json(obj);
         }
     }

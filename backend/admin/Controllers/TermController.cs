@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Logging;
 using StudyBuddy.Model;
 using StudyBuddy.Persistence;
@@ -8,12 +9,12 @@ namespace StudyBuddy.Admin.Controllers
     [Admin]
     public class TermController : Controller
     {
-        private readonly ILogger<UserController> logger;
+        IStringLocalizer<SharedResources> localizer;
         private IRepository repository;
 
-        public TermController(ILogger<UserController> logger, IRepository repository)
+        public TermController(IStringLocalizer<SharedResources> localizer, IRepository repository)
         {
-            this.logger = logger;
+            this.localizer = localizer;
             this.repository = repository;
         }
 
@@ -42,7 +43,21 @@ namespace StudyBuddy.Admin.Controllers
         {
             if (!ModelState.IsValid)
                 return View("Edit", obj);
+
+            if (obj.End <= obj.Start)
+            {
+                ModelState.AddModelError(string.Empty, localizer["The end of the semester must be at least one day after the beginning!"]);
+                return View("Edit", obj);
+            }
             
+            var other1 = repository.Terms.ByDate(obj.Start);
+            var other2 = repository.Terms.ByDate(obj.End);
+            if ((other1 != null && other1.ID != obj.ID) || (other2 != null && other2.ID != obj.ID))
+            {
+                ModelState.AddModelError(string.Empty, localizer["The period of the semester cannot overlap with another semester!"]);
+                return View("Edit", obj);
+            }
+
             this.repository.Terms.Save(obj);
             return RedirectToAction("Index");
         }

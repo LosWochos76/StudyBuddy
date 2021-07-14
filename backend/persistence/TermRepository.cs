@@ -61,6 +61,27 @@ namespace StudyBuddy.Persistence
             return null;
         }
 
+        public Term ByDate(DateTime date)
+        {
+            string sql = "SELECT id,shortname,name,start_date," +
+                "end_date FROM terms where :date>=start_date and :date<=end_date";
+
+            using (var cmd = new NpgsqlCommand(sql, connection))
+            {
+                cmd.Parameters.AddWithValue(":date", date.Date);
+
+                using (NpgsqlDataReader reader = cmd.ExecuteReader())
+                {
+                    if (reader.Read())
+                    {
+                        return FromReader(reader);
+                    }
+                }
+            }
+
+            return null;
+        }
+
         public IEnumerable<Term> All(int from = 0, int max = 1000)
         {
             string sql = "SELECT id,shortname,name,start_date,end_date " +

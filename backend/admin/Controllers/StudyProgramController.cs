@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Logging;
 using StudyBuddy.Model;
 using StudyBuddy.Persistence;
@@ -8,12 +9,12 @@ namespace StudyBuddy.Admin.Controllers
     [Admin]
     public class StudyProgramController : Controller
     {
-        private readonly ILogger<UserController> logger;
+        private IStringLocalizer<SharedResources> localizer;
         private IRepository repository;
 
-        public StudyProgramController(ILogger<UserController> logger, IRepository repository)
+        public StudyProgramController(IStringLocalizer<SharedResources> localizer, IRepository repository)
         {
-            this.logger = logger; 
+            this.localizer = localizer;
             this.repository = repository;
         }
 
@@ -42,6 +43,14 @@ namespace StudyBuddy.Admin.Controllers
         {
             if (!ModelState.IsValid)
                 return View("Edit", obj);
+
+            // ensure that the acronym is unique
+            var other = repository.StudyPrograms.ByAcronym(obj.Acronym);
+            if (other != null && other.ID != obj.ID) 
+            {
+                ModelState.AddModelError("Acronym", localizer["Acronym is already in use! Please select a different acronym!"]);
+                return View("Edit", obj);
+            }
             
             this.repository.StudyPrograms.Save(obj);
             return RedirectToAction("Index");

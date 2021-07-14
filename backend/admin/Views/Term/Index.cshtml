@@ -1,12 +1,13 @@
+@inject Microsoft.Extensions.Localization.IStringLocalizer<SharedResources> Localizer
 @{
-    ViewData["Title"] = "Terms";
+    ViewData["Title"] = @Localizer["Terms"];
 }
 @using System.Collections.Generic
 @using StudyBuddy.Model
 @model IEnumerable<Term>
 
 <form method="get" asp-controller="Term" asp-action="New">
-  <input class="btn btn-primary" type="submit" value="New Term">
+  <input class="btn btn-primary" type="submit" value="@Localizer["New Term"]">
 </form>
 
 <br>
@@ -14,10 +15,10 @@
 <table class="table table-bordered">
   <thead>
     <tr>
-      <th scope="col">Shortname</th>
-      <th scope="col">Start</th>
-      <th scope="col">End</th>
-      <th scope="col">Action</th>
+      <th scope="col">@Localizer["Shortname"]</th>
+      <th scope="col">@Localizer["Start"]</th>
+      <th scope="col">@Localizer["End"]</th>
+      <th scope="col">@Localizer["Action"]</th>
     </tr>
   </thead>
   <tbody>
@@ -28,8 +29,8 @@
             <td>@obj.Start.ToString("yyyy-MM-dd")</td>
             <td>@obj.End.ToString("yyyy-MM-dd")</td>
             <td>
-                <a href="/Term/Edit/@obj.ID">Edit</a>&nbsp;|
-                <a href="/Term/Delete/@obj.ID">Delete</a>
+                <a href="/Term/Edit/@obj.ID">@Localizer["Edit"]</a>&nbsp;|
+                <a href="/Term/Delete/@obj.ID">@Localizer["Delete"]</a>
             </td>
         </tr>
     }

@@ -79,6 +79,26 @@ namespace StudyBuddy.Persistence
             return null;
         }
 
+        public StudyProgram ByAcronym(string acronym)
+        {
+            string sql = "SELECT id,acronym,name FROM study_programs where lower(acronym)=lower(:acronym)";
+
+            using (var cmd = new NpgsqlCommand(sql, connection))
+            {
+                cmd.Parameters.AddWithValue(":acronym", acronym);
+
+                using (NpgsqlDataReader reader = cmd.ExecuteReader())
+                {
+                    if (reader.Read())
+                    {
+                        return FromReader(reader);
+                    }
+                }
+            }
+
+            return null;
+        }
+
         public void Delete(int id)
         {
             string sql = "delete from study_programs where id=:id";

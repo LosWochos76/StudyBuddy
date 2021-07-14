@@ -69,7 +69,7 @@ namespace StudyBuddy.Admin.Controllers
                 return View("Edit", PrepareModel(obj));
             }
 
-            var user_with_nickname = repository.Users.FindByNickname(obj.Nickname);
+            var user_with_nickname = repository.Users.ByNickname(obj.Nickname);
             if (user_with_nickname != null && user_with_nickname.ID != obj.ID)
             {
                 ModelState.AddModelError("Nickname", "Nickname is already in use! Please select a different nickname!");
