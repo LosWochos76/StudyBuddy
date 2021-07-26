@@ -25,6 +25,7 @@ namespace App
 
         protected override void OnStart()
         {
+            Facade.Instance.Authentication.TryResume();
         }
 
         protected override void OnSleep()

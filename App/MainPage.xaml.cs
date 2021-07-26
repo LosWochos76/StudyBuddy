@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Windows.Input;
 using StudyBuddy.ServiceFacade;
 using Xamarin.Forms;
 
 namespace App
 {
-    public partial class MainPage : ContentPage
+    public partial class MainPage : Shell
     {
         public MainPage()
         {
@@ -13,7 +14,7 @@ namespace App
             NavigationPage.SetHasNavigationBar(this, false);
         }
 
-        private async void Button_Clicked(System.Object sender, System.EventArgs e)
+        void Logout_Clicked(System.Object sender, System.EventArgs e)
         {
             Facade.Instance.Authentication.Logout();
         }

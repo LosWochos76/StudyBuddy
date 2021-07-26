@@ -1,8 +1,22 @@
 ﻿<?xml version="1.0" encoding="UTF-8" ?>
-<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+<Shell xmlns="http://xamarin.com/schemas/2014/forms"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:local="clr-namespace:App"
     x:Class="App.MainPage">
-    <StackLayout VerticalOptions="EndAndExpand">
-        <Button Text="Ausloggen" Clicked="Button_Clicked"/>
-    </StackLayout>
-</ContentPage>
+    <FlyoutItem Title="Herausforderungen">
+        <Tab>
+            <ShellContent Icon="" ContentTemplate="{DataTemplate local:ChallengesPage}" />
+        </Tab>
+    </FlyoutItem>
+    <FlyoutItem Title="Abzeichen">
+        <Tab>
+            <ShellContent Icon="" ContentTemplate="{DataTemplate local:BadgesPage}" />
+        </Tab>
+    </FlyoutItem>
+    <FlyoutItem Title="Teams">
+        <Tab>
+            <ShellContent Icon="" ContentTemplate="{DataTemplate local:TeamsPage}" />
+        </Tab>
+    </FlyoutItem>
+    <MenuItem Text="Ausloggen" Clicked="Logout_Clicked" />
+</Shell>

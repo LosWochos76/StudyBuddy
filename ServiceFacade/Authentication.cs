@@ -4,6 +4,7 @@ using System.Net.Http.Json;
 using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
 using StudyBuddy.Model;
+using Xamarin.Forms;
 
 namespace StudyBuddy.ServiceFacade
 {
@@ -59,18 +60,7 @@ namespace StudyBuddy.ServiceFacade
                     return false;
 
                 var content = await response.Content.ReadAsStringAsync();
-                var obj = JObject.Parse(content);
-
-                if (obj.ContainsKey("token"))
-                {
-                    Token = obj["token"].ToString();
-                    CurrentUser = obj["user"].ToObject<User>();
-                    var args = new AuthenticationEventArgs(Token, CurrentUser, true, false);
-                    AuthenticationStateChanged?.Invoke(this, args);
-                    return true;
-                }
-                else
-                    return false;
+                return await LoginFromJson(content);
             }
             catch (Exception)
             {
@@ -78,10 +68,40 @@ namespace StudyBuddy.ServiceFacade
             }
         }
 
-        public void Logout()
+        private async Task<bool> LoginFromJson(string content)
+        {
+            var obj = JObject.Parse(content);
+            if (!obj.ContainsKey("token"))
+                return false;
+
+            Token = obj["token"].ToString();
+            CurrentUser = obj["user"].ToObject<User>();
+
+            // Save the Login-Data to the context to be resumed
+            Application.Current.Properties["Login"] = content;
+            await Application.Current.SavePropertiesAsync();
+
+            var args = new AuthenticationEventArgs(Token, CurrentUser, true, false);
+            AuthenticationStateChanged?.Invoke(this, args);
+            return true;
+        }
+
+        public async Task<bool> TryResume()
+        {
+            if (!Application.Current.Properties.ContainsKey("Login"))
+                return false;
+
+            var content = Application.Current.Properties["Login"].ToString();
+            return await LoginFromJson(content);
+        }
+
+        public async void Logout()
         {
             Token = string.Empty;
             CurrentUser = null;
+            Application.Current.Properties.Remove("Login");
+            await Application.Current.SavePropertiesAsync();
+
             var args = new AuthenticationEventArgs(Token, CurrentUser, false, true);
             AuthenticationStateChanged?.Invoke(this, args);
         }
