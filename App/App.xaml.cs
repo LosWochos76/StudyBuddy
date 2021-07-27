@@ -11,28 +11,30 @@ namespace App
         {
             InitializeComponent();
 
-            Facade.Instance.Authentication.AuthenticationStateChanged += Authentication_AuthenticationStateChanged;
-            MainPage = new NavigationPage(new LoginPage());
+            // Replace the registration of local services by the restful versions to have a real experience
+            DependencyService.Register<IAuthentication, LocalAuthentication>();
+            DependencyService.Register<IChallengeRepository, LocalChallengeRepository>();
+
+            MainPage = new MainPage();
         }
 
-        private async void Authentication_AuthenticationStateChanged(object sender, AuthenticationEventArgs e)
+        protected async override void OnStart()
         {
-            if (e.WasLoggedIn)
-                await MainPage.Navigation.PushAsync(new MainPage());
-            else
-                await MainPage.Navigation.PopToRootAsync();
-        }
+            if (!Application.Current.Properties.ContainsKey("Login"))
+                return;
 
-        protected override void OnStart()
-        {
-            Facade.Instance.Authentication.TryResume();
+            var content = Application.Current.Properties["Login"].ToString();
+            var result = await DependencyService.Get<IAuthentication>().LoginFromJson(content);
+
+            if (result)
+                await Shell.Current.GoToAsync("//ChallengesPage");
         }
 
         protected override void OnSleep()
         {
         }
 
-        protected override void OnResume()
+        protected async override void OnResume()
         {
         }
     }

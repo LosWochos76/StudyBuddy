@@ -3,19 +3,22 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:local="clr-namespace:App"
     x:Class="App.MainPage">
+    <ShellItem Route="LoginPage" FlyoutItemIsVisible="False">
+        <ShellContent ContentTemplate="{DataTemplate local:LoginPage}" />
+    </ShellItem>
     <FlyoutItem Title="Herausforderungen">
         <Tab>
-            <ShellContent Icon="" ContentTemplate="{DataTemplate local:ChallengesPage}" />
+            <ShellContent Icon="" ContentTemplate="{DataTemplate local:ChallengesPage}" Route="ChallengesPage" />
         </Tab>
     </FlyoutItem>
     <FlyoutItem Title="Abzeichen">
         <Tab>
-            <ShellContent Icon="" ContentTemplate="{DataTemplate local:BadgesPage}" />
+            <ShellContent Icon="" ContentTemplate="{DataTemplate local:BadgesPage}" Route="BadgesPage" />
         </Tab>
     </FlyoutItem>
     <FlyoutItem Title="Teams">
         <Tab>
-            <ShellContent Icon="" ContentTemplate="{DataTemplate local:TeamsPage}" />
+            <ShellContent Icon="" ContentTemplate="{DataTemplate local:TeamsPage}" Route="TeamsPage" />
         </Tab>
     </FlyoutItem>
     <MenuItem Text="Ausloggen" Clicked="Logout_Clicked" />

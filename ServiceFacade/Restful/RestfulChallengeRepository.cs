@@ -3,40 +3,23 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
 using StudyBuddy.Model;
+using StudyBuddy.ServiceFacade;
+using Xamarin.Forms;
 
+[assembly: Xamarin.Forms.Dependency(typeof(RestfulChallengeRepository))]
 namespace StudyBuddy.ServiceFacade
 {
-    public class Challenges
+    public class RestfulChallengeRepository : IChallengeRepository
     {
-        private string base_url;
+        private string base_url = "https://localhost:5001/";
         private string token = string.Empty;
         private HttpClient client = new HttpClient();
-
-        public Challenges(string base_url, Authentication auth)
-        {
-            this.base_url = base_url;
-            auth.AuthenticationStateChanged += AuthenticationStateChanged;
-        }
-
-        private void AuthenticationStateChanged(object sender, AuthenticationEventArgs e)
-        {
-            if (e.WasLoggedIn)
-            {
-                token = e.Token;
-                client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
-            }
-            else
-            {
-                client.DefaultRequestHeaders.Authorization = null;
-                token = string.Empty;
-            }
-        }
 
         public async Task<Challenge> ById(int id)
         {
             if (string.IsNullOrEmpty(token))
                 throw new Exception("You must login first");
-            
+
             try
             {
                 var response = await client.GetAsync(base_url + "Challenge/" + id);

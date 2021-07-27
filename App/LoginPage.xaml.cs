@@ -9,13 +9,14 @@ namespace App
 {
     public partial class LoginPage : ContentPage
     {
+        private IAuthentication authentication;
         public ICommand TapCommand => new Command<string>(OpenBrowser);
 
         public LoginPage()
         {
             InitializeComponent();
 
-            NavigationPage.SetHasNavigationBar(this, false);
+            authentication = DependencyService.Get<IAuthentication>();
             BindingContext = this;
         }
 
@@ -26,17 +27,16 @@ namespace App
 
         private async void Anmelden_Clicked(System.Object sender, System.EventArgs e)
         {
-            var result = await Facade.Instance.Authentication.Login(
-                new UserCredentials()
-                {
-                    EMail = email.Text,
-                    Password = password.Text
-                });
-
-            if (!result)
+            var result = await authentication.Login(new UserCredentials()
             {
+                EMail = email.Text,
+                Password = password.Text
+            });
+
+            if (result)
+                await Shell.Current.GoToAsync("//ChallengesPage");
+            else
                 await DisplayAlert("Achtung!", "Anmdeldung nicht erfolgreich! Zugangsdaten korrekt?", "Ok");
-            }
         }
     }
 }

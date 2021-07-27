@@ -11,12 +11,13 @@ namespace App
         public MainPage()
         {
             InitializeComponent();
-            NavigationPage.SetHasNavigationBar(this, false);
         }
 
-        void Logout_Clicked(System.Object sender, System.EventArgs e)
+        private async void Logout_Clicked(System.Object sender, System.EventArgs e)
         {
-            Facade.Instance.Authentication.Logout();
+            var authentication = DependencyService.Get<IAuthentication>();
+            authentication.Logout();
+            await Shell.Current.GoToAsync("//LoginPage");
         }
     }
 }

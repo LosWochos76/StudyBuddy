@@ -4,38 +4,21 @@ using System.Net.Http.Json;
 using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
 using StudyBuddy.Model;
+using StudyBuddy.ServiceFacade;
 using Xamarin.Forms;
 
+[assembly: Xamarin.Forms.Dependency(typeof(RestfulAuthentication))]
 namespace StudyBuddy.ServiceFacade
 {
-    public class AuthenticationEventArgs : EventArgs
+    public class RestfulAuthentication : IAuthentication
     {
-        public string Token { get; set; }
-        public User CurrentUser { get; set; }
-        public bool WasLoggedIn { get; set; }
-        public bool WasLoggedOut { get; set; }
-
-        public AuthenticationEventArgs(string token, User current_user, bool was_logged_in, bool was_logged_out)
-        {
-            this.Token = token;
-            this.CurrentUser = current_user;
-            this.WasLoggedIn = was_logged_in;
-            this.WasLoggedOut = was_logged_out;
-        }
-    }
-
-    public class Authentication
-    {
-        private string base_url;
+        private string base_url = "https://localhost:5001/";
         private HttpClient client;
         public string Token { get; private set; } = string.Empty;
         public User CurrentUser { get; private set; } = null;
-        public delegate void AuthenticationStateChangedEventHandler(object sender, AuthenticationEventArgs e);
-        public event AuthenticationStateChangedEventHandler AuthenticationStateChanged;
 
-        public Authentication(string base_url)
+        public RestfulAuthentication()
         {
-            this.base_url = base_url;
             this.client = new HttpClient(GetInsecureHandler());
         }
 
@@ -68,10 +51,10 @@ namespace StudyBuddy.ServiceFacade
             }
         }
 
-        private async Task<bool> LoginFromJson(string content)
+        public async Task<bool> LoginFromJson(string content)
         {
             var obj = JObject.Parse(content);
-            if (!obj.ContainsKey("token"))
+            if (!obj.ContainsKey("token") || !obj.ContainsKey("user"))
                 return false;
 
             Token = obj["token"].ToString();
@@ -81,18 +64,7 @@ namespace StudyBuddy.ServiceFacade
             Application.Current.Properties["Login"] = content;
             await Application.Current.SavePropertiesAsync();
 
-            var args = new AuthenticationEventArgs(Token, CurrentUser, true, false);
-            AuthenticationStateChanged?.Invoke(this, args);
             return true;
-        }
-
-        public async Task<bool> TryResume()
-        {
-            if (!Application.Current.Properties.ContainsKey("Login"))
-                return false;
-
-            var content = Application.Current.Properties["Login"].ToString();
-            return await LoginFromJson(content);
         }
 
         public async void Logout()
@@ -101,13 +73,10 @@ namespace StudyBuddy.ServiceFacade
             CurrentUser = null;
             Application.Current.Properties.Remove("Login");
             await Application.Current.SavePropertiesAsync();
-
-            var args = new AuthenticationEventArgs(Token, CurrentUser, false, true);
-            AuthenticationStateChanged?.Invoke(this, args);
         }
 
-        public bool IsLoggedIn 
-        { 
+        public bool IsLoggedIn
+        {
             get { return Token != string.Empty; }
         }
     }
