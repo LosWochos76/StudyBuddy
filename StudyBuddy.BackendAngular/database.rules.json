@@ -1,0 +1,12 @@
+{
+  "rules": {
+    ".read": "now < 1631829600000",  // 2021-9-17
+    ".write": "now < 1631829600000",  // 2021-9-17
+    "studyprograms": {
+      ".indexOn": ["acronym"]
+    },
+    "users": {
+      ".indexOn": ["nickname", "email"]
+    }
+  }
+}
