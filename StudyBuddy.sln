@@ -3,21 +3,21 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.810.6
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "App.Android", "App.Android\App.Android.csproj", "{24B53796-6B2D-4EA4-AA01-67AACE5FF894}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StudyBuddy.App.Android", "StudyBuddy.App.Android\StudyBuddy.App.Android.csproj", "{24B53796-6B2D-4EA4-AA01-67AACE5FF894}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "App.iOS", "App.iOS\App.iOS.csproj", "{EFCF5052-1DCF-4D19-8544-7C57C468353D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StudyBuddy.App.iOS", "StudyBuddy.App.iOS\StudyBuddy.App.iOS.csproj", "{EFCF5052-1DCF-4D19-8544-7C57C468353D}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "App", "App\App.csproj", "{394F1131-79C6-4F7C-9DFB-6BEEE4AF3733}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StudyBuddy.App", "StudyBuddy.App\StudyBuddy.App.csproj", "{394F1131-79C6-4F7C-9DFB-6BEEE4AF3733}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Model", "Model\Model.csproj", "{AA0D0CB8-7AF6-4AF5-9CB9-E02CEC1F7D58}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StudyBuddy.Model", "StudyBuddy.Model\StudyBuddy.Model.csproj", "{AA0D0CB8-7AF6-4AF5-9CB9-E02CEC1F7D58}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Admin", "Admin\Admin.csproj", "{0602C21B-806E-425D-B611-4480C7152588}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StudyBuddy.Backend", "StudyBuddy.Backend\StudyBuddy.Backend.csproj", "{0602C21B-806E-425D-B611-4480C7152588}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ServiceFacade", "ServiceFacade\ServiceFacade.csproj", "{A5F638FA-18D0-4C51-B40A-EE1BA53051DD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StudyBuddy.ApiFacade", "StudyBuddy.ApiFacade\StudyBuddy.ApiFacade.csproj", "{A5F638FA-18D0-4C51-B40A-EE1BA53051DD}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Persistence", "Persistence\Persistence.csproj", "{CF1AE71C-3685-49D2-B341-3A60BA8F249C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StudyBuddy.Persistence", "StudyBuddy.Persistence\StudyBuddy.Persistence.csproj", "{CF1AE71C-3685-49D2-B341-3A60BA8F249C}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Services", "Services\Services.csproj", "{AF3DCED7-BB38-4A2D-AFB3-1EB812AC50C2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StudyBuddy.Api", "StudyBuddy.Api\StudyBuddy.Api.csproj", "{AF3DCED7-BB38-4A2D-AFB3-1EB812AC50C2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
