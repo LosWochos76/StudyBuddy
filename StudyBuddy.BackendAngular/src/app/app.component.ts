@@ -18,7 +18,6 @@ export class AppComponent implements OnInit {
     this.auth.changed.subscribe(result => { 
       this.is_logged_in = result;
       this.current_user = this.auth.getUser();
-      console.log(this.current_user);
     });
   }
 }

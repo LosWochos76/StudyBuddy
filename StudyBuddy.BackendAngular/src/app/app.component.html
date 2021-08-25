@@ -5,8 +5,8 @@
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      <ul class="navbar-nav me-auto mb-2 mb-lg-0" *ngIf="is_logged_in">
-        <li class="nav-item dropdown">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item dropdown" *ngIf="is_logged_in && current_user.isAdmin()">
           <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
             Stammdaten
           </a>
@@ -15,7 +15,7 @@
             <li><a class="dropdown-item" routerLink="term">Semester</a></li>
           </ul>
         </li>
-        <li class="nav-item dropdown">
+        <li class="nav-item dropdown" *ngIf="is_logged_in && current_user.isAdmin()">
           <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
             Benutzer und Teams
           </a>
@@ -24,7 +24,7 @@
             <li><a class="dropdown-item" routerLink="team">Teams</a></li>
           </ul>
         </li>
-        <li class="nav-item dropdown">
+        <li class="nav-item dropdown" *ngIf="is_logged_in">
           <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
             Spielelemente
           </a>

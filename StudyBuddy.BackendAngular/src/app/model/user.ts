@@ -4,7 +4,7 @@ export class User {
     lastname:string;
     nickname:string;
     email:string;
-    role:Role;
+    role:string;
     study_program_id:string;
     enrolled_since_term_id:string;
     firebase_user_id:string;
@@ -13,21 +13,24 @@ export class User {
         this.id = "";
     }
 
-    isAdmin():boolean {
-        return this.role == Role.Admin;
-    }
-
     isStudent():boolean {
-        return this.role == Role.Student;
+        return this.role == "1";
     }
 
     isTeacher():boolean {
-        return this.role == Role.Teacher;
+        return this.role == "2";
+    }
+
+    isAdmin():boolean {
+        return this.role == "3";
+    }
+
+    getRoleName() {
+        switch (this.role) {
+            case "1": return "Student"; break;
+            case "2": return "Dozent"; break;
+            case "3": return "Admin"; break;
+            default: return "";
+        }
     }
 }
-
-export enum Role {
-    Student = 1,
-    Teacher = 2,
-    Admin = 3
-  }

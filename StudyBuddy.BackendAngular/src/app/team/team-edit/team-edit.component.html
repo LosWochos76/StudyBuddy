@@ -1,0 +1,39 @@
+<br>
+
+<h1>Bearbeite Team</h1>
+
+<form [formGroup]="form" (ngSubmit)="onSubmit()">
+    <div class="mb-3">
+      <label class="form-label" for="acronym">Name:</label>
+      <input type="text" class="form-control" id="name" formControlName="name" 
+      [ngClass]="{
+        'is-invalid': form.controls.name.invalid && form.controls.name.dirty,
+        'is-valid': form.controls.name.valid && form.controls.name.dirty}">
+    </div>
+
+    <br>
+
+    <div class="row g-3">
+        <div class="col-md">
+            <label class="form-label" for="study_program_id">Mögliche Mitglieder:</label>
+            <select id="all_users" class="form-select" aria-label="Mögliche Mitglieder" size="10" (change)="onNewMemberSelected($event.target.value)">
+                <option *ngFor="let obj of all_users" [value]="obj.id">{{obj.firstname}} {{obj.lastname}}</option>
+            </select>
+        </div>
+        <div class="col-md">
+            <button type="button" class="btn btn-primary" (click)="addMember()" [disabled]="new_member == null">=></button>
+            <button type="button" class="btn btn-primary" (click)="removeMember()"><=</button>
+        </div>
+        <div class="col-md">
+            <label class="form-label" for="enrolled_since_id">Tatsächliche Mitglieder:</label>
+            <select id="members" class="form-select" aria-label="Tatsächliche Mitglieder" size="10" (change)="onOldMemberSelected($event.target.value)">
+                <option *ngFor="let obj of members" [value]="obj.id">{{obj.firstname}} {{obj.lastname}}</option>
+            </select>
+        </div>
+    </div>
+
+    <br>
+
+    <button type="submit" class="btn btn-primary">Ok</button>&nbsp;
+    <button type="button" class="btn btn-success" (click)="onCancel()">Abbrechen</button>
+</form>

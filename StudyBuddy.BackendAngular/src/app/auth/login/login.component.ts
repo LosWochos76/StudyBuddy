@@ -3,6 +3,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthorizationService } from 'src/app/shared/authorization.service';
 import { LoggingService } from 'src/app/shared/loging.service';
+import { UserService } from 'src/app/shared/user.service';
 
 @Component({
   selector: 'app-login',
@@ -41,7 +42,10 @@ export class LoginComponent implements OnInit {
       this.logger.debug("Wrong credentials!");
       this.login_error = true;
     }
+  }
 
-
+  onPasswordReset() {
+    let email = this.form.controls.email.value;
+    this.auth.sendPassworResetMail(email);
   }
 }

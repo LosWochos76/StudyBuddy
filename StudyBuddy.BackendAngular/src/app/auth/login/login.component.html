@@ -14,6 +14,12 @@
 
 <br>
 
-<div class="alert alert-danger" role="alert" *ngIf="login_error">
-Es konnte kein Benutzer mit dieser E-Mail-Adresse oder mit diesem Passwort gefunden werden!
+<div  *ngIf="login_error">
+    <div class="alert alert-danger" role="alert">
+        Es konnte kein Benutzer mit dieser E-Mail-Adresse oder mit diesem Passwort gefunden werden!
+    </div>
+
+    <br>
+
+    <button class="btn btn-warning" (click)="onPasswordReset()">Passwort vergessen</button>
 </div>

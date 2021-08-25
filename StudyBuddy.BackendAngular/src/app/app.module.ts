@@ -19,6 +19,12 @@ import { TermService } from './shared/term.service';
 import { RegisterUserComponent } from './user/register-user/register-user.component';
 import { UserService } from './shared/user.service';
 import { environment } from 'src/environments/environment';
+import { UserListComponent } from './user/user-list/user-list.component';
+import { UserEditComponent } from './user/user-edit/user-edit.component';
+import { RegisterUserSuccessComponent } from './user/register-user-success/register-user-success.component';
+import { TeamListComponent } from './team/team-list/team-list.component';
+import { TeamEditComponent } from './team/team-edit/team-edit.component';
+import { TeamService } from './shared/team.service';
 
 @NgModule({
   declarations: [
@@ -30,7 +36,12 @@ import { environment } from 'src/environments/environment';
     StudyProgramEditComponent,
     TermEditComponent,
     TermListComponent,
-    RegisterUserComponent
+    RegisterUserComponent,
+    UserListComponent,
+    UserEditComponent,
+    RegisterUserSuccessComponent,
+    TeamListComponent,
+    TeamEditComponent
   ],
   imports: [
     BrowserModule,
@@ -44,7 +55,8 @@ import { environment } from 'src/environments/environment';
     AuthorizationService,
     StudyProgramService,
     TermService,
-    UserService
+    UserService,
+    TeamService
   ],
   bootstrap: [AppComponent]
 })

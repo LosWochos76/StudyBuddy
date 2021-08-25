@@ -16,6 +16,15 @@ export class RouteGuardService implements CanActivate {
     if (!this.service.isLoggedIn()) {
       this.router.navigate(['/login']);
       return false;
+    } else {
+      let user = this.service.getUser();
+      if (user.isTeacher()) {
+        if (state.url == "/studyprogram" || 
+            state.url == "/term" ||
+            state.url == "/user" ||
+            state.url == "/team")
+            this.router.navigate(['/challenge']);
+      }
     }
 
     return true;

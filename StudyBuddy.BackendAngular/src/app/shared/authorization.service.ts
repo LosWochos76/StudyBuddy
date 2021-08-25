@@ -17,18 +17,18 @@ export class AuthorizationService {
   async login(email:string, password:string):Promise<boolean> {
     try {
       email = email.toLowerCase();
-      await this.auth.signInWithEmailAndPassword(email, password);
+      let firebase_user = await this.auth.signInWithEmailAndPassword(email, password);
       this.user = await this.service.byEmail(email);
 
       if (!this.user.isStudent()) {
         this.changed.emit(true);
         return true;
-      }
-      else {
+      } else {
+        this.user = null;
         await this.auth.signOut();
         return false;
       }
-    } catch  {
+    } catch {
       return false;
     }
   }
@@ -44,5 +44,10 @@ export class AuthorizationService {
   
   isLoggedIn() {
     return this.user != null;
+  }
+
+  sendPassworResetMail(email:string) {
+    email = email.toLowerCase();
+    this.auth.sendPasswordResetEmail(email);
   }
 }

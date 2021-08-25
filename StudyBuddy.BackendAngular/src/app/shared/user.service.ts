@@ -13,6 +13,24 @@ export class UserService {
     private db: AngularFireDatabase,
     private logger: LoggingService) { }
 
+  private fromSingleSnapshot(snapshot):User {
+    let val = snapshot.val();
+    let id = Object.keys(val)[0];
+    val = val[id];
+
+    let p = new User();
+    p.id = id;
+    p.firstname = val.firstname;
+    p.lastname = val.lastname;
+    p.nickname = val.nickname;
+    p.email = val.email;
+    p.role = val.role;
+    p.study_program_id = val.study_program_id;
+    p.enrolled_since_term_id = val.enrolled_since_term_id;
+    p.firebase_user_id = val.firebase_user_id;
+    return p;
+  }
+
   private fromSnapshot(snapshot):User {
     let val = snapshot.val();
     let p = new User();
@@ -23,7 +41,7 @@ export class UserService {
     p.email = val.email;
     p.role = val.role;
     p.study_program_id = val.study_program_id;
-    p.enrolled_since_term_id = val.enrolled_in_term_id;
+    p.enrolled_since_term_id = val.enrolled_since_term_id;
     p.firebase_user_id = val.firebase_user_id;
     return p;
   }
@@ -38,6 +56,12 @@ export class UserService {
     });
 
     return result;
+  }
+
+  async getCount() {
+    let reference = this.db.database.ref("users");
+    let snapshot = await reference.get();
+    return snapshot.numChildren();
   }
 
   async remove(id:string) {
@@ -61,7 +85,7 @@ export class UserService {
     let snapshot = await reference.get();
 
     if (snapshot.exists())
-        return this.fromSnapshot(snapshot);
+        return this.fromSingleSnapshot(snapshot);
 
     return null;
   }
@@ -72,7 +96,17 @@ export class UserService {
     let snapshot = await reference.get();
 
     if (snapshot.exists())
-        return this.fromSnapshot(snapshot);
+        return this.fromSingleSnapshot(snapshot);
+
+    return null;
+  }
+
+  async byFirebaseUserId(firebase_user_id:string):Promise<User> {
+    let reference = this.db.database.ref("users").orderByChild("firebase_user_id").equalTo(firebase_user_id);
+    let snapshot = await reference.get();
+
+    if (snapshot.exists())
+        return this.fromSingleSnapshot(snapshot);
 
     return null;
   }

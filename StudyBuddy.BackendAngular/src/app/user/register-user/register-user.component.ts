@@ -1,11 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/auth';
-import { FormControl, FormGroup, FormsModule, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { StudyProgram } from 'src/app/model/studyprogram';
 import { Term } from 'src/app/model/term';
-import { Role, User } from 'src/app/model/user';
+import { User } from 'src/app/model/user';
 import { LoggingService } from 'src/app/shared/loging.service';
+import { passwordMatchValidator } from 'src/app/shared/passwordMatchValidator';
 import { StudyProgramService } from 'src/app/shared/study-program.service';
 import { TermService } from 'src/app/shared/term.service';
 import { UserService } from 'src/app/shared/user.service';
@@ -50,7 +51,7 @@ export class RegisterUserComponent implements OnInit {
   }
 
   async onSubmit() {
-    this.logger.debug("Trying to save a Term!");
+    this.logger.debug("Trying to register a user!");
 
     let email = this.form.controls.email.value.toLowerCase();
     if (!email.endsWith("@hshl.de") && !email.endsWith("@stud.hshl.de")) {
@@ -86,7 +87,7 @@ export class RegisterUserComponent implements OnInit {
     obj.lastname = this.form.controls.lastname.value;
     obj.nickname = this.form.controls.nickname.value.toLowerCase();
     obj.email = this.form.controls.email.value.toLowerCase();
-    obj.role = Role.Student;
+    obj.role = "1";
     obj.firebase_user_id = uuid;
     obj.study_program_id = this.form.controls.study_program_id.value;
     obj.enrolled_since_term_id = this.form.controls.enrolled_since_id.value;
@@ -98,10 +99,8 @@ export class RegisterUserComponent implements OnInit {
     }
 
     this.service.save(obj);
+    let user = await this.auth.currentUser;
+    user.sendEmailVerification();
+    this.router.navigate(['registersuccess']);
   }
-}
-
-function passwordMatchValidator(g: FormGroup) {
-  return g.get('password').value === g.get('password_confirm').value
-     ? null : {'mismatch': true};
 }
