@@ -16,10 +16,6 @@ export class TeamEditComponent implements OnInit {
   id:string = "";
   obj:Team = null;
   form:FormGroup;
-  all_users:User[] = [];
-  members:User[] = [];
-  new_member:User = null;
-  old_member:User = null;
 
   constructor(
     private logger:LoggingService, 
@@ -29,7 +25,8 @@ export class TeamEditComponent implements OnInit {
     private user_service:UserService) {
 
       this.form = new FormGroup({
-        name: new FormControl("", [Validators.required, Validators.minLength(3)])
+        name: new FormControl("", [Validators.required, Validators.minLength(3)]),
+        members: new FormControl([], [Validators.required])
       });
     };
 
@@ -42,19 +39,14 @@ export class TeamEditComponent implements OnInit {
       this.obj = new Team("", "");
     }
 
-    this.all_users = await this.user_service.getAll();
-
-    console.log(this.all_users);
-
     this.form.setValue({
-      name: this.obj.name
+      name: this.obj.name,
+      members: this.obj.members
     });
   }
 
   async onSubmit() {
-    this.logger.debug("Trying to save a StudyProgram!");
-
-    this.obj.name = this.form.controls.name.value;
+    this.logger.debug("Trying to save a Team!");
 
     if (this.form.invalid)
     {
@@ -62,34 +54,14 @@ export class TeamEditComponent implements OnInit {
       return;
     }
 
+    this.obj.name = this.form.controls.name.value;
+    this.obj.members = this.form.controls.members.value;
+
     this.service.save(this.obj);
     this.router.navigate(["team"]);
   }
 
   onCancel() {
     this.router.navigate(['team']);
-  }
-
-  onNewMemberSelected(id:string) {
-    this.new_member = this.all_users.filter(obj => { return obj.id == id; })[0];
-  }
-
-  onOldMemberSelected(id:string) {
-    this.old_member = this.members.filter(obj => { return obj.id == id; })[0];
-  }
-
-  addMember() {
-    if (this.new_member == null)
-      return;
-
-    this.members.push(this.new_member);
-    let index = this.all_users.findIndex(obj => obj.id == this.new_member.id);
-    console.log(index);
-    this.all_users.splice(index, 1);
-    this.new_member = null;
-  }
-
-  removeMember() {
-
   }
 }

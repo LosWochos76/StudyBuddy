@@ -18,12 +18,14 @@ export class TeamService {
     let id = Object.keys(val)[0];
     val = val[id];
     let p = new Team(id, val.name);
+    p.members = val.members == undefined ? [] : val.members; 
     return p;
   }
 
   private fromSnapshot(snapshot):Team {
     let val = snapshot.val();
     let p = new Team(snapshot.key, val.name);
+    p.members = val.members == undefined ? [] : val.members;
     return p;
   }
 
@@ -62,7 +64,8 @@ export class TeamService {
 
   async save(obj:Team) {
     let tmp = { 
-      'name': obj.name
+      'name': obj.name,
+      'members': obj.members
     };
 
     if (obj.id == "") {

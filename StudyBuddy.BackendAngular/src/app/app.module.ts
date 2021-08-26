@@ -25,6 +25,8 @@ import { RegisterUserSuccessComponent } from './user/register-user-success/regis
 import { TeamListComponent } from './team/team-list/team-list.component';
 import { TeamEditComponent } from './team/team-edit/team-edit.component';
 import { TeamService } from './shared/team.service';
+import { UserSelectComponent } from './user/user-select/user-select.component';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
 @NgModule({
   declarations: [
@@ -41,7 +43,8 @@ import { TeamService } from './shared/team.service';
     UserEditComponent,
     RegisterUserSuccessComponent,
     TeamListComponent,
-    TeamEditComponent
+    TeamEditComponent,
+    UserSelectComponent
   ],
   imports: [
     BrowserModule,
@@ -49,7 +52,8 @@ import { TeamService } from './shared/team.service';
     ReactiveFormsModule,
     AngularFireModule.initializeApp(environment.firebase),
     AngularFireDatabaseModule,
-    AngularFireAuthModule
+    AngularFireAuthModule,
+    FontAwesomeModule
   ],
   providers: [
     AuthorizationService,
