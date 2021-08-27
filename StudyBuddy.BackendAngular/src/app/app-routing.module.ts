@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { LoginComponent } from './auth/login/login.component';
 import { LogoutComponent } from './auth/logout/logout.component';
+import { InfoComponent } from './misc/info/info.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { RouteGuardService } from './route-guard';
 import { StudyProgramEditComponent } from './studyprogram/study-program-edit/study-program-edit.component';
@@ -16,6 +17,7 @@ import { UserEditComponent } from './user/user-edit/user-edit.component';
 import { UserListComponent } from './user/user-list/user-list.component';
 
 const routes: Routes = [
+  { path: 'info', component: InfoComponent },
   { path: 'register', component: RegisterUserComponent },
   { path: 'registersuccess', component: RegisterUserSuccessComponent },
   { path: 'user', component: UserListComponent, canActivate: [RouteGuardService] },

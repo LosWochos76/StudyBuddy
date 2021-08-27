@@ -27,6 +27,7 @@ import { TeamEditComponent } from './team/team-edit/team-edit.component';
 import { TeamService } from './shared/team.service';
 import { UserSelectComponent } from './user/user-select/user-select.component';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { InfoComponent } from './misc/info/info.component';
 
 @NgModule({
   declarations: [
@@ -44,7 +45,8 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
     RegisterUserSuccessComponent,
     TeamListComponent,
     TeamEditComponent,
-    UserSelectComponent
+    UserSelectComponent,
+    InfoComponent
   ],
   imports: [
     BrowserModule,
