@@ -28,6 +28,12 @@ import { TeamService } from './shared/team.service';
 import { UserSelectComponent } from './user/user-select/user-select.component';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { InfoComponent } from './misc/info/info.component';
+import { ImprintComponent } from './misc/imprint/imprint.component';
+import { PrivacyComponent } from './misc/privacy/privacy.component';
+import { ChallengeListComponent } from './challenge/challenge-list/challenge-list.component';
+import { ChallengeEditComponent } from './challenge/challenge-edit/challenge-edit.component';
+import { ChallengeService } from './shared/challenge.service';
+import { CategoryPipe } from './shared/category.pipe';
 
 @NgModule({
   declarations: [
@@ -46,7 +52,12 @@ import { InfoComponent } from './misc/info/info.component';
     TeamListComponent,
     TeamEditComponent,
     UserSelectComponent,
-    InfoComponent
+    InfoComponent,
+    ImprintComponent,
+    PrivacyComponent,
+    ChallengeListComponent,
+    ChallengeEditComponent,
+    CategoryPipe
   ],
   imports: [
     BrowserModule,
@@ -62,7 +73,8 @@ import { InfoComponent } from './misc/info/info.component';
     StudyProgramService,
     TermService,
     UserService,
-    TeamService
+    TeamService,
+    ChallengeService
   ],
   bootstrap: [AppComponent]
 })

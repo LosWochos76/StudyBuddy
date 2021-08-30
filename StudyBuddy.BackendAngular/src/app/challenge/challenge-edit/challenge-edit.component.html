@@ -1,0 +1,91 @@
+<br>
+
+<h1>Bearbeite Herausforderung</h1>
+
+<form [formGroup]="form" (ngSubmit)="onSubmit()">
+    <div class="mb-3">
+        <label class="form-label" for="name">Name:</label>
+        <input type="text" class="form-control" id="name" formControlName="name"
+        [ngClass]="{
+            'is-invalid': form.controls.name.invalid && form.controls.name.dirty,
+            'is-valid': form.controls.name.valid && form.controls.name.dirty}">
+    </div>
+    <div class="mb-3">
+        <label class="form-label" for="name">Beschreibung:</label>
+        <textarea class="form-control" id="exampleFormControlTextarea1" formControlName="description" rows="3">
+        </textarea>
+    </div>
+    <div class="mb-3">
+        <label class="form-label" for="name">Punkte:</label>
+        <input type="text" class="form-control" id="name" formControlName="points"
+        [ngClass]="{
+            'is-invalid': form.controls.name.invalid && form.controls.points.dirty,
+            'is-valid': form.controls.name.valid && form.controls.points.dirty}">
+    </div>
+
+    <div class="row g-2">
+        <div class="col-md">
+            <label class="form-label" for="validity_start">Gültig ab:</label>
+            <input type="date" class="form-control" id="validity_start" formControlName="validity_start"
+            [ngClass]="{
+                'is-invalid': form.controls.validity_start.invalid && form.controls.validity_start.dirty,
+                'is-valid': form.controls.validity_start.valid && form.controls.validity_start.dirty}">
+        </div>
+        <div class="col-md">
+            <label class="form-label" for="validity_end">Gültig bis:</label>
+            <input type="date" class="form-control" id="validity_end" formControlName="validity_end"
+            [ngClass]="{
+                'is-invalid': form.controls.validity_end.invalid && form.controls.validity_end.dirty,
+                'is-valid': form.controls.validity_end.valid && form.controls.validity_end.dirty}">
+            <div *ngIf="form.controls.validity_end.hasError('invalidperiod')">
+                <small class="text-danger">Der Zeitraum ist nicht gültig!</small>
+            </div>
+        </div>
+    </div>
+
+    <br>
+
+    <div class="row g-2">
+        <div class="col-md">
+            <label class="form-label" for="category">Kategorie:</label>
+            <select class="form-select" formControlName="category">
+                <option value="1">Lernen</option>
+                <option value="2">Netzwerken</option>
+                <option value="3">Organisieren</option>
+            </select>
+        </div>
+        <div class="col-md">
+            <label class="form-label" for="prove">Beweis:</label>
+            <select class="form-select" formControlName="prove">
+                <option value="1">Durch Vertrauen</option>
+                <option value="2">Durch einen QR-Code</option>
+                <option value="3">Bestätigung eines Team-Mitglieds</option>
+                <option value="4">Standort nahe beim Besitzer</option>
+            </select>
+        </div>
+    </div>
+
+    <br>
+
+    <div class="row g-2">
+        <div class="col-md">
+            <label class="form-label" for="category">Für Studiengang:</label>
+            <select class="form-select" formControlName="study_program">
+                <option value="">Alle</option>
+                <option *ngFor="let obj of study_programs" [value]="obj.id">{{obj.acronym}}</option>
+            </select>
+        </div>
+        <div class="col-md">
+            <label class="form-label" for="prove">Für Studierende eingeschrieben seit:</label>
+            <select class="form-select" formControlName="enrolled_since">
+                <option value="">Alle</option>
+                <option *ngFor="let obj of terms" [value]="obj.id">{{obj.shortname}}</option>
+            </select>
+        </div>
+    </div>
+
+    <br>
+
+    <button type="submit" class="btn btn-primary">Ok</button>&nbsp;
+    <button type="button" class="btn btn-success" (click)="onCancel()">Abbrechen</button>
+</form>

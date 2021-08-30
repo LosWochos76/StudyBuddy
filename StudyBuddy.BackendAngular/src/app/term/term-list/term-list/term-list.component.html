@@ -32,8 +32,8 @@
         [class.table-info]="obj == selected">
         <th scope="row">{{i + 1}}</th>
         <td>{{obj.shortname}}</td>
-        <td>{{obj.start}}</td>
-        <td>{{obj.end}}</td>
+        <td>{{obj.start | date:'YYYY-MM-dd'}}</td>
+        <td>{{obj.end | date:'YYYY-MM-dd}}</td>
     </tr>
   </tbody>
   </table>

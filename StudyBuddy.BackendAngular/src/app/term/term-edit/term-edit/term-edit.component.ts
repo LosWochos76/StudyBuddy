@@ -65,7 +65,7 @@ export class TermEditComponent implements OnInit {
     if (!this.obj.periodHasNoOverlapsWithOthers(objects))
       this.form.controls.end.setErrors({'periodwithoveraps': true});
     else
-      this.form.controls.start.setErrors(null);
+      this.form.controls.end.setErrors(null);
 
     if (this.form.invalid)
     {
