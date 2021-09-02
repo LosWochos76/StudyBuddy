@@ -1,13 +1,17 @@
 import { Helper } from "../services/helper";
 
 export class Term {
-    id:number;
-    public shortname:string;
-    public name:string;
+    id:number = 0;
+    public shortname:string = "";
+    public name:string = "";
     public start:string;
     public end:string;
 
-    constructor() { }
+    constructor() { 
+        let today = (new Date()).toISOString().split('T')[0];
+        this.start = today;
+        this.end = today;
+    }
 
     startAsDate():Date {
         return Helper.convertToDate(this.start);

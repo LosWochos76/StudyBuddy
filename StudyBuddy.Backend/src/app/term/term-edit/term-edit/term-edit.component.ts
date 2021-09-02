@@ -35,10 +35,7 @@ export class TermEditComponent implements OnInit {
     if (this.id != 0) {
       this.obj = await this.service.byId(this.id);
     } else {
-      let today = (new Date()).toISOString().split('T')[0];
       this.obj = new Term();
-      this.obj.start = today;
-      this.obj.end = today;
     }
 
     this.form.setValue({
