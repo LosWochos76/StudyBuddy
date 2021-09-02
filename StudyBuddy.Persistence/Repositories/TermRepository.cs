@@ -8,7 +8,7 @@ namespace StudyBuddy.Persistence
 {
     class TermRepository : SqlRepositoryBase, ITermRepository
     {
-        public TermRepository(NpgsqlConnection connection) : base(connection)
+        public TermRepository(string connection_string) : base(connection_string)
         {
             if (!TableExists("terms")) 
                 CreateTeamTable();
@@ -23,9 +23,13 @@ namespace StudyBuddy.Persistence
                 "start_date date not null," +
                 "end_date date not null)";
 
-            using (var cmd = new NpgsqlCommand(sql, connection)) 
+            using (var connection = new NpgsqlConnection(connection_string))
             {
-                cmd.ExecuteNonQuery();
+                connection.Open();
+                using (var cmd = new NpgsqlCommand(sql, connection))
+                {
+                    cmd.ExecuteNonQuery();
+                }
             }
         }
 
@@ -45,15 +49,19 @@ namespace StudyBuddy.Persistence
             string sql = "SELECT id,shortname,name,start_date," +
                 "end_date FROM terms where id=:id";
 
-            using (var cmd = new NpgsqlCommand(sql, connection))
+            using (var connection = new NpgsqlConnection(connection_string))
             {
-                cmd.Parameters.AddWithValue(":id", id);
-
-                using (NpgsqlDataReader reader = cmd.ExecuteReader())
+                connection.Open();
+                using (var cmd = new NpgsqlCommand(sql, connection))
                 {
-                    if (reader.Read())
+                    cmd.Parameters.AddWithValue(":id", id);
+
+                    using (NpgsqlDataReader reader = cmd.ExecuteReader())
                     {
-                        return FromReader(reader);
+                        if (reader.Read())
+                        {
+                            return FromReader(reader);
+                        }
                     }
                 }
             }
@@ -66,15 +74,19 @@ namespace StudyBuddy.Persistence
             string sql = "SELECT id,shortname,name,start_date," +
                 "end_date FROM terms where :date>=start_date and :date<=end_date";
 
-            using (var cmd = new NpgsqlCommand(sql, connection))
+            using (var connection = new NpgsqlConnection(connection_string))
             {
-                cmd.Parameters.AddWithValue(":date", date.Date);
-
-                using (NpgsqlDataReader reader = cmd.ExecuteReader())
+                connection.Open();
+                using (var cmd = new NpgsqlCommand(sql, connection))
                 {
-                    if (reader.Read())
+                    cmd.Parameters.AddWithValue(":date", date.Date);
+
+                    using (NpgsqlDataReader reader = cmd.ExecuteReader())
                     {
-                        return FromReader(reader);
+                        if (reader.Read())
+                        {
+                            return FromReader(reader);
+                        }
                     }
                 }
             }
@@ -86,63 +98,81 @@ namespace StudyBuddy.Persistence
         {
             string sql = "SELECT id,shortname,name,start_date,end_date " +
                 "FROM terms order by start_date limit :max offset :from";
-            
-            var cmd = new NpgsqlCommand(sql, connection);
-            cmd.Parameters.AddWithValue(":from", from);
-            cmd.Parameters.AddWithValue(":max", max);
             var result = new List<Term>();
 
-            using (NpgsqlDataReader reader = cmd.ExecuteReader())
+            using (var connection = new NpgsqlConnection(connection_string))
             {
-                while (reader.Read())
+                connection.Open();
+                var cmd = new NpgsqlCommand(sql, connection);
+                cmd.Parameters.AddWithValue(":from", from);
+                cmd.Parameters.AddWithValue(":max", max);
+                
+
+                using (NpgsqlDataReader reader = cmd.ExecuteReader())
                 {
-                    var obj = FromReader(reader);
-                    result.Add(obj);
+                    while (reader.Read())
+                    {
+                        var obj = FromReader(reader);
+                        result.Add(obj);
+                    }
                 }
             }
-               
+            
             return result;
         }
 
         public void Delete(int id)
         {
             string sql = "delete from terms where id=:id";
-            using (var cmd = new NpgsqlCommand(sql, connection))
+
+            using (var connection = new NpgsqlConnection(connection_string))
             {
-                cmd.Parameters.AddWithValue(":id", id);
-                cmd.ExecuteNonQuery();
+                connection.Open();
+                using (var cmd = new NpgsqlCommand(sql, connection))
+                {
+                    cmd.Parameters.AddWithValue(":id", id);
+                    cmd.ExecuteNonQuery();
+                }
             }
         }
 
-        private void Insert(Term obj)
+        public void Insert(Term obj)
         {
             string sql = "insert into terms " +
                     "(shortname,name,start_date,end_date) values " +
                     "(:shortname,:name,:start_date,:end_date) RETURNING id";
 
-            using (var cmd = new NpgsqlCommand(sql, connection)) 
+            using (var connection = new NpgsqlConnection(connection_string))
             {
-                cmd.Parameters.AddWithValue(":shortname", obj.ShortName);
-                cmd.Parameters.AddWithValue(":name", obj.Name);
-                cmd.Parameters.AddWithValue(":start_date", obj.Start.Date);
-                cmd.Parameters.AddWithValue(":end_date", obj.End.Date);
-                obj.ID = Convert.ToInt32(cmd.ExecuteScalar());
+                connection.Open();
+                using (var cmd = new NpgsqlCommand(sql, connection))
+                {
+                    cmd.Parameters.AddWithValue(":shortname", obj.ShortName);
+                    cmd.Parameters.AddWithValue(":name", obj.Name);
+                    cmd.Parameters.AddWithValue(":start_date", obj.Start.Date);
+                    cmd.Parameters.AddWithValue(":end_date", obj.End.Date);
+                    obj.ID = Convert.ToInt32(cmd.ExecuteScalar());
+                }
             }
         }
 
-        private void Update(Term obj)
+        public void Update(Term obj)
         {
             string sql = "update terms set shortname=:shortname," +
                 "name=:name,start_date=:start_date,end_date=:end_date where id=:id";
 
-            using (var cmd = new NpgsqlCommand(sql, connection)) 
+            using (var connection = new NpgsqlConnection(connection_string))
             {
-                cmd.Parameters.AddWithValue(":id", obj.ID);
-                cmd.Parameters.AddWithValue(":shortname", obj.ShortName);
-                cmd.Parameters.AddWithValue(":name", obj.Name);
-                cmd.Parameters.AddWithValue(":start_date", obj.Start.Date);
-                cmd.Parameters.AddWithValue(":end_date", obj.End.Date);
-                cmd.ExecuteNonQuery();
+                connection.Open();
+                using (var cmd = new NpgsqlCommand(sql, connection))
+                {
+                    cmd.Parameters.AddWithValue(":id", obj.ID);
+                    cmd.Parameters.AddWithValue(":shortname", obj.ShortName);
+                    cmd.Parameters.AddWithValue(":name", obj.Name);
+                    cmd.Parameters.AddWithValue(":start_date", obj.Start.Date);
+                    cmd.Parameters.AddWithValue(":end_date", obj.End.Date);
+                    cmd.ExecuteNonQuery();
+                }
             }
         }
 

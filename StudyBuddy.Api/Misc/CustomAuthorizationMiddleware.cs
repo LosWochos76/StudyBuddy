@@ -24,35 +24,11 @@ namespace StudyBuddy.Services
 
         public async Task InvokeAsync(HttpContext context)
         {
-            if (!context.Request.Path.StartsWithSegments("/Login"))
-            {
-                var token = context.Request.Headers["Authorization"].FirstOrDefault()?.Split(" ").Last();
-
-                if (string.IsNullOrEmpty(token))
-                {
-                    SendError(context, "Unauthorized");
-                    return;
-                }
-
-                var user = GetUserFromToken(token);
-                if (user == null)
-                {
-                    SendError(context, "User from JWT-token not found");
-                    return;
-                }
-
-                context.Items["user"] = user;
-            }
+            var token = context.Request.Headers["Authorization"].FirstOrDefault()?.Split(" ").Last();
+            if (!string.IsNullOrEmpty(token))
+                context.Items["user"] = GetUserFromToken(token);
 
             await next(context);
-        }
-
-        private void SendError(HttpContext context, string message)
-        {
-            context.Response.StatusCode = 500;
-            context.Response.ContentType = "application/json";
-            string json = System.Text.Json.JsonSerializer.Serialize(new { Error=message });
-            context.Response.WriteAsync(json, Encoding.UTF8);
         }
 
         private User GetUserFromToken(string token)

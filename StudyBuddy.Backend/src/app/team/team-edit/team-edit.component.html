@@ -1,0 +1,26 @@
+<br>
+
+<h1>Bearbeite Team</h1>
+
+<form [formGroup]="form" (ngSubmit)="onSubmit()">
+    <div class="mb-3">
+        <label class="form-label" for="acronym">Name:</label>
+        <input type="text" class="form-control" id="name" formControlName="name" 
+        [ngClass]="{
+            'is-invalid': form.controls.name.invalid && form.controls.name.dirty,
+            'is-valid': form.controls.name.valid && form.controls.name.dirty}">
+    </div>
+
+    <div class="mb-3">
+        <label for="members">Mitglieder:</label>
+        <app-user-select formControlName="members"></app-user-select>
+        <div *ngIf="form.hasError('ownerneedstobemember')">
+            <small class="text-danger">Achtung: Der Besitzer des Teams muss auch Mitglied sein!</small>
+        </div>
+    </div>
+
+    <br>
+
+    <button type="submit" class="btn btn-primary" [disabled]="form.invalid">Ok</button>&nbsp;
+    <button type="button" class="btn btn-success" (click)="onCancel()">Abbrechen</button>
+</form>

@@ -11,18 +11,18 @@ namespace StudyBuddy.Persistence
     {
         private SimpleHash simpleHash = new SimpleHash();
 
-        public UserRepository(NpgsqlConnection connection) : base(connection)
+        public UserRepository(string connection_string) : base(connection_string)
         {
             if (!TableExists("users")) 
             {
                 CreateTable();
 
-                Save(new User() { 
+                Insert(new User() { 
                     Firstname="Empty", 
                     Lastname="Empty", 
                     Nickname="Admin",
                     Email="admin@admin.de",
-                    PasswordHash=simpleHash.Compute("secret"),
+                    Password= "secret",
                     Role=Role.Admin});
             }
         }
@@ -40,9 +40,13 @@ namespace StudyBuddy.Persistence
                 "program_id int, " + 
                 "enrolled_in_term_id int)";
 
-            using (var cmd = new NpgsqlCommand(sql, connection)) 
+            using (var connection = new NpgsqlConnection(connection_string))
             {
-                cmd.ExecuteNonQuery();
+                connection.Open();
+                using (var cmd = new NpgsqlCommand(sql, connection))
+                {
+                    cmd.ExecuteNonQuery();
+                }
             }
         }
 
@@ -66,15 +70,19 @@ namespace StudyBuddy.Persistence
             string sql = "SELECT id,firstname,lastname,nickname," + 
                 "email,password_hash,role,program_id,enrolled_in_term_id FROM users where id=:id";
 
-            using (var cmd = new NpgsqlCommand(sql, connection))
+            using (var connection = new NpgsqlConnection(connection_string))
             {
-                cmd.Parameters.AddWithValue(":id", id);
-
-                using (NpgsqlDataReader reader = cmd.ExecuteReader())
+                connection.Open();
+                using (var cmd = new NpgsqlCommand(sql, connection))
                 {
-                    if (reader.Read())
+                    cmd.Parameters.AddWithValue(":id", id);
+
+                    using (NpgsqlDataReader reader = cmd.ExecuteReader())
                     {
-                        return FromReader(reader);
+                        if (reader.Read())
+                        {
+                            return FromReader(reader);
+                        }
                     }
                 }
             }
@@ -86,24 +94,50 @@ namespace StudyBuddy.Persistence
         {
             string sql = "SELECT id,firstname,lastname,nickname,email,password_hash,role," +
                 "program_id,enrolled_in_term_id FROM users order by lastname,firstname,nickname limit :max offset :from";
-            
-            using (var cmd = new NpgsqlCommand(sql, connection))
-            {
-                cmd.Parameters.AddWithValue(":from", from);
-                cmd.Parameters.AddWithValue(":max", max);
-                var result = new List<User>();
 
-                using (NpgsqlDataReader reader = cmd.ExecuteReader())
+            var result = new List<User>();
+
+            using (var connection = new NpgsqlConnection(connection_string))
+            {
+                connection.Open();
+                using (var cmd = new NpgsqlCommand(sql, connection))
                 {
-                    while (reader.Read())
+                    cmd.Parameters.AddWithValue(":from", from);
+                    cmd.Parameters.AddWithValue(":max", max);
+                    
+                    using (NpgsqlDataReader reader = cmd.ExecuteReader())
                     {
-                        var obj = FromReader(reader);
-                        result.Add(obj);
+                        while (reader.Read())
+                        {
+                            var obj = FromReader(reader);
+                            result.Add(obj);
+                        }
                     }
                 }
-
-                return result;
             }
+
+            return result;
+        }
+
+        public int Count()
+        {
+            string sql = "SELECT count(*) as count FROM users";
+            int result = 0;
+
+            using (var connection = new NpgsqlConnection(connection_string))
+            {
+                connection.Open();
+                using (var cmd = new NpgsqlCommand(sql, connection))
+                {
+                    using (NpgsqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        if (reader.Read())
+                            result = reader.GetInt32(0);
+                    }
+                }
+            }
+
+            return result;
         }
 
         public User ByEmailAndPassword(UserCredentials credentials)
@@ -117,18 +151,23 @@ namespace StudyBuddy.Persistence
 
         public User ByEmail(string email)
         {
+            email = email.ToLower();
             string sql = "SELECT id,firstname,lastname,nickname," + 
                 "email,password_hash,role,program_id,enrolled_in_term_id FROM users where lower(email)=lower(:email)";
 
-            using (var cmd = new NpgsqlCommand(sql, connection))
+            using (var connection = new NpgsqlConnection(connection_string))
             {
-                cmd.Parameters.AddWithValue(":email", email);
-
-                using (NpgsqlDataReader reader = cmd.ExecuteReader())
+                connection.Open();
+                using (var cmd = new NpgsqlCommand(sql, connection))
                 {
-                    if (reader.Read())
+                    cmd.Parameters.AddWithValue(":email", email);
+
+                    using (NpgsqlDataReader reader = cmd.ExecuteReader())
                     {
-                        return FromReader(reader);
+                        if (reader.Read())
+                        {
+                            return FromReader(reader);
+                        }
                     }
                 }
             }
@@ -136,51 +175,59 @@ namespace StudyBuddy.Persistence
             return null;
         }
 
-        private void Insert(User obj)
+        public void Insert(User obj)
         {
             string sql = "insert into users " +
                     "(firstname,lastname,nickname,email,password_hash,role,program_id,enrolled_in_term_id) values " +
                     "(:firstname,:lastname,:nickname,:email,:password_hash,:role,:program_id,:enrolled_in_term_id) RETURNING id";
 
-            using (var cmd = new NpgsqlCommand(sql, connection)) 
+            using (var connection = new NpgsqlConnection(connection_string))
             {
-                cmd.Parameters.AddWithValue(":firstname", obj.Firstname);
-                cmd.Parameters.AddWithValue(":lastname", obj.Lastname);
-                cmd.Parameters.AddWithValue(":nickname", obj.Nickname);
-                cmd.Parameters.AddWithValue(":email", obj.Email);
-                cmd.Parameters.AddWithValue(":password_hash", obj.PasswordHash);
-                cmd.Parameters.AddWithValue(":role", (int)obj.Role);
-                cmd.Parameters.AddWithValue(":program_id", obj.ProgramID.HasValue ? obj.ProgramID : DBNull.Value);
-                cmd.Parameters.AddWithValue(":enrolled_in_term_id", obj.EnrolledInTermID.HasValue ? obj.EnrolledInTermID : DBNull.Value);
-                obj.ID = Convert.ToInt32(cmd.ExecuteScalar());
+                connection.Open();
+                using (var cmd = new NpgsqlCommand(sql, connection))
+                {
+                    cmd.Parameters.AddWithValue(":firstname", obj.Firstname);
+                    cmd.Parameters.AddWithValue(":lastname", obj.Lastname);
+                    cmd.Parameters.AddWithValue(":nickname", obj.Nickname.ToLower());
+                    cmd.Parameters.AddWithValue(":email", obj.Email.ToLower());
+                    cmd.Parameters.AddWithValue(":password_hash", simpleHash.Compute(obj.Password));
+                    cmd.Parameters.AddWithValue(":role", (int)obj.Role);
+                    cmd.Parameters.AddWithValue(":program_id", obj.ProgramID.HasValue ? obj.ProgramID : DBNull.Value);
+                    cmd.Parameters.AddWithValue(":enrolled_in_term_id", obj.EnrolledInTermID.HasValue ? obj.EnrolledInTermID : DBNull.Value);
+                    obj.ID = Convert.ToInt32(cmd.ExecuteScalar());
+                }
             }
         }
 
-        private void Update(User obj)
+        public void Update(User obj)
         {
             string sql = "update users set firstname=:firstname,lastname=:lastname,"+
                 "nickname=:nickname,email=:email";
                 
-            if (!string.IsNullOrEmpty(obj.PasswordHash))
+            if (!string.IsNullOrEmpty(obj.Password))
                 sql += ",password_hash=:password_hash";
             
             sql += ",role=:role,program_id=:program_id,enrolled_in_term_id=:enrolled_in_term_id where id=:id";
 
-            using (var cmd = new NpgsqlCommand(sql, connection)) 
+            using (var connection = new NpgsqlConnection(connection_string))
             {
-                cmd.Parameters.AddWithValue(":id", obj.ID);
-                cmd.Parameters.AddWithValue(":firstname", obj.Firstname);
-                cmd.Parameters.AddWithValue(":lastname", obj.Lastname);
-                cmd.Parameters.AddWithValue(":nickname", obj.Nickname);
-                cmd.Parameters.AddWithValue(":email", obj.Email);
+                connection.Open();
+                using (var cmd = new NpgsqlCommand(sql, connection))
+                {
+                    cmd.Parameters.AddWithValue(":id", obj.ID);
+                    cmd.Parameters.AddWithValue(":firstname", obj.Firstname);
+                    cmd.Parameters.AddWithValue(":lastname", obj.Lastname);
+                    cmd.Parameters.AddWithValue(":nickname", obj.Nickname.ToLower());
+                    cmd.Parameters.AddWithValue(":email", obj.Email.ToLower());
 
-                if (!string.IsNullOrEmpty(obj.PasswordHash))
-                    cmd.Parameters.AddWithValue(":password_hash", obj.PasswordHash);
+                    if (!string.IsNullOrEmpty(obj.Password))
+                        cmd.Parameters.AddWithValue(":password_hash", simpleHash.Compute(obj.Password));
 
-                cmd.Parameters.AddWithValue(":role", (int)obj.Role);
-                cmd.Parameters.AddWithValue(":program_id", obj.ProgramID.HasValue ? obj.ProgramID : DBNull.Value);
-                cmd.Parameters.AddWithValue(":enrolled_in_term_id", obj.EnrolledInTermID.HasValue ? obj.EnrolledInTermID : DBNull.Value);
-                cmd.ExecuteNonQuery();
+                    cmd.Parameters.AddWithValue(":role", (int)obj.Role);
+                    cmd.Parameters.AddWithValue(":program_id", obj.ProgramID.HasValue ? obj.ProgramID : DBNull.Value);
+                    cmd.Parameters.AddWithValue(":enrolled_in_term_id", obj.EnrolledInTermID.HasValue ? obj.EnrolledInTermID : DBNull.Value);
+                    cmd.ExecuteNonQuery();
+                }
             }
         }
 
@@ -195,27 +242,37 @@ namespace StudyBuddy.Persistence
         public void Delete(int id)
         {
             string sql = "delete from users where id=:id";
-            using (var cmd = new NpgsqlCommand(sql, connection))
+
+            using (var connection = new NpgsqlConnection(connection_string))
             {
-                cmd.Parameters.AddWithValue(":id", id);
-                cmd.ExecuteNonQuery();
+                connection.Open();
+                using (var cmd = new NpgsqlCommand(sql, connection))
+                {
+                    cmd.Parameters.AddWithValue(":id", id);
+                    cmd.ExecuteNonQuery();
+                }
             }
         }
 
         public User ByNickname(string nickname)
         {
+            nickname = nickname.ToLower();
             string sql = "SELECT id,firstname,lastname,nickname," + 
                 "email,password_hash,role,program_id,enrolled_in_term_id FROM users where lower(nickname)=lower(:nickname)";
 
-            using (var cmd = new NpgsqlCommand(sql, connection))
+            using (var connection = new NpgsqlConnection(connection_string))
             {
-                cmd.Parameters.AddWithValue(":nickname", nickname);
-
-                using (NpgsqlDataReader reader = cmd.ExecuteReader())
+                connection.Open();
+                using (var cmd = new NpgsqlCommand(sql, connection))
                 {
-                    if (reader.Read())
+                    cmd.Parameters.AddWithValue(":nickname", nickname);
+
+                    using (NpgsqlDataReader reader = cmd.ExecuteReader())
                     {
-                        return FromReader(reader);
+                        if (reader.Read())
+                        {
+                            return FromReader(reader);
+                        }
                     }
                 }
             }
@@ -228,21 +285,25 @@ namespace StudyBuddy.Persistence
             var sql = "select id,firstname,lastname,nickname,email,password_hash,role,program_id,enrolled_in_term_id from team_members " +
                 "inner join users on users.id=member_id where team_id=:team_id order by lastname,firstname,nickname";
 
-            using (var cmd = new NpgsqlCommand(sql, connection))
+            using (var connection = new NpgsqlConnection(connection_string))
             {
-                cmd.Parameters.AddWithValue(":team_id", team_id);
-                var result = new List<User>();
-
-                using (NpgsqlDataReader reader = cmd.ExecuteReader())
+                connection.Open();
+                using (var cmd = new NpgsqlCommand(sql, connection))
                 {
-                    while (reader.Read())
-                    {
-                        var obj = FromReader(reader);
-                        result.Add(obj);
-                    }
-                }
+                    cmd.Parameters.AddWithValue(":team_id", team_id);
+                    var result = new List<User>();
 
-                return result;
+                    using (NpgsqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            var obj = FromReader(reader);
+                            result.Add(obj);
+                        }
+                    }
+
+                    return result;
+                }
             }
         }
 
@@ -251,22 +312,26 @@ namespace StudyBuddy.Persistence
             var sql = "select id,firstname,lastname,nickname,email,password_hash,role,program_id,enrolled_in_term_id " +
                 "from users where id not in (select member_id from team_members where team_id=:team_id)";
 
-            using (var cmd = new NpgsqlCommand(sql, connection))
+            using (var connection = new NpgsqlConnection(connection_string))
             {
-                cmd.Parameters.AddWithValue(":team_id", team_id);
-                var result = new List<User>();
-
-                using (NpgsqlDataReader reader = cmd.ExecuteReader())
+                connection.Open();
+                using (var cmd = new NpgsqlCommand(sql, connection))
                 {
-                    while (reader.Read())
-                    {
-                        var obj = FromReader(reader);
-                        result.Add(obj);
-                    }
-                }
+                    cmd.Parameters.AddWithValue(":team_id", team_id);
+                    var result = new List<User>();
 
-                return result;
-            } 
+                    using (NpgsqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            var obj = FromReader(reader);
+                            result.Add(obj);
+                        }
+                    }
+
+                    return result;
+                }
+            }
         }
     }
 }

@@ -8,7 +8,7 @@ namespace StudyBuddy.Persistence
 {
     class StudyProgramRepository : SqlRepositoryBase, IStudyProgramRepository
     {
-        public StudyProgramRepository(NpgsqlConnection connection) : base(connection)
+        public StudyProgramRepository(string connection_string) : base(connection_string)
         {
             if (!TableExists("study_programs")) 
                 CreateTable();
@@ -21,9 +21,13 @@ namespace StudyBuddy.Persistence
                 "acronym varchar(10) not null," +
                 "name varchar(100) not null)";
 
-            using (var cmd = new NpgsqlCommand(sql, connection)) 
+            using (var connection = new NpgsqlConnection(connection_string))
             {
-                cmd.ExecuteNonQuery();
+                connection.Open();
+                using (var cmd = new NpgsqlCommand(sql, connection))
+                {
+                    cmd.ExecuteNonQuery();
+                }
             }
         }
 
@@ -38,20 +42,24 @@ namespace StudyBuddy.Persistence
 
         public IEnumerable<StudyProgram> All(int from = 0, int max = 1000)
         {
-           string sql = "SELECT id, acronym, name from study_programs order by acronym, name limit :max offset :from";
+            string sql = "SELECT id, acronym, name from study_programs order by acronym, name limit :max offset :from";
 
             var result = new List<StudyProgram>();
-            using (var cmd = new NpgsqlCommand(sql, connection)) 
+            using (var connection = new NpgsqlConnection(connection_string))
             {
-                cmd.Parameters.AddWithValue(":from", from);
-                cmd.Parameters.AddWithValue(":max", max);
-
-                using (NpgsqlDataReader reader = cmd.ExecuteReader())
+                connection.Open();
+                using (var cmd = new NpgsqlCommand(sql, connection))
                 {
-                    while (reader.Read())
+                    cmd.Parameters.AddWithValue(":from", from);
+                    cmd.Parameters.AddWithValue(":max", max);
+
+                    using (NpgsqlDataReader reader = cmd.ExecuteReader())
                     {
-                        var obj = FromReader(reader);
-                        result.Add(obj);
+                        while (reader.Read())
+                        {
+                            var obj = FromReader(reader);
+                            result.Add(obj);
+                        }
                     }
                 }
             }
@@ -63,15 +71,19 @@ namespace StudyBuddy.Persistence
         {
             string sql = "SELECT id,acronym,name FROM study_programs where id=:id";
 
-            using (var cmd = new NpgsqlCommand(sql, connection))
+            using (var connection = new NpgsqlConnection(connection_string))
             {
-                cmd.Parameters.AddWithValue(":id", id);
-
-                using (NpgsqlDataReader reader = cmd.ExecuteReader())
+                connection.Open();
+                using (var cmd = new NpgsqlCommand(sql, connection))
                 {
-                    if (reader.Read())
+                    cmd.Parameters.AddWithValue(":id", id);
+
+                    using (NpgsqlDataReader reader = cmd.ExecuteReader())
                     {
-                        return FromReader(reader);
+                        if (reader.Read())
+                        {
+                            return FromReader(reader);
+                        }
                     }
                 }
             }
@@ -83,15 +95,19 @@ namespace StudyBuddy.Persistence
         {
             string sql = "SELECT id,acronym,name FROM study_programs where lower(acronym)=lower(:acronym)";
 
-            using (var cmd = new NpgsqlCommand(sql, connection))
+            using (var connection = new NpgsqlConnection(connection_string))
             {
-                cmd.Parameters.AddWithValue(":acronym", acronym);
-
-                using (NpgsqlDataReader reader = cmd.ExecuteReader())
+                connection.Open();
+                using (var cmd = new NpgsqlCommand(sql, connection))
                 {
-                    if (reader.Read())
+                    cmd.Parameters.AddWithValue(":acronym", acronym);
+
+                    using (NpgsqlDataReader reader = cmd.ExecuteReader())
                     {
-                        return FromReader(reader);
+                        if (reader.Read())
+                        {
+                            return FromReader(reader);
+                        }
                     }
                 }
             }
@@ -102,36 +118,48 @@ namespace StudyBuddy.Persistence
         public void Delete(int id)
         {
             string sql = "delete from study_programs where id=:id";
-            using (var cmd = new NpgsqlCommand(sql, connection))
+            using (var connection = new NpgsqlConnection(connection_string))
             {
-                cmd.Parameters.AddWithValue(":id", id);
-                cmd.ExecuteNonQuery();
+                connection.Open();
+                using (var cmd = new NpgsqlCommand(sql, connection))
+                {
+                    cmd.Parameters.AddWithValue(":id", id);
+                    cmd.ExecuteNonQuery();
+                }
             }
         }
 
-        private void Insert(StudyProgram obj)
+        public void Insert(StudyProgram obj)
         {
             string sql = "insert into study_programs " +
                     "(acronym,name) values (:acronym,:name) RETURNING id";
 
-            using (var cmd = new NpgsqlCommand(sql, connection)) 
+            using (var connection = new NpgsqlConnection(connection_string))
             {
-                cmd.Parameters.AddWithValue(":acronym", obj.Acronym);
-                cmd.Parameters.AddWithValue(":name", obj.Name);
-                obj.ID = Convert.ToInt32(cmd.ExecuteScalar());
+                connection.Open();
+                using (var cmd = new NpgsqlCommand(sql, connection))
+                {
+                    cmd.Parameters.AddWithValue(":acronym", obj.Acronym);
+                    cmd.Parameters.AddWithValue(":name", obj.Name);
+                    obj.ID = Convert.ToInt32(cmd.ExecuteScalar());
+                }
             }
         }
 
-        private void Update(StudyProgram obj)
+        public void Update(StudyProgram obj)
         {
             string sql = "update study_programs set acronym=:acronym,name=:name where id=:id";
 
-            using (var cmd = new NpgsqlCommand(sql, connection)) 
+            using (var connection = new NpgsqlConnection(connection_string))
             {
-                cmd.Parameters.AddWithValue(":id", obj.ID);
-                cmd.Parameters.AddWithValue(":acronym", obj.Acronym);
-                cmd.Parameters.AddWithValue(":name", obj.Name);
-                cmd.ExecuteNonQuery();
+                connection.Open();
+                using (var cmd = new NpgsqlCommand(sql, connection))
+                {
+                    cmd.Parameters.AddWithValue(":id", obj.ID);
+                    cmd.Parameters.AddWithValue(":acronym", obj.Acronym);
+                    cmd.Parameters.AddWithValue(":name", obj.Name);
+                    cmd.ExecuteNonQuery();
+                }
             }
         }
 

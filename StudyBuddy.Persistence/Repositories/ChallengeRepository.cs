@@ -7,7 +7,7 @@ namespace StudyBuddy.Persistence
 {
     class ChallengeRepository : SqlRepositoryBase, IChallengeRepository
     {
-        public ChallengeRepository(NpgsqlConnection connection) : base(connection)
+        public ChallengeRepository(string connection_string) : base(connection_string)
         {
             if (!TableExists("challenges")) 
             {
@@ -31,9 +31,13 @@ namespace StudyBuddy.Persistence
                 "target_audience text," + 
                 "series_parent_id int)";
 
-            using (var cmd = new NpgsqlCommand(sql, connection)) 
+            using (var connection = new NpgsqlConnection(connection_string))
             {
-                cmd.ExecuteNonQuery();
+                connection.Open();
+                using (var cmd = new NpgsqlCommand(sql, connection))
+                {
+                    cmd.ExecuteNonQuery();
+                }
             }
         }
 
@@ -61,15 +65,19 @@ namespace StudyBuddy.Persistence
                 "category,owner_id,created,prove,target_audience,series_parent_id " +
                 "FROM challenges where id=:id";
 
-            using (var cmd = new NpgsqlCommand(sql, connection))
+            using (var connection = new NpgsqlConnection(connection_string))
             {
-                cmd.Parameters.AddWithValue(":id", id);
-
-                using (NpgsqlDataReader reader = cmd.ExecuteReader())
+                connection.Open();
+                using (var cmd = new NpgsqlCommand(sql, connection))
                 {
-                    if (reader.Read())
+                    cmd.Parameters.AddWithValue(":id", id);
+
+                    using (NpgsqlDataReader reader = cmd.ExecuteReader())
                     {
-                        return FromReader(reader);
+                        if (reader.Read())
+                        {
+                            return FromReader(reader);
+                        }
                     }
                 }
             }
@@ -82,23 +90,27 @@ namespace StudyBuddy.Persistence
             string sql = "SELECT id,name,description,points,validity_start,validity_end," +
                 "category,owner_id,created,prove,target_audience,series_parent_id " +
                 "FROM challenges order by created limit :max offset :from";
-            
-            using (var cmd = new NpgsqlCommand(sql, connection))
+
+            using (var connection = new NpgsqlConnection(connection_string))
             {
-                cmd.Parameters.AddWithValue(":from", from);
-                cmd.Parameters.AddWithValue(":max", max);
-                var result = new List<Challenge>();
-
-                using (NpgsqlDataReader reader = cmd.ExecuteReader())
+                connection.Open();
+                using (var cmd = new NpgsqlCommand(sql, connection))
                 {
-                    while (reader.Read())
-                    {
-                        var obj = FromReader(reader);
-                        result.Add(obj);
-                    }
-                }
+                    cmd.Parameters.AddWithValue(":from", from);
+                    cmd.Parameters.AddWithValue(":max", max);
+                    var result = new List<Challenge>();
 
-                return result;
+                    using (NpgsqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            var obj = FromReader(reader);
+                            result.Add(obj);
+                        }
+                    }
+
+                    return result;
+                }
             }
         }
 
@@ -110,20 +122,24 @@ namespace StudyBuddy.Persistence
                 "(:name,:description,:points,:validity_start,:validity_end,:category," +
                 ":owner_id,:created,:prove,:target_audience,:series_parent_id) RETURNING id";
 
-            using (var cmd = new NpgsqlCommand(sql, connection)) 
+            using (var connection = new NpgsqlConnection(connection_string))
             {
-                cmd.Parameters.AddWithValue(":name", obj.Name);
-                cmd.Parameters.AddWithValue(":description", string.IsNullOrEmpty(obj.Description) ? DBNull.Value : obj.Description);
-                cmd.Parameters.AddWithValue(":points", obj.Points);
-                cmd.Parameters.AddWithValue(":validity_start", obj.ValidityStart);
-                cmd.Parameters.AddWithValue(":validity_end", obj.ValidityEnd);
-                cmd.Parameters.AddWithValue(":category", (int)obj.Category);
-                cmd.Parameters.AddWithValue(":owner_id", obj.OwnerID);
-                cmd.Parameters.AddWithValue(":created", obj.Created);
-                cmd.Parameters.AddWithValue(":prove", (int)obj.Prove);
-                cmd.Parameters.AddWithValue(":target_audience", string.IsNullOrEmpty(obj.TargetAudience) ? DBNull.Value : obj.TargetAudience);
-                cmd.Parameters.AddWithValue(":series_parent_id", obj.SeriesParentID.HasValue ? obj.SeriesParentID.Value : DBNull.Value);
-                obj.ID = Convert.ToInt32(cmd.ExecuteScalar());
+                connection.Open();
+                using (var cmd = new NpgsqlCommand(sql, connection))
+                {
+                    cmd.Parameters.AddWithValue(":name", obj.Name);
+                    cmd.Parameters.AddWithValue(":description", string.IsNullOrEmpty(obj.Description) ? DBNull.Value : obj.Description);
+                    cmd.Parameters.AddWithValue(":points", obj.Points);
+                    cmd.Parameters.AddWithValue(":validity_start", obj.ValidityStart);
+                    cmd.Parameters.AddWithValue(":validity_end", obj.ValidityEnd);
+                    cmd.Parameters.AddWithValue(":category", (int)obj.Category);
+                    cmd.Parameters.AddWithValue(":owner_id", obj.OwnerID);
+                    cmd.Parameters.AddWithValue(":created", obj.Created);
+                    cmd.Parameters.AddWithValue(":prove", (int)obj.Prove);
+                    cmd.Parameters.AddWithValue(":target_audience", string.IsNullOrEmpty(obj.TargetAudience) ? DBNull.Value : obj.TargetAudience);
+                    cmd.Parameters.AddWithValue(":series_parent_id", obj.SeriesParentID.HasValue ? obj.SeriesParentID.Value : DBNull.Value);
+                    obj.ID = Convert.ToInt32(cmd.ExecuteScalar());
+                }
             }
         }
 
@@ -134,21 +150,25 @@ namespace StudyBuddy.Persistence
                 "owner_id=:owner_id,created=:created,prove=:prove," +
                 "target_audience=:target_audience,series_parent_id=:series_parent_id where id=:id";
 
-            using (var cmd = new NpgsqlCommand(sql, connection)) 
+            using (var connection = new NpgsqlConnection(connection_string))
             {
-                cmd.Parameters.AddWithValue(":id", obj.ID);
-                cmd.Parameters.AddWithValue(":name", obj.Name);
-                cmd.Parameters.AddWithValue(":description", string.IsNullOrEmpty(obj.Description) ? DBNull.Value : obj.Description);
-                cmd.Parameters.AddWithValue(":points", obj.Points);
-                cmd.Parameters.AddWithValue(":validity_start", obj.ValidityStart);
-                cmd.Parameters.AddWithValue(":validity_end", obj.ValidityEnd);
-                cmd.Parameters.AddWithValue(":category", (int)obj.Category);
-                cmd.Parameters.AddWithValue(":owner_id", obj.OwnerID);
-                cmd.Parameters.AddWithValue(":created", obj.Created);
-                cmd.Parameters.AddWithValue(":prove", (int)obj.Prove);
-                cmd.Parameters.AddWithValue(":target_audience", string.IsNullOrEmpty(obj.TargetAudience) ? DBNull.Value : obj.TargetAudience);
-                cmd.Parameters.AddWithValue(":series_parent_id", obj.SeriesParentID.HasValue ? obj.SeriesParentID.Value : DBNull.Value);
-                cmd.ExecuteNonQuery();
+                connection.Open();
+                using (var cmd = new NpgsqlCommand(sql, connection))
+                {
+                    cmd.Parameters.AddWithValue(":id", obj.ID);
+                    cmd.Parameters.AddWithValue(":name", obj.Name);
+                    cmd.Parameters.AddWithValue(":description", string.IsNullOrEmpty(obj.Description) ? DBNull.Value : obj.Description);
+                    cmd.Parameters.AddWithValue(":points", obj.Points);
+                    cmd.Parameters.AddWithValue(":validity_start", obj.ValidityStart);
+                    cmd.Parameters.AddWithValue(":validity_end", obj.ValidityEnd);
+                    cmd.Parameters.AddWithValue(":category", (int)obj.Category);
+                    cmd.Parameters.AddWithValue(":owner_id", obj.OwnerID);
+                    cmd.Parameters.AddWithValue(":created", obj.Created);
+                    cmd.Parameters.AddWithValue(":prove", (int)obj.Prove);
+                    cmd.Parameters.AddWithValue(":target_audience", string.IsNullOrEmpty(obj.TargetAudience) ? DBNull.Value : obj.TargetAudience);
+                    cmd.Parameters.AddWithValue(":series_parent_id", obj.SeriesParentID.HasValue ? obj.SeriesParentID.Value : DBNull.Value);
+                    cmd.ExecuteNonQuery();
+                }
             }
         }
 
@@ -163,10 +183,15 @@ namespace StudyBuddy.Persistence
         public void Delete(int id)
         {
             string sql = "delete from challenges where id=:id";
-            using (var cmd = new NpgsqlCommand(sql, connection))
+
+            using (var connection = new NpgsqlConnection(connection_string))
             {
-                cmd.Parameters.AddWithValue(":id", id);
-                cmd.ExecuteNonQuery();
+                connection.Open();
+                using (var cmd = new NpgsqlCommand(sql, connection))
+                {
+                    cmd.Parameters.AddWithValue(":id", id);
+                    cmd.ExecuteNonQuery();
+                }
             }
         }
 
@@ -178,22 +203,26 @@ namespace StudyBuddy.Persistence
                 "from game_badge_challenges " +
                 "inner join challenges on challenge=id where game_badge = :badge_id " +
                 "order by created desc";
-            
-            using (var cmd = new NpgsqlCommand(sql, connection))
+
+            using (var connection = new NpgsqlConnection(connection_string))
             {
-                cmd.Parameters.AddWithValue(":badge_id", badge_id);
-                var result = new List<Challenge>();
-
-                using (NpgsqlDataReader reader = cmd.ExecuteReader())
+                connection.Open();
+                using (var cmd = new NpgsqlCommand(sql, connection))
                 {
-                    while (reader.Read())
-                    {
-                        var obj = FromReader(reader);
-                        result.Add(obj);
-                    }
-                }
+                    cmd.Parameters.AddWithValue(":badge_id", badge_id);
+                    var result = new List<Challenge>();
 
-                return result;
+                    using (NpgsqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            var obj = FromReader(reader);
+                            result.Add(obj);
+                        }
+                    }
+
+                    return result;
+                }
             }
         }
 
@@ -205,21 +234,25 @@ namespace StudyBuddy.Persistence
                 "(select challenge from game_badge_challenges where game_badge=:badge_id) " +
                 "order by created desc";
 
-            using (var cmd = new NpgsqlCommand(sql, connection))
+            using (var connection = new NpgsqlConnection(connection_string))
             {
-                cmd.Parameters.AddWithValue(":badge_id", badge_id);
-                var result = new List<Challenge>();
-
-                using (NpgsqlDataReader reader = cmd.ExecuteReader())
+                connection.Open();
+                using (var cmd = new NpgsqlCommand(sql, connection))
                 {
-                    while (reader.Read())
-                    {
-                        var obj = FromReader(reader);
-                        result.Add(obj);
-                    }
-                }
+                    cmd.Parameters.AddWithValue(":badge_id", badge_id);
+                    var result = new List<Challenge>();
 
-                return result;
+                    using (NpgsqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            var obj = FromReader(reader);
+                            result.Add(obj);
+                        }
+                    }
+
+                    return result;
+                }
             }
         }
 

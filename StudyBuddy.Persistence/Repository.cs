@@ -25,15 +25,12 @@ namespace StudyBuddy.Persistence
                 Helper.GetFromEnvironmentOrDefault("POSTGRESQL_PASSWORD", "secret"),
                 Helper.GetFromEnvironmentOrDefault("POSTGRESQL_DATABASE", "postgres"));
 
-            this.connection = new NpgsqlConnection(connection_string);
-            connection.Open();
-
-            this.Users = new UserRepository(this.connection);
-            this.StudyPrograms = new StudyProgramRepository(this.connection);
-            this.Teams = new TeamRepository(this.connection);
-            this.Terms = new TermRepository(this.connection);
-            this.Challenges = new ChallengeRepository(this.connection);
-            this.GameBadges = new GameBadgeRepository(this.connection);
+            this.Users = new UserRepository(connection_string);
+            this.StudyPrograms = new StudyProgramRepository(connection_string);
+            this.Teams = new TeamRepository(connection_string);
+            this.Terms = new TermRepository(connection_string);
+            this.Challenges = new ChallengeRepository(connection_string);
+            this.GameBadges = new GameBadgeRepository(connection_string);
         }
 
         public void Dispose()

@@ -15,5 +15,4 @@
   </PropertyGroup>
 
   <PropertyGroup Condition=" '$(RunConfiguration)' == 'services' " />
-  <PropertyGroup Condition=" '$(RunConfiguration)' == 'Services' " />
 </Project>

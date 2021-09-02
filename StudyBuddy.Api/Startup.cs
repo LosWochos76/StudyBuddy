@@ -10,6 +10,10 @@ namespace StudyBuddy.Services
     {
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddCors(options => options.AddPolicy("all",
+                policy => policy.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader()
+            ));
+
             services.AddControllers();
             services.AddSingleton<IRepository, Repository>();
 
@@ -26,6 +30,8 @@ namespace StudyBuddy.Services
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            app.UseCors("all");
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();

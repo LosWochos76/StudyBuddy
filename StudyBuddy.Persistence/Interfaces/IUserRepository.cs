@@ -7,10 +7,13 @@ namespace StudyBuddy.Persistence
     {
         User ById(int id);
         IEnumerable<User> All(int from = 0, int max = 1000);
+        int Count();
         User ByEmailAndPassword(UserCredentials credentials);
         User ByEmail(string email);
         User ByNickname(string nickname);
         void Save(User obj);
+        void Insert(User obj);
+        void Update(User obj);
         void Delete(int id);
         IEnumerable<User> NotMembersOfTeam(int team_id);
         IEnumerable<User> MembersOfTeam(int team_id);
