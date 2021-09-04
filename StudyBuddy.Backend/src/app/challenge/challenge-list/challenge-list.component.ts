@@ -36,7 +36,7 @@ export class ChallengeListComponent implements OnInit {
   }
 
   isSeriable() {
-    return this.selected != null && this.selected.parent == null;
+    return this.selected != null && (this.selected.parent == null || this.selected.parent == 0);
   }
 
   onDelete() {
