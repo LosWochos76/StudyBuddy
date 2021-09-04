@@ -6,10 +6,8 @@ using System.Linq;
 
 namespace StudyBuddy.Persistence
 {
-    public class Repository : IRepository, IDisposable
+    public class Repository : IRepository
     {
-        private NpgsqlConnection connection;
-        
         public IUserRepository Users { get; private set; }
         public IStudyProgramRepository StudyPrograms { get; private set; }
         public ITeamRepository Teams { get; private set; }
@@ -25,17 +23,14 @@ namespace StudyBuddy.Persistence
                 Helper.GetFromEnvironmentOrDefault("POSTGRESQL_PASSWORD", "secret"),
                 Helper.GetFromEnvironmentOrDefault("POSTGRESQL_DATABASE", "postgres"));
 
+
+
             this.Users = new UserRepository(connection_string);
             this.StudyPrograms = new StudyProgramRepository(connection_string);
             this.Teams = new TeamRepository(connection_string);
             this.Terms = new TermRepository(connection_string);
             this.Challenges = new ChallengeRepository(connection_string);
             this.GameBadges = new GameBadgeRepository(connection_string);
-        }
-
-        public void Dispose()
-        {
-            this.connection.Close();
         }
     }
 }

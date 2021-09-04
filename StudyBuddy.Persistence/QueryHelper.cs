@@ -8,12 +8,14 @@ namespace StudyBuddy.Persistence
 
     public class QueryHelper<T> where T : class
     {
-        private string connection_string = "";
+        private string connection_string;
+        private ObjectReader<T> object_reader;
         private Dictionary<string, object> parameters = new Dictionary<string, object>();
 
-        public QueryHelper(string connection_string)
+        public QueryHelper(string connection_string, ObjectReader<T> object_reader)
         {
             this.connection_string = connection_string;
+            this.object_reader = object_reader;
         }
 
         public void AddParameter(string name, object value)
@@ -21,8 +23,16 @@ namespace StudyBuddy.Persistence
             parameters.Add(name, value);
         }
 
-        public T ExecuteQueryToSingleObject(string sql, ObjectReader<T> object_reader)
+        public void AddParameters(object obj)
         {
+            foreach (var p in obj.GetType().GetProperties())
+                parameters.Add(":" + p.Name, p.GetValue(obj, null));
+        }
+
+        public T ExecuteQueryToSingleObject(string sql)
+        {
+            T result = null;
+
             using (var connection = new NpgsqlConnection(connection_string))
             {
                 connection.Open();
@@ -35,16 +45,17 @@ namespace StudyBuddy.Persistence
                     {
                         if (reader.Read())
                         {
-                            return object_reader(reader);
+                            result = object_reader(reader);
                         }
                     }
                 }
             }
 
-            return null;
+            parameters.Clear();
+            return result;
         }
 
-        public IEnumerable<T> ExecuteQueryToObjectList(string sql, ObjectReader<T> object_reader)
+        public IEnumerable<T> ExecuteQueryToObjectList(string sql)
         {
             var result = new List<T>();
 
@@ -67,6 +78,7 @@ namespace StudyBuddy.Persistence
                 }
             }
 
+            parameters.Clear();
             return result;
         }
 
@@ -83,10 +95,14 @@ namespace StudyBuddy.Persistence
                     cmd.ExecuteNonQuery();
                 }
             }
+
+            parameters.Clear();
         }
 
         public int ExecuteScalar(string sql)
         {
+            int result = 0;
+
             using (var connection = new NpgsqlConnection(connection_string))
             {
                 connection.Open();
@@ -95,9 +111,18 @@ namespace StudyBuddy.Persistence
                     foreach (var param in this.parameters)
                         cmd.Parameters.AddWithValue(param.Key, param.Value);
 
-                    return Convert.ToInt32(cmd.ExecuteScalar());
+                    result = Convert.ToInt32(cmd.ExecuteScalar());
                 }
             }
+
+            parameters.Clear();
+            return result;
+        }
+
+        public void Delete(string table_name, string field_name, int id)
+        {
+            AddParameter(":id", id);
+            ExecuteNonQuery(string.Format("delete from {0} where {1}=:id", table_name, field_name));
         }
 
         public int GetCount(string table_name)
@@ -118,13 +143,27 @@ namespace StudyBuddy.Persistence
                 }
             }
 
+            parameters.Clear();
             return result;
         }
 
-        public void Delete(string table_name, string field_name, int id)
+        public bool TableExists(string table_name)
         {
-            AddParameter(":id", id);
-            ExecuteNonQuery(string.Format("delete from {0} where {1}=:id", table_name, field_name));
+            var result = false;
+            var sql = "SELECT EXISTS (SELECT FROM pg_tables WHERE tablename=:table_name)";
+
+            using (var connection = new NpgsqlConnection(connection_string))
+            {
+                connection.Open();
+                using (var cmd = new NpgsqlCommand(sql, connection))
+                {
+                    cmd.Parameters.AddWithValue(":table_name", table_name);
+                    result = Convert.ToBoolean(cmd.ExecuteScalar());
+                }
+            }
+
+            parameters.Clear();
+            return result;
         }
     }
 }

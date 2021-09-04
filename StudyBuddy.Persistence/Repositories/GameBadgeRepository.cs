@@ -5,53 +5,42 @@ using System.Collections.Generic;
 
 namespace StudyBuddy.Persistence
 {
-    class GameBadgeRepository : SqlRepositoryBase, IGameBadgeRepository
+    class GameBadgeRepository : IGameBadgeRepository
     {
-        public GameBadgeRepository(string connection_string) : base(connection_string)
-        {
-            if (!TableExists("game_badges")) 
-            {
-                CreateBadgesTable();
-            }
+        private string connection_string;
+        private QueryHelper<GameBadge> qh;
 
-            if (!TableExists("game_badge_challenges")) 
-            {
-                CreateGameBadgeChallengesTable();
-            }
+        public GameBadgeRepository(string connection_string)
+        {
+            this.connection_string = connection_string;
+            qh = new QueryHelper<GameBadge>(connection_string, FromReader);
+
+            CreateBadgesTable();
+            CreateGameBadgeChallengesTable();
         }
 
         private void CreateBadgesTable() 
         {
-            string sql = "create table game_badges (" +
-                "id serial primary key, " +
-                "name varchar(100) not null, " +
-                "owner_id int not null, " + 
-                "created date not null, " +
-                "required_coverage numeric(2,2) not null)";
-
-            using (var connection = new NpgsqlConnection(connection_string))
+            if (!qh.TableExists("game_badges"))
             {
-                connection.Open();
-                using (var cmd = new NpgsqlCommand(sql, connection))
-                {
-                    cmd.ExecuteNonQuery();
-                }
+                qh.ExecuteNonQuery(
+                    "create table game_badges (" +
+                    "id serial primary key, " +
+                    "name varchar(100) not null, " +
+                    "owner_id int not null, " +
+                    "created date not null, " +
+                    "required_coverage numeric(2,2) not null)");
             }
         }
 
         private void CreateGameBadgeChallengesTable() 
         {
-            string sql = "create table game_badge_challenges (" +
-                "game_badge int not null, " + 
-                "challenge int not null)";
-
-            using (var connection = new NpgsqlConnection(connection_string))
+            if (!qh.TableExists("game_badge_challenges"))
             {
-                connection.Open();
-                using (var cmd = new NpgsqlCommand(sql, connection))
-                {
-                    cmd.ExecuteNonQuery();
-                }
+                qh.ExecuteNonQuery(
+                    "create table game_badge_challenges (" +
+                    "game_badge int not null, " + 
+                    "challenge int not null)");
             }
         }
 

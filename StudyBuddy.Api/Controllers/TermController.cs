@@ -2,6 +2,7 @@
 using StudyBuddy.Model;
 using Microsoft.AspNetCore.Mvc;
 using StudyBuddy.Persistence;
+using System;
 
 namespace StudyBuddy.Services
 {
@@ -55,6 +56,13 @@ namespace StudyBuddy.Services
         {
             repository.Terms.Delete(id);
             return Json(new { Status = "ok" });
+        }
+
+        [Route("/Term/ByDate/{date}")]
+        [HttpGet]
+        public IActionResult Delete(DateTime date)
+        {
+            return Json(repository.Terms.ByDate(date));
         }
     }
 }

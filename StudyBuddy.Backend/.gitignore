@@ -119,6 +119,3 @@ baseline.json
 
 # Husky
 .husky/_
-
-# do not checkin the firebase credentials
-environments

@@ -32,7 +32,7 @@ import { ChallengeEditComponent } from './challenge/challenge-edit/challenge-edi
 import { ChallengeService } from './services/challenge.service';
 import { CategoryPipe } from './services/category.pipe';
 import { HttpClientModule } from '@angular/common/http';
-import { ChallengeCloneComponent } from './challenge/challenge-clone/challenge-clone.component';
+import { CreateSeriesComponent } from './challenge/create-series/create-series.component';
 
 @NgModule({
   declarations: [
@@ -57,7 +57,7 @@ import { ChallengeCloneComponent } from './challenge/challenge-clone/challenge-c
     ChallengeListComponent,
     ChallengeEditComponent,
     CategoryPipe,
-    ChallengeCloneComponent
+    CreateSeriesComponent,
   ],
   imports: [
     BrowserModule,

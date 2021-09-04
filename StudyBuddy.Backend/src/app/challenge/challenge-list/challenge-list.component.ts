@@ -35,7 +35,7 @@ export class ChallengeListComponent implements OnInit {
     return this.selected != null;
   }
 
-  isCloneable() {
+  isSeriable() {
     return this.selected != null && this.selected.parent == null;
   }
 
@@ -61,12 +61,12 @@ export class ChallengeListComponent implements OnInit {
     this.router.navigate(['/challenge/0']);
   }
 
-  onClone() {
+  onCreateSeries() {
     if (!this.isSelected())
       return;
 
     this.logger.debug("User wants to create a clone of a challenge");
-    this.router.navigate(['/challenge/clone/', this.selected.id]);
+    this.router.navigate(['challenge/create_series/', this.selected.id]);
   }
 
   onKeySearch(event: any) {
@@ -80,6 +80,9 @@ export class ChallengeListComponent implements OnInit {
   }
 
   private async onSearch(value: string) {
-    this.objects = await this.service.byText(value);
+    if (value == "")
+      this.objects = await this.service.getAll();
+    else
+      this.objects = await this.service.byText(value);
   }
 }

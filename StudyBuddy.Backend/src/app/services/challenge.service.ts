@@ -22,7 +22,6 @@ export class ChallengeService {
       return null;
 
     let objects:Challenge[] = [];
-
     let result = await this.http.get(this.url + "Challenge", 
     {
       headers: new HttpHeaders({ Authorization: this.auth.getToken() })
@@ -81,16 +80,20 @@ export class ChallengeService {
     this.changed.emit();
   }
 
-  // ToDo: Implement as server-call!
   async byText(text:string):Promise<Challenge[]> {
-    let result:Challenge[] = [];
-    let objects = await this.getAll();
+    if (!this.auth.isLoggedIn())
+      return null;
 
-    for (let obj of objects)
-      if (obj.name.includes(text) || obj.description.includes(text))
-        result.push(obj);
+    let objects:Challenge[] = [];
+    let result = await this.http.get(this.url + "Challenge/ByText/" + text,
+    {
+      headers: new HttpHeaders({ Authorization: this.auth.getToken() })
+    }).toPromise();
 
-    return result;
+    for (let obj in result)
+      objects.push(Challenge.fromApi(result[obj]));
+
+    return objects;
   }
 
   async save(obj:Challenge) {
@@ -115,6 +118,21 @@ export class ChallengeService {
         headers: new HttpHeaders({ Authorization: this.auth.getToken() })
       }).toPromise();
     }
+    
+    this.changed.emit();
+  }
+
+  async createSeries(id:number, days_add:number, count:number) {
+    if (!this.auth.isLoggedIn())
+      return null;
+    
+    let data = { 'challengeId':id, 'daysAdd':days_add, 'count':count };
+    let result = null;
+    this.logger.debug("Creating series of Challenges");
+    result = await this.http.post(this.url + "Challenge/CreateSeries/", data, 
+    {
+      headers: new HttpHeaders({ Authorization: this.auth.getToken() })
+    }).toPromise();
     
     this.changed.emit();
   }

@@ -17,7 +17,7 @@ export class AuthorizationService {
 
   async login(email:string, password:string):Promise<boolean> {
     const response = await this.http.post(this.url + 'Login', {
-      'eMail': email,
+      'email': email,
       'password': password
     }).toPromise();
 

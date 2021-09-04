@@ -5,39 +5,37 @@ using System.Collections.Generic;
 
 namespace StudyBuddy.Persistence
 {
-    class ChallengeRepository : SqlRepositoryBase, IChallengeRepository
+    class ChallengeRepository : IChallengeRepository
     {
-        public ChallengeRepository(string connection_string) : base(connection_string)
+        private string connection_string;
+        private QueryHelper<Challenge> qh;
+
+        public ChallengeRepository(string connection_string)
         {
-            if (!TableExists("challenges")) 
-            {
-                CreateTable();
-            }
+            this.connection_string = connection_string;
+            this.qh = new QueryHelper<Challenge>(connection_string, FromReader);
+
+            CreateTable();
         }
 
         private void CreateTable() 
         {
-            string sql = "create table challenges (" +
-                "id serial primary key, " +
-                "name varchar(100) not null, " +
-                "description text, " +
-                "points smallint not null, " +
-                "validity_start date not null, " +
-                "validity_end date not null, " +
-                "category smallint not null, " +
-                "owner_id int not null, " + 
-                "created date not null, " +
-                "prove smallint not null, " + 
-                "target_audience text," + 
-                "series_parent_id int)";
-
-            using (var connection = new NpgsqlConnection(connection_string))
+            if (!qh.TableExists("challenges"))
             {
-                connection.Open();
-                using (var cmd = new NpgsqlCommand(sql, connection))
-                {
-                    cmd.ExecuteNonQuery();
-                }
+                qh.ExecuteNonQuery(
+                    "create table challenges (" +
+                    "id serial primary key, " +
+                    "name varchar(100) not null, " +
+                    "description text, " +
+                    "points smallint not null, " +
+                    "validity_start date not null, " +
+                    "validity_end date not null, " +
+                    "category smallint not null, " +
+                    "owner_id int not null, " +
+                    "created date not null, " +
+                    "prove smallint not null, " +
+                    "target_audience text," +
+                    "series_parent_id int)");
             }
         }
 
@@ -61,115 +59,100 @@ namespace StudyBuddy.Persistence
 
         public Challenge ById(int id)
         {
-            string sql = "SELECT id,name,description,points,validity_start,validity_end," +
+            qh.AddParameter(":id", id);
+            return qh.ExecuteQueryToSingleObject(
+                "SELECT id,name,description,points,validity_start,validity_end," +
                 "category,owner_id,created,prove,target_audience,series_parent_id " +
-                "FROM challenges where id=:id";
-
-            using (var connection = new NpgsqlConnection(connection_string))
-            {
-                connection.Open();
-                using (var cmd = new NpgsqlCommand(sql, connection))
-                {
-                    cmd.Parameters.AddWithValue(":id", id);
-
-                    using (NpgsqlDataReader reader = cmd.ExecuteReader())
-                    {
-                        if (reader.Read())
-                        {
-                            return FromReader(reader);
-                        }
-                    }
-                }
-            }
-
-            return null;
+                "FROM challenges where id=:id");
         }
 
         public IEnumerable<Challenge> All(int from = 0, int max = 1000)
         {
-            string sql = "SELECT id,name,description,points,validity_start,validity_end," +
+            qh.AddParameter(":from", from);
+            qh.AddParameter(":max", max);
+            return qh.ExecuteQueryToObjectList(
+                "SELECT id,name,description,points,validity_start,validity_end," +
                 "category,owner_id,created,prove,target_audience,series_parent_id " +
-                "FROM challenges order by created limit :max offset :from";
-
-            using (var connection = new NpgsqlConnection(connection_string))
-            {
-                connection.Open();
-                using (var cmd = new NpgsqlCommand(sql, connection))
-                {
-                    cmd.Parameters.AddWithValue(":from", from);
-                    cmd.Parameters.AddWithValue(":max", max);
-                    var result = new List<Challenge>();
-
-                    using (NpgsqlDataReader reader = cmd.ExecuteReader())
-                    {
-                        while (reader.Read())
-                        {
-                            var obj = FromReader(reader);
-                            result.Add(obj);
-                        }
-                    }
-
-                    return result;
-                }
-            }
+                "FROM challenges order by created limit :max offset :from");
         }
 
-        private void Insert(Challenge obj)
+        public IEnumerable<Challenge> ByText(string text, int from = 0, int max = 1000)
         {
-            string sql = "insert into challenges (name,description,points,"  + 
-                "validity_start,validity_end,category,owner_id,created,prove," + 
+            qh.AddParameter(":from", from);
+            qh.AddParameter(":max", max);
+            qh.AddParameter(":text", "%" + text + "%");
+            return qh.ExecuteQueryToObjectList(
+                "SELECT id,name,description,points,validity_start,validity_end," +
+                "category,owner_id,created,prove,target_audience,series_parent_id " +
+                "FROM challenges where name like :text or description like :text " +
+                "order by created limit :max offset :from");
+        }
+
+        public IEnumerable<Challenge> OfOwner(int owner_id, int from = 0, int max = 1000)
+        {
+            qh.AddParameter(":from", from);
+            qh.AddParameter(":max", max);
+            qh.AddParameter(":owner_id", owner_id);
+            return qh.ExecuteQueryToObjectList(
+                "SELECT id,name,description,points,validity_start,validity_end," +
+                "category,owner_id,created,prove,target_audience,series_parent_id " +
+                "FROM challenges where owner_id=:owner_id order by created limit :max offset :from");
+        }
+
+        public IEnumerable<Challenge> OfOwnerByText(int owner_id, string text, int from = 0, int max = 1000)
+        {
+            qh.AddParameter(":from", from);
+            qh.AddParameter(":max", max);
+            qh.AddParameter(":owner_id", owner_id);
+            qh.AddParameter(":text", "%" + text + "%");
+            return qh.ExecuteQueryToObjectList(
+                "SELECT id,name,description,points,validity_start,validity_end," +
+                "category,owner_id,created,prove,target_audience,series_parent_id " +
+                "FROM challenges where owner_id=:owner_id and " +
+                "(name like :text or description like :text) order by created limit :max offset :from");
+        }
+
+        public void Insert(Challenge obj)
+        {
+            qh.AddParameter(":name", obj.Name);
+            qh.AddParameter(":description", string.IsNullOrEmpty(obj.Description) ? DBNull.Value : obj.Description);
+            qh.AddParameter(":points", obj.Points);
+            qh.AddParameter(":validity_start", obj.ValidityStart);
+            qh.AddParameter(":validity_end", obj.ValidityEnd);
+            qh.AddParameter(":category", (int)obj.Category);
+            qh.AddParameter(":owner_id", obj.OwnerID);
+            qh.AddParameter(":created", obj.Created);
+            qh.AddParameter(":prove", (int)obj.Prove);
+            qh.AddParameter(":target_audience", string.IsNullOrEmpty(obj.TargetAudience) ? DBNull.Value : obj.TargetAudience);
+            qh.AddParameter(":series_parent_id", obj.SeriesParentID.HasValue ? obj.SeriesParentID.Value : DBNull.Value);
+
+            obj.ID = qh.ExecuteScalar(
+                "insert into challenges (name,description,points," +
+                "validity_start,validity_end,category,owner_id,created,prove," +
                 "target_audience,series_parent_id) values " +
                 "(:name,:description,:points,:validity_start,:validity_end,:category," +
-                ":owner_id,:created,:prove,:target_audience,:series_parent_id) RETURNING id";
-
-            using (var connection = new NpgsqlConnection(connection_string))
-            {
-                connection.Open();
-                using (var cmd = new NpgsqlCommand(sql, connection))
-                {
-                    cmd.Parameters.AddWithValue(":name", obj.Name);
-                    cmd.Parameters.AddWithValue(":description", string.IsNullOrEmpty(obj.Description) ? DBNull.Value : obj.Description);
-                    cmd.Parameters.AddWithValue(":points", obj.Points);
-                    cmd.Parameters.AddWithValue(":validity_start", obj.ValidityStart);
-                    cmd.Parameters.AddWithValue(":validity_end", obj.ValidityEnd);
-                    cmd.Parameters.AddWithValue(":category", (int)obj.Category);
-                    cmd.Parameters.AddWithValue(":owner_id", obj.OwnerID);
-                    cmd.Parameters.AddWithValue(":created", obj.Created);
-                    cmd.Parameters.AddWithValue(":prove", (int)obj.Prove);
-                    cmd.Parameters.AddWithValue(":target_audience", string.IsNullOrEmpty(obj.TargetAudience) ? DBNull.Value : obj.TargetAudience);
-                    cmd.Parameters.AddWithValue(":series_parent_id", obj.SeriesParentID.HasValue ? obj.SeriesParentID.Value : DBNull.Value);
-                    obj.ID = Convert.ToInt32(cmd.ExecuteScalar());
-                }
-            }
+                ":owner_id,:created,:prove,:target_audience,:series_parent_id) RETURNING id");
         }
 
-        private void Update(Challenge obj)
+        public void Update(Challenge obj)
         {
-            string sql = "update challenges set name=:name,description=:description,points=:points," + 
+            qh.AddParameter(":id", obj.ID);
+            qh.AddParameter(":name", obj.Name);
+            qh.AddParameter(":description", string.IsNullOrEmpty(obj.Description) ? DBNull.Value : obj.Description);
+            qh.AddParameter(":points", obj.Points);
+            qh.AddParameter(":validity_start", obj.ValidityStart);
+            qh.AddParameter(":validity_end", obj.ValidityEnd);
+            qh.AddParameter(":category", (int)obj.Category);
+            qh.AddParameter(":owner_id", obj.OwnerID);
+            qh.AddParameter(":created", obj.Created);
+            qh.AddParameter(":prove", (int)obj.Prove);
+            qh.AddParameter(":target_audience", string.IsNullOrEmpty(obj.TargetAudience) ? DBNull.Value : obj.TargetAudience);
+            qh.AddParameter(":series_parent_id", obj.SeriesParentID.HasValue ? obj.SeriesParentID.Value : DBNull.Value);
+
+            qh.ExecuteNonQuery("update challenges set name=:name,description=:description,points=:points," + 
                 "validity_start=:validity_start,validity_end=:validity_end,category=:category," + 
                 "owner_id=:owner_id,created=:created,prove=:prove," +
-                "target_audience=:target_audience,series_parent_id=:series_parent_id where id=:id";
-
-            using (var connection = new NpgsqlConnection(connection_string))
-            {
-                connection.Open();
-                using (var cmd = new NpgsqlCommand(sql, connection))
-                {
-                    cmd.Parameters.AddWithValue(":id", obj.ID);
-                    cmd.Parameters.AddWithValue(":name", obj.Name);
-                    cmd.Parameters.AddWithValue(":description", string.IsNullOrEmpty(obj.Description) ? DBNull.Value : obj.Description);
-                    cmd.Parameters.AddWithValue(":points", obj.Points);
-                    cmd.Parameters.AddWithValue(":validity_start", obj.ValidityStart);
-                    cmd.Parameters.AddWithValue(":validity_end", obj.ValidityEnd);
-                    cmd.Parameters.AddWithValue(":category", (int)obj.Category);
-                    cmd.Parameters.AddWithValue(":owner_id", obj.OwnerID);
-                    cmd.Parameters.AddWithValue(":created", obj.Created);
-                    cmd.Parameters.AddWithValue(":prove", (int)obj.Prove);
-                    cmd.Parameters.AddWithValue(":target_audience", string.IsNullOrEmpty(obj.TargetAudience) ? DBNull.Value : obj.TargetAudience);
-                    cmd.Parameters.AddWithValue(":series_parent_id", obj.SeriesParentID.HasValue ? obj.SeriesParentID.Value : DBNull.Value);
-                    cmd.ExecuteNonQuery();
-                }
-            }
+                "target_audience=:target_audience,series_parent_id=:series_parent_id where id=:id");
         }
 
         public void Save(Challenge obj)
@@ -182,83 +165,52 @@ namespace StudyBuddy.Persistence
 
         public void Delete(int id)
         {
-            string sql = "delete from challenges where id=:id";
-
-            using (var connection = new NpgsqlConnection(connection_string))
-            {
-                connection.Open();
-                using (var cmd = new NpgsqlCommand(sql, connection))
-                {
-                    cmd.Parameters.AddWithValue(":id", id);
-                    cmd.ExecuteNonQuery();
-                }
-            }
+            qh.Delete("challenges", "id", id);
         }
 
         public IEnumerable<Challenge> OfBadge(int badge_id)
         {
-            string sql = "select id,name,description,points,validity_start," +
+            qh.AddParameter(":badge_id", badge_id);
+            return qh.ExecuteQueryToObjectList(
+                "select id,name,description,points,validity_start," +
                 "validity_end,category,owner_id,created,prove,target_audience," +
-                "series_parent_id " + 
+                "series_parent_id " +
                 "from game_badge_challenges " +
                 "inner join challenges on challenge=id where game_badge = :badge_id " +
-                "order by created desc";
-
-            using (var connection = new NpgsqlConnection(connection_string))
-            {
-                connection.Open();
-                using (var cmd = new NpgsqlCommand(sql, connection))
-                {
-                    cmd.Parameters.AddWithValue(":badge_id", badge_id);
-                    var result = new List<Challenge>();
-
-                    using (NpgsqlDataReader reader = cmd.ExecuteReader())
-                    {
-                        while (reader.Read())
-                        {
-                            var obj = FromReader(reader);
-                            result.Add(obj);
-                        }
-                    }
-
-                    return result;
-                }
-            }
+                "order by created desc");
         }
 
         public IEnumerable<Challenge> NotOfBadge(int badge_id)
         {
-            string sql = "select id,name,description,points,validity_start," +
+            qh.AddParameter(":badge_id", badge_id);
+            return qh.ExecuteQueryToObjectList(
+                "select id,name,description,points,validity_start," +
                 "validity_end,category,owner_id,created,prove,target_audience," +
                 "series_parent_id from challenges where id not in " +
                 "(select challenge from game_badge_challenges where game_badge=:badge_id) " +
-                "order by created desc";
-
-            using (var connection = new NpgsqlConnection(connection_string))
-            {
-                connection.Open();
-                using (var cmd = new NpgsqlCommand(sql, connection))
-                {
-                    cmd.Parameters.AddWithValue(":badge_id", badge_id);
-                    var result = new List<Challenge>();
-
-                    using (NpgsqlDataReader reader = cmd.ExecuteReader())
-                    {
-                        while (reader.Read())
-                        {
-                            var obj = FromReader(reader);
-                            result.Add(obj);
-                        }
-                    }
-
-                    return result;
-                }
-            }
+                "order by created desc");
         }
 
+        // ToDo: Eine der wichtigsten Methoden! Herausfinden, welche Challenge für den übergebenenen Benutzer sichtbar ist
         public IEnumerable<Challenge> AllForUser(int user_id)
         {
             return new List<Challenge>();
+        }
+
+        public void CreateSeries(int challenge_id, int days_add, int count)
+        {
+            var parent = ById(challenge_id);
+            if (parent == null)
+                return;
+
+            for (int i=0; i<count; i++)
+            {
+                var clone = parent.Clone();
+                clone.SeriesParentID = parent.ID;
+                clone.ValidityStart = clone.ValidityStart.AddDays((i+1) * days_add);
+                clone.ValidityEnd = clone.ValidityEnd.AddDays((i+1) * days_add);
+                Insert(clone);
+            }
         }
     }
 }

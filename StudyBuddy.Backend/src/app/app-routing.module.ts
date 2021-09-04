@@ -2,9 +2,9 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { LoginComponent } from './auth/login/login.component';
 import { LogoutComponent } from './auth/logout/logout.component';
-import { ChallengeCloneComponent } from './challenge/challenge-clone/challenge-clone.component';
 import { ChallengeEditComponent } from './challenge/challenge-edit/challenge-edit.component';
 import { ChallengeListComponent } from './challenge/challenge-list/challenge-list.component';
+import { CreateSeriesComponent } from './challenge/create-series/create-series.component';
 import { ImprintComponent } from './misc/imprint/imprint.component';
 import { InfoComponent } from './misc/info/info.component';
 import { PrivacyComponent } from './misc/privacy/privacy.component';
@@ -29,7 +29,7 @@ const routes: Routes = [
   { path: 'registersuccess', component: RegisterUserSuccessComponent },
   { path: 'challenge', component: ChallengeListComponent, canActivate: [RouteGuardService] },
   { path: 'challenge/:id', component: ChallengeEditComponent, canActivate: [RouteGuardService] },
-  { path: 'challenge/clone/:id', component: ChallengeCloneComponent, canActivate: [RouteGuardService] },
+  { path: 'challenge/create_series/:id', component: CreateSeriesComponent, canActivate: [RouteGuardService] },
   { path: 'user', component: UserListComponent, canActivate: [RouteGuardService] },
   { path: 'user/:id', component: UserEditComponent, canActivate: [RouteGuardService] },
   { path: 'team', component: TeamListComponent, canActivate: [RouteGuardService] },

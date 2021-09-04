@@ -23,18 +23,18 @@ namespace StudyBuddy.Services
         public IActionResult Index([FromBody] UserCredentials uc)
         {
             if (string.IsNullOrEmpty(uc.EMail) || string.IsNullOrEmpty(uc.Password))
-                return Json(new { Error = "Provide email and password!"});
+                return Json(new { Error = "Provide email and password!" });
 
-            var user = repository.Users.ByEmailAndPassword(uc);
+            var user = repository.Users.ByEmailAndPassword(uc.EMail, uc.Password);
             if (user == null)
             {
-                return Json(new { Error = "No user found!"});
+                return Json(new { Error = "No user found!" });
             }
             else
             {
                 user.PasswordHash = string.Empty;
-                return Json(new 
-                { 
+                return Json(new
+                {
                     Token = generateJwtToken(user),
                     User = user
                 });

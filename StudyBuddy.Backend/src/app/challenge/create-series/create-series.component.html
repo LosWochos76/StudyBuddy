@@ -1,0 +1,58 @@
+<br>
+
+<h1>Serie erstellen</h1>
+  
+<table class="table table-bordered">
+    <tbody>
+        <tr>
+        <th scope="row">Name:</th>
+        <td>{{obj.name}}</td>
+        </tr>
+        <tr>
+        <th scope="row">Punkte:</th>
+        <td>{{obj.points}}</td>
+        </tr>
+        <tr>
+        <th scope="row">Kategorie:</th>
+        <td>{{obj.category | category}}</td>
+        </tr>
+        <tr>
+        <th scope="row">Gültig ab:</th>
+        <td>{{obj.validity_start}}</td>
+        </tr>
+        <tr>
+        <th scope="row">Gültig bis:</th>
+        <td>{{obj.validity_end}}</td>
+        </tr>
+    </tbody>
+</table>
+  
+<form [formGroup]="form" (ngSubmit)="onSubmit()">
+    <div class="mb-3">
+        <label for="days">Verschiebung der Elemente:</label>
+        <select class="form-select" formControlName="days_add">
+            <option value="1">1 Tag</option>
+            <option value="7">7 Tage</option>
+            <option value="14">14 Tage</option>
+            <option value="21">21 Tage</option>
+            <option value="28">28 Tage</option>
+        </select>
+    </div>
+
+    <div class="mb-3">
+        <label for="count">Anzahl der Elemente:</label>
+        <select class="form-select" id="count" formControlName="count">
+            <option value="1">1 Element</option>
+            <option value="2">2 Elemente</option>
+            <option value="3">3 Elemente</option>
+            <option value="4">4 Elemente</option>
+            <option value="5">5 Elemente</option>
+            <option value="10">10 Elemente</option>
+            <option value="15">15 Elemente</option>
+            <option value="20">20 Elemente</option>
+        </select>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Ok</button>&nbsp;
+    <button type="button" class="btn btn-success" (click)="onCancel()">Abbrechen</button>
+</form>
