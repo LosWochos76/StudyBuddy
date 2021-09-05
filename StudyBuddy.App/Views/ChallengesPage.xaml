@@ -9,7 +9,7 @@
             <ListView x:Name="ch1" ItemsSource="{Binding ChallengesList}">
                 <ListView.ItemTemplate>
                     <DataTemplate>
-                        <TextCell Text="t"></TextCell>
+                        <TextCell Text="t" ></TextCell>
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>

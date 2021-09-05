@@ -4,7 +4,8 @@ using System.Text;
 
 namespace StudyBuddy.App.ViewModels
 {
-    class ChallengesViewModel
+    public class ChallengesViewModel
     {
+        
     }
 }

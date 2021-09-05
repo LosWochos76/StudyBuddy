@@ -6,6 +6,7 @@ using Newtonsoft.Json.Linq;
 using StudyBuddy.Model;
 using StudyBuddy.ApiFacade;
 using Xamarin.Forms;
+using StudyBuddy.ApiFacade.Restful;
 
 [assembly: Xamarin.Forms.Dependency(typeof(RestfulAuthentication))]
 namespace StudyBuddy.ApiFacade

@@ -13,7 +13,8 @@ namespace StudyBuddy.ApiFacade
     public class RestfulChallengeRepository : IChallengeRepository
     {
         private IAuthentication authentication;
-        private string base_url = "https://localhost:5001/";
+        //private string base_url = "https://localhost:5001/";
+        private string base_url = "https://studybuddy.hshl.de/";
         private HttpClient client;
 
         public RestfulChallengeRepository()

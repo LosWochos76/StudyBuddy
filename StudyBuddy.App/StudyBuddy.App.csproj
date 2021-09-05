@@ -24,4 +24,18 @@
     <ProjectReference Include="..\StudyBuddy.Model\StudyBuddy.Model.csproj" />
     <ProjectReference Include="..\StudyBuddy.ApiFacade\StudyBuddy.ApiFacade.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Update="Views\ChallengeDetailPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Views\ProfilePage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Views\RankingsPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Views\SignUpPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+  </ItemGroup>
 </Project>

@@ -4,6 +4,7 @@ using StudyBuddy.Model;
 using StudyBuddy.ApiFacade;
 using Xamarin.Essentials;
 using Xamarin.Forms;
+using StudyBuddy.ApiFacade.Restful;
 
 namespace App.Views
 {

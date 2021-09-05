@@ -15,5 +15,11 @@ namespace App.Views
             var ChallengesList = mockList.GetMockChallenges();
             ch1.ItemsSource = ChallengesList;
         }
+
+        private void Button_Clicked(object sender, EventArgs e)
+        {
+            Console.WriteLine("clicked");
+            
+        }
     }
 }
