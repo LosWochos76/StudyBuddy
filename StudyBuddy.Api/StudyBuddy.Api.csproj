@@ -10,10 +10,15 @@
       <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <None Remove="ViewModel\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="ViewModel\" />
+  </ItemGroup>
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
   </PropertyGroup>
 
   <PropertyGroup Condition=" '$(RunConfiguration)' == 'services' " />
-  <PropertyGroup Condition=" '$(RunConfiguration)' == 'Services' " />
 </Project>

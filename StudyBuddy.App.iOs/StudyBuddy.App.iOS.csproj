@@ -134,7 +134,7 @@
     </ProjectReference>
     <ProjectReference Include="..\StudyBuddy.ApiFacade\StudyBuddy.ApiFacade.csproj">
       <Project>{A5F638FA-18D0-4C51-B40A-EE1BA53051DD}</Project>
-      <Name>StudyBuddy.ServiceFacade</Name>
+      <Name>StudyBuddy.ApiFacade</Name>
     </ProjectReference>
   </ItemGroup>
 </Project>

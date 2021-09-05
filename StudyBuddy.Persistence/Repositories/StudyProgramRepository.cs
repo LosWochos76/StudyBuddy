@@ -6,24 +6,28 @@ using StudyBuddy.Model;
 
 namespace StudyBuddy.Persistence
 {
-    class StudyProgramRepository : SqlRepositoryBase, IStudyProgramRepository
+    class StudyProgramRepository : IStudyProgramRepository
     {
-        public StudyProgramRepository(NpgsqlConnection connection) : base(connection)
+        private string connection_string;
+        private QueryHelper<StudyProgram> qh;
+
+        public StudyProgramRepository(string connection_string)
         {
-            if (!TableExists("study_programs")) 
-                CreateTable();
+            this.connection_string = connection_string;
+            this.qh = new QueryHelper<StudyProgram>(connection_string, FromReader);
+
+            CreateTable();
         }
 
         private void CreateTable() 
         {
-            string sql = "create table study_programs (" +
-                "id serial primary key, " +
-                "acronym varchar(10) not null," +
-                "name varchar(100) not null)";
-
-            using (var cmd = new NpgsqlCommand(sql, connection)) 
+            if (!qh.TableExists("study_programs"))
             {
-                cmd.ExecuteNonQuery();
+                qh.ExecuteNonQuery(
+                    "create table study_programs (" +
+                    "id serial primary key, " +
+                    "acronym varchar(10) not null," +
+                    "name varchar(100) not null)");
             }
         }
 
@@ -38,101 +42,45 @@ namespace StudyBuddy.Persistence
 
         public IEnumerable<StudyProgram> All(int from = 0, int max = 1000)
         {
-           string sql = "SELECT id, acronym, name from study_programs order by acronym, name limit :max offset :from";
-
-            var result = new List<StudyProgram>();
-            using (var cmd = new NpgsqlCommand(sql, connection)) 
-            {
-                cmd.Parameters.AddWithValue(":from", from);
-                cmd.Parameters.AddWithValue(":max", max);
-
-                using (NpgsqlDataReader reader = cmd.ExecuteReader())
-                {
-                    while (reader.Read())
-                    {
-                        var obj = FromReader(reader);
-                        result.Add(obj);
-                    }
-                }
-            }
-
-            return result;
+            qh.AddParameter(":from", from);
+            qh.AddParameter(":max", max);
+            return qh.ExecuteQueryToObjectList(
+                "SELECT id, acronym, name from study_programs order by acronym, name limit :max offset :from");
         }
 
         public StudyProgram ById(int id)
         {
-            string sql = "SELECT id,acronym,name FROM study_programs where id=:id";
-
-            using (var cmd = new NpgsqlCommand(sql, connection))
-            {
-                cmd.Parameters.AddWithValue(":id", id);
-
-                using (NpgsqlDataReader reader = cmd.ExecuteReader())
-                {
-                    if (reader.Read())
-                    {
-                        return FromReader(reader);
-                    }
-                }
-            }
-
-            return null;
+            qh.AddParameter(":id", id);
+            return qh.ExecuteQueryToSingleObject(
+                "SELECT id,acronym,name FROM study_programs where id=:id");
         }
 
         public StudyProgram ByAcronym(string acronym)
         {
-            string sql = "SELECT id,acronym,name FROM study_programs where lower(acronym)=lower(:acronym)";
-
-            using (var cmd = new NpgsqlCommand(sql, connection))
-            {
-                cmd.Parameters.AddWithValue(":acronym", acronym);
-
-                using (NpgsqlDataReader reader = cmd.ExecuteReader())
-                {
-                    if (reader.Read())
-                    {
-                        return FromReader(reader);
-                    }
-                }
-            }
-
-            return null;
+            qh.AddParameter(":acronym", acronym);
+            return qh.ExecuteQueryToSingleObject(
+                "SELECT id,acronym,name FROM study_programs where lower(acronym)=lower(:acronym)");
         }
 
         public void Delete(int id)
         {
-            string sql = "delete from study_programs where id=:id";
-            using (var cmd = new NpgsqlCommand(sql, connection))
-            {
-                cmd.Parameters.AddWithValue(":id", id);
-                cmd.ExecuteNonQuery();
-            }
+            qh.Delete("study_programs", "id", id);
         }
 
-        private void Insert(StudyProgram obj)
+        public void Insert(StudyProgram obj)
         {
-            string sql = "insert into study_programs " +
-                    "(acronym,name) values (:acronym,:name) RETURNING id";
-
-            using (var cmd = new NpgsqlCommand(sql, connection)) 
-            {
-                cmd.Parameters.AddWithValue(":acronym", obj.Acronym);
-                cmd.Parameters.AddWithValue(":name", obj.Name);
-                obj.ID = Convert.ToInt32(cmd.ExecuteScalar());
-            }
+            qh.AddParameter(":acronym", obj.Acronym);
+            qh.AddParameter(":name", obj.Name);
+            obj.ID = qh.ExecuteScalar(
+                "insert into study_programs (acronym,name) values (:acronym,:name) RETURNING id");
         }
 
-        private void Update(StudyProgram obj)
+        public void Update(StudyProgram obj)
         {
-            string sql = "update study_programs set acronym=:acronym,name=:name where id=:id";
-
-            using (var cmd = new NpgsqlCommand(sql, connection)) 
-            {
-                cmd.Parameters.AddWithValue(":id", obj.ID);
-                cmd.Parameters.AddWithValue(":acronym", obj.Acronym);
-                cmd.Parameters.AddWithValue(":name", obj.Name);
-                cmd.ExecuteNonQuery();
-            }
+            qh.AddParameter(":id", obj.ID);
+            qh.AddParameter(":acronym", obj.Acronym);
+            qh.AddParameter(":name", obj.Name);
+            qh.ExecuteNonQuery("update study_programs set acronym=:acronym,name=:name where id=:id");
         }
 
         public void Save(StudyProgram obj)

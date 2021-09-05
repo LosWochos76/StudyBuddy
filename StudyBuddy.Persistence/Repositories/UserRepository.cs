@@ -3,46 +3,48 @@ using SimpleHashing.Net;
 using StudyBuddy.Model;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace StudyBuddy.Persistence
 {
-    class UserRepository : SqlRepositoryBase, IUserRepository
+    class UserRepository : IUserRepository
     {
+        private string connection_string;
+        private QueryHelper<User> qh;
         private SimpleHash simpleHash = new SimpleHash();
 
-        public UserRepository(NpgsqlConnection connection) : base(connection)
+        public UserRepository(string connection_string)
         {
-            if (!TableExists("users")) 
-            {
-                CreateTable();
+            this.connection_string = connection_string;
+            this.qh = new QueryHelper<User>(connection_string, FromReader);
 
-                Save(new User() { 
-                    Firstname="Empty", 
-                    Lastname="Empty", 
-                    Nickname="Admin",
-                    Email="admin@admin.de",
-                    PasswordHash=simpleHash.Compute("secret"),
-                    Role=Role.Admin});
-            }
+            CreateTable();
         }
 
         private void CreateTable() 
         {
-            string sql = "create table users (" +
-                "id serial primary key, " +
-                "firstname varchar(100) not null, " +
-                "lastname varchar(100) not null, " +
-                "nickname varchar(100) not null, " +
-                "email varchar(100) not null, " +
-                "password_hash varchar(100), " +
-                "role int not null, " + 
-                "program_id int, " + 
-                "enrolled_in_term_id int)";
-
-            using (var cmd = new NpgsqlCommand(sql, connection)) 
+            if (!qh.TableExists("users"))
             {
-                cmd.ExecuteNonQuery();
+                qh.ExecuteNonQuery(
+                    "create table users (" +
+                    "id serial primary key, " +
+                    "firstname varchar(100) not null, " +
+                    "lastname varchar(100) not null, " +
+                    "nickname varchar(100) not null, " +
+                    "email varchar(100) not null, " +
+                    "password_hash varchar(100), " +
+                    "role int not null, " +
+                    "program_id int, " +
+                    "enrolled_in_term_id int)");
+
+                Insert(new User()
+                {
+                    Firstname = "Empty",
+                    Lastname = "Empty",
+                    Nickname = "Admin",
+                    Email = "admin@admin.de",
+                    Password = "secret",
+                    Role = Role.Admin
+                });
             }
         }
 
@@ -63,53 +65,29 @@ namespace StudyBuddy.Persistence
 
         public User ById(int id)
         {
-            string sql = "SELECT id,firstname,lastname,nickname," + 
-                "email,password_hash,role,program_id,enrolled_in_term_id FROM users where id=:id";
-
-            using (var cmd = new NpgsqlCommand(sql, connection))
-            {
-                cmd.Parameters.AddWithValue(":id", id);
-
-                using (NpgsqlDataReader reader = cmd.ExecuteReader())
-                {
-                    if (reader.Read())
-                    {
-                        return FromReader(reader);
-                    }
-                }
-            }
-
-            return null;
+            qh.AddParameter(":id", id);
+            return qh.ExecuteQueryToSingleObject(
+                "SELECT id,firstname,lastname,nickname," +
+                "email,password_hash,role,program_id,enrolled_in_term_id FROM users where id=:id");
         }
 
         public IEnumerable<User> All(int from = 0, int max = 1000)
         {
-            string sql = "SELECT id,firstname,lastname,nickname,email,password_hash,role," +
-                "program_id,enrolled_in_term_id FROM users order by lastname,firstname,nickname limit :max offset :from";
-            
-            using (var cmd = new NpgsqlCommand(sql, connection))
-            {
-                cmd.Parameters.AddWithValue(":from", from);
-                cmd.Parameters.AddWithValue(":max", max);
-                var result = new List<User>();
-
-                using (NpgsqlDataReader reader = cmd.ExecuteReader())
-                {
-                    while (reader.Read())
-                    {
-                        var obj = FromReader(reader);
-                        result.Add(obj);
-                    }
-                }
-
-                return result;
-            }
+            qh.AddParameters(new { from, max });
+            return qh.ExecuteQueryToObjectList(
+                "SELECT id,firstname,lastname,nickname,email,password_hash,role," +
+                "program_id,enrolled_in_term_id FROM users order by lastname,firstname,nickname limit :max offset :from");
         }
 
-        public User ByEmailAndPassword(UserCredentials credentials)
+        public int Count()
         {
-            var user = ByEmail(credentials.EMail);
-            if (user != null && simpleHash.Verify(credentials.Password, user.PasswordHash))
+            return qh.GetCount("users");
+        }
+
+        public User ByEmailAndPassword(string email, string password)
+        {
+            var user = ByEmail(email);
+            if (user != null && simpleHash.Verify(password, user.PasswordHash))
                 return user;
             else
                 return null;
@@ -117,71 +95,53 @@ namespace StudyBuddy.Persistence
 
         public User ByEmail(string email)
         {
-            string sql = "SELECT id,firstname,lastname,nickname," + 
-                "email,password_hash,role,program_id,enrolled_in_term_id FROM users where lower(email)=lower(:email)";
-
-            using (var cmd = new NpgsqlCommand(sql, connection))
-            {
-                cmd.Parameters.AddWithValue(":email", email);
-
-                using (NpgsqlDataReader reader = cmd.ExecuteReader())
-                {
-                    if (reader.Read())
-                    {
-                        return FromReader(reader);
-                    }
-                }
-            }
-
-            return null;
+            qh.AddParameter(":email", email);
+            return qh.ExecuteQueryToSingleObject(
+                "SELECT id,firstname,lastname,nickname," +
+                "email,password_hash,role,program_id,enrolled_in_term_id FROM users where lower(email)=lower(:email)");
         }
 
-        private void Insert(User obj)
+        public void Insert(User obj)
         {
-            string sql = "insert into users " +
-                    "(firstname,lastname,nickname,email,password_hash,role,program_id,enrolled_in_term_id) values " +
-                    "(:firstname,:lastname,:nickname,:email,:password_hash,:role,:program_id,:enrolled_in_term_id) RETURNING id";
+            qh.AddParameter(":firstname", obj.Firstname);
+            qh.AddParameter(":lastname", obj.Lastname);
+            qh.AddParameter(":nickname", obj.Nickname.ToLower());
+            qh.AddParameter(":email", obj.Email.ToLower());
+            qh.AddParameter(":password_hash", simpleHash.Compute(obj.Password));
+            qh.AddParameter(":role", (int)obj.Role);
+            qh.AddParameter(":program_id", obj.ProgramID.HasValue ? obj.ProgramID : DBNull.Value);
+            qh.AddParameter(":enrolled_in_term_id", obj.EnrolledInTermID.HasValue ? obj.EnrolledInTermID : DBNull.Value);
 
-            using (var cmd = new NpgsqlCommand(sql, connection)) 
-            {
-                cmd.Parameters.AddWithValue(":firstname", obj.Firstname);
-                cmd.Parameters.AddWithValue(":lastname", obj.Lastname);
-                cmd.Parameters.AddWithValue(":nickname", obj.Nickname);
-                cmd.Parameters.AddWithValue(":email", obj.Email);
-                cmd.Parameters.AddWithValue(":password_hash", obj.PasswordHash);
-                cmd.Parameters.AddWithValue(":role", (int)obj.Role);
-                cmd.Parameters.AddWithValue(":program_id", obj.ProgramID.HasValue ? obj.ProgramID : DBNull.Value);
-                cmd.Parameters.AddWithValue(":enrolled_in_term_id", obj.EnrolledInTermID.HasValue ? obj.EnrolledInTermID : DBNull.Value);
-                obj.ID = Convert.ToInt32(cmd.ExecuteScalar());
-            }
+            obj.ID = qh.ExecuteScalar(
+                "insert into users " +
+                "(firstname,lastname,nickname,email,password_hash,role,program_id,enrolled_in_term_id) values " +
+                "(:firstname,:lastname,:nickname,:email,:password_hash,:role,:program_id,:enrolled_in_term_id) RETURNING id");
         }
 
-        private void Update(User obj)
+        public void Update(User obj)
         {
             string sql = "update users set firstname=:firstname,lastname=:lastname,"+
                 "nickname=:nickname,email=:email";
                 
-            if (!string.IsNullOrEmpty(obj.PasswordHash))
+            if (!string.IsNullOrEmpty(obj.Password))
                 sql += ",password_hash=:password_hash";
             
             sql += ",role=:role,program_id=:program_id,enrolled_in_term_id=:enrolled_in_term_id where id=:id";
 
-            using (var cmd = new NpgsqlCommand(sql, connection)) 
-            {
-                cmd.Parameters.AddWithValue(":id", obj.ID);
-                cmd.Parameters.AddWithValue(":firstname", obj.Firstname);
-                cmd.Parameters.AddWithValue(":lastname", obj.Lastname);
-                cmd.Parameters.AddWithValue(":nickname", obj.Nickname);
-                cmd.Parameters.AddWithValue(":email", obj.Email);
+            qh.AddParameter(":id", obj.ID);
+            qh.AddParameter(":firstname", obj.Firstname);
+            qh.AddParameter(":lastname", obj.Lastname);
+            qh.AddParameter(":nickname", obj.Nickname.ToLower());
+            qh.AddParameter(":email", obj.Email.ToLower());
 
-                if (!string.IsNullOrEmpty(obj.PasswordHash))
-                    cmd.Parameters.AddWithValue(":password_hash", obj.PasswordHash);
+            if (!string.IsNullOrEmpty(obj.Password))
+                qh.AddParameter(":password_hash", simpleHash.Compute(obj.Password));
 
-                cmd.Parameters.AddWithValue(":role", (int)obj.Role);
-                cmd.Parameters.AddWithValue(":program_id", obj.ProgramID.HasValue ? obj.ProgramID : DBNull.Value);
-                cmd.Parameters.AddWithValue(":enrolled_in_term_id", obj.EnrolledInTermID.HasValue ? obj.EnrolledInTermID : DBNull.Value);
-                cmd.ExecuteNonQuery();
-            }
+            qh.AddParameter(":role", (int)obj.Role);
+            qh.AddParameter(":program_id", obj.ProgramID.HasValue ? obj.ProgramID : DBNull.Value);
+            qh.AddParameter(":enrolled_in_term_id", obj.EnrolledInTermID.HasValue ? obj.EnrolledInTermID : DBNull.Value);
+
+            qh.ExecuteNonQuery(sql);
         }
 
         public void Save(User obj)
@@ -194,79 +154,32 @@ namespace StudyBuddy.Persistence
 
         public void Delete(int id)
         {
-            string sql = "delete from users where id=:id";
-            using (var cmd = new NpgsqlCommand(sql, connection))
-            {
-                cmd.Parameters.AddWithValue(":id", id);
-                cmd.ExecuteNonQuery();
-            }
+            qh.Delete("users", "id", id);
         }
 
         public User ByNickname(string nickname)
         {
-            string sql = "SELECT id,firstname,lastname,nickname," + 
-                "email,password_hash,role,program_id,enrolled_in_term_id FROM users where lower(nickname)=lower(:nickname)";
-
-            using (var cmd = new NpgsqlCommand(sql, connection))
-            {
-                cmd.Parameters.AddWithValue(":nickname", nickname);
-
-                using (NpgsqlDataReader reader = cmd.ExecuteReader())
-                {
-                    if (reader.Read())
-                    {
-                        return FromReader(reader);
-                    }
-                }
-            }
-
-            return null;
+            qh.AddParameter(":nickname", nickname);
+            return qh.ExecuteQueryToSingleObject(
+                "SELECT id,firstname,lastname,nickname," +
+                "email,password_hash,role,program_id,enrolled_in_term_id FROM " +
+                "users where lower(nickname)=lower(:nickname)");
         }
 
         public IEnumerable<User> MembersOfTeam(int team_id)
         {
-            var sql = "select id,firstname,lastname,nickname,email,password_hash,role,program_id,enrolled_in_term_id from team_members " +
-                "inner join users on users.id=member_id where team_id=:team_id order by lastname,firstname,nickname";
-
-            using (var cmd = new NpgsqlCommand(sql, connection))
-            {
-                cmd.Parameters.AddWithValue(":team_id", team_id);
-                var result = new List<User>();
-
-                using (NpgsqlDataReader reader = cmd.ExecuteReader())
-                {
-                    while (reader.Read())
-                    {
-                        var obj = FromReader(reader);
-                        result.Add(obj);
-                    }
-                }
-
-                return result;
-            }
+            qh.AddParameter(":team_id", team_id);
+            return qh.ExecuteQueryToObjectList(
+                "select id,firstname,lastname,nickname,email,password_hash,role,program_id,enrolled_in_term_id from team_members " +
+                "inner join users on users.id=member_id where team_id=:team_id order by lastname,firstname,nickname");
         }
 
         public IEnumerable<User> NotMembersOfTeam(int team_id)
         {
-            var sql = "select id,firstname,lastname,nickname,email,password_hash,role,program_id,enrolled_in_term_id " +
-                "from users where id not in (select member_id from team_members where team_id=:team_id)";
-
-            using (var cmd = new NpgsqlCommand(sql, connection))
-            {
-                cmd.Parameters.AddWithValue(":team_id", team_id);
-                var result = new List<User>();
-
-                using (NpgsqlDataReader reader = cmd.ExecuteReader())
-                {
-                    while (reader.Read())
-                    {
-                        var obj = FromReader(reader);
-                        result.Add(obj);
-                    }
-                }
-
-                return result;
-            } 
+            qh.AddParameter(":team_id", team_id);
+            return qh.ExecuteQueryToObjectList(
+                "select id,firstname,lastname,nickname,email,password_hash,role,program_id,enrolled_in_term_id " +
+                "from users where id not in (select member_id from team_members where team_id=:team_id)");
         }
     }
 }

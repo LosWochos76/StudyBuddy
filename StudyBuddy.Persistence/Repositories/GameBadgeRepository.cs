@@ -5,45 +5,42 @@ using System.Collections.Generic;
 
 namespace StudyBuddy.Persistence
 {
-    class GameBadgeRepository : SqlRepositoryBase, IGameBadgeRepository
+    class GameBadgeRepository : IGameBadgeRepository
     {
-        public GameBadgeRepository(NpgsqlConnection connection) : base(connection)
-        {
-            if (!TableExists("game_badges")) 
-            {
-                CreateBadgesTable();
-            }
+        private string connection_string;
+        private QueryHelper<GameBadge> qh;
 
-            if (!TableExists("game_badge_challenges")) 
-            {
-                CreateGameBadgeChallengesTable();
-            }
+        public GameBadgeRepository(string connection_string)
+        {
+            this.connection_string = connection_string;
+            qh = new QueryHelper<GameBadge>(connection_string, FromReader);
+
+            CreateBadgesTable();
+            CreateGameBadgeChallengesTable();
         }
 
         private void CreateBadgesTable() 
         {
-            string sql = "create table game_badges (" +
-                "id serial primary key, " +
-                "name varchar(100) not null, " +
-                "owner_id int not null, " + 
-                "created date not null, " +
-                "required_coverage numeric(2,2) not null)";
-
-            using (var cmd = new NpgsqlCommand(sql, connection)) 
+            if (!qh.TableExists("game_badges"))
             {
-                cmd.ExecuteNonQuery();
+                qh.ExecuteNonQuery(
+                    "create table game_badges (" +
+                    "id serial primary key, " +
+                    "name varchar(100) not null, " +
+                    "owner_id int not null, " +
+                    "created date not null, " +
+                    "required_coverage numeric(2,2) not null)");
             }
         }
 
         private void CreateGameBadgeChallengesTable() 
         {
-            string sql = "create table game_badge_challenges (" +
-                "game_badge int not null, " + 
-                "challenge int not null)";
-
-            using (var cmd = new NpgsqlCommand(sql, connection)) 
+            if (!qh.TableExists("game_badge_challenges"))
             {
-                cmd.ExecuteNonQuery();
+                qh.ExecuteNonQuery(
+                    "create table game_badge_challenges (" +
+                    "game_badge int not null, " + 
+                    "challenge int not null)");
             }
         }
 
@@ -63,15 +60,19 @@ namespace StudyBuddy.Persistence
             string sql = "SELECT id,name,owner_id,created,required_coverage " +
                 "FROM game_badges where id=:id";
 
-            using (var cmd = new NpgsqlCommand(sql, connection))
+            using (var connection = new NpgsqlConnection(connection_string))
             {
-                cmd.Parameters.AddWithValue(":id", id);
-
-                using (NpgsqlDataReader reader = cmd.ExecuteReader())
+                connection.Open();
+                using (var cmd = new NpgsqlCommand(sql, connection))
                 {
-                    if (reader.Read())
+                    cmd.Parameters.AddWithValue(":id", id);
+
+                    using (NpgsqlDataReader reader = cmd.ExecuteReader())
                     {
-                        return FromReader(reader);
+                        if (reader.Read())
+                        {
+                            return FromReader(reader);
+                        }
                     }
                 }
             }
@@ -83,55 +84,67 @@ namespace StudyBuddy.Persistence
         {
             string sql = "SELECT id,name,owner_id,created,required_coverage " +
                 "FROM game_badges order by created limit :max offset :from";
-            
-            using (var cmd = new NpgsqlCommand(sql, connection))
+
+            using (var connection = new NpgsqlConnection(connection_string))
             {
-                cmd.Parameters.AddWithValue(":from", from);
-                cmd.Parameters.AddWithValue(":max", max);
-                var result = new List<GameBadge>();
-
-                using (NpgsqlDataReader reader = cmd.ExecuteReader())
+                connection.Open();
+                using (var cmd = new NpgsqlCommand(sql, connection))
                 {
-                    while (reader.Read())
-                    {
-                        var obj = FromReader(reader);
-                        result.Add(obj);
-                    }
-                }
+                    cmd.Parameters.AddWithValue(":from", from);
+                    cmd.Parameters.AddWithValue(":max", max);
+                    var result = new List<GameBadge>();
 
-                return result;
+                    using (NpgsqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            var obj = FromReader(reader);
+                            result.Add(obj);
+                        }
+                    }
+
+                    return result;
+                }
             }
         }
 
-        private void Insert(GameBadge obj)
+        public void Insert(GameBadge obj)
         {
             string sql = "insert into game_badges (name,owner_id,created," + 
                 "required_coverage) values (:name,:owner_id,:created," +
                 ":required_coverage) RETURNING id";
 
-            using (var cmd = new NpgsqlCommand(sql, connection)) 
+            using (var connection = new NpgsqlConnection(connection_string))
             {
-                cmd.Parameters.AddWithValue(":name", obj.Name);
-                cmd.Parameters.AddWithValue(":owner_id", obj.OwnerID);
-                cmd.Parameters.AddWithValue(":created", obj.Created);
-                cmd.Parameters.AddWithValue(":required_coverage", obj.RequiredCoverage);
-                obj.ID = Convert.ToInt32(cmd.ExecuteScalar());
+                connection.Open();
+                using (var cmd = new NpgsqlCommand(sql, connection))
+                {
+                    cmd.Parameters.AddWithValue(":name", obj.Name);
+                    cmd.Parameters.AddWithValue(":owner_id", obj.OwnerID);
+                    cmd.Parameters.AddWithValue(":created", obj.Created);
+                    cmd.Parameters.AddWithValue(":required_coverage", obj.RequiredCoverage);
+                    obj.ID = Convert.ToInt32(cmd.ExecuteScalar());
+                }
             }
         }
 
-        private void Update(GameBadge obj)
+        public void Update(GameBadge obj)
         {
             string sql = "update game_badges set name=:name,owner_id=:owner_id," +
                 "created=:created,required_coverage=:required_coverage where id=:id";
 
-            using (var cmd = new NpgsqlCommand(sql, connection)) 
+            using (var connection = new NpgsqlConnection(connection_string))
             {
-                cmd.Parameters.AddWithValue(":id", obj.ID);
-                cmd.Parameters.AddWithValue(":name", obj.Name);
-                cmd.Parameters.AddWithValue(":owner_id", obj.OwnerID);
-                cmd.Parameters.AddWithValue(":created", obj.Created);
-                cmd.Parameters.AddWithValue(":required_coverage", obj.RequiredCoverage);
-                cmd.ExecuteNonQuery();
+                connection.Open();
+                using (var cmd = new NpgsqlCommand(sql, connection))
+                {
+                    cmd.Parameters.AddWithValue(":id", obj.ID);
+                    cmd.Parameters.AddWithValue(":name", obj.Name);
+                    cmd.Parameters.AddWithValue(":owner_id", obj.OwnerID);
+                    cmd.Parameters.AddWithValue(":created", obj.Created);
+                    cmd.Parameters.AddWithValue(":required_coverage", obj.RequiredCoverage);
+                    cmd.ExecuteNonQuery();
+                }
             }
         }
 
@@ -146,17 +159,25 @@ namespace StudyBuddy.Persistence
         public void Delete(int id)
         {
             string sql = "delete from game_badges where id=:id";
-            using (var cmd = new NpgsqlCommand(sql, connection))
+            using (var connection = new NpgsqlConnection(connection_string))
             {
-                cmd.Parameters.AddWithValue(":id", id);
-                cmd.ExecuteNonQuery();
+                connection.Open();
+                using (var cmd = new NpgsqlCommand(sql, connection))
+                {
+                    cmd.Parameters.AddWithValue(":id", id);
+                    cmd.ExecuteNonQuery();
+                }
             }
 
             sql = "delete from game_badge_challenges where game_badge=:id";
-            using (var cmd = new NpgsqlCommand(sql, connection))
+            using (var connection = new NpgsqlConnection(connection_string))
             {
-                cmd.Parameters.AddWithValue(":id", id);
-                cmd.ExecuteNonQuery();
+                connection.Open();
+                using (var cmd = new NpgsqlCommand(sql, connection))
+                {
+                    cmd.Parameters.AddWithValue(":id", id);
+                    cmd.ExecuteNonQuery();
+                }
             }
         }
 
@@ -165,11 +186,15 @@ namespace StudyBuddy.Persistence
             string sql = "insert into game_badge_challenges " +
                     "(game_badge,challenge) values (:badge_id,:challenge_id)";
 
-            using (var cmd = new NpgsqlCommand(sql, connection)) 
+            using (var connection = new NpgsqlConnection(connection_string))
             {
-                cmd.Parameters.AddWithValue(":badge_id", badge_id);
-                cmd.Parameters.AddWithValue(":challenge_id", challenge_id);
-                cmd.ExecuteNonQuery();
+                connection.Open();
+                using (var cmd = new NpgsqlCommand(sql, connection))
+                {
+                    cmd.Parameters.AddWithValue(":badge_id", badge_id);
+                    cmd.Parameters.AddWithValue(":challenge_id", challenge_id);
+                    cmd.ExecuteNonQuery();
+                }
             }
         }
 
@@ -178,11 +203,15 @@ namespace StudyBuddy.Persistence
             string sql = "delete from game_badge_challenges where " +
                 "game_badge=:badge_id and challenge=:challenge_id";
 
-            using (var cmd = new NpgsqlCommand(sql, connection)) 
+            using (var connection = new NpgsqlConnection(connection_string))
             {
-                cmd.Parameters.AddWithValue(":badge_id", badge_id);
-                cmd.Parameters.AddWithValue(":challenge_id", challenge_id);
-                cmd.ExecuteNonQuery();
+                connection.Open();
+                using (var cmd = new NpgsqlCommand(sql, connection))
+                {
+                    cmd.Parameters.AddWithValue(":badge_id", badge_id);
+                    cmd.Parameters.AddWithValue(":challenge_id", challenge_id);
+                    cmd.ExecuteNonQuery();
+                }
             }
         }
     }
