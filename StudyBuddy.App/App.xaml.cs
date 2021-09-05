@@ -1,4 +1,5 @@
 ﻿using System;
+using App.Views;
 using StudyBuddy.ApiFacade;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
@@ -32,10 +33,12 @@ namespace App
 
         protected override void OnSleep()
         {
+
         }
 
         protected async override void OnResume()
         {
+
         }
     }
 }

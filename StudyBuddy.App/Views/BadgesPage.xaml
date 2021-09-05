@@ -2,8 +2,8 @@
 <ContentPage
     xmlns="http://xamarin.com/schemas/2014/forms"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    x:Class="App.TeamsPage">
+    x:Class="App.Views.BadgesPage">
     <ContentPage.Content>
-        <Label Text="Teams" HorizontalTextAlignment="Center" VerticalOptions="Center" />
+        <Label Text="Badges" HorizontalTextAlignment="Center" VerticalOptions="Center" />
     </ContentPage.Content>
 </ContentPage>

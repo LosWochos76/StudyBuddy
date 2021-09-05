@@ -4,7 +4,7 @@ using System.Windows.Input;
 using StudyBuddy.ApiFacade;
 using Xamarin.Forms;
 
-namespace App
+namespace App.Views
 {
     public partial class MainPage : Shell
     {

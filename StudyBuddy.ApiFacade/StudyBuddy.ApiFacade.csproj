@@ -10,10 +10,16 @@
     <ProjectReference Include="..\StudyBuddy.Model\StudyBuddy.Model.csproj" />
   </ItemGroup>
   <ItemGroup>
+    <None Remove="App.config" />
     <None Remove="Xamarin.Forms" />
     <None Remove="Interfaces\" />
     <None Remove="Restful\" />
     <None Remove="Local\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ApplicationDefinition Include="App.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </ApplicationDefinition>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Interfaces\" />

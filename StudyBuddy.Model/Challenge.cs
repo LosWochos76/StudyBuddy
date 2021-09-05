@@ -19,6 +19,21 @@ namespace StudyBuddy.Model
         public string TargetAudience { get; set; }
         public int? SeriesParentID { get; set; }
 
+        public Challenge()
+        {
+
+        }
+
+        public Challenge(int id, string name, string description, int points, int ownerId, string targetAudience)
+        {
+            this.ID = id;
+            this.Name = name;
+            this.Description = description;
+            this.Points = points;
+            this.OwnerID = ownerId;
+            this.TargetAudience = targetAudience;
+        }
+
         public Challenge Clone()
         {
             var clone = new Challenge();

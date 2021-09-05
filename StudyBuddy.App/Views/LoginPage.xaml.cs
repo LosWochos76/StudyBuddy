@@ -5,7 +5,7 @@ using StudyBuddy.ApiFacade;
 using Xamarin.Essentials;
 using Xamarin.Forms;
 
-namespace App
+namespace App.Views
 {
     public partial class LoginPage : ContentPage
     {

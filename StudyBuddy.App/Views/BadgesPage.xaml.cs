@@ -3,11 +3,11 @@ using System.Collections.Generic;
 
 using Xamarin.Forms;
 
-namespace App
+namespace App.Views
 {
-    public partial class TeamsPage : ContentPage
+    public partial class BadgesPage : ContentPage
     {
-        public TeamsPage()
+        public BadgesPage()
         {
             InitializeComponent();
         }
