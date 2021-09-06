@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using StudyBuddy.ApiFacade.Restful;
 using StudyBuddy.Model;
 
 namespace StudyBuddy.ApiFacade

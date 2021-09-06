@@ -6,13 +6,14 @@ using Newtonsoft.Json.Linq;
 using StudyBuddy.Model;
 using StudyBuddy.ApiFacade;
 using Xamarin.Forms;
+using StudyBuddy.ApiFacade.Restful;
 
 [assembly: Xamarin.Forms.Dependency(typeof(RestfulAuthentication))]
 namespace StudyBuddy.ApiFacade
 {
     public class RestfulAuthentication : IAuthentication
     {
-        private string base_url = "https://localhost:5001/";
+        private string base_url = "https://studybuddy.hshl.de/";
         private HttpClient client;
         public string Token { get; private set; } = string.Empty;
         public User CurrentUser { get; private set; } = null;

@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using StudyBuddy.Model;
 using StudyBuddy.ApiFacade;
+using StudyBuddy.ApiFacade.Restful;
 
 [assembly: Xamarin.Forms.Dependency(typeof(LocalAuthentication))]
 namespace StudyBuddy.ApiFacade
@@ -15,8 +16,7 @@ namespace StudyBuddy.ApiFacade
 
         public async Task<bool> Login(UserCredentials credentials)
         {
-            IsLoggedIn = true;
-            return true;
+            throw new NotImplementedException();
         }
 
         public async Task<bool> LoginFromJson(string content)
