@@ -28,7 +28,7 @@
                             <Span Text="hier" TextColor="Blue" TextDecorations="Underline">
                                 <Span.GestureRecognizers>
                                     <TapGestureRecognizer Command="{Binding TapCommand}"
-                                    CommandParameter="https://studybuddy.hshl.de/Explain" />
+                                    CommandParameter="https://studybuddybackend.web.app/info" />
                                 </Span.GestureRecognizers>
                             </Span>
                             <Span Text="." />
@@ -51,7 +51,7 @@
                         <Span Text="Passwort vergessen?" TextColor="Blue" TextDecorations="Underline">
                             <Span.GestureRecognizers>
                                 <TapGestureRecognizer Command="{Binding TapCommand}"
-                                CommandParameter="https://studybuddy.hshl.de/PasswordForgotten" />
+                                CommandParameter="https://studybuddybackend.web.app/passwordforgotten" />
                             </Span.GestureRecognizers>
                         </Span>
                     </FormattedString.Spans>
@@ -61,7 +61,7 @@
         </StackLayout>
 
         <StackLayout VerticalOptions="EndAndExpand" Padding="10,0,10,20">
-            <Button Text="Neuen Account erstellen" />
+            <Button Text="Neuen Account erstellen" Clicked="Register_Clicked"/>
             <Label HorizontalOptions="CenterAndExpand">
                 <Label.FormattedText>
                     <FormattedString>
@@ -69,7 +69,7 @@
                             <Span Text="Impressum und Datenschutz" TextColor="Blue" TextDecorations="Underline">
                                 <Span.GestureRecognizers>
                                     <TapGestureRecognizer Command="{Binding TapCommand}"
-                                    CommandParameter="https://studybuddy.hshl.de/Imprint" />
+                                    CommandParameter="https://studybuddybackend.web.app/imprint" />
                                 </Span.GestureRecognizers>
                             </Span>
                         </FormattedString.Spans>

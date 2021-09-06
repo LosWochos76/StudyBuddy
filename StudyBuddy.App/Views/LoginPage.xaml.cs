@@ -39,5 +39,10 @@ namespace App.Views
             else
                 await DisplayAlert("Achtung!", "Anmdeldung nicht erfolgreich! Zugangsdaten korrekt?", "Ok");
         }
+
+        void Register_Clicked(System.Object sender, System.EventArgs e)
+        {
+            OpenBrowser("https://studybuddybackend.web.app/register");
+        }
     }
 }
