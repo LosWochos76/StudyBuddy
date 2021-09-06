@@ -71,14 +71,14 @@
         <div class="col-md">
             <label class="form-label" for="category">Für Studiengang:</label>
             <select class="form-select" formControlName="study_program">
-                <option value="">Alle</option>
+                <option value="null">Alle</option>
                 <option *ngFor="let obj of study_programs" [value]="obj.id">{{obj.acronym}}</option>
             </select>
         </div>
         <div class="col-md">
             <label class="form-label" for="prove">Für Studierende eingeschrieben seit:</label>
             <select class="form-select" formControlName="enrolled_since">
-                <option value="">Alle</option>
+                <option value="null">Alle</option>
                 <option *ngFor="let obj of terms" [value]="obj.id">{{obj.shortname}}</option>
             </select>
         </div>

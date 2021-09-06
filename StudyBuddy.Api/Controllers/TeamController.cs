@@ -88,10 +88,10 @@ namespace StudyBuddy.Services
             return Json(members);
         }
 
-        [Route("/Team/Members/{id}")]
+        [Route("/Team/Members/")]
         [HttpPost]
         [IsLoggedIn]
-        public IActionResult SetMembers(int id, [FromBody] TeamMember[] members)
+        public IActionResult SetMembers([FromBody] TeamMember[] members)
         {
             if (members.Length == 0)
                 return Json(new { Status = "ok" });

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using Npgsql;
 using StudyBuddy.Model;
 
@@ -19,6 +20,7 @@ namespace StudyBuddy.Persistence
             CreateTeamTable();
         }
 
+        [MethodImpl(MethodImplOptions.Synchronized)]
         private void CreateTeamTable()
         {
             if (!qh.TableExists("terms"))
@@ -44,6 +46,7 @@ namespace StudyBuddy.Persistence
             return obj;
         }
 
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public Term ById(int id)
         {
             qh.AddParameter(":id", id);
@@ -51,6 +54,7 @@ namespace StudyBuddy.Persistence
                 "SELECT id,shortname,name,start_date,end_date FROM terms where id=:id");
         }
 
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public Term ByDate(DateTime date)
         {
             qh.AddParameter(":date", date.Date);
@@ -59,6 +63,7 @@ namespace StudyBuddy.Persistence
                 "end_date FROM terms where :date>=start_date and :date<=end_date");
         }
 
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public IEnumerable<Term> All(int from = 0, int max = 1000)
         {
             qh.AddParameters(new { from, max });
@@ -67,11 +72,13 @@ namespace StudyBuddy.Persistence
                 "FROM terms order by start_date limit :max offset :from");
         }
 
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public void Delete(int id)
         {
             qh.Delete("terms", "id", id);
         }
 
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public void Insert(Term obj)
         {
             qh.AddParameters(new {
@@ -86,6 +93,7 @@ namespace StudyBuddy.Persistence
                 "(:shortname,:name,:start_date,:end_date) RETURNING id");
         }
 
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public void Update(Term obj)
         {
             qh.AddParameters(new
@@ -102,6 +110,7 @@ namespace StudyBuddy.Persistence
                 "name=:name,start_date=:start_date,end_date=:end_date where id=:id");
         }
 
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public void Save(Term obj)
         {
             if (obj.ID == 0)
@@ -110,6 +119,7 @@ namespace StudyBuddy.Persistence
                 Update(obj);
         }
 
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public Term Current()
         {
             return ByDate(DateTime.Now.Date);

@@ -8,6 +8,7 @@ namespace StudyBuddy.Persistence
 {
     public class Repository : IRepository
     {
+        private string connection_string;
         public IUserRepository Users { get; private set; }
         public IStudyProgramRepository StudyPrograms { get; private set; }
         public ITeamRepository Teams { get; private set; }
@@ -17,14 +18,25 @@ namespace StudyBuddy.Persistence
 
         public Repository()
         {
-            var connection_string = string.Format("Host={0};Username={1};Password={2};Database={3}",
+            this.connection_string = string.Format("Host={0};Username={1};Password={2};Database={3}",
                 Helper.GetFromEnvironmentOrDefault("POSTGRESQL_HOST", "localhost"),
                 Helper.GetFromEnvironmentOrDefault("POSTGRESQL_USER", "postgres"),
                 Helper.GetFromEnvironmentOrDefault("POSTGRESQL_PASSWORD", "secret"),
                 Helper.GetFromEnvironmentOrDefault("POSTGRESQL_DATABASE", "postgres"));
 
 
+            this.CreateTablesTable();
+            this.CreateRepositories();
+        }
 
+        private void CreateTablesTable()
+        {
+            var qh = new QueryHelper<Repository>(connection_string, null);
+            qh.CreateTablesTable();
+        }
+
+        private void CreateRepositories()
+        {
             this.Users = new UserRepository(connection_string);
             this.StudyPrograms = new StudyProgramRepository(connection_string);
             this.Teams = new TeamRepository(connection_string);

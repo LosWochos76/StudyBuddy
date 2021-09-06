@@ -1,3 +1,4 @@
+
 using System.Linq;
 using StudyBuddy.Model;
 using Microsoft.AspNetCore.Mvc;
@@ -21,7 +22,7 @@ namespace StudyBuddy.Services
         {
             var user = HttpContext.Items["user"] as User;
 
-            if (user.IsAdmin)   
+            if (user.IsAdmin)
                 return Json(repository.Challenges.All());
             else
                 return Json(repository.Challenges.OfOwner(user.ID));
@@ -53,12 +54,33 @@ namespace StudyBuddy.Services
         [IsLoggedIn]
         public IActionResult Update([FromBody] Challenge obj)
         {
+            if (obj == null)
+                return Json(new { Error = "Object invalid!" });
+
             var user = HttpContext.Items["user"] as User;
             if (!user.IsAdmin && obj.OwnerID != user.ID)
                 return Json(new { Error = "Unauthorized" });
 
             repository.Challenges.Update(obj);
             return Json(obj);
+        }
+
+        [Route("/Challenge/OfBadge/{id}")]
+        [HttpGet]
+        [IsLoggedIn]
+        public IActionResult OfBadge(int id)
+        {
+            var result = repository.Challenges.OfBadge(id);
+            return Json(result);
+        }
+
+        [Route("/Challenge/NotOfBadge/{id}")]
+        [HttpGet]
+        [IsLoggedIn]
+        public IActionResult NotOfBadge(int id)
+        {
+            var result = repository.Challenges.NotOfBadge(id);
+            return Json(result);
         }
 
         [Route("/Challenge/")]

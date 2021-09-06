@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using Npgsql;
 using StudyBuddy.Model;
 
@@ -19,6 +20,7 @@ namespace StudyBuddy.Persistence
             CreateTable();
         }
 
+        [MethodImpl(MethodImplOptions.Synchronized)]
         private void CreateTable() 
         {
             if (!qh.TableExists("study_programs"))
@@ -40,6 +42,7 @@ namespace StudyBuddy.Persistence
             return obj;
         }
 
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public IEnumerable<StudyProgram> All(int from = 0, int max = 1000)
         {
             qh.AddParameter(":from", from);
@@ -48,6 +51,7 @@ namespace StudyBuddy.Persistence
                 "SELECT id, acronym, name from study_programs order by acronym, name limit :max offset :from");
         }
 
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public StudyProgram ById(int id)
         {
             qh.AddParameter(":id", id);
@@ -55,6 +59,7 @@ namespace StudyBuddy.Persistence
                 "SELECT id,acronym,name FROM study_programs where id=:id");
         }
 
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public StudyProgram ByAcronym(string acronym)
         {
             qh.AddParameter(":acronym", acronym);
@@ -62,11 +67,13 @@ namespace StudyBuddy.Persistence
                 "SELECT id,acronym,name FROM study_programs where lower(acronym)=lower(:acronym)");
         }
 
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public void Delete(int id)
         {
             qh.Delete("study_programs", "id", id);
         }
 
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public void Insert(StudyProgram obj)
         {
             qh.AddParameter(":acronym", obj.Acronym);
@@ -75,6 +82,7 @@ namespace StudyBuddy.Persistence
                 "insert into study_programs (acronym,name) values (:acronym,:name) RETURNING id");
         }
 
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public void Update(StudyProgram obj)
         {
             qh.AddParameter(":id", obj.ID);
@@ -83,6 +91,7 @@ namespace StudyBuddy.Persistence
             qh.ExecuteNonQuery("update study_programs set acronym=:acronym,name=:name where id=:id");
         }
 
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public void Save(StudyProgram obj)
         {
             if (obj.ID == 0)

@@ -5,6 +5,8 @@ import { LogoutComponent } from './auth/logout/logout.component';
 import { ChallengeEditComponent } from './challenge/challenge-edit/challenge-edit.component';
 import { ChallengeListComponent } from './challenge/challenge-list/challenge-list.component';
 import { CreateSeriesComponent } from './challenge/create-series/create-series.component';
+import { GameBadgeEditComponent } from './gamebadge/game-badge-edit/game-badge-edit.component';
+import { GameBadgeListComponent } from './gamebadge/game-badge-list/game-badge-list.component';
 import { ImprintComponent } from './misc/imprint/imprint.component';
 import { InfoComponent } from './misc/info/info.component';
 import { PrivacyComponent } from './misc/privacy/privacy.component';
@@ -30,6 +32,8 @@ const routes: Routes = [
   { path: 'challenge', component: ChallengeListComponent, canActivate: [RouteGuardService] },
   { path: 'challenge/:id', component: ChallengeEditComponent, canActivate: [RouteGuardService] },
   { path: 'challenge/create_series/:id', component: CreateSeriesComponent, canActivate: [RouteGuardService] },
+  { path: 'gamebadge', component: GameBadgeListComponent, canActivate: [RouteGuardService] },
+  { path: 'gamebadge/:id', component: GameBadgeEditComponent, canActivate: [RouteGuardService] },
   { path: 'user', component: UserListComponent, canActivate: [RouteGuardService] },
   { path: 'user/:id', component: UserEditComponent, canActivate: [RouteGuardService] },
   { path: 'team', component: TeamListComponent, canActivate: [RouteGuardService] },

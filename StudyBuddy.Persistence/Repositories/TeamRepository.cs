@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using Npgsql;
 using StudyBuddy.Model;
 
@@ -22,6 +23,7 @@ namespace StudyBuddy.Persistence
             CreateTeamMemberTable();
         }
 
+        [MethodImpl(MethodImplOptions.Synchronized)]
         private void CreateTeamTable() 
         {
             if (!team_qh.TableExists("teams"))
@@ -33,7 +35,8 @@ namespace StudyBuddy.Persistence
                     "owner_id int not null)");
             }
         }
-        
+
+        [MethodImpl(MethodImplOptions.Synchronized)]
         private void CreateTeamMemberTable() 
         {
             if (!members_qh.TableExists("team_members"))
@@ -54,6 +57,7 @@ namespace StudyBuddy.Persistence
             return obj;
         }
 
+        [MethodImpl(MethodImplOptions.Synchronized)]
         private TeamMember TeamMemberFromReader(NpgsqlDataReader reader)
         {
             var obj = new TeamMember();
@@ -62,6 +66,7 @@ namespace StudyBuddy.Persistence
             return obj;
         }
 
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public Team ById(int id)
         {
             team_qh.AddParameter(":id", id);
@@ -69,6 +74,7 @@ namespace StudyBuddy.Persistence
                 "SELECT id,name,owner_id FROM teams where id=:id");
         }
 
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public Team ByName(string name)
         {
             team_qh.AddParameter(":name", name);
@@ -76,6 +82,7 @@ namespace StudyBuddy.Persistence
                 "SELECT id,name,owner_id FROM teams where lower(name)=lower(:name)");
         }
 
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public IEnumerable<Team> All(int from = 0, int max = 1000)
         {
             team_qh.AddParameter(":max", max);
@@ -84,6 +91,7 @@ namespace StudyBuddy.Persistence
                 "SELECT id,name,owner_id FROM teams order by name limit :max offset :from");
         }
 
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public IEnumerable<Team> TeamsInWhichUserIsMember(int user_id)
         {
             team_qh.AddParameter(":member_id", user_id);
@@ -93,16 +101,19 @@ namespace StudyBuddy.Persistence
                 "where member_id = :member_id order by name");
         }
 
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public int Count()
         {
             return team_qh.GetCount("teams");
         }
 
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public void Delete(int id)
         {
             team_qh.Delete("teams", "id", id);
         }
 
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public void Insert(Team obj)
         {
             team_qh.AddParameter(":name", obj.Name);
@@ -112,6 +123,7 @@ namespace StudyBuddy.Persistence
                     "(:name, :owner_id) RETURNING id");
         }
 
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public void Update(Team obj)
         {
             team_qh.AddParameter(":id", obj.ID);
@@ -120,6 +132,7 @@ namespace StudyBuddy.Persistence
             team_qh.ExecuteNonQuery("update teams set name=:name, owner_id=:owner_id where id=:id");
         }
 
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public void Save(Team obj)
         {
             if (obj.ID == 0)
@@ -128,6 +141,7 @@ namespace StudyBuddy.Persistence
                 Update(obj);
         }
 
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public IEnumerable<TeamMember> GetMembers(int team_id)
         {
             members_qh.AddParameter(":team_id", team_id);
@@ -135,18 +149,21 @@ namespace StudyBuddy.Persistence
                 "select team_id,member_id FROM team_members where team_id=:team_id");
         }
 
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public void DeleteMembers(int team_id)
         {
             members_qh.Delete("team_members", "team_id", team_id);
         }
 
         // ToDo: Es gibt wahrscheinlich einen besseren Weg, mehrer Zeilen in die Datenbank zu schreiben
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public void AddMembers(IEnumerable<TeamMember> members)
         {
             foreach (var member in members)
                 AddMember(member);
         }
 
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public void AddMember(TeamMember member)
         {
             members_qh.AddParameter(":team_id", member.TeamId);
@@ -154,6 +171,7 @@ namespace StudyBuddy.Persistence
             members_qh.ExecuteNonQuery("insert into team_members (team_id,member_id) values (:team_id,:member_id)");
         }
 
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public void RemoveMember(TeamMember member)
         {
             members_qh.AddParameter(":team_id", member.TeamId);

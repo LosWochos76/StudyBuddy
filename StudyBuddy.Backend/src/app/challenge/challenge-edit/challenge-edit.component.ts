@@ -39,8 +39,8 @@ export class ChallengeEditComponent implements OnInit {
         validity_end: new FormControl("", [Validators.required]),
         category: new FormControl("", [Validators.required]),
         prove: new FormControl("", [Validators.required]),
-        study_program: new FormControl(""),
-        enrolled_since: new FormControl("")
+        study_program: new FormControl(null),
+        enrolled_since: new FormControl(null)
       });
   };
 
@@ -65,14 +65,13 @@ export class ChallengeEditComponent implements OnInit {
       validity_end: this.obj.validity_end,
       category: this.obj.category,
       prove: this.obj.prove,
-      study_program: this.obj.study_program,
-      enrolled_since: this.obj.enrolled_since
+      study_program: this.obj.valid_for_study_program,
+      enrolled_since: this.obj.valid_for_enrolled_since
     });
   }
 
   async onSubmit() {
     this.logger.debug("Trying to save a Challenge!");
-
     this.obj.copyValues(this.form.value);
 
     if (!this.obj.isPeriodValid())

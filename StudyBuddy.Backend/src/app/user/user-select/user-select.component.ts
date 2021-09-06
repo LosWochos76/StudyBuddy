@@ -19,7 +19,7 @@ import { UserService } from 'src/app/services/user.service';
 })
 export class UserSelectComponent implements OnInit, ControlValueAccessor {
   @Input() selected:number[] = [];
-  all:User[] = [];
+  all:User[] = null;
   selected_objects:User[] = [];
   onChanged: any = () => { };
   onTouched: any = () => { };

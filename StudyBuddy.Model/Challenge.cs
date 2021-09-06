@@ -14,8 +14,9 @@ namespace StudyBuddy.Model
         public int OwnerID { get; set; }
         public DateTime Created { get; set; } = DateTime.Now.Date;
         public ChallengeProve Prove { get; set; } = ChallengeProve.ByTrust;
-        public string TargetAudience { get; set; }
         public int? SeriesParentID { get; set; }
+        public int? ValidForStudyProgramID { get; set; }
+        public int? ValidForEnrolledSinceTermID { get; set; }
 
         public Challenge Clone()
         {
@@ -29,8 +30,9 @@ namespace StudyBuddy.Model
             clone.OwnerID = OwnerID;
             clone.Created = DateTime.Now.Date;
             clone.Prove = Prove;
-            clone.TargetAudience = TargetAudience;
             clone.SeriesParentID = SeriesParentID;
+            clone.ValidForStudyProgramID = ValidForStudyProgramID;
+            clone.ValidForEnrolledSinceTermID = ValidForEnrolledSinceTermID;
             return clone;
         }
     }

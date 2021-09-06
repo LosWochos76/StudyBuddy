@@ -99,6 +99,30 @@ namespace StudyBuddy.Persistence
             parameters.Clear();
         }
 
+        public int ExecuteQueryToSingleInt(string sql)
+        {
+            int result = 0;
+
+            using (var connection = new NpgsqlConnection(connection_string))
+            {
+                connection.Open();
+                using (var cmd = new NpgsqlCommand(sql, connection))
+                {
+                    foreach (var param in this.parameters)
+                        cmd.Parameters.AddWithValue(param.Key, param.Value);
+
+                    using (NpgsqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        if (reader.Read())
+                            result = reader.GetInt32(0);
+                    }
+                }
+            }
+
+            parameters.Clear();
+            return result;
+        }
+
         public int ExecuteScalar(string sql)
         {
             int result = 0;
@@ -127,13 +151,12 @@ namespace StudyBuddy.Persistence
 
         public int GetCount(string table_name)
         {
-            string sql = "SELECT count(*) as count FROM " + table_name;
             int result = 0;
 
             using (var connection = new NpgsqlConnection(connection_string))
             {
                 connection.Open();
-                using (var cmd = new NpgsqlCommand(sql, connection))
+                using (var cmd = new NpgsqlCommand("SELECT count(*) as count FROM " + table_name, connection))
                 {
                     using (NpgsqlDataReader reader = cmd.ExecuteReader())
                     {
@@ -164,6 +187,35 @@ namespace StudyBuddy.Persistence
 
             parameters.Clear();
             return result;
+        }
+
+        public void CreateTablesTable()
+        {
+            if (!TableExists("tables"))
+                ExecuteNonQuery("create table tables (" +
+                    "table_name varchar(100) not null, " +
+                    "revision int not null)");
+        }
+
+        public int GetRevision(string table_name)
+        {
+            AddParameters(new { table_name });
+            var result = ExecuteQueryToSingleInt("SELECT revision FROM tables where table_name=:table_name");
+
+            if (result == 0)
+            {
+                AddParameters(new { table_name, revision = 1});
+                ExecuteNonQuery("insert into tables (table_name,revision) values (:table_name,:revision)");
+                result = 1;
+            }
+
+            return result;
+        }
+
+        public void SetRevision(string table_name, int revision)
+        {
+            AddParameters(new { table_name, revision });
+            ExecuteNonQuery("update tables set revision=:revision where table_name=:table_name");
         }
     }
 }

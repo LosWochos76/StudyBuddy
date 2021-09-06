@@ -33,6 +33,9 @@ import { ChallengeService } from './services/challenge.service';
 import { CategoryPipe } from './services/category.pipe';
 import { HttpClientModule } from '@angular/common/http';
 import { CreateSeriesComponent } from './challenge/create-series/create-series.component';
+import { GameBadgeListComponent } from './gamebadge/game-badge-list/game-badge-list.component';
+import { GameBadgeEditComponent } from './gamebadge/game-badge-edit/game-badge-edit.component';
+import { GameBadgeService } from './services/gamebadge.service';
 
 @NgModule({
   declarations: [
@@ -58,6 +61,8 @@ import { CreateSeriesComponent } from './challenge/create-series/create-series.c
     ChallengeEditComponent,
     CategoryPipe,
     CreateSeriesComponent,
+    GameBadgeListComponent,
+    GameBadgeEditComponent,
   ],
   imports: [
     BrowserModule,
@@ -72,7 +77,8 @@ import { CreateSeriesComponent } from './challenge/create-series/create-series.c
     TermService,
     UserService,
     TeamService,
-    ChallengeService
+    ChallengeService,
+    GameBadgeService
   ],
   bootstrap: [AppComponent]
 })

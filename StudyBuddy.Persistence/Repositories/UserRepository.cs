@@ -3,6 +3,7 @@ using SimpleHashing.Net;
 using StudyBuddy.Model;
 using System;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 
 namespace StudyBuddy.Persistence
 {
@@ -20,6 +21,7 @@ namespace StudyBuddy.Persistence
             CreateTable();
         }
 
+        [MethodImpl(MethodImplOptions.Synchronized)]
         private void CreateTable() 
         {
             if (!qh.TableExists("users"))
@@ -63,6 +65,7 @@ namespace StudyBuddy.Persistence
             return obj;
         }
 
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public User ById(int id)
         {
             qh.AddParameter(":id", id);
@@ -71,6 +74,7 @@ namespace StudyBuddy.Persistence
                 "email,password_hash,role,program_id,enrolled_in_term_id FROM users where id=:id");
         }
 
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public IEnumerable<User> All(int from = 0, int max = 1000)
         {
             qh.AddParameters(new { from, max });
@@ -79,11 +83,13 @@ namespace StudyBuddy.Persistence
                 "program_id,enrolled_in_term_id FROM users order by lastname,firstname,nickname limit :max offset :from");
         }
 
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public int Count()
         {
             return qh.GetCount("users");
         }
 
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public User ByEmailAndPassword(string email, string password)
         {
             var user = ByEmail(email);
@@ -93,6 +99,7 @@ namespace StudyBuddy.Persistence
                 return null;
         }
 
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public User ByEmail(string email)
         {
             qh.AddParameter(":email", email);
@@ -101,6 +108,7 @@ namespace StudyBuddy.Persistence
                 "email,password_hash,role,program_id,enrolled_in_term_id FROM users where lower(email)=lower(:email)");
         }
 
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public void Insert(User obj)
         {
             qh.AddParameter(":firstname", obj.Firstname);
@@ -118,6 +126,7 @@ namespace StudyBuddy.Persistence
                 "(:firstname,:lastname,:nickname,:email,:password_hash,:role,:program_id,:enrolled_in_term_id) RETURNING id");
         }
 
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public void Update(User obj)
         {
             string sql = "update users set firstname=:firstname,lastname=:lastname,"+
@@ -144,6 +153,7 @@ namespace StudyBuddy.Persistence
             qh.ExecuteNonQuery(sql);
         }
 
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public void Save(User obj)
         {
             if (obj.ID == 0)
@@ -152,11 +162,13 @@ namespace StudyBuddy.Persistence
                 Update(obj);
         }
 
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public void Delete(int id)
         {
             qh.Delete("users", "id", id);
         }
 
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public User ByNickname(string nickname)
         {
             qh.AddParameter(":nickname", nickname);
@@ -166,6 +178,7 @@ namespace StudyBuddy.Persistence
                 "users where lower(nickname)=lower(:nickname)");
         }
 
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public IEnumerable<User> MembersOfTeam(int team_id)
         {
             qh.AddParameter(":team_id", team_id);
@@ -174,6 +187,7 @@ namespace StudyBuddy.Persistence
                 "inner join users on users.id=member_id where team_id=:team_id order by lastname,firstname,nickname");
         }
 
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public IEnumerable<User> NotMembersOfTeam(int team_id)
         {
             qh.AddParameter(":team_id", team_id);

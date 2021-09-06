@@ -2,6 +2,7 @@ using Npgsql;
 using StudyBuddy.Model;
 using System;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 
 namespace StudyBuddy.Persistence
 {
@@ -19,6 +20,7 @@ namespace StudyBuddy.Persistence
             CreateGameBadgeChallengesTable();
         }
 
+        [MethodImpl(MethodImplOptions.Synchronized)]
         private void CreateBadgesTable() 
         {
             if (!qh.TableExists("game_badges"))
@@ -33,6 +35,7 @@ namespace StudyBuddy.Persistence
             }
         }
 
+        [MethodImpl(MethodImplOptions.Synchronized)]
         private void CreateGameBadgeChallengesTable() 
         {
             if (!qh.TableExists("game_badge_challenges"))
@@ -55,99 +58,63 @@ namespace StudyBuddy.Persistence
             return obj;
         }
 
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public GameBadge ById(int id)
         {
-            string sql = "SELECT id,name,owner_id,created,required_coverage " +
-                "FROM game_badges where id=:id";
-
-            using (var connection = new NpgsqlConnection(connection_string))
-            {
-                connection.Open();
-                using (var cmd = new NpgsqlCommand(sql, connection))
-                {
-                    cmd.Parameters.AddWithValue(":id", id);
-
-                    using (NpgsqlDataReader reader = cmd.ExecuteReader())
-                    {
-                        if (reader.Read())
-                        {
-                            return FromReader(reader);
-                        }
-                    }
-                }
-            }
-
-            return null;
+            qh.AddParameter(":id", id);
+            return qh.ExecuteQueryToSingleObject(
+                "SELECT id,name,owner_id,created,required_coverage " +
+                "FROM game_badges where id=:id");
         }
 
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public IEnumerable<GameBadge> All(int from = 0, int max = 1000)
         {
-            string sql = "SELECT id,name,owner_id,created,required_coverage " +
-                "FROM game_badges order by created limit :max offset :from";
-
-            using (var connection = new NpgsqlConnection(connection_string))
-            {
-                connection.Open();
-                using (var cmd = new NpgsqlCommand(sql, connection))
-                {
-                    cmd.Parameters.AddWithValue(":from", from);
-                    cmd.Parameters.AddWithValue(":max", max);
-                    var result = new List<GameBadge>();
-
-                    using (NpgsqlDataReader reader = cmd.ExecuteReader())
-                    {
-                        while (reader.Read())
-                        {
-                            var obj = FromReader(reader);
-                            result.Add(obj);
-                        }
-                    }
-
-                    return result;
-                }
-            }
+            qh.AddParameter(":from", from);
+            qh.AddParameter(":max", max);
+            return qh.ExecuteQueryToObjectList(
+                "SELECT id,name,owner_id,created,required_coverage " +
+                "FROM game_badges order by created,name limit :max offset :from");
         }
 
+        [MethodImpl(MethodImplOptions.Synchronized)]
+        public IEnumerable<GameBadge> OfOwner(int owner_id, int from = 0, int max = 1000)
+        {
+            qh.AddParameter(":from", from);
+            qh.AddParameter(":max", max);
+            qh.AddParameter(":owner_id", owner_id);
+            return qh.ExecuteQueryToObjectList(
+                "SELECT id,name,owner_id,created,required_coverage " +
+                "FROM game_badges where owner_id=:owner_id order by created,name limit :max offset :from");
+        }
+
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public void Insert(GameBadge obj)
         {
-            string sql = "insert into game_badges (name,owner_id,created," + 
+            qh.AddParameter(":name", obj.Name);
+            qh.AddParameter(":owner_id", obj.OwnerID);
+            qh.AddParameter(":created", obj.Created);
+            qh.AddParameter(":required_coverage", obj.RequiredCoverage);
+            obj.ID = qh.ExecuteScalar(
+                "insert into game_badges (name,owner_id,created," +
                 "required_coverage) values (:name,:owner_id,:created," +
-                ":required_coverage) RETURNING id";
-
-            using (var connection = new NpgsqlConnection(connection_string))
-            {
-                connection.Open();
-                using (var cmd = new NpgsqlCommand(sql, connection))
-                {
-                    cmd.Parameters.AddWithValue(":name", obj.Name);
-                    cmd.Parameters.AddWithValue(":owner_id", obj.OwnerID);
-                    cmd.Parameters.AddWithValue(":created", obj.Created);
-                    cmd.Parameters.AddWithValue(":required_coverage", obj.RequiredCoverage);
-                    obj.ID = Convert.ToInt32(cmd.ExecuteScalar());
-                }
-            }
+                ":required_coverage) RETURNING id");
         }
 
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public void Update(GameBadge obj)
         {
-            string sql = "update game_badges set name=:name,owner_id=:owner_id," +
-                "created=:created,required_coverage=:required_coverage where id=:id";
-
-            using (var connection = new NpgsqlConnection(connection_string))
-            {
-                connection.Open();
-                using (var cmd = new NpgsqlCommand(sql, connection))
-                {
-                    cmd.Parameters.AddWithValue(":id", obj.ID);
-                    cmd.Parameters.AddWithValue(":name", obj.Name);
-                    cmd.Parameters.AddWithValue(":owner_id", obj.OwnerID);
-                    cmd.Parameters.AddWithValue(":created", obj.Created);
-                    cmd.Parameters.AddWithValue(":required_coverage", obj.RequiredCoverage);
-                    cmd.ExecuteNonQuery();
-                }
-            }
+            qh.AddParameter(":id", obj.ID);
+            qh.AddParameter(":name", obj.Name);
+            qh.AddParameter(":owner_id", obj.OwnerID);
+            qh.AddParameter(":created", obj.Created);
+            qh.AddParameter(":required_coverage", obj.RequiredCoverage);
+            qh.ExecuteNonQuery(
+                "update game_badges set name=:name,owner_id=:owner_id," +
+                "created=:created,required_coverage=:required_coverage where id=:id");
         }
 
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public void Save(GameBadge obj)
         {
             if (obj.ID == 0)
@@ -156,63 +123,46 @@ namespace StudyBuddy.Persistence
                 Update(obj);
         }
 
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public void Delete(int id)
         {
-            string sql = "delete from game_badges where id=:id";
-            using (var connection = new NpgsqlConnection(connection_string))
-            {
-                connection.Open();
-                using (var cmd = new NpgsqlCommand(sql, connection))
-                {
-                    cmd.Parameters.AddWithValue(":id", id);
-                    cmd.ExecuteNonQuery();
-                }
-            }
-
-            sql = "delete from game_badge_challenges where game_badge=:id";
-            using (var connection = new NpgsqlConnection(connection_string))
-            {
-                connection.Open();
-                using (var cmd = new NpgsqlCommand(sql, connection))
-                {
-                    cmd.Parameters.AddWithValue(":id", id);
-                    cmd.ExecuteNonQuery();
-                }
-            }
+            qh.Delete("game_bades", "id", id);
+            qh.Delete("game_badge_challenges", "id", id);
         }
 
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public void AddChallenge(int badge_id, int challenge_id)
         {
-            string sql = "insert into game_badge_challenges " +
-                    "(game_badge,challenge) values (:badge_id,:challenge_id)";
-
-            using (var connection = new NpgsqlConnection(connection_string))
-            {
-                connection.Open();
-                using (var cmd = new NpgsqlCommand(sql, connection))
-                {
-                    cmd.Parameters.AddWithValue(":badge_id", badge_id);
-                    cmd.Parameters.AddWithValue(":challenge_id", challenge_id);
-                    cmd.ExecuteNonQuery();
-                }
-            }
+            qh.AddParameter(":badge_id", badge_id);
+            qh.AddParameter(":challenge_id", challenge_id);
+            qh.ExecuteNonQuery(
+                "insert into game_badge_challenges " +
+                "(game_badge,challenge) values (:badge_id,:challenge_id)");
         }
 
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public void RemoveChallenge(int badge_id, int challenge_id)
         {
-            string sql = "delete from game_badge_challenges where " +
-                "game_badge=:badge_id and challenge=:challenge_id";
+            qh.AddParameter(":badge_id", badge_id);
+            qh.AddParameter(":challenge_id", challenge_id);
+            qh.ExecuteNonQuery(
+                "delete from game_badge_challenges where " +
+                "game_badge=:badge_id and challenge=:challenge_id");
+        }
 
-            using (var connection = new NpgsqlConnection(connection_string))
-            {
-                connection.Open();
-                using (var cmd = new NpgsqlCommand(sql, connection))
-                {
-                    cmd.Parameters.AddWithValue(":badge_id", badge_id);
-                    cmd.Parameters.AddWithValue(":challenge_id", challenge_id);
-                    cmd.ExecuteNonQuery();
-                }
-            }
+        [MethodImpl(MethodImplOptions.Synchronized)]
+        public void DeleteChallenges(int badge_id)
+        {
+            qh.AddParameter(":badge_id", badge_id);
+            qh.ExecuteNonQuery(
+                "delete from game_badge_challenges where game_badge=:badge_id");
+        }
+
+        [MethodImpl(MethodImplOptions.Synchronized)]
+        public void AddChallenges(GameBadgeChallenge[] challenges)
+        {
+            foreach (var obj in challenges)
+                AddChallenge(obj.GameBadgeId, obj.ChallengeId);
         }
     }
 }

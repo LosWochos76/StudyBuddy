@@ -1,4 +1,4 @@
-<div class="row g-3">
+<div class="row g-3" >
     <div class="col-md">
         <select id="members" class="form-select" size="5" (change)="onSelectedSelected($event.target.value)" width="100%">
             <option *ngFor="let obj of selected_objects" [value]="obj.id">{{obj.firstname}} {{obj.lastname}}</option>
