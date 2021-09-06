@@ -17,12 +17,12 @@ Das System besteht aus mehrere Komponenten:
 
 ## Revisionen
 
-### Version 0.0.6
+### Backend 0.0.6
 
 * Bei den Herausforderungen sind zwei neue Attribute hinzugekommen: 
     * "Gültig für Studiengang" und "Gültig für Studierende eingeschrieben im Semester".
     * Damit soll man steuern können, welche Studierende die Herausforderung sehen sollen.
-    * Entsprechend musste auch die DB-Struktur der Tabelle "challenges" angepasst werden.
+    * Entsprechend musste auch die Modell-Klasse Challenge und die DB-Struktur der Tabelle "challenges" angepasst werden.
     * Damit bei solchen Änderungen nicht immer die ganze Datenbank neu aufgesetzt werden muss, 
       wurde eine Art Migrationssystem in den Repositories der API eingebaut.
 
@@ -34,7 +34,7 @@ Das System besteht aus mehrere Komponenten:
     * Die Methoden der Repositories sind erstmal alle synchronized, 
       weil durch die parallel ablaufenden Requests teilweise komische Dinge passiert sind.
 
-### Version 0.0.5
+### Backend 0.0.5
 
 * Von Herausforderungen können Serien erstellt werden.
 * Herausforderungen können mit einer Volltextsuche gefiltert werden.
