@@ -4,12 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using StudyBuddy.Model;
 using StudyBuddy.Persistence;
 
-namespace StudyBuddy.Services
+namespace StudyBuddy.Api
 {
     public class CustomAuthorizationMiddleware
     {

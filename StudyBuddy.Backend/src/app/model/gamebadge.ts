@@ -14,8 +14,7 @@ export class GameBadge {
 
     copyValues(values) {
         this.name = values.name;
-        this.owner = values.owner;
-        this.required_coverage = values.required_coverage;
+        this.required_coverage = +values.required_coverage;
     }
 
     static fromApi(result):GameBadge {
@@ -24,7 +23,7 @@ export class GameBadge {
         obj.name = result["name"];
         obj.owner = result["ownerId"];
         obj.created = result["created"];
-        obj.required_coverage = result["requiredCoverage"];
+        obj.required_coverage = +result["requiredCoverage"];
         return obj;
     }
 
@@ -34,7 +33,7 @@ export class GameBadge {
             "name": this.name,
             "ownerId": this.owner,
             "created": this.created,
-            "requireCoverage": this.required_coverage
+            "requiredCoverage": +this.required_coverage
         };
     }
 }

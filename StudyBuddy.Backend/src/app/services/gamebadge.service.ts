@@ -104,8 +104,17 @@ export class GameBadgeService {
     this.changed.emit();
   }
 
-  async setChallenges(id:number, members:number[]) {
-    this.logger.debug("Saving Challenges of Badge " + id);
+  async setChallenges(game_badge_id:number, members:number[]) {
+    this.logger.debug("Saving Challenges of Badge " + game_badge_id);
 
+    let data = [];
+    for (let challenge_id of members) {
+      data.push({ 'gameBadgeId': game_badge_id, 'challengeId': challenge_id});
+    }
+
+    let result = await this.http.post(this.url + "GameBadge/Challenges", data, 
+    {
+      headers: new HttpHeaders({ Authorization: this.auth.getToken() })
+    }).toPromise();
   }
 }

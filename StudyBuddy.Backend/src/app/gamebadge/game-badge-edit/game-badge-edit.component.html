@@ -1,1 +1,36 @@
-<p>game-badge-edit works!</p>
+<br>
+
+<h1>Bearbeite Abzeichen</h1>
+
+<form [formGroup]="form" (ngSubmit)="onSubmit()">
+    <div class="mb-3">
+        <label class="form-label" for="name">Name:</label>
+        <input type="text" class="form-control" id="name" formControlName="name" [ngClass]="{
+            'is-invalid': form.controls.name.invalid && form.controls.name.dirty,
+            'is-valid': form.controls.name.valid && form.controls.name.dirty}">
+    </div>
+    <div class="col-md">
+        <label class="form-label" for="required_coverage">Benötigte Abdeckung der Herausforderungen:</label>
+        <select class="form-select" formControlName="required_coverage">
+            <option value="0.5">50%</option>
+            <option value="0.6">60%</option>
+            <option value="0.7">70%</option>
+            <option value="0.8">80%</option>
+            <option value="0.9">90%</option>
+            <option value="1">100%</option>
+        </select>
+    </div>
+
+    <br>
+
+    <div class="mb-3">
+        <label class="form-label" for="required_coverage">Herausforderungen:</label>
+        <app-challenge-select formControlName="challenges"></app-challenge-select>
+        <div *ngIf="form.hasError('missingchallenge')">
+            <small class="text-danger">Achtung: Es muss mindestens eine Herausforderung ausgewählt werden!</small>
+        </div>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Ok</button>&nbsp;
+    <button type="button" class="btn btn-success" (click)="onCancel()">Abbrechen</button>
+</form>

@@ -65,6 +65,7 @@ export class TeamEditComponent implements OnInit {
 
   async onSubmit() {
     this.logger.debug("Trying to save a Team!");
+    let members = this.form.controls.members.value;
 
     if (!this.checkIfOwnerIsMember()) {
       this.form.setErrors({'ownerneedstobemember': true});
@@ -78,8 +79,8 @@ export class TeamEditComponent implements OnInit {
     }
 
     this.obj.name = this.form.controls.name.value;
-    this.service.save(this.obj);
-    this.service.setMembers(this.obj.id, this.form.controls.members.value);
+    await this.service.save(this.obj);
+    await this.service.setMembers(this.obj.id, this.form.controls.members.value);
     this.router.navigate(["team"]);
   }
 

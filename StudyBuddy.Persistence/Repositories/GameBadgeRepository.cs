@@ -31,7 +31,17 @@ namespace StudyBuddy.Persistence
                     "name varchar(100) not null, " +
                     "owner_id int not null, " +
                     "created date not null, " +
-                    "required_coverage numeric(2,2) not null)");
+                    "required_coverage numeric(3,2) not null)");
+            }
+
+            int revision = qh.GetRevision("game_badges");
+            if (revision == 1)
+            {
+                qh.ExecuteNonQuery(
+                    "ALTER TABLE game_badges " +
+                    "ALTER COLUMN required_coverage TYPE numeric(3,2)");
+
+                qh.SetRevision("game_badges", 2);
             }
         }
 
@@ -126,8 +136,8 @@ namespace StudyBuddy.Persistence
         [MethodImpl(MethodImplOptions.Synchronized)]
         public void Delete(int id)
         {
-            qh.Delete("game_bades", "id", id);
-            qh.Delete("game_badge_challenges", "id", id);
+            qh.Delete("game_badges", "id", id);
+            qh.Delete("game_badge_challenges", "game_badge", id);
         }
 
         [MethodImpl(MethodImplOptions.Synchronized)]

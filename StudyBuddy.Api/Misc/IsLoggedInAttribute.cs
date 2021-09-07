@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 
-namespace StudyBuddy.Services
+namespace StudyBuddy.Api
 {
     public class IsLoggedInAttribute : ActionFilterAttribute
     {

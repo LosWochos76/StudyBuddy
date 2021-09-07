@@ -4,6 +4,7 @@ import { LoginComponent } from './auth/login/login.component';
 import { LogoutComponent } from './auth/logout/logout.component';
 import { ChallengeEditComponent } from './challenge/challenge-edit/challenge-edit.component';
 import { ChallengeListComponent } from './challenge/challenge-list/challenge-list.component';
+import { ChallengeSelectComponent } from './challenge/challenge-select/challenge-select.component';
 import { CreateSeriesComponent } from './challenge/create-series/create-series.component';
 import { GameBadgeEditComponent } from './gamebadge/game-badge-edit/game-badge-edit.component';
 import { GameBadgeListComponent } from './gamebadge/game-badge-list/game-badge-list.component';

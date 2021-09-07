@@ -136,4 +136,20 @@ export class ChallengeService {
     
     this.changed.emit();
   }
+
+  async ofBadge(id:number):Promise<number[]> {
+    let ids:number[] = [];
+
+    this.logger.debug("Loading Challenges of Badge + " + id);
+    let result = await this.http.get(this.url + "Challenge/ofBadge/" + id,
+    {
+      headers: new HttpHeaders({ Authorization: this.auth.getToken() })
+    }).toPromise();
+
+    for (let index in result) {
+      ids.push(result[index].id);
+    }
+
+    return ids;
+  }
 }

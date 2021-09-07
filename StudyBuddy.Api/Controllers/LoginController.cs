@@ -6,16 +6,19 @@ using System.Security.Claims;
 using System.Text;
 using StudyBuddy.Persistence;
 using System.IdentityModel.Tokens.Jwt;
+using NETCore.MailKit.Core;
 
-namespace StudyBuddy.Services
+namespace StudyBuddy.Api
 {
     public class LoginController : Controller
     {
         private IRepository repository;
+        private readonly IEmailService emailservice;
 
-        public LoginController(IRepository repository)
+        public LoginController(IRepository repository, IEmailService emailservice)
         {
             this.repository = repository;
+            this.emailservice = emailservice;
         }
 
         [Route("/Login/")]
@@ -39,6 +42,18 @@ namespace StudyBuddy.Services
                     User = user
                 });
             }
+        }
+
+        [Route("/Login/SendPasswortResetMail/")]
+        [HttpPost]
+        public IActionResult SendPasswortResetMail([FromBody] string email)
+        {
+            if (string.IsNullOrEmpty(email))
+                return Json(new { Error = "Provide email and password!" });
+
+            //this.emailservice.Send(email, "Passwort zurücksetzen", "Bla", true);
+
+            return Json(new { Status = "ok" });
         }
 
         private string generateJwtToken(User user)

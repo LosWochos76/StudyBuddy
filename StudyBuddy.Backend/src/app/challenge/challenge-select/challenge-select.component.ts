@@ -1,32 +1,32 @@
 import { Component, forwardRef, Input, OnInit } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
-import { User } from 'src/app/model/user';
-import { UserService } from 'src/app/services/user.service';
+import { Challenge } from 'src/app/model/challenge';
+import { ChallengeService } from 'src/app/services/challenge.service';
 
 @Component({
-  selector: 'app-user-select',
-  templateUrl: './user-select.component.html',
-  styleUrls: ['./user-select.component.css'],
+  selector: 'app-challenge-select',
+  templateUrl: './challenge-select.component.html',
+  styleUrls: ['./challenge-select.component.css'],
   providers: [
     {
        provide: NG_VALUE_ACCESSOR,
-       useExisting: forwardRef(() => UserSelectComponent),
+       useExisting: forwardRef(() => ChallengeSelectComponent),
        multi: true
     }
  ]
 })
-export class UserSelectComponent implements OnInit, ControlValueAccessor {
+export class ChallengeSelectComponent implements OnInit, ControlValueAccessor{
   @Input() selected:number[] = [];
-  all:User[] = [];
-  all_copy:User[] = [];
-  selected_objects:User[] = [];
+  all:Challenge[] = [];
+  all_copy:Challenge[] = [];
+  selected_objects:Challenge[] = [];
   timeout: any = null;
   onChanged: any = () => { };
   onTouched: any = () => { };
   disabled = false;
   
   constructor(
-    private service:UserService) { }
+    private service:ChallengeService) { }
 
   async ngOnInit() {
     this.all = await this.service.getAll();
@@ -79,7 +79,7 @@ export class UserSelectComponent implements OnInit, ControlValueAccessor {
   }
 
   private findByText(value:string) {
-    let result:User[] = [];
+    let result:Challenge[] = [];
 
     for (let obj of this.all_copy)
       if (JSON.stringify(obj).search(value) > -1)
@@ -89,7 +89,7 @@ export class UserSelectComponent implements OnInit, ControlValueAccessor {
   }
 
   isChecked(id:number) {
-    return this.selected_objects.findIndex(xyz => xyz.id == id) > -1;
+    return this.selected_objects.findIndex(obj => obj.id == id) > -1;
   }
 
   private async onSearch(value: string) {

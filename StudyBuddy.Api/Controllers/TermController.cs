@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using StudyBuddy.Persistence;
 using System;
 
-namespace StudyBuddy.Services
+namespace StudyBuddy.Api
 {
     public class TermController : Controller
     {

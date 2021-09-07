@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using StudyBuddy.Model;
 
-namespace StudyBuddy.Services
+namespace StudyBuddy.Api
 {
     public class IsAdminAttribute : ActionFilterAttribute
     {

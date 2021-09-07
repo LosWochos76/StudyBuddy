@@ -36,6 +36,7 @@ import { CreateSeriesComponent } from './challenge/create-series/create-series.c
 import { GameBadgeListComponent } from './gamebadge/game-badge-list/game-badge-list.component';
 import { GameBadgeEditComponent } from './gamebadge/game-badge-edit/game-badge-edit.component';
 import { GameBadgeService } from './services/gamebadge.service';
+import { ChallengeSelectComponent } from './challenge/challenge-select/challenge-select.component';
 
 @NgModule({
   declarations: [
@@ -63,6 +64,7 @@ import { GameBadgeService } from './services/gamebadge.service';
     CreateSeriesComponent,
     GameBadgeListComponent,
     GameBadgeEditComponent,
+    ChallengeSelectComponent,
   ],
   imports: [
     BrowserModule,

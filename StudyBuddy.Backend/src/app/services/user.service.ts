@@ -42,8 +42,8 @@ export class UserService {
       headers: new HttpHeaders({ Authorization: this.auth.getToken() })
     }).toPromise();
 
-    for (let obj in result)
-      objects.push(User.fromApi(result[obj]));
+    for (let index in result)
+      objects.push(User.fromApi(result[index]));
 
     return objects;
   }

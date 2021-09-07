@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Builder;
 
-namespace StudyBuddy.Services
+namespace StudyBuddy.Api
 {
     public static class CustomAuthorizationMiddlewareExtension
     {

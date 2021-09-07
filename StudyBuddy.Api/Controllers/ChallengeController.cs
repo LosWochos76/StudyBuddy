@@ -4,7 +4,7 @@ using StudyBuddy.Model;
 using Microsoft.AspNetCore.Mvc;
 using StudyBuddy.Persistence;
 
-namespace StudyBuddy.Services
+namespace StudyBuddy.Api
 {
     public class ChallengeController : Controller
     {

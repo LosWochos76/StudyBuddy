@@ -3,7 +3,7 @@ using StudyBuddy.Model;
 using Microsoft.AspNetCore.Mvc;
 using StudyBuddy.Persistence;
 
-namespace StudyBuddy.Services
+namespace StudyBuddy.Api
 {
     public class GameBadgeController : Controller
     {
@@ -56,6 +56,9 @@ namespace StudyBuddy.Services
         [IsLoggedIn]
         public IActionResult Insert([FromBody] GameBadge obj)
         {
+            if (obj == null)
+                return Json(new { Error = "Object invalid!" });
+
             repository.GameBadges.Insert(obj);
             return Json(obj);
         }
