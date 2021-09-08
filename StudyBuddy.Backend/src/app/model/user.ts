@@ -1,27 +1,27 @@
 export class User {
-    id:number;
-    firstname:string;
-    lastname:string;
-    nickname:string;
-    password:string;
-    email:string;
-    role:number;
-    study_program_id:number;
-    enrolled_since_term_id:number;
-    
-    constructor() { 
+    id: number;
+    firstname: string;
+    lastname: string;
+    nickname: string;
+    password: string;
+    email: string;
+    role: number;
+    study_program_id: number;
+    enrolled_since_term_id: number;
+
+    constructor() {
         this.id = 0;
     }
 
-    isStudent():boolean {
+    isStudent(): boolean {
         return this.role == 1;
     }
 
-    isTeacher():boolean {
+    isTeacher(): boolean {
         return this.role == 2;
     }
 
-    isAdmin():boolean {
+    isAdmin(): boolean {
         return this.role == 3;
     }
 
@@ -34,7 +34,7 @@ export class User {
         }
     }
 
-    static fromApi(obj):User {
+    static fromApi(obj): User {
         let result = new User();
         result.id = obj['id'];
         result.firstname = obj['firstname'];
@@ -59,5 +59,30 @@ export class User {
             "enrolledInTermID": this.enrolled_since_term_id,
             "role": this.role
         };
+    }
+
+    fullName() {
+        return this.firstname + " " + this.lastname + " (" + this.nickname + ")";
+    }
+
+    copyValues(values) {
+        this.firstname = values.firstname;
+        this.lastname = values.lastname;
+        this.nickname = values.nickname.toLowerCase();
+
+        if (values.hasOwnProperty('password'))
+            this.password = values.password;
+
+        if (values.hasOwnProperty('email'))
+            this.email = values.email.toLowerCase();
+
+        if (values.hasOwnProperty('role'))
+            this.role = +values.role;
+
+        if (values.hasOwnProperty('study_program_id'))
+            this.study_program_id = +values.study_program_id;
+
+        if (values.hasOwnProperty('enrolled_since_term_id'))
+            this.enrolled_since_term_id = +values.study_program_id;
     }
 }

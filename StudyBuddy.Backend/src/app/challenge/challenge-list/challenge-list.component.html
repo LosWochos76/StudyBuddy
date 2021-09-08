@@ -36,6 +36,7 @@
       <th scope="col">Punkte</th>
       <th scope="col">Von</th>
       <th scope="col">Bis</th>
+      <th scope="col" *ngIf="user.isAdmin()">Besitzer</th>
     </tr>
   </thead>
   <tbody>
@@ -49,6 +50,7 @@
         <td>{{obj.points}}</td>
         <td>{{obj.validity_start}}</td>
         <td>{{obj.validity_end}}</td>
+        <td *ngIf="user.isAdmin()">{{getOwnerName(obj.owner)}}</td>
     </tr>
   </tbody>
   </table>

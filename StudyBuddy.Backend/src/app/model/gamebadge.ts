@@ -15,13 +15,16 @@ export class GameBadge {
     copyValues(values) {
         this.name = values.name;
         this.required_coverage = +values.required_coverage;
+
+        if (values.hasOwnProperty('owner')) 
+            this.owner = +values.owner;
     }
 
     static fromApi(result):GameBadge {
         let obj = new GameBadge();
         obj.id = result["id"];
         obj.name = result["name"];
-        obj.owner = result["ownerId"];
+        obj.owner = result["ownerID"];
         obj.created = result["created"];
         obj.required_coverage = +result["requiredCoverage"];
         return obj;

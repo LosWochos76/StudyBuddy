@@ -32,6 +32,9 @@ export class Challenge {
         this.prove = +values.prove;
         this.valid_for_study_program = values.study_program == "null" ? null : values.study_program;
         this.valid_for_enrolled_since = values.enrolled_since == "null" ? null : values.enrolled_since;
+
+        if (values.hasOwnProperty('owner')) 
+            this.owner = +values.owner;
     }
 
     validityStartAsDate():Date {

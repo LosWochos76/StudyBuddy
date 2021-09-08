@@ -1,69 +1,62 @@
 <br>
-
 <h1>Benutzer bearbeiten</h1>
-
 <form [formGroup]="form" (ngSubmit)="onSubmit()">
     <div class="row g-3">
         <div class="col-md">
             <label class="form-label" for="acronym">Vorname:</label>
-            <input type="text" class="form-control" id="firstname" formControlName="firstname" 
-            [ngClass]="{
+            <input type="text" class="form-control" id="firstname" formControlName="firstname" [ngClass]="{
             'is-invalid': form.controls.firstname.invalid && form.controls.firstname.dirty,
             'is-valid': form.controls.firstname.valid && form.controls.firstname.dirty}">
         </div>
         <div class="col-md">
             <label class="form-label" for="name">Nachname:</label>
-            <input type="text" class="form-control" id="lastname" formControlName="lastname"
-            [ngClass]="{
+            <input type="text" class="form-control" id="lastname" formControlName="lastname" [ngClass]="{
                 'is-invalid': form.controls.lastname.invalid && form.controls.lastname.dirty,
                 'is-valid': form.controls.lastname.valid && form.controls.lastname.dirty}">
         </div>
         <div class="col-md">
             <label class="form-label" for="name">Nickname:</label>
-            <input type="text" class="form-control" id="nickname" formControlName="nickname"
-            [ngClass]="{
+            <input type="text" class="form-control" id="nickname" formControlName="nickname" [ngClass]="{
                 'is-invalid': form.controls.nickname.invalid && form.controls.nickname.dirty,
                 'is-valid': form.controls.nickname.valid && form.controls.nickname.dirty}">
         </div>
         <div *ngIf="form.hasError('nicknamealreadyinuse')">
-            <small class="text-danger">Achtung: Der Nickname wird bereits verwenden! Bitte wählen Sie einen anderen Nickname!</small>
+            <small class="text-danger">Achtung: Der Nickname wird bereits verwenden! Bitte wählen Sie einen anderen
+                Nickname!</small>
         </div>
     </div>
-
     <br>
-
     <div class="row g-1">
         <div class="col-md">
             <label class="form-label" for="role">Rolle:</label>
-            <select id="role" class="form-select" aria-label="Studiengang" formControlName="role">
-                <option *ngFor="let obj of roles" [value]="obj.id">{{obj.name}}</option>
+            <select id="role" class="form-select" aria-label="Rolle" formControlName="role">
+                <option value="1">Student</option>
+                <option value="2">Dozent</option>
+                <option value="3">Admin</option>
             </select>
         </div>
     </div>
-
     <br>
-
     <div class="row g-2" *ngIf="form.controls.role.value == 1">
         <div class="col-md">
             <label class="form-label" for="study_program_id">Studiengang:</label>
-            <select id="study_program_id" class="form-select" aria-label="Studiengang" formControlName="study_program_id">
+            <select id="study_program_id" class="form-select" aria-label="Studiengang"
+                formControlName="study_program_id">
                 <option *ngFor="let obj of study_programs" [value]="obj.id">{{obj.acronym}}</option>
             </select>
         </div>
         <div class="col-md">
-            <label class="form-label" for="enrolled_since_id">Eingeschrieben seit:</label>
-            <select id="enrolled_since_id" class="form-select" aria-label="Eingeschrieben seit" formControlName="enrolled_since_id">
+            <label class="form-label" for="enrolled_since_term_id">Eingeschrieben seit:</label>
+            <select id="enrolled_since_term_id" class="form-select" aria-label="Eingeschrieben seit"
+                formControlName="enrolled_since_term_id">
                 <option *ngFor="let obj of terms" [value]="obj.id">{{obj.shortname}}</option>
             </select>
         </div>
     </div>
-
     <br *ngIf="form.controls.role.value == 1">
-
-    <button type="button" class="btn btn-info" (click)="onSendResetPasswortEmail()">Sende Passwort-Reset-Email</button>&nbsp;
-    
+    <button type="button" class="btn btn-info" (click)="onSendResetPasswortEmail()">Sende
+        Passwort-Reset-Email</button>&nbsp;
     <br><br>
-
     <button type="submit" class="btn btn-primary" [disabled]="!form.valid">Ok</button>&nbsp;
     <button type="button" class="btn btn-success" (click)="onCancel()">Abbrechen</button>
 </form>

@@ -20,4 +20,11 @@ export class Team {
             "ownerID": this.owner
         };
     }
+
+    copyValues(values) {
+        this.name = values.name;
+
+        if (values.hasOwnProperty('owner')) 
+            this.owner = +values.owner;
+    }
 }

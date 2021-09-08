@@ -1,12 +1,9 @@
 <br>
-
 <h1>Bearbeite Herausforderung</h1>
-
 <form [formGroup]="form" (ngSubmit)="onSubmit()">
     <div class="mb-3">
         <label class="form-label" for="name">Name:</label>
-        <input type="text" class="form-control" id="name" formControlName="name"
-        [ngClass]="{
+        <input type="text" class="form-control" id="name" formControlName="name" [ngClass]="{
             'is-invalid': form.controls.name.invalid && form.controls.name.dirty,
             'is-valid': form.controls.name.valid && form.controls.name.dirty}">
     </div>
@@ -17,24 +14,20 @@
     </div>
     <div class="mb-3">
         <label class="form-label" for="name">Punkte:</label>
-        <input type="text" class="form-control" id="name" formControlName="points"
-        [ngClass]="{
+        <input type="text" class="form-control" id="name" formControlName="points" [ngClass]="{
             'is-invalid': form.controls.name.invalid && form.controls.points.dirty,
             'is-valid': form.controls.name.valid && form.controls.points.dirty}">
     </div>
-
     <div class="row g-2">
         <div class="col-md">
             <label class="form-label" for="validity_start">Gültig ab:</label>
-            <input type="date" class="form-control" id="validity_start" formControlName="validity_start"
-            [ngClass]="{
+            <input type="date" class="form-control" id="validity_start" formControlName="validity_start" [ngClass]="{
                 'is-invalid': form.controls.validity_start.invalid && form.controls.validity_start.dirty,
                 'is-valid': form.controls.validity_start.valid && form.controls.validity_start.dirty}">
         </div>
         <div class="col-md">
             <label class="form-label" for="validity_end">Gültig bis:</label>
-            <input type="date" class="form-control" id="validity_end" formControlName="validity_end"
-            [ngClass]="{
+            <input type="date" class="form-control" id="validity_end" formControlName="validity_end" [ngClass]="{
                 'is-invalid': form.controls.validity_end.invalid && form.controls.validity_end.dirty,
                 'is-valid': form.controls.validity_end.valid && form.controls.validity_end.dirty}">
             <div *ngIf="form.controls.validity_end.hasError('invalidperiod')">
@@ -42,9 +35,7 @@
             </div>
         </div>
     </div>
-
     <br>
-
     <div class="row g-2">
         <div class="col-md">
             <label class="form-label" for="category">Kategorie:</label>
@@ -64,9 +55,7 @@
             </select>
         </div>
     </div>
-
     <br>
-
     <div class="row g-2">
         <div class="col-md">
             <label class="form-label" for="category">Für Studiengang:</label>
@@ -83,9 +72,14 @@
             </select>
         </div>
     </div>
-
+    <br *ngIf="user.isAdmin()">
+    <div class="mb-3" *ngIf="user.isAdmin()">
+        <label class="form-label" for="category">Besitzer:</label>
+        <select class="form-select" formControlName="owner">
+            <option *ngFor="let u of all_users" [value]="u.id">{{u.fullName()}}</option>
+        </select>
+    </div>
     <br>
-
     <button type="submit" class="btn btn-primary">Ok</button>&nbsp;
     <button type="button" class="btn btn-success" (click)="onCancel()">Abbrechen</button>
 </form>

@@ -1,7 +1,5 @@
 <br>
-
 <h1>Bearbeite Team</h1>
-
 <form [formGroup]="form" (ngSubmit)="onSubmit()">
     <div class="mb-3">
         <label class="form-label" for="acronym">Name:</label>
@@ -10,7 +8,6 @@
             'is-invalid': form.controls.name.invalid && form.controls.name.dirty,
             'is-valid': form.controls.name.valid && form.controls.name.dirty}">
     </div>
-
     <div class="mb-3">
         <label for="members">Mitglieder:</label>
         <app-user-select formControlName="members"></app-user-select>
@@ -18,9 +15,12 @@
             <small class="text-danger">Achtung: Der Besitzer des Teams muss auch Mitglied sein!</small>
         </div>
     </div>
-
-    <br>
-
+    <div class="mb-3" *ngIf="user.isAdmin()">
+        <label class="form-label" for="category">Besitzer:</label>
+        <select class="form-select" formControlName="owner">
+            <option *ngFor="let u of all_users" [value]="u.id">{{u.fullName()}}</option>
+        </select>
+    </div>
     <button type="submit" class="btn btn-primary" [disabled]="form.invalid">Ok</button>&nbsp;
     <button type="button" class="btn btn-success" (click)="onCancel()">Abbrechen</button>
 </form>

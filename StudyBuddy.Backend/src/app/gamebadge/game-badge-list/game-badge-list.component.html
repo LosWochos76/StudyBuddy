@@ -1,36 +1,24 @@
 <br>
-
 <div class="col-10">
-<button class="btn btn-primary" 
-    (click)="onAdd()">Neu</button>
-&nbsp;
-
-<button class="btn btn-success" 
-    [disabled]="!isSelected()"
-    (click)="onEdit()">Bearbeiten</button>
-&nbsp;
-
-<button class="btn btn-danger" 
-    [disabled]="!isSelected()"
-    (click)="onDelete()">Löschen</button>
+  <button class="btn btn-primary" (click)="onAdd()">Neu</button>&nbsp;
+  <button class="btn btn-success" [disabled]="!isSelected()" (click)="onEdit()">Bearbeiten</button>&nbsp;
+  <button class="btn btn-danger" [disabled]="!isSelected()" (click)="onDelete()">Löschen</button>
 </div>
-
 <br>
-
 <table class="table table-bordered">
-<thead>
+  <thead>
     <tr>
       <th scope="col">#</th>
       <th scope="col">Name</th>
+      <th scope="col" *ngIf="user.isAdmin()">Besitzer</th>
     </tr>
   </thead>
   <tbody>
-    <tr *ngFor="let obj of objects; index as i" 
-        (click)="onSelect(obj)"
-        (dblclick)="onEdit(obj)"
-        [class.table-info]="obj == selected">
-        <th scope="row">{{i + 1}}</th>
-        <td>{{obj.name}}</td>
+    <tr *ngFor="let obj of objects; index as i" (click)="onSelect(obj)" (dblclick)="onEdit(obj)"
+      [class.table-info]="obj == selected">
+      <th scope="row">{{i + 1}}</th>
+      <td>{{obj.name}}</td>
+      <td *ngIf="user.isAdmin()">{{getOwnerName(obj.owner)}}</td>
     </tr>
   </tbody>
-  </table>
+</table>

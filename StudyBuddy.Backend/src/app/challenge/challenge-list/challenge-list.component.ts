@@ -1,8 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Challenge } from 'src/app/model/challenge';
+import { User } from 'src/app/model/user';
+import { AuthorizationService } from 'src/app/services/authorization.service';
 import { ChallengeService } from 'src/app/services/challenge.service';
 import { LoggingService } from 'src/app/services/loging.service';
+import { UserService } from 'src/app/services/user.service';
 
 @Component({
   selector: 'app-challenge-list',
@@ -13,17 +16,26 @@ export class ChallengeListComponent implements OnInit {
   objects:Challenge[] = [];
   selected:Challenge = null;
   timeout: any = null;
+  user:User = null;
+  owners_cache = new Map();
 
   constructor(
     private logger:LoggingService, 
     private service:ChallengeService,
-    private router:Router) { }
+    private router:Router,
+    private auth:AuthorizationService,
+    private user_service:UserService) { 
+      this.user = this.auth.getUser();
+    }
 
   async ngOnInit() {
     this.objects = await this.service.getAll();
     this.service.changed.subscribe(async () => {
       this.objects = await this.service.getAll();
     });
+
+    if (this.user.isAdmin())
+      this.loadOwners();
   }
   
   onSelect(obj:Challenge) {
@@ -84,5 +96,19 @@ export class ChallengeListComponent implements OnInit {
       this.objects = await this.service.getAll();
     else
       this.objects = await this.service.byText(value);
+  }
+
+  private async loadOwners() {
+    for (let obj of this.objects)
+      this.owners_cache.set(obj.owner,await this.user_service.byId(obj.owner));
+  }
+
+  getOwnerName(id:number) {
+    if (this.owners_cache.has(id)) {
+      let owner = this.owners_cache.get(id);
+      return owner.fullName();
+    }
+
+    return "";
   }
 }

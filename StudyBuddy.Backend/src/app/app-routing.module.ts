@@ -23,6 +23,7 @@ import { RegisterUserSuccessComponent } from './user/register-user-success/regis
 import { RegisterUserComponent } from './user/register-user/register-user.component';
 import { UserEditComponent } from './user/user-edit/user-edit.component';
 import { UserListComponent } from './user/user-list/user-list.component';
+import { UserSettingsComponent } from './user/user-settings/user-settings.component';
 
 const routes: Routes = [
   { path: 'info', component: InfoComponent },
@@ -37,16 +38,17 @@ const routes: Routes = [
   { path: 'gamebadge/:id', component: GameBadgeEditComponent, canActivate: [RouteGuardService] },
   { path: 'user', component: UserListComponent, canActivate: [RouteGuardService] },
   { path: 'user/:id', component: UserEditComponent, canActivate: [RouteGuardService] },
+  { path: 'usersettings', component: UserSettingsComponent, canActivate: [RouteGuardService] },
   { path: 'team', component: TeamListComponent, canActivate: [RouteGuardService] },
   { path: 'team/:id', component: TeamEditComponent, canActivate: [RouteGuardService] },
-  { path: 'studyprogram', component: StudyProgramListComponent, canActivate: [RouteGuardService]},
-  { path: 'studyprogram/:id', component: StudyProgramEditComponent, canActivate: [RouteGuardService]},
-  { path: 'term', component: TermListComponent, canActivate: [RouteGuardService]},
-  { path: 'term/:id', component: TermEditComponent, canActivate: [RouteGuardService]},
+  { path: 'studyprogram', component: StudyProgramListComponent, canActivate: [RouteGuardService] },
+  { path: 'studyprogram/:id', component: StudyProgramEditComponent, canActivate: [RouteGuardService] },
+  { path: 'term', component: TermListComponent, canActivate: [RouteGuardService] },
+  { path: 'term/:id', component: TermEditComponent, canActivate: [RouteGuardService] },
   { path: 'login', component: LoginComponent },
   { path: 'logout', component: LogoutComponent },
-  { path: '', redirectTo: 'info', pathMatch: 'full'},
-  { path: '**', component: PageNotFoundComponent } 
+  { path: '', redirectTo: 'info', pathMatch: 'full' },
+  { path: '**', component: PageNotFoundComponent }
 ];
 
 @NgModule({

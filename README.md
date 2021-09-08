@@ -17,6 +17,12 @@ Das System besteht aus mehrere Komponenten:
 
 ## Revisionen
 
+### Backend 0.0.8
+
+* Die persönlichen Einstellungen können nun geändert werden.
+
+* Bei den Herausforderungen, Abzeichen und Teams kann der Admin nun die Besitzer ändern
+
 ### Backend 0.0.7
 
 * Abzeichen können nun komplett erstellt werden.

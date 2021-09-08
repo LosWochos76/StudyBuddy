@@ -24,10 +24,10 @@ export class AuthorizationService {
     if ('error' in response)
       return false;
 
-    this.token = response['token'];
     let user = User.fromApi(response['user']);
     if (!user.isStudent()) {
       this.user = user;
+      this.token = response['token'];
       this.changed.emit(true);
       return true;
     }

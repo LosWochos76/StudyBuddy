@@ -1,8 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { StudyProgram } from 'src/app/model/studyprogram';
-import { Term } from 'src/app/model/term';
 import { User } from 'src/app/model/user';
 import { AuthorizationService } from 'src/app/services/authorization.service';
 import { LoggingService } from 'src/app/services/loging.service';
@@ -11,16 +9,13 @@ import { TermService } from 'src/app/services/term.service';
 import { UserService } from 'src/app/services/user.service';
 
 @Component({
-  selector: 'app-user-edit',
-  templateUrl: './user-edit.component.html',
-  styleUrls: ['./user-edit.component.css']
+  selector: 'app-user-settings',
+  templateUrl: './user-settings.component.html',
+  styleUrls: ['./user-settings.component.css']
 })
-export class UserEditComponent implements OnInit {
-  id: number = 0;
+export class UserSettingsComponent implements OnInit {
   obj: User = null;
   form: FormGroup;
-  study_programs: StudyProgram[] = [];
-  terms: Term[] = [];
 
   constructor(
     private logger: LoggingService,
@@ -35,50 +30,58 @@ export class UserEditComponent implements OnInit {
       firstname: new FormControl("", [Validators.required, Validators.minLength(3)]),
       lastname: new FormControl("", [Validators.required, Validators.minLength(3)]),
       nickname: new FormControl("", [Validators.required, Validators.minLength(3)]),
-      role: new FormControl(1),
-      study_program_id: new FormControl(""),
-      enrolled_since_term_id: new FormControl("")
+      email: new FormControl("", [Validators.required, Validators.email]),
+      password: new FormControl(""),
+      password_confirm: new FormControl(""),
+      role: new FormControl(1)
     });
   };
 
   async ngOnInit() {
-    this.id = this.route.snapshot.params['id'];
-
-    if (this.id != 0) {
-      this.obj = await this.service.byId(this.id);
-    } else {
-      this.obj = new User();
-    }
-
-    this.study_programs = await this.study_program_service.getAll();
-    this.terms = await this.term_service.getAll();
+    this.obj = this.auth.getUser()
 
     this.form.setValue({
       firstname: this.obj.firstname,
       lastname: this.obj.lastname,
       nickname: this.obj.nickname,
-      role: this.obj.role,
-      study_program_id: this.obj.study_program_id,
-      enrolled_since_term_id: this.obj.enrolled_since_term_id,
+      email: this.obj.email,
+      password: "",
+      password_confirm: "",
+      role: this.obj.role
     });
   }
 
   async onSubmit() {
-    this.logger.debug("Trying to save a user!");
+    this.logger.debug("Trying to save settings of current user!");
     this.obj.copyValues(this.form.value);
 
-    let result = await this.service.userIdByNickname(this.obj.nickname);
+    if (!this.obj.email.endsWith("@hshl.de") && !this.obj.email.endsWith("@stud.hshl.de")) {
+      this.form.setErrors({ 'emailnotfromhshl': true });
+      return;
+    }
+
+    let result = await this.service.userIdByNickname(this.form.controls.nickname.value);
     if (result != 0 && result != this.obj.id) {
       this.form.setErrors({ 'nicknamealreadyinuse': true });
       return;
     }
 
-    if (this.obj.role == 1) {
-      this.obj.study_program_id = +this.form.controls.study_program_id.value;
-      this.obj.enrolled_since_term_id = +this.form.controls.enrolled_since_term_id.value;
-    } else {
-      this.obj.study_program_id = null;
-      this.obj.enrolled_since_term_id = null;
+    result = await this.service.userIdByEmail(this.obj.email);
+    if (result != 0 && result != this.obj.id) {
+      this.form.setErrors({ 'emailalreadyinuse': true });
+      return;
+    }
+
+    if (this.obj.password != "") {
+      if (this.obj.password.length < 6) {
+        this.form.setErrors({ 'passwordunsafe': true });
+        return;
+      }
+
+      if (this.obj.password != this.form.controls.password_confirm.value) {
+        this.form.setErrors({ 'passwordmismatch': true });
+        return;
+      }
     }
 
     if (this.form.invalid) {
@@ -87,11 +90,11 @@ export class UserEditComponent implements OnInit {
     }
 
     this.service.save(this.obj);
-    this.router.navigate(['user']);
+    this.router.navigate(['challenge']);
   }
 
   onCancel() {
-    this.router.navigate(['user']);
+    this.router.navigate(['challenge']);
   }
 
   onSendResetPasswortEmail() {

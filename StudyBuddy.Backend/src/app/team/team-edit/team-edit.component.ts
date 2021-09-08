@@ -14,26 +14,33 @@ import { UserService } from 'src/app/services/user.service';
   styleUrls: ['./team-edit.component.css']
 })
 export class TeamEditComponent implements OnInit {
-  id:number = 0;
-  obj:Team = null;
-  form:FormGroup;
+  id: number = 0;
+  obj: Team = null;
+  form: FormGroup;
+  user: User = null;
+  all_users: User[] = [];
 
   constructor(
-    private logger:LoggingService, 
-    private route:ActivatedRoute,
-    private router:Router,
-    private service:TeamService,
-    private user_service:UserService,
-    private auth:AuthorizationService) {
-      this.form = new FormGroup({
-        name: new FormControl("", [Validators.required, Validators.minLength(3)]),
-        members: new FormControl([], [Validators.required])
-      });
+    private logger: LoggingService,
+    private route: ActivatedRoute,
+    private router: Router,
+    private service: TeamService,
+    private user_service: UserService,
+    private auth: AuthorizationService) {
+    this.user = this.auth.getUser();
+
+    this.form = new FormGroup({
+      name: new FormControl("", [Validators.required, Validators.minLength(3)]),
+      members: new FormControl([], [Validators.required])
+    });
+
+    if (this.user.isAdmin())
+      this.form.addControl("owner", new FormControl(0));
   };
 
   async ngOnInit() {
     this.id = this.route.snapshot.params['id'];
-    let members:number[] = [];
+    let members: number[] = [];
 
     if (this.id != 0) {
       this.obj = await this.service.byId(this.id);
@@ -44,13 +51,24 @@ export class TeamEditComponent implements OnInit {
       members.push(this.obj.owner);
     }
 
-    this.form.setValue({
-      name: this.obj.name,
-      members: members
-    });
+    if (this.user.isAdmin())
+      this.all_users = await this.user_service.getAll();
+
+    if (this.user.isAdmin()) {
+      this.form.setValue({
+        name: this.obj.name,
+        members: members,
+        owner: this.obj.owner
+      });
+    } else {
+      this.form.setValue({
+        name: this.obj.name,
+        members: members
+      });
+    }
   }
 
-  checkIfOwnerIsMember():boolean {
+  checkIfOwnerIsMember(): boolean {
     let members = this.form.controls.members.value;
     let owner = this.obj.owner;
 
@@ -59,26 +77,25 @@ export class TeamEditComponent implements OnInit {
         return true;
       }
     }
-    
+
     return false;
   }
 
   async onSubmit() {
     this.logger.debug("Trying to save a Team!");
+    this.obj.copyValues(this.form.value);
     let members = this.form.controls.members.value;
 
     if (!this.checkIfOwnerIsMember()) {
-      this.form.setErrors({'ownerneedstobemember': true});
+      this.form.setErrors({ 'ownerneedstobemember': true });
       return;
     }
 
-    if (this.form.invalid)
-    {
+    if (this.form.invalid) {
       this.logger.debug("Data is invalid!");
       return;
     }
 
-    this.obj.name = this.form.controls.name.value;
     await this.service.save(this.obj);
     await this.service.setMembers(this.obj.id, this.form.controls.members.value);
     this.router.navigate(["team"]);
