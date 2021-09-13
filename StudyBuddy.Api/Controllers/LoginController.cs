@@ -51,7 +51,7 @@ namespace StudyBuddy.Api
             if (string.IsNullOrEmpty(email))
                 return Json(new { Error = "Provide email and password!" });
 
-            //this.emailservice.Send(email, "Passwort zurücksetzen", "Bla", true);
+            this.emailservice.Send(email, "Passwort zurücksetzen", "Bla", true);
 
             return Json(new { Status = "ok" });
         }

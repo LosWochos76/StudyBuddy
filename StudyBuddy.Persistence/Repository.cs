@@ -24,7 +24,6 @@ namespace StudyBuddy.Persistence
                 Helper.GetFromEnvironmentOrDefault("POSTGRESQL_PASSWORD", "secret"),
                 Helper.GetFromEnvironmentOrDefault("POSTGRESQL_DATABASE", "postgres"));
 
-
             this.CreateTablesTable();
             this.CreateRepositories();
         }
