@@ -40,7 +40,7 @@ export class ChallengeEditComponent implements OnInit {
     this.form = new FormGroup({
       name: new FormControl("", [Validators.required, Validators.minLength(3)]),
       description: new FormControl(""),
-      points: new FormControl(0, [Validators.required, Validators.pattern("^[0-9]*$")]),
+      points: new FormControl(0, [Validators.required, Validators.pattern("^[1-9][0-9]*$")]),
       validity_start: new FormControl("", [Validators.required]),
       validity_end: new FormControl("", [Validators.required]),
       category: new FormControl("", [Validators.required]),

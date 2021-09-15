@@ -21,7 +21,7 @@ export class AuthorizationService {
       'password': password
     }).toPromise();
 
-    if ('error' in response)
+    if (response == null)
       return false;
 
     let user = User.fromApi(response['user']);

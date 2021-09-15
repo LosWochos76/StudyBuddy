@@ -10,19 +10,18 @@ namespace StudyBuddy.Persistence
     class StudyProgramRepository : IStudyProgramRepository
     {
         private string connection_string;
-        private QueryHelper<StudyProgram> qh;
 
         public StudyProgramRepository(string connection_string)
         {
             this.connection_string = connection_string;
-            this.qh = new QueryHelper<StudyProgram>(connection_string, FromReader);
 
             CreateTable();
         }
 
-        [MethodImpl(MethodImplOptions.Synchronized)]
         private void CreateTable() 
         {
+            var qh = new QueryHelper<StudyProgram>(connection_string, FromReader);
+
             if (!qh.TableExists("study_programs"))
             {
                 qh.ExecuteNonQuery(
@@ -42,56 +41,55 @@ namespace StudyBuddy.Persistence
             return obj;
         }
 
-        [MethodImpl(MethodImplOptions.Synchronized)]
         public IEnumerable<StudyProgram> All(int from = 0, int max = 1000)
         {
+            var qh = new QueryHelper<StudyProgram>(connection_string, FromReader);
             qh.AddParameter(":from", from);
             qh.AddParameter(":max", max);
             return qh.ExecuteQueryToObjectList(
                 "SELECT id, acronym, name from study_programs order by acronym, name limit :max offset :from");
         }
 
-        [MethodImpl(MethodImplOptions.Synchronized)]
         public StudyProgram ById(int id)
         {
+            var qh = new QueryHelper<StudyProgram>(connection_string, FromReader);
             qh.AddParameter(":id", id);
             return qh.ExecuteQueryToSingleObject(
                 "SELECT id,acronym,name FROM study_programs where id=:id");
         }
 
-        [MethodImpl(MethodImplOptions.Synchronized)]
         public StudyProgram ByAcronym(string acronym)
         {
+            var qh = new QueryHelper<StudyProgram>(connection_string, FromReader);
             qh.AddParameter(":acronym", acronym);
             return qh.ExecuteQueryToSingleObject(
                 "SELECT id,acronym,name FROM study_programs where lower(acronym)=lower(:acronym)");
         }
 
-        [MethodImpl(MethodImplOptions.Synchronized)]
         public void Delete(int id)
         {
+            var qh = new QueryHelper<StudyProgram>(connection_string, FromReader);
             qh.Delete("study_programs", "id", id);
         }
 
-        [MethodImpl(MethodImplOptions.Synchronized)]
         public void Insert(StudyProgram obj)
         {
+            var qh = new QueryHelper<StudyProgram>(connection_string, FromReader);
             qh.AddParameter(":acronym", obj.Acronym);
             qh.AddParameter(":name", obj.Name);
             obj.ID = qh.ExecuteScalar(
                 "insert into study_programs (acronym,name) values (:acronym,:name) RETURNING id");
         }
 
-        [MethodImpl(MethodImplOptions.Synchronized)]
         public void Update(StudyProgram obj)
         {
+            var qh = new QueryHelper<StudyProgram>(connection_string, FromReader);
             qh.AddParameter(":id", obj.ID);
             qh.AddParameter(":acronym", obj.Acronym);
             qh.AddParameter(":name", obj.Name);
             qh.ExecuteNonQuery("update study_programs set acronym=:acronym,name=:name where id=:id");
         }
 
-        [MethodImpl(MethodImplOptions.Synchronized)]
         public void Save(StudyProgram obj)
         {
             if (obj.ID == 0)

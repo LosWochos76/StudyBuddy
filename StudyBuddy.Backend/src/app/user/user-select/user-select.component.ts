@@ -17,6 +17,7 @@ import { UserService } from 'src/app/services/user.service';
 })
 export class UserSelectComponent implements OnInit, ControlValueAccessor {
   @Input() selected:number[] = [];
+  @Input() mode = 'multiple';
   all:User[] = [];
   all_copy:User[] = [];
   selected_objects:User[] = [];
@@ -24,9 +25,12 @@ export class UserSelectComponent implements OnInit, ControlValueAccessor {
   onChanged: any = () => { };
   onTouched: any = () => { };
   disabled = false;
+  name = "";
   
   constructor(
-    private service:UserService) { }
+    private service:UserService) { 
+      this.name = "select_user_" + Math.floor(Math.random() * 10000);
+    }
 
   async ngOnInit() {
     this.all = await this.service.getAll();
@@ -51,20 +55,38 @@ export class UserSelectComponent implements OnInit, ControlValueAccessor {
     this.disabled = isDisabled;
   }
 
-  onChange(id:number) {
-    let index = this.selected_objects.findIndex(obj => obj.id == id);
-    if (index > -1) {
-      this.selected_objects.splice(index, 1);
-      this.selected.splice(this.selected.indexOf(id), 1);
-      this.onChanged(this.selected);
-      return;
-    }
+  isSingleMode():boolean {
+    return this.mode == "single";
+  }
 
-    index = this.all.findIndex(obj => obj.id == id);
-    if (index > -1) {
-      this.selected_objects.push(this.all[index]);
-      this.selected.push(id);
-      this.onChanged(this.selected);
+  getName() {
+    return this.name;
+  }
+
+  onChange(id:number) {
+    if (this.isSingleMode()) {
+      let index = this.all.findIndex(obj => obj.id == id);
+      if (index > -1) {
+        this.selected_objects = [this.all[index]];
+        this.selected = [id];
+        this.onChanged(this.selected);
+      }
+    }
+    else {
+      let index = this.selected_objects.findIndex(obj => obj.id == id);
+      if (index > -1) {
+        this.selected_objects.splice(index, 1);
+        this.selected.splice(this.selected.indexOf(id), 1);
+        this.onChanged(this.selected);
+        return;
+      }
+
+      index = this.all.findIndex(obj => obj.id == id);
+      if (index > -1) {
+        this.selected_objects.push(this.all[index]);
+        this.selected.push(id);
+        this.onChanged(this.selected);
+      }
     }
   }
 

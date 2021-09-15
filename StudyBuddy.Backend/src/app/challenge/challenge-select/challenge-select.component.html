@@ -24,11 +24,16 @@
     </div>
     <div class="row" style="margin-top:8px;">
         <div class="col">
-            <ul class="list-group" style="height:8.7em; overflow: scroll; width: auto; overflow-y:scroll;">
-                <li *ngFor="let obj of all" class="list-group-item">
-                    <input class="form-check-input me-1" type="checkbox" value="{{obj.id}}" id="{{obj.id}}"
-                        (change)="onChange(obj.id)" [checked]=isChecked(obj.id)>
-                    <label class="form-check-label" for="{{obj.id}}">{{obj.name}}</label>
+            <ul class="list-group" style="height:8.7em; overflow: scroll; width: auto; overflow-y:scroll;"
+                *ngIf="all.length > 0">
+                <li *ngFor="let xyz of all" class="list-group-item">
+                    <input class="form-check-input me-1" type="checkbox" value="{{xyz.id}}" id="{{name}}_{{xyz.id}}"
+                        (change)="onChange(xyz.id)" [checked]=isChecked(xyz.id) *ngIf="!isSingleMode()"
+                        name="{{name}}">
+                    <input class="form-check-input me-1" type="radio" value="{{xyz.id}}" id="{{name}}_{{xyz.id}}"
+                        (change)="onChange(xyz.id)" [checked]=isChecked(xyz.id) *ngIf="isSingleMode()"
+                        name="{{name}}">
+                    <label class="form-check-label" for="{{name}}_{{xyz.id}}">{{xyz.name}})</label>
                 </li>
             </ul>
         </div>

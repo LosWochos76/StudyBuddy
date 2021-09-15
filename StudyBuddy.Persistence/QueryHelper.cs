@@ -12,10 +12,28 @@ namespace StudyBuddy.Persistence
         private ObjectReader<T> object_reader;
         private Dictionary<string, object> parameters = new Dictionary<string, object>();
 
+        public QueryHelper(string connection_string)
+        {
+            this.connection_string = connection_string;
+        }
+
         public QueryHelper(string connection_string, ObjectReader<T> object_reader)
         {
             this.connection_string = connection_string;
             this.object_reader = object_reader;
+        }
+
+        public QueryHelper(string connection_string, object parameters)
+        {
+            this.connection_string = connection_string;
+            AddParameters(parameters);
+        }
+
+        public QueryHelper(string connection_string, ObjectReader<T> object_reader, object parameters)
+        {
+            this.connection_string = connection_string;
+            this.object_reader = object_reader;
+            AddParameters(parameters);
         }
 
         public void AddParameter(string name, object value)

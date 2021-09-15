@@ -37,7 +37,8 @@ export class UserEditComponent implements OnInit {
       nickname: new FormControl("", [Validators.required, Validators.minLength(3)]),
       role: new FormControl(1),
       study_program_id: new FormControl(""),
-      enrolled_since_term_id: new FormControl("")
+      enrolled_since_term_id: new FormControl(""),
+      friends: new FormControl([])
     });
   };
 
@@ -60,6 +61,7 @@ export class UserEditComponent implements OnInit {
       role: this.obj.role,
       study_program_id: this.obj.study_program_id,
       enrolled_since_term_id: this.obj.enrolled_since_term_id,
+      friends: await this.service.getFriends(this.id)
     });
   }
 
@@ -70,6 +72,12 @@ export class UserEditComponent implements OnInit {
     let result = await this.service.userIdByNickname(this.obj.nickname);
     if (result != 0 && result != this.obj.id) {
       this.form.setErrors({ 'nicknamealreadyinuse': true });
+      return;
+    }
+
+    let friends = this.form.controls.friends.value;
+    if (friends.findIndex(id => id == this.id) > -1) {
+      this.form.setErrors({ 'cannotfriendwithself': true });
       return;
     }
 
@@ -87,6 +95,13 @@ export class UserEditComponent implements OnInit {
     }
 
     this.service.save(this.obj);
+
+    if (this.obj.role == 1) {
+      this.service.setFriends(this.obj.id, this.form.controls.friends.value);
+    } else {
+      this.service.setFriends(this.obj.id, []);
+    }
+
     this.router.navigate(['user']);
   }
 

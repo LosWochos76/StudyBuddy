@@ -9,20 +9,19 @@ namespace StudyBuddy.Persistence
     class GameBadgeRepository : IGameBadgeRepository
     {
         private string connection_string;
-        private QueryHelper<GameBadge> qh;
 
         public GameBadgeRepository(string connection_string)
         {
             this.connection_string = connection_string;
-            qh = new QueryHelper<GameBadge>(connection_string, FromReader);
 
             CreateBadgesTable();
             CreateGameBadgeChallengesTable();
         }
 
-        [MethodImpl(MethodImplOptions.Synchronized)]
         private void CreateBadgesTable() 
         {
+            var qh = new QueryHelper<GameBadge>(connection_string, FromReader);
+
             if (!qh.TableExists("game_badges"))
             {
                 qh.ExecuteNonQuery(
@@ -45,9 +44,10 @@ namespace StudyBuddy.Persistence
             }
         }
 
-        [MethodImpl(MethodImplOptions.Synchronized)]
         private void CreateGameBadgeChallengesTable() 
         {
+            var qh = new QueryHelper<GameBadge>(connection_string, FromReader);
+
             if (!qh.TableExists("game_badge_challenges"))
             {
                 qh.ExecuteNonQuery(
@@ -68,18 +68,18 @@ namespace StudyBuddy.Persistence
             return obj;
         }
 
-        [MethodImpl(MethodImplOptions.Synchronized)]
         public GameBadge ById(int id)
         {
+            var qh = new QueryHelper<GameBadge>(connection_string, FromReader);
             qh.AddParameter(":id", id);
             return qh.ExecuteQueryToSingleObject(
                 "SELECT id,name,owner_id,created,required_coverage " +
                 "FROM game_badges where id=:id");
         }
 
-        [MethodImpl(MethodImplOptions.Synchronized)]
         public IEnumerable<GameBadge> All(int from = 0, int max = 1000)
         {
+            var qh = new QueryHelper<GameBadge>(connection_string, FromReader);
             qh.AddParameter(":from", from);
             qh.AddParameter(":max", max);
             return qh.ExecuteQueryToObjectList(
@@ -87,9 +87,9 @@ namespace StudyBuddy.Persistence
                 "FROM game_badges order by created,name limit :max offset :from");
         }
 
-        [MethodImpl(MethodImplOptions.Synchronized)]
         public IEnumerable<GameBadge> OfOwner(int owner_id, int from = 0, int max = 1000)
         {
+            var qh = new QueryHelper<GameBadge>(connection_string, FromReader);
             qh.AddParameter(":from", from);
             qh.AddParameter(":max", max);
             qh.AddParameter(":owner_id", owner_id);
@@ -98,9 +98,9 @@ namespace StudyBuddy.Persistence
                 "FROM game_badges where owner_id=:owner_id order by created,name limit :max offset :from");
         }
 
-        [MethodImpl(MethodImplOptions.Synchronized)]
         public void Insert(GameBadge obj)
         {
+            var qh = new QueryHelper<GameBadge>(connection_string, FromReader);
             qh.AddParameter(":name", obj.Name);
             qh.AddParameter(":owner_id", obj.OwnerID);
             qh.AddParameter(":created", obj.Created);
@@ -111,9 +111,9 @@ namespace StudyBuddy.Persistence
                 ":required_coverage) RETURNING id");
         }
 
-        [MethodImpl(MethodImplOptions.Synchronized)]
         public void Update(GameBadge obj)
         {
+            var qh = new QueryHelper<GameBadge>(connection_string, FromReader);
             qh.AddParameter(":id", obj.ID);
             qh.AddParameter(":name", obj.Name);
             qh.AddParameter(":owner_id", obj.OwnerID);
@@ -124,7 +124,6 @@ namespace StudyBuddy.Persistence
                 "created=:created,required_coverage=:required_coverage where id=:id");
         }
 
-        [MethodImpl(MethodImplOptions.Synchronized)]
         public void Save(GameBadge obj)
         {
             if (obj.ID == 0)
@@ -133,16 +132,16 @@ namespace StudyBuddy.Persistence
                 Update(obj);
         }
 
-        [MethodImpl(MethodImplOptions.Synchronized)]
         public void Delete(int id)
         {
+            var qh = new QueryHelper<GameBadge>(connection_string, FromReader);
             qh.Delete("game_badges", "id", id);
             qh.Delete("game_badge_challenges", "game_badge", id);
         }
 
-        [MethodImpl(MethodImplOptions.Synchronized)]
         public void AddChallenge(int badge_id, int challenge_id)
         {
+            var qh = new QueryHelper<GameBadge>(connection_string, FromReader);
             qh.AddParameter(":badge_id", badge_id);
             qh.AddParameter(":challenge_id", challenge_id);
             qh.ExecuteNonQuery(
@@ -150,9 +149,9 @@ namespace StudyBuddy.Persistence
                 "(game_badge,challenge) values (:badge_id,:challenge_id)");
         }
 
-        [MethodImpl(MethodImplOptions.Synchronized)]
         public void RemoveChallenge(int badge_id, int challenge_id)
         {
+            var qh = new QueryHelper<GameBadge>(connection_string, FromReader);
             qh.AddParameter(":badge_id", badge_id);
             qh.AddParameter(":challenge_id", challenge_id);
             qh.ExecuteNonQuery(
@@ -160,15 +159,14 @@ namespace StudyBuddy.Persistence
                 "game_badge=:badge_id and challenge=:challenge_id");
         }
 
-        [MethodImpl(MethodImplOptions.Synchronized)]
         public void DeleteChallenges(int badge_id)
         {
+            var qh = new QueryHelper<GameBadge>(connection_string, FromReader);
             qh.AddParameter(":badge_id", badge_id);
             qh.ExecuteNonQuery(
                 "delete from game_badge_challenges where game_badge=:badge_id");
         }
 
-        [MethodImpl(MethodImplOptions.Synchronized)]
         public void AddChallenges(GameBadgeChallenge[] challenges)
         {
             foreach (var obj in challenges)

@@ -1,34 +1,32 @@
-﻿using System.Linq;
-using StudyBuddy.Model;
+﻿using StudyBuddy.Model;
 using Microsoft.AspNetCore.Mvc;
 using StudyBuddy.Persistence;
 using System;
+using StudyBuddy.BusinessLogic;
 
 namespace StudyBuddy.Api
 {
     public class TermController : Controller
     {
-        private IRepository repository;
+        private TermService service;
 
         public TermController(IRepository repository)
         {
-            this.repository = repository;
+            this.service = new TermService(repository);
         }
 
         [Route("/Term/")]
         [HttpGet]
         public IActionResult Get()
         {
-            var objects = repository.Terms.All();
-            return Json(objects);
+            return Json(service.All());
         }
 
         [Route("/Term/{id}")]
         [HttpGet]
         public IActionResult GetById(int id)
         {
-            var obj = repository.Terms.ById(id);
-            return Json(obj);
+            return Json(service.GetById(id));
         }
 
         [Route("/Term/{id}")]
@@ -36,8 +34,7 @@ namespace StudyBuddy.Api
         [IsAdmin]
         public IActionResult Update([FromBody] Term obj)
         {
-            repository.Terms.Update(obj);
-            return Json(obj);
+            return Json(service.Update(obj));
         }
 
         [Route("/Term/")]
@@ -45,8 +42,7 @@ namespace StudyBuddy.Api
         [IsAdmin]
         public IActionResult Insert([FromBody] Term obj)
         {
-            repository.Terms.Insert(obj);
-            return Json(obj);
+            return Json(service.Insert(obj));
         }
 
         [Route("/Term/{id}")]
@@ -54,7 +50,7 @@ namespace StudyBuddy.Api
         [IsAdmin]
         public IActionResult Delete(int id)
         {
-            repository.Terms.Delete(id);
+            service.Delete(id);
             return Json(new { Status = "ok" });
         }
 
@@ -62,7 +58,7 @@ namespace StudyBuddy.Api
         [HttpGet]
         public IActionResult Delete(DateTime date)
         {
-            return Json(repository.Terms.ByDate(date));
+            return Json(service.ByDate(date));
         }
     }
 }

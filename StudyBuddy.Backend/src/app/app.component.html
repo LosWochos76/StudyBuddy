@@ -20,11 +20,11 @@
         <li class="nav-item dropdown" *ngIf="is_logged_in && current_user.isAdmin()">
           <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown"
             aria-expanded="false">
-            Benutzer und Teams
+            Benutzer
           </a>
           <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
             <li><a class="dropdown-item" routerLink="user">Benutzer</a></li>
-            <li><a class="dropdown-item" routerLink="team">Teams</a></li>
+            <li><a class="dropdown-item" routerLink="request">Anfragen</a></li>
           </ul>
         </li>
         <li class="nav-item dropdown" *ngIf="is_logged_in">
@@ -50,14 +50,14 @@
     </div>
   </div>
 </nav>
-<div class="container">
+<div class="container" style="margin-bottom:60px;">
   <router-outlet></router-outlet>
 </div>
 <footer class="border-top footer fixed-bottom bg-primary text-white">
   <div class="container">
     <div class="row">
       <div class="col-8">
-        &copy; 2021 - StudyBuddy - Backend Version 0.0.7
+        &copy; 2021 - StudyBuddy - Backend Version 0.0.8
       </div>
       <div class="col">
         <a routerLink="/info" class="link-light">Infos</a> &#124;

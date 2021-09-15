@@ -1,0 +1,33 @@
+<br>
+<h1>Anfrage erstellen</h1>
+<form [formGroup]="form" (ngSubmit)="onSubmit()">
+    <div class="mb-3">
+        <label class="form-label" for="acronym">Sender:</label>
+        <app-user-select formControlName="sender" mode="single"></app-user-select>
+    </div>
+    <div class="mb-3">
+        <label class="form-label" for="name">Empfänger:</label>
+        <app-user-select formControlName="recipient" mode="single"></app-user-select>
+        <div *ngIf="form.hasError('senderequalsrecipient')">
+            <small class="text-danger">Achtung: Sender und Empfänder dürfen nicht gleich sein!</small>
+        </div>
+    </div>
+    <div class="row g-1">
+        <div class="col-md">
+            <label class="form-label" for="role">Typ:</label>
+            <select id="role" class="form-select" aria-label="Typ" formControlName="type">
+                <option value="1">Freunschaftsanfrage</option>
+                <option value="2">Bestätigung einer Herausforderung</option>
+            </select>
+        </div>
+    </div>
+    <br>
+    <div class="mb-3" *ngIf="form.controls.type.value == 2">
+        <div class="col-md">
+            <label class="form-label" for="role">Herausforderung:</label>
+            <app-challenge-select formControlName="challenge" mode="single"></app-challenge-select>
+        </div>
+    </div>
+    <button type="submit" class="btn btn-primary">Ok</button>&nbsp;
+    <button type="button" class="btn btn-success" (click)="onCancel()">Abbrechen</button>
+</form>

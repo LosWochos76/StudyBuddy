@@ -8,7 +8,7 @@
                 <div class="col">
                     <input type="text" id="suche" name="suche" class="form-control" (keyup)="onKeySearch($event)">
                 </div>
-                <div class="col-auto">
+                <div class="col-auto" *ngIf="!isSingleMode()">
                     <button type="button" class="btn btn-primary" (click)="selectAll()">Alle</button>&nbsp;
                     <button type="button" class="btn btn-secondary" (click)="selectNone()">Keine</button>&nbsp;
                 </div>
@@ -24,18 +24,23 @@
     </div>
     <div class="row" style="margin-top:8px;">
         <div class="col">
-            <ul class="list-group" style="height:8.7em; overflow: scroll; width: auto; overflow-y:scroll;" *ngIf="all.length > 0">
+            <ul class="list-group" style="height:8.7em; overflow: scroll; width: auto; overflow-y:scroll;"
+                *ngIf="all.length > 0">
                 <li *ngFor="let xyz of all" class="list-group-item">
-                    <input class="form-check-input me-1" type="checkbox" value="{{xyz.id}}" id="{{xyz.id}}"
-                        (change)="onChange(xyz.id)" [checked]=isChecked(xyz.id)>
-                    <label class="form-check-label" for="{{xyz.id}}">{{xyz.firstname}} {{xyz.lastname}} ({{xyz.nickname}})</label>
+                    <input class="form-check-input me-1" type="checkbox" value="{{xyz.id}}" id="{{name}}_{{xyz.id}}"
+                        (change)="onChange(xyz.id)" [checked]=isChecked(xyz.id) *ngIf="!isSingleMode()"
+                        name="{{name}}">
+                    <input class="form-check-input me-1" type="radio" value="{{xyz.id}}" id="{{name}}_{{xyz.id}}"
+                        (change)="onChange(xyz.id)" [checked]=isChecked(xyz.id) *ngIf="isSingleMode()"
+                        name="{{name}}">
+                    <label class="form-check-label" for="{{name}}_{{xyz.id}}">{{xyz.fullName()}})</label>
                 </li>
             </ul>
         </div>
         <div class="col">
             <ul class="list-group" style="height:8.7em; overflow: scroll; width: auto; overflow-y:scroll;">
                 <li *ngFor="let xyz of selected_objects" class="list-group-item">
-                    <label class="form-check-label">{{xyz.firstname}} {{xyz.lastname}} ({{xyz.nickname}})</label>
+                    <label class="form-check-label">{{xyz.fullName()}}</label>
                 </li>
             </ul>
         </div>

@@ -5,6 +5,7 @@ WORKDIR /app
 COPY StudyBuddy.Model StudyBuddy.Model
 COPY StudyBuddy.Persistence StudyBuddy.Persistence
 COPY StudyBuddy.Api StudyBuddy.Api
+COPY StudyBuddy.BusinessLogic StudyBuddy.BusinessLogic 
 RUN dotnet restore StudyBuddy.Api/StudyBuddy.Api.csproj
 
 # Copy everything else and build

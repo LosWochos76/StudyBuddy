@@ -5,7 +5,7 @@ export class User {
     nickname: string;
     password: string;
     email: string;
-    role: number;
+    role: number = 1;
     study_program_id: number;
     enrolled_since_term_id: number;
 
@@ -56,7 +56,7 @@ export class User {
             "email": this.email,
             "password": this.password,
             "programID": this.study_program_id,
-            "enrolledInTermID": this.enrolled_since_term_id,
+            "EnrolledInTermID": this.enrolled_since_term_id,
             "role": this.role
         };
     }
@@ -82,7 +82,7 @@ export class User {
         if (values.hasOwnProperty('study_program_id'))
             this.study_program_id = +values.study_program_id;
 
-        if (values.hasOwnProperty('enrolled_since_term_id'))
-            this.enrolled_since_term_id = +values.study_program_id;
+        if (values.hasOwnProperty('enrolled_since_id'))
+            this.enrolled_since_term_id = +values.enrolled_since_id;
     }
 }

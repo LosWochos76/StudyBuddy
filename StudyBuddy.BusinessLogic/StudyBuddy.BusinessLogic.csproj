@@ -1,0 +1,24 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\StudyBuddy.Model\StudyBuddy.Model.csproj" />
+    <ProjectReference Include="..\StudyBuddy.Persistence\StudyBuddy.Persistence.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Remove="Parameters\" />
+    <None Remove="System.IdentityModel.Tokens.Jwt" />
+    <None Remove="MailKit" />
+    <None Remove="NETCore.MailKit" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Parameters\" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.12.2" />
+    <PackageReference Include="NETCore.MailKit" Version="2.0.3" />
+  </ItemGroup>
+</Project>

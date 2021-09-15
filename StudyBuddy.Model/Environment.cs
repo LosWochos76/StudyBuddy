@@ -1,12 +1,10 @@
-using System;
-
 namespace StudyBuddy.Model
 {
-    public class Helper
+    public class Environment
     {
-        public static string GetFromEnvironmentOrDefault(string key, string def)
+        public static string GetOrDefault(string key, string def)
         {
-            string var = Environment.GetEnvironmentVariable(key);
+            string var = System.Environment.GetEnvironmentVariable(key);
             if (var == null || var == string.Empty)
                 return def;
             else

@@ -1,8 +1,4 @@
-using Npgsql;
-using SimpleHashing.Net;
 using StudyBuddy.Model;
-using System;
-using System.Linq;
 
 namespace StudyBuddy.Persistence
 {
@@ -11,18 +7,18 @@ namespace StudyBuddy.Persistence
         private string connection_string;
         public IUserRepository Users { get; private set; }
         public IStudyProgramRepository StudyPrograms { get; private set; }
-        public ITeamRepository Teams { get; private set; }
         public ITermRepository Terms { get; private set; }
         public IChallengeRepository Challenges { get; private set; }
         public IGameBadgeRepository GameBadges { get; private set; }
+        public IRequestRepository Requests { get; private set; }
 
         public Repository()
         {
             this.connection_string = string.Format("Host={0};Username={1};Password={2};Database={3}",
-                Helper.GetFromEnvironmentOrDefault("POSTGRESQL_HOST", "localhost"),
-                Helper.GetFromEnvironmentOrDefault("POSTGRESQL_USER", "postgres"),
-                Helper.GetFromEnvironmentOrDefault("POSTGRESQL_PASSWORD", "secret"),
-                Helper.GetFromEnvironmentOrDefault("POSTGRESQL_DATABASE", "postgres"));
+                Environment.GetOrDefault("POSTGRESQL_HOST", "localhost"),
+                Environment.GetOrDefault("POSTGRESQL_USER", "postgres"),
+                Environment.GetOrDefault("POSTGRESQL_PASSWORD", "secret"),
+                Environment.GetOrDefault("POSTGRESQL_DATABASE", "postgres"));
 
             this.CreateTablesTable();
             this.CreateRepositories();
@@ -38,10 +34,10 @@ namespace StudyBuddy.Persistence
         {
             this.Users = new UserRepository(connection_string);
             this.StudyPrograms = new StudyProgramRepository(connection_string);
-            this.Teams = new TeamRepository(connection_string);
             this.Terms = new TermRepository(connection_string);
             this.Challenges = new ChallengeRepository(connection_string);
             this.GameBadges = new GameBadgeRepository(connection_string);
+            this.Requests = new RequestRepository(connection_string);
         }
     }
 }

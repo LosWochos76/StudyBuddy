@@ -34,8 +34,8 @@ export class RegisterUserComponent implements OnInit {
       email: new FormControl("", [Validators.required, Validators.email]),
       password: new FormControl("", [Validators.required, Validators.minLength(6)]),
       password_confirm: new FormControl("", [Validators.required, Validators.minLength(6)]),
-      study_program_id: new FormControl(""),
-      enrolled_since_id: new FormControl("")
+      study_program_id: new FormControl(0),
+      enrolled_since_id: new FormControl(0)
     }, {
       validators: passwordMatchValidator,
       updateOn: 'blur'
@@ -45,6 +45,9 @@ export class RegisterUserComponent implements OnInit {
   async ngOnInit() {
     this.study_programs = await this.study_program_service.getAll();
     this.terms = await this.term_service.getAll();
+
+    this.form.controls.study_program_id.setValue(this.study_programs[0].id);
+    this.form.controls.enrolled_since_id.setValue(this.terms[0].id);
   }
 
   async onSubmit() {

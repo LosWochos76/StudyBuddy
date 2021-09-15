@@ -9,19 +9,17 @@ namespace StudyBuddy.Persistence
     class ChallengeRepository : IChallengeRepository
     {
         private string connection_string;
-        private QueryHelper<Challenge> qh;
 
         public ChallengeRepository(string connection_string)
         {
             this.connection_string = connection_string;
-            this.qh = new QueryHelper<Challenge>(connection_string, FromReader);
 
             CreateTable();
         }
 
-        [MethodImpl(MethodImplOptions.Synchronized)]
         private void CreateTable() 
         {
+            var qh = new QueryHelper<Challenge>(connection_string, FromReader);
             if (!qh.TableExists("challenges"))
             {
                 qh.ExecuteNonQuery(
@@ -56,7 +54,6 @@ namespace StudyBuddy.Persistence
             }
         }
 
-        [MethodImpl(MethodImplOptions.Synchronized)]
         private Challenge FromReader(NpgsqlDataReader reader)
         {
             var obj = new Challenge();
@@ -76,30 +73,27 @@ namespace StudyBuddy.Persistence
             return obj;
         }
 
-        [MethodImpl(MethodImplOptions.Synchronized)]
         public Challenge ById(int id)
         {
-            qh.AddParameter(":id", id);
+            var qh = new QueryHelper<Challenge>(connection_string, FromReader, new { id });
             return qh.ExecuteQueryToSingleObject(
                 "SELECT id,name,description,points,validity_start,validity_end," +
                 "category,owner_id,created,prove,series_parent_id,valid_for_study_program_id,valid_for_for_enrolled_since_term_id " +
                 "FROM challenges where id=:id");
         }
 
-        [MethodImpl(MethodImplOptions.Synchronized)]
         public IEnumerable<Challenge> All(int from = 0, int max = 1000)
         {
-            qh.AddParameter(":from", from);
-            qh.AddParameter(":max", max);
+            var qh = new QueryHelper<Challenge>(connection_string, FromReader, new { from, max });
             return qh.ExecuteQueryToObjectList(
                 "SELECT id,name,description,points,validity_start,validity_end," +
                 "category,owner_id,created,prove,series_parent_id,valid_for_study_program_id,valid_for_for_enrolled_since_term_id " +
                 "FROM challenges order by created limit :max offset :from");
         }
 
-        [MethodImpl(MethodImplOptions.Synchronized)]
         public IEnumerable<Challenge> ByText(string text, int from = 0, int max = 1000)
         {
+            var qh = new QueryHelper<Challenge>(connection_string, FromReader);
             qh.AddParameter(":from", from);
             qh.AddParameter(":max", max);
             qh.AddParameter(":text", "%" + text + "%");
@@ -110,9 +104,9 @@ namespace StudyBuddy.Persistence
                 "order by created limit :max offset :from");
         }
 
-        [MethodImpl(MethodImplOptions.Synchronized)]
         public IEnumerable<Challenge> OfOwner(int owner_id, int from = 0, int max = 1000)
         {
+            var qh = new QueryHelper<Challenge>(connection_string, FromReader);
             qh.AddParameter(":from", from);
             qh.AddParameter(":max", max);
             qh.AddParameter(":owner_id", owner_id);
@@ -122,9 +116,9 @@ namespace StudyBuddy.Persistence
                 "FROM challenges where owner_id=:owner_id order by created limit :max offset :from");
         }
 
-        [MethodImpl(MethodImplOptions.Synchronized)]
         public IEnumerable<Challenge> OfOwnerByText(int owner_id, string text, int from = 0, int max = 1000)
         {
+            var qh = new QueryHelper<Challenge>(connection_string, FromReader);
             qh.AddParameter(":from", from);
             qh.AddParameter(":max", max);
             qh.AddParameter(":owner_id", owner_id);
@@ -136,9 +130,9 @@ namespace StudyBuddy.Persistence
                 "(name like :text or description like :text) order by created limit :max offset :from");
         }
 
-        [MethodImpl(MethodImplOptions.Synchronized)]
         public void Insert(Challenge obj)
         {
+            var qh = new QueryHelper<Challenge>(connection_string, FromReader);
             qh.AddParameter(":name", obj.Name);
             qh.AddParameter(":description", string.IsNullOrEmpty(obj.Description) ? DBNull.Value : obj.Description);
             qh.AddParameter(":points", obj.Points);
@@ -160,9 +154,9 @@ namespace StudyBuddy.Persistence
                 ":owner_id,:created,:prove,:series_parent_id,:valid_for_study_program_id,:valid_for_for_enrolled_since_term_id) RETURNING id");
         }
 
-        [MethodImpl(MethodImplOptions.Synchronized)]
         public void Update(Challenge obj)
         {
+            var qh = new QueryHelper<Challenge>(connection_string, FromReader);
             qh.AddParameter(":id", obj.ID);
             qh.AddParameter(":name", obj.Name);
             qh.AddParameter(":description", string.IsNullOrEmpty(obj.Description) ? DBNull.Value : obj.Description);
@@ -184,7 +178,6 @@ namespace StudyBuddy.Persistence
                 "valid_for_for_enrolled_since_term_id=:valid_for_for_enrolled_since_term_id where id=:id");
         }
 
-        [MethodImpl(MethodImplOptions.Synchronized)]
         public void Save(Challenge obj)
         {
             if (obj.ID == 0)
@@ -193,15 +186,15 @@ namespace StudyBuddy.Persistence
                 Update(obj);
         }
 
-        [MethodImpl(MethodImplOptions.Synchronized)]
         public void Delete(int id)
         {
+            var qh = new QueryHelper<Challenge>(connection_string, FromReader);
             qh.Delete("challenges", "id", id);
         }
 
-        [MethodImpl(MethodImplOptions.Synchronized)]
         public IEnumerable<Challenge> OfBadge(int badge_id)
         {
+            var qh = new QueryHelper<Challenge>(connection_string, FromReader);
             qh.AddParameter(":badge_id", badge_id);
             return qh.ExecuteQueryToObjectList(
                 "select id,name,description,points,validity_start," +
@@ -212,9 +205,9 @@ namespace StudyBuddy.Persistence
                 "order by created desc");
         }
 
-        [MethodImpl(MethodImplOptions.Synchronized)]
         public IEnumerable<Challenge> NotOfBadge(int badge_id)
         {
+            var qh = new QueryHelper<Challenge>(connection_string, FromReader);
             qh.AddParameter(":badge_id", badge_id);
             return qh.ExecuteQueryToObjectList(
                 "select id,name,description,points,validity_start," +
@@ -226,13 +219,11 @@ namespace StudyBuddy.Persistence
         }
 
         // ToDo: Eine der wichtigsten Methoden! Herausfinden, welche Challenge für den übergebenenen Benutzer sichtbar ist
-        [MethodImpl(MethodImplOptions.Synchronized)]
         public IEnumerable<Challenge> VisibleForUser(int user_id)
         {
             return new List<Challenge>();
         }
 
-        [MethodImpl(MethodImplOptions.Synchronized)]
         public void CreateSeries(int challenge_id, int days_add, int count)
         {
             var parent = ById(challenge_id);

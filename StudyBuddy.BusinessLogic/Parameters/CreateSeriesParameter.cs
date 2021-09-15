@@ -1,4 +1,4 @@
-﻿namespace StudyBuddy.Api
+﻿namespace StudyBuddy.BusinessLogic
 {
     public class CreateSeriesParameter
     {

@@ -1,17 +1,17 @@
-﻿using System.Linq;
-using StudyBuddy.Model;
+﻿using StudyBuddy.Model;
 using Microsoft.AspNetCore.Mvc;
 using StudyBuddy.Persistence;
+using StudyBuddy.BusinessLogic;
 
 namespace StudyBuddy.Api
 {
     public class UserController : Controller
     {
-        private IRepository repository;
+        private UserService service;
 
         public UserController(IRepository repository)
         {
-            this.repository = repository;
+            this.service = new UserService(repository);
         }
 
         [Route("/User/")]
@@ -19,8 +19,7 @@ namespace StudyBuddy.Api
         [IsAdmin]
         public IActionResult Get()
         {
-            var objects = repository.Users.All();
-            return Json(objects);
+            return Json(service.All());
         }
 
         [Route("/User/Count")]
@@ -28,54 +27,41 @@ namespace StudyBuddy.Api
         [IsAdmin]
         public IActionResult GetCount()
         {
-            return Json(repository.Users.Count());
+            return Json(service.GetCount());
         }
 
         [Route("/User/{id}")]
         [HttpGet]
+        [IsLoggedIn]
         public IActionResult GetById(int id)
         {
-            var user = HttpContext.Items["user"] as User;
-            if (user == null || (!user.IsAdmin && user.ID != id))
-                return Json(new { Error = "Unauthorized" });
-
-            var obj = repository.Users.ById(id);
-            return Json(obj);
+            var current_user = HttpContext.Items["user"] as User;
+            return Json(service.GetById(current_user, id));
         }
 
         [Route("/User/{id}")]
         [HttpPut]
+        [IsLoggedIn]
         public IActionResult Update([FromBody] User obj)
         {
-            var user = HttpContext.Items["user"] as User;
-            if (user == null || (!user.IsAdmin && user.ID != obj.ID))
-                return Json(new { Error = "Unauthorized" });
-
-            repository.Users.Update(obj);
-            return Json(obj);
+            var current_user = HttpContext.Items["user"] as User;
+            return Json(service.Update(current_user, obj));
         }
 
         [Route("/User/")]
         [HttpPost]
         public IActionResult Insert([FromBody] User obj)
         {
-            repository.Users.Insert(obj);
-            return Json(obj);
+            return Json(service.Insert(obj));
         }
 
         [Route("/User/{id}")]
         [HttpDelete]
+        [IsLoggedIn]
         public IActionResult Delete(int id)
         {
             var user = HttpContext.Items["user"] as User;
-            if (user == null || (!user.IsAdmin && user.ID != id))
-                return Json(new { Error = "Unauthorized" });
-
-            var teams = repository.Teams.TeamsInWhichUserIsMember(id);
-            if (teams.Any())
-                return Json(new { Error = "User is member of teams!" });
-
-            repository.Users.Delete(id);
+            service.Delete(user, id);
             return Json(new { Status = "ok" });
         }
 
@@ -83,22 +69,62 @@ namespace StudyBuddy.Api
         [HttpGet]
         public IActionResult UserIdByNickname(string nickname)
         {
-            var obj = repository.Users.ByNickname(nickname);
-            if (obj == null)
-                return Json(new { Error = "User not found!" });
-            else
-                return Json(new { Id = obj.ID });
+            return Json(new { Id = service.UserIdByNickname(nickname) });
         }
 
         [Route("/User/UserIdByEmail/{email}")]
         [HttpGet]
         public IActionResult UserIdByEmail(string email)
         {
-            var obj = repository.Users.ByEmail(email);
-            if (obj == null)
-                return Json(new { Error = "User not found!" });
-            else
-                return Json(new { Id = obj.ID });
+            return Json(new { Id = service.UserIdByEmail(email) });
+        }
+
+        [Route("/User/Friends/{id}")]
+        [HttpGet]
+        [IsLoggedIn]
+        public IActionResult AllFriends(int id)
+        {
+            var current_user = HttpContext.Items["user"] as User;
+            return Json(service.AllFriends(current_user, id));
+        }
+
+        [Route("/User/Friend/")]
+        [HttpPost]
+        [IsAdmin]
+        public IActionResult AddFriend([FromBody] SingleFriendParameter parameter)
+        {
+            service.AddFriend(parameter);
+            return Json(new { Status = "ok" });
+        }
+
+        [Route("/User/Friend/")]
+        [HttpDelete]
+        [IsLoggedIn]
+        public IActionResult RemoveFriend([FromBody] SingleFriendParameter parameter)
+        {
+            var current_user = HttpContext.Items["user"] as User;
+            service.RemoveFriend(current_user, parameter);
+            return Json(new { Status = "ok" });
+        }
+
+        [Route("/User/Friend/{id}")]
+        [HttpDelete]
+        [IsLoggedIn]
+        public IActionResult RemoveFriends(int id)
+        {
+            var current_user = HttpContext.Items["user"] as User;
+            service.RemoveFriends(current_user, id);
+            return Json(new { Status = "ok" });
+        }
+
+        [Route("/User/Friends/")]
+        [HttpPost]
+        [IsAdmin]
+        public IActionResult SetFriends([FromBody] MultipleFriendsParameter parameter)
+        {
+            var current_user = HttpContext.Items["user"] as User;
+            service.SetFriends(current_user, parameter);
+            return Json(new { Status = "ok" });
         }
     }
 }

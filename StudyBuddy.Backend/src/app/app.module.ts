@@ -15,13 +15,9 @@ import { TermListComponent } from './term/term-list/term-list/term-list.componen
 import { TermService } from './services/term.service';
 import { RegisterUserComponent } from './user/register-user/register-user.component';
 import { UserService } from './services/user.service';
-import { environment } from 'src/environments/environment';
 import { UserListComponent } from './user/user-list/user-list.component';
 import { UserEditComponent } from './user/user-edit/user-edit.component';
 import { RegisterUserSuccessComponent } from './user/register-user-success/register-user-success.component';
-import { TeamListComponent } from './team/team-list/team-list.component';
-import { TeamEditComponent } from './team/team-edit/team-edit.component';
-import { TeamService } from './services/team.service';
 import { UserSelectComponent } from './user/user-select/user-select.component';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { InfoComponent } from './misc/info/info.component';
@@ -38,10 +34,16 @@ import { GameBadgeEditComponent } from './gamebadge/game-badge-edit/game-badge-e
 import { GameBadgeService } from './services/gamebadge.service';
 import { ChallengeSelectComponent } from './challenge/challenge-select/challenge-select.component';
 import { UserSettingsComponent } from './user/user-settings/user-settings.component';
+import { RequestService } from './services/request.service';
+import { RequestTypePipe } from './services/requesttype.pipe';
+import { RequestEditComponent } from './request/request-edit/request-edit.component';
+import { RequestListComponent } from './request/request-list/request-list.component';
 
 @NgModule({
   declarations: [
     AppComponent,
+    CategoryPipe,
+    RequestTypePipe,
     LoginComponent,
     LogoutComponent,
     PageNotFoundComponent,
@@ -53,20 +55,19 @@ import { UserSettingsComponent } from './user/user-settings/user-settings.compon
     UserListComponent,
     UserEditComponent,
     RegisterUserSuccessComponent,
-    TeamListComponent,
-    TeamEditComponent,
     UserSelectComponent,
     InfoComponent,
     ImprintComponent,
     PrivacyComponent,
     ChallengeListComponent,
     ChallengeEditComponent,
-    CategoryPipe,
     CreateSeriesComponent,
     GameBadgeListComponent,
     GameBadgeEditComponent,
     ChallengeSelectComponent,
     UserSettingsComponent,
+    RequestEditComponent,
+    RequestListComponent,
   ],
   imports: [
     BrowserModule,
@@ -80,9 +81,9 @@ import { UserSettingsComponent } from './user/user-settings/user-settings.compon
     StudyProgramService,
     TermService,
     UserService,
-    TeamService,
     ChallengeService,
-    GameBadgeService
+    GameBadgeService,
+    RequestService
   ],
   bootstrap: [AppComponent]
 })

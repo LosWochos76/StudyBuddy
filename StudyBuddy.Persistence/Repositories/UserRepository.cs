@@ -3,27 +3,25 @@ using SimpleHashing.Net;
 using StudyBuddy.Model;
 using System;
 using System.Collections.Generic;
-using System.Runtime.CompilerServices;
 
 namespace StudyBuddy.Persistence
 {
     class UserRepository : IUserRepository
     {
         private string connection_string;
-        private QueryHelper<User> qh;
         private SimpleHash simpleHash = new SimpleHash();
 
         public UserRepository(string connection_string)
         {
             this.connection_string = connection_string;
-            this.qh = new QueryHelper<User>(connection_string, FromReader);
 
             CreateTable();
         }
 
-        [MethodImpl(MethodImplOptions.Synchronized)]
         private void CreateTable() 
         {
+            var qh = new QueryHelper<User>(connection_string);
+
             if (!qh.TableExists("users"))
             {
                 qh.ExecuteNonQuery(
@@ -48,6 +46,20 @@ namespace StudyBuddy.Persistence
                     Role = Role.Admin
                 });
             }
+
+            if (!qh.TableExists("friends"))
+            {
+                qh.ExecuteNonQuery(
+                    "create table friends (" +
+                    "user_a int not null, " +
+                    "user_b int not null)");
+            }
+
+            if (qh.TableExists("teams"))
+                qh.ExecuteNonQuery("drop table teams");
+
+            if (qh.TableExists("team_members"))
+                qh.ExecuteNonQuery("drop table team_members");
         }
 
         private User FromReader(NpgsqlDataReader reader)
@@ -65,31 +77,28 @@ namespace StudyBuddy.Persistence
             return obj;
         }
 
-        [MethodImpl(MethodImplOptions.Synchronized)]
         public User ById(int id)
         {
-            qh.AddParameter(":id", id);
+            var qh = new QueryHelper<User>(connection_string, FromReader, new { id });
             return qh.ExecuteQueryToSingleObject(
                 "SELECT id,firstname,lastname,nickname," +
                 "email,password_hash,role,program_id,enrolled_in_term_id FROM users where id=:id");
         }
 
-        [MethodImpl(MethodImplOptions.Synchronized)]
         public IEnumerable<User> All(int from = 0, int max = 1000)
         {
-            qh.AddParameters(new { from, max });
+            var qh = new QueryHelper<User>(connection_string, FromReader, new { from, max });
             return qh.ExecuteQueryToObjectList(
                 "SELECT id,firstname,lastname,nickname,email,password_hash,role," +
                 "program_id,enrolled_in_term_id FROM users order by lastname,firstname,nickname limit :max offset :from");
         }
 
-        [MethodImpl(MethodImplOptions.Synchronized)]
         public int Count()
         {
+            var qh = new QueryHelper<User>(connection_string);
             return qh.GetCount("users");
         }
 
-        [MethodImpl(MethodImplOptions.Synchronized)]
         public User ByEmailAndPassword(string email, string password)
         {
             var user = ByEmail(email);
@@ -99,18 +108,17 @@ namespace StudyBuddy.Persistence
                 return null;
         }
 
-        [MethodImpl(MethodImplOptions.Synchronized)]
         public User ByEmail(string email)
         {
-            qh.AddParameter(":email", email);
+            var qh = new QueryHelper<User>(connection_string, FromReader, new { email });
             return qh.ExecuteQueryToSingleObject(
                 "SELECT id,firstname,lastname,nickname," +
                 "email,password_hash,role,program_id,enrolled_in_term_id FROM users where lower(email)=lower(:email)");
         }
 
-        [MethodImpl(MethodImplOptions.Synchronized)]
         public void Insert(User obj)
         {
+            var qh = new QueryHelper<User>(connection_string, FromReader);
             qh.AddParameter(":firstname", obj.Firstname);
             qh.AddParameter(":lastname", obj.Lastname);
             qh.AddParameter(":nickname", obj.Nickname.ToLower());
@@ -126,9 +134,10 @@ namespace StudyBuddy.Persistence
                 "(:firstname,:lastname,:nickname,:email,:password_hash,:role,:program_id,:enrolled_in_term_id) RETURNING id");
         }
 
-        [MethodImpl(MethodImplOptions.Synchronized)]
         public void Update(User obj)
         {
+            var qh = new QueryHelper<User>(connection_string, FromReader);
+
             string sql = "update users set firstname=:firstname,lastname=:lastname,"+
                 "nickname=:nickname,email=:email";
                 
@@ -153,7 +162,6 @@ namespace StudyBuddy.Persistence
             qh.ExecuteNonQuery(sql);
         }
 
-        [MethodImpl(MethodImplOptions.Synchronized)]
         public void Save(User obj)
         {
             if (obj.ID == 0)
@@ -162,15 +170,15 @@ namespace StudyBuddy.Persistence
                 Update(obj);
         }
 
-        [MethodImpl(MethodImplOptions.Synchronized)]
         public void Delete(int id)
         {
+            var qh = new QueryHelper<User>(connection_string);
             qh.Delete("users", "id", id);
         }
 
-        [MethodImpl(MethodImplOptions.Synchronized)]
         public User ByNickname(string nickname)
         {
+            var qh = new QueryHelper<User>(connection_string, FromReader);
             qh.AddParameter(":nickname", nickname);
             return qh.ExecuteQueryToSingleObject(
                 "SELECT id,firstname,lastname,nickname," +
@@ -178,22 +186,41 @@ namespace StudyBuddy.Persistence
                 "users where lower(nickname)=lower(:nickname)");
         }
 
-        [MethodImpl(MethodImplOptions.Synchronized)]
-        public IEnumerable<User> MembersOfTeam(int team_id)
+        public IEnumerable<User> GetFriends(int user_id, int from = 0, int max = 1000)
         {
-            qh.AddParameter(":team_id", team_id);
+            var qh = new QueryHelper<User>(connection_string, FromReader, new { user_id, from, max });
             return qh.ExecuteQueryToObjectList(
-                "select id,firstname,lastname,nickname,email,password_hash,role,program_id,enrolled_in_term_id from team_members " +
-                "inner join users on users.id=member_id where team_id=:team_id order by lastname,firstname,nickname");
+                "select id,firstname,lastname,nickname,email,password_hash,role," +
+                "program_id,enrolled_in_term_id from friends " +
+                "inner join users on user_b = id where user_a=:user_id " +
+                "order by lastname,firstname,nickname limit :max offset :from");
         }
 
-        [MethodImpl(MethodImplOptions.Synchronized)]
-        public IEnumerable<User> NotMembersOfTeam(int team_id)
+        public void AddFriend(int user_id, int friend_id)
         {
-            qh.AddParameter(":team_id", team_id);
-            return qh.ExecuteQueryToObjectList(
-                "select id,firstname,lastname,nickname,email,password_hash,role,program_id,enrolled_in_term_id " +
-                "from users where id not in (select member_id from team_members where team_id=:team_id)");
+            var qh = new QueryHelper<User>(connection_string, FromReader, new { user_id, friend_id });
+            qh.ExecuteNonQuery("insert into friends (user_a, user_b) values(:user_id, :friend_id), (:friend_id, :user_id);");
+        }
+
+        public void RemoveFriend(int user_id, int friend_id)
+        {
+            var qh = new QueryHelper<User>(connection_string, FromReader, new { user_id, friend_id });
+            qh.ExecuteNonQuery(
+                "delete from friends where " +
+                "(user_a=:user_id and user_b=:friend_id) or " +
+                "(user_a=:friend_id and user_b=:user_id);");
+        }
+
+        public void RemoveFriends(int user_id)
+        {
+            var qh = new QueryHelper<User>(connection_string, FromReader, new { user_id });
+            qh.ExecuteNonQuery("delete from friends where user_a=:user_id or user_b=:user_id;");
+        }
+
+        public void AddFriends(int user_id, int[] friend_ids)
+        {
+            foreach (int friend_id in friend_ids)
+                AddFriend(user_id, friend_id);
         }
     }
 }

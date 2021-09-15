@@ -1,18 +1,17 @@
-
-using System.Linq;
 using StudyBuddy.Model;
 using Microsoft.AspNetCore.Mvc;
 using StudyBuddy.Persistence;
+using StudyBuddy.BusinessLogic;
 
 namespace StudyBuddy.Api
 {
     public class ChallengeController : Controller
     {
-        private IRepository repository;
+        private ChallengeService service;
 
         public ChallengeController(IRepository repository)
         {
-            this.repository = repository;
+            this.service = new ChallengeService(repository);
         }
 
         [Route("/Challenge/")]
@@ -20,12 +19,8 @@ namespace StudyBuddy.Api
         [IsLoggedIn]
         public IActionResult Get()
         {
-            var user = HttpContext.Items["user"] as User;
-
-            if (user.IsAdmin)
-                return Json(repository.Challenges.All());
-            else
-                return Json(repository.Challenges.OfOwner(user.ID));
+            var current_user = HttpContext.Items["user"] as User;
+            return Json(service.All(current_user));
         }
 
         [Route("/Challenge/{id}")]
@@ -33,7 +28,7 @@ namespace StudyBuddy.Api
         [IsLoggedIn]
         public IActionResult GetById(int id)
         {
-            return Json(repository.Challenges.ById(id));
+            return Json(service.GetById(id));
         }
 
         [Route("/Challenge/ByText/{text}")]
@@ -41,12 +36,8 @@ namespace StudyBuddy.Api
         [IsLoggedIn]
         public IActionResult GetByText(string text)
         {
-            var user = HttpContext.Items["user"] as User;
-
-            if (user.IsAdmin)
-                return Json(repository.Challenges.ByText(text));
-            else
-                return Json(repository.Challenges.OfOwnerByText(user.ID, text));
+            var current_user = HttpContext.Items["user"] as User;
+            return Json(service.GetByText(current_user, text));
         }
 
         [Route("/Challenge/{id}")]
@@ -54,15 +45,8 @@ namespace StudyBuddy.Api
         [IsLoggedIn]
         public IActionResult Update([FromBody] Challenge obj)
         {
-            if (obj == null)
-                return Json(new { Error = "Object invalid!" });
-
-            var user = HttpContext.Items["user"] as User;
-            if (!user.IsAdmin && obj.OwnerID != user.ID)
-                return Json(new { Error = "Unauthorized" });
-
-            repository.Challenges.Update(obj);
-            return Json(obj);
+            var current_user = HttpContext.Items["user"] as User;
+            return Json(service.Update(current_user, obj));
         }
 
         [Route("/Challenge/OfBadge/{id}")]
@@ -70,8 +54,7 @@ namespace StudyBuddy.Api
         [IsLoggedIn]
         public IActionResult OfBadge(int id)
         {
-            var result = repository.Challenges.OfBadge(id);
-            return Json(result);
+            return Json(service.OfBadge(id));
         }
 
         [Route("/Challenge/NotOfBadge/{id}")]
@@ -79,8 +62,7 @@ namespace StudyBuddy.Api
         [IsLoggedIn]
         public IActionResult NotOfBadge(int id)
         {
-            var result = repository.Challenges.NotOfBadge(id);
-            return Json(result);
+            return Json(service.NotOfBadge(id));
         }
 
         [Route("/Challenge/")]
@@ -88,8 +70,7 @@ namespace StudyBuddy.Api
         [IsLoggedIn]
         public IActionResult Insert([FromBody] Challenge obj)
         {
-            repository.Challenges.Insert(obj);
-            return Json(obj);
+            return Json(service.Insert(obj));
         }
 
         [Route("/Challenge/{id}")]
@@ -97,12 +78,8 @@ namespace StudyBuddy.Api
         [IsLoggedIn]
         public IActionResult Delete(int id)
         {
-            var obj = repository.Challenges.ById(id);
-            var user = HttpContext.Items["user"] as User;
-            if (!user.IsAdmin && obj != null && obj.OwnerID != user.ID)
-                return Json(new { Error = "Unauthorized" });
-
-            repository.Challenges.Delete(id);
+            var current_user = HttpContext.Items["user"] as User;
+            service.Delete(current_user, id);
             return Json(new { Status = "ok" });
         }
 
@@ -111,12 +88,8 @@ namespace StudyBuddy.Api
         [IsLoggedIn]
         public IActionResult CreateSeries([FromBody] CreateSeriesParameter param)
         {
-            var obj = repository.Challenges.ById(param.ChallengeId);
-            var user = HttpContext.Items["user"] as User;
-            if (!user.IsAdmin && obj != null && obj.OwnerID != user.ID)
-                return Json(new { Error = "Unauthorized" });
-
-            repository.Challenges.CreateSeries(param.ChallengeId, param.DaysAdd, param.Count);
+            var current_user = HttpContext.Items["user"] as User;
+            service.CreateSeries(current_user, param);
             return Json(new { Status = "ok" });
         }
     }
