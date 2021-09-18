@@ -8,7 +8,6 @@ namespace StudyBuddy.Api
 {
     public class GameBadgeController : Controller
     {
-        private IRepository repository;
         private GameBadgeService service;
 
         public GameBadgeController(IRepository repository)

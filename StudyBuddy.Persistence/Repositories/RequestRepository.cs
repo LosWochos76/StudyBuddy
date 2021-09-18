@@ -32,6 +32,8 @@ namespace StudyBuddy.Persistence
                     "recipient_id int not null, " +
                     "type int not null, " +
                     "challenge_id int)");
+
+                    qh.SetRevision("requests", 2);
             }
 
             int revision = qh.GetRevision("requests");

@@ -22,7 +22,7 @@ namespace StudyBuddy.BusinessLogic
         {
             AuthenticationAuthorization.CheckLogin(current_user);
 
-            if (string.IsNullOrEmpty(uc.EMail) || string.IsNullOrEmpty(uc.Password))
+            if (uc == null || string.IsNullOrEmpty(uc.EMail) || string.IsNullOrEmpty(uc.Password))
                 throw new Exception("Provide email and password!");
 
             var user = repository.Users.ByEmailAndPassword(uc.EMail, uc.Password);
