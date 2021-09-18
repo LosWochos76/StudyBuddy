@@ -13,9 +13,15 @@
     <None Remove="System.IdentityModel.Tokens.Jwt" />
     <None Remove="MailKit" />
     <None Remove="NETCore.MailKit" />
+    <None Remove="Services\" />
+    <None Remove="Misc\" />
+    <None Remove="Authorization\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Parameters\" />
+    <Folder Include="Services\" />
+    <Folder Include="Misc\" />
+    <Folder Include="Authorization\" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.12.2" />

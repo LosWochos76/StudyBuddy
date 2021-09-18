@@ -10,8 +10,8 @@ namespace StudyBuddy.Api
             var result = new ObjectResult(new
             {
                 code = 500,
-                message = "An error occured!",
-                detailedMessage = context.Exception.Message
+                error = context.Exception.Message,
+                source = context.Exception.Source
             });
 
             result.StatusCode = 500;
