@@ -13,7 +13,11 @@ export class AuthorizationService {
   changed:EventEmitter<boolean> = new EventEmitter<boolean>();
 
   constructor(
-    private http:HttpClient) { }
+    private http:HttpClient) {
+
+
+
+  }
 
   async login(email:string, password:string):Promise<boolean> {
     const response = await this.http.post(this.url + 'Login', {
@@ -25,6 +29,7 @@ export class AuthorizationService {
       return false;
 
     let user = User.fromApi(response['user']);
+
     if (!user.isStudent()) {
       this.user = user;
       this.token = response['token'];
