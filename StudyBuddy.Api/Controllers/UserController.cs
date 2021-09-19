@@ -1,13 +1,13 @@
-﻿using StudyBuddy.Model;
-using Microsoft.AspNetCore.Mvc;
-using StudyBuddy.Persistence;
+﻿using Microsoft.AspNetCore.Mvc;
 using StudyBuddy.BusinessLogic;
+using StudyBuddy.Model;
+using StudyBuddy.Persistence;
 
 namespace StudyBuddy.Api
 {
     public class UserController : Controller
     {
-        private IRepository repository;
+        private readonly IRepository repository;
 
         public UserController(IRepository repository)
         {
@@ -60,7 +60,7 @@ namespace StudyBuddy.Api
         {
             var service = new UserService(repository, HttpContext.Items["user"] as User);
             service.Delete(id);
-            return Json(new { Status = "ok" });
+            return Json(new {Status = "ok"});
         }
 
         [Route("/User/UserIdByNickname/{nickname}")]
@@ -68,7 +68,7 @@ namespace StudyBuddy.Api
         public IActionResult GetUserIdByNickname(string nickname)
         {
             var service = new UserService(repository, HttpContext.Items["user"] as User);
-            return Json(new { Id = service.GetUserIdByNickname(nickname) });
+            return Json(new {Id = service.GetUserIdByNickname(nickname)});
         }
 
         [Route("/User/UserIdByEmail/{email}")]
@@ -76,7 +76,7 @@ namespace StudyBuddy.Api
         public IActionResult GetUserIdByEmail(string email)
         {
             var service = new UserService(repository, HttpContext.Items["user"] as User);
-            return Json(new { Id = service.GetUserIdByEmail(email) });
+            return Json(new {Id = service.GetUserIdByEmail(email)});
         }
 
         [Route("/User/Friends/{id}")]
@@ -93,7 +93,7 @@ namespace StudyBuddy.Api
         {
             var service = new UserService(repository, HttpContext.Items["user"] as User);
             service.AddFriend(parameter);
-            return Json(new { Status = "ok" });
+            return Json(new {Status = "ok"});
         }
 
         [Route("/User/Friend/")]
@@ -102,7 +102,7 @@ namespace StudyBuddy.Api
         {
             var service = new UserService(repository, HttpContext.Items["user"] as User);
             service.RemoveFriend(parameter);
-            return Json(new { Status = "ok" });
+            return Json(new {Status = "ok"});
         }
 
         [Route("/User/Friend/{id}")]
@@ -111,7 +111,7 @@ namespace StudyBuddy.Api
         {
             var service = new UserService(repository, HttpContext.Items["user"] as User);
             service.RemoveFriends(id);
-            return Json(new { Status = "ok" });
+            return Json(new {Status = "ok"});
         }
 
         [Route("/User/Friends/")]
@@ -120,7 +120,7 @@ namespace StudyBuddy.Api
         {
             var service = new UserService(repository, HttpContext.Items["user"] as User);
             service.SetFriends(parameter);
-            return Json(new { Status = "ok" });
+            return Json(new {Status = "ok"});
         }
 
         [Route("/User/ThatAcceptedChallenge/{challenge_id}")]

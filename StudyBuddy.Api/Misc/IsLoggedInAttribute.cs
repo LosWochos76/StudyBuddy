@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 
 namespace StudyBuddy.Api
@@ -9,9 +8,7 @@ namespace StudyBuddy.Api
         public override void OnActionExecuting(ActionExecutingContext context)
         {
             if (context.HttpContext.Items["user"] == null)
-            {
-                context.Result = new JsonResult(new { Error = "Unauthorized" });
-            }
+                context.Result = new JsonResult(new {Error = "Unauthorized"});
         }
     }
 }

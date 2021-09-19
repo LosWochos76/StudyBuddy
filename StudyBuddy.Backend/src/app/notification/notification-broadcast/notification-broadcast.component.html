@@ -1,0 +1,14 @@
+<form [formGroup]="form">
+    <p class="text-justify mt-2">Sendet eine Nachricht an alle Bentzer.</p>
+
+    <div class="mb-1">
+        <label  class="form-label">Tile</label>
+        <input formControlName="title" type="text" class="form-control">
+    </div>
+    <div class="mb-1">
+        <label  class="form-label">Body</label>
+        <textarea formControlName="body" class="form-control"></textarea>
+    </div>
+
+    <button (click)="handleSubmit()" type="submit" [disabled]="form.invalid" class="btn btn-primary mt-1">Senden</button>
+</form>

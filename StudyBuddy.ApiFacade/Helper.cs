@@ -1,5 +1,5 @@
-﻿using System;
-using System.Net.Http;
+﻿using System.Net.Http;
+using System.Net.Security;
 
 namespace StudyBuddy.ApiFacade
 {
@@ -13,7 +13,7 @@ namespace StudyBuddy.ApiFacade
                 if (cert.Issuer.Equals("CN=localhost"))
                     return true;
 
-                return errors == System.Net.Security.SslPolicyErrors.None;
+                return errors == SslPolicyErrors.None;
             };
 
             return handler;

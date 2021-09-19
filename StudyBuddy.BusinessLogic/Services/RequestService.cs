@@ -7,7 +7,7 @@ namespace StudyBuddy.BusinessLogic
 {
     public class RequestService
     {
-        private IRepository repository;
+        private readonly IRepository repository;
 
         public RequestService(IRepository repository)
         {
@@ -58,10 +58,7 @@ namespace StudyBuddy.BusinessLogic
             if (!current_user.IsAdmin && current_user.ID != obj.RecipientID)
                 throw new Exception("Unauthorized!");
 
-            if (obj.Type == RequestType.Friendship)
-            {
-                repository.Users.AddFriend(obj.SenderID, obj.RecipientID);
-            }
+            if (obj.Type == RequestType.Friendship) repository.Users.AddFriend(obj.SenderID, obj.RecipientID);
 
             if (obj.Type == RequestType.ChallengeAcceptance)
             {

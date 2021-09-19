@@ -1,5 +1,4 @@
-﻿using System;
-using StudyBuddy.Persistence;
+﻿using StudyBuddy.Persistence;
 
 namespace StudyBuddy.BusinessLogic
 {

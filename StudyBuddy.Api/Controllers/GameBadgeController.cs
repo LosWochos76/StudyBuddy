@@ -1,18 +1,17 @@
-using System.Linq;
-using StudyBuddy.Model;
 using Microsoft.AspNetCore.Mvc;
-using StudyBuddy.Persistence;
 using StudyBuddy.BusinessLogic;
+using StudyBuddy.Model;
+using StudyBuddy.Persistence;
 
 namespace StudyBuddy.Api
 {
     public class GameBadgeController : Controller
     {
-        private GameBadgeService service;
+        private readonly GameBadgeService service;
 
         public GameBadgeController(IRepository repository)
         {
-            this.service = new GameBadgeService(repository);
+            service = new GameBadgeService(repository);
         }
 
         [Route("/GameBadge/")]
@@ -56,7 +55,7 @@ namespace StudyBuddy.Api
         {
             var current_user = HttpContext.Items["user"] as User;
             service.Delete(current_user, id);
-            return Json(new { Status = "ok" });
+            return Json(new {Status = "ok"});
         }
 
         [Route("/GameBadge/Challenges/")]
@@ -65,7 +64,7 @@ namespace StudyBuddy.Api
         public IActionResult SetChallenges([FromBody] GameBadgeChallenge[] challenges)
         {
             service.SetChallenges(challenges);
-            return Json(new { Status = "ok" });
+            return Json(new {Status = "ok"});
         }
     }
 }

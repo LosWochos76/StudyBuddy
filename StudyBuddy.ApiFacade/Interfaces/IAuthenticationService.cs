@@ -9,18 +9,18 @@ namespace StudyBuddy.ApiFacade
 
     public class LoginStateChangedArgs : EventArgs
     {
-        public bool IsLoggedIn { get; private set; }
-        public bool IsLoggedOut { get; private set; }
-        public User User { get; private set; }
-        public string Token { get; set; }
-
         public LoginStateChangedArgs(bool is_logged_in, User user, string token)
         {
-            this.IsLoggedIn = is_logged_in;
-            this.IsLoggedOut = !is_logged_in;
-            this.User = user;
-            this.Token = token;
+            IsLoggedIn = is_logged_in;
+            IsLoggedOut = !is_logged_in;
+            User = user;
+            Token = token;
         }
+
+        public bool IsLoggedIn { get; }
+        public bool IsLoggedOut { get; }
+        public User User { get; }
+        public string Token { get; set; }
     }
 
     public interface IAuthenticationService
