@@ -1,5 +1,4 @@
 using FirebaseAdmin.Messaging;
-using StudyBuddy.Model;
 using StudyBuddy.Persistence;
 
 namespace StudyBuddy.BusinessLogic
@@ -7,13 +6,12 @@ namespace StudyBuddy.BusinessLogic
     public class PushNotificationService
     {
         private readonly IRepository repository;
-        private readonly User current_user;
 
-        public PushNotificationService(IRepository repository, User current_user)
+        public PushNotificationService(IRepository repository)
         {
             this.repository = repository;
-            this.current_user = current_user;
         }
+
 
         public void BroadcastMessage(string title, string body)
         {

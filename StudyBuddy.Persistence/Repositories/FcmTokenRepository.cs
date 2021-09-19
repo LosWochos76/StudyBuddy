@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Runtime.Remoting;
 using Npgsql;
 using StudyBuddy.Model;
 
@@ -52,19 +53,22 @@ namespace StudyBuddy.Persistence
                 qh.ExecuteNonQuery(
                     "create table fcm_tokens (" +
                     "id serial primary key, " +
-                    "token varchar(100) not null, " +
+                    "token text not null, " +
                     "user_id int not null, " +
                     "created date not null, " +
-                    "last_seen date null )");
+                    "last_seen date not null )");
         }
 
         public void Insert(FcmToken obj)
         {
             var qh = new QueryHelper<FcmToken>(connection_string, FromReader);
+            qh.AddParameter(":user_id", obj.UserID);
             qh.AddParameter(":token", obj.Token);
             qh.AddParameter(":created", obj.Created);
+            qh.AddParameter(":last_seen", obj.LastSeen);
+
             obj.ID = qh.ExecuteScalar(
-                "insert into fcm_tokens (token,created) values (:token,:created) RETURNING id");
+                "insert into fcm_tokens (user_id,token,created,last_seen) values (:user_id,:token,:created,:last_seen) RETURNING id");
         }
 
         public void Update(FcmToken obj)

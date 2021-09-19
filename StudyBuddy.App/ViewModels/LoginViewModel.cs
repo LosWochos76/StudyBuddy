@@ -45,7 +45,10 @@ namespace StudyBuddy.App.ViewModels
             var result = await api.Authentication.Login(uc);
 
             if (result)
+            {
                 await navigation.GoTo("//ChallengesPage");
+            }
+   
             else
                 await dialog.ShowMessageBox("Achtung!", "Anmdeldung nicht erfolgreich! Zugangsdaten korrekt?");
         }

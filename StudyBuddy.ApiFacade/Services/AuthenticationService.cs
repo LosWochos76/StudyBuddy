@@ -37,8 +37,9 @@ namespace StudyBuddy.ApiFacade
                 var content = await response.Content.ReadAsStringAsync();
                 return await LoginFromJson(content);
             }
-            catch (Exception)
+            catch (Exception exp)
             {
+                var test = exp;
                 return false;
             }
         }
