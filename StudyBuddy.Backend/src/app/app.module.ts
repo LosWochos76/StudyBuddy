@@ -38,6 +38,8 @@ import { RequestService } from './services/request.service';
 import { RequestTypePipe } from './services/requesttype.pipe';
 import { RequestEditComponent } from './request/request-edit/request-edit.component';
 import { RequestListComponent } from './request/request-list/request-list.component';
+import { TagListComponent } from './tag/tag-list/tag-list.component';
+import { TagEditComponent } from './tag/tag-edit/tag-edit.component';
 
 @NgModule({
   declarations: [
@@ -68,6 +70,8 @@ import { RequestListComponent } from './request/request-list/request-list.compon
     UserSettingsComponent,
     RequestEditComponent,
     RequestListComponent,
+    TagListComponent,
+    TagEditComponent,
   ],
   imports: [
     BrowserModule,

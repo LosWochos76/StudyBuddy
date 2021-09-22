@@ -17,6 +17,8 @@ import { RequestListComponent } from './request/request-list/request-list.compon
 import { RouteGuardService } from './route-guard';
 import { StudyProgramEditComponent } from './studyprogram/study-program-edit/study-program-edit.component';
 import { StudyProgramListComponent } from './studyprogram/study-program-list/study-program-list.component';
+import { TagEditComponent } from './tag/tag-edit/tag-edit.component';
+import { TagListComponent } from './tag/tag-list/tag-list.component';
 import { TermEditComponent } from './term/term-edit/term-edit/term-edit.component';
 import { TermListComponent } from './term/term-list/term-list/term-list.component';
 import { RegisterUserSuccessComponent } from './user/register-user-success/register-user-success.component';
@@ -45,6 +47,8 @@ const routes: Routes = [
   { path: 'term/:id', component: TermEditComponent, canActivate: [RouteGuardService] },
   { path: 'request', component: RequestListComponent, canActivate: [RouteGuardService] },
   { path: 'request/:id', component: RequestEditComponent, canActivate: [RouteGuardService] },
+  { path: 'tag', component: TagListComponent, canActivate: [RouteGuardService] },
+  { path: 'tag/:id', component: TagEditComponent, canActivate: [RouteGuardService] },
   { path: 'login', component: LoginComponent },
   { path: 'logout', component: LogoutComponent },
   { path: '', redirectTo: 'info', pathMatch: 'full' },

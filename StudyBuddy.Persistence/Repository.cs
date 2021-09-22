@@ -11,6 +11,7 @@ namespace StudyBuddy.Persistence
         public IChallengeRepository Challenges { get; private set; }
         public IGameBadgeRepository GameBadges { get; private set; }
         public IRequestRepository Requests { get; private set; }
+        public ITagRepository Tags { get; private set; }
 
         public Repository()
         {
@@ -31,6 +32,7 @@ namespace StudyBuddy.Persistence
             this.Challenges = new ChallengeRepository(connection_string);
             this.GameBadges = new GameBadgeRepository(connection_string);
             this.Requests = new RequestRepository(connection_string);
+            this.Tags = new TagRepository(connection_string);
         }
     }
 }
