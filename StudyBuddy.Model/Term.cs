@@ -2,9 +2,8 @@ using System;
 
 namespace StudyBuddy.Model
 {
-    public class Term
+    public class Term : Entity
     {
-        public int ID { get; set; }
         public string ShortName { get; set; }
         public string Name { get; set; }
         public DateTime Start { get; set; }

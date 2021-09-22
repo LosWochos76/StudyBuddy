@@ -18,6 +18,7 @@ namespace StudyBuddy.Persistence
 
         private void CreateTeamTable()
         {
+            var rh = new RevisionHelper(connection_string, "terms");
             var qh = new QueryHelper<Term>(connection_string, FromReader);
 
             if (!qh.TableExists("terms"))

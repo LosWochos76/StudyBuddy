@@ -20,6 +20,7 @@ namespace StudyBuddy.Persistence
 
         private void CreateTable() 
         {
+            var rh = new RevisionHelper(connection_string, "study_programs");
             var qh = new QueryHelper<StudyProgram>(connection_string, FromReader);
 
             if (!qh.TableExists("study_programs"))

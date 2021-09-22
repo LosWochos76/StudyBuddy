@@ -74,11 +74,21 @@ namespace StudyBuddy.BusinessLogic
 
         public void CreateSeries(User current_user, CreateSeriesParameter param)
         {
-            var obj = repository.Challenges.ById(param.ChallengeId);
-            if (!current_user.IsAdmin && obj != null && obj.OwnerID != current_user.ID)
+            var parent = repository.Challenges.ById(param.ChallengeId);
+            if (parent == null)
+                throw new Exception("Object not found!");
+
+            if (!current_user.IsAdmin && parent != null && parent.OwnerID != current_user.ID)
                 throw new Exception("Unauthorized");
 
-            repository.Challenges.CreateSeries(param.ChallengeId, param.DaysAdd, param.Count);
+            for (int i = 0; i < param.Count; i++)
+            {
+                var clone = parent.Clone();
+                clone.SeriesParentID = parent.ID;
+                clone.ValidityStart = clone.ValidityStart.AddDays((i + 1) * param.DaysAdd);
+                clone.ValidityEnd = clone.ValidityEnd.AddDays((i + 1) * param.DaysAdd);
+                repository.Challenges.Insert(clone);
+            }
         }
     }
 }

@@ -2,9 +2,8 @@ using System;
 
 namespace StudyBuddy.Model
 {
-    public class Challenge
+    public class Challenge : Entity
     {
-        public int ID { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
         public int Points { get; set; } = 1;
@@ -15,8 +14,6 @@ namespace StudyBuddy.Model
         public DateTime Created { get; set; } = DateTime.Now.Date;
         public ChallengeProve Prove { get; set; } = ChallengeProve.ByTrust;
         public int? SeriesParentID { get; set; }
-        public int? ValidForStudyProgramID { get; set; }
-        public int? ValidForEnrolledSinceTermID { get; set; }
 
         public Challenge()
         {
@@ -44,8 +41,6 @@ namespace StudyBuddy.Model
             clone.Created = DateTime.Now.Date;
             clone.Prove = Prove;
             clone.SeriesParentID = SeriesParentID;
-            clone.ValidForStudyProgramID = ValidForStudyProgramID;
-            clone.ValidForEnrolledSinceTermID = ValidForEnrolledSinceTermID;
             return clone;
         }
     }

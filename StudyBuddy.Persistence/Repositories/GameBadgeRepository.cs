@@ -20,6 +20,7 @@ namespace StudyBuddy.Persistence
 
         private void CreateBadgesTable() 
         {
+            var rh = new RevisionHelper(connection_string, "badges");
             var qh = new QueryHelper<GameBadge>(connection_string, FromReader);
 
             if (!qh.TableExists("game_badges"))
@@ -31,16 +32,17 @@ namespace StudyBuddy.Persistence
                     "owner_id int not null, " +
                     "created date not null, " +
                     "required_coverage numeric(3,2) not null)");
+
+                rh.SetRevision(2);
             }
 
-            int revision = qh.GetRevision("game_badges");
-            if (revision == 1)
+            if (rh.GetRevision() == 1)
             {
                 qh.ExecuteNonQuery(
                     "ALTER TABLE game_badges " +
                     "ALTER COLUMN required_coverage TYPE numeric(3,2)");
 
-                qh.SetRevision("game_badges", 2);
+                rh.SetRevision(2);
             }
         }
 

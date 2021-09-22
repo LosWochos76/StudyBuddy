@@ -16,7 +16,5 @@ namespace StudyBuddy.Persistence
         void Delete(int id);
         IEnumerable<Challenge> OfBadge(int badge_id);
         IEnumerable<Challenge> NotOfBadge(int badge_id);
-        IEnumerable<Challenge> VisibleForUser(int user_id);
-        void CreateSeries(int challenge_id, int days_add, int count);
     }
 }

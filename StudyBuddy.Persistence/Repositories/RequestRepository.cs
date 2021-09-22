@@ -20,6 +20,7 @@ namespace StudyBuddy.Persistence
         [MethodImpl(MethodImplOptions.Synchronized)]
         private void CreateTable() 
         {
+            var rh = new RevisionHelper(connection_string, "requests");
             var qh = new QueryHelper<Request>(connection_string, FromReader);
 
             if (!qh.TableExists("requests"))
@@ -32,16 +33,17 @@ namespace StudyBuddy.Persistence
                     "recipient_id int not null, " +
                     "type int not null, " +
                     "challenge_id int)");
+
+                rh.SetRevision(2);
             }
 
-            int revision = qh.GetRevision("requests");
-            if (revision == 1)
+            if (rh.GetRevision() == 1)
             {
                 qh.ExecuteNonQuery(
                     "alter table requests " +
                     "add column created date;");
 
-                qh.SetRevision("requests", 2);
+                rh.SetRevision(2);
             }
         }
 

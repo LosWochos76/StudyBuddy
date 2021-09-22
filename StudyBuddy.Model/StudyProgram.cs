@@ -1,8 +1,7 @@
 namespace StudyBuddy.Model
 {
-    public class StudyProgram
+    public class StudyProgram : Entity
     {
-        public int ID { get; set; }
         public string Acronym { get; set; }
         public string Name { get; set; }
     }

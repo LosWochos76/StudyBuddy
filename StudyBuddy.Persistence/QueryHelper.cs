@@ -4,9 +4,9 @@ using Npgsql;
 
 namespace StudyBuddy.Persistence
 {
-    public delegate T ObjectReader<T>(NpgsqlDataReader reader);
+    delegate T ObjectReader<T>(NpgsqlDataReader reader);
 
-    public class QueryHelper<T> where T : class
+    class QueryHelper<T> where T : class
     {
         private string connection_string;
         private ObjectReader<T> object_reader;
@@ -205,35 +205,6 @@ namespace StudyBuddy.Persistence
 
             parameters.Clear();
             return result;
-        }
-
-        public void CreateTablesTable()
-        {
-            if (!TableExists("tables"))
-                ExecuteNonQuery("create table tables (" +
-                    "table_name varchar(100) not null, " +
-                    "revision int not null)");
-        }
-
-        public int GetRevision(string table_name)
-        {
-            AddParameters(new { table_name });
-            var result = ExecuteQueryToSingleInt("SELECT revision FROM tables where table_name=:table_name");
-
-            if (result == 0)
-            {
-                AddParameters(new { table_name, revision = 1});
-                ExecuteNonQuery("insert into tables (table_name,revision) values (:table_name,:revision)");
-                result = 1;
-            }
-
-            return result;
-        }
-
-        public void SetRevision(string table_name, int revision)
-        {
-            AddParameters(new { table_name, revision });
-            ExecuteNonQuery("update tables set revision=:revision where table_name=:table_name");
         }
     }
 }
