@@ -63,6 +63,8 @@ namespace StudyBuddy.Persistence
                 qh.ExecuteNonQuery("drop table team_members");
         }
 
+
+
         private User FromReader(NpgsqlDataReader reader)
         {
             var obj = new User();
@@ -222,6 +224,10 @@ namespace StudyBuddy.Persistence
         {
             foreach (int friend_id in friend_ids)
                 AddFriend(user_id, friend_id);
+        }
+
+        public void AddTag(int user_id, int tag_id)
+        {
         }
     }
 }

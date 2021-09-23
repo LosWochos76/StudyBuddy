@@ -23,8 +23,8 @@ export class UserListComponent implements OnInit {
     private auth:AuthorizationService) { }
 
   async ngOnInit() {
-    this.objects = await this.service.getAll();
     this.current_user = this.auth.getUser();
+    this.objects = await this.service.getAll();
     this.count = await this.service.getCount();
 
     this.service.changed.subscribe(async () => {

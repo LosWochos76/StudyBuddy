@@ -17,4 +17,8 @@ export class Tag {
             'Name': this.name
           };
     }
+
+    static toTagString(tags:Tag[]):string {
+        return tags.map(obj => "#" + obj.name).join(' ');
+    }
 }

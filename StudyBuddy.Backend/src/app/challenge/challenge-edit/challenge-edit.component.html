@@ -56,30 +56,18 @@
         </div>
     </div>
     <br>
-    <div class="row g-2">
-        <div class="col-md">
-            <label class="form-label" for="category">Für Studiengang:</label>
-            <select class="form-select" formControlName="study_program">
-                <option value="null">Alle</option>
-                <option *ngFor="let obj of study_programs" [value]="obj.id">{{obj.acronym}}</option>
-            </select>
-        </div>
-        <div class="col-md">
-            <label class="form-label" for="prove">Für Studierende eingeschrieben seit:</label>
-            <select class="form-select" formControlName="enrolled_since">
-                <option value="null">Alle</option>
-                <option *ngFor="let obj of terms" [value]="obj.id">{{obj.shortname}}</option>
-            </select>
-        </div>
+    <div class="mb-3">
+        <label class="form-label" for="name">Tags:</label>
+        <input type="text" class="form-control" id="tags" formControlName="tags" [ngClass]="{
+            'is-invalid': form.controls.tags.invalid && form.controls.tags.dirty,
+            'is-valid': form.controls.tags.valid && form.controls.tags.dirty}">
     </div>
-    <br *ngIf="user.isAdmin()">
     <div class="mb-3" *ngIf="user.isAdmin()">
         <label class="form-label" for="category">Besitzer:</label>
         <select class="form-select" formControlName="owner">
             <option *ngFor="let u of all_users" [value]="u.id">{{u.fullName()}}</option>
         </select>
     </div>
-    <br>
     <button type="submit" class="btn btn-primary">Ok</button>&nbsp;
     <button type="button" class="btn btn-success" (click)="onCancel()">Abbrechen</button>
 </form>

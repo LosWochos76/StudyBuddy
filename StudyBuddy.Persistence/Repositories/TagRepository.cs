@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using Npgsql;
 using StudyBuddy.Model;
@@ -14,6 +13,7 @@ namespace StudyBuddy.Persistence
             this.connection_string = connection_string;
 
             CreateTable();
+            CreateChallengeTagsTable();
         }
 
         private void CreateTable()
@@ -26,6 +26,21 @@ namespace StudyBuddy.Persistence
                     "create table tags (" +
                     "id serial primary key, " +
                     "name varchar(50) not null);");
+            }
+        }
+
+        private void CreateChallengeTagsTable()
+        {
+            var rh = new RevisionHelper(connection_string, "tags_challenges");
+            var qh = new QueryHelper<Tag>(connection_string);
+
+            if (!qh.TableExists("tags_challenges"))
+            {
+                qh.ExecuteNonQuery(
+                    "create table tags_challenges (" +
+                    "challenge_id int not null, " +
+                    "tag_id int not null," +
+                    "unique (challenge_id, tag_id))");
             }
         }
 
@@ -70,6 +85,7 @@ namespace StudyBuddy.Persistence
         public void Delete(int id)
         {
             var qh = new QueryHelper<Tag>(connection_string);
+            qh.Delete("tags_challenges", "tag_id", id);
             qh.Delete("tags", "id", id);
         }
 
@@ -94,6 +110,33 @@ namespace StudyBuddy.Persistence
                 Insert(obj);
             else
                 Update(obj);
+        }
+
+        public IEnumerable<Tag> OfChallenge(int challenge_id)
+        {
+            var qh = new QueryHelper<Tag>(connection_string, FromReader);
+            qh.AddParameter(":challenge_id", challenge_id);
+            return qh.ExecuteQueryToObjectList(
+                "SELECT id,name FROM tags_challenges " +
+                "inner join tags on id=tag_id " +
+                "where challenge_id=:challenge_id order by name");
+        }
+
+        public void RemoveAllTagsFromChallenge(int challenge_id)
+        {
+            var qh = new QueryHelper<Tag>(connection_string);
+            qh.AddParameters(new { challenge_id });
+            qh.ExecuteNonQuery(
+                "delete from tags_challenges where challenge_id=:challenge_id");
+        }
+
+        public void AddTagForChallenge(int tag_id, int challenge_id)
+        {
+            var qh = new QueryHelper<Tag>(connection_string);
+            qh.AddParameters(new { tag_id, challenge_id });
+            qh.ExecuteNonQuery(
+                "insert into tags_challenges(challenge_id, tag_id) " +
+                "values(:challenge_id, :tag_id) ON CONFLICT DO NOTHING;");
         }
     }
 }

@@ -1,13 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { StudyProgram } from 'src/app/model/studyprogram';
-import { Term } from 'src/app/model/term';
 import { User } from 'src/app/model/user';
 import { LoggingService } from 'src/app/services/loging.service';
 import { passwordMatchValidator } from 'src/app/services/passwordMatchValidator';
-import { StudyProgramService } from 'src/app/services/study-program.service';
-import { TermService } from 'src/app/services/term.service';
 import { UserService } from 'src/app/services/user.service';
 
 @Component({
@@ -17,15 +13,11 @@ import { UserService } from 'src/app/services/user.service';
 })
 export class RegisterUserComponent implements OnInit {
   form: FormGroup;
-  study_programs: StudyProgram[] = [];
-  terms: Term[] = [];
 
   constructor(
     private logger: LoggingService,
     private router: Router,
-    private service: UserService,
-    private study_program_service: StudyProgramService,
-    private term_service: TermService) {
+    private service: UserService) {
 
     this.form = new FormGroup({
       firstname: new FormControl("", [Validators.required, Validators.minLength(3)]),
@@ -33,22 +25,14 @@ export class RegisterUserComponent implements OnInit {
       nickname: new FormControl("", [Validators.required, Validators.minLength(3)]),
       email: new FormControl("", [Validators.required, Validators.email]),
       password: new FormControl("", [Validators.required, Validators.minLength(6)]),
-      password_confirm: new FormControl("", [Validators.required, Validators.minLength(6)]),
-      study_program_id: new FormControl(0),
-      enrolled_since_id: new FormControl(0)
+      password_confirm: new FormControl("", [Validators.required, Validators.minLength(6)])
     }, {
       validators: passwordMatchValidator,
       updateOn: 'blur'
     });
   };
 
-  async ngOnInit() {
-    this.study_programs = await this.study_program_service.getAll();
-    this.terms = await this.term_service.getAll();
-
-    this.form.controls.study_program_id.setValue(this.study_programs[0].id);
-    this.form.controls.enrolled_since_id.setValue(this.terms[0].id);
-  }
+  async ngOnInit() { }
 
   async onSubmit() {
     this.logger.debug("Trying to register a user!");

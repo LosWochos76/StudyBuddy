@@ -85,20 +85,19 @@ export class UserService {
   async save(obj: User) {
     let data = obj.toApi();
     let result = null;
+    this.logger.debug("Saving User");
 
     if (obj.id == 0) {
-      this.logger.debug("Saving new User");
       result = await this.http.post(this.url + "User", data).toPromise();
+      obj.id = result['id'];
     } else {
-      this.logger.debug("Saving existing User");
       result = await this.http.put(this.url + "User/" + obj.id, data,
         {
           headers: new HttpHeaders({ Authorization: this.auth.getToken() })
         }).toPromise();
     }
 
-    if ('status' in result)
-      this.changed.emit();
+    this.changed.emit();
   }
 
   async userIdByNickname(nickname: string): Promise<number> {
@@ -137,8 +136,8 @@ export class UserService {
       return null;
 
     let data = {
-      'userID':id,
-      'friends':friends
+      'userID': id,
+      'friends': friends
     };
 
     let result = await this.http.post(this.url + "User/Friends/", data,

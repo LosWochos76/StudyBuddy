@@ -29,7 +29,6 @@ namespace StudyBuddy.BusinessLogic
 
         public static void CheckInsert(User current_user)
         {
-            CheckGetById(current_user);
         }
 
         public static void CheckDelete(User current_user)

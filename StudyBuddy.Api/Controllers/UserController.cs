@@ -51,7 +51,7 @@ namespace StudyBuddy.Api
         public IActionResult Insert([FromBody] User obj)
         {
             var service = new UserService(repository, HttpContext.Items["user"] as User);
-            return Json(Insert(obj));
+            return Json(service.Insert(obj));
         }
 
         [Route("/User/{id}")]

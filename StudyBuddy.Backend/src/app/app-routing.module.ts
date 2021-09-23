@@ -15,12 +15,8 @@ import { PageNotFoundComponent } from './page-not-found/page-not-found.component
 import { RequestEditComponent } from './request/request-edit/request-edit.component';
 import { RequestListComponent } from './request/request-list/request-list.component';
 import { RouteGuardService } from './route-guard';
-import { StudyProgramEditComponent } from './studyprogram/study-program-edit/study-program-edit.component';
-import { StudyProgramListComponent } from './studyprogram/study-program-list/study-program-list.component';
 import { TagEditComponent } from './tag/tag-edit/tag-edit.component';
 import { TagListComponent } from './tag/tag-list/tag-list.component';
-import { TermEditComponent } from './term/term-edit/term-edit/term-edit.component';
-import { TermListComponent } from './term/term-list/term-list/term-list.component';
 import { RegisterUserSuccessComponent } from './user/register-user-success/register-user-success.component';
 import { RegisterUserComponent } from './user/register-user/register-user.component';
 import { UserEditComponent } from './user/user-edit/user-edit.component';
@@ -41,10 +37,6 @@ const routes: Routes = [
   { path: 'user', component: UserListComponent, canActivate: [RouteGuardService] },
   { path: 'user/:id', component: UserEditComponent, canActivate: [RouteGuardService] },
   { path: 'usersettings', component: UserSettingsComponent, canActivate: [RouteGuardService] },
-  { path: 'studyprogram', component: StudyProgramListComponent, canActivate: [RouteGuardService] },
-  { path: 'studyprogram/:id', component: StudyProgramEditComponent, canActivate: [RouteGuardService] },
-  { path: 'term', component: TermListComponent, canActivate: [RouteGuardService] },
-  { path: 'term/:id', component: TermEditComponent, canActivate: [RouteGuardService] },
   { path: 'request', component: RequestListComponent, canActivate: [RouteGuardService] },
   { path: 'request/:id', component: RequestEditComponent, canActivate: [RouteGuardService] },
   { path: 'tag', component: TagListComponent, canActivate: [RouteGuardService] },

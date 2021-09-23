@@ -47,9 +47,9 @@ export class TagService {
     let path = this.url + "Tag/" + id;
     this.logger.debug("Loading Tag from " + path);
     let result = await this.http.get(this.url + "Tag/" + id,
-    {
-      headers: new HttpHeaders({ Authorization: this.auth.getToken() })
-    }).toPromise();
+      {
+        headers: new HttpHeaders({ Authorization: this.auth.getToken() })
+      }).toPromise();
 
     if (result == null) {
       this.logger.debug("Object not found!");
@@ -100,5 +100,30 @@ export class TagService {
       objects.push(Tag.fromApi(result[obj]));
 
     return objects;
+  }
+
+  async ofChallenge(challenge_id: number): Promise<Tag[]> {
+    let objects: Tag[] = [];
+    let result = await this.http.get(this.url + "Tag/OfChallenge/" + challenge_id, {
+      headers: new HttpHeaders({ Authorization: this.auth.getToken() })
+    }).toPromise();
+
+    for (let obj in result)
+      objects.push(Tag.fromApi(result[obj]));
+
+    return objects;
+  }
+
+  async setForChallenge(challenge_id: number, tag_string: string) {
+    let data = {
+      'EntityId': challenge_id,
+      'Tags': tag_string
+    };
+
+    this.http.post(this.url + "Tag/SetForChallenge/", data, {
+      headers: new HttpHeaders({ Authorization: this.auth.getToken() })
+    }).toPromise();
+
+    this.changed.emit();
   }
 }

@@ -6,8 +6,6 @@ export class User {
     password: string;
     email: string;
     role: number = 1;
-    study_program_id: number;
-    enrolled_since_term_id: number;
 
     constructor() {
         this.id = 0;
@@ -41,8 +39,6 @@ export class User {
         result.lastname = obj['lastname'];
         result.nickname = obj['nickname'];
         result.email = obj['email'];
-        result.study_program_id = obj['programID'];
-        result.enrolled_since_term_id = obj['enrolledInTermID'];
         result.role = obj['role'];
         return result;
     }
@@ -55,8 +51,6 @@ export class User {
             "nickname": this.nickname,
             "email": this.email,
             "password": this.password,
-            "programID": this.study_program_id,
-            "EnrolledInTermID": this.enrolled_since_term_id,
             "role": this.role
         };
     }
@@ -78,11 +72,5 @@ export class User {
 
         if (values.hasOwnProperty('role'))
             this.role = +values.role;
-
-        if (values.hasOwnProperty('study_program_id'))
-            this.study_program_id = +values.study_program_id;
-
-        if (values.hasOwnProperty('enrolled_since_id'))
-            this.enrolled_since_term_id = +values.enrolled_since_id;
     }
 }

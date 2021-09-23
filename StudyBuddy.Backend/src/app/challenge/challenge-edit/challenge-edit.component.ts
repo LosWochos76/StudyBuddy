@@ -2,14 +2,12 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Challenge } from 'src/app/model/challenge';
-import { StudyProgram } from 'src/app/model/studyprogram';
-import { Term } from 'src/app/model/term';
+import { Tag } from 'src/app/model/tag';
 import { User } from 'src/app/model/user';
 import { AuthorizationService } from 'src/app/services/authorization.service';
 import { ChallengeService } from 'src/app/services/challenge.service';
 import { LoggingService } from 'src/app/services/loging.service';
-import { StudyProgramService } from 'src/app/services/study-program.service';
-import { TermService } from 'src/app/services/term.service';
+import { TagService } from 'src/app/services/tag.service';
 import { UserService } from 'src/app/services/user.service';
 
 @Component({
@@ -21,8 +19,6 @@ export class ChallengeEditComponent implements OnInit {
   id: number = 0;
   obj: Challenge = null;
   form: FormGroup;
-  study_programs: StudyProgram[] = [];
-  terms: Term[] = [];
   user: User = null;
   all_users: User[] = [];
 
@@ -32,9 +28,8 @@ export class ChallengeEditComponent implements OnInit {
     private router: Router,
     private service: ChallengeService,
     private auth: AuthorizationService,
-    private studyprogram_service: StudyProgramService,
-    private term_service: TermService,
-    private user_service: UserService) {
+    private user_service: UserService,
+    private tag_service: TagService) {
     this.user = this.auth.getUser();
 
     this.form = new FormGroup({
@@ -45,8 +40,7 @@ export class ChallengeEditComponent implements OnInit {
       validity_end: new FormControl("", [Validators.required]),
       category: new FormControl("", [Validators.required]),
       prove: new FormControl("", [Validators.required]),
-      study_program: new FormControl(null),
-      enrolled_since: new FormControl(null)
+      tags: new FormControl("")
     });
 
     if (this.user.isAdmin())
@@ -55,9 +49,13 @@ export class ChallengeEditComponent implements OnInit {
 
   async ngOnInit() {
     this.id = this.route.snapshot.params['id'];
+    let tags = "";
 
     if (this.id != 0) {
       this.obj = await this.service.byId(this.id);
+      let tag_list = await this.tag_service.ofChallenge(this.id);
+      console.log(tag_list);
+      tags = Tag.toTagString(tag_list);
     } else {
       this.obj = new Challenge();
       this.obj.owner = this.auth.getUser().id;
@@ -65,9 +63,6 @@ export class ChallengeEditComponent implements OnInit {
 
     if (this.user.isAdmin())
       this.all_users = await this.user_service.getAll();
-
-    this.study_programs = await this.studyprogram_service.getAll();
-    this.terms = await this.term_service.getAll();
 
     if (this.user.isAdmin()) {
       this.form.setValue({
@@ -78,9 +73,8 @@ export class ChallengeEditComponent implements OnInit {
         validity_end: this.obj.validity_end,
         category: this.obj.category,
         prove: this.obj.prove,
-        study_program: this.obj.valid_for_study_program,
-        enrolled_since: this.obj.valid_for_enrolled_since,
-        owner: this.obj.owner
+        owner: this.obj.owner,
+        tags: tags
       });
     } else {
       this.form.setValue({
@@ -91,8 +85,7 @@ export class ChallengeEditComponent implements OnInit {
         validity_end: this.obj.validity_end,
         category: this.obj.category,
         prove: this.obj.prove,
-        study_program: this.obj.valid_for_study_program,
-        enrolled_since: this.obj.valid_for_enrolled_since
+        tags: tags
       });
     }
   }
@@ -111,7 +104,8 @@ export class ChallengeEditComponent implements OnInit {
       return;
     }
 
-    this.service.save(this.obj);
+    await this.service.save(this.obj);
+    await this.tag_service.setForChallenge(this.obj.id, this.form.controls.tags.value);
     this.router.navigate(["challenge"]);
   }
 

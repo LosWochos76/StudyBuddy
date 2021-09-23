@@ -2,7 +2,6 @@ using Npgsql;
 using StudyBuddy.Model;
 using System;
 using System.Collections.Generic;
-using System.Runtime.CompilerServices;
 
 namespace StudyBuddy.Persistence
 {
@@ -62,20 +61,6 @@ namespace StudyBuddy.Persistence
                     "drop column if exists valid_for_for_enrolled_since_term_id");
 
                 rh.SetRevision(3);
-            }
-        }
-
-        private void CreateChallengeTagsTable()
-        {
-            var rh = new RevisionHelper(connection_string, "challenge_tags");
-            var qh = new QueryHelper<Challenge>(connection_string, FromReader);
-
-            if (!qh.TableExists("challenge_tags"))
-            {
-                qh.ExecuteNonQuery(
-                    "create table challenge_tags (" +
-                    "challenge_id int not null, " +
-                    "tag_id int not null)");
             }
         }
 

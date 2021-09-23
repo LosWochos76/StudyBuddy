@@ -87,5 +87,21 @@ namespace StudyBuddy.BusinessLogic
 
             return object_list;
         }
+
+        public IEnumerable<Tag> OfChallenge(int challenge_id)
+        {
+            return repository.Tags.OfChallenge(challenge_id);
+        }
+
+        public IEnumerable<Tag> SetForChallenge(SetTagsParameter parameter)
+        {
+            repository.Tags.RemoveAllTagsFromChallenge(parameter.EntityId);
+
+            var tags = CreateOrFindMultiple(parameter.Tags);
+            foreach (var tag in tags)
+                repository.Tags.AddTagForChallenge(tag.ID, parameter.EntityId);
+
+            return tags;
+        }
     }
 }

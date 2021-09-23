@@ -4,8 +4,6 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { User } from 'src/app/model/user';
 import { AuthorizationService } from 'src/app/services/authorization.service';
 import { LoggingService } from 'src/app/services/loging.service';
-import { StudyProgramService } from 'src/app/services/study-program.service';
-import { TermService } from 'src/app/services/term.service';
 import { UserService } from 'src/app/services/user.service';
 
 @Component({
@@ -22,8 +20,6 @@ export class UserSettingsComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private service: UserService,
-    private study_program_service: StudyProgramService,
-    private term_service: TermService,
     private auth: AuthorizationService) {
 
     this.form = new FormGroup({

@@ -12,8 +12,6 @@ export class Challenge {
     created:string;
     prove:number = 1;
     parent:number = 0;
-    valid_for_study_program:number = null;
-    valid_for_enrolled_since:number = null;
 
     constructor() { 
         let today = (new Date()).toISOString().split('T')[0];
@@ -30,8 +28,6 @@ export class Challenge {
         this.validity_end = values.validity_end;
         this.category = +values.category;
         this.prove = +values.prove;
-        this.valid_for_study_program = values.study_program == "null" ? null : values.study_program;
-        this.valid_for_enrolled_since = values.enrolled_since == "null" ? null : values.enrolled_since;
 
         if (values.hasOwnProperty('owner')) 
             this.owner = +values.owner;
@@ -66,8 +62,6 @@ export class Challenge {
         obj.created = result["created"].split('T')[0];
         obj.prove = result["prove"];
         obj.parent = result["seriesParentID"];
-        obj.valid_for_study_program = result["validForStudyProgramID"];
-        obj.valid_for_enrolled_since = result["validForEnrolledSinceTermID"];
         return obj;
     }
 
@@ -83,9 +77,7 @@ export class Challenge {
             "OwnerID": this.owner,
             "created": this.created,
             "prove": this.prove,
-            "SeriesParentID": this.parent,
-            "ValidForStudyProgramID": this.valid_for_study_program,
-            "ValidForEnrolledSinceTermID": this.valid_for_enrolled_since
+            "SeriesParentID": this.parent
         };
     }
 }

@@ -64,5 +64,21 @@ namespace StudyBuddy.Api
             var service = new TagService(repository, HttpContext.Items["user"] as User);
             return Json(service.CreateOrFindMultiple(tags));
         }
+
+        [Route("/Tag/OfChallenge/{challenge_id}")]
+        [HttpGet]
+        public IActionResult OfChallenge(int challenge_id)
+        {
+            var service = new TagService(repository, HttpContext.Items["user"] as User);
+            return Json(service.OfChallenge(challenge_id));
+        }
+
+        [Route("/Tag/SetForChallenge/")]
+        [HttpPost]
+        public IActionResult SetForChallenge([FromBody] SetTagsParameter parameter)
+        {
+            var service = new TagService(repository, HttpContext.Items["user"] as User);
+            return Json(service.SetForChallenge(parameter));
+        }
     }
 }
