@@ -20,6 +20,18 @@ Das System besteht aus mehrere Schichten bzw. Komponenten:
 
 ## Revisionen
 
+## Backend 0.0.10
+
+* Nach dem letzten Jourfix haben sich einige interessante Dinge ergeben:
+  * Es wurde das Konzept der Tags eingeführt.
+  * Eine Herausforderung kann mit beliebig vielen Tags markiert werden.
+  * Diese Tags reflektieren dann die Zielgruppe der Herausforderung.
+  * In der App kann ein Nutzer dann selber konfigurieren, für welche Tags er sich interessiert.
+  * In der API wurde eine entsprechende Schnittstelle eingebaut.
+  * Auch im Backend können Tags nun verwaltet und einer Herausforderung hinzugefügt werden.
+  * All das macht insbesondere die Studiengänge und Semester überflüssig.
+  * Entsprechend wurden beide Konzepte aus API und Backend entfernt.
+
 ### Backend 0.0.9
 
 * Das ganze Konzept der Teams wurde komplett entfernt.
