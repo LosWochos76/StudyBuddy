@@ -6,6 +6,6 @@ namespace StudyBuddy.ApiFacade
 {
     public interface IChallengeRepository
     {
-        Task<IEnumerable<Challenge>> All();
+        Task<IEnumerable<Challenge>> ForToday(string tag_string);
     }
 }

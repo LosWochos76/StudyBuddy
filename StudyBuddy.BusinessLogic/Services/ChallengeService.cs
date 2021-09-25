@@ -8,35 +8,60 @@ namespace StudyBuddy.BusinessLogic
     public class ChallengeService
     {
         private IRepository repository;
+        private User current_user;
 
-        public ChallengeService(IRepository repository)
+        public ChallengeService(IRepository repository, User current_user)
         {
             this.repository = repository;
+            this.current_user = current_user;
         }
 
-        public IEnumerable<Challenge> All(User current_user)
+        public IEnumerable<Challenge> All()
         {
+            if (current_user == null || current_user.IsStudent)
+                throw new UnauthorizedAccessException("Unauthorized!");
+
             if (current_user.IsAdmin)
                 return repository.Challenges.All();
-            else
+            
+            if (current_user.IsInstructor)
                 return repository.Challenges.OfOwner(current_user.ID);
+
+            return null;
+        }
+
+        public IEnumerable<Challenge> ForToday(string tag_string)
+        {
+            if (current_user == null)
+                throw new UnauthorizedAccessException("Unauthorized!");
+
+            return repository.Challenges.ForToday(DateTime.Now.Date);
         }
 
         public Challenge GetById(int id)
         {
+            if (current_user == null)
+                throw new UnauthorizedAccessException("Unauthorized!");
+
             return repository.Challenges.ById(id);
         }
 
-        public IEnumerable<Challenge> GetByText(User current_user, string text)
+        public IEnumerable<Challenge> GetByText(string text)
         {
+            if (current_user == null)
+                throw new UnauthorizedAccessException("Unauthorized!");
+
             if (current_user == null || !current_user.IsAdmin)
                 return repository.Challenges.OfOwnerByText(current_user.ID, text);
             else
                 return repository.Challenges.ByText(text);
         }
 
-        public Challenge Update(User current_user, Challenge obj)
+        public Challenge Update(Challenge obj)
         {
+            if (current_user == null || current_user.IsStudent)
+                throw new UnauthorizedAccessException("Unauthorized!");
+
             if (obj == null)
                 throw new Exception("Object invalid!");
 
@@ -49,22 +74,34 @@ namespace StudyBuddy.BusinessLogic
 
         public IEnumerable<Challenge> OfBadge(int id)
         {
+            if (current_user == null)
+                throw new UnauthorizedAccessException("Unauthorized!");
+
             return repository.Challenges.OfBadge(id);
         }
 
         public IEnumerable<Challenge> NotOfBadge(int id)
         {
+            if (current_user == null)
+                throw new UnauthorizedAccessException("Unauthorized!");
+
             return repository.Challenges.NotOfBadge(id);
         }
 
         public Challenge Insert(Challenge obj)
         {
+            if (current_user == null || current_user.IsStudent)
+                throw new UnauthorizedAccessException("Unauthorized!");
+
             repository.Challenges.Insert(obj);
             return obj;
         }
 
-        public void Delete(User current_user, int id)
+        public void Delete(int id)
         {
+            if (current_user == null || current_user.IsStudent)
+                throw new UnauthorizedAccessException("Unauthorized!");
+
             var obj = repository.Challenges.ById(id);
             if (!current_user.IsAdmin && obj != null && obj.OwnerID != current_user.ID)
                 throw new Exception("Unauthorized");
@@ -72,8 +109,11 @@ namespace StudyBuddy.BusinessLogic
             repository.Challenges.Delete(id);
         }
 
-        public void CreateSeries(User current_user, CreateSeriesParameter param)
+        public void CreateSeries(CreateSeriesParameter param)
         {
+            if (current_user == null || current_user.IsStudent)
+                throw new UnauthorizedAccessException("Unauthorized!");
+
             var parent = repository.Challenges.ById(param.ChallengeId);
             if (parent == null)
                 throw new Exception("Object not found!");

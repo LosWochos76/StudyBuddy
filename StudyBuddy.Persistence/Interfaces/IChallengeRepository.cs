@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using StudyBuddy.Model;
 
@@ -7,6 +8,7 @@ namespace StudyBuddy.Persistence
     {
         Challenge ById(int id);
         IEnumerable<Challenge> All(int from = 0, int max = 1000);
+        IEnumerable<Challenge> ForToday(DateTime today, int from = 0, int max = 1000);
         IEnumerable<Challenge> ByText(string text, int from = 0, int max = 1000);
         IEnumerable<Challenge> OfOwner(int owner_id, int from = 0, int max = 1000);
         IEnumerable<Challenge> OfOwnerByText(int owner_id, string text, int from = 0, int max = 1000);

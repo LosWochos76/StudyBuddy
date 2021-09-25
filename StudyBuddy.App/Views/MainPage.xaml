@@ -16,10 +16,5 @@
             <ShellContent Icon="" ContentTemplate="{DataTemplate local:BadgesPage}" Route="BadgesPage" />
         </Tab>
     </FlyoutItem>
-    <FlyoutItem Title="Teams">
-        <Tab>
-            <ShellContent Icon="" ContentTemplate="{DataTemplate local:TeamsPage}" Route="TeamsPage" />
-        </Tab>
-    </FlyoutItem>
-    <MenuItem Text="Ausloggen" Clicked="Logout_Clicked" />
+    <MenuItem Text="Ausloggen" Command="{Binding LogoutCommand}" />
 </Shell>

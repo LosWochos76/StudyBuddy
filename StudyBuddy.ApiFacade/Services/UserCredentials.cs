@@ -8,6 +8,5 @@ namespace StudyBuddy.ApiFacade.Restful
     {
         public string EMail { get; set; }
         public string Password { get; set; }
-
     }
 }

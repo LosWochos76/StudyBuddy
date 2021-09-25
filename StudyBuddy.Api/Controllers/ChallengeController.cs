@@ -7,89 +7,92 @@ namespace StudyBuddy.Api
 {
     public class ChallengeController : Controller
     {
-        private ChallengeService service;
+        private IRepository repository;
 
         public ChallengeController(IRepository repository)
         {
-            this.service = new ChallengeService(repository);
+            this.repository = repository;
         }
 
         [Route("/Challenge/")]
         [HttpGet]
-        [IsLoggedIn]
         public IActionResult Get()
         {
-            var current_user = HttpContext.Items["user"] as User;
-            return Json(service.All(current_user));
+            var service = new ChallengeService(repository, HttpContext.Items["user"] as User);
+            return Json(service.All());
+        }
+
+        [Route("/Challenge/ForToday/")]
+        [HttpGet]
+        public IActionResult ForToday([FromBody] string tag_string)
+        {
+            var service = new ChallengeService(repository, HttpContext.Items["user"] as User);
+            return Json(service.ForToday(tag_string));
         }
 
         [Route("/Challenge/{id}")]
         [HttpGet]
-        [IsLoggedIn]
         public IActionResult GetById(int id)
         {
+            var service = new ChallengeService(repository, HttpContext.Items["user"] as User);
             return Json(service.GetById(id));
         }
 
         [Route("/Challenge/ByText/{text}")]
         [HttpGet]
-        [IsLoggedIn]
         public IActionResult GetByText(string text)
         {
-            var current_user = HttpContext.Items["user"] as User;
-            return Json(service.GetByText(current_user, text));
+            var service = new ChallengeService(repository, HttpContext.Items["user"] as User);
+            return Json(service.GetByText(text));
         }
 
         [Route("/Challenge/{id}")]
         [HttpPut]
-        [IsLoggedIn]
         public IActionResult Update([FromBody] Challenge obj)
         {
-            var current_user = HttpContext.Items["user"] as User;
-            return Json(service.Update(current_user, obj));
+            var service = new ChallengeService(repository, HttpContext.Items["user"] as User);
+            return Json(service.Update(obj));
         }
 
         [Route("/Challenge/OfBadge/{id}")]
         [HttpGet]
-        [IsLoggedIn]
         public IActionResult OfBadge(int id)
         {
+            var service = new ChallengeService(repository, HttpContext.Items["user"] as User);
             return Json(service.OfBadge(id));
         }
 
         [Route("/Challenge/NotOfBadge/{id}")]
         [HttpGet]
-        [IsLoggedIn]
         public IActionResult NotOfBadge(int id)
         {
+            var service = new ChallengeService(repository, HttpContext.Items["user"] as User);
             return Json(service.NotOfBadge(id));
         }
 
         [Route("/Challenge/")]
         [HttpPost]
-        [IsLoggedIn]
         public IActionResult Insert([FromBody] Challenge obj)
         {
+            var service = new ChallengeService(repository, HttpContext.Items["user"] as User);
             return Json(service.Insert(obj));
         }
 
         [Route("/Challenge/{id}")]
         [HttpDelete]
-        [IsLoggedIn]
         public IActionResult Delete(int id)
         {
-            var current_user = HttpContext.Items["user"] as User;
-            service.Delete(current_user, id);
+            var service = new ChallengeService(repository, HttpContext.Items["user"] as User);
+            service.Delete(id);
             return Json(new { Status = "ok" });
         }
 
         [Route("/Challenge/CreateSeries/")]
         [HttpPost]
-        [IsLoggedIn]
         public IActionResult CreateSeries([FromBody] CreateSeriesParameter param)
         {
-            var current_user = HttpContext.Items["user"] as User;
-            service.CreateSeries(current_user, param);
+            var service = new ChallengeService(repository, HttpContext.Items["user"] as User);
+            service.CreateSeries(param);
             return Json(new { Status = "ok" });
         }
     }

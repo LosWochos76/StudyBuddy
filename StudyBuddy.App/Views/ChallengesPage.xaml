@@ -2,14 +2,17 @@
 <ContentPage
     xmlns="http://xamarin.com/schemas/2014/forms"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    x:Class="App.Views.ChallengesPage">
+    x:Class="App.Views.ChallengesPage"
+    xmlns:viewmodels="clr-namespace:StudyBuddy.App.ViewModels"
+    xmlns:models="clr-namespace:StudyBuddy.Model;assembly=StudyBuddy.Model"
+    x:DataType="viewmodels:ChallengesViewModel">
     <ContentPage.Content>
         <StackLayout Padding="10">
-                    <Label Text="Challenges" HorizontalTextAlignment="Center" VerticalOptions="Center" />
-            <ListView x:Name="ch1" ItemsSource="{Binding ChallengesList}">
+            <Label Text="{Binding Header}" FontAttributes="Bold" HorizontalTextAlignment="Center" VerticalOptions="Center" />
+            <ListView ItemsSource="{Binding Challenges}" IsPullToRefreshEnabled="True" RefreshCommand="{Binding RefreshCommand}" IsRefreshing="{Binding IsRefreshing}">
                 <ListView.ItemTemplate>
-                    <DataTemplate>
-                        <TextCell Text="t" ></TextCell>
+                    <DataTemplate x:DataType="models:Challenge">
+                        <TextCell Text="{Binding Name}"></TextCell>
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>

@@ -21,7 +21,7 @@
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
 	<key>MinimumOSVersion</key>
-	<string>8.0</string>
+	<string>14</string>
 	<key>CFBundleDisplayName</key>
 	<string>StudyBuddy</string>
 	<key>CFBundleIdentifier</key>

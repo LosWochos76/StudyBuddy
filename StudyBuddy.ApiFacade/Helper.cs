@@ -12,6 +12,7 @@ namespace StudyBuddy.ApiFacade
             {
                 if (cert.Issuer.Equals("CN=localhost"))
                     return true;
+
                 return errors == System.Net.Security.SslPolicyErrors.None;
             };
 

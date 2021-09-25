@@ -22,54 +22,52 @@
             <StackLayout Padding="10,10,10,0">
                 <Label HorizontalTextAlignment="Center">
                     <Label.FormattedText>
-                    <FormattedString>
-                        <FormattedString.Spans>
-                            <Span Text="Wenn du herausfinden willst, was der StudyBuddy für dich als Studierender tun kann, klicke " />
-                            <Span Text="hier" TextColor="Blue" TextDecorations="Underline">
-                                <Span.GestureRecognizers>
-                                    <TapGestureRecognizer Command="{Binding TapCommand}"
+                        <FormattedString>
+                            <FormattedString.Spans>
+                                <Span Text="Wenn du herausfinden willst, was der StudyBuddy für dich als Studierender tun kann, klicke " />
+                                <Span Text="hier" TextColor="Blue" TextDecorations="Underline">
+                                    <Span.GestureRecognizers>
+                                        <TapGestureRecognizer Command="{Binding TapCommand}"
                                     CommandParameter="https://studybuddybackend.web.app/info" />
-                                </Span.GestureRecognizers>
-                            </Span>
-                            <Span Text="." />
-                        </FormattedString.Spans>
-                    </FormattedString>
-                </Label.FormattedText>
+                                    </Span.GestureRecognizers>
+                                </Span>
+                                <Span Text="." />
+                            </FormattedString.Spans>
+                        </FormattedString>
+                    </Label.FormattedText>
                 </Label>
             </StackLayout>
         </StackLayout>
 
         <StackLayout Padding="10,10,10,10" VerticalOptions="CenterAndExpand">
-            <Entry Placeholder="E-Mail-Adresse" x:Name="email" />
-            <Entry Placeholder="Passwort" x:Name="password" IsPassword="True"/>
-            <Button Text="Anmelden" Clicked="Anmelden_Clicked"/>
+            <Entry Placeholder="E-Mail-Adresse" Text="{Binding EMail}" />
+            <Entry Placeholder="Passwort" IsPassword="True" Text="{Binding Password}"/>
+            <Button Text="Anmelden" Command="{Binding LoginCommand}"/>
 
             <Label HorizontalTextAlignment="Center">
                 <Label.FormattedText>
-                <FormattedString>
-                    <FormattedString.Spans>
-                        <Span Text="Passwort vergessen?" TextColor="Blue" TextDecorations="Underline">
-                            <Span.GestureRecognizers>
-                                <TapGestureRecognizer Command="{Binding TapCommand}"
-                                CommandParameter="https://studybuddybackend.web.app/passwordforgotten" />
-                            </Span.GestureRecognizers>
-                        </Span>
-                    </FormattedString.Spans>
-                </FormattedString>
-            </Label.FormattedText>
+                    <FormattedString>
+                        <FormattedString.Spans>
+                            <Span Text="Passwort vergessen?" TextColor="Blue" TextDecorations="Underline">
+                                <Span.GestureRecognizers>
+                                    <TapGestureRecognizer Command="{Binding PasswordForgottenCommand}" />
+                                </Span.GestureRecognizers>
+                            </Span>
+                        </FormattedString.Spans>
+                    </FormattedString>
+                </Label.FormattedText>
             </Label>
         </StackLayout>
 
         <StackLayout VerticalOptions="EndAndExpand" Padding="10,0,10,20">
-            <Button Text="Neuen Account erstellen" Clicked="Register_Clicked"/>
+            <Button Text="Neuen Account erstellen" Command="{Binding RegisterCommand}"/>
             <Label HorizontalOptions="CenterAndExpand">
                 <Label.FormattedText>
                     <FormattedString>
                         <FormattedString.Spans>
                             <Span Text="Impressum und Datenschutz" TextColor="Blue" TextDecorations="Underline">
                                 <Span.GestureRecognizers>
-                                    <TapGestureRecognizer Command="{Binding TapCommand}"
-                                    CommandParameter="https://studybuddybackend.web.app/imprint" />
+                                    <TapGestureRecognizer Command="{Binding ImprintCommand}" />
                                 </Span.GestureRecognizers>
                             </Span>
                         </FormattedString.Spans>

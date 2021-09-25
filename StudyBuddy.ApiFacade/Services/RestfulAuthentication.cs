@@ -4,22 +4,25 @@ using System.Net.Http.Json;
 using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
 using StudyBuddy.Model;
-using StudyBuddy.ApiFacade;
 using Xamarin.Forms;
 using StudyBuddy.ApiFacade.Restful;
 
-[assembly: Xamarin.Forms.Dependency(typeof(RestfulAuthentication))]
 namespace StudyBuddy.ApiFacade
 {
-    public class RestfulAuthentication : IAuthentication
+    class RestfulAuthentication : IAuthentication
     {
-        private string base_url = "https://studybuddy.hshl.de/";
+        private IApiFacade api;
+        private string base_url;
         private HttpClient client;
+
+        public event LoginStateChangedHandler LoginStateChanged;
         public string Token { get; private set; } = string.Empty;
         public User CurrentUser { get; private set; } = null;
 
-        public RestfulAuthentication()
+        public RestfulAuthentication(IApiFacade api, string base_url)
         {
+            this.api = api;
+            this.base_url = base_url;
             this.client = new HttpClient(Helper.GetInsecureHandler());
         }
 
@@ -53,7 +56,14 @@ namespace StudyBuddy.ApiFacade
             Application.Current.Properties["Login"] = content;
             await Application.Current.SavePropertiesAsync();
 
+            OnLoginStateChanged(true);
             return true;
+        }
+
+        private void OnLoginStateChanged(bool is_logged_in)
+        {
+            if (LoginStateChanged != null)
+                LoginStateChanged(this, new LoginStateChangedArgs(is_logged_in, CurrentUser, Token));
         }
 
         public async void Logout()
@@ -62,6 +72,8 @@ namespace StudyBuddy.ApiFacade
             CurrentUser = null;
             Application.Current.Properties.Remove("Login");
             await Application.Current.SavePropertiesAsync();
+
+            OnLoginStateChanged(false);
         }
 
         public bool IsLoggedIn

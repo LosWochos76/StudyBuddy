@@ -99,6 +99,16 @@ namespace StudyBuddy.Persistence
                 "FROM challenges order by created limit :max offset :from");
         }
 
+        public IEnumerable<Challenge> ForToday(DateTime today, int from = 0, int max = 1000)
+        {
+            var qh = new QueryHelper<Challenge>(connection_string, FromReader, new { today, from, max });
+            return qh.ExecuteQueryToObjectList(
+                "SELECT id,name,description,points,validity_start,validity_end," +
+                "category,owner_id,created,prove,series_parent_id " +
+                "FROM challenges where :today>=validity_start and :today<=validity_end " +
+                "order by created limit :max offset :from");
+        }
+
         public IEnumerable<Challenge> ByText(string text, int from = 0, int max = 1000)
         {
             var qh = new QueryHelper<Challenge>(connection_string, FromReader);

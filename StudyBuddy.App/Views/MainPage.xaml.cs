@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Windows.Input;
-using StudyBuddy.ApiFacade;
+﻿using StudyBuddy.App.ViewModels;
 using Xamarin.Forms;
 
 namespace App.Views
@@ -11,13 +8,8 @@ namespace App.Views
         public MainPage()
         {
             InitializeComponent();
-        }
 
-        private async void Logout_Clicked(System.Object sender, System.EventArgs e)
-        {
-            var authentication = DependencyService.Get<IAuthentication>();
-            authentication.Logout();
-            await Shell.Current.GoToAsync("//LoginPage");
+            BindingContext = new MainPageViewModel();
         }
     }
 }
