@@ -5,17 +5,40 @@
     x:Class="App.Views.ChallengesPage"
     xmlns:viewmodels="clr-namespace:StudyBuddy.App.ViewModels"
     xmlns:models="clr-namespace:StudyBuddy.Model;assembly=StudyBuddy.Model"
-    x:DataType="viewmodels:ChallengesViewModel">
+    x:DataType="viewmodels:ChallengesViewModel" x:Name="page">
     <ContentPage.Content>
         <StackLayout Padding="10">
-            <Label Text="{Binding Header}" FontAttributes="Bold" HorizontalTextAlignment="Center" VerticalOptions="Center" />
-            <ListView ItemsSource="{Binding Challenges}" IsPullToRefreshEnabled="True" RefreshCommand="{Binding RefreshCommand}" IsRefreshing="{Binding IsRefreshing}">
-                <ListView.ItemTemplate>
-                    <DataTemplate x:DataType="models:Challenge">
-                        <TextCell Text="{Binding Name}"></TextCell>
-                    </DataTemplate>
-                </ListView.ItemTemplate>
-            </ListView>
-        </StackLayout>
+            <Label Text="{Binding Header}" FontAttributes="Bold" Padding="15"
+                   HorizontalTextAlignment="Center" VerticalOptions="Center" />
+            <BoxView HorizontalOptions="FillAndExpand" HeightRequest="1" Color="Gray"/>
+            <RefreshView
+                BackgroundColor="LightGray"
+                IsRefreshing="{Binding IsRefreshing}"
+                Command="{Binding RefreshCommand}">
+                <CollectionView ItemsSource="{Binding Challenges}">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate x:DataType="models:Challenge">
+                            <ContentView>
+                                <StackLayout Padding="5,5,5,20" x:Name="Item">
+                                    <Label Text="{Binding Name}" FontAttributes="Bold" />
+                                    <Label Text="{Binding InfoText}" FontSize="Small"
+                                           TextColor="Gray"  VerticalOptions="FillAndExpand"/>
+                                    <BoxView HorizontalOptions="FillAndExpand" HeightRequest="1" Color="Gray"/>
+                                    <Label Text="Annehmen">
+                                        <Label.GestureRecognizers>
+                                            <TapGestureRecognizer
+                                                Command="{Binding BindingContext.AcceptCommand,
+                                                    Source={x:Reference Name=page}}"
+                                                CommandParameter="{Binding Source={x:Reference Item},
+                                                Path=BindingContext}" />
+                                        </Label.GestureRecognizers>
+                                    </Label>
+                                </StackLayout>
+                            </ContentView>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+            </RefreshView>
+        </StackLayout>  
     </ContentPage.Content>
 </ContentPage>

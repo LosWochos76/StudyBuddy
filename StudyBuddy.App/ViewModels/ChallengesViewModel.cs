@@ -10,6 +10,7 @@ namespace StudyBuddy.App.ViewModels
     {
         public IEnumerable<Challenge> Challenges { get; private set; } = new List<Challenge>();
         public ICommand RefreshCommand { get; private set; }
+        public ICommand AcceptCommand { get; private set; }
         public bool IsRefreshing { get; set; }
 
         public ChallengesViewModel() : base()
@@ -17,6 +18,7 @@ namespace StudyBuddy.App.ViewModels
             this.LoadChallenges();
             api.Authentication.LoginStateChanged += Authentication_LoginStateChanged;
             RefreshCommand = new Command(LoadChallenges);
+            AcceptCommand = new Command<Challenge>(Accept);
         }
 
         public string Header
@@ -41,6 +43,11 @@ namespace StudyBuddy.App.ViewModels
             IsRefreshing = false;
             NotifyPropertyChanged("IsRefreshing");
             NotifyPropertyChanged("Challenges");
+        }
+
+        private void Accept(Challenge obj)
+        {
+            this.dialog.ShowMessageBox(obj.Name, "Herausforderung annehmen");
         }
     }
 }

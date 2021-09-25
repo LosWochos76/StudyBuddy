@@ -15,17 +15,26 @@ namespace StudyBuddy.Model
         public ChallengeProve Prove { get; set; } = ChallengeProve.ByTrust;
         public int? SeriesParentID { get; set; }
 
-        public Challenge()
+        public string InfoText
         {
-        }
+            get
+            {
+                string result = "";
 
-        public Challenge(int id, string name, string description, int points, int ownerId)
-        {
-            this.ID = id;
-            this.Name = name;
-            this.Description = description;
-            this.Points = points;
-            this.OwnerID = ownerId;
+                if (ValidityStart.Year == ValidityEnd.Year &&
+                    ValidityStart.Month == ValidityEnd.Month)
+                    result = ValidityStart.ToString("dd.") + "-" + ValidityEnd.ToString("dd.MM.yyyy");
+
+                if (ValidityStart.Date == ValidityEnd.Date)
+                    result = ValidityEnd.ToString("dd.MM.yyyy");
+
+                if (Points > 1)
+                    result += " - " + Points + " Punkte";
+                else
+                    result += " - " + Points + " Punkt";
+
+                return result;
+            }
         }
 
         public Challenge Clone()

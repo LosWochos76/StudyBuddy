@@ -34,5 +34,7 @@
 	<string>App</string>
 	<key>XSAppIconAssets</key>
 	<string>Assets.xcassets/AppIcon.appiconset</string>
+	<key>CFBundleDevelopmentRegion</key>
+	<string>de</string>
 </dict>
 </plist>
