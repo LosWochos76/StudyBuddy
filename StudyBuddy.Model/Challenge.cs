@@ -37,6 +37,20 @@ namespace StudyBuddy.Model
             }
         }
 
+        public char CategorySymbol
+        {
+            get
+            {
+                if (Category == ChallengeCategory.Learning)
+                    return '\uf19d';
+
+                if (Category == ChallengeCategory.Networking)
+                    return '\ue068';
+
+                return '\uf0ae';
+            }
+        }
+
         public Challenge Clone()
         {
             var clone = new Challenge();

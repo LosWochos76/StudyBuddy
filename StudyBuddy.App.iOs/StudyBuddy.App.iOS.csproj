@@ -147,4 +147,9 @@
       <Name>StudyBuddy.ApiFacade</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\fabrands.otf" />
+    <BundleResource Include="Resources\faregular.otf" />
+    <BundleResource Include="Resources\fasolid.otf" />
+  </ItemGroup>
 </Project>

@@ -36,5 +36,11 @@
 	<string>Assets.xcassets/AppIcon.appiconset</string>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>de</string>
+	<key>UIAppFonts</key>
+	<array>
+		<string>fabrands.otf</string>
+		<string>faregular.otf</string>
+		<string>fasolid.otf</string>
+	</array>
 </dict>
 </plist>

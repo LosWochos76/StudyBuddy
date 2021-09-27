@@ -64,7 +64,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\AboutResources.txt" />
-    <None Include="Assets\AboutAssets.txt" />
     <None Include="Properties\AndroidManifest.xml" />
   </ItemGroup>
   <ItemGroup>
@@ -85,12 +84,18 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Resources\drawable\" />
+    <Folder Include="Assets\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\StudyBuddy.App\StudyBuddy.App.csproj">
       <Project>{394F1131-79C6-4F7C-9DFB-6BEEE4AF3733}</Project>
       <Name>StudyBuddy.App</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidAsset Include="Assets\fabrands.otf" />
+    <AndroidAsset Include="Assets\faregular.otf" />
+    <AndroidAsset Include="Assets\fasolid.otf" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
 </Project>

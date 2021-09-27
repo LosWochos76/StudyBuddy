@@ -5,7 +5,9 @@
     x:Class="App.Views.ChallengesPage"
     xmlns:viewmodels="clr-namespace:StudyBuddy.App.ViewModels"
     xmlns:models="clr-namespace:StudyBuddy.Model;assembly=StudyBuddy.Model"
-    x:DataType="viewmodels:ChallengesViewModel" x:Name="page">
+    x:DataType="viewmodels:ChallengesViewModel"
+    xmlns:fontAwesome="clr-namespace:StudyBuddy.App"
+    x:Name="page">
     <ContentPage.Content>
         <StackLayout Padding="10">
             <Label Text="{Binding Header}" FontAttributes="Bold" Padding="15"
@@ -19,21 +21,38 @@
                     <CollectionView.ItemTemplate>
                         <DataTemplate x:DataType="models:Challenge">
                             <ContentView>
-                                <StackLayout Padding="5,5,5,20" x:Name="Item">
-                                    <Label Text="{Binding Name}" FontAttributes="Bold" />
-                                    <Label Text="{Binding InfoText}" FontSize="Small"
-                                           TextColor="Gray"  VerticalOptions="FillAndExpand"/>
-                                    <BoxView HorizontalOptions="FillAndExpand" HeightRequest="1" Color="Gray"/>
-                                    <Label Text="Annehmen">
-                                        <Label.GestureRecognizers>
-                                            <TapGestureRecognizer
-                                                Command="{Binding BindingContext.AcceptCommand,
-                                                    Source={x:Reference Name=page}}"
-                                                CommandParameter="{Binding Source={x:Reference Item},
-                                                Path=BindingContext}" />
-                                        </Label.GestureRecognizers>
-                                    </Label>
-                                </StackLayout>
+                                <Grid x:Name="Item" Padding="0,0,0,20">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="70" />
+                                        <ColumnDefinition Width="Auto" />
+                                    </Grid.ColumnDefinitions>
+                                    <Label Grid.Column="0" Grid.Row="0"
+                                        WidthRequest="100"
+                                        Text="{Binding CategorySymbol}"
+                                        FontFamily="{StaticResource FontAwesomeSolid}"
+                                        FontSize="50" />
+                                    <StackLayout Grid.Column="1" Grid.Row="0">
+                                        <Label Text="{Binding Name}" FontAttributes="Bold" />
+                                        <Label
+                                            Grid.Column="1" Grid.Row="1"
+                                            Text="{Binding InfoText}" FontSize="Small"
+                                            TextColor="Gray" />
+                                       <BoxView
+                                            Grid.Column="1" Grid.Row="2"
+                                           HeightRequest="1" Color="Gray"/>
+                                        <Label
+                                            Grid.Column="1" Grid.Row="3"
+                                            Text="Annehmen">
+                                            <Label.GestureRecognizers>
+                                                <TapGestureRecognizer
+                                                    Command="{Binding BindingContext.AcceptCommand,
+                                                        Source={x:Reference Name=page}}"
+                                                    CommandParameter="{Binding Source={x:Reference Item},
+                                                    Path=BindingContext}" />
+                                            </Label.GestureRecognizers>
+                                        </Label>
+                                    </StackLayout>
+                                </Grid>
                             </ContentView>
                         </DataTemplate>
                     </CollectionView.ItemTemplate>
