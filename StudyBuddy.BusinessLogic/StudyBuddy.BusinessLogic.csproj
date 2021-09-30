@@ -16,6 +16,7 @@
     <None Remove="Services\" />
     <None Remove="Misc\" />
     <None Remove="Authorization\" />
+    <None Remove="QRCoder" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Parameters\" />
@@ -26,5 +27,6 @@
   <ItemGroup>
     <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.12.2" />
     <PackageReference Include="NETCore.MailKit" Version="2.0.3" />
+    <PackageReference Include="QRCoder" Version="1.4.1" />
   </ItemGroup>
 </Project>

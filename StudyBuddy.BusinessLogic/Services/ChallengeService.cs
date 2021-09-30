@@ -1,5 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
+using System.Reflection;
+using QRCoder;
 using StudyBuddy.Model;
 using StudyBuddy.Persistence;
 
@@ -129,6 +132,14 @@ namespace StudyBuddy.BusinessLogic
                 clone.ValidityEnd = clone.ValidityEnd.AddDays((i + 1) * param.DaysAdd);
                 repository.Challenges.Insert(clone);
             }
+        }
+
+        public Bitmap GetQrCode(int challenge_id)
+        {
+            QRCodeGenerator qrGenerator = new QRCodeGenerator();
+            QRCodeData qrCodeData = qrGenerator.CreateQrCode("The text which should be encoded.", QRCodeGenerator.ECCLevel.Q);
+            QRCode qrCode = new QRCode(qrCodeData);
+            return qrCode.GetGraphic(20);
         }
     }
 }

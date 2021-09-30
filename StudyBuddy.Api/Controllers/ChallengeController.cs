@@ -2,6 +2,8 @@ using StudyBuddy.Model;
 using Microsoft.AspNetCore.Mvc;
 using StudyBuddy.Persistence;
 using StudyBuddy.BusinessLogic;
+using System.IO;
+using System;
 
 namespace StudyBuddy.Api
 {
@@ -94,6 +96,28 @@ namespace StudyBuddy.Api
             var service = new ChallengeService(repository, HttpContext.Items["user"] as User);
             service.CreateSeries(param);
             return Json(new { Status = "ok" });
+        }
+
+        [Route("/Challenge/GetQrCode/{id}")]
+        [HttpGet]
+        public IActionResult GetQrCode(int id)
+        {
+            try
+            {
+                var service = new ChallengeService(repository, HttpContext.Items["user"] as User);
+                var code = service.GetQrCode(id);
+
+                using (MemoryStream ms = new MemoryStream())
+                {
+                    code.Save(ms, System.Drawing.Imaging.ImageFormat.Png);
+                    return File(ms, "image/png");
+                }
+            } catch (Exception e)
+            {
+                Console.WriteLine(e.ToString());
+            }
+
+            return null;
         }
     }
 }
