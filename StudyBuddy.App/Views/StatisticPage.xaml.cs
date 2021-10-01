@@ -3,11 +3,11 @@ using System.Collections.Generic;
 
 using Xamarin.Forms;
 
-namespace App.Views
+namespace StudyBuddy.App.Views
 {
-    public partial class BadgesPage : ContentPage
+    public partial class StatisticPage : ContentPage
     {
-        public BadgesPage()
+        public StatisticPage()
         {
             InitializeComponent();
         }

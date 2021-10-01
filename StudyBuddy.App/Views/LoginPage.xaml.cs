@@ -1,7 +1,8 @@
 ﻿using Xamarin.Forms;
 using StudyBuddy.App.ViewModels;
+using TinyIoC;
 
-namespace App.Views
+namespace StudyBuddy.App.Views
 {
     public partial class LoginPage : ContentPage
     {
@@ -9,7 +10,7 @@ namespace App.Views
         {
             InitializeComponent();
 
-            BindingContext = new LoginViewModel();
+            BindingContext = TinyIoCContainer.Current.Resolve<LoginViewModel>();
         }
     }
 }

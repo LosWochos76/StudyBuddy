@@ -14,6 +14,7 @@ namespace StudyBuddy.Persistence
             this.connection_string = connection_string;
 
             CreateChallengesTable();
+            CreateChallengeAcceptanceTable();
         }
 
         private void CreateChallengesTable() 
@@ -64,6 +65,22 @@ namespace StudyBuddy.Persistence
             }
         }
 
+        private void CreateChallengeAcceptanceTable()
+        {
+            var rh = new RevisionHelper(connection_string, "challenge_acceptance");
+            var qh = new QueryHelper<Challenge>(connection_string, FromReader);
+
+            if (!qh.TableExists("challenge_acceptance"))
+            {
+                qh.ExecuteNonQuery(
+                    "create table challenge_acceptance (" +
+                    "user_id int not null," +
+                    "challenge_id int not null, " +
+                    "created date not null," +
+                    "unique (user_id, challenge_id))");
+            }
+        }
+
         private Challenge FromReader(NpgsqlDataReader reader)
         {
             var obj = new Challenge();
@@ -104,9 +121,11 @@ namespace StudyBuddy.Persistence
             var qh = new QueryHelper<Challenge>(connection_string, FromReader, new { today, from, max });
             return qh.ExecuteQueryToObjectList(
                 "SELECT id,name,description,points,validity_start,validity_end," +
-                "category,owner_id,created,prove,series_parent_id " +
-                "FROM challenges where :today>=validity_start and :today<=validity_end " +
-                "order by created limit :max offset :from");
+                "category,owner_id,challenges.created,prove,series_parent_id " +
+                "FROM challenges " +
+                "left outer join challenge_acceptance on id=challenge_id " +
+                "where challenge_id is null and :today>=validity_start and :today<=validity_end " +
+                "order by challenges.created limit :max offset :from");
         }
 
         public IEnumerable<Challenge> ByText(string text, int from = 0, int max = 1000)
@@ -225,6 +244,34 @@ namespace StudyBuddy.Persistence
                 "from challenges where id not in " +
                 "(select challenge from game_badge_challenges where game_badge=:badge_id) " +
                 "order by created desc");
+        }
+
+        public void AddAcceptance(int challenge_id, int user_id)
+        {
+            var qh = new QueryHelper<Tag>(connection_string);
+            qh.AddParameters(new { challenge_id, user_id, created=DateTime.Now.Date });
+            qh.ExecuteNonQuery(
+                "insert into challenge_acceptance(challenge_id, user_id, created) " +
+                "values(:challenge_id, :user_id, :created) ON CONFLICT DO NOTHING;");
+        }
+
+        public void DeleteAcceptance(int challenge_id, int user_id)
+        {
+            var qh = new QueryHelper<Tag>(connection_string);
+            qh.AddParameters(new { challenge_id, user_id });
+            qh.ExecuteNonQuery(
+                "delete from challenge_acceptance where challenge_id=:challenge_id and user_id=:user_id");
+        }
+
+        public IEnumerable<Challenge> Accepted(int user_id)
+        {
+            var qh = new QueryHelper<Challenge>(connection_string, FromReader);
+            qh.AddParameter(":user_id", user_id);
+            string sql = "select id,name,description,points,validity_start,validity_end," +
+                "category,owner_id,created,prove,series_parent_id from challenge_acceptance " +
+                "inner join challenges on challenge_id=id where user_id=:user_id " +
+                "order by challenge_acceptance.created desc";
+            return qh.ExecuteQueryToObjectList(sql);
         }
     }
 }

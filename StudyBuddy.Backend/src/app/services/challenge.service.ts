@@ -152,4 +152,16 @@ export class ChallengeService {
 
     return ids;
   }
+
+  async getQrCode(id:number):Promise<Blob> {
+    this.logger.debug("Loading QR-Code of Challenge " + id);
+
+    let result = await this.http.get(this.url + "Challenge/GetQrCode/" + id,
+    {
+      responseType: 'blob',
+      headers: new HttpHeaders({ Authorization: this.auth.getToken() })
+    }).toPromise();
+
+    return result;
+  }
 }

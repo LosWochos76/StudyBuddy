@@ -2,17 +2,14 @@
 <ContentPage
     xmlns="http://xamarin.com/schemas/2014/forms"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    x:Class="App.Views.ChallengesPage"
+    x:Class="StudyBuddy.App.Views.ChallengesPage"
     xmlns:viewmodels="clr-namespace:StudyBuddy.App.ViewModels"
     xmlns:models="clr-namespace:StudyBuddy.Model;assembly=StudyBuddy.Model"
     x:DataType="viewmodels:ChallengesViewModel"
     xmlns:fontAwesome="clr-namespace:StudyBuddy.App"
-    x:Name="page">
+    x:Name="page" Title="{Binding Header}">
     <ContentPage.Content>
         <StackLayout Padding="10">
-            <Label Text="{Binding Header}" FontAttributes="Bold" Padding="15"
-                   HorizontalTextAlignment="Center" VerticalOptions="Center" />
-            <BoxView HorizontalOptions="FillAndExpand" HeightRequest="1" Color="Gray"/>
             <RefreshView
                 BackgroundColor="LightGray"
                 IsRefreshing="{Binding IsRefreshing}"

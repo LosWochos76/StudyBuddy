@@ -9,9 +9,9 @@ using StudyBuddy.ApiFacade.Restful;
 
 namespace StudyBuddy.ApiFacade
 {
-    class RestfulAuthentication : IAuthentication
+    class AuthenticationService : IAuthenticationService
     {
-        private IApiFacade api;
+        private IApi api;
         private string base_url;
         private HttpClient client;
 
@@ -19,7 +19,7 @@ namespace StudyBuddy.ApiFacade
         public string Token { get; private set; } = string.Empty;
         public User CurrentUser { get; private set; } = null;
 
-        public RestfulAuthentication(IApiFacade api, string base_url)
+        public AuthenticationService(IApi api, string base_url)
         {
             this.api = api;
             this.base_url = base_url;

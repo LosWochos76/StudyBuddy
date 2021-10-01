@@ -1,5 +1,7 @@
 ﻿using System.Windows.Input;
+using StudyBuddy.ApiFacade;
 using StudyBuddy.ApiFacade.Restful;
+using StudyBuddy.App.Misc;
 using Xamarin.Forms;
 
 namespace StudyBuddy.App.ViewModels
@@ -13,7 +15,7 @@ namespace StudyBuddy.App.ViewModels
         public string EMail { get; set; }
         public string Password { get; set; }
 
-        public LoginViewModel() : base()
+        public LoginViewModel(IApi api, IDialogService dialog, INavigationService navigation) : base(api, dialog, navigation)
         {
             LoginCommand = new Command(Login);
             RegisterCommand = new Command(Register);

@@ -2,23 +2,21 @@
 
 <div class="row">
   <div class="col-10">
-    <button class="btn btn-primary" 
-      (click)="onAdd()">Neu</button>
+    <button class="btn btn-primary" (click)="onAdd()">Neu</button>
     &nbsp;
 
-    <button class="btn btn-success" 
-      [disabled]="!isSelected()"
-      (click)="onEdit()">Bearbeiten</button>
+    <button class="btn btn-success" [disabled]="!isSelected()" (click)="onEdit()">Bearbeiten</button>
     &nbsp;
 
-    <button class="btn btn-success" 
-      [disabled]="!isSeriable()"
-      (click)="onCreateSeries()">Serie erstellen</button>
+    <button class="btn btn-success" [disabled]="!isSeriable()" (click)="onCreateSeries()">Serie erstellen</button>
     &nbsp;
 
-    <button class="btn btn-danger" 
-      [disabled]="!isSelected()"
-      (click)="onDelete()">Löschen</button>
+    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop"
+      [disabled]="!isSelected()" (click)="getQrCodeImage()">
+      QR-Code
+    </button>&nbsp;
+
+    <button class="btn btn-danger" [disabled]="!isSelected()" (click)="onDelete()">Löschen</button>
   </div>
   <div class="col-2">
     <input type="text" class="form-control" (keyup)="onKeySearch($event)">
@@ -28,7 +26,7 @@
 <br>
 
 <table class="table table-bordered">
-<thead>
+  <thead>
     <tr>
       <th scope="col">#</th>
       <th scope="col">Name</th>
@@ -40,17 +38,30 @@
     </tr>
   </thead>
   <tbody>
-    <tr *ngFor="let obj of objects; index as i" 
-        (click)="onSelect(obj)"
-        (dblclick)="onEdit(obj)"
-        [class.table-info]="obj == selected">
-        <th scope="row">{{i + 1}}</th>
-        <td>{{obj.name}}</td>
-        <td>{{obj.category | category}}</td>
-        <td>{{obj.points}}</td>
-        <td>{{obj.validity_start}}</td>
-        <td>{{obj.validity_end}}</td>
-        <td *ngIf="user.isAdmin()">{{getOwnerName(obj.owner)}}</td>
+    <tr *ngFor="let obj of objects; index as i" (click)="onSelect(obj)" (dblclick)="onEdit(obj)"
+      [class.table-info]="obj == selected">
+      <th scope="row">{{i + 1}}</th>
+      <td>{{obj.name}}</td>
+      <td>{{obj.category | category}}</td>
+      <td>{{obj.points}}</td>
+      <td>{{obj.validity_start}}</td>
+      <td>{{obj.validity_end}}</td>
+      <td *ngIf="user.isAdmin()">{{getOwnerName(obj.owner)}}</td>
     </tr>
   </tbody>
-  </table>
+</table>
+
+<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+  aria-labelledby="staticBackdropLabel" aria-hidden="true" *ngIf="selected != null">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="staticBackdropLabel">{{selected.name}}</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <img [src]="image" width="300" height="300">
+      </div>
+    </div>
+  </div>
+</div>

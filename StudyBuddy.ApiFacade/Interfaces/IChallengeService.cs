@@ -4,8 +4,9 @@ using StudyBuddy.Model;
 
 namespace StudyBuddy.ApiFacade
 {
-    public interface IChallengeRepository
+    public interface IChallengeService
     {
         Task<IEnumerable<Challenge>> ForToday(string tag_string);
+        void AcceptFromQrCode(string code);
     }
 }

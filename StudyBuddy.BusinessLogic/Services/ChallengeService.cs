@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Reflection;
+using System.Linq;
+using NETCore.Encrypt;
 using QRCoder;
 using StudyBuddy.Model;
 using StudyBuddy.Persistence;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace StudyBuddy.BusinessLogic
 {
@@ -136,10 +139,62 @@ namespace StudyBuddy.BusinessLogic
 
         public Bitmap GetQrCode(int challenge_id)
         {
+            if (current_user == null || current_user.IsStudent)
+                throw new UnauthorizedAccessException("Unauthorized!");
+
+            var challenge = repository.Challenges.ById(challenge_id);
+            if (challenge == null)
+                throw new Exception("Challenge not found!");
+
+            if (!current_user.IsAdmin && current_user.ID != challenge.ID)
+                throw new UnauthorizedAccessException("Unauthorized!");
+
+            // Encrypt the challenge_id
+            var key_string = Model.Environment.GetOrDefault("JWT_KEY", "thisisasupersecretkey");
+            key_string = string.Concat(Enumerable.Repeat(key_string, 32)).Substring(0, 32);
+            var encrypted = EncryptProvider.AESEncrypt(challenge_id.ToString(), key_string);
+            var plainTextBytes = System.Text.Encoding.UTF8.GetBytes(encrypted);
+
+            // create payload
+            var payload = "qr:" + Convert.ToBase64String(plainTextBytes);
+
+            // Generate QR-Code
             QRCodeGenerator qrGenerator = new QRCodeGenerator();
-            QRCodeData qrCodeData = qrGenerator.CreateQrCode("The text which should be encoded.", QRCodeGenerator.ECCLevel.Q);
+            QRCodeData qrCodeData = qrGenerator.CreateQrCode(payload, QRCodeGenerator.ECCLevel.Q);
             QRCode qrCode = new QRCode(qrCodeData);
             return qrCode.GetGraphic(20);
+        }
+
+        public void AcceptFromQrCode(string payload)
+        {
+            if (current_user == null)
+                throw new UnauthorizedAccessException("Unauthorized!");
+
+            if (!payload.StartsWith("qr:"))
+                throw new UnauthorizedAccessException("No valid payload given!");
+
+            int challenge_id = 0;
+
+            try
+            {
+                // Decrypt the challenge_id
+                var plainTextBytes = Convert.FromBase64String(payload.Substring(3));
+                var encrypted_string = System.Text.Encoding.UTF8.GetString(plainTextBytes);
+                
+                var key_string = Model.Environment.GetOrDefault("JWT_KEY", "thisisasupersecretkey");
+                key_string = string.Concat(Enumerable.Repeat(key_string, 32)).Substring(0, 32);
+                
+                var decrypted = EncryptProvider.AESDecrypt(encrypted_string, key_string);
+                challenge_id = Convert.ToInt32(decrypted);
+            }
+            catch
+            {
+                throw new Exception("No valid payload given!");
+            }
+
+            repository.Challenges.AddAcceptance(challenge_id, current_user.ID);
+
+            // ToDo: Neuigkeit erzeugen
         }
     }
 }

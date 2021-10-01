@@ -16,7 +16,14 @@ namespace StudyBuddy.Persistence
         void Insert(Challenge obj);
         void Update(Challenge obj);
         void Delete(int id);
+
+        // Link to badges:
         IEnumerable<Challenge> OfBadge(int badge_id);
         IEnumerable<Challenge> NotOfBadge(int badge_id);
+
+        // Link to acceptance:
+        void AddAcceptance(int challenge_id, int user_id);
+        void DeleteAcceptance(int challenge_id, int user_id);
+        IEnumerable<Challenge> Accepted(int user_id);
     }
 }

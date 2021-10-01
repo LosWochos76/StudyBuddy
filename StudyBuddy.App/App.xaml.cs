@@ -1,16 +1,13 @@
-﻿using System;
-using App.Views;
-using Microsoft.Extensions.DependencyInjection;
-using StudyBuddy.ApiFacade;
+﻿using StudyBuddy.ApiFacade;
 using StudyBuddy.App.Misc;
+using StudyBuddy.App.Views;
+using TinyIoC;
 using Xamarin.Forms;
 
 namespace StudyBuddy.App
 {
     public partial class App : Application
     {
-        public static IServiceProvider ServiceProvider { get; set; }
-
         public App()
         {
             InitializeComponent();
@@ -21,11 +18,9 @@ namespace StudyBuddy.App
 
         private void SetupServices()
         {
-            var services = new ServiceCollection();
-            services.AddSingleton<IApiFacade, ApiFacade.ApiFacade>();
-            services.AddSingleton<IDialogService, DialogService>();
-            services.AddSingleton<INagigationService, NagigationService>();
-            ServiceProvider = services.BuildServiceProvider();
+            TinyIoCContainer.Current.Register<IApi>(new ApiFacade.ApiFacade());
+            TinyIoCContainer.Current.Register<IDialogService>(new DialogService());
+            TinyIoCContainer.Current.Register<INavigationService>(new NagigationService());
         }
 
         protected async override void OnStart()
@@ -34,7 +29,7 @@ namespace StudyBuddy.App
                 return;
 
             var content = Current.Properties["Login"].ToString();
-            var api = ServiceProvider.GetService(typeof(IApiFacade)) as IApiFacade;
+            var api = TinyIoCContainer.Current.Resolve<IApi>();
             var result = await api.Authentication.LoginFromJson(content);
 
             if (result)

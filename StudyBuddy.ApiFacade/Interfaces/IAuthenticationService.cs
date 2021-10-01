@@ -23,7 +23,7 @@ namespace StudyBuddy.ApiFacade
         }
     }
 
-    public interface IAuthentication
+    public interface IAuthenticationService
     {
         string Token { get; }
         User CurrentUser { get; }

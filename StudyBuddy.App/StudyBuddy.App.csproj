@@ -16,23 +16,23 @@
     <None Remove="NewFolder1\**" />
     <None Remove="Microsoft.Extensions.DependencyInjection" />
     <None Remove="Misc\" />
+    <None Remove="TinyIoC" />
+    <None Remove="Interfaces\" />
+    <None Remove="ZXing.Net.Mobile.Forms" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Xamarin.Forms" Version="5.0.0.2125" />
     <PackageReference Include="Xamarin.Essentials" Version="1.7.0" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="5.0.2" />
+    <PackageReference Include="ZXing.Net.Mobile.Forms" Version="3.1.0-beta2" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\StudyBuddy.Model\StudyBuddy.Model.csproj" />
     <ProjectReference Include="..\StudyBuddy.ApiFacade\StudyBuddy.ApiFacade.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Update="Views\RankingsPage.xaml">
-      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-    </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
     <Folder Include="Misc\" />
+    <Folder Include="Interfaces\" />
   </ItemGroup>
 </Project>

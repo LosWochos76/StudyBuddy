@@ -18,6 +18,7 @@ export class ChallengeListComponent implements OnInit {
   timeout: any = null;
   user:User = null;
   owners_cache = new Map();
+  image;
 
   constructor(
     private logger:LoggingService, 
@@ -110,5 +111,16 @@ export class ChallengeListComponent implements OnInit {
     }
 
     return "";
+  }
+
+  async getQrCodeImage() {
+    let blob = await this.service.getQrCode(this.selected.id);
+
+    let file = new FileReader();
+    file.addEventListener("load", () => {
+      this.image = file.result;
+    });
+
+    file.readAsDataURL(blob);
   }
 }

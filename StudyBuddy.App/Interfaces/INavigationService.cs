@@ -2,7 +2,7 @@
 
 namespace StudyBuddy.App.Misc
 {
-    public interface INagigationService
+    public interface INavigationService
     {
         Task GoTo(string path);
     }

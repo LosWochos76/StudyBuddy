@@ -102,22 +102,22 @@ namespace StudyBuddy.Api
         [HttpGet]
         public IActionResult GetQrCode(int id)
         {
-            try
-            {
-                var service = new ChallengeService(repository, HttpContext.Items["user"] as User);
-                var code = service.GetQrCode(id);
+            var service = new ChallengeService(repository, HttpContext.Items["user"] as User);
+            var code = service.GetQrCode(id);
 
-                using (MemoryStream ms = new MemoryStream())
-                {
-                    code.Save(ms, System.Drawing.Imaging.ImageFormat.Png);
-                    return File(ms, "image/png");
-                }
-            } catch (Exception e)
-            {
-                Console.WriteLine(e.ToString());
-            }
+            MemoryStream ms = new MemoryStream();
+            code.Save(ms, System.Drawing.Imaging.ImageFormat.Png);
+            ms.Position = 0;
+            return File(ms, "image/png");
+        }
 
-            return null;
+        [Route("/Challenge/AcceptFromQrCode/")]
+        [HttpPost]
+        public IActionResult AcceptFromQrCode([FromBody] string payload)
+        {
+            var service = new ChallengeService(repository, HttpContext.Items["user"] as User);
+            service.AcceptFromQrCode(payload);
+            return Json(new { Status = "ok" });
         }
     }
 }

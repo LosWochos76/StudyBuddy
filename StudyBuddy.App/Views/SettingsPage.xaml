@@ -2,8 +2,11 @@
 <ContentPage
     xmlns="http://xamarin.com/schemas/2014/forms"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    x:Class="App.Views.BadgesPage">
+    x:Class="StudyBuddy.App.Views.SettingsPage"
+    Title="Einstellungen">
     <ContentPage.Content>
-        <Label Text="Badges" HorizontalTextAlignment="Center" VerticalOptions="Center" />
+        <StackLayout Padding="5">
+            <Button Text="Ausloggen" Command="{Binding LogoutCommand}" />
+        </StackLayout>
     </ContentPage.Content>
 </ContentPage>

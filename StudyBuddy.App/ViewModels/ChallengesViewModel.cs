@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Windows.Input;
+using StudyBuddy.ApiFacade;
+using StudyBuddy.App.Misc;
 using StudyBuddy.Model;
 using Xamarin.Forms;
 
@@ -13,11 +15,11 @@ namespace StudyBuddy.App.ViewModels
         public ICommand AcceptCommand { get; private set; }
         public bool IsRefreshing { get; set; }
 
-        public ChallengesViewModel() : base()
+        public ChallengesViewModel(IApi api, IDialogService dialog, INavigationService navigation) : base(api, dialog, navigation)
         {
-            this.LoadChallenges();
+            this.Reload();
             api.Authentication.LoginStateChanged += Authentication_LoginStateChanged;
-            RefreshCommand = new Command(LoadChallenges);
+            RefreshCommand = new Command(Reload);
             AcceptCommand = new Command<Challenge>(Accept);
         }
 
@@ -32,10 +34,10 @@ namespace StudyBuddy.App.ViewModels
         private void Authentication_LoginStateChanged(object sender, ApiFacade.LoginStateChangedArgs args)
         {
             if (args.IsLoggedIn)
-                LoadChallenges();
+                Reload();
         }
 
-        private async void LoadChallenges()
+        public async void Reload()
         {
             IsRefreshing = true;
             NotifyPropertyChanged("IsRefreshing");

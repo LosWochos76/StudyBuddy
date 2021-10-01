@@ -42,5 +42,7 @@
 		<string>faregular.otf</string>
 		<string>fasolid.otf</string>
 	</array>
+	<key>NSCameraUsageDescription</key>
+	<string>StudyBuddy möchte QR-Codes scannen.</string>
 </dict>
 </plist>

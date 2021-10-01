@@ -1,17 +1,17 @@
 ﻿namespace StudyBuddy.ApiFacade
 {
-    public class ApiFacade : IApiFacade
+    public class ApiFacade : IApi
     {
-        private string base_url = "https://localhost:5001/";
-        //private string base_url = "https://studybuddy.hshl.de/";
+        //private string base_url = "https://localhost:5001/";
+        private string base_url = "https://studybuddy.hshl.de/";
 
-        public IAuthentication Authentication { get; private set; }
-        public IChallengeRepository Challenges { get; private set; }
+        public IAuthenticationService Authentication { get; private set; }
+        public IChallengeService Challenges { get; private set; }
 
         public ApiFacade()
         {
-            this.Authentication = new RestfulAuthentication(this, base_url);
-            this.Challenges = new RestfulChallengeRepository(this, base_url);
+            this.Authentication = new AuthenticationService(this, base_url);
+            this.Challenges = new ChallengeService(this, base_url);
         }
     }
 }

@@ -4,13 +4,13 @@ using Xamarin.Forms;
 
 namespace StudyBuddy.App.Views
 {
-    public partial class MainPage : Shell
+    public partial class SettingsPage : ContentPage
     {
-        public MainPage()
+        public SettingsPage()
         {
             InitializeComponent();
 
-            BindingContext = TinyIoCContainer.Current.Resolve<MainViewModel>();
+            BindingContext = TinyIoCContainer.Current.Resolve<SettingsViewModel>();
         }
     }
 }

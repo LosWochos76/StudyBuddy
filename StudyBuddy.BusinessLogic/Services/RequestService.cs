@@ -65,7 +65,7 @@ namespace StudyBuddy.BusinessLogic
 
             if (obj.Type == RequestType.ChallengeAcceptance)
             {
-                // Hier Challenge accepten.
+                // Der Nutzer will bestätigen, dass ein anderer Nutzer eine Herausforderung geschafft hat.
             }
 
             repository.Requests.Delete(id);

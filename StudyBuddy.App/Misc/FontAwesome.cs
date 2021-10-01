@@ -11,6 +11,8 @@ namespace StudyBuddy.App
     /// </summary>
     public static partial class FontAwesomeIcons
     {
+        public const string Gears = "\uf085";
+
         /// <summary>
         /// fa-500px unicode value ("\uf26e").
         /// <para/>

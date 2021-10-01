@@ -8,13 +8,13 @@ using System.Text;
 
 namespace StudyBuddy.ApiFacade
 {
-    class RestfulChallengeRepository : IChallengeRepository
+    class ChallengeService : IChallengeService
     {
-        private IApiFacade api;
+        private IApi api;
         private string base_url;
         private HttpClient client;
 
-        public RestfulChallengeRepository(IApiFacade api, string base_url)
+        public ChallengeService(IApi api, string base_url)
         {
             this.api = api;
             this.base_url = base_url;
@@ -42,6 +42,23 @@ namespace StudyBuddy.ApiFacade
                 return jtoken.ToObject<IEnumerable<Challenge>>();
             else
                 return null;
+        }
+
+        public async void AcceptFromQrCode(string code)
+        {
+            var token = api.Authentication.Token;
+            if (string.IsNullOrEmpty(token))
+                throw new Exception("You must login first");
+
+            var message = new HttpRequestMessage(HttpMethod.Post, base_url + "Challenge/AcceptFromQrCode");
+            message.Headers.Add("Authorization", api.Authentication.Token);
+            message.Content = new StringContent("{\"payload\":\"\"}", Encoding.UTF8, "application/json");
+
+            var response = await client.SendAsync(message);
+            if (response == null || !response.IsSuccessStatusCode)
+                return;
+
+            var content = await response.Content.ReadAsStringAsync();
         }
     }
 }

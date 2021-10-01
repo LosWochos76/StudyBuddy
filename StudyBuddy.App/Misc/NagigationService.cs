@@ -3,7 +3,7 @@ using Xamarin.Forms;
 
 namespace StudyBuddy.App.Misc
 {
-    public class NagigationService : INagigationService
+    public class NagigationService : INavigationService
     {
         public Task GoTo(string path)
         {
