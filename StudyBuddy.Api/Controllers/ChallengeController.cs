@@ -113,10 +113,10 @@ namespace StudyBuddy.Api
 
         [Route("/Challenge/AcceptFromQrCode/")]
         [HttpPost]
-        public IActionResult AcceptFromQrCode([FromBody] string payload)
+        public IActionResult AcceptFromQrCode([FromBody] ChallengeAcceptParameter parameter)
         {
             var service = new ChallengeService(repository, HttpContext.Items["user"] as User);
-            service.AcceptFromQrCode(payload);
+            service.AcceptFromQrCode(parameter.Payload);
             return Json(new { Status = "ok" });
         }
     }

@@ -6,11 +6,14 @@ namespace StudyBuddy.App.Views
 {
     public partial class SettingsPage : ContentPage
     {
+        private SettingsViewModel view_model;
+
         public SettingsPage()
         {
             InitializeComponent();
 
-            BindingContext = TinyIoCContainer.Current.Resolve<SettingsViewModel>();
+            view_model =  TinyIoCContainer.Current.Resolve<SettingsViewModel>();
+            BindingContext = view_model;
         }
     }
 }

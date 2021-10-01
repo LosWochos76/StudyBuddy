@@ -17,7 +17,6 @@ namespace StudyBuddy.App.ViewModels
 
         public ChallengesViewModel(IApi api, IDialogService dialog, INavigationService navigation) : base(api, dialog, navigation)
         {
-            this.Reload();
             api.Authentication.LoginStateChanged += Authentication_LoginStateChanged;
             RefreshCommand = new Command(Reload);
             AcceptCommand = new Command<Challenge>(Accept);

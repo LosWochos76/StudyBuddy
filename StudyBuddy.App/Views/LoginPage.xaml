@@ -1,10 +1,13 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="StudyBuddy.App.Views.LoginPage"
-             Shell.FlyoutBehavior="Disabled"
-             Shell.NavBarIsVisible="False">
-
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Class="StudyBuddy.App.Views.LoginPage"
+    xmlns:viewmodels="clr-namespace:StudyBuddy.App.ViewModels"
+    xmlns:models="clr-namespace:StudyBuddy.Model;assembly=StudyBuddy.Model"
+    x:DataType="viewmodels:LoginViewModel"
+    xmlns:fontAwesome="clr-namespace:StudyBuddy.App"
+    Shell.FlyoutBehavior="Disabled"
+    Shell.NavBarIsVisible="False">
     <StackLayout>
         <StackLayout VerticalOptions="StartAndExpand">
             <Frame BackgroundColor="#2196F3" CornerRadius="0">
@@ -18,7 +21,6 @@
                        HorizontalTextAlignment="Center"
                        TextColor="White" FontSize="36"/>
             </Frame>
-
             <StackLayout Padding="10,10,10,0">
                 <Label HorizontalTextAlignment="Center">
                     <Label.FormattedText>
@@ -38,7 +40,6 @@
                 </Label>
             </StackLayout>
         </StackLayout>
-
         <StackLayout Padding="10,10,10,10" VerticalOptions="CenterAndExpand">
             <Entry Placeholder="E-Mail-Adresse" Text="{Binding EMail}" />
             <Entry Placeholder="Passwort" IsPassword="True" Text="{Binding Password}"/>

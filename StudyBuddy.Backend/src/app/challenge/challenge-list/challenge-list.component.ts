@@ -113,6 +113,10 @@ export class ChallengeListComponent implements OnInit {
     return "";
   }
 
+  isQrCodeable() {
+    return (this.selected != null && this.selected.prove == 2);
+  }
+
   async getQrCodeImage() {
     let blob = await this.service.getQrCode(this.selected.id);
 

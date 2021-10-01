@@ -9,21 +9,35 @@ namespace StudyBuddy.App.ViewModels
         {
         }
 
-        public void AcceptFromQrCode(string text)
+        public async void AcceptFromQrCode(string text)
         {
+            bool answer = false;
             if (text.StartsWith("qr:"))
-                dialog.ShowMessage("StudyBuddy QR-Code gefunden! Wollen Sie die Herausforderung annehmen?",
+                await dialog.ShowMessage(
+                    "StudyBuddy QR-Code gefunden! Wollen Sie die Herausforderung annehmen?",
                     "Herausforderung annehmen?",
-                    "Ja", "Nein", (answer) =>
-                {
-                    if (answer)
-                    {
-                        api.Challenges.AcceptFromQrCode(text);
-                        navigation.GoTo("//StatisticsPage");
-                    }
+                    "Ja", "Nein", (a) => { answer = a; });
 
-                    navigation.GoTo("//ChallengesPage");
-                });
+            if (answer)
+            {
+                var result = await api.Challenges.AcceptFromQrCode(text);
+                if (result)
+                {
+                    var challenges_view_model = TinyIoC.TinyIoCContainer.Current.Resolve<ChallengesViewModel>();
+                    challenges_view_model.Reload();
+
+                    await navigation.GoTo("//StatisticsPage");
+                }
+                else
+                {
+                    await dialog.ShowError("Ein Fehler ist aufgetreten!", "Fehler!", "Ok", null);
+                }
+                    
+            }
+            else
+            {
+                await navigation.GoTo("//ChallengesPage");
+            }  
         }
     }
 }

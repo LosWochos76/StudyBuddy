@@ -12,7 +12,7 @@
     &nbsp;
 
     <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop"
-      [disabled]="!isSelected()" (click)="getQrCodeImage()">
+      [disabled]="!isQrCodeable()" (click)="getQrCodeImage()">
       QR-Code
     </button>&nbsp;
 

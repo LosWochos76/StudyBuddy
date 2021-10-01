@@ -153,10 +153,9 @@ namespace StudyBuddy.BusinessLogic
             var key_string = Model.Environment.GetOrDefault("JWT_KEY", "thisisasupersecretkey");
             key_string = string.Concat(Enumerable.Repeat(key_string, 32)).Substring(0, 32);
             var encrypted = EncryptProvider.AESEncrypt(challenge_id.ToString(), key_string);
-            var plainTextBytes = System.Text.Encoding.UTF8.GetBytes(encrypted);
 
             // create payload
-            var payload = "qr:" + Convert.ToBase64String(plainTextBytes);
+            var payload = "qr:" + Base64.Encode(encrypted);
 
             // Generate QR-Code
             QRCodeGenerator qrGenerator = new QRCodeGenerator();
@@ -170,7 +169,7 @@ namespace StudyBuddy.BusinessLogic
             if (current_user == null)
                 throw new UnauthorizedAccessException("Unauthorized!");
 
-            if (!payload.StartsWith("qr:"))
+            if (string.IsNullOrEmpty(payload) || !payload.StartsWith("qr:"))
                 throw new UnauthorizedAccessException("No valid payload given!");
 
             int challenge_id = 0;
@@ -178,19 +177,19 @@ namespace StudyBuddy.BusinessLogic
             try
             {
                 // Decrypt the challenge_id
-                var plainTextBytes = Convert.FromBase64String(payload.Substring(3));
-                var encrypted_string = System.Text.Encoding.UTF8.GetString(plainTextBytes);
-                
+                var encrypted = Base64.Decode(payload.Substring(3));
                 var key_string = Model.Environment.GetOrDefault("JWT_KEY", "thisisasupersecretkey");
                 key_string = string.Concat(Enumerable.Repeat(key_string, 32)).Substring(0, 32);
-                
-                var decrypted = EncryptProvider.AESDecrypt(encrypted_string, key_string);
+                var decrypted = EncryptProvider.AESDecrypt(encrypted, key_string);
                 challenge_id = Convert.ToInt32(decrypted);
             }
             catch
             {
                 throw new Exception("No valid payload given!");
             }
+
+            if (challenge_id == 0)
+                throw new Exception("No valid payload given!");
 
             repository.Challenges.AddAcceptance(challenge_id, current_user.ID);
 

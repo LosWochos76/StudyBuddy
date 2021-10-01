@@ -44,7 +44,7 @@ namespace StudyBuddy.ApiFacade
                 return null;
         }
 
-        public async void AcceptFromQrCode(string code)
+        public async Task<bool> AcceptFromQrCode(string code)
         {
             var token = api.Authentication.Token;
             if (string.IsNullOrEmpty(token))
@@ -52,13 +52,15 @@ namespace StudyBuddy.ApiFacade
 
             var message = new HttpRequestMessage(HttpMethod.Post, base_url + "Challenge/AcceptFromQrCode");
             message.Headers.Add("Authorization", api.Authentication.Token);
-            message.Content = new StringContent("{\"payload\":\"\"}", Encoding.UTF8, "application/json");
+            message.Content = new StringContent("{\"Payload\":\"" + code + "\"}", Encoding.UTF8, "application/json");
 
             var response = await client.SendAsync(message);
             if (response == null || !response.IsSuccessStatusCode)
-                return;
+                return false;
 
             var content = await response.Content.ReadAsStringAsync();
+            var obj = JObject.Parse(content);
+            return obj.ContainsKey("status");
         }
     }
 }

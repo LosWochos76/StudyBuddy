@@ -1,5 +1,6 @@
 ﻿using StudyBuddy.ApiFacade;
 using StudyBuddy.App.Misc;
+using StudyBuddy.App.ViewModels;
 using StudyBuddy.App.Views;
 using TinyIoC;
 using Xamarin.Forms;
@@ -21,6 +22,12 @@ namespace StudyBuddy.App
             TinyIoCContainer.Current.Register<IApi>(new ApiFacade.ApiFacade());
             TinyIoCContainer.Current.Register<IDialogService>(new DialogService());
             TinyIoCContainer.Current.Register<INavigationService>(new NagigationService());
+
+            TinyIoCContainer.Current.Register<LoginViewModel>(TinyIoCContainer.Current.Resolve<LoginViewModel>());
+            TinyIoCContainer.Current.Register<MainViewModel>(TinyIoCContainer.Current.Resolve<MainViewModel>());
+            TinyIoCContainer.Current.Register<ChallengesViewModel>(TinyIoCContainer.Current.Resolve<ChallengesViewModel>());
+            TinyIoCContainer.Current.Register<QrCodeViewModel>(TinyIoCContainer.Current.Resolve<QrCodeViewModel>());
+            TinyIoCContainer.Current.Register<SettingsViewModel>(TinyIoCContainer.Current.Resolve<SettingsViewModel>());
         }
 
         protected async override void OnStart()

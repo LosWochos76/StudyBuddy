@@ -6,11 +6,15 @@ namespace StudyBuddy.App.Views
 {
     public partial class ChallengesPage : ContentPage
     {
+        private ChallengesViewModel view_model;
+
         public ChallengesPage()
         {
             InitializeComponent();
 
-            BindingContext = TinyIoCContainer.Current.Resolve<ChallengesViewModel>();
+            view_model = TinyIoCContainer.Current.Resolve<ChallengesViewModel>();
+            BindingContext = view_model;
+            view_model.Reload();
         }
     }
 }
