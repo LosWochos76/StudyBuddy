@@ -50,6 +50,9 @@ export class GameBadgeListComponent implements OnInit {
     if (!this.isSelected())
       return;
 
+    if (!confirm("Wollen Sie das Abzeichen wirklich löschen?"))
+      return
+
     this.logger.debug("User wants to delete a GameBadge");
     this.service.remove(this.selected.id);
     this.selected = null;

@@ -23,7 +23,7 @@ namespace StudyBuddy.Persistence
 
         // Link to acceptance:
         void AddAcceptance(int challenge_id, int user_id);
-        void DeleteAcceptance(int challenge_id, int user_id);
+        void RemoveAcceptance(int challenge_id, int user_id);
         IEnumerable<Challenge> Accepted(int user_id);
     }
 }

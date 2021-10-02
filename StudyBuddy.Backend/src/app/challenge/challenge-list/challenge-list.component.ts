@@ -6,6 +6,7 @@ import { AuthorizationService } from 'src/app/services/authorization.service';
 import { ChallengeService } from 'src/app/services/challenge.service';
 import { LoggingService } from 'src/app/services/loging.service';
 import { UserService } from 'src/app/services/user.service';
+import { faGraduationCap, faPeopleArrows, faTasks } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-challenge-list',
@@ -13,21 +14,21 @@ import { UserService } from 'src/app/services/user.service';
   styleUrls: ['./challenge-list.component.css']
 })
 export class ChallengeListComponent implements OnInit {
-  objects:Challenge[] = [];
-  selected:Challenge = null;
+  objects: Challenge[] = [];
+  selected: Challenge = null;
   timeout: any = null;
-  user:User = null;
+  user: User = null;
   owners_cache = new Map();
   image;
 
   constructor(
-    private logger:LoggingService, 
-    private service:ChallengeService,
-    private router:Router,
-    private auth:AuthorizationService,
-    private user_service:UserService) { 
-      this.user = this.auth.getUser();
-    }
+    private logger: LoggingService,
+    private service: ChallengeService,
+    private router: Router,
+    private auth: AuthorizationService,
+    private user_service: UserService) {
+    this.user = this.auth.getUser();
+  }
 
   async ngOnInit() {
     this.objects = await this.service.getAll();
@@ -38,8 +39,8 @@ export class ChallengeListComponent implements OnInit {
     if (this.user.isAdmin())
       this.loadOwners();
   }
-  
-  onSelect(obj:Challenge) {
+
+  onSelect(obj: Challenge) {
     this.logger.debug("User selected a Challenge");
     this.selected = obj;
   }
@@ -54,6 +55,9 @@ export class ChallengeListComponent implements OnInit {
 
   onDelete() {
     if (!this.isSelected())
+      return;
+
+    if (!confirm("Wollen Sie die Herausforderung wirklich löschen?"))
       return;
 
     this.logger.debug("User wants to delete a Challenge");
@@ -101,10 +105,10 @@ export class ChallengeListComponent implements OnInit {
 
   private async loadOwners() {
     for (let obj of this.objects)
-      this.owners_cache.set(obj.owner,await this.user_service.byId(obj.owner));
+      this.owners_cache.set(obj.owner, await this.user_service.byId(obj.owner));
   }
 
-  getOwnerName(id:number) {
+  getOwnerName(id: number) {
     if (this.owners_cache.has(id)) {
       let owner = this.owners_cache.get(id);
       return owner.fullName();
@@ -126,5 +130,23 @@ export class ChallengeListComponent implements OnInit {
     });
 
     file.readAsDataURL(blob);
+  }
+
+  onSuccess() {
+    if (!this.isSelected())
+      return;
+
+    this.logger.debug("User wants to see success of Challenge");
+    this.router.navigate(['/challengesuccess/', this.selected.id]);
+  }
+
+  getCategorgyIcon(obj: Challenge) {
+    if (obj.category == 1)
+      return faGraduationCap;
+
+    if (obj.category == 2)
+      return faPeopleArrows;
+
+    return faTasks;
   }
 }

@@ -195,5 +195,13 @@ namespace StudyBuddy.BusinessLogic
 
             // ToDo: Neuigkeit erzeugen
         }
+
+        public void RemoveAcceptance(int challenge_id, int user_id)
+        {
+            if (current_user == null || !current_user.IsAdmin)
+                 throw new UnauthorizedAccessException("Unathorrized");
+
+            repository.Challenges.RemoveAcceptance(challenge_id, user_id);
+        }
     }
 }

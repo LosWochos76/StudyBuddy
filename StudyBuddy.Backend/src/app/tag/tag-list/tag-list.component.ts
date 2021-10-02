@@ -10,13 +10,13 @@ import { TagService } from 'src/app/services/tag.service';
   styleUrls: ['./tag-list.component.css']
 })
 export class TagListComponent implements OnInit {
-  objects:Tag[] = [];
-  selected:Tag = null;
+  objects: Tag[] = [];
+  selected: Tag = null;
 
   constructor(
-    private logger:LoggingService, 
-    private service:TagService,
-    private router:Router) { }
+    private logger: LoggingService,
+    private service: TagService,
+    private router: Router) { }
 
   async ngOnInit() {
     this.objects = await this.service.getAll();
@@ -24,8 +24,8 @@ export class TagListComponent implements OnInit {
       this.objects = await this.service.getAll();
     });
   }
-  
-  onSelect(obj:Tag) {
+
+  onSelect(obj: Tag) {
     this.logger.debug("User selected a Tag");
     this.selected = obj;
   }
@@ -37,7 +37,10 @@ export class TagListComponent implements OnInit {
   onDelete() {
     if (!this.isSelected())
       return;
-    
+
+    if (!confirm("Wollen Sie den Tag wirklich löschen?"))
+      return;
+
     this.logger.debug("User wants to delete a Tag");
     this.service.remove(this.selected.id);
     this.selected = null;

@@ -98,7 +98,7 @@ namespace StudyBuddy.Api
             return Json(new { Status = "ok" });
         }
 
-        [Route("/Challenge/GetQrCode/{id}")]
+        [Route("/Challenge/{id}/QrCode/")]
         [HttpGet]
         public IActionResult GetQrCode(int id)
         {
@@ -113,10 +113,19 @@ namespace StudyBuddy.Api
 
         [Route("/Challenge/AcceptFromQrCode/")]
         [HttpPost]
-        public IActionResult AcceptFromQrCode([FromBody] ChallengeAcceptParameter parameter)
+        public IActionResult AcceptFromQrCode([FromBody] QrCodeParameter parameter)
         {
             var service = new ChallengeService(repository, HttpContext.Items["user"] as User);
             service.AcceptFromQrCode(parameter.Payload);
+            return Json(new { Status = "ok" });
+        }
+
+        [Route("/Challenge/{challenge_id}/RemoveAcceptance/{user_id}")]
+        [HttpPut]
+        public IActionResult RemoveAcceptance(int challenge_id, int user_id)
+        {
+            var service = new ChallengeService(repository, HttpContext.Items["user"] as User);
+            service.RemoveAcceptance(challenge_id, user_id);
             return Json(new { Status = "ok" });
         }
     }

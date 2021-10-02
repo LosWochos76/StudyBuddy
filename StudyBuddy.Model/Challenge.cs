@@ -41,9 +41,11 @@ namespace StudyBuddy.Model
         {
             get
             {
+                // GraduationCap
                 if (Category == ChallengeCategory.Learning)
                     return '\uf19d';
 
+                // PeopleArrows
                 if (Category == ChallengeCategory.Networking)
                     return '\ue068';
 

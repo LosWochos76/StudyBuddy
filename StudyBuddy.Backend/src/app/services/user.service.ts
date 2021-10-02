@@ -145,4 +145,21 @@ export class UserService {
         headers: new HttpHeaders({ Authorization: this.auth.getToken() })
       }).toPromise();
   }
+
+  async getAcceptedUsersOfChallenge(challenge_id: number): Promise<User[]> {
+    if (!this.auth.isLoggedIn())
+      return null;
+
+    let objects: User[] = [];
+    this.logger.debug("Getting all Users that accepted challenge " + challenge_id);
+    let result = await this.http.get(this.url + "User/ThatAcceptedChallenge/" + challenge_id,
+      {
+        headers: new HttpHeaders({ Authorization: this.auth.getToken() })
+      }).toPromise();
+
+    for (let index in result)
+      objects.push(User.fromApi(result[index]));
+
+    return objects;
+  }
 }

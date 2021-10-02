@@ -177,6 +177,7 @@ namespace StudyBuddy.Persistence
         {
             var qh = new QueryHelper<User>(connection_string);
             qh.Delete("users", "id", id);
+            qh.Delete("challenge_acceptance", "user_id", id);
         }
 
         public User ByNickname(string nickname)
@@ -226,8 +227,16 @@ namespace StudyBuddy.Persistence
                 AddFriend(user_id, friend_id);
         }
 
-        public void AddTag(int user_id, int tag_id)
+        public IEnumerable<User> GetAllUsersThatAcceptedChallenge(int challenge_id)
         {
+            var qh = new QueryHelper<User>(connection_string, FromReader);
+            qh.AddParameter(":challenge_id", challenge_id);
+            return qh.ExecuteQueryToObjectList(
+                "SELECT id,firstname,lastname,nickname,email,password_hash,role," +
+                "program_id,enrolled_in_term_id FROM challenge_acceptance " +
+                "inner join users on user_id=id " +
+                "where challenge_id=:challenge_id " +
+                "order by lastname,firstname,nickname");
         }
     }
 }

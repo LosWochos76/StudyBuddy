@@ -122,5 +122,14 @@ namespace StudyBuddy.Api
             service.SetFriends(parameter);
             return Json(new { Status = "ok" });
         }
+
+        [Route("/User/ThatAcceptedChallenge/{challenge_id}")]
+        [HttpGet]
+        public IActionResult ThatAcceptedChallenge(int challenge_id)
+        {
+            var service = new UserService(repository, HttpContext.Items["user"] as User);
+            var result = service.GetAllUsersThatAcceptedChallenge(challenge_id);
+            return Json(result);
+        }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using StudyBuddy.Model;
 using StudyBuddy.Persistence;
 
@@ -109,6 +110,21 @@ namespace StudyBuddy.BusinessLogic
                 return;
 
             repository.Users.AddFriends(parameter.UserID, parameter.Friends);
+        }
+
+        public IEnumerable<User> GetAllUsersThatAcceptedChallenge(int challenge_id)
+        {
+            if (current_user == null)
+                throw new UnauthorizedAccessException("Unauthorized!");
+
+            var challenge = repository.Challenges.ById(challenge_id);
+            if (challenge == null)
+                throw new Exception("Challenge not found!");
+
+            if (!current_user.IsAdmin && challenge.OwnerID != current_user.ID)
+                throw new UnauthorizedAccessException("Unauthorized!");
+
+            return repository.Users.GetAllUsersThatAcceptedChallenge(challenge_id);
         }
     }
 }

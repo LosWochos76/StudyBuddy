@@ -1,36 +1,26 @@
 <br>
-
 <div class="row">
   <div class="col-10">
-    <button class="btn btn-primary" (click)="onAdd()">Neu</button>
-    &nbsp;
-
-    <button class="btn btn-success" [disabled]="!isSelected()" (click)="onEdit()">Bearbeiten</button>
-    &nbsp;
-
-    <button class="btn btn-success" [disabled]="!isSeriable()" (click)="onCreateSeries()">Serie erstellen</button>
-    &nbsp;
-
+    <button class="btn btn-primary" (click)="onAdd()">Neu</button>&nbsp;
+    <button class="btn btn-success" [disabled]="!isSelected()" (click)="onEdit()">Bearbeiten</button>&nbsp;
+    <button class="btn btn-success" [disabled]="!isSeriable()" (click)="onCreateSeries()">Serie erstellen</button>&nbsp;
     <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop"
       [disabled]="!isQrCodeable()" (click)="getQrCodeImage()">
       QR-Code
     </button>&nbsp;
-
+    <button class="btn btn-info"  [disabled]="!isSelected()" (click)="onSuccess()">Erfolg</button>&nbsp;
     <button class="btn btn-danger" [disabled]="!isSelected()" (click)="onDelete()">Löschen</button>
   </div>
   <div class="col-2">
     <input type="text" class="form-control" (keyup)="onKeySearch($event)">
   </div>
 </div>
-
 <br>
-
 <table class="table table-bordered">
   <thead>
     <tr>
       <th scope="col">#</th>
       <th scope="col">Name</th>
-      <th scope="col">Kategory</th>
       <th scope="col">Punkte</th>
       <th scope="col">Von</th>
       <th scope="col">Bis</th>
@@ -41,8 +31,7 @@
     <tr *ngFor="let obj of objects; index as i" (click)="onSelect(obj)" (dblclick)="onEdit(obj)"
       [class.table-info]="obj == selected">
       <th scope="row">{{i + 1}}</th>
-      <td>{{obj.name}}</td>
-      <td>{{obj.category | category}}</td>
+      <td><fa-icon [icon]="getCategorgyIcon(obj)"></fa-icon>&nbsp;{{obj.name}}</td>
       <td>{{obj.points}}</td>
       <td>{{obj.validity_start}}</td>
       <td>{{obj.validity_end}}</td>
@@ -50,7 +39,6 @@
     </tr>
   </tbody>
 </table>
-
 <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
   aria-labelledby="staticBackdropLabel" aria-hidden="true" *ngIf="selected != null">
   <div class="modal-dialog">

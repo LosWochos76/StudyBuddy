@@ -156,12 +156,23 @@ export class ChallengeService {
   async getQrCode(id:number):Promise<Blob> {
     this.logger.debug("Loading QR-Code of Challenge " + id);
 
-    let result = await this.http.get(this.url + "Challenge/GetQrCode/" + id,
+    let result = await this.http.get(this.url + "Challenge/" + id  + "/QrCode/",
     {
       responseType: 'blob',
       headers: new HttpHeaders({ Authorization: this.auth.getToken() })
     }).toPromise();
 
     return result;
+  }
+
+  async removeAcceptance(challenge_id:number, user_id:number) {
+    this.logger.debug("Removeing challenge acceptance");
+
+    let result = await this.http.put(this.url + "Challenge/" + challenge_id + "/RemoveAcceptance/" + user_id, "", 
+    {
+      headers: new HttpHeaders({ Authorization: this.auth.getToken() })
+    }).toPromise();
+
+    console.log(result);
   }
 }

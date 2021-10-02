@@ -34,6 +34,7 @@ import { RequestEditComponent } from './request/request-edit/request-edit.compon
 import { RequestListComponent } from './request/request-list/request-list.component';
 import { TagListComponent } from './tag/tag-list/tag-list.component';
 import { TagEditComponent } from './tag/tag-edit/tag-edit.component';
+import { SuccessComponent } from './challenge/success/success.component';
 
 @NgModule({
   declarations: [
@@ -62,6 +63,7 @@ import { TagEditComponent } from './tag/tag-edit/tag-edit.component';
     RequestListComponent,
     TagListComponent,
     TagEditComponent,
+    SuccessComponent,
   ],
   imports: [
     BrowserModule,

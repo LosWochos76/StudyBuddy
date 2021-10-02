@@ -1,6 +1,6 @@
 ﻿namespace StudyBuddy.BusinessLogic
 {
-    public class ChallengeAcceptParameter
+    public class QrCodeParameter
     {
         public string Payload { get; set; }
     }

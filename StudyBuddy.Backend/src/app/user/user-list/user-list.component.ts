@@ -11,16 +11,16 @@ import { UserService } from 'src/app/services/user.service';
   styleUrls: ['./user-list.component.css']
 })
 export class UserListComponent implements OnInit {
-  objects:User[] = [];
-  count:number = 0;
-  selected:User = null;
-  current_user:User = null;
+  objects: User[] = [];
+  count: number = 0;
+  selected: User = null;
+  current_user: User = null;
 
   constructor(
-    private logger:LoggingService, 
-    private service:UserService,
-    private router:Router,
-    private auth:AuthorizationService) { }
+    private logger: LoggingService,
+    private service: UserService,
+    private router: Router,
+    private auth: AuthorizationService) { }
 
   async ngOnInit() {
     this.current_user = this.auth.getUser();
@@ -32,8 +32,8 @@ export class UserListComponent implements OnInit {
       this.objects = await this.service.getAll();
     });
   }
-  
-  onSelect(obj:User) {
+
+  onSelect(obj: User) {
     this.logger.debug("User selected a Term");
     this.selected = obj;
   }
@@ -45,7 +45,10 @@ export class UserListComponent implements OnInit {
   onDelete() {
     if (!this.isSelected())
       return;
-    
+
+    if (!confirm("Wollen Sie den Nutzer wirklich löschen?"))
+      return;
+
     this.logger.debug("User wants to delete a User");
     this.service.remove(this.selected.id);
     this.selected = null;

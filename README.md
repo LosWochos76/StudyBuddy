@@ -20,7 +20,24 @@ Das System besteht aus mehrere Schichten bzw. Komponenten:
 
 ## Revisionen
 
-## Backend 0.0.10
+## Version 0.0.12
+
+* Herausformderungen können Nutzern zugeordnet (akzeptiert) werden. 
+  * In der API wurden dazu entsprechende Schnittstellen geschaffen.
+  * In der Datenbank existiert dazu die Tabelle "challenge_acceptance"
+* Im Backend kann bei einer Herausforderung angezeigt werden, welche Nutzer diese angenommen haben.
+  *  Admins haben auch die Möglichkeit, diese Verbindung wieder zu entfernen.
+* In der App kann der QR-Code einer Challenge gescannt werden.
+  * Dadurch wird die Challenge dann angenommen/in der API gesleichert.
+
+## Version 0.0.11
+
+* Für die Herausforderungen können QR-Codes erstellt und im Backend angezeigt werden
+* In der App wurde auf Tabbed-Navigation umgestellt.
+  * Es werden Icons von Fontawesome verwendet
+  * Es gibt einen Tab, um QR-Codes zu scannen. Das Kamera-Bild wird angezeigt, mehr aber noch nicht.
+
+## Version 0.0.10
 
 * Nach dem letzten Jourfix haben sich einige interessante Dinge ergeben:
   * Es wurde das Konzept der Tags eingeführt.
@@ -32,7 +49,7 @@ Das System besteht aus mehrere Schichten bzw. Komponenten:
   * All das macht insbesondere die Studiengänge und Semester überflüssig.
   * Entsprechend wurden beide Konzepte aus API und Backend entfernt.
 
-### Backend 0.0.9
+### Version 0.0.9
 
 * Das ganze Konzept der Teams wurde komplett entfernt.
   * Teams sind aus einigen Gründen unpraktisch. Wenn später Neuigkeiten angezeigt werden sollen,
@@ -64,13 +81,13 @@ Das System besteht aus mehrere Schichten bzw. Komponenten:
     Aktuell geschieht das noch zum großen Teil in den Controllern durch
     verschiedene Attribute, zB [IsAdmin] oder [IsLoggedIn]
 
-### Backend 0.0.8
+### Version 0.0.8
 
 * Die persönlichen Einstellungen können nun geändert werden.
 
 * Bei den Herausforderungen, Abzeichen und Teams kann der Admin nun die Besitzer ändern
 
-### Backend 0.0.7
+### Version 0.0.7
 
 * Abzeichen können nun komplett erstellt werden.
   * In diesem Zug wurde auch eine neue Komponente erstellet, um Herausforderungen auszuwählen
@@ -83,7 +100,7 @@ Das System besteht aus mehrere Schichten bzw. Komponenten:
   * Aktuell geht es da leider nicht weiter, weil mir an der HSHL nur ein Exchange-Server bekannt ist
     und der Versand aus Asp.Net Core lediglich mit SMTP leicht umsetzbar ist.
 
-### Backend 0.0.6
+### Version 0.0.6
 
 * Bei den Herausforderungen sind zwei neue Attribute hinzugekommen: 
   * "Gültig für Studiengang" und "Gültig für Studierende eingeschrieben im Semester".
@@ -96,11 +113,11 @@ Das System besteht aus mehrere Schichten bzw. Komponenten:
   * Die Komponenten GameBadgeEdit und GameBadgeList sind erstellt, letztere ist fast fertig.
   * Die Modellklasse "GameBadge" ist eingebaut und der Service "GameBadgeService" wurde begonnen.
 
-* Einige Bugfixes, hauptsächlich in der RESTful-Api
+* Einige Bugfixes, hauptsächlich in der Api
   * Die Methoden der Repositories sind erstmal alle synchronized, 
     weil durch die parallel ablaufenden Requests teilweise komische Dinge passiert sind.
 
-### Backend 0.0.5
+### Version 0.0.5
 
 * Von Herausforderungen können Serien erstellt werden.
 * Herausforderungen können mit einer Volltextsuche gefiltert werden.

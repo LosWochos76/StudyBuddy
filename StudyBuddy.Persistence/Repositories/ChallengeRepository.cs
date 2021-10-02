@@ -228,7 +228,7 @@ namespace StudyBuddy.Persistence
             qh.AddParameter(":badge_id", badge_id);
             return qh.ExecuteQueryToObjectList(
                 "select id,name,description,points,validity_start," +
-                "validity_end,category,owner_id,created,prove,series_parent_id," +
+                "validity_end,category,owner_id,created,prove,series_parent_id " +
                 "from game_badge_challenges " +
                 "inner join challenges on challenge=id where game_badge=:badge_id " +
                 "order by created desc");
@@ -255,7 +255,7 @@ namespace StudyBuddy.Persistence
                 "values(:challenge_id, :user_id, :created) ON CONFLICT DO NOTHING;");
         }
 
-        public void DeleteAcceptance(int challenge_id, int user_id)
+        public void RemoveAcceptance(int challenge_id, int user_id)
         {
             var qh = new QueryHelper<Tag>(connection_string);
             qh.AddParameters(new { challenge_id, user_id });
