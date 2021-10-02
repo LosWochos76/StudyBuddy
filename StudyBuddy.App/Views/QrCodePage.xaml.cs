@@ -1,12 +1,13 @@
 ﻿using StudyBuddy.App.ViewModels;
 using TinyIoC;
 using Xamarin.Forms;
+using ZXing;
 
 namespace StudyBuddy.App.Views
 {
     public partial class QrCodePage : ContentPage
     {
-        private QrCodeViewModel view_model;
+        private readonly QrCodeViewModel view_model;
 
         public QrCodePage()
         {
@@ -16,12 +17,9 @@ namespace StudyBuddy.App.Views
             BindingContext = view_model;
         }
 
-        void ZXingScannerView_OnScanResult(ZXing.Result result)
+        private void ZXingScannerView_OnScanResult(Result result)
         {
-            Device.BeginInvokeOnMainThread(() =>
-            {
-                view_model.AcceptFromQrCode(result.Text);
-            });
+            Device.BeginInvokeOnMainThread(() => { view_model.AcceptFromQrCode(result.Text); });
         }
     }
 }

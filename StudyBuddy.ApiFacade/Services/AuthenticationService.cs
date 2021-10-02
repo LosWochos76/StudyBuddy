@@ -3,28 +3,28 @@ using System.Net.Http;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
+using StudyBuddy.ApiFacade.Restful;
 using StudyBuddy.Model;
 using Xamarin.Forms;
-using StudyBuddy.ApiFacade.Restful;
 
 namespace StudyBuddy.ApiFacade
 {
-    class AuthenticationService : IAuthenticationService
+    internal class AuthenticationService : IAuthenticationService
     {
         private IApi api;
-        private string base_url;
-        private HttpClient client;
-
-        public event LoginStateChangedHandler LoginStateChanged;
-        public string Token { get; private set; } = string.Empty;
-        public User CurrentUser { get; private set; } = null;
+        private readonly string base_url;
+        private readonly HttpClient client;
 
         public AuthenticationService(IApi api, string base_url)
         {
             this.api = api;
             this.base_url = base_url;
-            this.client = new HttpClient(Helper.GetInsecureHandler());
+            client = new HttpClient(Helper.GetInsecureHandler());
         }
+
+        public event LoginStateChangedHandler LoginStateChanged;
+        public string Token { get; private set; } = string.Empty;
+        public User CurrentUser { get; private set; }
 
         public async Task<bool> Login(UserCredentials credentials)
         {
@@ -60,12 +60,6 @@ namespace StudyBuddy.ApiFacade
             return true;
         }
 
-        private void OnLoginStateChanged(bool is_logged_in)
-        {
-            if (LoginStateChanged != null)
-                LoginStateChanged(this, new LoginStateChangedArgs(is_logged_in, CurrentUser, Token));
-        }
-
         public async void Logout()
         {
             Token = string.Empty;
@@ -76,9 +70,12 @@ namespace StudyBuddy.ApiFacade
             OnLoginStateChanged(false);
         }
 
-        public bool IsLoggedIn
+        public bool IsLoggedIn => Token != string.Empty;
+
+        private void OnLoginStateChanged(bool is_logged_in)
         {
-            get { return Token != string.Empty; }
+            if (LoginStateChanged != null)
+                LoginStateChanged(this, new LoginStateChangedArgs(is_logged_in, CurrentUser, Token));
         }
     }
 }

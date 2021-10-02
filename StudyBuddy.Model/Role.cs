@@ -1,6 +1,6 @@
 namespace StudyBuddy.Model
 {
-    public enum Role 
+    public enum Role
     {
         Student = 1,
         Instructor = 2,

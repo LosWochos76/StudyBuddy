@@ -1,13 +1,13 @@
-using StudyBuddy.Model;
 using Microsoft.AspNetCore.Mvc;
-using StudyBuddy.Persistence;
 using StudyBuddy.BusinessLogic;
+using StudyBuddy.Model;
+using StudyBuddy.Persistence;
 
 namespace StudyBuddy.Api
 {
     public class RequestController : Controller
     {
-        private RequestService service;
+        private readonly RequestService service;
 
         public RequestController(IRepository repository)
         {
@@ -45,7 +45,7 @@ namespace StudyBuddy.Api
         public IActionResult Delete(int id)
         {
             service.Delete(id);
-            return Json(new { Status = "Ok" });
+            return Json(new {Status = "Ok"});
         }
 
         [Route("/Request/")]
@@ -64,7 +64,7 @@ namespace StudyBuddy.Api
         {
             var current_user = HttpContext.Items["user"] as User;
             service.Accept(current_user, id);
-            return Json(new { Status = "Ok" });
+            return Json(new {Status = "Ok"});
         }
     }
 }

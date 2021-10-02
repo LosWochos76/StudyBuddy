@@ -13,8 +13,8 @@ namespace StudyBuddy.Api
         {
             pushNotificationService = new PushNotificationService(repository);
         }
-        
-        
+
+
         [Route("/Notification/")]
         [HttpPost]
         [IsAdmin]

@@ -1,4 +1,5 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
+﻿<?xml version="1.0" encoding="utf-8"?>
+
 <Application xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="StudyBuddy.App.App">
@@ -10,14 +11,14 @@
         <OnPlatform x:TypeArguments="x:String" x:Key="FontAwesomeBrands">
             <On Platform="Android" Value="fabrands.otf#Regular" />
             <On Platform="iOS" Value="FontAwesome5Brands-Regular" />
-        </OnPlatform> 
-        <OnPlatform x:TypeArguments="x:String" x:Key="FontAwesomeSolid"> 
-            <On Platform="Android" Value="fasolid.otf#Regular" /> 
-            <On Platform="iOS" Value="FontAwesome5Free-Solid" /> 
-        </OnPlatform> 
-         <OnPlatform x:TypeArguments="x:String" x:Key="FontAwesomeRegular">
-             <On Platform="Android" Value="faregular.otf#Regular" /> 
-             <On Platform="iOS" Value="FontAwesome5Free-Regular" /> 
-         </OnPlatform>
+        </OnPlatform>
+        <OnPlatform x:TypeArguments="x:String" x:Key="FontAwesomeSolid">
+            <On Platform="Android" Value="fasolid.otf#Regular" />
+            <On Platform="iOS" Value="FontAwesome5Free-Solid" />
+        </OnPlatform>
+        <OnPlatform x:TypeArguments="x:String" x:Key="FontAwesomeRegular">
+            <On Platform="Android" Value="faregular.otf#Regular" />
+            <On Platform="iOS" Value="FontAwesome5Free-Regular" />
+        </OnPlatform>
     </Application.Resources>
 </Application>

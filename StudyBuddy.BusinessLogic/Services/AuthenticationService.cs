@@ -8,9 +8,9 @@ namespace StudyBuddy.BusinessLogic
 {
     public class AuthenticationService
     {
-        private IRepository repository;
-        private User current_user;
+        private readonly User current_user;
         private IEmailService mail;
+        private readonly IRepository repository;
 
         public AuthenticationService(IRepository repository, User current_user)
         {

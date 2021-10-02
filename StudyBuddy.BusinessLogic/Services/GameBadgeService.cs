@@ -7,7 +7,7 @@ namespace StudyBuddy.BusinessLogic
 {
     public class GameBadgeService
     {
-        private IRepository repository;
+        private readonly IRepository repository;
 
         public GameBadgeService(IRepository repository)
         {
@@ -18,8 +18,7 @@ namespace StudyBuddy.BusinessLogic
         {
             if (current_user == null || !current_user.IsAdmin)
                 return repository.GameBadges.OfOwner(current_user.ID);
-            else
-                return repository.GameBadges.All();
+            return repository.GameBadges.All();
         }
 
         public GameBadge GetById(int id)

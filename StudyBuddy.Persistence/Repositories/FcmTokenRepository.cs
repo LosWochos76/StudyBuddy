@@ -7,7 +7,7 @@ namespace StudyBuddy.Persistence
 {
     public class FcmTokenRepository : IFcmTokenRepository
     {
-        private string connection_string;
+        private readonly string connection_string;
 
         public FcmTokenRepository(string connection_string)
         {
@@ -16,25 +16,6 @@ namespace StudyBuddy.Persistence
             CreateTable();
         }
 
-        private void CreateTable()
-        {
-            var qh = new QueryHelper<FcmToken>(connection_string);
-
-            if (!qh.TableExists("fcm_tokens"))
-            {
-                qh.ExecuteNonQuery(
-                        "create table fcm_tokens (" +
-                        "id serial primary key, " +
-                        "token varchar(100) not null, " +
-                        "user_id int not null, " +
-                        "created date not null, " +
-                        "last_seen date null )" );
-
-
-            }
-            
-        }
-        
         public IEnumerable<FcmToken> OfUser(int user_id, int from = 0, int max = 1000)
         {
             var qh = new QueryHelper<FcmToken>(connection_string, FromReader);
@@ -45,15 +26,38 @@ namespace StudyBuddy.Persistence
                 "SELECT id,token,user_id,created,last_seen " +
                 "FROM fcm_tokens where user_id=:user_id order by created limit :max offset :from");
         }
-        
+
         public IEnumerable<FcmToken> All(int from = 0, int max = 1000)
         {
-            var qh = new QueryHelper<FcmToken>(connection_string, FromReader, new { from, max });
+            var qh = new QueryHelper<FcmToken>(connection_string, FromReader, new {from, max});
             return qh.ExecuteQueryToObjectList(
                 "SELECT id,token,user_id,created,last_seen " +
                 "FROM fcm_tokens order by created limit :max offset :from");
         }
-        
+
+        public FcmToken Save(FcmToken obj)
+        {
+            if (obj.ID == 0)
+                Insert(obj);
+            else
+                Update(obj);
+            return obj;
+        }
+
+        private void CreateTable()
+        {
+            var qh = new QueryHelper<FcmToken>(connection_string);
+
+            if (!qh.TableExists("fcm_tokens"))
+                qh.ExecuteNonQuery(
+                    "create table fcm_tokens (" +
+                    "id serial primary key, " +
+                    "token varchar(100) not null, " +
+                    "user_id int not null, " +
+                    "created date not null, " +
+                    "last_seen date null )");
+        }
+
         public void Insert(FcmToken obj)
         {
             var qh = new QueryHelper<FcmToken>(connection_string, FromReader);
@@ -63,11 +67,11 @@ namespace StudyBuddy.Persistence
                 "insert into fcm_tokens (token,created) values (:token,:created) RETURNING id");
         }
 
-        public void Update( FcmToken obj)
+        public void Update(FcmToken obj)
         {
             var qh = new QueryHelper<FcmToken>(connection_string, FromReader);
             obj.LastSeen = DateTime.Now.Date;
-            
+
             qh.AddParameter(":id", obj.ID);
             qh.AddParameter(":token", obj.Token);
             qh.AddParameter(":created", obj.Created);
@@ -75,16 +79,7 @@ namespace StudyBuddy.Persistence
 
             qh.ExecuteNonQuery("update fcm_tokens set token=:token,created=:created,last_seen=:last_seen where id=:id");
         }
-        
-        public FcmToken Save(FcmToken obj)
-        {
-            if (obj.ID == 0)
-                Insert(obj);
-            else
-                Update(obj);
-            return obj;
-        }
-        
+
         private FcmToken FromReader(NpgsqlDataReader reader)
         {
             var obj = new FcmToken();

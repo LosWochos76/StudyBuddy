@@ -23,14 +23,14 @@ namespace StudyBuddy.App
             TinyIoCContainer.Current.Register<IDialogService>(new DialogService());
             TinyIoCContainer.Current.Register<INavigationService>(new NagigationService());
 
-            TinyIoCContainer.Current.Register<LoginViewModel>(TinyIoCContainer.Current.Resolve<LoginViewModel>());
-            TinyIoCContainer.Current.Register<MainViewModel>(TinyIoCContainer.Current.Resolve<MainViewModel>());
-            TinyIoCContainer.Current.Register<ChallengesViewModel>(TinyIoCContainer.Current.Resolve<ChallengesViewModel>());
-            TinyIoCContainer.Current.Register<QrCodeViewModel>(TinyIoCContainer.Current.Resolve<QrCodeViewModel>());
-            TinyIoCContainer.Current.Register<SettingsViewModel>(TinyIoCContainer.Current.Resolve<SettingsViewModel>());
+            TinyIoCContainer.Current.Register(TinyIoCContainer.Current.Resolve<LoginViewModel>());
+            TinyIoCContainer.Current.Register(TinyIoCContainer.Current.Resolve<MainViewModel>());
+            TinyIoCContainer.Current.Register(TinyIoCContainer.Current.Resolve<ChallengesViewModel>());
+            TinyIoCContainer.Current.Register(TinyIoCContainer.Current.Resolve<QrCodeViewModel>());
+            TinyIoCContainer.Current.Register(TinyIoCContainer.Current.Resolve<SettingsViewModel>());
         }
 
-        protected async override void OnStart()
+        protected override async void OnStart()
         {
             if (!Current.Properties.ContainsKey("Login"))
                 return;
@@ -47,7 +47,7 @@ namespace StudyBuddy.App
         {
         }
 
-        protected async override void OnResume()
+        protected override async void OnResume()
         {
         }
     }

@@ -17,10 +17,7 @@ namespace StudyBuddy.App.Misc
                 message,
                 buttonText);
 
-            if (afterHideCallback != null)
-            {
-                afterHideCallback();
-            }
+            if (afterHideCallback != null) afterHideCallback();
         }
 
         public async Task ShowError(
@@ -34,10 +31,7 @@ namespace StudyBuddy.App.Misc
                 error.Message,
                 buttonText);
 
-            if (afterHideCallback != null)
-            {
-                afterHideCallback();
-            }
+            if (afterHideCallback != null) afterHideCallback();
         }
 
         public async Task ShowMessage(
@@ -61,10 +55,7 @@ namespace StudyBuddy.App.Misc
                 message,
                 buttonText);
 
-            if (afterHideCallback != null)
-            {
-                afterHideCallback();
-            }
+            if (afterHideCallback != null) afterHideCallback();
         }
 
         public async Task<bool> ShowMessage(
@@ -80,10 +71,7 @@ namespace StudyBuddy.App.Misc
                 buttonConfirmText,
                 buttonCancelText);
 
-            if (afterHideCallback != null)
-            {
-                afterHideCallback(result);
-            }
+            if (afterHideCallback != null) afterHideCallback(result);
             return result;
         }
 

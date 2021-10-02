@@ -7,8 +7,8 @@ namespace StudyBuddy.BusinessLogic
 {
     public class TagService
     {
-        private IRepository repository;
-        private User current_user;
+        private readonly User current_user;
+        private readonly IRepository repository;
 
         public TagService(IRepository repository, User current_user)
         {
@@ -57,8 +57,7 @@ namespace StudyBuddy.BusinessLogic
         private IEnumerable<string> SplitTags(string tags)
         {
             return
-                tags.Replace("#", "").
-                Split(new char[] {' ','\t'}, StringSplitOptions.RemoveEmptyEntries);
+                tags.Replace("#", "").Split(new[] {' ', '\t'}, StringSplitOptions.RemoveEmptyEntries);
         }
 
         public Tag CreateOrFindSingle(string tag_name)
@@ -70,7 +69,7 @@ namespace StudyBuddy.BusinessLogic
 
             if (obj == null)
             {
-                obj =  new Tag(){ Name = tag_name };
+                obj = new Tag {Name = tag_name};
                 Insert(obj);
             }
 
@@ -82,7 +81,7 @@ namespace StudyBuddy.BusinessLogic
             var tag_list = SplitTags(tags);
             var object_list = new List<Tag>();
 
-            foreach (var tag in tag_list) 
+            foreach (var tag in tag_list)
                 object_list.Add(CreateOrFindSingle(tag));
 
             return object_list;

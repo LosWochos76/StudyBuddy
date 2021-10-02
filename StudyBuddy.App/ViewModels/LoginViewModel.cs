@@ -8,20 +8,21 @@ namespace StudyBuddy.App.ViewModels
 {
     public class LoginViewModel : ViewModelBase
     {
-        public ICommand LoginCommand { get; private set; }
-        public ICommand RegisterCommand { get; private set; }
-        public ICommand PasswordForgottenCommand { get; private set; }
-        public ICommand ImprintCommand { get; private set; }
-        public string EMail { get; set; }
-        public string Password { get; set; }
-
-        public LoginViewModel(IApi api, IDialogService dialog, INavigationService navigation) : base(api, dialog, navigation)
+        public LoginViewModel(IApi api, IDialogService dialog, INavigationService navigation) : base(api, dialog,
+            navigation)
         {
             LoginCommand = new Command(Login);
             RegisterCommand = new Command(Register);
             PasswordForgottenCommand = new Command(PasswordForgotten);
             ImprintCommand = new Command(Imprint);
         }
+
+        public ICommand LoginCommand { get; }
+        public ICommand RegisterCommand { get; }
+        public ICommand PasswordForgottenCommand { get; }
+        public ICommand ImprintCommand { get; }
+        public string EMail { get; set; }
+        public string Password { get; set; }
 
         private void Register()
         {
@@ -40,7 +41,7 @@ namespace StudyBuddy.App.ViewModels
 
         private async void Login()
         {
-            var uc = new UserCredentials() { EMail = this.EMail, Password = this.Password };
+            var uc = new UserCredentials {EMail = EMail, Password = Password};
             var result = await api.Authentication.Login(uc);
 
             if (result)

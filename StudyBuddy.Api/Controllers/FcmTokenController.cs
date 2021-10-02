@@ -5,15 +5,15 @@ using StudyBuddy.Persistence;
 
 namespace StudyBuddy.Api
 {
-    public class FcmTokenController  : Controller
+    public class FcmTokenController : Controller
     {
-        private FcmTokenService service;
+        private readonly FcmTokenService service;
 
         public FcmTokenController(IRepository repository)
         {
-            this.service = new FcmTokenService(repository);
+            service = new FcmTokenService(repository);
         }
-        
+
         [Route("/FcmToken/")]
         [HttpGet]
         [IsAdmin]
@@ -22,8 +22,8 @@ namespace StudyBuddy.Api
             var current_user = HttpContext.Items["user"] as User;
             return Json(service.All(current_user));
         }
-        
-        
+
+
         [Route("/FcmToken/")]
         [HttpPost]
         [IsLoggedIn]
@@ -33,6 +33,5 @@ namespace StudyBuddy.Api
 
             return null;
         }
-        
     }
 }

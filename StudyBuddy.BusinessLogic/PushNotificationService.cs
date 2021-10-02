@@ -5,26 +5,24 @@ namespace StudyBuddy.BusinessLogic
 {
     public class PushNotificationService
     {
-        private IRepository repository;
-        
+        private readonly IRepository repository;
+
         public PushNotificationService(IRepository repository)
         {
             this.repository = repository;
         }
 
 
-
         public void BroadcastMessage(string title, string body)
         {
-
             var fcmTokens = repository.FcmTokens.All();
 
             var message = new Message
             {
-                Notification = new Notification()
+                Notification = new Notification
                 {
                     Title = title,
-                    Body = body,
+                    Body = body
                 }
             };
 
@@ -33,9 +31,6 @@ namespace StudyBuddy.BusinessLogic
                 message.Token = fcmToken.Token;
                 FirebaseMessaging.DefaultInstance.SendAsync(message);
             }
-
-
         }
-
     }
 }

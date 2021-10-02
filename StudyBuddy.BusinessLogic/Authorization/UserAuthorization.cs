@@ -18,7 +18,7 @@ namespace StudyBuddy.BusinessLogic
 
         public static void CheckGetById(User current_user, int user_id)
         {
-            if (current_user == null || (!current_user.IsAdmin && current_user.ID != user_id))
+            if (current_user == null || !current_user.IsAdmin && current_user.ID != user_id)
                 throw new Exception("Unauthorized!");
         }
 

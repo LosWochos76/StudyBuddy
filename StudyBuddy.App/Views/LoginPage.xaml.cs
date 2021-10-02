@@ -1,12 +1,12 @@
-﻿using Xamarin.Forms;
-using StudyBuddy.App.ViewModels;
+﻿using StudyBuddy.App.ViewModels;
 using TinyIoC;
+using Xamarin.Forms;
 
 namespace StudyBuddy.App.Views
 {
     public partial class LoginPage : ContentPage
     {
-        private LoginViewModel view_model;
+        private readonly LoginViewModel view_model;
 
         public LoginPage()
         {

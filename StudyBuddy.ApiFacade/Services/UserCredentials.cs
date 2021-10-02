@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace StudyBuddy.ApiFacade.Restful
+﻿namespace StudyBuddy.ApiFacade.Restful
 {
     public class UserCredentials
     {

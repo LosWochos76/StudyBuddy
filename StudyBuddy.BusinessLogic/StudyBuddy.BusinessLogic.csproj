@@ -1,35 +1,35 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
-  </PropertyGroup>
+    <PropertyGroup>
+        <TargetFramework>net5.0</TargetFramework>
+    </PropertyGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\StudyBuddy.Model\StudyBuddy.Model.csproj" />
-    <ProjectReference Include="..\StudyBuddy.Persistence\StudyBuddy.Persistence.csproj" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Remove="Parameters\" />
-    <None Remove="System.IdentityModel.Tokens.Jwt" />
-    <None Remove="MailKit" />
-    <None Remove="NETCore.MailKit" />
-    <None Remove="Services\" />
-    <None Remove="Misc\" />
-    <None Remove="Authorization\" />
-    <None Remove="QRCoder" />
-    <None Remove="NETCore.Encrypt" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Parameters\" />
-    <Folder Include="Services\" />
-    <Folder Include="Misc\" />
-    <Folder Include="Authorization\" />
-  </ItemGroup>
-  <ItemGroup>
-    <PackageReference Include="FirebaseAdmin" Version="2.2.0" />
-    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.12.2" />
-    <PackageReference Include="NETCore.MailKit" Version="2.0.3" />
-    <PackageReference Include="QRCoder" Version="1.4.1" />
-    <PackageReference Include="NETCore.Encrypt" Version="2.0.9.1" />
-  </ItemGroup>
+    <ItemGroup>
+        <ProjectReference Include="..\StudyBuddy.Model\StudyBuddy.Model.csproj"/>
+        <ProjectReference Include="..\StudyBuddy.Persistence\StudyBuddy.Persistence.csproj"/>
+    </ItemGroup>
+    <ItemGroup>
+        <None Remove="Parameters\"/>
+        <None Remove="System.IdentityModel.Tokens.Jwt"/>
+        <None Remove="MailKit"/>
+        <None Remove="NETCore.MailKit"/>
+        <None Remove="Services\"/>
+        <None Remove="Misc\"/>
+        <None Remove="Authorization\"/>
+        <None Remove="QRCoder"/>
+        <None Remove="NETCore.Encrypt"/>
+    </ItemGroup>
+    <ItemGroup>
+        <Folder Include="Parameters\"/>
+        <Folder Include="Services\"/>
+        <Folder Include="Misc\"/>
+        <Folder Include="Authorization\"/>
+    </ItemGroup>
+    <ItemGroup>
+        <PackageReference Include="FirebaseAdmin" Version="2.2.0"/>
+        <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.12.2"/>
+        <PackageReference Include="NETCore.MailKit" Version="2.0.3"/>
+        <PackageReference Include="QRCoder" Version="1.4.1"/>
+        <PackageReference Include="NETCore.Encrypt" Version="2.0.9.1"/>
+    </ItemGroup>
 </Project>

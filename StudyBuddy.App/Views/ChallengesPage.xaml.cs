@@ -6,7 +6,7 @@ namespace StudyBuddy.App.Views
 {
     public partial class ChallengesPage : ContentPage
     {
-        private ChallengesViewModel view_model;
+        private readonly ChallengesViewModel view_model;
 
         public ChallengesPage()
         {

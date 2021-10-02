@@ -4,11 +4,10 @@ namespace StudyBuddy.Model
     {
         public static string GetOrDefault(string key, string def)
         {
-            string var = System.Environment.GetEnvironmentVariable(key);
+            var var = System.Environment.GetEnvironmentVariable(key);
             if (var == null || var == string.Empty)
                 return def;
-            else
-                return var;
+            return var;
         }
     }
 }

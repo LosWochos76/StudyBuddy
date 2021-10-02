@@ -1,14 +1,12 @@
+using System.Collections.Generic;
 using Npgsql;
 using StudyBuddy.Model;
-using System;
-using System.Collections.Generic;
-using System.Runtime.CompilerServices;
 
 namespace StudyBuddy.Persistence
 {
-    class GameBadgeRepository : IGameBadgeRepository
+    internal class GameBadgeRepository : IGameBadgeRepository
     {
-        private string connection_string;
+        private readonly string connection_string;
 
         public GameBadgeRepository(string connection_string)
         {
@@ -16,58 +14,6 @@ namespace StudyBuddy.Persistence
 
             CreateBadgesTable();
             CreateGameBadgeChallengesTable();
-        }
-
-        private void CreateBadgesTable() 
-        {
-            var rh = new RevisionHelper(connection_string, "badges");
-            var qh = new QueryHelper<GameBadge>(connection_string, FromReader);
-
-            if (!qh.TableExists("game_badges"))
-            {
-                qh.ExecuteNonQuery(
-                    "create table game_badges (" +
-                    "id serial primary key, " +
-                    "name varchar(100) not null, " +
-                    "owner_id int not null, " +
-                    "created date not null, " +
-                    "required_coverage numeric(3,2) not null)");
-
-                rh.SetRevision(2);
-            }
-
-            if (rh.GetRevision() == 1)
-            {
-                qh.ExecuteNonQuery(
-                    "ALTER TABLE game_badges " +
-                    "ALTER COLUMN required_coverage TYPE numeric(3,2)");
-
-                rh.SetRevision(2);
-            }
-        }
-
-        private void CreateGameBadgeChallengesTable() 
-        {
-            var qh = new QueryHelper<GameBadge>(connection_string, FromReader);
-
-            if (!qh.TableExists("game_badge_challenges"))
-            {
-                qh.ExecuteNonQuery(
-                    "create table game_badge_challenges (" +
-                    "game_badge int not null, " + 
-                    "challenge int not null)");
-            }
-        }
-
-        private GameBadge FromReader(NpgsqlDataReader reader)
-        {
-            var obj = new GameBadge();
-            obj.ID = reader.GetInt32(0);
-            obj.Name = reader.GetString(1);
-            obj.OwnerID = reader.GetInt32(2);
-            obj.Created = reader.GetDateTime(3);
-            obj.RequiredCoverage = reader.GetDouble(4);
-            return obj;
         }
 
         public GameBadge ById(int id)
@@ -173,6 +119,56 @@ namespace StudyBuddy.Persistence
         {
             foreach (var obj in challenges)
                 AddChallenge(obj.GameBadgeId, obj.ChallengeId);
+        }
+
+        private void CreateBadgesTable()
+        {
+            var rh = new RevisionHelper(connection_string, "badges");
+            var qh = new QueryHelper<GameBadge>(connection_string, FromReader);
+
+            if (!qh.TableExists("game_badges"))
+            {
+                qh.ExecuteNonQuery(
+                    "create table game_badges (" +
+                    "id serial primary key, " +
+                    "name varchar(100) not null, " +
+                    "owner_id int not null, " +
+                    "created date not null, " +
+                    "required_coverage numeric(3,2) not null)");
+
+                rh.SetRevision(2);
+            }
+
+            if (rh.GetRevision() == 1)
+            {
+                qh.ExecuteNonQuery(
+                    "ALTER TABLE game_badges " +
+                    "ALTER COLUMN required_coverage TYPE numeric(3,2)");
+
+                rh.SetRevision(2);
+            }
+        }
+
+        private void CreateGameBadgeChallengesTable()
+        {
+            var qh = new QueryHelper<GameBadge>(connection_string, FromReader);
+
+            if (!qh.TableExists("game_badge_challenges"))
+                qh.ExecuteNonQuery(
+                    "create table game_badge_challenges (" +
+                    "game_badge int not null, " +
+                    "challenge int not null)");
+        }
+
+        private GameBadge FromReader(NpgsqlDataReader reader)
+        {
+            var obj = new GameBadge();
+            obj.ID = reader.GetInt32(0);
+            obj.Name = reader.GetString(1);
+            obj.OwnerID = reader.GetInt32(2);
+            obj.Created = reader.GetDateTime(3);
+            obj.RequiredCoverage = reader.GetDouble(4);
+            return obj;
         }
     }
 }

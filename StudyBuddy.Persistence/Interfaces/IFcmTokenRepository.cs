@@ -10,6 +10,5 @@ namespace StudyBuddy.Persistence
         FcmToken Save(FcmToken obj);
 
         IEnumerable<FcmToken> OfUser(int user_id, int from = 0, int max = 1000);
-
     }
 }

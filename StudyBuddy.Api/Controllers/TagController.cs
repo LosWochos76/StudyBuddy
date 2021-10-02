@@ -1,14 +1,13 @@
-﻿using StudyBuddy.Model;
-using Microsoft.AspNetCore.Mvc;
-using StudyBuddy.Persistence;
-using System;
+﻿using Microsoft.AspNetCore.Mvc;
 using StudyBuddy.BusinessLogic;
+using StudyBuddy.Model;
+using StudyBuddy.Persistence;
 
 namespace StudyBuddy.Api
 {
     public class TagController : Controller
     {
-        private IRepository repository;
+        private readonly IRepository repository;
 
         public TagController(IRepository repository)
         {
@@ -54,7 +53,7 @@ namespace StudyBuddy.Api
         {
             var service = new TagService(repository, HttpContext.Items["user"] as User);
             service.Delete(id);
-            return Json(new { Status = "ok" });
+            return Json(new {Status = "ok"});
         }
 
         [Route("/Tag/CreateOrFind/")]

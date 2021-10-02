@@ -1,7 +1,5 @@
 namespace StudyBuddy.Model
 {
-
-
     public class PushNotificationBroadcastDto
     {
         public string title { get; set; }

@@ -1,14 +1,13 @@
-﻿<?xml version="1.0" encoding="UTF-8" ?>
+﻿<?xml version="1.0" encoding="UTF-8"?>
+
 <ContentPage
     xmlns="http://xamarin.com/schemas/2014/forms"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     x:Class="StudyBuddy.App.Views.StatisticPage"
     xmlns:viewmodels="clr-namespace:StudyBuddy.App.ViewModels"
-    xmlns:models="clr-namespace:StudyBuddy.Model;assembly=StudyBuddy.Model"
     x:DataType="viewmodels:StatisticsViewModel"
-    xmlns:fontAwesome="clr-namespace:StudyBuddy.App"
     Title="Statistiken">
     <ContentPage.Content>
-        
+
     </ContentPage.Content>
 </ContentPage>

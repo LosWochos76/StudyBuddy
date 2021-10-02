@@ -6,15 +6,14 @@ using NETCore.Encrypt;
 using QRCoder;
 using StudyBuddy.Model;
 using StudyBuddy.Persistence;
-using System.Text.Json;
-using System.Text.Json.Serialization;
+using Environment = StudyBuddy.Model.Environment;
 
 namespace StudyBuddy.BusinessLogic
 {
     public class ChallengeService
     {
-        private IRepository repository;
-        private User current_user;
+        private readonly User current_user;
+        private readonly IRepository repository;
 
         public ChallengeService(IRepository repository, User current_user)
         {
@@ -29,7 +28,7 @@ namespace StudyBuddy.BusinessLogic
 
             if (current_user.IsAdmin)
                 return repository.Challenges.All();
-            
+
             if (current_user.IsInstructor)
                 return repository.Challenges.OfOwner(current_user.ID);
 
@@ -59,8 +58,7 @@ namespace StudyBuddy.BusinessLogic
 
             if (current_user == null || !current_user.IsAdmin)
                 return repository.Challenges.OfOwnerByText(current_user.ID, text);
-            else
-                return repository.Challenges.ByText(text);
+            return repository.Challenges.ByText(text);
         }
 
         public Challenge Update(Challenge obj)
@@ -127,7 +125,7 @@ namespace StudyBuddy.BusinessLogic
             if (!current_user.IsAdmin && parent != null && parent.OwnerID != current_user.ID)
                 throw new Exception("Unauthorized");
 
-            for (int i = 0; i < param.Count; i++)
+            for (var i = 0; i < param.Count; i++)
             {
                 var clone = parent.Clone();
                 clone.SeriesParentID = parent.ID;
@@ -150,7 +148,7 @@ namespace StudyBuddy.BusinessLogic
                 throw new UnauthorizedAccessException("Unauthorized!");
 
             // Encrypt the challenge_id
-            var key_string = Model.Environment.GetOrDefault("JWT_KEY", "thisisasupersecretkey");
+            var key_string = Environment.GetOrDefault("JWT_KEY", "thisisasupersecretkey");
             key_string = string.Concat(Enumerable.Repeat(key_string, 32)).Substring(0, 32);
             var encrypted = EncryptProvider.AESEncrypt(challenge_id.ToString(), key_string);
 
@@ -158,9 +156,9 @@ namespace StudyBuddy.BusinessLogic
             var payload = "qr:" + Base64.Encode(encrypted);
 
             // Generate QR-Code
-            QRCodeGenerator qrGenerator = new QRCodeGenerator();
-            QRCodeData qrCodeData = qrGenerator.CreateQrCode(payload, QRCodeGenerator.ECCLevel.Q);
-            QRCode qrCode = new QRCode(qrCodeData);
+            var qrGenerator = new QRCodeGenerator();
+            var qrCodeData = qrGenerator.CreateQrCode(payload, QRCodeGenerator.ECCLevel.Q);
+            var qrCode = new QRCode(qrCodeData);
             return qrCode.GetGraphic(20);
         }
 
@@ -172,13 +170,13 @@ namespace StudyBuddy.BusinessLogic
             if (string.IsNullOrEmpty(payload) || !payload.StartsWith("qr:"))
                 throw new UnauthorizedAccessException("No valid payload given!");
 
-            int challenge_id = 0;
+            var challenge_id = 0;
 
             try
             {
                 // Decrypt the challenge_id
                 var encrypted = Base64.Decode(payload.Substring(3));
-                var key_string = Model.Environment.GetOrDefault("JWT_KEY", "thisisasupersecretkey");
+                var key_string = Environment.GetOrDefault("JWT_KEY", "thisisasupersecretkey");
                 key_string = string.Concat(Enumerable.Repeat(key_string, 32)).Substring(0, 32);
                 var decrypted = EncryptProvider.AESDecrypt(encrypted, key_string);
                 challenge_id = Convert.ToInt32(decrypted);
@@ -199,7 +197,7 @@ namespace StudyBuddy.BusinessLogic
         public void RemoveAcceptance(int challenge_id, int user_id)
         {
             if (current_user == null || !current_user.IsAdmin)
-                 throw new UnauthorizedAccessException("Unathorrized");
+                throw new UnauthorizedAccessException("Unathorrized");
 
             repository.Challenges.RemoveAcceptance(challenge_id, user_id);
         }

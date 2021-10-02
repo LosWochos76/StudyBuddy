@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace StudyBuddy.Model
+﻿namespace StudyBuddy.Model
 {
     public enum RequestType
     {

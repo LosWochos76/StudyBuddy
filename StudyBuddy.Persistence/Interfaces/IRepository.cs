@@ -8,6 +8,5 @@ namespace StudyBuddy.Persistence
         IRequestRepository Requests { get; }
         ITagRepository Tags { get; }
         IFcmTokenRepository FcmTokens { get; }
-
     }
 }

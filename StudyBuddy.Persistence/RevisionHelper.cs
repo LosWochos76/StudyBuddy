@@ -1,9 +1,9 @@
 ﻿namespace StudyBuddy.Persistence
 {
-    class RevisionHelper
+    internal class RevisionHelper
     {
-        private string connection_string;
-        private string table_name;
+        private readonly string connection_string;
+        private readonly string table_name;
 
         public RevisionHelper(string connection_string, string table_name)
         {
@@ -19,8 +19,8 @@
             var qh = new QueryHelper<RevisionHelper>(connection_string);
             if (!qh.TableExists("tables"))
                 qh.ExecuteNonQuery("create table tables (" +
-                    "table_name varchar(100) not null, " +
-                    "revision int not null)");
+                                   "table_name varchar(100) not null, " +
+                                   "revision int not null)");
         }
 
         public void Prepare()
@@ -44,7 +44,7 @@
         public void SetRevision(int revision)
         {
             var qh = new QueryHelper<RevisionHelper>(connection_string);
-            qh.AddParameters(new { table_name, revision });
+            qh.AddParameters(new {table_name, revision});
             qh.ExecuteNonQuery("update tables set revision=:revision where table_name=:table_name");
         }
     }
