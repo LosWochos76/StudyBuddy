@@ -57,13 +57,15 @@
         <PackageReference Include="Plugin.FirebasePushNotification" Version="3.3.16-beta" />
         <PackageReference Include="Xamarin.Forms" Version="5.0.0.2125" />
         <PackageReference Include="Xamarin.Essentials" Version="1.7.0" />
+        <PackageReference Include="Xamarin.GooglePlayServices.Base" Version="117.6.0" />
         <PackageReference Include="ZXing.Net.Mobile.Forms">
             <Version>3.1.0-beta2</Version>
         </PackageReference>
     </ItemGroup>
     <ItemGroup>
+        <Compile Include="Application.cs" />
         <Compile Include="MainActivity.cs" />
-        <Compile Include="Misc\Setup.cs" />
+        <Compile Include="Misc\SetupFirebaseAndroid.cs" />
         <Compile Include="Resources\Resource.designer.cs" />
         <Compile Include="Properties\AssemblyInfo.cs" />
     </ItemGroup>
@@ -101,6 +103,9 @@
         <AndroidAsset Include="Assets\fabrands.otf" />
         <AndroidAsset Include="Assets\faregular.otf" />
         <AndroidAsset Include="Assets\fasolid.otf" />
+    </ItemGroup>
+    <ItemGroup>
+        <GoogleServicesJson Include="google-services.json" />
     </ItemGroup>
     <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
 </Project>

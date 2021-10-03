@@ -12,7 +12,7 @@ namespace StudyBuddy.Model
 
         public DateTime Created { get; set; } = DateTime.Now.Date;
 
-        public DateTime LastSeen { get; set; }
+        public DateTime LastSeen { get; set; } = DateTime.Now.Date;
     }
 
     public class FcmTokenSaveDto

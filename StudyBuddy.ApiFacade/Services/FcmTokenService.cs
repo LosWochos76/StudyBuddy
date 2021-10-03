@@ -4,25 +4,46 @@ using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 using Plugin.FirebasePushNotification;
+using Plugin.FirebasePushNotification;
 
 namespace StudyBuddy.ApiFacade.Services
 {
-    public class FcmTokenService
+    public class FcmTokenService : IFcmTokenService
     {
         private readonly IApi api;
         private readonly string base_url;
         private readonly HttpClient client;
 
-        private FcmTokenService(IApi api, string base_url)
+        public FcmTokenService(IApi api, string base_url)
         {
             this.api = api;
             this.base_url = base_url;
             client = new HttpClient(Helper.GetInsecureHandler());
+
+            api.Authentication.LoginStateChanged += (sender, args) =>
+            {
+                if (args.IsLoggedIn == true)
+                {
+                    this.UpdateToken();
+                    
+                    CrossFirebasePushNotification.Current.OnTokenRefresh += (source, eventArgs) =>
+                    {
+                        this.Save(eventArgs.Token);
+                    };
+
+                }
+            };
         }
 
 
-        private async Task<HttpResponseMessage> Save(string fcmToken)
+        public async Task<HttpResponseMessage> Save(string fcmToken)
         {
+
+            if (string.IsNullOrEmpty(fcmToken))
+            {
+                return null;
+            }
+            
             var token = api.Authentication.Token;
             if (string.IsNullOrEmpty(token))
                 throw new Exception("You must login first");
@@ -44,6 +65,23 @@ namespace StudyBuddy.ApiFacade.Services
         }
 
 
+<<<<<<< HEAD
+=======
+        async void UpdateToken()
+        {
+            var token = await CrossFirebasePushNotification.Current.GetTokenAsync();
+
+            if (string.IsNullOrEmpty(token))
+            {
+                return;
+            }
+
+            this.Save(token);
+
+        }
+
+
+>>>>>>> f8665b0 (push notifications are now working for Android)
 
     }
 }

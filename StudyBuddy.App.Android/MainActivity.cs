@@ -2,6 +2,7 @@
 using Android.Content.PM;
 using Android.OS;
 using Android.Runtime;
+using Plugin.FirebasePushNotification;
 using Xamarin.Forms;
 using Xamarin.Forms.Platform.Android;
 using ZXing.Net.Mobile.Android;
@@ -23,6 +24,9 @@ namespace App.Droid
             ZXing.Net.Mobile.Forms.Android.Platform.Init();
 
             LoadApplication(new StudyBuddy.App.App());
+            
+            FirebasePushNotificationManager.ProcessIntent(this, Intent);
+
         }
 
         public override void OnRequestPermissionsResult(int requestCode, string[] permissions,

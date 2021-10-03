@@ -7,20 +7,20 @@ namespace StudyBuddy.Api
 {
     public class PushNotificationController : Controller
     {
-        public IRepository repository;
+        public PushNotificationService pushNotificationService;
 
         public PushNotificationController(IRepository repository)
         {
-            this.repository = repository;
+            pushNotificationService = new PushNotificationService(repository);
         }
+
 
         [Route("/Notification/")]
         [HttpPost]
         [IsAdmin]
         public IActionResult BroadcastMessage([FromBody] PushNotificationBroadcastDto obj)
         {
-            var service = new PushNotificationService(repository, HttpContext.Items["user"] as User);
-            service.BroadcastMessage(obj.title, obj.body);
+            pushNotificationService.BroadcastMessage(obj.title, obj.body);
             return Json(true);
         }
     }

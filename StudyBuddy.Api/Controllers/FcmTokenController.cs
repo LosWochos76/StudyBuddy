@@ -29,7 +29,11 @@ namespace StudyBuddy.Api
         [IsLoggedIn]
         public IActionResult Insert([FromBody] FcmTokenSaveDto obj)
         {
-            service.Save(obj.ToFcmToken());
+            var token = obj.ToFcmToken();
+            var current_user = HttpContext.Items["user"] as User;
+            token.UserID = current_user.ID;
+            
+            service.Save(token);
 
             return null;
         }
