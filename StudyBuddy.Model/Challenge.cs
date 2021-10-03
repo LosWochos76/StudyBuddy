@@ -19,7 +19,7 @@ namespace StudyBuddy.Model
         {
             get
             {
-                string result = "";
+                var result = "";
 
                 if (ValidityStart.Year == ValidityEnd.Year &&
                     ValidityStart.Month == ValidityEnd.Month)

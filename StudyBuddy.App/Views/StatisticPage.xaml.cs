@@ -6,7 +6,7 @@ namespace StudyBuddy.App.Views
 {
     public partial class StatisticPage : ContentPage
     {
-        private StatisticsViewModel view_model;
+        private readonly StatisticsViewModel view_model;
 
         public StatisticPage()
         {

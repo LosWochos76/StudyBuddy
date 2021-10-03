@@ -9,7 +9,7 @@ namespace StudyBuddy.Api
     public class CustomAuthorizationMiddleware
     {
         private readonly RequestDelegate next;
-        private JwtToken jwt;
+        private readonly JwtToken jwt;
 
         public CustomAuthorizationMiddleware(RequestDelegate next, IRepository repository)
         {
@@ -22,10 +22,10 @@ namespace StudyBuddy.Api
             var token = context.Request.Headers["Authorization"].FirstOrDefault()?.Split(" ").Last();
             if (!string.IsNullOrEmpty(token))
             {
-                var user = this.jwt.FromToken(token);
+                var user = jwt.FromToken(token);
                 context.Items["user"] = user;
-            } 
-                
+            }
+
             await next(context);
         }
     }

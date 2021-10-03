@@ -35,6 +35,8 @@ import { RequestListComponent } from './request/request-list/request-list.compon
 import { TagListComponent } from './tag/tag-list/tag-list.component';
 import { TagEditComponent } from './tag/tag-edit/tag-edit.component';
 import { SuccessComponent } from './challenge/success/success.component';
+import { NotificationPageComponent } from './notification/notification-page/notification-page.component';
+import { NotificationBroadcastComponent } from './notification/notification-broadcast/notification-broadcast.component';
 
 @NgModule({
   declarations: [
@@ -64,6 +66,8 @@ import { SuccessComponent } from './challenge/success/success.component';
     TagListComponent,
     TagEditComponent,
     SuccessComponent,
+    NotificationPageComponent,
+    NotificationBroadcastComponent,
   ],
   imports: [
     BrowserModule,

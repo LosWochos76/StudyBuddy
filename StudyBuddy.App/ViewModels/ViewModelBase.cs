@@ -1,9 +1,7 @@
-﻿using System;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using StudyBuddy.ApiFacade;
 using StudyBuddy.App.Misc;
-using TinyIoC;
 
 namespace StudyBuddy.App.ViewModels
 {
@@ -22,7 +20,7 @@ namespace StudyBuddy.App.ViewModels
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        protected void NotifyPropertyChanged([CallerMemberName] String propertyName = "")
+        protected void NotifyPropertyChanged([CallerMemberName] string propertyName = "")
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }

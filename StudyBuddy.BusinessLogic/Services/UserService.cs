@@ -7,8 +7,8 @@ namespace StudyBuddy.BusinessLogic
 {
     public class UserService
     {
-        private IRepository repository;
-        private User current_user;
+        private readonly User current_user;
+        private readonly IRepository repository;
 
         public UserService(IRepository repository, User current_user)
         {

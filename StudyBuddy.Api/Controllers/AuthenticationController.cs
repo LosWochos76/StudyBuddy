@@ -1,13 +1,13 @@
 using Microsoft.AspNetCore.Mvc;
-using StudyBuddy.Persistence;
 using StudyBuddy.BusinessLogic;
 using StudyBuddy.Model;
+using StudyBuddy.Persistence;
 
 namespace StudyBuddy.Api
 {
     public class AuthenticationController : Controller
     {
-        private IRepository repository;
+        private readonly IRepository repository;
 
         public AuthenticationController(IRepository repository)
         {
@@ -28,7 +28,7 @@ namespace StudyBuddy.Api
         {
             var service = new AuthenticationService(repository, HttpContext.Items["user"] as User);
             service.SendPasswortResetMail(email);
-            return Json(new { Status = "ok" });
+            return Json(new {Status = "ok"});
         }
     }
 }

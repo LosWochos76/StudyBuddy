@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using NETCore.MailKit.Extensions;
+using Microsoft.OpenApi.Models;
 using StudyBuddy.Persistence;
 
 namespace StudyBuddy.Api
@@ -22,16 +22,13 @@ namespace StudyBuddy.Api
                 policy => policy.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader()
             ));
 
-            services.AddControllers(options =>
-            {
-                options.Filters.Add(typeof(JsonExceptionFilter));
-            });
+            services.AddControllers(options => { options.Filters.Add(typeof(JsonExceptionFilter)); });
 
             services.AddSingleton<IRepository, Repository>();
 
             services.AddSwaggerGen(options =>
             {
-                options.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo
+                options.SwaggerDoc("v1", new OpenApiInfo
                 {
                     Title = "StudyBuddy API",
                     Description = "The RESful API of StudyBuddy",
@@ -53,10 +50,7 @@ namespace StudyBuddy.Api
 
             app.UseCustomAuthorization();
             app.UseRouting();
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapControllers();
-            });
+            app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
         }
     }
 }

@@ -11,9 +11,9 @@
         public Role Role { get; set; }
         public int? ProgramID { get; set; }
         public int? EnrolledInTermID { get; set; }
-        
-        public bool IsAdmin { get { return Role == Role.Admin; } }
-        public bool IsStudent { get { return Role == Role.Student; } }
-        public bool IsInstructor { get { return Role == Role.Instructor; } }
+
+        public bool IsAdmin => Role == Role.Admin;
+        public bool IsStudent => Role == Role.Student;
+        public bool IsInstructor => Role == Role.Instructor;
     }
 }

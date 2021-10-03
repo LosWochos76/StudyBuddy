@@ -7,12 +7,13 @@ namespace StudyBuddy.App.ViewModels
 {
     public class SettingsViewModel : ViewModelBase
     {
-        public ICommand LogoutCommand { get; private set; }
-
-        public SettingsViewModel(IApi api, IDialogService dialog, INavigationService navigation) : base(api, dialog, navigation)
+        public SettingsViewModel(IApi api, IDialogService dialog, INavigationService navigation) : base(api, dialog,
+            navigation)
         {
-            this.LogoutCommand = new Command(Logout);
+            LogoutCommand = new Command(Logout);
         }
+
+        public ICommand LogoutCommand { get; }
 
         public void Logout()
         {

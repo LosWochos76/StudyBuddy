@@ -4,13 +4,13 @@ using Npgsql;
 
 namespace StudyBuddy.Persistence
 {
-    delegate T ObjectReader<T>(NpgsqlDataReader reader);
+    internal delegate T ObjectReader<T>(NpgsqlDataReader reader);
 
-    class QueryHelper<T> where T : class
+    internal class QueryHelper<T> where T : class
     {
-        private string connection_string;
-        private ObjectReader<T> object_reader;
-        private Dictionary<string, object> parameters = new Dictionary<string, object>();
+        private readonly string connection_string;
+        private readonly ObjectReader<T> object_reader;
+        private readonly Dictionary<string, object> parameters = new();
 
         public QueryHelper(string connection_string)
         {
@@ -56,15 +56,12 @@ namespace StudyBuddy.Persistence
                 connection.Open();
                 using (var cmd = new NpgsqlCommand(sql, connection))
                 {
-                    foreach (var param in this.parameters)
+                    foreach (var param in parameters)
                         cmd.Parameters.AddWithValue(param.Key, param.Value);
 
-                    using (NpgsqlDataReader reader = cmd.ExecuteReader())
+                    using (var reader = cmd.ExecuteReader())
                     {
-                        if (reader.Read())
-                        {
-                            result = object_reader(reader);
-                        }
+                        if (reader.Read()) result = object_reader(reader);
                     }
                 }
             }
@@ -82,10 +79,10 @@ namespace StudyBuddy.Persistence
                 connection.Open();
                 using (var cmd = new NpgsqlCommand(sql, connection))
                 {
-                    foreach (var param in this.parameters)
+                    foreach (var param in parameters)
                         cmd.Parameters.AddWithValue(param.Key, param.Value);
 
-                    using (NpgsqlDataReader reader = cmd.ExecuteReader())
+                    using (var reader = cmd.ExecuteReader())
                     {
                         while (reader.Read())
                         {
@@ -107,7 +104,7 @@ namespace StudyBuddy.Persistence
                 connection.Open();
                 using (var cmd = new NpgsqlCommand(sql, connection))
                 {
-                    foreach (var param in this.parameters)
+                    foreach (var param in parameters)
                         cmd.Parameters.AddWithValue(param.Key, param.Value);
 
                     cmd.ExecuteNonQuery();
@@ -119,17 +116,17 @@ namespace StudyBuddy.Persistence
 
         public int ExecuteQueryToSingleInt(string sql)
         {
-            int result = 0;
+            var result = 0;
 
             using (var connection = new NpgsqlConnection(connection_string))
             {
                 connection.Open();
                 using (var cmd = new NpgsqlCommand(sql, connection))
                 {
-                    foreach (var param in this.parameters)
+                    foreach (var param in parameters)
                         cmd.Parameters.AddWithValue(param.Key, param.Value);
 
-                    using (NpgsqlDataReader reader = cmd.ExecuteReader())
+                    using (var reader = cmd.ExecuteReader())
                     {
                         if (reader.Read())
                             result = reader.GetInt32(0);
@@ -143,14 +140,14 @@ namespace StudyBuddy.Persistence
 
         public int ExecuteScalar(string sql)
         {
-            int result = 0;
+            var result = 0;
 
             using (var connection = new NpgsqlConnection(connection_string))
             {
                 connection.Open();
                 using (var cmd = new NpgsqlCommand(sql, connection))
                 {
-                    foreach (var param in this.parameters)
+                    foreach (var param in parameters)
                         cmd.Parameters.AddWithValue(param.Key, param.Value);
 
                     result = Convert.ToInt32(cmd.ExecuteScalar());
@@ -169,14 +166,14 @@ namespace StudyBuddy.Persistence
 
         public int GetCount(string table_name)
         {
-            int result = 0;
+            var result = 0;
 
             using (var connection = new NpgsqlConnection(connection_string))
             {
                 connection.Open();
                 using (var cmd = new NpgsqlCommand("SELECT count(*) as count FROM " + table_name, connection))
                 {
-                    using (NpgsqlDataReader reader = cmd.ExecuteReader())
+                    using (var reader = cmd.ExecuteReader())
                     {
                         if (reader.Read())
                             result = reader.GetInt32(0);

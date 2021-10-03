@@ -1,5 +1,4 @@
-﻿using System;
-namespace StudyBuddy.BusinessLogic.Authorization
+﻿namespace StudyBuddy.BusinessLogic.Authorization
 {
     public class ChallengeAuthorization
     {

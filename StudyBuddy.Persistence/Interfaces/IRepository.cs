@@ -7,5 +7,6 @@ namespace StudyBuddy.Persistence
         IGameBadgeRepository GameBadges { get; }
         IRequestRepository Requests { get; }
         ITagRepository Tags { get; }
+        IFcmTokenRepository FcmTokens { get; }
     }
 }

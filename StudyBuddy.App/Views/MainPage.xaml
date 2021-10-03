@@ -1,12 +1,12 @@
-﻿<?xml version="1.0" encoding="UTF-8" ?>
+﻿<?xml version="1.0" encoding="UTF-8"?>
+
 <Shell xmlns="http://xamarin.com/schemas/2014/forms"
-    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:local="clr-namespace:StudyBuddy.App.Views"
-    xmlns:viewmodels="clr-namespace:StudyBuddy.App.ViewModels"
-    xmlns:models="clr-namespace:StudyBuddy.Model;assembly=StudyBuddy.Model"
-    x:DataType="viewmodels:ChallengesViewModel"
-    xmlns:fontAwesome="clr-namespace:StudyBuddy.App"
-    x:Class="StudyBuddy.App.Views.MainPage">
+       xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+       xmlns:local="clr-namespace:StudyBuddy.App.Views"
+       xmlns:viewmodels="clr-namespace:StudyBuddy.App.ViewModels"
+       x:DataType="viewmodels:ChallengesViewModel"
+       xmlns:fontAwesome="clr-namespace:StudyBuddy.App"
+       x:Class="StudyBuddy.App.Views.MainPage">
     <ShellItem Route="LoginPage" FlyoutItemIsVisible="False">
         <ShellContent ContentTemplate="{DataTemplate local:LoginPage}" />
     </ShellItem>
@@ -14,25 +14,29 @@
         <Tab>
             <ShellContent ContentTemplate="{DataTemplate local:ChallengesPage}" Route="ChallengesPage" />
             <Tab.Icon>
-                <FontImageSource FontFamily="{StaticResource FontAwesomeSolid}" Glyph="{x:Static fontAwesome:FontAwesomeIcons.Table}"/>
+                <FontImageSource FontFamily="{StaticResource FontAwesomeSolid}"
+                                 Glyph="{x:Static fontAwesome:FontAwesomeIcons.Table}" />
             </Tab.Icon>
         </Tab>
         <Tab>
             <ShellContent ContentTemplate="{DataTemplate local:StatisticPage}" Route="StatisticsPage" />
             <Tab.Icon>
-                <FontImageSource FontFamily="{StaticResource FontAwesomeSolid}" Glyph="{x:Static fontAwesome:FontAwesomeIcons.Crown}"/>
+                <FontImageSource FontFamily="{StaticResource FontAwesomeSolid}"
+                                 Glyph="{x:Static fontAwesome:FontAwesomeIcons.Crown}" />
             </Tab.Icon>
         </Tab>
         <Tab>
             <ShellContent ContentTemplate="{DataTemplate local:QrCodePage}" Route="QrCodePage" />
             <Tab.Icon>
-                <FontImageSource FontFamily="{StaticResource FontAwesomeSolid}" Glyph="{x:Static fontAwesome:FontAwesomeIcons.Camera}"/>
+                <FontImageSource FontFamily="{StaticResource FontAwesomeSolid}"
+                                 Glyph="{x:Static fontAwesome:FontAwesomeIcons.Camera}" />
             </Tab.Icon>
         </Tab>
         <Tab>
             <ShellContent ContentTemplate="{DataTemplate local:SettingsPage}" Route="SettingsPage" />
             <Tab.Icon>
-                <FontImageSource FontFamily="{StaticResource FontAwesomeSolid}" Glyph="{x:Static fontAwesome:FontAwesomeIcons.Gears}"/>
+                <FontImageSource FontFamily="{StaticResource FontAwesomeSolid}"
+                                 Glyph="{x:Static fontAwesome:FontAwesomeIcons.Gears}" />
             </Tab.Icon>
         </Tab>
     </TabBar>

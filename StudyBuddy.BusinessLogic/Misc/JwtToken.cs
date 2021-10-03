@@ -6,27 +6,28 @@ using System.Text;
 using Microsoft.IdentityModel.Tokens;
 using StudyBuddy.Model;
 using StudyBuddy.Persistence;
+using Environment = StudyBuddy.Model.Environment;
 
 namespace StudyBuddy.BusinessLogic
 {
     public class JwtToken
     {
-        private byte[] key;
-        private JwtSecurityTokenHandler tokenHandler = new JwtSecurityTokenHandler();
-        private IRepository repository;
- 
+        private readonly byte[] key;
+        private readonly IRepository repository;
+        private readonly JwtSecurityTokenHandler tokenHandler = new();
+
         public JwtToken(IRepository repository)
         {
             this.repository = repository;
 
-            var key_string = Model.Environment.GetOrDefault("JWT_KEY", "thisisasupersecretkey");
-            this.key = Encoding.ASCII.GetBytes(key_string);
+            var key_string = Environment.GetOrDefault("JWT_KEY", "thisisasupersecretkey");
+            key = Encoding.ASCII.GetBytes(key_string);
         }
 
         public string FromUser(User user)
         {
             var tokenDescriptor = new SecurityTokenDescriptor();
-            tokenDescriptor.Subject = new ClaimsIdentity(new[] { new Claim("id", user.ID.ToString()) });
+            tokenDescriptor.Subject = new ClaimsIdentity(new[] {new Claim("id", user.ID.ToString())});
             tokenDescriptor.Expires = DateTime.UtcNow.AddDays(7);
             tokenDescriptor.SigningCredentials = new SigningCredentials(
                 new SymmetricSecurityKey(key),
@@ -47,10 +48,10 @@ namespace StudyBuddy.BusinessLogic
                     ValidateIssuer = false,
                     ValidateAudience = false,
                     ClockSkew = TimeSpan.Zero
-                }, out SecurityToken validatedToken);
+                }, out var validatedToken);
 
-                var jwtToken = (JwtSecurityToken)validatedToken;
-                int user_id = int.Parse(jwtToken.Claims.First(x => x.Type == "id").Value);
+                var jwtToken = (JwtSecurityToken) validatedToken;
+                var user_id = int.Parse(jwtToken.Claims.First(x => x.Type == "id").Value);
                 return repository.Users.ById(user_id);
             }
             catch

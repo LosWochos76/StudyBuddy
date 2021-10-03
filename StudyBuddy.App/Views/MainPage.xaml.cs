@@ -6,7 +6,7 @@ namespace StudyBuddy.App.Views
 {
     public partial class MainPage : Shell
     {
-        private MainViewModel view_model;
+        private readonly MainViewModel view_model;
 
         public MainPage()
         {

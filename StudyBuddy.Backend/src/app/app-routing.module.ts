@@ -22,6 +22,8 @@ import { RegisterUserComponent } from './user/register-user/register-user.compon
 import { UserEditComponent } from './user/user-edit/user-edit.component';
 import { UserListComponent } from './user/user-list/user-list.component';
 import { UserSettingsComponent } from './user/user-settings/user-settings.component';
+import {NotificationPageComponent} from "./notification/notification-page/notification-page.component";
+import {NotificationBroadcastComponent} from "./notification/notification-broadcast/notification-broadcast.component";
 
 const routes: Routes = [
   { path: 'info', component: InfoComponent },
@@ -39,6 +41,11 @@ const routes: Routes = [
   { path: 'user/:id', component: UserEditComponent, canActivate: [RouteGuardService] },
   { path: 'usersettings', component: UserSettingsComponent, canActivate: [RouteGuardService] },
   { path: 'request', component: RequestListComponent, canActivate: [RouteGuardService] },
+  { path: 'notification', component: NotificationPageComponent, canActivate: [RouteGuardService] , children: [
+      {path: 'broadcast', component: NotificationBroadcastComponent },
+      { path: '', redirectTo: 'broadcast', pathMatch: 'full' },
+
+    ]},
   { path: 'request/:id', component: RequestEditComponent, canActivate: [RouteGuardService] },
   { path: 'tag', component: TagListComponent, canActivate: [RouteGuardService] },
   { path: 'tag/:id', component: TagEditComponent, canActivate: [RouteGuardService] },

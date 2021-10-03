@@ -1,18 +1,18 @@
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
+using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
 using StudyBuddy.Model;
-using System.Text;
 
 namespace StudyBuddy.ApiFacade
 {
-    class ChallengeService : IChallengeService
+    internal class ChallengeService : IChallengeService
     {
-        private IApi api;
-        private string base_url;
-        private HttpClient client;
+        private readonly IApi api;
+        private readonly string base_url;
+        private readonly HttpClient client;
 
         public ChallengeService(IApi api, string base_url)
         {
@@ -40,8 +40,7 @@ namespace StudyBuddy.ApiFacade
 
             if (jtoken is JArray)
                 return jtoken.ToObject<IEnumerable<Challenge>>();
-            else
-                return null;
+            return null;
         }
 
         public async Task<bool> AcceptFromQrCode(string code)
