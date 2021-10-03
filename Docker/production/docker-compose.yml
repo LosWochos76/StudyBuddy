@@ -26,6 +26,9 @@ services:
       - type: bind
         source: /Users/stuckenholz/.aspnet/https/aspnetapp.pfx
         target: /https/aspnetapp.pfx
+      - type: bind
+        source: /Users/stuckenholz/private_key.json
+        target: /conf/private_key.json
     depends_on:
       - postgres
 

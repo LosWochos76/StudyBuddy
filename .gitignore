@@ -1,3 +1,6 @@
+#  Dont checkin google crendtials
+private_key.json
+
 # User-specific files
 *.suo
 *.user
