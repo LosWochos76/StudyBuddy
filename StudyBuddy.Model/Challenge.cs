@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace StudyBuddy.Model
 {
@@ -14,26 +16,30 @@ namespace StudyBuddy.Model
         public DateTime Created { get; set; } = DateTime.Now.Date;
         public ChallengeProve Prove { get; set; } = ChallengeProve.ByTrust;
         public int? SeriesParentID { get; set; }
+        public string Tags { get; set; }
 
-        public string InfoText
+        public string ValidityText
         {
             get
             {
                 var result = "";
 
-                if (ValidityStart.Year == ValidityEnd.Year &&
-                    ValidityStart.Month == ValidityEnd.Month)
+                if (ValidityStart.Year == ValidityEnd.Year && ValidityStart.Month == ValidityEnd.Month)
                     result = ValidityStart.ToString("dd.") + "-" + ValidityEnd.ToString("dd.MM.yyyy");
-
-                if (ValidityStart.Date == ValidityEnd.Date)
+                else if (ValidityStart.Date == ValidityEnd.Date)
                     result = ValidityEnd.ToString("dd.MM.yyyy");
-
-                if (Points > 1)
-                    result += " - " + Points + " Punkte";
                 else
-                    result += " - " + Points + " Punkt";
+                    result = ValidityStart.ToString("dd.MM.yyyy") + "-" + ValidityEnd.ToString("dd.MM.yyyy");
 
                 return result;
+            }
+        }
+
+        public string PointsText
+        {
+            get
+            {
+                return Points > 1 ? Points + " Punkte" : Points + " Punkt";
             }
         }
 
@@ -67,6 +73,23 @@ namespace StudyBuddy.Model
             clone.Prove = Prove;
             clone.SeriesParentID = SeriesParentID;
             return clone;
+        }
+
+        private IEnumerable<string> SplitSearchText(string search_text)
+        {
+            return search_text.ToLower().Replace("#", "")
+                .Split(new[] { ' ', '\t' }, StringSplitOptions.RemoveEmptyEntries);
+        }
+
+        private bool Contains(string property, IEnumerable<string> keywords)
+        {
+            return property == null ? false : keywords.All(kw => property.ToLower().Contains(kw));
+        }
+
+        public bool Contains(string search_text)
+        {
+            var keywords = SplitSearchText(search_text);
+            return Contains(Name, keywords) || Contains(Description, keywords) || Contains(Tags, keywords);
         }
     }
 }

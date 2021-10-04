@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using StudyBuddy.Model;
 using StudyBuddy.Persistence;
 
@@ -101,6 +102,15 @@ namespace StudyBuddy.BusinessLogic
                 repository.Tags.AddTagForChallenge(tag.ID, parameter.EntityId);
 
             return tags;
+        }
+
+        public void LoadTags(IEnumerable<Challenge> challenges)
+        {
+            foreach (Challenge c in challenges)
+            {
+                var tags = repository.Tags.OfChallenge(c.ID);
+                c.Tags = string.Join(" ", (from tag in tags select "#" + tag.Name).ToArray());
+            }
         }
     }
 }

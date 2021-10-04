@@ -140,11 +140,7 @@
             <Version>3.1.0-beta2</Version>
         </PackageReference>
     </ItemGroup>
-<<<<<<< HEAD
     <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets"/>
-=======
-    <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
->>>>>>> f8665b0 (push notifications are now working for Android)
     <ItemGroup>
         <ProjectReference Include="..\StudyBuddy.App\StudyBuddy.App.csproj">
             <Project>{394F1131-79C6-4F7C-9DFB-6BEEE4AF3733}</Project>
@@ -156,14 +152,8 @@
         </ProjectReference>
     </ItemGroup>
     <ItemGroup>
-<<<<<<< HEAD
         <BundleResource Include="Resources\fabrands.otf"/>
         <BundleResource Include="Resources\faregular.otf"/>
         <BundleResource Include="Resources\fasolid.otf"/>
-=======
-        <BundleResource Include="Resources\fabrands.otf" />
-        <BundleResource Include="Resources\faregular.otf" />
-        <BundleResource Include="Resources\fasolid.otf" />
->>>>>>> f8665b0 (push notifications are now working for Android)
     </ItemGroup>
 </Project>

@@ -4,7 +4,6 @@ using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 using Plugin.FirebasePushNotification;
-using Plugin.FirebasePushNotification;
 
 namespace StudyBuddy.ApiFacade.Services
 {
@@ -25,7 +24,7 @@ namespace StudyBuddy.ApiFacade.Services
                 if (args.IsLoggedIn == true)
                 {
                     this.UpdateToken();
-                    
+
                     CrossFirebasePushNotification.Current.OnTokenRefresh += (source, eventArgs) =>
                     {
                         this.Save(eventArgs.Token);
@@ -35,15 +34,11 @@ namespace StudyBuddy.ApiFacade.Services
             };
         }
 
-
         public async Task<HttpResponseMessage> Save(string fcmToken)
         {
-
             if (string.IsNullOrEmpty(fcmToken))
-            {
                 return null;
-            }
-            
+
             var token = api.Authentication.Token;
             if (string.IsNullOrEmpty(token))
                 throw new Exception("You must login first");
@@ -64,24 +59,16 @@ namespace StudyBuddy.ApiFacade.Services
             return response;
         }
 
-
-<<<<<<< HEAD
-=======
         async void UpdateToken()
         {
-            var token = await CrossFirebasePushNotification.Current.GetTokenAsync();
-
-            if (string.IsNullOrEmpty(token))
+            try
             {
-                return;
+                var token = await CrossFirebasePushNotification.Current.GetTokenAsync();
+                this.Save(token);
             }
-
-            this.Save(token);
-
+            catch
+            {
+            }
         }
-
-
->>>>>>> f8665b0 (push notifications are now working for Android)
-
     }
 }

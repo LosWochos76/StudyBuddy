@@ -1,7 +1,4 @@
-<<<<<<< HEAD
 using System.IO;
-=======
->>>>>>> f8665b0 (push notifications are now working for Android)
 using FirebaseAdmin;
 using Google.Apis.Auth.OAuth2;
 using Microsoft.AspNetCore.Hosting;

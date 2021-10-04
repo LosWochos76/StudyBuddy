@@ -10,6 +10,9 @@
     <ShellItem Route="LoginPage" FlyoutItemIsVisible="False">
         <ShellContent ContentTemplate="{DataTemplate local:LoginPage}" />
     </ShellItem>
+    <ShellItem Route="ChallengeDetailsPage" FlyoutItemIsVisible="False">
+        <ShellContent ContentTemplate="{DataTemplate local:ChallengeDetailsPage}" />
+    </ShellItem>
     <TabBar>
         <Tab>
             <ShellContent ContentTemplate="{DataTemplate local:ChallengesPage}" Route="ChallengesPage" />

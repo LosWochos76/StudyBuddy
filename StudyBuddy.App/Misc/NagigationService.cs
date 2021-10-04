@@ -9,5 +9,10 @@ namespace StudyBuddy.App.Misc
         {
             return Shell.Current.GoToAsync(path);
         }
+
+        public Task Push(Page page)
+        {
+            return Shell.Current.Navigation.PushAsync(page);
+        }
     }
 }
