@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Linq;
+using System.Threading.Tasks;
 using Xamarin.Forms;
 
 namespace StudyBuddy.App.Misc
@@ -7,6 +8,14 @@ namespace StudyBuddy.App.Misc
     {
         public Task GoTo(string path)
         {
+            if (Shell.Current.Navigation.NavigationStack.Count > 0)
+            {
+                var list = Shell.Current.Navigation.NavigationStack.ToList();
+                foreach (var page in list)
+                    if (page != null)
+                        Shell.Current.Navigation.RemovePage(page);
+            }
+
             return Shell.Current.GoToAsync(path);
         }
 

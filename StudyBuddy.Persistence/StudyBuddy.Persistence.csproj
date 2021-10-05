@@ -1,20 +1,20 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <ItemGroup>
-        <PackageReference Include="Npgsql" Version="5.0.10"/>
-        <PackageReference Include="SimpleHashing.Net" Version="2.1.0"/>
+        <PackageReference Include="Npgsql" Version="5.0.10" />
+        <PackageReference Include="SimpleHashing.Net" Version="2.1.0" />
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\StudyBuddy.Model\StudyBuddy.Model.csproj"/>
+        <ProjectReference Include="..\StudyBuddy.Model\StudyBuddy.Model.csproj" />
     </ItemGroup>
     <ItemGroup>
-        <None Remove="Interfaces\"/>
-        <None Remove="Repositories\"/>
+        <None Remove="Interfaces\" />
+        <None Remove="Repositories\" />
     </ItemGroup>
     <ItemGroup>
-        <Folder Include="Interfaces\"/>
-        <Folder Include="Repositories\"/>
+        <Folder Include="Interfaces\" />
+        <Folder Include="Repositories\" />
     </ItemGroup>
     <PropertyGroup>
         <TargetFramework>net5.0</TargetFramework>

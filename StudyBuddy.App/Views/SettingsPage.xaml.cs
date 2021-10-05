@@ -1,4 +1,5 @@
-﻿using StudyBuddy.App.ViewModels;
+﻿using StudyBuddy.ApiFacade;
+using StudyBuddy.App.ViewModels;
 using TinyIoC;
 using Xamarin.Forms;
 

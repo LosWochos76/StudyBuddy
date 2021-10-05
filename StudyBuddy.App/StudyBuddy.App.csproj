@@ -19,6 +19,7 @@
         <None Remove="TinyIoC" />
         <None Remove="Interfaces\" />
         <None Remove="ZXing.Net.Mobile.Forms" />
+        <None Remove="Controls\" />
     </ItemGroup>
 
     <ItemGroup>
@@ -34,5 +35,6 @@
     <ItemGroup>
         <Folder Include="Misc\" />
         <Folder Include="Interfaces\" />
+        <Folder Include="Controls\" />
     </ItemGroup>
 </Project>

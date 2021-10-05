@@ -29,6 +29,13 @@
             </Tab.Icon>
         </Tab>
         <Tab>
+            <ShellContent ContentTemplate="{DataTemplate local:FriendsPage}" Route="FriendsPage" />
+            <Tab.Icon>
+                <FontImageSource FontFamily="{StaticResource FontAwesomeSolid}"
+                                 Glyph="{x:Static fontAwesome:FontAwesomeIcons.UserFriends}" />
+            </Tab.Icon>
+        </Tab>
+        <Tab>
             <ShellContent ContentTemplate="{DataTemplate local:QrCodePage}" Route="QrCodePage" />
             <Tab.Icon>
                 <FontImageSource FontFamily="{StaticResource FontAwesomeSolid}"

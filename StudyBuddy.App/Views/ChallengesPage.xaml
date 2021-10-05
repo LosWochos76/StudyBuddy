@@ -10,7 +10,7 @@
     x:Name="page" Title="{Binding Header}">
     <ContentPage.Content>
         <StackLayout>
-            <SearchBar />
+            <SearchBar x:Name="searchBar" TextChanged="searchBar_TextChanged" />
             <RefreshView
                 IsRefreshing="{Binding IsRefreshing}"
                 Command="{Binding RefreshCommand}"

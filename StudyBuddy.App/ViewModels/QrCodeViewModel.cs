@@ -37,6 +37,7 @@ namespace StudyBuddy.App.ViewModels
             }
             else
             {
+
                 await navigation.GoTo("//ChallengesPage");
             }
         }

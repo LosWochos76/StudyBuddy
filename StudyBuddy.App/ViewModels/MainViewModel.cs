@@ -5,8 +5,7 @@ namespace StudyBuddy.App.ViewModels
 {
     public class MainViewModel : ViewModelBase
     {
-        public MainViewModel(IApi api, IDialogService dialog, INavigationService navigation) : base(api, dialog,
-            navigation)
+        public MainViewModel(IApi api, IDialogService dialog, INavigationService navigation) : base(api, dialog, navigation)
         {
         }
     }

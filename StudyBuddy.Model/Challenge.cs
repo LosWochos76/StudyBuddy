@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json.Serialization;
 
 namespace StudyBuddy.Model
 {
@@ -18,6 +19,7 @@ namespace StudyBuddy.Model
         public int? SeriesParentID { get; set; }
         public string Tags { get; set; }
 
+        [JsonIgnore]
         public string ValidityText
         {
             get
@@ -35,6 +37,7 @@ namespace StudyBuddy.Model
             }
         }
 
+        [JsonIgnore]
         public string PointsText
         {
             get
@@ -43,6 +46,7 @@ namespace StudyBuddy.Model
             }
         }
 
+        [JsonIgnore]
         public char CategorySymbol
         {
             get
@@ -77,8 +81,7 @@ namespace StudyBuddy.Model
 
         private IEnumerable<string> SplitSearchText(string search_text)
         {
-            return search_text.ToLower().Replace("#", "")
-                .Split(new[] { ' ', '\t' }, StringSplitOptions.RemoveEmptyEntries);
+            return search_text.ToLower().Split(new[] { ' ', '\t' }, StringSplitOptions.RemoveEmptyEntries);
         }
 
         private bool Contains(string property, IEnumerable<string> keywords)
@@ -89,7 +92,7 @@ namespace StudyBuddy.Model
         public bool Contains(string search_text)
         {
             var keywords = SplitSearchText(search_text);
-            return Contains(Name, keywords) || Contains(Description, keywords) || Contains(Tags, keywords);
+            return Contains(Name + Description + Tags, keywords);
         }
     }
 }

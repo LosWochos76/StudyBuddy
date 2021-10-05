@@ -16,6 +16,7 @@ namespace StudyBuddy.App.ViewModels
         public ICommand DetailsCommand { get; }
         public bool IsRefreshing { get; set; }
         public string Header => string.Format("Herausforderungen am {0}", DateTime.Now.ToShortDateString());
+        public string SearchText { get; set; }
 
         public ChallengesViewModel(IApi api, IDialogService dialog, INavigationService navigation) : base(api, dialog, navigation)
         {
@@ -32,17 +33,16 @@ namespace StudyBuddy.App.ViewModels
 
         public async void Reload()
         {
-            IsRefreshing = true;
-            NotifyPropertyChanged("IsRefreshing");
-            Challenges = await api.Challenges.ForToday("");
+            Challenges = await api.Challenges.ForToday(SearchText);
+            NotifyPropertyChanged("Challenges");
+
             IsRefreshing = false;
             NotifyPropertyChanged("IsRefreshing");
-            NotifyPropertyChanged("Challenges");
         }
 
         private void ShowDetails(Challenge obj)
         {
-            navigation.Push(new ChallengeDetailsPage());
+            navigation.Push(new ChallengeDetailsPage(obj));
         }
     }
 }

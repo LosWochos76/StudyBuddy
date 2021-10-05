@@ -19,13 +19,14 @@ namespace StudyBuddy.ApiFacade
             client = new HttpClient(Helper.GetInsecureHandler());
         }
 
-        public async Task<IEnumerable<Challenge>> ForToday(string tag_string)
+        public async Task<IEnumerable<Challenge>> ForToday(string search_string)
         {
-            tag_string = "#all";
             var rh = new RequestHelper(api.Authentication.Token);
-            var content = await rh.DropRequest(base_url + "Challenge/ForToday", HttpMethod.Get, tag_string);
-            var jtoken = JToken.Parse(content);
+            var content = await rh.DropRequest(base_url + "Challenge/ForToday", HttpMethod.Get, search_string);
+            if (content == null)
+                return null;
 
+            var jtoken = JToken.Parse(content);
             if (jtoken is JArray)
                 return jtoken.ToObject<IEnumerable<Challenge>>();
             else
@@ -35,7 +36,10 @@ namespace StudyBuddy.ApiFacade
         public async Task<bool> AcceptFromQrCode(string code)
         {
             var rh = new RequestHelper(api.Authentication.Token);
-            var content = await rh.DropRequest(base_url + "Challenge/AcceptFromQrCode", HttpMethod.Post, new { Payload = code });
+            var content = await rh.DropRequest(base_url + "Challenge/AcceptFromQrCode", HttpMethod.Post, code);
+            if (content == null)
+                return false;
+
             var obj = JObject.Parse(content);
             return obj.ContainsKey("status");
         }
