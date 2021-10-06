@@ -234,8 +234,8 @@ namespace StudyBuddy.Persistence
             if (revision == 2)
             {
                 qh.ExecuteNonQuery("alter table challenges " +
-                                   "drop column if exists valid_for_study_program_id," +
-                                   "drop column if exists valid_for_for_enrolled_since_term_id");
+                    "drop column if exists valid_for_study_program_id," +
+                    "drop column if exists valid_for_for_enrolled_since_term_id");
 
                 rh.SetRevision(3);
             }

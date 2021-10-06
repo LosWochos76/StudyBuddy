@@ -1,7 +1,7 @@
 ﻿using System.Net.Http;
 using System.Net.Security;
 
-namespace StudyBuddy.ApiFacade
+namespace StudyBuddy.App.Api
 {
     public class Helper
     {

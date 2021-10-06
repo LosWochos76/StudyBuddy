@@ -1,6 +1,5 @@
 ﻿using System.Windows.Input;
-using StudyBuddy.ApiFacade;
-using StudyBuddy.ApiFacade.Restful;
+using StudyBuddy.App.Api;
 using StudyBuddy.App.Misc;
 using Xamarin.Forms;
 

@@ -103,14 +103,5 @@ namespace StudyBuddy.BusinessLogic
 
             return tags;
         }
-
-        public void LoadTags(IEnumerable<Challenge> challenges)
-        {
-            foreach (Challenge c in challenges)
-            {
-                var tags = repository.Tags.OfChallenge(c.ID);
-                c.Tags = string.Join(" ", (from tag in tags select "#" + tag.Name).ToArray());
-            }
-        }
     }
 }

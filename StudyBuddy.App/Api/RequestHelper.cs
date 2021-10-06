@@ -4,7 +4,7 @@ using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 
-namespace StudyBuddy.ApiFacade
+namespace StudyBuddy.App.Api
 {
     public class RequestHelper
     {
@@ -19,11 +19,11 @@ namespace StudyBuddy.ApiFacade
 
         public async Task<string> DropRequest(string path, HttpMethod method, object payload = null)
         {
-            if (string.IsNullOrEmpty(token))
-                throw new Exception("You must login first");
-
             var message = new HttpRequestMessage(method, path);
-            message.Headers.Add("Authorization", token);
+
+            if (!string.IsNullOrEmpty(token))
+                message.Headers.Add("Authorization", token);
+
             var json_string = payload == null ? "" : JsonSerializer.Serialize(payload);
             var content = new StringContent(json_string, Encoding.UTF8, "application/json");
             message.Content = content;

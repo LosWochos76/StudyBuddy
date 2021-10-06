@@ -1,5 +1,5 @@
 ﻿using System.Windows.Input;
-using StudyBuddy.ApiFacade;
+using StudyBuddy.App.Api;
 using StudyBuddy.App.Misc;
 using Xamarin.Forms;
 
@@ -7,8 +7,7 @@ namespace StudyBuddy.App.ViewModels
 {
     public class SettingsViewModel : ViewModelBase
     {
-        public SettingsViewModel(IApi api, IDialogService dialog, INavigationService navigation) : base(api, dialog,
-            navigation)
+        public SettingsViewModel(IApi api, IDialogService dialog, INavigationService navigation) : base(api, dialog, navigation)
         {
             LogoutCommand = new Command(Logout);
         }

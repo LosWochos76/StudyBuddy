@@ -1,4 +1,6 @@
-﻿namespace StudyBuddy.Model
+﻿using System.Text.Json.Serialization;
+
+namespace StudyBuddy.Model
 {
     public class User : Entity
     {
@@ -9,11 +11,14 @@
         public string PasswordHash { get; set; }
         public string Email { get; set; }
         public Role Role { get; set; }
-        public int? ProgramID { get; set; }
-        public int? EnrolledInTermID { get; set; }
 
+        [JsonIgnore]
         public bool IsAdmin => Role == Role.Admin;
+
+        [JsonIgnore]
         public bool IsStudent => Role == Role.Student;
+
+        [JsonIgnore]
         public bool IsInstructor => Role == Role.Instructor;
     }
 }

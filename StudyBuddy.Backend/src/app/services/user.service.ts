@@ -120,7 +120,7 @@ export class UserService {
 
     let objects: User[] = [];
     this.logger.debug("Getting friends of " + id);
-    let result = await this.http.get(this.url + "User/Friends/" + id,
+    let result = await this.http.get(this.url + "User/" + id + "/Friends",
       {
         headers: new HttpHeaders({ Authorization: this.auth.getToken() })
       }).toPromise();

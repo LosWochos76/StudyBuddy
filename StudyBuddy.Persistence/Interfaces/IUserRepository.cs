@@ -21,6 +21,7 @@ namespace StudyBuddy.Persistence
         void RemoveFriend(int user_id, int friend_id);
         void RemoveFriends(int user_id);
         void AddFriends(int user_id, int[] friend_ids);
+        int GetCountOfCommonFriends(int user_a_id, int user_b_id);
 
         IEnumerable<User> GetAllUsersThatAcceptedChallenge(int challenge_id);
     }

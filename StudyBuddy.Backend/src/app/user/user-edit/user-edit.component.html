@@ -46,6 +46,7 @@
             </div>
         </div>
     </div>
+    <br *ngIf="form.controls.role.value != 1">
     <div class="row g-1">
         <div class="col">
             <button type="submit" class="btn btn-primary" [disabled]="!form.valid">Ok</button>&nbsp;

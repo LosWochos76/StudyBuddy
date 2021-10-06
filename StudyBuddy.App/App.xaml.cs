@@ -1,4 +1,4 @@
-﻿using StudyBuddy.ApiFacade;
+﻿using StudyBuddy.App.Api;
 using StudyBuddy.App.Misc;
 using StudyBuddy.App.ViewModels;
 using StudyBuddy.App.Views;
@@ -19,7 +19,7 @@ namespace StudyBuddy.App
 
         private void SetupServices()
         {
-            TinyIoCContainer.Current.Register<IApi>(new ApiFacade.ApiFacade());
+            TinyIoCContainer.Current.Register<IApi>(new ApiFacade());
             TinyIoCContainer.Current.Register<IDialogService>(new DialogService());
             TinyIoCContainer.Current.Register<INavigationService>(new NagigationService());
 

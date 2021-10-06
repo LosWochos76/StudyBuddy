@@ -26,10 +26,10 @@ namespace StudyBuddy.Api
 
         [Route("/Challenge/ForToday/")]
         [HttpGet]
-        public IActionResult ForToday([FromBody] string search_string)
+        public IActionResult ForToday()
         {
             var service = new ChallengeService(repository, HttpContext.Items["user"] as User);
-            return Json(service.ForToday(search_string));
+            return Json(service.ForToday());
         }
 
         [Route("/Challenge/{id}")]

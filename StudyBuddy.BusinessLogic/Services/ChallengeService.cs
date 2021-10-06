@@ -35,26 +35,12 @@ namespace StudyBuddy.BusinessLogic
             return null;
         }
 
-        public IEnumerable<Challenge> ForToday(string search_string)
+        public IEnumerable<Challenge> ForToday()
         {
             if (current_user == null)
                 throw new UnauthorizedAccessException("Unauthorized!");
 
-            var challenges = repository.Challenges.ForToday(DateTime.Now.Date);
-
-            var result = new List<Challenge>();
-            foreach (Challenge c in challenges)
-            {
-                var tags = repository.Tags.OfChallenge(c.ID);
-                c.Tags = string.Join(" ", (from tag in tags select "#" + tag.Name).ToArray());
-
-                if (string.IsNullOrEmpty(search_string))
-                    result.Add(c);
-                else if (c.Contains(search_string))
-                    result.Add(c);
-            }
-
-            return result;
+            return repository.Challenges.ForToday(DateTime.Now.Date);
         }
 
         public Challenge GetById(int id)

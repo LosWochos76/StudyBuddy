@@ -79,7 +79,7 @@ namespace StudyBuddy.Api
             return Json(new {Id = service.GetUserIdByEmail(email)});
         }
 
-        [Route("/User/Friends/{id}")]
+        [Route("/User/{id}/Friends")]
         [HttpGet]
         public IActionResult GetAllFriends(int id)
         {
@@ -129,6 +129,15 @@ namespace StudyBuddy.Api
         {
             var service = new UserService(repository, HttpContext.Items["user"] as User);
             var result = service.GetAllUsersThatAcceptedChallenge(challenge_id);
+            return Json(result);
+        }
+
+        [Route("/User/{user_a_id}/CountOfCommonFriends/{user_b_id}")]
+        [HttpGet]
+        public IActionResult GetCountOfCommonFriends(int user_a_id, int user_b_id)
+        {
+            var service = new UserService(repository, HttpContext.Items["user"] as User);
+            var result = service.GetCountOfCommonFriends(user_a_id, user_b_id);
             return Json(result);
         }
     }

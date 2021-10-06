@@ -5,7 +5,7 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using Plugin.FirebasePushNotification;
 
-namespace StudyBuddy.ApiFacade.Services
+namespace StudyBuddy.App.Api
 {
     public class FcmTokenService : IFcmTokenService
     {

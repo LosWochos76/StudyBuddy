@@ -1,16 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Windows.Input;
-using StudyBuddy.ApiFacade;
+using StudyBuddy.App.Api;
 using StudyBuddy.App.Misc;
-using StudyBuddy.Model;
 using Xamarin.Forms;
 
 namespace StudyBuddy.App.ViewModels
 {
     public class FriendsViewModel : ViewModelBase
     {
-        public IEnumerable<User> Friends { get; set; } = new List<User>();
+        public IEnumerable<UserViewModel> Friends { get; set; } = new List<UserViewModel>();
         public bool IsRefreshing { get; set; }
         public ICommand RefreshCommand { get; }
 

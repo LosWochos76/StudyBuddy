@@ -7,7 +7,7 @@
     xmlns:models="clr-namespace:StudyBuddy.Model;assembly=StudyBuddy.Model"
     x:DataType="viewmodels:FriendsViewModel"
     xmlns:fontAwesome="clr-namespace:StudyBuddy.App"
-    Title="Freunde">
+    Title="Freunde" x:Name="page">
     <ContentPage.Content>
         <StackLayout>
             <RefreshView
@@ -16,14 +16,28 @@
                 Padding="8">
                 <CollectionView ItemsSource="{Binding Friends}">
                     <CollectionView.ItemTemplate>
-                        <DataTemplate x:DataType="models:User">
+                        <DataTemplate x:DataType="viewmodels:UserViewModel">
                             <ContentView>
                                 <StackLayout Padding="10">
-                                    <StackLayout Orientation="Horizontal">
-                                        <Label Text="{Binding Firstname}" />
-                                        <Label Text="{Binding Lastname}" />
-                                        <Label Text="{Binding Nickname}" />
-                                    </StackLayout>
+                                    <Grid Padding="10" x:Name="Item">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="70" />
+                                            <ColumnDefinition Width="*" />
+                                        </Grid.ColumnDefinitions>
+                                        <Label Grid.Column="0" Grid.Row="0"
+                                            Text="{x:Static fontAwesome:FontAwesomeIcons.User}"
+                                            FontFamily="{StaticResource FontAwesomeSolid}"
+                                            FontSize="50" />
+                                        <StackLayout Grid.Column="1" Grid.Row="0" HorizontalOptions="FillAndExpand">
+                                            <Label Text="{Binding FullName}" FontAttributes="Bold" />
+                                            <Label Text="{Binding CountOfCommonFriends, StringFormat='{0} gemeinsame Freunde'}" />
+                                        </StackLayout>
+                                        <Grid.GestureRecognizers>
+                                            <TapGestureRecognizer
+                                                Command="{Binding BindingContext.DetailsCommand, Source={x:Reference Name=page}}"
+                                                CommandParameter="{Binding Source={x:Reference Item}, Path=BindingContext}"/>
+                                        </Grid.GestureRecognizers>
+                                    </Grid>
                                     <BoxView HeightRequest="1" Color="Gray" />
                                 </StackLayout>
                             </ContentView>

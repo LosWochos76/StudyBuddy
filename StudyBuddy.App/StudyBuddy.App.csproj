@@ -20,6 +20,9 @@
         <None Remove="Interfaces\" />
         <None Remove="ZXing.Net.Mobile.Forms" />
         <None Remove="Controls\" />
+        <None Remove="ApiFacade\" />
+        <None Remove="Plugin.FirebasePushNotification" />
+        <None Remove="Newtonsoft.Json" />
     </ItemGroup>
 
     <ItemGroup>
@@ -27,14 +30,16 @@
         <PackageReference Include="Xamarin.Essentials" Version="1.7.0" />
         <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="5.0.2" />
         <PackageReference Include="ZXing.Net.Mobile.Forms" Version="3.1.0-beta2" />
-    </ItemGroup>
-    <ItemGroup>
-        <ProjectReference Include="..\StudyBuddy.Model\StudyBuddy.Model.csproj" />
-        <ProjectReference Include="..\StudyBuddy.ApiFacade\StudyBuddy.ApiFacade.csproj" />
+        <PackageReference Include="Plugin.FirebasePushNotification" Version="3.3.10" />
+        <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
     </ItemGroup>
     <ItemGroup>
         <Folder Include="Misc\" />
         <Folder Include="Interfaces\" />
         <Folder Include="Controls\" />
+        <Folder Include="Api\" />
+    </ItemGroup>
+    <ItemGroup>
+      <ProjectReference Include="..\StudyBuddy.Model\StudyBuddy.Model.csproj" />
     </ItemGroup>
 </Project>

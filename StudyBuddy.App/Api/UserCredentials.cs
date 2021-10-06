@@ -1,4 +1,4 @@
-﻿namespace StudyBuddy.ApiFacade.Restful
+﻿namespace StudyBuddy.App.Api
 {
     public class UserCredentials
     {

@@ -1,4 +1,4 @@
-﻿namespace StudyBuddy.ApiFacade
+﻿namespace StudyBuddy.App.Api
 {
     public interface IApi
     {
@@ -6,5 +6,6 @@
         IChallengeService Challenges { get; }
         IFcmTokenService FcmTokens { get; }
         IUserService Users { get; }
+        ITagService Tags { get; }
     }
 }

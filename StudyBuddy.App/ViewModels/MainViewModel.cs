@@ -1,4 +1,4 @@
-﻿using StudyBuddy.ApiFacade;
+﻿using StudyBuddy.App.Api;
 using StudyBuddy.App.Misc;
 
 namespace StudyBuddy.App.ViewModels

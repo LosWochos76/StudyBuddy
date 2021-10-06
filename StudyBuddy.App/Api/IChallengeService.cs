@@ -1,12 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using StudyBuddy.Model;
+using StudyBuddy.App.ViewModels;
 
-namespace StudyBuddy.ApiFacade
+namespace StudyBuddy.App.Api
 {
     public interface IChallengeService
     {
-        Task<IEnumerable<Challenge>> ForToday(string tag_string);
+        Task<IEnumerable<ChallengeViewModel>> ForToday(string tag_string, bool reload = false);
         Task<bool> AcceptFromQrCode(string code);
     }
 }

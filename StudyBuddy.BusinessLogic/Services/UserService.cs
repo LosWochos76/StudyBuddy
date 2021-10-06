@@ -126,5 +126,13 @@ namespace StudyBuddy.BusinessLogic
 
             return repository.Users.GetAllUsersThatAcceptedChallenge(challenge_id);
         }
+
+        public int GetCountOfCommonFriends(int user_a_id, int user_b_id)
+        {
+            if (current_user == null)
+                throw new UnauthorizedAccessException("Unauthorized!");
+
+            return repository.Users.GetCountOfCommonFriends(user_a_id, user_b_id);
+        }
     }
 }

@@ -26,7 +26,7 @@ namespace StudyBuddy.App.Views
                 task = Task.Run(async () =>
                 {
                     await Task.Delay(800);
-                    view_model.Reload();
+                    view_model.ApplyFilter();
                 });
             }
         }

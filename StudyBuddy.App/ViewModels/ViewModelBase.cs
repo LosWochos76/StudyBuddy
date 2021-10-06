@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using StudyBuddy.ApiFacade;
+using StudyBuddy.App.Api;
 using StudyBuddy.App.Misc;
 
 namespace StudyBuddy.App.ViewModels

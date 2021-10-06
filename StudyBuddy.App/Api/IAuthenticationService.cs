@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Threading.Tasks;
-using StudyBuddy.ApiFacade.Restful;
 using StudyBuddy.Model;
 
-namespace StudyBuddy.ApiFacade
+namespace StudyBuddy.App.Api
 {
     public delegate void LoginStateChangedHandler(object sender, LoginStateChangedArgs args);
 
