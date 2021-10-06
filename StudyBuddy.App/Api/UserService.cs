@@ -128,7 +128,7 @@ namespace StudyBuddy.App.Api
             foreach (var user in jtoken.ToObject<IEnumerable<User>>())
             {
                 var obj = UserViewModel.FromModel(user);
-                if (!IsFriend(obj.ID))
+                if (obj.ID != current_user.ID && !IsFriend(obj.ID))
                 {
                     obj.CountOfCommonFriends = await GetCountOfCommonFriends(obj.ID);
                     result.Add(obj);
