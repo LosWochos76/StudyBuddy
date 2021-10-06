@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<ContentPage
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Class="StudyBuddy.App.Views.FriendPage"
+    xmlns:viewmodels="clr-namespace:StudyBuddy.App.ViewModels"
+    x:DataType="viewmodels:FriendViewModel"
+    Title="{Binding User.FullName}">
+    <ContentPage.Content>
+        <StackLayout Padding="10">
+            <Button Text="Freund entfernen" Command="{Binding RemoveFriendCommand}" /> 
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

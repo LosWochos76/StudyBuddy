@@ -36,8 +36,8 @@
                                         </StackLayout>
                                         <Grid.GestureRecognizers>
                                             <TapGestureRecognizer
-                                        Command="{Binding BindingContext.DetailsCommand, Source={x:Reference Name=page}}"
-                                        CommandParameter="{Binding Source={x:Reference Item}, Path=BindingContext}"/>
+                                                Command="{Binding BindingContext.DetailsCommand, Source={x:Reference Name=page}}"
+                                                CommandParameter="{Binding Source={x:Reference Item}, Path=BindingContext}"/>
                                         </Grid.GestureRecognizers>
                                     </Grid>
                                     <BoxView HeightRequest="1" Color="Gray" />

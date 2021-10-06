@@ -22,7 +22,7 @@ namespace StudyBuddy.App.ViewModels
         {
             api.Authentication.LoginStateChanged += Authentication_LoginStateChanged;
             RefreshCommand = new Command(Reload);
-            DetailsCommand = new Command<Challenge>(ShowDetails);
+            DetailsCommand = new Command<ChallengeViewModel>(ShowDetails);
         }
 
         private void Authentication_LoginStateChanged(object sender, LoginStateChangedArgs args)
@@ -46,7 +46,7 @@ namespace StudyBuddy.App.ViewModels
             NotifyPropertyChanged("Challenges");
         }
 
-        private void ShowDetails(Challenge obj)
+        private void ShowDetails(ChallengeViewModel obj)
         {
             navigation.Push(new ChallengeDetailsPage(obj));
         }
