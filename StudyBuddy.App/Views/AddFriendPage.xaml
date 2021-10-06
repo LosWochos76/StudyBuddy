@@ -2,27 +2,19 @@
 <ContentPage
     xmlns="http://xamarin.com/schemas/2014/forms"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    x:Class="StudyBuddy.App.Views.FriendsPage"
+    x:Class="StudyBuddy.App.Views.AddFriendPage"
     xmlns:viewmodels="clr-namespace:StudyBuddy.App.ViewModels"
-    xmlns:models="clr-namespace:StudyBuddy.Model;assembly=StudyBuddy.Model"
-    x:DataType="viewmodels:FriendsViewModel"
+    x:DataType="viewmodels:AddFriendViewModel"
     xmlns:fontAwesome="clr-namespace:StudyBuddy.App"
-    Title="Freunde" x:Name="page">
-    <ContentPage.ToolbarItems>
-        <ToolbarItem Text="Freund hinzufügen" Order="Primary" Priority="0" Command="{Binding AddFriendCommand}">
-            <ToolbarItem.IconImageSource>
-                <FontImageSource FontFamily="{StaticResource FontAwesomeSolid}"
-                                 Glyph="{x:Static fontAwesome:FontAwesomeIcons.Plus}" />
-            </ToolbarItem.IconImageSource>
-        </ToolbarItem>
-        </ContentPage.ToolbarItems>
+    Title="Freund  hinzufügen">
     <ContentPage.Content>
         <StackLayout>
+            <SearchBar x:Name="searchBar" TextChanged="searchBar_TextChanged" />
             <RefreshView
                 IsRefreshing="{Binding IsRefreshing}"
                 Command="{Binding RefreshCommand}"
                 Padding="8">
-                <CollectionView ItemsSource="{Binding Friends}">
+                <CollectionView ItemsSource="{Binding Users}">
                     <CollectionView.ItemTemplate>
                         <DataTemplate x:DataType="viewmodels:UserViewModel">
                             <ContentView>
@@ -39,12 +31,8 @@
                                         <StackLayout Grid.Column="1" Grid.Row="0" HorizontalOptions="FillAndExpand">
                                             <Label Text="{Binding FullName}" FontAttributes="Bold" />
                                             <Label Text="{Binding CountOfCommonFriends, StringFormat='{0} gemeinsame Freunde'}" FontSize="Small"/>
+                                            <Label Text="Freundschaft anfragen" />
                                         </StackLayout>
-                                        <Grid.GestureRecognizers>
-                                            <TapGestureRecognizer
-                                                Command="{Binding BindingContext.DetailsCommand, Source={x:Reference Name=page}}"
-                                                CommandParameter="{Binding Source={x:Reference Item}, Path=BindingContext}"/>
-                                        </Grid.GestureRecognizers>
                                     </Grid>
                                     <BoxView HeightRequest="1" Color="Gray" />
                                 </StackLayout>

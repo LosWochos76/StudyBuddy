@@ -1,4 +1,5 @@
-﻿using StudyBuddy.Model;
+﻿using StudyBuddy.App.Misc;
+using StudyBuddy.Model;
 
 namespace StudyBuddy.App.ViewModels
 {
@@ -35,6 +36,12 @@ namespace StudyBuddy.App.ViewModels
                 Email = u.Email,
                 Role = u.Role
             };
+        }
+
+        public bool ContainsAny(string search_text)
+        {
+            var keywords = Helper.SplitIntoKeywords(search_text);
+            return Helper.ContainsAny(Firstname + Lastname + Nickname + Email, keywords);
         }
     }
 }

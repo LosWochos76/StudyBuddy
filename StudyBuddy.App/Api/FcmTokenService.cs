@@ -4,6 +4,7 @@ using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 using Plugin.FirebasePushNotification;
+using StudyBuddy.App.Misc;
 
 namespace StudyBuddy.App.Api
 {

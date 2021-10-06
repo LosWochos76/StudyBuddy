@@ -87,21 +87,21 @@ namespace StudyBuddy.Api
             return Json(service.GetAllFriends(id));
         }
 
-        [Route("/User/Friend/")]
+        [Route("/User/{user_id}/Friend/{friend_id}")]
         [HttpPost]
-        public IActionResult AddFriend([FromBody] SingleFriendParameter parameter)
+        public IActionResult AddFriend(int user_id, int friend_id)
         {
             var service = new UserService(repository, HttpContext.Items["user"] as User);
-            service.AddFriend(parameter);
+            service.AddFriend(user_id, friend_id);
             return Json(new {Status = "ok"});
         }
 
-        [Route("/User/Friend/")]
+        [Route("/User/{user_id}/Friend/{friend_id}")]
         [HttpDelete]
-        public IActionResult RemoveFriend([FromBody] SingleFriendParameter parameter)
+        public IActionResult RemoveFriend(int user_id, int friend_id)
         {
             var service = new UserService(repository, HttpContext.Items["user"] as User);
-            service.RemoveFriend(parameter);
+            service.RemoveFriend(user_id, friend_id);
             return Json(new {Status = "ok"});
         }
 

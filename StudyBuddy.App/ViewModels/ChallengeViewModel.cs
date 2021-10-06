@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using StudyBuddy.App.Misc;
 using StudyBuddy.Model;
 
 namespace StudyBuddy.App.ViewModels
@@ -77,20 +78,10 @@ namespace StudyBuddy.App.ViewModels
             };
         }
 
-        private static IEnumerable<string> SplitIntoKeywords(string search_text)
-        {
-            return search_text.ToLower().Split(new[] { ' ', '\t' }, StringSplitOptions.RemoveEmptyEntries);
-        }
-
-        private static bool ContainsAny(string property, IEnumerable<string> keywords)
-        {
-            return property == null ? false : keywords.Any(kw => property.ToLower().Contains(kw));
-        }
-
         public bool ContainsAny(string search_text)
         {
-            var keywords = SplitIntoKeywords(search_text);
-            return ContainsAny(Name + Description + Tags, keywords);
+            var keywords = Helper.SplitIntoKeywords(search_text);
+            return Helper.ContainsAny(Name + Description + Tags, keywords);
         }
     }
 }
