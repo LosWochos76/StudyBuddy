@@ -1,8 +1,10 @@
-using System;
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
 
-namespace StudyBuddy.Model
+namespace StudyBuddy.App.ViewModels
 {
-    public class GameBadge : Entity
+    public class BadgeViewModel
     {
         public int? OwnerID { get; set; }
         public DateTime Created { get; set; } = DateTime.Now.Date;
@@ -10,5 +12,6 @@ namespace StudyBuddy.Model
         public double RequiredCoverage { get; set; } = 0.5;
         public string Description { get; set; }
         public string ImagePath { get; set; }
+
     }
 }

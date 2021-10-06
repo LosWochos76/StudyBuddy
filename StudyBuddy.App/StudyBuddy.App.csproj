@@ -37,9 +37,13 @@
         <Folder Include="Misc\" />
         <Folder Include="Interfaces\" />
         <Folder Include="Controls\" />
-        <Folder Include="Api\" />
     </ItemGroup>
     <ItemGroup>
       <ProjectReference Include="..\StudyBuddy.Model\StudyBuddy.Model.csproj" />
+    </ItemGroup>
+    <ItemGroup>
+      <EmbeddedResource Update="Views\BadgesPage.xaml">
+        <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+      </EmbeddedResource>
     </ItemGroup>
 </Project>
