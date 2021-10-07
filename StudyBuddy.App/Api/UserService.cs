@@ -36,7 +36,7 @@ namespace StudyBuddy.App.Api
         {
             var current_user = api.Authentication.CurrentUser;
 
-            var rh = new RequestHelper(api.Authentication.Token);
+            var rh = new WebRequestHelper(api.Authentication.Token);
             var content = await rh.DropRequest(base_url + "User/" + current_user.ID + "/Friends/", HttpMethod.Get);
             if (content == null)
                 return null;
@@ -60,7 +60,7 @@ namespace StudyBuddy.App.Api
         {
             var current_user = api.Authentication.CurrentUser;
 
-            var rh = new RequestHelper(api.Authentication.Token);
+            var rh = new WebRequestHelper(api.Authentication.Token);
             var content = await rh.DropRequest(base_url + "User/" + current_user.ID + "/CountOfCommonFriends/" + other_user, HttpMethod.Get);
             if (content == null)
                 return 0;
@@ -72,7 +72,7 @@ namespace StudyBuddy.App.Api
         {
             var current_user = api.Authentication.CurrentUser;
 
-            var rh = new RequestHelper(api.Authentication.Token);
+            var rh = new WebRequestHelper(api.Authentication.Token);
             var content = await rh.DropRequest(base_url + "User/" + current_user.ID + "/Friend/" + friend_id, HttpMethod.Delete);
             if (content == null)
                 return false;
@@ -115,7 +115,7 @@ namespace StudyBuddy.App.Api
         {
             var current_user = api.Authentication.CurrentUser;
 
-            var rh = new RequestHelper(api.Authentication.Token);
+            var rh = new WebRequestHelper(api.Authentication.Token);
             var content = await rh.DropRequest(base_url + "User", HttpMethod.Get);
             if (content == null)
                 return null;

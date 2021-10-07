@@ -12,12 +12,14 @@ namespace StudyBuddy.App.ViewModels
 
         public async void AcceptFromQrCode(string text)
         {
+            if (!text.StartsWith("qr:"))
+                return;
+
             var answer = false;
-            if (text.StartsWith("qr:"))
-                await dialog.ShowMessage(
-                    "StudyBuddy QR-Code gefunden! Wollen Sie die Herausforderung annehmen?",
-                    "Herausforderung annehmen?",
-                    "Ja", "Nein", a => { answer = a; });
+            await dialog.ShowMessage(
+                "StudyBuddy QR-Code gefunden! Wollen Sie die Herausforderung annehmen?",
+                "Herausforderung annehmen?",
+                "Ja", "Nein", a => { answer = a; });
 
             if (!answer)
             {

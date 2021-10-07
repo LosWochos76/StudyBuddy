@@ -16,7 +16,9 @@ namespace StudyBuddy.App.Api
         public IChallengeService Challenges { get; }
         public IFcmTokenService FcmTokens { get; }
         public IUserService Users { get; }
-        public ITagService Tags { get; set; }
+        public ITagService Tags { get; }
+        public IBadgeService Badges { get; }
+        public IRequestService Requests { get; }
 
         public ApiFacade()
         {
@@ -25,13 +27,15 @@ namespace StudyBuddy.App.Api
             FcmTokens = new FcmTokenService(this, base_url);
             Users = new UserService(this, base_url);
             Tags = new TagService(this, base_url);
+            Badges = new BadgeService(this, base_url);
+            Requests = new RequestService(this, base_url);
 
             CheckVersion();
         }
 
         private async void CheckVersion()
         {
-            var rh = new RequestHelper("");
+            var rh = new WebRequestHelper("");
             var result = await rh.DropRequest(base_url + "ApiVersion", HttpMethod.Get);
             if (result == null)
                 return;

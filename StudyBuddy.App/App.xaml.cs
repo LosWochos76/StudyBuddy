@@ -42,7 +42,7 @@ namespace StudyBuddy.App
             var result = await api.Authentication.LoginFromJson(content);
 
             if (result)
-                await Shell.Current.GoToAsync("//BadgesViewModel");
+                await Shell.Current.GoToAsync("//ChallengesPage");
         }
 
         protected override void OnSleep()

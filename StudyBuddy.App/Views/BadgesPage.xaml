@@ -15,7 +15,7 @@
                 Padding="8">
                 <CollectionView ItemsSource="{Binding Badges}">
                     <CollectionView.ItemTemplate>
-                        <DataTemplate x:DataType="viewmodels:BadgesViewModel">
+                        <DataTemplate x:DataType="viewmodels:BadgeViewModel">
                             <ContentView>
                                 <StackLayout>
                                     <Grid Padding="10" x:Name="Item">
@@ -29,11 +29,7 @@
                                         FontSize="50" />
                                         <StackLayout Grid.Column="1" Grid.Row="0" HorizontalOptions="FillAndExpand">
                                             <Label Text="{Binding Name}" FontAttributes="Bold" />
-                                            <StackLayout Orientation="Horizontal">
-                                                <Label Text="{Binding PointsText}" FontSize="Small" HorizontalOptions="FillAndExpand" />
-                                                <Label Text="{Binding Tags}" FontSize="Small" TextColor="Gray" />
-                                            </StackLayout>
-                                        </StackLayout>
+                                         </StackLayout>
                                         <Grid.GestureRecognizers>
                                             <TapGestureRecognizer
                                         Command="{Binding BindingContext.DetailsCommand, Source={x:Reference Name=page}}"

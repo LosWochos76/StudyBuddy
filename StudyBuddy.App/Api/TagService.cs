@@ -26,7 +26,7 @@ namespace StudyBuddy.App.Api
         {
             var current_user = api.Authentication.CurrentUser;
 
-            var rh = new RequestHelper(api.Authentication.Token);
+            var rh = new WebRequestHelper(api.Authentication.Token);
             var content = await rh.DropRequest(base_url + "Tag/OfChallenge/" + challenge_id, HttpMethod.Get);
             if (content == null)
                 return null;

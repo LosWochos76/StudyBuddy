@@ -41,6 +41,11 @@ namespace StudyBuddy.BusinessLogic
                 throw new Exception("Unauthorized!");
 
             repository.Requests.Insert(obj);
+
+            /* ToDo: Wenn es sich um eine Freundschaftsanfrage handelt,
+             * muss eine Neuigkeit für den angefragten erzeugt werden.
+             */
+
             return obj;
         }
 
