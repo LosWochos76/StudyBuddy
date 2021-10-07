@@ -19,10 +19,10 @@ jobs:
           dotnet-version: '5.0.x'
 
       - name: Install dependencies
-        run: nuget restore StudyBuddy.App.Android
+        run: nuget restore .
 
       - name: Build
-        run: msbuild StudyBuddy.App.Android /t:PackageForAndroid /p:Configuration=Debug
+        run: msbuild . /t:StudyBuddy.App.Android /p:Configuration=Debug
       
       - name: Upload Aritifacts
         uses: actions/upload-artifact@v2
