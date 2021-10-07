@@ -22,13 +22,13 @@ jobs:
         run: nuget restore .
 
       - name: Build
-        run: msbuild ./StudyBuddy.App.Android/StudyBuddy.App.Android.csproj /t:PackageForAndroid /p:Configuration=Debug
-      
+        run:  msbuild ./StudyBuddy.App.Android/StudyBuddy.App.Android.csproj /t:PackageForAndroid /p:Configuration=Debug /p:OutputPath=bin/Debug
+
       - name: Upload Aritifacts
         uses: actions/upload-artifact@v2
         with:
           name: study-buddy-apk
-          path: out/
+          path: ./StudyBuddy.App.Android/bin/Debug/de.hshl.app.apk
     
   release-project:
     name: Release apk to Github Releases
