@@ -1,6 +1,11 @@
 name: Build Xamarin.Android app
 
-on: [push]
+on:
+  push:
+    branches:
+      - main
+    tags:
+      - 'android-release'
 
 jobs:
   build-project:
