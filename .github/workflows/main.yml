@@ -22,7 +22,7 @@ jobs:
         run: nuget restore .
 
       - name: Build
-        run: msbuild . /t:StudyBuddy.App.Android /p:Configuration=Debug
+        run: msbuild . /t:PackageForAndroid /p:Configuration=Debug
       
       - name: Upload Aritifacts
         uses: actions/upload-artifact@v2
