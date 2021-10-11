@@ -26,7 +26,8 @@
                         <FormattedString>
                             <FormattedString.Spans>
                                 <Span
-                                    Text="Wenn du herausfinden willst, was der StudyBuddy für dich als Studierender tun kann, klicke " />
+                                    Text="Wenn du herausfinden willst, was der StudyBuddy 
+                                    für dich als Studierender tun kann, klicke " />
                                 <Span Text="hier" TextColor="Blue" TextDecorations="Underline">
                                     <Span.GestureRecognizers>
                                         <TapGestureRecognizer Command="{Binding TapCommand}"
@@ -51,7 +52,8 @@
                         <FormattedString.Spans>
                             <Span Text="Passwort vergessen?" TextColor="Blue" TextDecorations="Underline">
                                 <Span.GestureRecognizers>
-                                    <TapGestureRecognizer Command="{Binding PasswordForgottenCommand}" />
+                                    <TapGestureRecognizer 
+                                        Command="{Binding PasswordForgottenCommand}" />
                                 </Span.GestureRecognizers>
                             </Span>
                         </FormattedString.Spans>
