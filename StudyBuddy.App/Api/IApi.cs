@@ -7,5 +7,7 @@
         IFcmTokenService FcmTokens { get; }
         IUserService Users { get; }
         ITagService Tags { get; }
+        IBadgeService Badges { get; }
+        IRequestService Requests { get; }
     }
 }

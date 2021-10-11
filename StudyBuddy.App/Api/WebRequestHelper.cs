@@ -7,12 +7,12 @@ using StudyBuddy.App.Misc;
 
 namespace StudyBuddy.App.Api
 {
-    public class RequestHelper
+    public class WebRequestHelper
     {
         private string token;
         private HttpClient client;
 
-        public RequestHelper(string token)
+        public WebRequestHelper(string token)
         {
             this.token = token;
             this.client = new HttpClient(Helper.GetInsecureHandler());

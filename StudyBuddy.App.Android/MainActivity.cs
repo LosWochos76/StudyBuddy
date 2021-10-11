@@ -26,7 +26,6 @@ namespace App.Droid
             LoadApplication(new StudyBuddy.App.App());
             
             FirebasePushNotificationManager.ProcessIntent(this, Intent);
-
         }
 
         public override void OnRequestPermissionsResult(int requestCode, string[] permissions,

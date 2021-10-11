@@ -45,7 +45,7 @@ namespace StudyBuddy.App.Api
 
         private async Task<IEnumerable<ChallengeViewModel>> LoadFromServer(string search_string)
         {
-            var rh = new RequestHelper(api.Authentication.Token);
+            var rh = new WebRequestHelper(api.Authentication.Token);
             var content = await rh.DropRequest(base_url + "Challenge/ForToday", HttpMethod.Get, search_string);
             if (content == null)
                 return null;
@@ -67,7 +67,7 @@ namespace StudyBuddy.App.Api
 
         public async Task<bool> AcceptFromQrCode(string code)
         {
-            var rh = new RequestHelper(api.Authentication.Token);
+            var rh = new WebRequestHelper(api.Authentication.Token);
             var content = await rh.DropRequest(base_url + "Challenge/AcceptFromQrCode", HttpMethod.Post, code);
             if (content == null)
                 return false;

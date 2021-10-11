@@ -6,7 +6,7 @@
     xmlns:viewmodels="clr-namespace:StudyBuddy.App.ViewModels"
     x:DataType="viewmodels:AddFriendViewModel"
     xmlns:fontAwesome="clr-namespace:StudyBuddy.App"
-    Title="Freund  hinzufügen">
+    Title="Freund hinzufügen" x:Name="page">
     <ContentPage.Content>
         <StackLayout>
             <SearchBar x:Name="SearchBar" TextChanged="searchBar_TextChanged" />
@@ -31,7 +31,13 @@
                                         <StackLayout Grid.Column="1" Grid.Row="0" HorizontalOptions="FillAndExpand">
                                             <Label Text="{Binding FullName}" FontAttributes="Bold" />
                                             <Label Text="{Binding CountOfCommonFriends, StringFormat='{0} gemeinsame Freunde'}" FontSize="Small"/>
-                                            <Label Text="Freundschaft anfragen" />
+                                            <Label Text="Freundschaft anfragen">
+                                                <Label.GestureRecognizers>
+                                                    <TapGestureRecognizer
+                                                        Command="{Binding BindingContext.AddFriendCommand, Source={x:Reference Name=page}}"
+                                                CommandParameter="{Binding Source={x:Reference Item}, Path=BindingContext}"/>
+                                                </Label.GestureRecognizers>
+                                            </Label>
                                         </StackLayout>
                                     </Grid>
                                     <BoxView HeightRequest="1" Color="Gray" />
