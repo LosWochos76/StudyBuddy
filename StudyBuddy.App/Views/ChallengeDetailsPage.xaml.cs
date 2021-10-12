@@ -22,9 +22,10 @@ namespace StudyBuddy.App.Views
         private void BuildUi()
         {
             if (this.obj.Prove == ChallengeProve.ByQrCode)
-            {
                 stack.Children.Add(new ByQrCodeView());
-            }
+
+            if (this.obj.Prove == ChallengeProve.ByRandomTeamMember)
+                stack.Children.Add(new ByFriendView(obj));
         }
     }
 }

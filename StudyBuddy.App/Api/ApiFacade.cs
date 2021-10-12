@@ -8,9 +8,9 @@ namespace StudyBuddy.App.Api
 {
     public class ApiFacade : IApi
     {
-        //public static string base_url = "https://localhost:5001/";
+        //public readonly string base_url = "https://localhost:5001/";
         private readonly string base_url = "https://studybuddy.hshl.de/";
-        private Version app_version = new Version(0, 0, 13, 0);
+        private Version app_version = new Version(0, 0, 14, 0);
 
         public IAuthenticationService Authentication { get; }
         public IChallengeService Challenges { get; }

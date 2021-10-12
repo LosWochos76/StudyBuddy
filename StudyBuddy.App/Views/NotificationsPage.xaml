@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewmodels="clr-namespace:StudyBuddy.App.ViewModels"
+             x:Class="StudyBuddy.App.Views.NotificationsPage"
+             Title="Neuigkeiten" x:Name="page">
+    <ContentPage.Content>
+        <StackLayout>
+            <RefreshView
+                IsRefreshing="{Binding IsRefreshing}"
+                Command="{Binding RefreshCommand}"
+                Padding="8">
+                <CollectionView ItemsSource="{Binding Notifications}">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate x:DataType="viewmodels:RequestViewModel">
+                            <ContentView>
+                                <StackLayout>
+                                    <Grid Padding="10" x:Name="requestItem">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="70" />
+                                            <ColumnDefinition Width="*" />
+                                        </Grid.ColumnDefinitions>
+                                        <Label Grid.Column="0" Grid.Row="0"
+                                        Text="{Binding TypeSymbol}"
+                                        FontFamily="{StaticResource FontAwesomeSolid}"
+                                        FontSize="50" />
+                                        <StackLayout Grid.Column="1" Grid.Row="0" HorizontalOptions="FillAndExpand">
+                                            <Label Text="{Binding Name}" FontAttributes="Bold" />
+                                            <StackLayout Orientation="Horizontal">
+                                                <Label Text="Annehmen" FontSize="Small" HorizontalOptions="FillAndExpand">
+                                                    <Label.GestureRecognizers>
+                                                        <TapGestureRecognizer
+                                                            Command="{Binding BindingContext.AcceptCommand, Source={x:Reference Name=page}}"
+                                                            CommandParameter="{Binding Source={x:Reference requestItem}, Path=BindingContext}"/>
+                                                    </Label.GestureRecognizers>
+                                                </Label>
+                                                <Label Text="Ablehnen" FontSize="Small">
+                                                    <Label.GestureRecognizers>
+                                                        <TapGestureRecognizer
+                                                            Command="{Binding BindingContext.DenyCommand, Source={x:Reference Name=page}}"
+                                                            CommandParameter="{Binding Source={x:Reference requestItem}, Path=BindingContext}"/>
+                                                    </Label.GestureRecognizers>
+                                                </Label>
+                                            </StackLayout>
+                                        </StackLayout>
+                                    </Grid>
+                                    <BoxView HeightRequest="1" Color="Gray" />
+                                </StackLayout>
+                            </ContentView>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+            </RefreshView>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

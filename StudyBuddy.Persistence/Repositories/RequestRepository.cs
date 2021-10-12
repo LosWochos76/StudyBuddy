@@ -41,7 +41,7 @@ namespace StudyBuddy.Persistence
 
         public IEnumerable<Request> OfSender(int sender_id)
         {
-            var qh = new QueryHelper<Request>(connection_string, FromReader, new {sender_id});
+            var qh = new QueryHelper<Request>(connection_string, FromReader, new { sender_id });
             return qh.ExecuteQueryToObjectList(
                 "select id,created,sender_id,recipient_id,type,challenge_id " +
                 "from requests where sender_id=:sender_id order by created desc");

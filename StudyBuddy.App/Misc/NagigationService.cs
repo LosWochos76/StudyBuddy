@@ -23,5 +23,10 @@ namespace StudyBuddy.App.Misc
         {
             return Shell.Current.Navigation.PushAsync(page);
         }
+
+        public Task Pop()
+        {
+            return Shell.Current.Navigation.PopAsync();
+        }
     }
 }

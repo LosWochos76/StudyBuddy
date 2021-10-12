@@ -34,7 +34,7 @@ namespace StudyBuddy.BusinessLogic
 
         public User GetById(int user_id)
         {
-            if (current_user == null || !current_user.IsAdmin && current_user.ID != user_id)
+            if (current_user == null)
                 throw new Exception("Unauthorized!");
 
             return repository.Users.ById(user_id);

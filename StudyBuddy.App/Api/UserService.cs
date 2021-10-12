@@ -111,6 +111,13 @@ namespace StudyBuddy.App.Api
             return false;
         }
 
+        private bool RequestForFriendshipSend(int user_id)
+        {
+            // ToDo: Hier etwas schlaues überlegen, um diejenigen User herauszufilter, für die bereits Freundschaftsanfragen gestellt wurden.
+
+            return false;
+        }
+
         private async Task<IEnumerable<UserViewModel>> GetNotFriendsFromServer()
         {
             var current_user = api.Authentication.CurrentUser;
@@ -128,7 +135,7 @@ namespace StudyBuddy.App.Api
             foreach (var user in jtoken.ToObject<IEnumerable<User>>())
             {
                 var obj = UserViewModel.FromModel(user);
-                if (obj.ID != current_user.ID && !IsFriend(obj.ID))
+                if (obj.ID != current_user.ID && !IsFriend(obj.ID) && !RequestForFriendshipSend(obj.ID))
                 {
                     obj.CountOfCommonFriends = await GetCountOfCommonFriends(obj.ID);
                     result.Add(obj);
@@ -136,6 +143,42 @@ namespace StudyBuddy.App.Api
             }
 
             return result;
+        }
+
+        private UserViewModel TryToFindByIdInCache(IEnumerable<UserViewModel> cache, int user_id)
+        {
+            if (cache != null)
+                foreach (var obj in cache)
+                    if (obj.ID == user_id)
+                        return obj;
+
+            return null;
+        }
+
+        public async Task<UserViewModel> GetById(int user_id)
+        {
+            var user = TryToFindByIdInCache(users_cache, user_id);
+            if (user != null)
+                return user;
+
+            user = TryToFindByIdInCache(friends_cache, user_id);
+            if (user != null)
+                return user;
+
+            return await GetByIdFromServer(user_id);
+        }
+
+        private async Task<UserViewModel> GetByIdFromServer(int user_id)
+        {
+            var rh = new WebRequestHelper(api.Authentication.Token);
+            var content = await rh.DropRequest(base_url + "User/" + user_id, HttpMethod.Get);
+            if (content == null)
+                return null;
+
+            var jobject = JObject.Parse(content);
+            var user = jobject.ToObject<User>();
+            var uvm = UserViewModel.FromModel(user);
+            return uvm;
         }
     }
 }

@@ -75,5 +75,37 @@ namespace StudyBuddy.App.Api
             var obj = JObject.Parse(content);
             return obj.ContainsKey("status");
         }
+
+        private ChallengeViewModel TryToFindByIdInCache(IEnumerable<ChallengeViewModel> cache, int challenge_id)
+        {
+            if (cache != null)
+                foreach (var obj in cache)
+                    if (obj.ID == challenge_id)
+                        return obj;
+
+            return null;
+        }
+
+        public async Task<ChallengeViewModel> GetById(int challenge_id)
+        {
+            var challenge = TryToFindByIdInCache(cache, challenge_id);
+            if (challenge != null)
+                return challenge;
+
+            return await GetByIdFromServer(challenge_id);
+        }
+
+        private async Task<ChallengeViewModel> GetByIdFromServer(int challenge_id)
+        {
+            var rh = new WebRequestHelper(api.Authentication.Token);
+            var content = await rh.DropRequest(base_url + "Challenge/" + challenge_id, HttpMethod.Get);
+            if (content == null)
+                return null;
+
+            var jobject = JObject.Parse(content);
+            var user = jobject.ToObject<Challenge>();
+            var uvm = ChallengeViewModel.FromModel(user);
+            return uvm;
+        }
     }
 }

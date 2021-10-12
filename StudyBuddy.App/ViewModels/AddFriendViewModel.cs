@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Windows.Input;
 using StudyBuddy.App.Api;
 using StudyBuddy.App.Misc;
-using StudyBuddy.Model;
-using TinyIoC;
 using Xamarin.Forms;
 
 namespace StudyBuddy.App.ViewModels
@@ -55,6 +52,11 @@ namespace StudyBuddy.App.ViewModels
             {
                 await dialog.ShowError("Ein Fehler ist aufgetreten!", "Fehler!", "Ok", null);
                 return;
+            }
+            else
+            {
+                await dialog.ShowMessageBox("Sobald die Anfrage bestätigt wird, seid ihr befreundet.",
+                    "Anfrage wurde verschickt!");
             }
         }
     }

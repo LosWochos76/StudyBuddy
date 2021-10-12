@@ -14,6 +14,7 @@ namespace StudyBuddy.App.ViewModels
         public IEnumerable<ChallengeViewModel> Challenges { get; private set; } = new List<ChallengeViewModel>();
         public ICommand RefreshCommand { get; }
         public ICommand DetailsCommand { get; }
+        public ICommand ScanQrCodeCommand { get; }
         public bool IsRefreshing { get; set; }
         public string Header => string.Format("Herausforderungen am {0}", DateTime.Now.ToShortDateString());
         public string SearchText { get; set; }
@@ -23,6 +24,7 @@ namespace StudyBuddy.App.ViewModels
             api.Authentication.LoginStateChanged += Authentication_LoginStateChanged;
             RefreshCommand = new Command(Reload);
             DetailsCommand = new Command<ChallengeViewModel>(ShowDetails);
+            ScanQrCodeCommand = new Command(ScanQrCode);
         }
 
         private void Authentication_LoginStateChanged(object sender, LoginStateChangedArgs args)
@@ -49,6 +51,11 @@ namespace StudyBuddy.App.ViewModels
         private void ShowDetails(ChallengeViewModel obj)
         {
             navigation.Push(new ChallengeDetailsPage(obj));
+        }
+
+        private void ScanQrCode()
+        {
+            navigation.Push(new QrCodePage());
         }
     }
 }

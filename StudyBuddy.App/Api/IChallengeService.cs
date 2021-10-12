@@ -8,5 +8,6 @@ namespace StudyBuddy.App.Api
     {
         Task<IEnumerable<ChallengeViewModel>> ForToday(string tag_string, bool reload = false);
         Task<bool> AcceptFromQrCode(string code);
+        Task<ChallengeViewModel> GetById(int challenge_id);
     }
 }

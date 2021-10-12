@@ -97,6 +97,7 @@ namespace StudyBuddy.Persistence
             var user = ByEmail(email);
             if (user != null && simpleHash.Verify(password, user.PasswordHash))
                 return user;
+
             return null;
         }
 
