@@ -86,13 +86,19 @@ namespace StudyBuddy.App.Api
             if (users_cache == null || reload)
                 users_cache = await GetNotFriendsFromServer();
 
+            IEnumerable<UserViewModel> result;
             if (string.IsNullOrEmpty(search_string))
-                return users_cache;
+                result = users_cache;
             else
-                return FilterObjects(users_cache, search_string);
+                result = FilterBySearchText(users_cache, search_string);
+
+            foreach (var obj in result)
+                obj.FriendshipRequest = await api.Requests.GetFriendshipRequest(obj.ID);
+
+            return result;
         }
 
-        private static IEnumerable<UserViewModel> FilterObjects(IEnumerable<UserViewModel> input, string search_string)
+        private IEnumerable<UserViewModel> FilterBySearchText(IEnumerable<UserViewModel> input, string search_string)
         {
             var result = new List<UserViewModel>();
             foreach (var obj in input)
@@ -107,13 +113,6 @@ namespace StudyBuddy.App.Api
             foreach (var obj in friends_cache)
                 if (obj.ID == user_id)
                     return true;
-
-            return false;
-        }
-
-        private bool RequestForFriendshipSend(int user_id)
-        {
-            // ToDo: Hier etwas schlaues überlegen, um diejenigen User herauszufilter, für die bereits Freundschaftsanfragen gestellt wurden.
 
             return false;
         }
@@ -135,7 +134,7 @@ namespace StudyBuddy.App.Api
             foreach (var user in jtoken.ToObject<IEnumerable<User>>())
             {
                 var obj = UserViewModel.FromModel(user);
-                if (obj.ID != current_user.ID && !IsFriend(obj.ID) && !RequestForFriendshipSend(obj.ID))
+                if (obj.ID != current_user.ID && !IsFriend(obj.ID))
                 {
                     obj.CountOfCommonFriends = await GetCountOfCommonFriends(obj.ID);
                     result.Add(obj);

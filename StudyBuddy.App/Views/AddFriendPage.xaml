@@ -31,11 +31,18 @@
                                         <StackLayout Grid.Column="1" Grid.Row="0" HorizontalOptions="FillAndExpand">
                                             <Label Text="{Binding FullName}" FontAttributes="Bold" />
                                             <Label Text="{Binding CountOfCommonFriends, StringFormat='{0} gemeinsame Freunde'}" FontSize="Small"/>
-                                            <Label Text="Freundschaft anfragen">
+                                            <Label Text="Freundschaft anfragen" IsVisible="{Binding NotRequestedForFriendship}">
                                                 <Label.GestureRecognizers>
                                                     <TapGestureRecognizer
-                                                        Command="{Binding BindingContext.AddFriendCommand, Source={x:Reference Name=page}}"
-                                                CommandParameter="{Binding Source={x:Reference Item}, Path=BindingContext}"/>
+                                                        Command="{Binding BindingContext.SendFriendshipRequestCommand, Source={x:Reference Name=page}}"
+                                                        CommandParameter="{Binding Source={x:Reference Item}, Path=BindingContext}"/>
+                                                </Label.GestureRecognizers>
+                                            </Label>
+                                            <Label Text="Freundschaftsanfrage löschen" IsVisible="{Binding RequestedForFriendship}">
+                                                <Label.GestureRecognizers>
+                                                    <TapGestureRecognizer
+                                                        Command="{Binding BindingContext.RemoveFriendshipRequestCommand, Source={x:Reference Name=page}}"
+                                                        CommandParameter="{Binding Source={x:Reference Item}, Path=BindingContext}"/>
                                                 </Label.GestureRecognizers>
                                             </Label>
                                         </StackLayout>

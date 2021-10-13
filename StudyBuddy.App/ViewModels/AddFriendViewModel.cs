@@ -12,12 +12,14 @@ namespace StudyBuddy.App.ViewModels
         public bool IsRefreshing { get; set; }
         public ICommand RefreshCommand { get; }
         public string SearchText { get; set; }
-        public ICommand AddFriendCommand { get; set; }
+        public ICommand SendFriendshipRequestCommand { get; set; }
+        public ICommand RemoveFriendshipRequestCommand { get; set; }
 
         public AddFriendViewModel(IApi api, IDialogService dialog, INavigationService navigation) : base(api, dialog, navigation)
         {
             RefreshCommand = new Command(Reload);
-            AddFriendCommand = new Command<UserViewModel>(AddFriend);
+            SendFriendshipRequestCommand = new Command<UserViewModel>(SendFriendshipRequest);
+            RemoveFriendshipRequestCommand = new Command<UserViewModel>(RemoveFriendshipRequest);
             this.Reload();
         }
 
@@ -36,7 +38,7 @@ namespace StudyBuddy.App.ViewModels
             NotifyPropertyChanged("Users");
         }
 
-        public async void AddFriend(UserViewModel obj)
+        public async void SendFriendshipRequest(UserViewModel obj)
         {
             var answer = false;
             await dialog.ShowMessage(
@@ -54,10 +56,28 @@ namespace StudyBuddy.App.ViewModels
                 return;
             }
             else
+                Reload();
+        }
+
+        public async void RemoveFriendshipRequest(UserViewModel obj)
+        {
+            var answer = false;
+            await dialog.ShowMessage(
+                "Wollen Sie die Anfrage and " + obj.Nickname + " löschen?",
+                "Freundschaftsanfrage löschen?",
+                "Ja", "Nein", a => { answer = a; });
+
+            if (!answer)
+                return;
+
+            var result = await api.Requests.Delete(obj.FriendshipRequest.ID);
+            if (!result)
             {
-                await dialog.ShowMessageBox("Sobald die Anfrage bestätigt wird, seid ihr befreundet.",
-                    "Anfrage wurde verschickt!");
+                await dialog.ShowError("Ein Fehler ist aufgetreten!", "Fehler!", "Ok", null);
+                return;
             }
+            else
+                Reload();
         }
     }
 }

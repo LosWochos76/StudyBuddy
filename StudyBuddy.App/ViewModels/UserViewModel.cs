@@ -1,9 +1,11 @@
-﻿using StudyBuddy.App.Misc;
+﻿using System.ComponentModel;
+using System.Runtime.CompilerServices;
+using StudyBuddy.App.Misc;
 using StudyBuddy.Model;
 
 namespace StudyBuddy.App.ViewModels
 {
-    public class UserViewModel
+    public class UserViewModel : INotifyPropertyChanged
     {
         public int ID { get; set; }
         public string Firstname { get; set; }
@@ -17,12 +19,34 @@ namespace StudyBuddy.App.ViewModels
         public bool IsStudent => Role == Role.Student;
         public bool IsInstructor => Role == Role.Instructor;
 
+        private RequestViewModel request;
+        public RequestViewModel FriendshipRequest
+        {
+            get { return request; }
+            set
+            {
+                request = value;
+                NotifyPropertyChanged("FriendshipRequest");
+                NotifyPropertyChanged("RequestedForFriendship");
+                NotifyPropertyChanged("NotRequestedForFriendship");
+            }
+        }
+        public bool RequestedForFriendship { get { return FriendshipRequest != null; } }
+        public bool NotRequestedForFriendship { get { return FriendshipRequest == null; } }
+
         public string FullName
         {
             get
             {
                 return string.Format("{0} {1} ({2})", Firstname, Lastname, Nickname);
             }
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected void NotifyPropertyChanged([CallerMemberName] string propertyName = "")
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
         public static UserViewModel FromModel(User u)

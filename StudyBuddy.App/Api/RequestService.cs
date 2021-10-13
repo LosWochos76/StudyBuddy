@@ -14,6 +14,8 @@ namespace StudyBuddy.App.Api
         private readonly IApi api;
         private readonly string base_url;
         private readonly HttpClient client;
+        private IEnumerable<RequestViewModel> for_me_cache = null;
+        private IEnumerable<RequestViewModel> from_me_cache = null;
 
         public RequestService(IApi api, string base_url)
         {
@@ -39,7 +41,12 @@ namespace StudyBuddy.App.Api
                 return false;
 
             var obj = JObject.Parse(content);
-            return obj.ContainsKey("id");
+            var result = obj.ContainsKey("id");
+
+            if (result)
+                this.from_me_cache = null;
+
+            return result;
         }
 
         public async Task<bool> AskForChallengeAcceptance(int other_user_id, int challenge_id)
@@ -60,10 +67,23 @@ namespace StudyBuddy.App.Api
                 return false;
 
             var obj = JObject.Parse(content);
-            return obj.ContainsKey("id");
+            var result = obj.ContainsKey("id");
+
+            if (result)
+                this.from_me_cache = null;
+
+            return result;
         }
 
-        public async Task<IEnumerable<RequestViewModel>> ForMe()
+        public async Task<IEnumerable<RequestViewModel>> ForMe(bool reload = false)
+        {
+            if (for_me_cache == null || reload)
+                for_me_cache = await ForMeFromServer();
+
+            return for_me_cache;
+        }
+
+        private async Task<IEnumerable<RequestViewModel>> ForMeFromServer()
         {
             var currentUser = api.Authentication.CurrentUser;
             var rh = new WebRequestHelper(api.Authentication.Token);
@@ -89,6 +109,51 @@ namespace StudyBuddy.App.Api
             return result;
         }
 
+        public async Task<IEnumerable<RequestViewModel>> FromMe(bool reload = false)
+        {
+            if (this.from_me_cache == null || reload)
+                from_me_cache = await FromMeFromServer();
+
+            return from_me_cache;
+        }
+
+        private async Task<IEnumerable<RequestViewModel>> FromMeFromServer()
+        {
+            var currentUser = api.Authentication.CurrentUser;
+            var rh = new WebRequestHelper(api.Authentication.Token);
+            var content = await rh.DropRequest(base_url + "Request/OfSender/" + currentUser.ID, HttpMethod.Get);
+            if (content == null)
+                return null;
+
+            var jtoken = JToken.Parse(content);
+            if (!(jtoken is JArray))
+                return null;
+
+            var result = new List<RequestViewModel>();
+            foreach (var obj in jtoken.ToObject<IEnumerable<Request>>())
+            {
+                var rvm = RequestViewModel.FromModel(obj);
+                rvm.Sender = await api.Users.GetById(rvm.SenderID);
+                if (rvm.Type == RequestType.ChallengeAcceptance)
+                    rvm.Challenge = await api.Challenges.GetById(rvm.ChallengeID.Value);
+
+                result.Add(rvm);
+            }
+
+            return result;
+        }
+
+        public async Task<RequestViewModel> GetFriendshipRequest(int other_user_id)
+        {
+            var requests = await FromMe();
+
+            foreach (var r in requests)
+                if (r.Type == RequestType.Friendship && r.RecipientID == other_user_id)
+                    return r;
+
+            return null;
+        }
+
         public async Task<bool> Accept(int request_id)
         {
             var rh = new WebRequestHelper(api.Authentication.Token);
@@ -97,7 +162,12 @@ namespace StudyBuddy.App.Api
                 return false;
 
             var obj = JObject.Parse(content);
-            return obj.ContainsKey("status");
+            var result = obj.ContainsKey("status");
+
+            if (result)
+                this.for_me_cache = null;
+
+            return result;
         }
 
         public async Task<bool> Deny(int request_id)
@@ -108,7 +178,28 @@ namespace StudyBuddy.App.Api
                 return false;
 
             var obj = JObject.Parse(content);
-            return obj.ContainsKey("status");
+            var result = obj.ContainsKey("status");
+
+            if (result)
+                this.for_me_cache = null;
+
+            return result;
+        }
+
+        public async Task<bool> Delete(int request_id)
+        {
+            var rh = new WebRequestHelper(api.Authentication.Token);
+            var content = await rh.DropRequest(base_url + "Request/" + request_id, HttpMethod.Delete);
+            if (content == null)
+                return false;
+
+            var obj = JObject.Parse(content);
+            var result = obj.ContainsKey("status");
+
+            if (result)
+                this.from_me_cache = null;
+
+            return result;
         }
     }
 }
