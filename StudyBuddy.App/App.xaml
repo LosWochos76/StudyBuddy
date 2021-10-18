@@ -1,6 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Application xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:controls="clr-namespace:StudyBuddy.App.Controls"
              x:Class="StudyBuddy.App.App">
     <Application.Resources>
         <Style TargetType="Button">
@@ -19,5 +20,13 @@
             <On Platform="Android" Value="faregular.otf#Regular" />
             <On Platform="iOS" Value="FontAwesome5Free-Regular" />
         </OnPlatform>
+        <Style TargetType="controls:ToggleButton">
+            <Setter Property="Padding" Value="10" />
+            <Setter Property="HeightRequest" Value="30" />
+            <Setter Property="TextColor" Value="Blue" />
+            <Setter Property="BackgroundColor" Value="White" />
+            <Setter Property="BorderColor" Value="Blue" />
+            <Setter Property="BorderWidth" Value="1" />
+        </Style>
     </Application.Resources>
 </Application>

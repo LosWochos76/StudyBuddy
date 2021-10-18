@@ -4,14 +4,43 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:viewmodels="clr-namespace:StudyBuddy.App.ViewModels"
              x:Class="StudyBuddy.App.Views.NotificationsPage"
+             xmlns:sys="clr-namespace:System;assembly=mscorlib"
+             xmlns:controls="clr-namespace:StudyBuddy.App.Controls"
+             x:DataType="viewmodels:NotificationsViewModel"
              Title="Neuigkeiten" x:Name="page">
     <ContentPage.Content>
         <StackLayout>
+            <controls:ToggleButtonBar HorizontalOptions="Center" SelectedIndex="{Binding SelectedView}">
+                <controls:ToggleButtonBar.ItemsSource>
+                    <x:Array Type="{x:Type sys:String}">
+                        <sys:String>Freunde</sys:String>
+                        <sys:String>Anfragen</sys:String>
+                    </x:Array>
+                </controls:ToggleButtonBar.ItemsSource>
+            </controls:ToggleButtonBar>
             <RefreshView
                 IsRefreshing="{Binding IsRefreshing}"
                 Command="{Binding RefreshCommand}"
-                Padding="8">
-                <CollectionView ItemsSource="{Binding Notifications}">
+                Padding="8" IsVisible="{Binding NewsIsSelected}">
+                <CollectionView ItemsSource="{Binding News}">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate x:DataType="viewmodels:NewsViewModel">
+                            <ContentView>
+                                <StackLayout>
+                                    <Grid Padding="10" x:Name="newsItem">
+                                    </Grid>
+                                    <BoxView HeightRequest="1" Color="Gray" />
+                                </StackLayout>
+                            </ContentView>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+            </RefreshView>
+            <RefreshView
+                IsRefreshing="{Binding IsRefreshing}"
+                Command="{Binding RefreshCommand}"
+                Padding="8" IsVisible="{Binding RequestsIsSelected}">
+                <CollectionView ItemsSource="{Binding Requests}">
                     <CollectionView.ItemTemplate>
                         <DataTemplate x:DataType="viewmodels:RequestViewModel">
                             <ContentView>

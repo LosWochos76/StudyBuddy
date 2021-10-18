@@ -3,7 +3,7 @@ using StudyBuddy.Model;
 
 namespace StudyBuddy.App.ViewModels
 {
-    public class RequestViewModel : NotificationBaseViewModel
+    public class RequestViewModel
     {
         public int ID { get; set; }
         public DateTime Created { get; set; } = DateTime.Now.Date;
@@ -21,7 +21,8 @@ namespace StudyBuddy.App.ViewModels
                 if (Type == RequestType.Friendship)
                     return Sender.FullName + " möchte sich mit dir befreunden.";
 
-                return Sender.FullName + " möchte, dass du die Herausforderung \"" + Challenge.Name + "\" bestätigst.";
+                return Sender.FullName + " möchte, dass du die Herausforderung \""
+                    + Challenge.Name + "\" bestätigst.";
             }
         }
 

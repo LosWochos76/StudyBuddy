@@ -1,4 +1,5 @@
-using System.Collections.ObjectModel;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using System.Windows.Input;
 using StudyBuddy.App.Api;
 using StudyBuddy.App.Misc;
@@ -9,49 +10,71 @@ namespace StudyBuddy.App.ViewModels
 {
     public class NotificationsViewModel : ViewModelBase
     {
-        public ObservableCollection<NotificationBaseViewModel> Notifications { get; private set; } = new ObservableCollection<NotificationBaseViewModel>();
+        private int selected_view = 0;
+        public int SelectedView
+        {
+            get => selected_view;
+
+            set
+            {
+                selected_view = value;
+                NotifyPropertyChanged("NewsIsSelected");
+                NotifyPropertyChanged("RequestsIsSelected");
+            }
+        }
+
+        public bool NewsIsSelected { get { return SelectedView == 0; } }
+        public bool RequestsIsSelected { get { return SelectedView == 1; } }
+
+        public IEnumerable<RequestViewModel> Requests { get; private set; } = new List<RequestViewModel>();
+        public IEnumerable<NewsViewModel> News { get; private set; } = new List<NewsViewModel>();
         public ICommand RefreshCommand { get; }
         public bool IsRefreshing { get; set; }
-        public ICommand AcceptCommand { get; set; }
-        public ICommand DenyCommand { get; set; }
+
+        public ICommand RefreshNewsCommand { get; }
+        public bool NewsIsRefreshing { get; set; }
+
+        public ICommand AcceptRequestCommand { get; set; }
+        public ICommand DenyRequestCommand { get; set; }
 
         public NotificationsViewModel(IApi api, IDialogService dialog, INavigationService navigation) : base(api, dialog, navigation)
         {
-            this.RefreshCommand = new Command(Reload);
-            this.AcceptCommand = new Command<NotificationBaseViewModel>(Accept);
-            this.DenyCommand = new Command<NotificationBaseViewModel>(Deny);
+            this.RefreshCommand = new Command(Refresh);
+            this.AcceptRequestCommand = new Command<RequestViewModel>(AcceptRequest);
+            this.DenyRequestCommand = new Command<RequestViewModel>(DenyRequest);
             api.Authentication.LoginStateChanged += Authentication_LoginStateChanged;
         }
 
         private void Authentication_LoginStateChanged(object sender, LoginStateChangedArgs args)
         {
             if (args.IsLoggedIn)
-                Reload();
+            {
+                ReloadNews();
+                ReloadRequests();
+            }
         }
 
-        private async void Reload()
+        private async void Refresh()
         {
-            var requests = await api.Requests.ForMe();
-            Notifications.Clear();
-            foreach (var obj in requests)
-                Notifications.Add(obj);
-
-            // Now load all News and add them to the List
+            if (NewsIsSelected)
+                await ReloadNews();
+            else
+                await ReloadRequests();
 
             IsRefreshing = false;
             NotifyPropertyChanged("IsRefreshing");
         }
 
-        public void Accept(NotificationBaseViewModel model)
+        private async Task ReloadNews()
         {
-            if (model is RequestViewModel)
-            {
-                var rvm = (RequestViewModel)model;
-                AcceptRequest(rvm);
-            }
         }
 
-        private async void AcceptRequest(RequestViewModel rvm)
+        private async Task ReloadRequests()
+        {
+            this.Requests = await api.Requests.ForMe();
+        }
+
+        public async void AcceptRequest(RequestViewModel rvm)
         {
             var answer = false;
             await dialog.ShowMessage(
@@ -69,7 +92,7 @@ namespace StudyBuddy.App.ViewModels
                 return;
             }
 
-            Reload();
+            await ReloadRequests();
 
             if (rvm.Type == Model.RequestType.Friendship)
             {
@@ -78,16 +101,7 @@ namespace StudyBuddy.App.ViewModels
             }
         }
 
-        public void Deny(NotificationBaseViewModel model)
-        {
-            if (model is RequestViewModel)
-            {
-                var rvm = (RequestViewModel)model;
-                DenyRequest(rvm);
-            }
-        }
-
-        private async void DenyRequest(RequestViewModel rvm)
+        public async void DenyRequest(RequestViewModel rvm)
         {
             var answer = false;
             await dialog.ShowMessage(
@@ -105,7 +119,7 @@ namespace StudyBuddy.App.ViewModels
                 return;
             }
 
-            Reload();
+            await ReloadRequests();
 
             if (rvm.Type == Model.RequestType.Friendship)
             {
