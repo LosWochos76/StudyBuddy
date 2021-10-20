@@ -188,6 +188,7 @@ namespace StudyBuddy.BusinessLogic
                 throw new Exception("Object is null!");
 
             backend.Repository.Challenges.AddAcceptance(challenge_id, backend.CurrentUser.ID);
+            backend.BusinessEvent.TriggerEvent(this, new BusinessEventArgs(BusinessEventType.FriendAdded, challenge));
         }
 
         public void RemoveAcceptance(int challenge_id, int user_id)

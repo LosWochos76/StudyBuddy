@@ -49,6 +49,7 @@ namespace StudyBuddy.BusinessLogic
         public User Insert(User obj)
         {
             backend.Repository.Users.Insert(obj);
+            backend.BusinessEvent.TriggerEvent(this, new BusinessEventArgs(BusinessEventType.UserRegistered, obj));
             return obj;
         }
 
@@ -89,10 +90,14 @@ namespace StudyBuddy.BusinessLogic
 
         public void AddFriend(int user_id, int friend_id)
         {
-            if (backend.CurrentUser == null || !backend.CurrentUser.IsAdmin && backend.CurrentUser.ID != user_id)
+            if (backend.CurrentUser == null)
                 throw new Exception("Unauthorized!");
 
             backend.Repository.Users.AddFriend(user_id, friend_id);
+
+            var user = backend.Repository.Users.ById(user_id);
+            var friend = backend.Repository.Users.ById(friend_id);
+            backend.BusinessEvent.TriggerEvent(this, new BusinessEventArgs(BusinessEventType.FriendAdded, friend) { CurrentUser = user });
         }
 
         public void RemoveFriend(int user_id, int friend_id)

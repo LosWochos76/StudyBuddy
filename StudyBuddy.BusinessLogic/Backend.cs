@@ -15,6 +15,7 @@ namespace StudyBuddy.BusinessLogic
         public IRequestService RequestService { get; set; }
         public ITagService TagService { get; set; }
         public IUserService UserService { get; set; }
+        public IBusinessEventService BusinessEvent { get; private set; }
 
         public Backend()
         {
@@ -27,6 +28,7 @@ namespace StudyBuddy.BusinessLogic
             RequestService = new RequestService(this);
             TagService = new TagService(this);
             UserService = new UserService(this);
+            BusinessEvent = new BusinessEventService(this);
         }
 
         public void SetCurrentUserFromToken(string token)

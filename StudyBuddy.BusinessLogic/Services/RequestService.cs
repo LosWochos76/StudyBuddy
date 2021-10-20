@@ -84,13 +84,19 @@ namespace StudyBuddy.BusinessLogic
             if (backend.CurrentUser == null || !backend.CurrentUser.IsAdmin && backend.CurrentUser.ID != obj.RecipientID)
                 throw new Exception("Unauthorized!");
 
+            var user = backend.Repository.Users.ById(obj.SenderID);
+
             if (obj.Type == RequestType.Friendship)
             {
                 backend.Repository.Users.AddFriend(obj.SenderID, obj.RecipientID);
+                var friend = backend.Repository.Users.ById(obj.RecipientID);
+                backend.BusinessEvent.TriggerEvent(this, new BusinessEventArgs(BusinessEventType.FriendAdded, friend) { CurrentUser = user });
             }
             else if (obj.Type == RequestType.ChallengeAcceptance)
             {
                 backend.Repository.Challenges.AddAcceptance(obj.ChallengeID.Value, obj.SenderID);
+                var challenge = backend.Repository.Challenges.ById(obj.ChallengeID.Value);
+                backend.BusinessEvent.TriggerEvent(this, new BusinessEventArgs(BusinessEventType.ChallengeAccepted, challenge) { CurrentUser = user });
             }
 
             backend.Repository.Requests.Delete(id);
