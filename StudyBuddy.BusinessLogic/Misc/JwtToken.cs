@@ -6,7 +6,6 @@ using System.Text;
 using Microsoft.IdentityModel.Tokens;
 using StudyBuddy.Model;
 using StudyBuddy.Persistence;
-using Environment = StudyBuddy.Model.Environment;
 
 namespace StudyBuddy.BusinessLogic
 {
@@ -20,7 +19,7 @@ namespace StudyBuddy.BusinessLogic
         {
             this.repository = repository;
 
-            var key_string = Environment.GetOrDefault("JWT_KEY", "thisisasupersecretkey");
+            var key_string = Model.Environment.GetOrDefault("JWT_KEY", "thisisasupersecretkey");
             key = Encoding.ASCII.GetBytes(key_string);
         }
 

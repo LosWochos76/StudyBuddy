@@ -1,29 +1,41 @@
+using System;
 using System.Collections.Generic;
 using StudyBuddy.Model;
-using StudyBuddy.Persistence;
 
 namespace StudyBuddy.BusinessLogic
 {
-    public class FcmTokenService
+    public class FcmTokenService : IFcmTokenService
     {
-        private readonly IRepository repository;
+        private readonly IBackend backend;
 
-        public FcmTokenService(IRepository repository)
+        public FcmTokenService(IBackend backend)
         {
-            this.repository = repository;
+            this.backend = backend;
         }
 
-        public IEnumerable<FcmToken> All(User current_user)
+        public IEnumerable<FcmToken> All()
         {
-            if (current_user.IsAdmin)
-                return repository.FcmTokens.All();
-            return repository.FcmTokens.OfUser(current_user.ID);
+            if (backend.CurrentUser == null)
+                throw new Exception("Unauthorized!");
+
+            if (backend.CurrentUser.IsAdmin)
+                return backend.Repository.FcmTokens.All();
+
+            return backend.Repository.FcmTokens.OfUser(backend.CurrentUser.ID);
         }
 
-        public FcmToken Save(FcmToken fcmToken)
+        public FcmToken Save(FcmTokenSaveDto obj)
         {
-            repository.FcmTokens.Save(fcmToken);
-            return fcmToken;
+            if (backend.CurrentUser == null)
+                throw new Exception("Unauthorized!");
+
+            if (obj == null)
+                throw new Exception("Object is null!");
+
+            var token = obj.ToFcmToken();
+            token.UserID = backend.CurrentUser.ID;
+            backend.Repository.FcmTokens.Save(token);
+            return token;
         }
     }
 }

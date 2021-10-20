@@ -3,89 +3,79 @@ using System.IO;
 using Microsoft.AspNetCore.Mvc;
 using StudyBuddy.BusinessLogic;
 using StudyBuddy.Model;
-using StudyBuddy.Persistence;
 
 namespace StudyBuddy.Api
 {
     public class ChallengeController : Controller
     {
-        private readonly IRepository repository;
+        private readonly IBackend backend;
 
-        public ChallengeController(IRepository repository)
+        public ChallengeController(IBackend backend)
         {
-            this.repository = repository;
+            this.backend = backend;
         }
 
         [Route("/Challenge/")]
         [HttpGet]
         public IActionResult Get()
         {
-            var service = new ChallengeService(repository, HttpContext.Items["user"] as User);
-            return Json(service.All());
+            return Json(backend.ChallengeService.All());
         }
 
         [Route("/Challenge/ForToday/")]
         [HttpGet]
         public IActionResult ForToday()
         {
-            var service = new ChallengeService(repository, HttpContext.Items["user"] as User);
-            return Json(service.ForToday());
+            return Json(backend.ChallengeService.ForToday());
         }
 
         [Route("/Challenge/{id}")]
         [HttpGet]
         public IActionResult GetById(int id)
         {
-            var service = new ChallengeService(repository, HttpContext.Items["user"] as User);
-            return Json(service.GetById(id));
+            return Json(backend.ChallengeService.GetById(id));
         }
 
         [Route("/Challenge/ByText/{text}")]
         [HttpGet]
         public IActionResult GetByText(string text)
         {
-            var service = new ChallengeService(repository, HttpContext.Items["user"] as User);
-            return Json(service.GetByText(text));
+            return Json(backend.ChallengeService.GetByText(text));
         }
 
         [Route("/Challenge/{id}")]
         [HttpPut]
         public IActionResult Update([FromBody] Challenge obj)
         {
-            var service = new ChallengeService(repository, HttpContext.Items["user"] as User);
-            return Json(service.Update(obj));
+            return Json(backend.ChallengeService.Update(obj));
         }
 
         [Route("/Challenge/OfBadge/{id}")]
         [HttpGet]
         public IActionResult OfBadge(int id)
         {
-            var service = new ChallengeService(repository, HttpContext.Items["user"] as User);
-            return Json(service.OfBadge(id));
+            return Json(backend.ChallengeService.OfBadge(id));
         }
 
         [Route("/Challenge/NotOfBadge/{id}")]
         [HttpGet]
         public IActionResult NotOfBadge(int id)
         {
-            var service = new ChallengeService(repository, HttpContext.Items["user"] as User);
-            return Json(service.NotOfBadge(id));
+            return Json(backend.ChallengeService.NotOfBadge(id));
         }
 
         [Route("/Challenge/")]
         [HttpPost]
         public IActionResult Insert([FromBody] Challenge obj)
         {
-            var service = new ChallengeService(repository, HttpContext.Items["user"] as User);
-            return Json(service.Insert(obj));
+            return Json(backend.ChallengeService.Insert(obj));
         }
 
         [Route("/Challenge/{id}")]
         [HttpDelete]
         public IActionResult Delete(int id)
         {
-            var service = new ChallengeService(repository, HttpContext.Items["user"] as User);
-            service.Delete(id);
+            backend.ChallengeService.Delete(id);
             return Json(new {Status = "ok"});
         }
 
@@ -93,8 +83,7 @@ namespace StudyBuddy.Api
         [HttpPost]
         public IActionResult CreateSeries([FromBody] CreateSeriesParameter param)
         {
-            var service = new ChallengeService(repository, HttpContext.Items["user"] as User);
-            service.CreateSeries(param);
+            backend.ChallengeService.CreateSeries(param);
             return Json(new {Status = "ok"});
         }
 
@@ -102,8 +91,7 @@ namespace StudyBuddy.Api
         [HttpGet]
         public IActionResult GetQrCode(int id)
         {
-            var service = new ChallengeService(repository, HttpContext.Items["user"] as User);
-            var code = service.GetQrCode(id);
+            var code = backend.ChallengeService.GetQrCode(id);
 
             var ms = new MemoryStream();
             code.Save(ms, ImageFormat.Png);
@@ -115,8 +103,7 @@ namespace StudyBuddy.Api
         [HttpPost]
         public IActionResult AcceptFromQrCode([FromBody] string parameter)
         {
-            var service = new ChallengeService(repository, HttpContext.Items["user"] as User);
-            service.AcceptFromQrCode(parameter);
+            backend.ChallengeService.AcceptFromQrCode(parameter);
             return Json(new {Status = "ok"});
         }
 
@@ -124,8 +111,7 @@ namespace StudyBuddy.Api
         [HttpPut]
         public IActionResult RemoveAcceptance(int challenge_id, int user_id)
         {
-            var service = new ChallengeService(repository, HttpContext.Items["user"] as User);
-            service.RemoveAcceptance(challenge_id, user_id);
+            backend.ChallengeService.RemoveAcceptance(challenge_id, user_id);
             return Json(new {Status = "ok"});
         }
     }

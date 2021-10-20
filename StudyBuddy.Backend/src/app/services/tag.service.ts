@@ -116,7 +116,7 @@ export class TagService {
 
   async setForChallenge(challenge_id: number, tag_string: string) {
     let data = {
-      'EntityId': challenge_id,
+      'ChallengeId': challenge_id,
       'Tags': tag_string
     };
 

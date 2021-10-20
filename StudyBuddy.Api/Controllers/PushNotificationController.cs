@@ -1,26 +1,22 @@
 using Microsoft.AspNetCore.Mvc;
 using StudyBuddy.BusinessLogic;
-using StudyBuddy.Model;
-using StudyBuddy.Persistence;
 
 namespace StudyBuddy.Api
 {
     public class PushNotificationController : Controller
     {
-        public PushNotificationService pushNotificationService;
+        private readonly IBackend backend;
 
-        public PushNotificationController(IRepository repository)
+        public PushNotificationController(IBackend backend)
         {
-            pushNotificationService = new PushNotificationService(repository);
+            this.backend = backend;
         }
-
 
         [Route("/Notification/")]
         [HttpPost]
-        [IsAdmin]
         public IActionResult BroadcastMessage([FromBody] PushNotificationBroadcastDto obj)
         {
-            pushNotificationService.BroadcastMessage(obj.title, obj.body);
+            backend.PushNotificationService.BroadcastMessage(obj);
             return Json(true);
         }
     }

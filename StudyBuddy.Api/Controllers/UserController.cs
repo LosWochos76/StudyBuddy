@@ -1,65 +1,58 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using StudyBuddy.BusinessLogic;
 using StudyBuddy.Model;
-using StudyBuddy.Persistence;
 
 namespace StudyBuddy.Api
 {
     public class UserController : Controller
     {
-        private readonly IRepository repository;
+        private readonly IBackend backend;
 
-        public UserController(IRepository repository)
+        public UserController(IBackend backend)
         {
-            this.repository = repository;
+            this.backend = backend;
         }
 
         [Route("/User/")]
         [HttpGet]
         public IActionResult GetAll()
         {
-            var service = new UserService(repository, HttpContext.Items["user"] as User);
-            return Json(service.GetAll());
+            return Json(backend.UserService.GetAll());
         }
 
         [Route("/User/Count")]
         [HttpGet]
         public IActionResult GetCount()
         {
-            var service = new UserService(repository, HttpContext.Items["user"] as User);
-            return Json(service.GetCount());
+            return Json(backend.UserService.GetCount());
         }
 
         [Route("/User/{id}")]
         [HttpGet]
         public IActionResult GetById(int id)
         {
-            var service = new UserService(repository, HttpContext.Items["user"] as User);
-            return Json(service.GetById(id));
+            return Json(backend.UserService.GetById(id));
         }
 
         [Route("/User/{id}")]
         [HttpPut]
         public IActionResult Update([FromBody] User obj)
         {
-            var service = new UserService(repository, HttpContext.Items["user"] as User);
-            return Json(service.Update(obj));
+            return Json(backend.UserService.Update(obj));
         }
 
         [Route("/User/")]
         [HttpPost]
         public IActionResult Insert([FromBody] User obj)
         {
-            var service = new UserService(repository, HttpContext.Items["user"] as User);
-            return Json(service.Insert(obj));
+            return Json(backend.UserService.Insert(obj));
         }
 
         [Route("/User/{id}")]
         [HttpDelete]
         public IActionResult Delete(int id)
         {
-            var service = new UserService(repository, HttpContext.Items["user"] as User);
-            service.Delete(id);
+            backend.UserService.Delete(id);
             return Json(new {Status = "ok"});
         }
 
@@ -67,32 +60,28 @@ namespace StudyBuddy.Api
         [HttpGet]
         public IActionResult GetUserIdByNickname(string nickname)
         {
-            var service = new UserService(repository, HttpContext.Items["user"] as User);
-            return Json(new {Id = service.GetUserIdByNickname(nickname)});
+            return Json(new {Id = backend.UserService.GetUserIdByNickname(nickname)});
         }
 
         [Route("/User/UserIdByEmail/{email}")]
         [HttpGet]
         public IActionResult GetUserIdByEmail(string email)
         {
-            var service = new UserService(repository, HttpContext.Items["user"] as User);
-            return Json(new {Id = service.GetUserIdByEmail(email)});
+            return Json(new {Id = backend.UserService.GetUserIdByEmail(email)});
         }
 
         [Route("/User/{id}/Friends")]
         [HttpGet]
         public IActionResult GetAllFriends(int id)
         {
-            var service = new UserService(repository, HttpContext.Items["user"] as User);
-            return Json(service.GetAllFriends(id));
+            return Json(backend.UserService.GetAllFriends(id));
         }
 
         [Route("/User/{user_id}/Friend/{friend_id}")]
         [HttpPost]
         public IActionResult AddFriend(int user_id, int friend_id)
         {
-            var service = new UserService(repository, HttpContext.Items["user"] as User);
-            service.AddFriend(user_id, friend_id);
+            backend.UserService.AddFriend(user_id, friend_id);
             return Json(new {Status = "ok"});
         }
 
@@ -100,8 +89,7 @@ namespace StudyBuddy.Api
         [HttpDelete]
         public IActionResult RemoveFriend(int user_id, int friend_id)
         {
-            var service = new UserService(repository, HttpContext.Items["user"] as User);
-            service.RemoveFriend(user_id, friend_id);
+            backend.UserService.RemoveFriend(user_id, friend_id);
             return Json(new {Status = "ok"});
         }
 
@@ -109,8 +97,7 @@ namespace StudyBuddy.Api
         [HttpDelete]
         public IActionResult RemoveFriends(int id)
         {
-            var service = new UserService(repository, HttpContext.Items["user"] as User);
-            service.RemoveFriends(id);
+            backend.UserService.RemoveFriends(id);
             return Json(new {Status = "ok"});
         }
 
@@ -118,8 +105,7 @@ namespace StudyBuddy.Api
         [HttpPost]
         public IActionResult SetFriends([FromBody] MultipleFriendsParameter parameter)
         {
-            var service = new UserService(repository, HttpContext.Items["user"] as User);
-            service.SetFriends(parameter);
+            backend.UserService.SetFriends(parameter);
             return Json(new {Status = "ok"});
         }
 
@@ -127,8 +113,7 @@ namespace StudyBuddy.Api
         [HttpGet]
         public IActionResult ThatAcceptedChallenge(int challenge_id)
         {
-            var service = new UserService(repository, HttpContext.Items["user"] as User);
-            var result = service.GetAllUsersThatAcceptedChallenge(challenge_id);
+            var result = backend.UserService.GetAllUsersThatAcceptedChallenge(challenge_id);
             return Json(result);
         }
 
@@ -136,8 +121,7 @@ namespace StudyBuddy.Api
         [HttpGet]
         public IActionResult GetCountOfCommonFriends(int user_a_id, int user_b_id)
         {
-            var service = new UserService(repository, HttpContext.Items["user"] as User);
-            var result = service.GetCountOfCommonFriends(user_a_id, user_b_id);
+            var result = backend.UserService.GetCountOfCommonFriends(user_a_id, user_b_id);
             return Json(result);
         }
     }

@@ -1,91 +1,74 @@
 using Microsoft.AspNetCore.Mvc;
 using StudyBuddy.BusinessLogic;
 using StudyBuddy.Model;
-using StudyBuddy.Persistence;
 
 namespace StudyBuddy.Api
 {
     public class RequestController : Controller
     {
-        private readonly IRepository repository;
+        private readonly IBackend backend;
 
-        public RequestController(IRepository repository)
+        public RequestController(IBackend backend)
         {
-            this.repository = repository;
+            this.backend = backend;
         }
 
         [Route("/Request/")]
         [HttpGet]
-        [IsAdmin]
         public IActionResult Get()
         {
-            var service = new RequestService(repository, HttpContext.Items["user"] as User);
-            return Json(service.All());
+            return Json(backend.RequestService.All());
         }
 
         [Route("/Request/ForRecipient/{user_id}")]
         [HttpGet]
-        [IsLoggedIn]
         public IActionResult ForRecipient(int user_id)
         {
-            var service = new RequestService(repository, HttpContext.Items["user"] as User);
-            return Json(service.ForRecipient(user_id));
+            return Json(backend.RequestService.ForRecipient(user_id));
         }
 
         [Route("/Request/OfSender/{user_id}")]
         [HttpGet]
-        [IsLoggedIn]
         public IActionResult OfSender(int user_id)
         {
-            var service = new RequestService(repository, HttpContext.Items["user"] as User);
-            return Json(service.OfSender(user_id));
+            return Json(backend.RequestService.OfSender(user_id));
         }
 
         [Route("/Request/{id}")]
         [HttpGet]
-        [IsLoggedIn]
         public IActionResult GetById(int id)
         {
-            var service = new RequestService(repository, HttpContext.Items["user"] as User);
-            return Json(service.GetById(id));
+            return Json(backend.RequestService.GetById(id));
         }
 
         [Route("/Request/{id}")]
         [HttpDelete]
-        [IsAdmin]
         public IActionResult Delete(int id)
         {
-            var service = new RequestService(repository, HttpContext.Items["user"] as User);
-            service.Delete(id);
+            backend.RequestService.Delete(id);
             return Json(new {Status = "Ok"});
         }
 
         [Route("/Request/")]
         [HttpPost]
-        [IsLoggedIn]
         public IActionResult Insert([FromBody] Request obj)
         {
-            var service = new RequestService(repository, HttpContext.Items["user"] as User);
-            return Json(service.Insert(obj));
+            return Json(backend.RequestService.Insert(obj));
         }
 
         [Route("/Request/Accept/{id}")]
         [HttpPost]
-        [IsLoggedIn]
         public IActionResult Accept(int id)
         {
-            var service = new RequestService(repository, HttpContext.Items["user"] as User);
-            service.Accept(id);
+            backend.RequestService.Accept(id);
             return Json(new {Status = "Ok"});
         }
 
         [Route("/Request/Deny/{id}")]
         [HttpPost]
-        [IsLoggedIn]
         public IActionResult Deny(int id)
         {
-            var service = new RequestService(repository, HttpContext.Items["user"] as User);
-            service.Deny(id);
+            backend.RequestService.Deny(id);
             return Json(new { Status = "Ok" });
         }
     }

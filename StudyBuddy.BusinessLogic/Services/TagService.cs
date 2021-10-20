@@ -1,76 +1,83 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using StudyBuddy.Model;
-using StudyBuddy.Persistence;
 
 namespace StudyBuddy.BusinessLogic
 {
-    public class TagService
+    class TagService : ITagService
     {
-        private readonly User current_user;
-        private readonly IRepository repository;
+        private readonly IBackend backend;
 
-        public TagService(IRepository repository, User current_user)
+        public TagService(IBackend backend)
         {
-            this.repository = repository;
-            this.current_user = current_user;
+            this.backend = backend;
         }
 
         public IEnumerable<Tag> GetAll()
         {
-            TagAuthorization.CheckGetAll(current_user);
-            return repository.Tags.All();
+            if (backend.CurrentUser == null || !backend.CurrentUser.IsAdmin)
+                throw new Exception("Unauthorized!");
+
+            return backend.Repository.Tags.All();
         }
 
         public int GetCount()
         {
-            TagAuthorization.CheckGetCount(current_user);
-            return repository.Tags.Count();
+            if (backend.CurrentUser == null || !backend.CurrentUser.IsAdmin)
+                throw new Exception("Unauthorized!");
+
+            return backend.Repository.Tags.Count();
         }
 
         public Tag GetById(int id)
         {
-            TagAuthorization.CheckGetById(current_user);
-            return repository.Tags.ById(id);
+            if (backend.CurrentUser == null)
+                throw new Exception("Unauthorized!");
+
+            return backend.Repository.Tags.ById(id);
         }
 
         public Tag Update(Tag obj)
         {
-            TagAuthorization.CheckUpdate(current_user);
-            repository.Tags.Update(obj);
+            if (backend.CurrentUser == null || !backend.CurrentUser.IsAdmin)
+                throw new Exception("Unauthorized!");
+
+            backend.Repository.Tags.Update(obj);
             return obj;
         }
 
         public Tag Insert(Tag obj)
         {
-            TagAuthorization.CheckInsert(current_user);
-            repository.Tags.Insert(obj);
+            if (backend.CurrentUser == null)
+                throw new Exception("Unauthorized!");
+
+            backend.Repository.Tags.Insert(obj);
             return obj;
         }
 
         public void Delete(int id)
         {
-            TagAuthorization.CheckDelete(current_user);
-            repository.Tags.Delete(id);
+            if (backend.CurrentUser == null || !backend.CurrentUser.IsAdmin)
+                throw new Exception("Unauthorized!");
+
+            backend.Repository.Tags.Delete(id);
         }
 
         private IEnumerable<string> SplitTags(string tags)
         {
-            return
-                tags.Replace("#", "").Split(new[] {' ', '\t'}, StringSplitOptions.RemoveEmptyEntries);
+            return tags
+                .Replace("#", "")
+                .Split(new[] { ' ', '\t' }, StringSplitOptions.RemoveEmptyEntries);
         }
 
-        public Tag CreateOrFindSingle(string tag_name)
+        private Tag CreateOrFindSingle(string tag_name)
         {
-            TagAuthorization.CheckCreateOrFindSigle(current_user);
-
             tag_name = tag_name.ToLower();
-            var obj = repository.Tags.ByName(tag_name);
+            var obj = backend.Repository.Tags.ByName(tag_name);
 
             if (obj == null)
             {
-                obj = new Tag {Name = tag_name};
+                obj = new Tag { Name = tag_name };
                 Insert(obj);
             }
 
@@ -79,6 +86,9 @@ namespace StudyBuddy.BusinessLogic
 
         public IEnumerable<Tag> CreateOrFindMultiple(string tags)
         {
+            if (backend.CurrentUser == null || backend.CurrentUser.IsStudent)
+                throw new Exception("Unauthorized!");
+
             var tag_list = SplitTags(tags);
             var object_list = new List<Tag>();
 
@@ -90,16 +100,26 @@ namespace StudyBuddy.BusinessLogic
 
         public IEnumerable<Tag> OfChallenge(int challenge_id)
         {
-            return repository.Tags.OfChallenge(challenge_id);
+            if (backend.CurrentUser == null)
+                throw new Exception("Unauthorized!");
+
+            return backend.Repository.Tags.OfChallenge(challenge_id);
         }
 
-        public IEnumerable<Tag> SetForChallenge(SetTagsParameter parameter)
+        public IEnumerable<Tag> SetForChallenge(TagsForChallengeParameter parameter)
         {
-            repository.Tags.RemoveAllTagsFromChallenge(parameter.EntityId);
+            var challenge = backend.Repository.Challenges.ById(parameter.ChallengeId);
+            if (challenge == null)
+                throw new Exception("Object is null!");
+
+            if (backend.CurrentUser == null || !backend.CurrentUser.IsAdmin && challenge.OwnerID != backend.CurrentUser.ID)
+                throw new Exception("Unauthorized!");
+
+            backend.Repository.Tags.RemoveAllTagsFromChallenge(parameter.ChallengeId);
 
             var tags = CreateOrFindMultiple(parameter.Tags);
             foreach (var tag in tags)
-                repository.Tags.AddTagForChallenge(tag.ID, parameter.EntityId);
+                backend.Repository.Tags.AddTagForChallenge(tag.ID, parameter.ChallengeId);
 
             return tags;
         }

@@ -1,71 +1,82 @@
 ﻿using System;
 using System.Collections.Generic;
 using StudyBuddy.Model;
-using StudyBuddy.Persistence;
 
 namespace StudyBuddy.BusinessLogic
 {
-    public class GameBadgeService
+    class GameBadgeService : IGameBadgeService
     {
-        private readonly IRepository repository;
+        private readonly IBackend backend;
 
-        public GameBadgeService(IRepository repository)
+        public GameBadgeService(IBackend backend)
         {
-            this.repository = repository;
+            this.backend = backend;
         }
 
-        public IEnumerable<GameBadge> All(User current_user)
+        public IEnumerable<GameBadge> All()
         {
-            if (current_user == null || !current_user.IsAdmin)
-                return repository.GameBadges.OfOwner(current_user.ID);
-            return repository.GameBadges.All();
+            if (backend.CurrentUser == null || !backend.CurrentUser.IsAdmin)
+                return backend.Repository.GameBadges.OfOwner(backend.CurrentUser.ID);
+
+            return backend.Repository.GameBadges.All();
         }
 
         public GameBadge GetById(int id)
         {
-            return repository.GameBadges.ById(id);
+            if (backend.CurrentUser == null)
+                throw new Exception("Unauthorized");
+
+            return backend.Repository.GameBadges.ById(id);
         }
 
-        public GameBadge Update(User current_user, GameBadge obj)
+        public GameBadge Update(GameBadge obj)
         {
             if (obj == null)
                 throw new Exception("Object invalid!");
 
-            if (!current_user.IsAdmin && obj.OwnerID != current_user.ID)
+            if (backend.CurrentUser == null || !backend.CurrentUser.IsAdmin && obj.OwnerID != backend.CurrentUser.ID)
                 throw new Exception("Unauthorized");
 
-            repository.GameBadges.Update(obj);
+            backend.Repository.GameBadges.Update(obj);
             return obj;
         }
 
         public GameBadge Insert(GameBadge obj)
         {
+            if (backend.CurrentUser == null || backend.CurrentUser.IsStudent)
+                throw new Exception("Unauthorized");
+
             if (obj == null)
                 throw new Exception("Object invalid!");
 
-            repository.GameBadges.Insert(obj);
+            backend.Repository.GameBadges.Insert(obj);
             return obj;
         }
 
-        public void Delete(User current_user, int id)
+        public void Delete(int id)
         {
-            var obj = repository.GameBadges.ById(id);
+            var obj = backend.Repository.GameBadges.ById(id);
             if (obj == null)
                 throw new Exception("Object not found!");
 
-            if (!current_user.IsAdmin && obj.OwnerID != current_user.ID)
+            if (!backend.CurrentUser.IsAdmin && obj.OwnerID != backend.CurrentUser.ID)
                 throw new Exception("Unauthorized!");
 
-            repository.GameBadges.Delete(id);
+            backend.Repository.GameBadges.Delete(id);
         }
 
+        // ToDo: Der Parameter hier ist Mist! Sollte nur eine GameBadgeId und viele ChallengeIds sein! Dann muss aber auch das Angular-Backend abgepasst werden, weil sich die Signatur ändert!
         public void SetChallenges(GameBadgeChallenge[] challenges)
         {
-            if (challenges.Length == 0)
+            if (challenges == null || challenges.Length == 0)
                 throw new Exception("No challenges delivered!");
 
-            repository.GameBadges.DeleteChallenges(challenges[0].GameBadgeId);
-            repository.GameBadges.AddChallenges(challenges);
+            var obj = backend.Repository.GameBadges.ById(challenges[0].GameBadgeId);
+            if (backend.CurrentUser == null || backend.CurrentUser.IsAdmin && obj.OwnerID != backend.CurrentUser.ID)
+                throw new Exception("Unauthorized!");
+
+            backend.Repository.GameBadges.DeleteChallenges(challenges[0].GameBadgeId);
+            backend.Repository.GameBadges.AddChallenges(challenges);
         }
     }
 }

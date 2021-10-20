@@ -1,36 +1,29 @@
 ﻿using System;
 using NETCore.MailKit;
 using NETCore.MailKit.Core;
-using StudyBuddy.Model;
-using StudyBuddy.Persistence;
 
 namespace StudyBuddy.BusinessLogic
 {
-    public class AuthenticationService
+    class AuthenticationService : IAuthenticationService
     {
-        private readonly User current_user;
-        private IEmailService mail;
-        private readonly IRepository repository;
+        private readonly IBackend backend;
 
-        public AuthenticationService(IRepository repository, User current_user)
+        public AuthenticationService(IBackend backend)
         {
-            this.repository = repository;
-            this.current_user = current_user;
+            this.backend = backend;
         }
 
         public object Login(UserCredentials uc)
         {
-            AuthenticationAuthorization.CheckLogin(current_user);
-
             if (uc == null || string.IsNullOrEmpty(uc.EMail) || string.IsNullOrEmpty(uc.Password))
                 throw new Exception("Provide email and password!");
 
-            var user = repository.Users.ByEmailAndPassword(uc.EMail, uc.Password);
+            var user = backend.Repository.Users.ByEmailAndPassword(uc.EMail, uc.Password);
             if (user == null)
                 return null;
 
             user.PasswordHash = null;
-            var jwt = new JwtToken(repository);
+            var jwt = new JwtToken(backend.Repository);
             return new
             {
                 Token = jwt.FromUser(user),
@@ -40,12 +33,10 @@ namespace StudyBuddy.BusinessLogic
 
         public void SendPasswortResetMail(string email)
         {
-            AuthenticationAuthorization.CheckSendPasswortResetMail(current_user);
-
             if (string.IsNullOrEmpty(email))
                 throw new Exception("No email-adress given!");
 
-            var obj = repository.Users.ByEmail(email);
+            var obj = backend.Repository.Users.ByEmail(email);
             if (obj == null)
                 throw new Exception("User not found!");
 
@@ -53,7 +44,7 @@ namespace StudyBuddy.BusinessLogic
 
             var options = MailKitHelper.GetMailKitOptions();
             var provider = new MailKitProvider(options);
-            mail = new EmailService(provider);
+            var mail = new EmailService(provider);
             mail.Send(email, "Passwort zurücksetzen", "Bla", true);
         }
     }
