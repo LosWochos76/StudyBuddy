@@ -1,33 +1,29 @@
 using Microsoft.AspNetCore.Mvc;
 using StudyBuddy.BusinessLogic;
-using StudyBuddy.Model;
-using StudyBuddy.Persistence;
 
 namespace StudyBuddy.Api
 {
     public class AuthenticationController : Controller
     {
-        private readonly IRepository repository;
+        private readonly IBackend backend;
 
-        public AuthenticationController(IRepository repository)
+        public AuthenticationController(IBackend backend)
         {
-            this.repository = repository;
+            this.backend = backend;
         }
 
         [Route("/Login/")]
         [HttpPost]
         public IActionResult Login([FromBody] UserCredentials uc)
         {
-            var service = new AuthenticationService(repository, HttpContext.Items["user"] as User);
-            return Json(service.Login(uc));
+            return Json(backend.AuthenticationService.Login(uc));
         }
 
         [Route("/Login/SendPasswortResetMail/")]
         [HttpPost]
         public IActionResult SendPasswortResetMail([FromBody] string email)
         {
-            var service = new AuthenticationService(repository, HttpContext.Items["user"] as User);
-            service.SendPasswortResetMail(email);
+            backend.AuthenticationService.SendPasswortResetMail(email);
             return Json(new {Status = "ok"});
         }
     }

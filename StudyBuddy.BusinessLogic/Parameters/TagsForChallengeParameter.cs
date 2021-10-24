@@ -1,8 +1,8 @@
 ﻿namespace StudyBuddy.BusinessLogic
 {
-    public class SetTagsParameter
+    public class TagsForChallengeParameter
     {
-        public int EntityId { get; set; }
+        public int ChallengeId { get; set; }
         public string Tags { get; set; }
     }
 }

@@ -1,28 +1,26 @@
 using FirebaseAdmin.Messaging;
-using StudyBuddy.Persistence;
 
 namespace StudyBuddy.BusinessLogic
 {
-    public class PushNotificationService
+    public class PushNotificationService : IPushNotificationService
     {
-        private readonly IRepository repository;
+        private readonly IBackend backend;
 
-        public PushNotificationService(IRepository repository)
+        public PushNotificationService(IBackend backend)
         {
-            this.repository = repository;
+            this.backend = backend;
         }
 
-
-        public void BroadcastMessage(string title, string body)
+        public void BroadcastMessage(PushNotificationBroadcastDto obj)
         {
-            var fcmTokens = repository.FcmTokens.All();
+            var fcmTokens = backend.Repository.FcmTokens.All();
 
             var message = new Message
             {
                 Notification = new Notification
                 {
-                    Title = title,
-                    Body = body
+                    Title = obj.Title,
+                    Body = obj.Body,
                 }
             };
 

@@ -5,124 +5,121 @@ using System.Linq;
 using NETCore.Encrypt;
 using QRCoder;
 using StudyBuddy.Model;
-using StudyBuddy.Persistence;
-using Environment = StudyBuddy.Model.Environment;
 
 namespace StudyBuddy.BusinessLogic
 {
-    public class ChallengeService
+    class ChallengeService : IChallengeService
     {
-        private readonly User current_user;
-        private readonly IRepository repository;
+        private readonly IBackend backend;
 
-        public ChallengeService(IRepository repository, User current_user)
+        public ChallengeService(IBackend backend)
         {
-            this.repository = repository;
-            this.current_user = current_user;
+            this.backend = backend;
         }
 
         public IEnumerable<Challenge> All()
         {
-            if (current_user == null || current_user.IsStudent)
+            if (backend.CurrentUser == null || backend.CurrentUser.IsStudent)
                 throw new UnauthorizedAccessException("Unauthorized!");
 
-            if (current_user.IsAdmin)
-                return repository.Challenges.All();
+            if (backend.CurrentUser.IsAdmin)
+                return backend.Repository.Challenges.All();
 
-            if (current_user.IsInstructor)
-                return repository.Challenges.OfOwner(current_user.ID);
+            if (backend.CurrentUser.IsInstructor)
+                return backend.Repository.Challenges.OfOwner(backend.CurrentUser.ID);
 
             return null;
         }
 
         public IEnumerable<Challenge> ForToday()
         {
-            if (current_user == null)
+            if (backend.CurrentUser == null)
                 throw new UnauthorizedAccessException("Unauthorized!");
 
-            return repository.Challenges.ForToday(DateTime.Now.Date);
+            return backend.Repository.Challenges.ForToday(DateTime.Now.Date);
         }
 
         public Challenge GetById(int id)
         {
-            if (current_user == null)
+            if (backend.CurrentUser == null)
                 throw new UnauthorizedAccessException("Unauthorized!");
 
-            return repository.Challenges.ById(id);
+            return backend.Repository.Challenges.ById(id);
         }
 
         public IEnumerable<Challenge> GetByText(string text)
         {
-            if (current_user == null)
+            if (backend.CurrentUser == null)
                 throw new UnauthorizedAccessException("Unauthorized!");
 
-            if (current_user == null || !current_user.IsAdmin)
-                return repository.Challenges.OfOwnerByText(current_user.ID, text);
-            return repository.Challenges.ByText(text);
+            if (backend.CurrentUser == null || !backend.CurrentUser.IsAdmin)
+                return backend.Repository.Challenges.OfOwnerByText(backend.CurrentUser.ID, text);
+
+            return backend.Repository.Challenges.ByText(text);
         }
 
         public Challenge Update(Challenge obj)
         {
-            if (current_user == null || current_user.IsStudent)
+            if (backend.CurrentUser == null || backend.CurrentUser.IsStudent)
                 throw new UnauthorizedAccessException("Unauthorized!");
 
             if (obj == null)
                 throw new Exception("Object invalid!");
 
-            if (!current_user.IsAdmin && obj.OwnerID != current_user.ID)
+            if (!backend.CurrentUser.IsAdmin && obj.OwnerID != backend.CurrentUser.ID)
                 throw new Exception("Unauthorized");
 
-            repository.Challenges.Update(obj);
+            backend.Repository.Challenges.Update(obj);
             return obj;
         }
 
         public IEnumerable<Challenge> OfBadge(int id)
         {
-            if (current_user == null)
+            if (backend.CurrentUser == null)
                 throw new UnauthorizedAccessException("Unauthorized!");
 
-            return repository.Challenges.OfBadge(id);
+            return backend.Repository.Challenges.OfBadge(id);
         }
 
         public IEnumerable<Challenge> NotOfBadge(int id)
         {
-            if (current_user == null)
+            if (backend.CurrentUser == null)
                 throw new UnauthorizedAccessException("Unauthorized!");
 
-            return repository.Challenges.NotOfBadge(id);
+            return backend.Repository.Challenges.NotOfBadge(id);
         }
 
         public Challenge Insert(Challenge obj)
         {
-            if (current_user == null || current_user.IsStudent)
+            if (backend.CurrentUser == null || backend.CurrentUser.IsStudent)
                 throw new UnauthorizedAccessException("Unauthorized!");
 
-            repository.Challenges.Insert(obj);
+            backend.Repository.Challenges.Insert(obj);
             return obj;
         }
 
         public void Delete(int id)
         {
-            if (current_user == null || current_user.IsStudent)
+            if (backend.CurrentUser == null || backend.CurrentUser.IsStudent)
                 throw new UnauthorizedAccessException("Unauthorized!");
 
-            var obj = repository.Challenges.ById(id);
-            if (!current_user.IsAdmin && obj != null && obj.OwnerID != current_user.ID)
+            var obj = backend.Repository.Challenges.ById(id);
+            if (!backend.CurrentUser.IsAdmin && obj != null && obj.OwnerID != backend.CurrentUser.ID)
                 throw new Exception("Unauthorized");
 
-            repository.Challenges.Delete(id);
+            backend.Repository.Challenges.Delete(id);
         }
 
         public void CreateSeries(CreateSeriesParameter param)
         {
-            if (current_user == null || current_user.IsStudent)
+            if (backend.CurrentUser == null || backend.CurrentUser.IsStudent)
                 throw new UnauthorizedAccessException("Unauthorized!");
 
-            var parent = repository.Challenges.ById(param.ChallengeId);
+            var parent = backend.Repository.Challenges.ById(param.ChallengeId);
             if (parent == null)
                 throw new Exception("Object not found!");
 
-            if (!current_user.IsAdmin && parent != null && parent.OwnerID != current_user.ID)
+            if (!backend.CurrentUser.IsAdmin && parent != null && parent.OwnerID != backend.CurrentUser.ID)
                 throw new Exception("Unauthorized");
 
             for (var i = 0; i < param.Count; i++)
@@ -131,24 +128,24 @@ namespace StudyBuddy.BusinessLogic
                 clone.SeriesParentID = parent.ID;
                 clone.ValidityStart = clone.ValidityStart.AddDays((i + 1) * param.DaysAdd);
                 clone.ValidityEnd = clone.ValidityEnd.AddDays((i + 1) * param.DaysAdd);
-                repository.Challenges.Insert(clone);
+                backend.Repository.Challenges.Insert(clone);
             }
         }
 
         public Bitmap GetQrCode(int challenge_id)
         {
-            if (current_user == null || current_user.IsStudent)
+            if (backend.CurrentUser == null || backend.CurrentUser.IsStudent)
                 throw new UnauthorizedAccessException("Unauthorized!");
 
-            var challenge = repository.Challenges.ById(challenge_id);
+            var challenge = backend.Repository.Challenges.ById(challenge_id);
             if (challenge == null)
                 throw new Exception("Challenge not found!");
 
-            if (!current_user.IsAdmin && current_user.ID != challenge.ID)
+            if (!backend.CurrentUser.IsAdmin && backend.CurrentUser.ID != challenge.ID)
                 throw new UnauthorizedAccessException("Unauthorized!");
 
             // Encrypt the challenge_id
-            var key_string = Environment.GetOrDefault("JWT_KEY", "thisisasupersecretkey");
+            var key_string = Model.Environment.GetOrDefault("JWT_KEY", "thisisasupersecretkey");
             key_string = string.Concat(Enumerable.Repeat(key_string, 32)).Substring(0, 32);
             var encrypted = EncryptProvider.AESEncrypt(challenge_id.ToString(), key_string);
 
@@ -164,7 +161,7 @@ namespace StudyBuddy.BusinessLogic
 
         public void AcceptFromQrCode(string payload)
         {
-            if (current_user == null)
+            if (backend.CurrentUser == null)
                 throw new UnauthorizedAccessException("Unauthorized!");
 
             if (string.IsNullOrEmpty(payload) || !payload.StartsWith("qr:"))
@@ -176,7 +173,7 @@ namespace StudyBuddy.BusinessLogic
             {
                 // Decrypt the challenge_id
                 var encrypted = Base64.Decode(payload.Substring(3));
-                var key_string = Environment.GetOrDefault("JWT_KEY", "thisisasupersecretkey");
+                var key_string = Model.Environment.GetOrDefault("JWT_KEY", "thisisasupersecretkey");
                 key_string = string.Concat(Enumerable.Repeat(key_string, 32)).Substring(0, 32);
                 var decrypted = EncryptProvider.AESDecrypt(encrypted, key_string);
                 challenge_id = Convert.ToInt32(decrypted);
@@ -186,20 +183,20 @@ namespace StudyBuddy.BusinessLogic
                 throw new Exception("No valid payload given!");
             }
 
-            if (challenge_id == 0)
-                throw new Exception("No valid payload given!");
+            var challenge = backend.Repository.Challenges.ById(challenge_id);
+            if (challenge == null)
+                throw new Exception("Object is null!");
 
-            repository.Challenges.AddAcceptance(challenge_id, current_user.ID);
-
-            // ToDo: Neuigkeit erzeugen
+            backend.Repository.Challenges.AddAcceptance(challenge_id, backend.CurrentUser.ID);
+            backend.BusinessEvent.TriggerEvent(this, new BusinessEventArgs(BusinessEventType.FriendAdded, challenge));
         }
 
         public void RemoveAcceptance(int challenge_id, int user_id)
         {
-            if (current_user == null || !current_user.IsAdmin)
+            if (backend.CurrentUser == null || !backend.CurrentUser.IsAdmin)
                 throw new UnauthorizedAccessException("Unathorrized");
 
-            repository.Challenges.RemoveAcceptance(challenge_id, user_id);
+            backend.Repository.Challenges.RemoveAcceptance(challenge_id, user_id);
         }
     }
 }

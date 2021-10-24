@@ -1,69 +1,59 @@
 using Microsoft.AspNetCore.Mvc;
 using StudyBuddy.BusinessLogic;
 using StudyBuddy.Model;
-using StudyBuddy.Persistence;
 
 namespace StudyBuddy.Api
 {
     public class GameBadgeController : Controller
     {
-        private readonly GameBadgeService service;
+        private readonly IBackend backend;
 
-        public GameBadgeController(IRepository repository)
+        public GameBadgeController(IBackend backend)
         {
-            service = new GameBadgeService(repository);
+            this.backend = backend;
         }
 
         [Route("/GameBadge/")]
         [HttpGet]
-        [IsLoggedIn]
         public IActionResult Get()
         {
-            var current_user = HttpContext.Items["user"] as User;
-            return Json(service.All(current_user));
+            return Json(backend.GameBadgeService.All());
         }
 
         [Route("/GameBadge/{id}")]
         [HttpGet]
-        [IsLoggedIn]
         public IActionResult GetById(int id)
         {
-            return Json(service.GetById(id));
+            return Json(backend.GameBadgeService.GetById(id));
         }
 
         [Route("/GameBadge/{id}")]
         [HttpPut]
-        [IsLoggedIn]
         public IActionResult Update([FromBody] GameBadge obj)
         {
-            var current_user = HttpContext.Items["user"] as User;
-            return Json(service.Update(current_user, obj));
+            return Json(backend.GameBadgeService.Update(obj));
         }
 
         [Route("/GameBadge/")]
         [HttpPost]
-        [IsLoggedIn]
         public IActionResult Insert([FromBody] GameBadge obj)
         {
-            return Json(service.Insert(obj));
+            return Json(backend.GameBadgeService.Insert(obj));
         }
 
         [Route("/GameBadge/{id}")]
         [HttpDelete]
-        [IsLoggedIn]
         public IActionResult Delete(int id)
         {
-            var current_user = HttpContext.Items["user"] as User;
-            service.Delete(current_user, id);
+            backend.GameBadgeService.Delete(id);
             return Json(new {Status = "ok"});
         }
 
         [Route("/GameBadge/Challenges/")]
         [HttpPost]
-        [IsLoggedIn]
         public IActionResult SetChallenges([FromBody] GameBadgeChallenge[] challenges)
         {
-            service.SetChallenges(challenges);
+            backend.GameBadgeService.SetChallenges(challenges);
             return Json(new {Status = "ok"});
         }
     }

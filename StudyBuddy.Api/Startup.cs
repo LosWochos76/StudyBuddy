@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
-using StudyBuddy.Persistence;
+using StudyBuddy.BusinessLogic;
 
 namespace StudyBuddy.Api
 {
@@ -24,8 +24,7 @@ namespace StudyBuddy.Api
 
             services.AddControllers(options => { options.Filters.Add(typeof(JsonExceptionFilter)); });
 
-            services.AddSingleton<IRepository, Repository>();
-
+            services.AddScoped<IBackend, Backend>();
             services.AddSwaggerGen(options =>
             {
                 options.SwaggerDoc("v1", new OpenApiInfo

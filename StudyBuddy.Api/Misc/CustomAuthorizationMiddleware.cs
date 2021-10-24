@@ -2,30 +2,22 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using StudyBuddy.BusinessLogic;
-using StudyBuddy.Persistence;
 
 namespace StudyBuddy.Api
 {
     public class CustomAuthorizationMiddleware
     {
         private readonly RequestDelegate next;
-        private readonly JwtToken jwt;
 
-        public CustomAuthorizationMiddleware(RequestDelegate next, IRepository repository)
+        public CustomAuthorizationMiddleware(RequestDelegate next)
         {
             this.next = next;
-            jwt = new JwtToken(repository);
         }
 
-        public async Task InvokeAsync(HttpContext context)
+        public async Task InvokeAsync(HttpContext context, IBackend backend)
         {
             var token = context.Request.Headers["Authorization"].FirstOrDefault()?.Split(" ").Last();
-            if (!string.IsNullOrEmpty(token))
-            {
-                var user = jwt.FromToken(token);
-                context.Items["user"] = user;
-            }
-
+            backend.SetCurrentUserFromToken(token);
             await next(context);
         }
     }

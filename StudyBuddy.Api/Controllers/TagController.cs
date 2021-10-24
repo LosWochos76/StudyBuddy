@@ -1,58 +1,51 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using StudyBuddy.BusinessLogic;
 using StudyBuddy.Model;
-using StudyBuddy.Persistence;
 
 namespace StudyBuddy.Api
 {
     public class TagController : Controller
     {
-        private readonly IRepository repository;
+        private readonly IBackend backend;
 
-        public TagController(IRepository repository)
+        public TagController(IBackend backend)
         {
-            this.repository = repository;
+            this.backend = backend;
         }
 
         [Route("/Tag/")]
         [HttpGet]
         public IActionResult GetAll()
         {
-            var service = new TagService(repository, HttpContext.Items["user"] as User);
-            return Json(service.GetAll());
+            return Json(backend.TagService.GetAll());
         }
 
         [Route("/Tag/{id}")]
         [HttpGet]
         public IActionResult GetById(int id)
         {
-            var service = new TagService(repository, HttpContext.Items["user"] as User);
-            return Json(service.GetById(id));
+            return Json(backend.TagService.GetById(id));
         }
 
         [Route("/Tag/{id}")]
         [HttpPut]
-        [IsAdmin]
         public IActionResult Update([FromBody] Tag obj)
         {
-            var service = new TagService(repository, HttpContext.Items["user"] as User);
-            return Json(service.Update(obj));
+            return Json(backend.TagService.Update(obj));
         }
 
         [Route("/Tag/")]
         [HttpPost]
         public IActionResult Insert([FromBody] Tag obj)
         {
-            var service = new TagService(repository, HttpContext.Items["user"] as User);
-            return Json(service.Insert(obj));
+            return Json(backend.TagService.Insert(obj));
         }
 
         [Route("/Tag/{id}")]
         [HttpDelete]
         public IActionResult Delete(int id)
         {
-            var service = new TagService(repository, HttpContext.Items["user"] as User);
-            service.Delete(id);
+            backend.TagService.Delete(id);
             return Json(new {Status = "ok"});
         }
 
@@ -60,24 +53,21 @@ namespace StudyBuddy.Api
         [HttpPost]
         public IActionResult CreateOrFind([FromBody] string tags)
         {
-            var service = new TagService(repository, HttpContext.Items["user"] as User);
-            return Json(service.CreateOrFindMultiple(tags));
+            return Json(backend.TagService.CreateOrFindMultiple(tags));
         }
 
         [Route("/Tag/OfChallenge/{challenge_id}")]
         [HttpGet]
         public IActionResult OfChallenge(int challenge_id)
         {
-            var service = new TagService(repository, HttpContext.Items["user"] as User);
-            return Json(service.OfChallenge(challenge_id));
+            return Json(backend.TagService.OfChallenge(challenge_id));
         }
 
         [Route("/Tag/SetForChallenge/")]
         [HttpPost]
-        public IActionResult SetForChallenge([FromBody] SetTagsParameter parameter)
+        public IActionResult SetForChallenge([FromBody] TagsForChallengeParameter parameter)
         {
-            var service = new TagService(repository, HttpContext.Items["user"] as User);
-            return Json(service.SetForChallenge(parameter));
+            return Json(backend.TagService.SetForChallenge(parameter));
         }
     }
 }
