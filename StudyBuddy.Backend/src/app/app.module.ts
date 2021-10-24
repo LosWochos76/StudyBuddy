@@ -37,6 +37,7 @@ import { TagEditComponent } from './tag/tag-edit/tag-edit.component';
 import { SuccessComponent } from './challenge/success/success.component';
 import { NotificationPageComponent } from './notification/notification-page/notification-page.component';
 import { NotificationBroadcastComponent } from './notification/notification-broadcast/notification-broadcast.component';
+import { FcmTokenListComponent } from './notification/fcm-token-list/fcm-token-list.component';
 
 @NgModule({
   declarations: [
@@ -68,6 +69,7 @@ import { NotificationBroadcastComponent } from './notification/notification-broa
     SuccessComponent,
     NotificationPageComponent,
     NotificationBroadcastComponent,
+    FcmTokenListComponent,
   ],
   imports: [
     BrowserModule,

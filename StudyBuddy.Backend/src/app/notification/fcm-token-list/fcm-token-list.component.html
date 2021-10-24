@@ -1,0 +1,26 @@
+<table class="table">
+    <thead>
+    <tr>
+        <th scope="col">ID</th>
+        <th scope="col">Token</th>
+        <th scope="col">User ID</th>
+        <th scope="col">Erstellt</th>
+        <th scope="col">Zuletzt</th>
+    </tr>
+    </thead>
+    <tbody>
+    
+    <ng-container *ngIf="$tokens | async as tokens">
+        <ng-container *ngFor="let token of tokens">
+            <tr>
+                <th scope="row">{{ token.id }}</th>
+                <td>{{ token.token }}</td>
+                <td>{{ token.userID }}</td>
+                <td>{{ token.created }}</td>
+                <td>{{ token.lastSeen }}</td>
+            </tr>
+        </ng-container>
+    </ng-container>
+    <ng-container  > </ng-container>
+    </tbody>
+</table>
