@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
-using Newtonsoft.Json.Linq;
 using StudyBuddy.App.Misc;
 using StudyBuddy.Model;
 
@@ -24,19 +22,13 @@ namespace StudyBuddy.App.Api
 
         public async Task<IEnumerable<Tag>> OfChallenge(int challenge_id)
         {
-            var current_user = api.Authentication.CurrentUser;
-
             var rh = new WebRequestHelper(api.Authentication.Token);
-            var content = await rh.DropRequest(base_url + "Tag/OfChallenge/" + challenge_id, HttpMethod.Get);
+            var content = await rh.Load< IEnumerable<Tag>>(base_url + "Tag/OfChallenge/" + challenge_id, HttpMethod.Get);
             if (content == null)
                 return null;
 
-            var jtoken = JToken.Parse(content);
-            if (!(jtoken is JArray))
-                return null;
-
             var result = new List<Tag>();
-            foreach (var tag in jtoken.ToObject<IEnumerable<Tag>>())
+            foreach (var tag in content)
                 result.Add(tag);
 
             return result;

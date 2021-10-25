@@ -131,7 +131,7 @@
     </ItemGroup>
     <ItemGroup>
         <PackageReference Include="Plugin.FirebasePushNotification" Version="3.3.16-beta" />
-        <PackageReference Include="Xamarin.Forms" Version="5.0.0.2125" />
+        <PackageReference Include="Xamarin.Forms" Version="5.0.0.2196" />
         <PackageReference Include="Xamarin.Essentials" Version="1.7.0" />
         <PackageReference Include="Microsoft.Extensions.DependencyInjection">
             <Version>5.0.2</Version>

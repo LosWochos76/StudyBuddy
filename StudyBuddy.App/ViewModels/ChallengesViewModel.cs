@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Windows.Input;
 using StudyBuddy.App.Api;
 using StudyBuddy.App.Misc;
@@ -11,7 +12,7 @@ namespace StudyBuddy.App.ViewModels
 {
     public class ChallengesViewModel : ViewModelBase
     {
-        public IEnumerable<ChallengeViewModel> Challenges { get; private set; } = new List<ChallengeViewModel>();
+        public IEnumerable<ChallengeViewModel> Challenges { get; set; } = new List<ChallengeViewModel>();
         public ICommand RefreshCommand { get; }
         public ICommand DetailsCommand { get; }
         public ICommand ScanQrCodeCommand { get; }
@@ -35,6 +36,12 @@ namespace StudyBuddy.App.ViewModels
 
         public async void Reload()
         {
+            if (!IsRefreshing)
+            {
+                IsRefreshing = true;
+                NotifyPropertyChanged("IsRefreshing");
+            }
+
             Challenges = await api.Challenges.ForToday(SearchText, true);
             NotifyPropertyChanged("Challenges");
 

@@ -6,7 +6,7 @@ namespace StudyBuddy.App.Api
 {
     public interface IChallengeService
     {
-        Task<IEnumerable<ChallengeViewModel>> ForToday(string tag_string, bool reload = false);
+        Task<IEnumerable<ChallengeViewModel>> ForToday(string search_string, bool reload = false);
         Task<bool> AcceptFromQrCode(string code);
         Task<ChallengeViewModel> GetById(int challenge_id);
     }

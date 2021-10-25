@@ -1,8 +1,8 @@
 using System;
 using System.Net.Http;
 using System.Net.Http.Json;
+using System.Text.Json;
 using System.Threading.Tasks;
-using Newtonsoft.Json.Linq;
 using StudyBuddy.App.Misc;
 using StudyBuddy.Model;
 using Xamarin.Forms;
@@ -46,12 +46,15 @@ namespace StudyBuddy.App.Api
 
         public async Task<bool> LoginFromJson(string content)
         {
-            var obj = JObject.Parse(content);
-            if (!obj.ContainsKey("token") || !obj.ContainsKey("user"))
+            var obj = JsonDocument.Parse(content);
+
+            JsonElement token_element, user_element;
+            if (!obj.RootElement.TryGetProperty("token", out token_element) || 
+                !obj.RootElement.TryGetProperty("user", out user_element))
                 return false;
 
-            Token = obj["token"].ToString();
-            CurrentUser = obj["user"].ToObject<User>();
+            Token = token_element.ToString();
+            CurrentUser = JsonSerializer.Deserialize<User>(user_element.GetRawText());
 
             // Save the Login-Data to the context to be resumed
             Application.Current.Properties["Login"] = content;

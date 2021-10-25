@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Net.Http;
-using Newtonsoft.Json.Linq;
 using StudyBuddy.App.Misc;
 using TinyIoC;
 
@@ -36,12 +35,9 @@ namespace StudyBuddy.App.Api
         private async void CheckVersion()
         {
             var rh = new WebRequestHelper("");
-            var result = await rh.DropRequest(base_url + "ApiVersion", HttpMethod.Get);
-            if (result == null)
+            var api_version = await rh.Load<Version>(base_url + "ApiVersion", HttpMethod.Get);
+            if (api_version == null)
                 return;
-
-            var jtoken = JToken.Parse(result);
-            var api_version = jtoken.ToObject<Version>();
 
             if (api_version > app_version)
             {
