@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Net.Http;
-using System.Threading;
 using System.Threading.Tasks;
 using StudyBuddy.App.Misc;
 using StudyBuddy.App.ViewModels;
@@ -23,37 +22,39 @@ namespace StudyBuddy.App.Api
             client = new HttpClient(Helper.GetInsecureHandler());
         }
 
-        public async Task<IEnumerable<ChallengeViewModel>> ForToday(string search_string, bool reload = false)
+        public async Task ForToday(ObservableCollection<ChallengeViewModel> list, string search_string, bool reload = false)
         {
             if (reload || cache == null)
-                await LoadFromServer(search_string);
-
-            return Filter(cache, search_string);
+                await LoadFromServer(list, search_string);
+            else
+                await LoadFromCache(list, search_string);
         }
 
-        private static IEnumerable<ChallengeViewModel> Filter(IEnumerable<ChallengeViewModel> list, string search_string)
+        private async Task LoadFromCache(ObservableCollection<ChallengeViewModel> list, string search_string)
         {
-            var result = new List<ChallengeViewModel>();
-            foreach (var obj in list)
+            list.Clear();
+            foreach (var obj in cache)
                 if (obj.ContainsAny(search_string))
-                    result.Add(obj);
-
-            return result;
+                    list.Add(obj);
         }
 
-        private async Task LoadFromServer(string search_string)
+        private async Task LoadFromServer(ObservableCollection<ChallengeViewModel> list, string search_string)
         {
             var rh = new WebRequestHelper(api.Authentication.Token);
             var items = await rh.Load<IEnumerable<Challenge>>(base_url + "Challenge/ForToday", HttpMethod.Get, search_string);
             if (items == null)
                 return;
 
+            list.Clear();
             this.cache = new List<ChallengeViewModel>();
             foreach (var obj in items)
             {
                 var vmo = ChallengeViewModel.FromModel(obj);
                 vmo.Tags = await api.Tags.OfChallengeAsString(obj.ID);
                 cache.Add(vmo);
+
+                if (vmo.ContainsAny(search_string))
+                    list.Add(vmo);
             }
         }
 

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Windows.Input;
 using StudyBuddy.App.Api;
 using StudyBuddy.App.Misc;
@@ -31,8 +32,21 @@ namespace StudyBuddy.App.ViewModels
 
         public async void Reload()
         {
-            Friends = await api.Users.GetFriends(true);
-            NotifyPropertyChanged("Friends");
+            if (!IsRefreshing)
+            {
+                IsRefreshing = true;
+                NotifyPropertyChanged("IsRefreshing");
+            }
+
+            try
+            {
+                Friends = await api.Users.GetFriends(true);
+                NotifyPropertyChanged("Friends");
+            }
+            catch (Exception e)
+            {
+                await dialog.ShowError(e, "Ein Fehler ist aufgetreten!", "Ok", null);
+            }
 
             IsRefreshing = false;
             NotifyPropertyChanged("IsRefreshing");

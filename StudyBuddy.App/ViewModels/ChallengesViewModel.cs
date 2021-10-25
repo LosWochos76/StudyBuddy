@@ -1,18 +1,16 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
 using StudyBuddy.App.Api;
 using StudyBuddy.App.Misc;
 using StudyBuddy.App.Views;
-using StudyBuddy.Model;
 using Xamarin.Forms;
 
 namespace StudyBuddy.App.ViewModels
 {
     public class ChallengesViewModel : ViewModelBase
     {
-        public IEnumerable<ChallengeViewModel> Challenges { get; set; } = new List<ChallengeViewModel>();
+        public ObservableCollection<ChallengeViewModel> Challenges { get; private set; } = new ObservableCollection<ChallengeViewModel>();
         public ICommand RefreshCommand { get; }
         public ICommand DetailsCommand { get; }
         public ICommand ScanQrCodeCommand { get; }
@@ -42,8 +40,18 @@ namespace StudyBuddy.App.ViewModels
                 NotifyPropertyChanged("IsRefreshing");
             }
 
-            Challenges = await api.Challenges.ForToday(SearchText, true);
-            NotifyPropertyChanged("Challenges");
+            try
+            {
+                await Device.InvokeOnMainThreadAsync(() =>
+                {
+                    api.Challenges.ForToday(Challenges, SearchText, true);
+                    NotifyPropertyChanged("Challenges");
+                });
+            }
+            catch (ApiException e)
+            {
+                await dialog.ShowError(e, "Ein Fehler ist aufgetreten!", "Ok", null);
+            }
 
             IsRefreshing = false;
             NotifyPropertyChanged("IsRefreshing");
@@ -51,8 +59,11 @@ namespace StudyBuddy.App.ViewModels
 
         public async void ApplyFilter()
         {
-            Challenges = await api.Challenges.ForToday(SearchText, false);
-            NotifyPropertyChanged("Challenges");
+            await Device.InvokeOnMainThreadAsync(() =>
+            {
+                api.Challenges.ForToday(Challenges, SearchText, false);
+                NotifyPropertyChanged("Challenges");
+            });
         }
 
         private void ShowDetails(ChallengeViewModel obj)

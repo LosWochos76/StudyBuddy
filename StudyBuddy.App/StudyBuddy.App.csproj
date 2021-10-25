@@ -23,6 +23,7 @@
         <None Remove="ApiFacade\" />
         <None Remove="Plugin.FirebasePushNotification" />
         <None Remove="Newtonsoft.Json" />
+        <None Remove="Nito.AsyncEx" />
     </ItemGroup>
 
     <ItemGroup>

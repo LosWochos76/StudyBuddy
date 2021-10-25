@@ -49,12 +49,13 @@ namespace StudyBuddy.App.Api
             var obj = JsonDocument.Parse(content);
 
             JsonElement token_element, user_element;
-            if (!obj.RootElement.TryGetProperty("token", out token_element) || 
+            if (!obj.RootElement.TryGetProperty("token", out token_element) ||
                 !obj.RootElement.TryGetProperty("user", out user_element))
                 return false;
 
             Token = token_element.ToString();
-            CurrentUser = JsonSerializer.Deserialize<User>(user_element.GetRawText());
+            var options = new JsonSerializerOptions() { PropertyNameCaseInsensitive = true };
+            CurrentUser = JsonSerializer.Deserialize<User>(user_element.GetRawText(), options);
 
             // Save the Login-Data to the context to be resumed
             Application.Current.Properties["Login"] = content;

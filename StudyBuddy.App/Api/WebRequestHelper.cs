@@ -1,4 +1,5 @@
-﻿using System.Net.Http;
+﻿using System.IO;
+using System.Net.Http;
 using System.Text;
 using System.Text.Json;
 using System.Threading;
@@ -39,7 +40,12 @@ namespace StudyBuddy.App.Api
                 using (var response = await client.SendAsync(message, HttpCompletionOption.ResponseHeadersRead, cancellationToken))
                 {
                     var stream = await response.Content.ReadAsStreamAsync();
-                    return await JsonSerializer.DeserializeAsync<T>(stream, options);
+
+                    if (response.IsSuccessStatusCode)
+                        return await JsonSerializer.DeserializeAsync<T>(stream, options);
+
+                    var exception = await JsonSerializer.DeserializeAsync<ApiException>(stream, options);
+                    throw exception;
                 }
             }
         }
