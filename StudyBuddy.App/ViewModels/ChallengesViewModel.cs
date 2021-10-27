@@ -45,7 +45,6 @@ namespace StudyBuddy.App.ViewModels
                 await Device.InvokeOnMainThreadAsync(() =>
                 {
                     api.Challenges.ForToday(Challenges, SearchText, true);
-                    NotifyPropertyChanged("Challenges");
                 });
             }
             catch (ApiException e)

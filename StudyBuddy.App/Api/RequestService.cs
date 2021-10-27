@@ -5,6 +5,8 @@ using System.Threading.Tasks;
 using StudyBuddy.App.Misc;
 using StudyBuddy.Model;
 using StudyBuddy.App.ViewModels;
+using Nito.AsyncEx;
+using System.Collections.ObjectModel;
 
 namespace StudyBuddy.App.Api
 {
@@ -13,8 +15,9 @@ namespace StudyBuddy.App.Api
         private readonly IApi api;
         private readonly string base_url;
         private readonly HttpClient client;
-        private IEnumerable<RequestViewModel> for_me_cache = null;
-        private IEnumerable<RequestViewModel> from_me_cache = null;
+        private List<RequestViewModel> for_me_cache = null;
+        private List<RequestViewModel> from_me_cache = null;
+        private AsyncMonitor monitor = new AsyncMonitor();
 
         public RequestService(IApi api, string base_url)
         {
@@ -64,72 +67,95 @@ namespace StudyBuddy.App.Api
             return true;
         }
 
-        public async Task<IEnumerable<RequestViewModel>> ForMe(bool reload = false)
+        public async Task ForMe(ObservableCollection<RequestViewModel> list, bool reload = false)
         {
             if (for_me_cache == null || reload)
-                for_me_cache = await ForMeFromServer();
-
-            return for_me_cache;
+                await ForMeFromServer(list);
+            else
+                await ForMeFromCache(list);
         }
 
-        // ToDo: Hier nachladen besser machen!
-        private async Task<IEnumerable<RequestViewModel>> ForMeFromServer()
+        private async Task ForMeFromServer(ObservableCollection<RequestViewModel> list)
         {
-            var currentUser = api.Authentication.CurrentUser;
-            var rh = new WebRequestHelper(api.Authentication.Token);
-            var content = await rh.Load<IEnumerable<Request>>(base_url + "Request/ForRecipient/" + currentUser.ID, HttpMethod.Get);
-            if (content == null)
-                return null;
-
-            var result = new List<RequestViewModel>();
-            foreach (var obj in content)
+            using (await monitor.EnterAsync())
             {
-                var rvm = RequestViewModel.FromModel(obj);
-                rvm.Sender = await api.Users.GetById(rvm.SenderID);
-                if (rvm.Type == RequestType.ChallengeAcceptance)
-                    rvm.Challenge = await api.Challenges.GetById(rvm.ChallengeID.Value);
+                var currentUser = api.Authentication.CurrentUser;
+                var rh = new WebRequestHelper(api.Authentication.Token);
+                var content = await rh.Load<IEnumerable<Request>>(base_url + "Request/ForRecipient/" + currentUser.ID, HttpMethod.Get);
+                if (content == null)
+                    return;
 
-                result.Add(rvm);
+                list.Clear();
+                for_me_cache = new List<RequestViewModel>();
+                foreach (var obj in content)
+                {
+                    var rvm = RequestViewModel.FromModel(obj);
+                    list.Add(rvm);
+                    for_me_cache.Add(rvm);
+
+                    rvm.Sender = await api.Users.GetById(rvm.SenderID);
+                    if (rvm.Type == RequestType.ChallengeAcceptance)
+                        rvm.Challenge = await api.Challenges.GetById(rvm.ChallengeID.Value);
+                }
             }
-
-            return result;
         }
 
-        public async Task<IEnumerable<RequestViewModel>> FromMe(bool reload = false)
+        private async Task ForMeFromCache(ObservableCollection<RequestViewModel> list)
+        {
+            list.Clear();
+            foreach (var obj in for_me_cache)
+                list.Add(obj);
+        }
+
+        public async Task FromMe(ObservableCollection<RequestViewModel> list, bool reload = false)
         {
             if (this.from_me_cache == null || reload)
-                from_me_cache = await FromMeFromServer();
-
-            return from_me_cache;
+                await FromMeFromServer(list);
+            else
+                await FromMeFromCache(list);
         }
 
-        private async Task<IEnumerable<RequestViewModel>> FromMeFromServer()
+        private async Task FromMeFromServer(ObservableCollection<RequestViewModel> list)
         {
-            var currentUser = api.Authentication.CurrentUser;
-            var rh = new WebRequestHelper(api.Authentication.Token);
-            var content = await rh.Load<IEnumerable<Request>>(base_url + "Request/OfSender/" + currentUser.ID, HttpMethod.Get);
-            if (content == null)
-                return null;
-
-            var result = new List<RequestViewModel>();
-            foreach (var obj in content)
+            using (await monitor.EnterAsync())
             {
-                var rvm = RequestViewModel.FromModel(obj);
-                rvm.Sender = await api.Users.GetById(rvm.SenderID);
-                if (rvm.Type == RequestType.ChallengeAcceptance)
-                    rvm.Challenge = await api.Challenges.GetById(rvm.ChallengeID.Value);
+                var currentUser = api.Authentication.CurrentUser;
+                var rh = new WebRequestHelper(api.Authentication.Token);
+                var content = await rh.Load<IEnumerable<Request>>(base_url + "Request/OfSender/" + currentUser.ID, HttpMethod.Get);
+                if (content == null)
+                    return;
 
-                result.Add(rvm);
+                list.Clear();
+                from_me_cache = new List<RequestViewModel>();
+                foreach (var obj in content)
+                {
+                    var rvm = RequestViewModel.FromModel(obj);
+                    list.Add(rvm);
+                    from_me_cache.Add(rvm);
+
+                    rvm.Sender = await api.Users.GetById(rvm.SenderID);
+                    if (rvm.Type == RequestType.ChallengeAcceptance)
+                        rvm.Challenge = await api.Challenges.GetById(rvm.ChallengeID.Value);
+                }
             }
+        }
 
-            return result;
+        private async Task FromMeFromCache(ObservableCollection<RequestViewModel> list)
+        {
+            list.Clear();
+            foreach (var obj in from_me_cache)
+                list.Add(obj);
         }
 
         public async Task<RequestViewModel> GetFriendshipRequest(int other_user_id)
         {
-            var requests = await FromMe();
+            if (from_me_cache == null)
+            {
+                var temp = new ObservableCollection<RequestViewModel>();
+                await FromMeFromServer(temp);
+            }
 
-            foreach (var r in requests)
+            foreach (var r in from_me_cache)
                 if (r.Type == RequestType.Friendship && r.RecipientID == other_user_id)
                     return r;
 

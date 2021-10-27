@@ -52,6 +52,7 @@ namespace StudyBuddy.App.Api
                 if (content == null)
                     return;
 
+                list.Clear();
                 friends_cache = new List<UserViewModel>();
                 foreach (var user in content)
                 {
@@ -110,14 +111,14 @@ namespace StudyBuddy.App.Api
                 if (content == null)
                     return;
 
-                not_friends_cache = new List<UserViewModel>();
                 list.Clear();
+                not_friends_cache = new List<UserViewModel>();
                 foreach (var user in content)
                 {
                     var obj = UserViewModel.FromModel(user);
                     if (obj.ContainsAny(search_text))
                         list.Add(obj);
-
+                    
                     not_friends_cache.Add(obj);
                     obj.CountOfCommonFriends = await GetCountOfCommonFriends(obj.ID);
                     obj.FriendshipRequest = await api.Requests.GetFriendshipRequest(obj.ID);

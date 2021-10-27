@@ -36,7 +36,6 @@ namespace StudyBuddy.App.ViewModels
                 await Device.InvokeOnMainThreadAsync(() =>
                 {
                     api.Users.GetNotFriends(Users, SearchText, true);
-                    NotifyPropertyChanged("Users");
                 });
             }
             catch (ApiException e)

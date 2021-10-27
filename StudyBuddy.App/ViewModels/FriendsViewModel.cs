@@ -45,7 +45,6 @@ namespace StudyBuddy.App.ViewModels
                 await Device.InvokeOnMainThreadAsync(() =>
                 {
                     api.Users.GetFriends(Friends, SearchText, true);
-                    NotifyPropertyChanged("Friends");
                 });
             }
             catch (Exception e)
@@ -62,7 +61,6 @@ namespace StudyBuddy.App.ViewModels
             await Device.InvokeOnMainThreadAsync(() =>
             {
                 api.Users.GetFriends(Friends, SearchText, false);
-                NotifyPropertyChanged("Friends");
             });
         }
 

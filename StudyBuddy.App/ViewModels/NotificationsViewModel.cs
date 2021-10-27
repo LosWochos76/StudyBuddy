@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using StudyBuddy.App.Api;
@@ -26,7 +27,7 @@ namespace StudyBuddy.App.ViewModels
         public bool NewsIsSelected { get { return SelectedView == 0; } }
         public bool RequestsIsSelected { get { return SelectedView == 1; } }
 
-        public IEnumerable<RequestViewModel> Requests { get; private set; } = new List<RequestViewModel>();
+        public ObservableCollection<RequestViewModel> Requests { get; private set; } = new ObservableCollection<RequestViewModel>();
         public IEnumerable<NewsViewModel> News { get; private set; } = new List<NewsViewModel>();
         public ICommand RefreshCommand { get; }
         public bool IsRefreshing { get; set; }
@@ -71,7 +72,17 @@ namespace StudyBuddy.App.ViewModels
 
         private async Task ReloadRequests()
         {
-            this.Requests = await api.Requests.ForMe();
+            try
+            {
+                await Device.InvokeOnMainThreadAsync(() =>
+                {
+                    api.Requests.ForMe(Requests, true);
+                });
+            }
+            catch (ApiException e)
+            {
+                await dialog.ShowError(e, "Ein Fehler ist aufgetreten!", "Ok", null);
+            }
         }
 
         public async void AcceptRequest(RequestViewModel rvm)
@@ -123,8 +134,7 @@ namespace StudyBuddy.App.ViewModels
 
             if (rvm.Type == Model.RequestType.Friendship)
             {
-                var vm = TinyIoCContainer.Current.Resolve<FriendsViewModel>();
-                vm.Reload();
+                TinyIoCContainer.Current.Resolve<FriendsViewModel>().Reload();
             }
         }
     }

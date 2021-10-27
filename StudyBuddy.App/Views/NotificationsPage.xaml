@@ -60,14 +60,14 @@
                                                 <Label Text="Annehmen" FontSize="Small" HorizontalOptions="FillAndExpand">
                                                     <Label.GestureRecognizers>
                                                         <TapGestureRecognizer
-                                                            Command="{Binding BindingContext.AcceptCommand, Source={x:Reference Name=page}}"
+                                                            Command="{Binding BindingContext.AcceptRequestCommand, Source={x:Reference Name=page}}"
                                                             CommandParameter="{Binding Source={x:Reference requestItem}, Path=BindingContext}"/>
                                                     </Label.GestureRecognizers>
                                                 </Label>
                                                 <Label Text="Ablehnen" FontSize="Small">
                                                     <Label.GestureRecognizers>
                                                         <TapGestureRecognizer
-                                                            Command="{Binding BindingContext.DenyCommand, Source={x:Reference Name=page}}"
+                                                            Command="{Binding BindingContext.DenyRequestCommand, Source={x:Reference Name=page}}"
                                                             CommandParameter="{Binding Source={x:Reference requestItem}, Path=BindingContext}"/>
                                                     </Label.GestureRecognizers>
                                                 </Label>
