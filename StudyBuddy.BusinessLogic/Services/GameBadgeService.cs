@@ -59,10 +59,26 @@ namespace StudyBuddy.BusinessLogic
             if (obj == null)
                 throw new Exception("Object not found!");
 
-            if (!backend.CurrentUser.IsAdmin && obj.OwnerID != backend.CurrentUser.ID)
+            if (backend.CurrentUser == null || (!backend.CurrentUser.IsAdmin && obj.OwnerID != backend.CurrentUser.ID))
                 throw new Exception("Unauthorized!");
 
             backend.Repository.GameBadges.Delete(id);
+        }
+
+        public IEnumerable<GameBadge> GetBadgesForChallenge(int challenge_id)
+        {
+            if (backend.CurrentUser == null)
+                throw new Exception("Unauthorized!");
+
+            return backend.Repository.GameBadges.GetBadgesForChallenge(challenge_id);
+        }
+
+        public BadgeSuccessRate GetSuccessRate(int badge_id, int user_id)
+        {
+            if (backend.CurrentUser == null || (!backend.CurrentUser.IsAdmin && backend.CurrentUser.ID != user_id))
+                throw new Exception("Unauthorized!");
+
+            return backend.Repository.GameBadges.GetSuccessRate(badge_id, user_id);
         }
     }
 }

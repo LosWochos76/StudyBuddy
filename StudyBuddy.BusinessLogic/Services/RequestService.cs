@@ -114,8 +114,6 @@ namespace StudyBuddy.BusinessLogic
                 throw new Exception("Unauthorized!");
 
             backend.Repository.Requests.Delete(id);
-
-            // ToDo: Erzeugen einer Neuigkeit?
         }
     }
 }

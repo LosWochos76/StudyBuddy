@@ -83,7 +83,48 @@ namespace StudyBuddy.Persistence
         {
             var qh = new QueryHelper<GameBadge>(connection_string, FromReader);
             qh.Delete("game_badges", "id", id);
-            qh.Delete("game_badge_challenges", "game_badge", id);
+            qh.Delete("tags_badges", "badge_id", id);
+        }
+
+        // Get all of the badges that belong to the given challenge
+        public IEnumerable<GameBadge> GetBadgesForChallenge(int challenge_id)
+        {
+            var qh = new QueryHelper<GameBadge>(connection_string, FromReader);
+            qh.AddParameter(":challenge_id", challenge_id);
+            return qh.ExecuteQueryToObjectList(
+                "select distinct id,name,owner_id,created,required_coverage from game_badges " +
+                "inner join tags_badges tb on id=tb.badge_id " +
+                "inner join tags_challenges tc on tb.tag_id = tc.tag_id " +
+                "where challenge_id=:challenge_id order by created,name");
+        }
+
+        // Get the success rate of a specific user for a certain badge
+        public BadgeSuccessRate GetSuccessRate(int badge_id, int user_id)
+        {
+            var qh = new QueryHelper<BadgeSuccessRate>(connection_string, BadgeSuccessRateFromReader);
+            qh.AddParameter(":badge_id", badge_id);
+            qh.AddParameter(":user_id", user_id);
+
+            var sql = "select " +
+                ":badge_id as badge_id, " +
+                ":user_id as user_id, " +
+                "(select count(*) as overall_challenge_count from " +
+                "   (select id from challenges " +
+                "       inner join tags_challenges tc on id = tc.challenge_id " +
+                "       inner join tags_badges tb on tc.tag_id = tb.tag_id " +
+                "       where tb.badge_id = :badge_id " +
+                "   ) as a " +
+                ")," +
+                "(select count(*) as accepted_challenge_count from" +
+                "   (select distinct id from challenges " +
+                "       inner join tags_challenges tc on id = tc.challenge_id " +
+                "       inner join tags_badges tb on tc.tag_id = tb.tag_id " +
+                "       inner join challenge_acceptance ca on ca.challenge_id = id " +
+                "       where tb.badge_id = :badge_id and ca.user_id = :user_id " +
+                "   ) as b " +
+                "); ";
+
+            return qh.ExecuteQueryToSingleObject(sql);
         }
 
         private void CreateBadgesTable()
@@ -127,6 +168,16 @@ namespace StudyBuddy.Persistence
             obj.OwnerID = reader.GetInt32(2);
             obj.Created = reader.GetDateTime(3);
             obj.RequiredCoverage = reader.GetDouble(4);
+            return obj;
+        }
+
+        private BadgeSuccessRate BadgeSuccessRateFromReader(NpgsqlDataReader reader)
+        {
+            var obj = new BadgeSuccessRate();
+            obj.BadgeId = reader.GetInt32(0);
+            obj.UserId = reader.GetInt32(1);
+            obj.OverallChallengeCount = reader.GetInt32(2);
+            obj.AcceptedChallengeCount = reader.GetInt32(3);
             return obj;
         }
     }

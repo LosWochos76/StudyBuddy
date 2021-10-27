@@ -15,7 +15,6 @@ namespace StudyBuddy.BusinessLogic
         IEnumerable<Challenge> GetByText(string text);
         Bitmap GetQrCode(int challenge_id);
         Challenge Insert(Challenge obj);
-        IEnumerable<Challenge> NotOfBadge(int id);
         IEnumerable<Challenge> OfBadge(int id);
         void RemoveAcceptance(int challenge_id, int user_id);
         Challenge Update(Challenge obj);

@@ -48,5 +48,12 @@ namespace StudyBuddy.Api
             backend.GameBadgeService.Delete(id);
             return Json(new {Status = "ok"});
         }
+
+        [Route("/GameBadge/{badge_id}/UserSuccess/{user_id}")]
+        [HttpGet]
+        public IActionResult GetSuccessRate(int badge_id, int user_id)
+        {
+            return Json(backend.GameBadgeService.GetSuccessRate(badge_id, user_id));
+        }
     }
 }

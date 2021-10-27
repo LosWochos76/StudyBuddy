@@ -146,23 +146,11 @@ namespace StudyBuddy.Persistence
             var qh = new QueryHelper<Challenge>(connection_string, FromReader);
             qh.AddParameter(":badge_id", badge_id);
             return qh.ExecuteQueryToObjectList(
-                "select id,name,description,points,validity_start," +
-                "validity_end,category,owner_id,created,prove,series_parent_id " +
-                "from game_badge_challenges " +
-                "inner join challenges on challenge=id where game_badge=:badge_id " +
-                "order by created desc");
-        }
-
-        public IEnumerable<Challenge> NotOfBadge(int badge_id)
-        {
-            var qh = new QueryHelper<Challenge>(connection_string, FromReader);
-            qh.AddParameter(":badge_id", badge_id);
-            return qh.ExecuteQueryToObjectList(
-                "select id,name,description,points,validity_start," +
-                "validity_end,category,owner_id,created,prove,series_parent_id " +
-                "from challenges where id not in " +
-                "(select challenge from game_badge_challenges where game_badge=:badge_id) " +
-                "order by created desc");
+                "select distinct id,name,description,points,validity_start,validity_end," +
+                "category,owner_id,created,prove,series_parent_id from challenges " +
+                "inner join tags_challenges tc on id = tc.challenge_id " +
+                "inner join tags_badges tb on tc.tag_id = tb.tag_id " +
+                "where tb.badge_id=:badge_id order by created desc,name");
         }
 
         public void AddAcceptance(int challenge_id, int user_id)

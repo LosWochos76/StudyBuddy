@@ -12,5 +12,8 @@ namespace StudyBuddy.Persistence
         void Insert(GameBadge obj);
         void Update(GameBadge obj);
         void Delete(int id);
+
+        IEnumerable<GameBadge> GetBadgesForChallenge(int challenge_id);
+        BadgeSuccessRate GetSuccessRate(int badge_id, int user_id);
     }
 }

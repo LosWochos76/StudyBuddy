@@ -19,7 +19,6 @@ namespace StudyBuddy.Persistence
 
         // Link to badges:
         IEnumerable<Challenge> OfBadge(int badge_id);
-        IEnumerable<Challenge> NotOfBadge(int badge_id);
 
         // Link to acceptance:
         void AddAcceptance(int challenge_id, int user_id);

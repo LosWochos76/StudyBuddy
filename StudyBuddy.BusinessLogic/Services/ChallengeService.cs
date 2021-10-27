@@ -81,14 +81,6 @@ namespace StudyBuddy.BusinessLogic
             return backend.Repository.Challenges.OfBadge(id);
         }
 
-        public IEnumerable<Challenge> NotOfBadge(int id)
-        {
-            if (backend.CurrentUser == null)
-                throw new UnauthorizedAccessException("Unauthorized!");
-
-            return backend.Repository.Challenges.NotOfBadge(id);
-        }
-
         public Challenge Insert(Challenge obj)
         {
             if (backend.CurrentUser == null || backend.CurrentUser.IsStudent)
@@ -188,7 +180,7 @@ namespace StudyBuddy.BusinessLogic
                 throw new Exception("Object is null!");
 
             backend.Repository.Challenges.AddAcceptance(challenge_id, backend.CurrentUser.ID);
-            backend.BusinessEvent.TriggerEvent(this, new BusinessEventArgs(BusinessEventType.FriendAdded, challenge));
+            backend.BusinessEvent.TriggerEvent(this, new BusinessEventArgs(BusinessEventType.ChallengeAccepted, challenge));
         }
 
         public void RemoveAcceptance(int challenge_id, int user_id)
