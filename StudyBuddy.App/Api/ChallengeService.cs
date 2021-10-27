@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Net.Http;
 using System.Threading.Tasks;
+using Nito.AsyncEx;
 using StudyBuddy.App.Misc;
 using StudyBuddy.App.ViewModels;
 using StudyBuddy.Model;
@@ -14,6 +15,7 @@ namespace StudyBuddy.App.Api
         private readonly string base_url;
         private readonly HttpClient client;
         private List<ChallengeViewModel> cache;
+        private AsyncMonitor monitor = new AsyncMonitor();
 
         public ChallengeService(IApi api, string base_url)
         {
@@ -40,21 +42,24 @@ namespace StudyBuddy.App.Api
 
         private async Task LoadFromServer(ObservableCollection<ChallengeViewModel> list, string search_string)
         {
-            var rh = new WebRequestHelper(api.Authentication.Token);
-            var items = await rh.Load<IEnumerable<Challenge>>(base_url + "Challenge/ForToday", HttpMethod.Get, search_string);
-            if (items == null)
-                return;
-
-            list.Clear();
-            this.cache = new List<ChallengeViewModel>();
-            foreach (var obj in items)
+            using (await monitor.EnterAsync())
             {
-                var vmo = ChallengeViewModel.FromModel(obj);
-                vmo.Tags = await api.Tags.OfChallengeAsString(obj.ID);
-                cache.Add(vmo);
+                var rh = new WebRequestHelper(api.Authentication.Token);
+                var items = await rh.Load<IEnumerable<Challenge>>(base_url + "Challenge/ForToday", HttpMethod.Get, search_string);
+                if (items == null)
+                    return;
 
-                if (vmo.ContainsAny(search_string))
-                    list.Add(vmo);
+                list.Clear();
+                this.cache = new List<ChallengeViewModel>();
+                foreach (var obj in items)
+                {
+                    var vmo = ChallengeViewModel.FromModel(obj);
+                    vmo.Tags = await api.Tags.OfChallengeAsString(obj.ID);
+                    cache.Add(vmo);
+
+                    if (vmo.ContainsAny(search_string))
+                        list.Add(vmo);
+                }
             }
         }
 

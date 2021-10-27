@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Net.Http;
 using System.Threading.Tasks;
+using Nito.AsyncEx;
 using StudyBuddy.App.Misc;
 using StudyBuddy.App.ViewModels;
 using StudyBuddy.Model;
@@ -13,8 +15,9 @@ namespace StudyBuddy.App.Api
         private readonly IApi api;
         private readonly string base_url;
         private readonly HttpClient client;
-        private IEnumerable<UserViewModel> friends_cache;
-        private IEnumerable<UserViewModel> users_cache;
+        private List<UserViewModel> friends_cache;
+        private List<UserViewModel> not_friends_cache;
+        private AsyncMonitor monitor = new AsyncMonitor();
 
         public UserService(IApi api, string base_url)
         {
@@ -23,32 +26,43 @@ namespace StudyBuddy.App.Api
             client = new HttpClient(Helper.GetInsecureHandler());
         }
 
-        public async Task<IEnumerable<UserViewModel>> GetFriends(bool reload = false)
+        public async Task GetFriends(ObservableCollection<UserViewModel> list, string search_text, bool reload = false)
         {
             if (friends_cache == null || reload)
-                friends_cache = await GetFriendsFromServer();
-
-            return friends_cache;
+                await GetFriendsFromServer(list, search_text);
+            else
+                await GetFriendsFromCache(list, search_text);
         }
 
-        private async Task<IEnumerable<UserViewModel>> GetFriendsFromServer()
+        private async Task GetFriendsFromCache(ObservableCollection<UserViewModel> list, string search_text)
         {
-            var current_user = api.Authentication.CurrentUser;
+            list.Clear();
+            foreach (var obj in friends_cache)
+                if (obj.ContainsAny(search_text))
+                    list.Add(obj);
+        }
 
-            var rh = new WebRequestHelper(api.Authentication.Token);
-            var content = await rh.Load< IEnumerable<User>>(base_url + "User/" + current_user.ID + "/Friends/", HttpMethod.Get);
-            if (content == null)
-                return null;
-
-            var result = new List<UserViewModel>();
-            foreach (var user in content)
+        private async Task GetFriendsFromServer(ObservableCollection<UserViewModel> list, string search_text)
+        {
+            using (await monitor.EnterAsync())
             {
-                var obj = UserViewModel.FromModel(user);
-                obj.CountOfCommonFriends = await GetCountOfCommonFriends(obj.ID);
-                result.Add(obj);
-            }
+                var current_user = api.Authentication.CurrentUser;
+                var rh = new WebRequestHelper(api.Authentication.Token);
+                var content = await rh.Load<IEnumerable<User>>(base_url + "User/" + current_user.ID + "/Friends/", HttpMethod.Get);
+                if (content == null)
+                    return;
 
-            return result;
+                friends_cache = new List<UserViewModel>();
+                foreach (var user in content)
+                {
+                    var obj = UserViewModel.FromModel(user);
+                    if (obj.ContainsAny(search_text))
+                        list.Add(obj);
+
+                    obj.CountOfCommonFriends = await GetCountOfCommonFriends(obj.ID);
+                    friends_cache.Add(obj);
+                }
+            }
         }
 
         public async Task<int> GetCountOfCommonFriends(int other_user)
@@ -70,64 +84,45 @@ namespace StudyBuddy.App.Api
             return content.IsOk;
         }
 
-        public async Task<IEnumerable<UserViewModel>> GetNotFriends(string search_string, bool reload=false)
+        public async Task GetNotFriends(ObservableCollection<UserViewModel> list, string search_string, bool reload = false)
         {
-            if (users_cache == null || reload)
-                users_cache = await GetNotFriendsFromServer();
-
-            IEnumerable<UserViewModel> result;
-            if (string.IsNullOrEmpty(search_string))
-                result = users_cache;
+            if (not_friends_cache == null || reload)
+                await GetNotFriendsFromServer(list, search_string);
             else
-                result = FilterBySearchText(users_cache, search_string);
-
-            foreach (var obj in result)
-                obj.FriendshipRequest = await api.Requests.GetFriendshipRequest(obj.ID);
-
-            return result;
+                await GetNotFriendsFromCache(list, search_string);
         }
 
-        private IEnumerable<UserViewModel> FilterBySearchText(IEnumerable<UserViewModel> input, string search_string)
+        private async Task GetNotFriendsFromCache(ObservableCollection<UserViewModel> list, string search_text)
         {
-            var result = new List<UserViewModel>();
-            foreach (var obj in input)
-                if (obj.ContainsAny(search_string))
-                    result.Add(obj);
-
-            return result;
+            list.Clear();
+            foreach (var obj in not_friends_cache)
+                if (obj.ContainsAny(search_text))
+                    list.Add(obj);
         }
 
-        private bool IsFriend(int user_id)
+        private async Task GetNotFriendsFromServer(ObservableCollection<UserViewModel> list, string search_text)
         {
-            foreach (var obj in friends_cache)
-                if (obj.ID == user_id)
-                    return true;
-
-            return false;
-        }
-
-        // ToDo: Nachladen effizienter machen:
-        private async Task<IEnumerable<UserViewModel>> GetNotFriendsFromServer()
-        {
-            var current_user = api.Authentication.CurrentUser;
-
-            var rh = new WebRequestHelper(api.Authentication.Token);
-            var content = await rh.Load<IEnumerable<User>>(base_url + "User", HttpMethod.Get);
-            if (content == null)
-                return null;
-
-            var result = new List<UserViewModel>();
-            foreach (var user in content)
+            using (await monitor.EnterAsync())
             {
-                var obj = UserViewModel.FromModel(user);
-                if (obj.ID != current_user.ID && !IsFriend(obj.ID))
+                var current_user = api.Authentication.CurrentUser;
+                var rh = new WebRequestHelper(api.Authentication.Token);
+                var content = await rh.Load<IEnumerable<User>>(base_url + "User/" + current_user.ID + "/NotFriends/", HttpMethod.Get);
+                if (content == null)
+                    return;
+
+                not_friends_cache = new List<UserViewModel>();
+                list.Clear();
+                foreach (var user in content)
                 {
+                    var obj = UserViewModel.FromModel(user);
+                    if (obj.ContainsAny(search_text))
+                        list.Add(obj);
+
+                    not_friends_cache.Add(obj);
                     obj.CountOfCommonFriends = await GetCountOfCommonFriends(obj.ID);
-                    result.Add(obj);
+                    obj.FriendshipRequest = await api.Requests.GetFriendshipRequest(obj.ID);
                 }
             }
-
-            return result;
         }
 
         private UserViewModel TryToFindByIdInCache(IEnumerable<UserViewModel> cache, int user_id)
@@ -142,7 +137,7 @@ namespace StudyBuddy.App.Api
 
         public async Task<UserViewModel> GetById(int user_id)
         {
-            var user = TryToFindByIdInCache(users_cache, user_id);
+            var user = TryToFindByIdInCache(not_friends_cache, user_id);
             if (user != null)
                 return user;
 

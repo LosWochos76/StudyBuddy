@@ -184,6 +184,15 @@ namespace StudyBuddy.Persistence
                 "order by lastname,firstname,nickname limit :max offset :from");
         }
 
+        public IEnumerable<User> GetNotFriends(int user_id, int from = 0, int max = 1000)
+        {
+            var qh = new QueryHelper<User>(connection_string, FromReader, new { user_id, from, max });
+            return qh.ExecuteQueryToObjectList(
+                "select id,firstname,lastname,nickname,email,password_hash,role from users " +
+                "where id not in (select user_b from friends where user_a = :user_id) and id != :user_id " +
+                "order by lastname,firstname,nickname limit :max offset :from");
+        }
+
         public void AddFriend(int user_id, int friend_id)
         {
             var qh = new QueryHelper<User>(connection_string, FromReader, new {user_id, friend_id});

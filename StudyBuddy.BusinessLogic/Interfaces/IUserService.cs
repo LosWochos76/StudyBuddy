@@ -9,6 +9,7 @@ namespace StudyBuddy.BusinessLogic
         void Delete(int user_id);
         IEnumerable<User> GetAll();
         IEnumerable<User> GetAllFriends(int user_id);
+        IEnumerable<User> GetAllNotFriends(int user_id);
         IEnumerable<User> GetAllUsersThatAcceptedChallenge(int challenge_id);
         User GetById(int user_id);
         int GetCount();

@@ -18,6 +18,7 @@
         </ContentPage.ToolbarItems>
     <ContentPage.Content>
         <StackLayout>
+            <SearchBar x:Name="searchBar" TextChanged="searchBar_TextChanged" />
             <RefreshView
                 IsRefreshing="{Binding IsRefreshing}"
                 Command="{Binding RefreshCommand}"

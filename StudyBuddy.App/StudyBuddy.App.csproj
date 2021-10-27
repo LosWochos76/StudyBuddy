@@ -32,6 +32,7 @@
         <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="5.0.2" />
         <PackageReference Include="ZXing.Net.Mobile.Forms" Version="3.1.0-beta2" />
         <PackageReference Include="Plugin.FirebasePushNotification" Version="3.3.10" />
+        <PackageReference Include="Nito.AsyncEx" Version="5.1.2" />
     </ItemGroup>
     <ItemGroup>
         <Folder Include="Misc\" />

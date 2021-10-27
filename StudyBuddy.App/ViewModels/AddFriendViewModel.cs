@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.ObjectModel;
 using System.Windows.Input;
 using StudyBuddy.App.Api;
 using StudyBuddy.App.Misc;
@@ -9,7 +8,7 @@ namespace StudyBuddy.App.ViewModels
 {
     public class AddFriendViewModel: ViewModelBase
     {
-        public IEnumerable<UserViewModel> Users { get; set; } = new List<UserViewModel>();
+        public ObservableCollection<UserViewModel> Users { get; private set; } = new ObservableCollection<UserViewModel>();
         public bool IsRefreshing { get; set; }
         public ICommand RefreshCommand { get; }
         public string SearchText { get; set; }
@@ -34,8 +33,11 @@ namespace StudyBuddy.App.ViewModels
 
             try
             {
-                Users = await api.Users.GetNotFriends(SearchText);
-                NotifyPropertyChanged("Users");
+                await Device.InvokeOnMainThreadAsync(() =>
+                {
+                    api.Users.GetNotFriends(Users, SearchText, true);
+                    NotifyPropertyChanged("Users");
+                });
             }
             catch (ApiException e)
             {
@@ -48,8 +50,11 @@ namespace StudyBuddy.App.ViewModels
 
         public async void ApplyFilter()
         {
-            Users = await api.Users.GetNotFriends(SearchText, false);
-            NotifyPropertyChanged("Users");
+            await Device.InvokeOnMainThreadAsync(() =>
+            {
+                api.Users.GetNotFriends(Users, SearchText, false);
+                NotifyPropertyChanged("Users");
+            });
         }
 
         public async void SendFriendshipRequest(UserViewModel obj)

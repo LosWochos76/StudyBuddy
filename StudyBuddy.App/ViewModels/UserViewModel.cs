@@ -64,6 +64,9 @@ namespace StudyBuddy.App.ViewModels
 
         public bool ContainsAny(string search_text)
         {
+            if (string.IsNullOrEmpty(search_text))
+                return true;
+
             var keywords = Helper.SplitIntoKeywords(search_text);
             return Helper.ContainsAny(Firstname + Lastname + Nickname + Email, keywords);
         }

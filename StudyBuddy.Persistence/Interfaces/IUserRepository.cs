@@ -17,6 +17,7 @@ namespace StudyBuddy.Persistence
         void Delete(int id);
 
         IEnumerable<User> GetFriends(int user_id, int from = 0, int max = 1000);
+        IEnumerable<User> GetNotFriends(int user_id, int from = 0, int max = 1000);
         void AddFriend(int user_id, int friend_id);
         void RemoveFriend(int user_id, int friend_id);
         void RemoveFriends(int user_id);

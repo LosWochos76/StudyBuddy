@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using StudyBuddy.App.Api;
 using StudyBuddy.App.Misc;
@@ -26,8 +27,10 @@ namespace StudyBuddy.App.Controls
             var api = TinyIoCContainer.Current.Resolve<IApi>();
             var navigation = TinyIoCContainer.Current.Resolve<INavigationService>();
 
-            var friends = await api.Users.GetFriends();
-            if (friends == null || !friends.Any())
+            var friends = new ObservableCollection<UserViewModel>();
+            await api.Users.GetFriends(friends, string.Empty);
+
+            if (!friends.Any())
             {
                 await dialog.ShowMessage("Offenbar hast du noch keine Freunde! Bitte vernetze mit deinen Mit-Studierenden!", "Keine Freunde gefunden!");
                 return;

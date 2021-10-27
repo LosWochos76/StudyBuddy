@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Windows.Input;
 using StudyBuddy.App.Api;
 using StudyBuddy.App.Misc;
@@ -10,11 +11,12 @@ namespace StudyBuddy.App.ViewModels
 {
     public class FriendsViewModel : ViewModelBase
     {
-        public IEnumerable<UserViewModel> Friends { get; set; } = new List<UserViewModel>();
+        public ObservableCollection<UserViewModel> Friends { get; private set; } = new ObservableCollection<UserViewModel>();
         public bool IsRefreshing { get; set; }
         public ICommand RefreshCommand { get; }
         public ICommand DetailsCommand { get; }
         public ICommand AddFriendCommand { get; set; }
+        public string SearchText { get; set; }
 
         public FriendsViewModel(IApi api, IDialogService dialog, INavigationService navigation) : base(api, dialog, navigation)
         {
@@ -40,8 +42,11 @@ namespace StudyBuddy.App.ViewModels
 
             try
             {
-                Friends = await api.Users.GetFriends(true);
-                NotifyPropertyChanged("Friends");
+                await Device.InvokeOnMainThreadAsync(() =>
+                {
+                    api.Users.GetFriends(Friends, SearchText, true);
+                    NotifyPropertyChanged("Friends");
+                });
             }
             catch (Exception e)
             {
@@ -50,6 +55,15 @@ namespace StudyBuddy.App.ViewModels
 
             IsRefreshing = false;
             NotifyPropertyChanged("IsRefreshing");
+        }
+
+        public async void ApplyFilter()
+        {
+            await Device.InvokeOnMainThreadAsync(() =>
+            {
+                api.Users.GetFriends(Friends, SearchText, false);
+                NotifyPropertyChanged("Friends");
+            });
         }
 
         public void Details(UserViewModel obj)

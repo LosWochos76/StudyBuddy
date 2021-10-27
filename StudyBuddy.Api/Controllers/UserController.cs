@@ -77,6 +77,13 @@ namespace StudyBuddy.Api
             return Json(backend.UserService.GetAllFriends(id));
         }
 
+        [Route("/User/{id}/NotFriends")]
+        [HttpGet]
+        public IActionResult GetAllNotFriends(int id)
+        {
+            return Json(backend.UserService.GetAllNotFriends(id));
+        }
+
         [Route("/User/{user_id}/Friend/{friend_id}")]
         [HttpPost]
         public IActionResult AddFriend(int user_id, int friend_id)
