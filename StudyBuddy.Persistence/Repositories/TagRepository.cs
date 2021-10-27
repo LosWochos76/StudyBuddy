@@ -14,6 +14,7 @@ namespace StudyBuddy.Persistence
 
             CreateTable();
             CreateChallengeTagsTable();
+            CreateBadgesTagsTable();
         }
 
         public Tag ById(int id)
@@ -103,6 +104,32 @@ namespace StudyBuddy.Persistence
                 "values(:challenge_id, :tag_id) ON CONFLICT DO NOTHING;");
         }
 
+        public IEnumerable<Tag> OfBadge(int badge_id)
+        {
+            var qh = new QueryHelper<Tag>(connection_string, FromReader);
+            qh.AddParameter(":badge_id", badge_id);
+            return qh.ExecuteQueryToObjectList(
+                "SELECT id,name FROM tags_badges " +
+                "inner join tags on id=tag_id " +
+                "where badge_id=:badge_id order by name");
+        }
+
+        public void RemoveAllTagsFromBadge(int badge_id)
+        {
+            var qh = new QueryHelper<Tag>(connection_string);
+            qh.AddParameters(new { badge_id });
+            qh.ExecuteNonQuery("delete from tags_badges where badge_id=:badge_id");
+        }
+
+        public void AddTagForBadge(int tag_id, int badge_id)
+        {
+            var qh = new QueryHelper<Tag>(connection_string);
+            qh.AddParameters(new { tag_id, badge_id });
+            qh.ExecuteNonQuery(
+                "insert into tags_badges(badge_id, tag_id) " +
+                "values(:badge_id, :tag_id) ON CONFLICT DO NOTHING;");
+        }
+
         private void CreateTable()
         {
             var qh = new QueryHelper<Tag>(connection_string, FromReader);
@@ -125,6 +152,19 @@ namespace StudyBuddy.Persistence
                     "challenge_id int not null, " +
                     "tag_id int not null," +
                     "unique (challenge_id, tag_id))");
+        }
+
+        private void CreateBadgesTagsTable()
+        {
+            var rh = new RevisionHelper(connection_string, "tags_badges");
+            var qh = new QueryHelper<Tag>(connection_string);
+
+            if (!qh.TableExists("tags_badges"))
+                qh.ExecuteNonQuery(
+                    "create table tags_badges (" +
+                    "badge_id int not null, " +
+                    "tag_id int not null," +
+                    "unique (badge_id, tag_id))");
         }
 
         private Tag FromReader(NpgsqlDataReader reader)

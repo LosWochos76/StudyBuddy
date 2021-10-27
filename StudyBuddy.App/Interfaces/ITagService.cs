@@ -1,12 +1,11 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
-using StudyBuddy.Model;
+﻿using System.Threading.Tasks;
+using StudyBuddy.App.ViewModels;
 
 namespace StudyBuddy.App.Api
 {
     public interface ITagService
     {
-        Task<IEnumerable<Tag>> OfChallenge(int challenge_id);
-        Task<string> OfChallengeAsString(int challenge_id);
+        Task<TagListViewModel> OfChallenge(int challenge_id);
+        Task<TagListViewModel> OfBadge(int badge_id);
     }
 }

@@ -48,13 +48,5 @@ namespace StudyBuddy.Api
             backend.GameBadgeService.Delete(id);
             return Json(new {Status = "ok"});
         }
-
-        [Route("/GameBadge/Challenges/")]
-        [HttpPost]
-        public IActionResult SetChallenges([FromBody] GameBadgeChallenge[] challenges)
-        {
-            backend.GameBadgeService.SetChallenges(challenges);
-            return Json(new {Status = "ok"});
-        }
     }
 }

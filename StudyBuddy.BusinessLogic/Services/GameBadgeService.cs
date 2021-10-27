@@ -64,19 +64,5 @@ namespace StudyBuddy.BusinessLogic
 
             backend.Repository.GameBadges.Delete(id);
         }
-
-        // ToDo: Der Parameter hier ist Mist! Sollte nur eine GameBadgeId und viele ChallengeIds sein! Dann muss aber auch das Angular-Backend abgepasst werden, weil sich die Signatur ändert!
-        public void SetChallenges(GameBadgeChallenge[] challenges)
-        {
-            if (challenges == null || challenges.Length == 0)
-                throw new Exception("No challenges delivered!");
-
-            var obj = backend.Repository.GameBadges.ById(challenges[0].GameBadgeId);
-            if (backend.CurrentUser == null || backend.CurrentUser.IsAdmin && obj.OwnerID != backend.CurrentUser.ID)
-                throw new Exception("Unauthorized!");
-
-            backend.Repository.GameBadges.DeleteChallenges(challenges[0].GameBadgeId);
-            backend.Repository.GameBadges.AddChallenges(challenges);
-        }
     }
 }

@@ -9,7 +9,7 @@ namespace StudyBuddy.Api.Controllers
         [HttpGet]
         public IActionResult GetApiVersion()
         {
-            var version = new Version(0, 0, 15, 0);
+            var version = new Version(0, 0, 16, 0);
             return Json(version);
         }
     }

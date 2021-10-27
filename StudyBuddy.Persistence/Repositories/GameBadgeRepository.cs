@@ -13,7 +13,6 @@ namespace StudyBuddy.Persistence
             this.connection_string = connection_string;
 
             CreateBadgesTable();
-            CreateGameBadgeChallengesTable();
         }
 
         public GameBadge ById(int id)
@@ -87,40 +86,6 @@ namespace StudyBuddy.Persistence
             qh.Delete("game_badge_challenges", "game_badge", id);
         }
 
-        public void AddChallenge(int badge_id, int challenge_id)
-        {
-            var qh = new QueryHelper<GameBadge>(connection_string, FromReader);
-            qh.AddParameter(":badge_id", badge_id);
-            qh.AddParameter(":challenge_id", challenge_id);
-            qh.ExecuteNonQuery(
-                "insert into game_badge_challenges " +
-                "(game_badge,challenge) values (:badge_id,:challenge_id)");
-        }
-
-        public void RemoveChallenge(int badge_id, int challenge_id)
-        {
-            var qh = new QueryHelper<GameBadge>(connection_string, FromReader);
-            qh.AddParameter(":badge_id", badge_id);
-            qh.AddParameter(":challenge_id", challenge_id);
-            qh.ExecuteNonQuery(
-                "delete from game_badge_challenges where " +
-                "game_badge=:badge_id and challenge=:challenge_id");
-        }
-
-        public void DeleteChallenges(int badge_id)
-        {
-            var qh = new QueryHelper<GameBadge>(connection_string, FromReader);
-            qh.AddParameter(":badge_id", badge_id);
-            qh.ExecuteNonQuery(
-                "delete from game_badge_challenges where game_badge=:badge_id");
-        }
-
-        public void AddChallenges(GameBadgeChallenge[] challenges)
-        {
-            foreach (var obj in challenges)
-                AddChallenge(obj.GameBadgeId, obj.ChallengeId);
-        }
-
         private void CreateBadgesTable()
         {
             var rh = new RevisionHelper(connection_string, "badges");
@@ -147,17 +112,11 @@ namespace StudyBuddy.Persistence
 
                 rh.SetRevision(2);
             }
-        }
 
-        private void CreateGameBadgeChallengesTable()
-        {
-            var qh = new QueryHelper<GameBadge>(connection_string, FromReader);
-
-            if (!qh.TableExists("game_badge_challenges"))
-                qh.ExecuteNonQuery(
-                    "create table game_badge_challenges (" +
-                    "game_badge int not null, " +
-                    "challenge int not null)");
+            if (qh.TableExists("game_badge_challenges"))
+            {
+                qh.ExecuteNonQuery("drop table game_badge_challenges");
+            }
         }
 
         private GameBadge FromReader(NpgsqlDataReader reader)

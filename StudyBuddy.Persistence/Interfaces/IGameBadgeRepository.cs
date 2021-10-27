@@ -12,10 +12,5 @@ namespace StudyBuddy.Persistence
         void Insert(GameBadge obj);
         void Update(GameBadge obj);
         void Delete(int id);
-
-        void AddChallenge(int badge_id, int challenge_id);
-        void RemoveChallenge(int badge_id, int challenge_id);
-        void DeleteChallenges(int badge_id);
-        void AddChallenges(GameBadgeChallenge[] challenges);
     }
 }

@@ -20,11 +20,10 @@
     </div>
     <br>
     <div class="mb-3">
-        <label class="form-label" for="required_coverage">Herausforderungen:</label>
-        <app-challenge-select formControlName="challenges"></app-challenge-select>
-        <div *ngIf="form.hasError('missingchallenge')">
-            <small class="text-danger">Achtung: Es muss mindestens eine Herausforderung ausgewählt werden!</small>
-        </div>
+        <label class="form-label" for="name">Tags:</label>
+        <input type="text" class="form-control" id="tags" formControlName="tags" [ngClass]="{
+            'is-invalid': form.controls.tags.invalid && form.controls.tags.dirty,
+            'is-valid': form.controls.tags.valid && form.controls.tags.dirty}">
     </div>
     <div class="mb-3" *ngIf="user.isAdmin()">
         <label class="form-label" for="category">Besitzer:</label>

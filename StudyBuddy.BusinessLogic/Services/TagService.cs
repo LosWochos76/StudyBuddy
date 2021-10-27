@@ -123,5 +123,31 @@ namespace StudyBuddy.BusinessLogic
 
             return tags;
         }
+
+        public IEnumerable<Tag> OfBadge(int badge_id)
+        {
+            if (backend.CurrentUser == null)
+                throw new Exception("Unauthorized!");
+
+            return backend.Repository.Tags.OfBadge(badge_id);
+        }
+
+        public IEnumerable<Tag> SetForBadge(TagsForBadgeParameter parameter)
+        {
+            var badge = backend.Repository.GameBadges.ById(parameter.BadgeId);
+            if (badge == null)
+                throw new Exception("Object is null!");
+
+            if (backend.CurrentUser == null || !backend.CurrentUser.IsAdmin && badge.OwnerID != backend.CurrentUser.ID)
+                throw new Exception("Unauthorized!");
+
+            backend.Repository.Tags.RemoveAllTagsFromBadge(parameter.BadgeId);
+
+            var tags = CreateOrFindMultiple(parameter.Tags);
+            foreach (var tag in tags)
+                backend.Repository.Tags.AddTagForBadge(tag.ID, parameter.BadgeId);
+
+            return tags;
+        }
     }
 }

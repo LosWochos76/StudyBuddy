@@ -54,7 +54,7 @@ namespace StudyBuddy.App.Api
                 foreach (var obj in items)
                 {
                     var vmo = ChallengeViewModel.FromModel(obj);
-                    vmo.Tags = await api.Tags.OfChallengeAsString(obj.ID);
+                    vmo.Tags = (await api.Tags.OfChallenge(obj.ID)).ToString();
                     cache.Add(vmo);
 
                     if (vmo.ContainsAny(search_string))

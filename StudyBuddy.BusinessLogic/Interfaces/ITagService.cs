@@ -5,14 +5,19 @@ namespace StudyBuddy.BusinessLogic
 {
     public interface ITagService
     {
-        IEnumerable<Tag> CreateOrFindMultiple(string tags);
-        void Delete(int id);
         IEnumerable<Tag> GetAll();
         Tag GetById(int id);
         int GetCount();
         Tag Insert(Tag obj);
+        Tag Update(Tag obj);
+        void Delete(int id);
+
+        IEnumerable<Tag> CreateOrFindMultiple(string tags);
+
         IEnumerable<Tag> OfChallenge(int challenge_id);
         IEnumerable<Tag> SetForChallenge(TagsForChallengeParameter parameter);
-        Tag Update(Tag obj);
+
+        IEnumerable<Tag> OfBadge(int badge_id);
+        IEnumerable<Tag> SetForBadge(TagsForBadgeParameter parameter);
     }
 }

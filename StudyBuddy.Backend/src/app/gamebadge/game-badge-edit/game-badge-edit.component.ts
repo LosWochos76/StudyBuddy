@@ -2,11 +2,12 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { GameBadge } from 'src/app/model/gamebadge';
+import { Tag } from 'src/app/model/tag';
 import { User } from 'src/app/model/user';
 import { AuthorizationService } from 'src/app/services/authorization.service';
-import { ChallengeService } from 'src/app/services/challenge.service';
 import { GameBadgeService } from 'src/app/services/gamebadge.service';
 import { LoggingService } from 'src/app/services/loging.service';
+import { TagService } from 'src/app/services/tag.service';
 import { UserService } from 'src/app/services/user.service';
 
 @Component({
@@ -27,14 +28,14 @@ export class GameBadgeEditComponent implements OnInit {
     private router: Router,
     private service: GameBadgeService,
     private auth: AuthorizationService,
-    private challenge_service: ChallengeService,
-    private user_service: UserService) {
+    private user_service: UserService,
+    private tag_service: TagService) {
     this.user = this.auth.getUser();
 
     this.form = new FormGroup({
       name: new FormControl("", [Validators.required, Validators.minLength(3)]),
       required_coverage: new FormControl(0.5, [Validators.required]),
-      challenges: new FormControl([], [Validators.required])
+      tags: new FormControl("", [Validators.required])
     });
 
     if (this.user.isAdmin())
@@ -43,11 +44,12 @@ export class GameBadgeEditComponent implements OnInit {
 
   async ngOnInit() {
     this.id = this.route.snapshot.params['id'];
-    let challenges: number[] = [];
+    let tags = "";
 
     if (this.id != 0) {
       this.obj = await this.service.byId(this.id);
-      challenges = await this.challenge_service.ofBadge(this.id);
+      let tag_list = await this.tag_service.ofBadge(this.id);
+      tags = Tag.toTagString(tag_list);
     } else {
       this.obj = new GameBadge();
       this.obj.owner = this.auth.getUser().id;
@@ -60,14 +62,14 @@ export class GameBadgeEditComponent implements OnInit {
       this.form.setValue({
         name: this.obj.name,
         required_coverage: this.obj.required_coverage,
-        challenges: challenges,
+        tags: tags,
         owner: this.obj.owner
       });
     } else {
       this.form.setValue({
         name: this.obj.name,
         required_coverage: this.obj.required_coverage,
-        challenges: challenges
+        tags: tags
       });
     }
   }
@@ -75,12 +77,6 @@ export class GameBadgeEditComponent implements OnInit {
   async onSubmit() {
     this.logger.debug("Trying to save a GameBadge!");
     this.obj.copyValues(this.form.value);
-    let challenges = this.form.controls.challenges.value;
-
-    if (challenges.length == 0) {
-      this.form.setErrors({ 'missingchallenge': true });
-      return;
-    }
 
     if (this.form.invalid) {
       this.logger.debug("Data is invalid!");
@@ -88,7 +84,7 @@ export class GameBadgeEditComponent implements OnInit {
     }
 
     await this.service.save(this.obj);
-    await this.service.setChallenges(this.obj.id, challenges);
+    await this.tag_service.setForBadge(this.obj.id, this.form.controls.tags.value);
     this.router.navigate(["gamebadge"]);
   }
 

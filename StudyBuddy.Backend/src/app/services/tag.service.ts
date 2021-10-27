@@ -104,7 +104,7 @@ export class TagService {
 
   async ofChallenge(challenge_id: number): Promise<Tag[]> {
     let objects: Tag[] = [];
-    let result = await this.http.get(this.url + "Tag/OfChallenge/" + challenge_id, {
+    let result = await this.http.get(this.url + "Tag/Challenge/" + challenge_id, {
       headers: new HttpHeaders({ Authorization: this.auth.getToken() })
     }).toPromise();
 
@@ -120,7 +120,32 @@ export class TagService {
       'Tags': tag_string
     };
 
-    this.http.post(this.url + "Tag/SetForChallenge/", data, {
+    this.http.post(this.url + "Tag/Challenge/", data, {
+      headers: new HttpHeaders({ Authorization: this.auth.getToken() })
+    }).toPromise();
+
+    this.changed.emit();
+  }
+
+  async ofBadge(badge_id: number): Promise<Tag[]> {
+    let objects: Tag[] = [];
+    let result = await this.http.get(this.url + "Tag/Badge/" + badge_id, {
+      headers: new HttpHeaders({ Authorization: this.auth.getToken() })
+    }).toPromise();
+
+    for (let obj in result)
+      objects.push(Tag.fromApi(result[obj]));
+
+    return objects;
+  }
+
+  async setForBadge(badge_id: number, tag_string: string) {
+    let data = {
+      'BadgeId': badge_id,
+      'Tags': tag_string
+    };
+
+    this.http.post(this.url + "Tag/Badge/", data, {
       headers: new HttpHeaders({ Authorization: this.auth.getToken() })
     }).toPromise();
 
