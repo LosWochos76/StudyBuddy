@@ -54,7 +54,6 @@ export class ChallengeEditComponent implements OnInit {
     if (this.id != 0) {
       this.obj = await this.service.byId(this.id);
       let tag_list = await this.tag_service.ofChallenge(this.id);
-      console.log(tag_list);
       tags = Tag.toTagString(tag_list);
     } else {
       this.obj = new Challenge();
