@@ -18,7 +18,7 @@ namespace StudyBuddy.App.Api
         public ITagService Tags { get; }
         public IBadgeService Badges { get; }
         public IRequestService Requests { get; }
-        public ILoggingService Logging { get;^ }
+        public ILoggingService Logging { get; }
 
         public ApiFacade()
         {
