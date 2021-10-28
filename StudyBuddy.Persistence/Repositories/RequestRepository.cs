@@ -68,7 +68,6 @@ namespace StudyBuddy.Persistence
                 "(:created,:sender_id,:recipient_id,:type,:challenge_id) returning id");
         }
 
-        [MethodImpl(MethodImplOptions.Synchronized)]
         private void CreateTable()
         {
             var rh = new RevisionHelper(connection_string, "requests");

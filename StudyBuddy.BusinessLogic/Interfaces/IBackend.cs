@@ -16,6 +16,7 @@ namespace StudyBuddy.BusinessLogic
         ITagService TagService { get; set; }
         IUserService UserService { get; set; }
         IBusinessEventService BusinessEvent { get; }
+        ILoggingService Logging { get; }
         public void SetCurrentUserFromToken(string token);
     }
 }

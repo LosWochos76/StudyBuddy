@@ -18,6 +18,7 @@ namespace StudyBuddy.App.Api
         public ITagService Tags { get; }
         public IBadgeService Badges { get; }
         public IRequestService Requests { get; }
+        public ILoggingService Logging { get;^ }
 
         public ApiFacade()
         {
@@ -28,6 +29,7 @@ namespace StudyBuddy.App.Api
             Tags = new TagService(this, base_url);
             Badges = new BadgeService(this, base_url);
             Requests = new RequestService(this, base_url);
+            Logging = new LoggingService(this, base_url);
 
             CheckVersion();
         }
@@ -42,6 +44,7 @@ namespace StudyBuddy.App.Api
             if (api_version > app_version)
             {
                 var dialog = TinyIoCContainer.Current.Resolve<IDialogService>();
+                Logging.LogError("App too old!");
                 await dialog.ShowError("App zu alt!", "Diese Version der App ist zu alt! Bitte updaten!", "Ok", null);
                 throw new Exception("App is too old! Please update!");
             }

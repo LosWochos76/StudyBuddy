@@ -9,5 +9,6 @@
         ITagService Tags { get; }
         IBadgeService Badges { get; }
         IRequestService Requests { get; }
+        ILoggingService Logging { get; }
     }
 }

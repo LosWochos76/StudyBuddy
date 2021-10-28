@@ -16,12 +16,16 @@ namespace StudyBuddy.BusinessLogic
         public object Login(UserCredentials uc)
         {
             if (uc == null || string.IsNullOrEmpty(uc.EMail) || string.IsNullOrEmpty(uc.Password))
-                throw new Exception("Provide email and password!");
+                throw new Exception("Missing email and password!");
 
             var user = backend.Repository.Users.ByEmailAndPassword(uc.EMail, uc.Password);
             if (user == null)
+            {
+                backend.Logging.LogDebug("Wrong credentials?");
                 return null;
+            }
 
+            backend.Logging.LogDebug("Successfull login");
             user.PasswordHash = null;
             var jwt = new JwtToken(backend.Repository);
             return new
