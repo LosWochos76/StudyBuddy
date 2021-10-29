@@ -40,7 +40,14 @@ namespace StudyBuddy.App.ViewModels
                     "Willst du die Herausforderung wirklich abschließen?",
                     "Herausforderung abschließen?",
                     "Ja", "Nein", a => { answer = a; });
-                return;
+                if (!answer) 
+                    return;
+                var result = await api.Requests.Accept(iD);
+                if (!result)
+                {
+                    await dialog.ShowError("Ein Fehler ist aufgetreten!", "Fehler!", "Ok", null);
+                    return;
+                }
             }
             if (proveType == 2)
             {

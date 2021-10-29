@@ -6,7 +6,9 @@
        xmlns:viewmodels="clr-namespace:StudyBuddy.App.ViewModels"
        x:DataType="viewmodels:ChallengesViewModel"
        xmlns:fontAwesome="clr-namespace:StudyBuddy.App"
-       x:Class="StudyBuddy.App.Views.MainPage">
+       x:Class="StudyBuddy.App.Views.MainPage"
+       xmlns:android="clr-namespace:Xamarin.Forms.PlatformConfiguration.AndroidSpecific;assembly=Xamarin.Forms.Core">
+       
     <ShellItem Route="LoginPage" FlyoutItemIsVisible="False">
         <ShellContent ContentTemplate="{DataTemplate local:LoginPage}" />
     </ShellItem>
@@ -36,7 +38,7 @@
             </Tab.Icon>
         </Tab>
         <Tab>
-            <ShellContent ContentTemplate="{DataTemplate local:NotificationsPage}" Route="NotificationPage" />
+            <ShellContent Shell.NavBarIsVisible="False" Shell.TabBarIsVisible="True" ContentTemplate="{DataTemplate local:NotificationsPage}" Route="NotificationPage" />
             <Tab.Icon>
                 <FontImageSource FontFamily="{StaticResource FontAwesomeSolid}"
                                  Glyph="{x:Static fontAwesome:FontAwesomeIcons.Bell}" />
