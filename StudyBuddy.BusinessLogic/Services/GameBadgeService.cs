@@ -13,12 +13,15 @@ namespace StudyBuddy.BusinessLogic
             this.backend = backend;
         }
 
-        public IEnumerable<GameBadge> All()
+        public IEnumerable<GameBadge> All(GameBadgeFilter filter)
         {
-            if (backend.CurrentUser == null || !backend.CurrentUser.IsAdmin)
-                return backend.Repository.GameBadges.OfOwner(backend.CurrentUser.ID);
+            if (backend.CurrentUser == null)
+                throw new Exception("Unauthorized!");
 
-            return backend.Repository.GameBadges.All();
+            if (filter == null)
+                filter = new GameBadgeFilter();
+
+            return backend.Repository.GameBadges.All(filter);
         }
 
         public GameBadge GetById(int id)
@@ -38,6 +41,10 @@ namespace StudyBuddy.BusinessLogic
                 throw new Exception("Unauthorized");
 
             backend.Repository.GameBadges.Update(obj);
+            backend.Repository.Tags.RemoveAllTagsFromBadge(obj.ID);
+            foreach (var tag in backend.TagService.CreateOrFindMultiple(obj.Tags))
+                backend.Repository.Tags.AddTagForBadge(tag.ID, obj.ID);
+
             return obj;
         }
 
@@ -50,6 +57,9 @@ namespace StudyBuddy.BusinessLogic
                 throw new Exception("Object invalid!");
 
             backend.Repository.GameBadges.Insert(obj);
+            foreach (var tag in backend.TagService.CreateOrFindMultiple(obj.Tags))
+                backend.Repository.Tags.AddTagForBadge(tag.ID, obj.ID);
+
             return obj;
         }
 
@@ -62,6 +72,7 @@ namespace StudyBuddy.BusinessLogic
             if (backend.CurrentUser == null || (!backend.CurrentUser.IsAdmin && obj.OwnerID != backend.CurrentUser.ID))
                 throw new Exception("Unauthorized!");
 
+            backend.Repository.Tags.RemoveAllTagsFromBadge(obj.ID);
             backend.Repository.GameBadges.Delete(id);
         }
 

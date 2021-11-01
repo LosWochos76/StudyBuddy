@@ -17,16 +17,9 @@ namespace StudyBuddy.Api
 
         [Route("/Challenge/")]
         [HttpGet]
-        public IActionResult Get()
+        public IActionResult Get([FromQuery] ChallengeFilter filter)
         {
-            return Json(backend.ChallengeService.All());
-        }
-
-        [Route("/Challenge/ForToday/")]
-        [HttpGet]
-        public IActionResult ForToday()
-        {
-            return Json(backend.ChallengeService.ForToday());
+            return Json(backend.ChallengeService.All(filter));
         }
 
         [Route("/Challenge/{id}")]
@@ -34,13 +27,6 @@ namespace StudyBuddy.Api
         public IActionResult GetById(int id)
         {
             return Json(backend.ChallengeService.GetById(id));
-        }
-
-        [Route("/Challenge/ByText/{text}")]
-        [HttpGet]
-        public IActionResult GetByText(string text)
-        {
-            return Json(backend.ChallengeService.GetByText(text));
         }
 
         [Route("/Challenge/{id}")]

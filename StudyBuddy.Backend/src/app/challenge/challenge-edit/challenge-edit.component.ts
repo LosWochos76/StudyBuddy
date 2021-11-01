@@ -2,12 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Challenge } from 'src/app/model/challenge';
-import { Tag } from 'src/app/model/tag';
 import { User } from 'src/app/model/user';
 import { AuthorizationService } from 'src/app/services/authorization.service';
 import { ChallengeService } from 'src/app/services/challenge.service';
 import { LoggingService } from 'src/app/services/loging.service';
-import { TagService } from 'src/app/services/tag.service';
 import { UserService } from 'src/app/services/user.service';
 
 @Component({
@@ -28,8 +26,7 @@ export class ChallengeEditComponent implements OnInit {
     private router: Router,
     private service: ChallengeService,
     private auth: AuthorizationService,
-    private user_service: UserService,
-    private tag_service: TagService) {
+    private user_service: UserService) {
     this.user = this.auth.getUser();
 
     this.form = new FormGroup({
@@ -53,8 +50,6 @@ export class ChallengeEditComponent implements OnInit {
 
     if (this.id != 0) {
       this.obj = await this.service.byId(this.id);
-      let tag_list = await this.tag_service.ofChallenge(this.id);
-      tags = Tag.toTagString(tag_list);
     } else {
       this.obj = new Challenge();
       this.obj.owner = this.auth.getUser().id;
@@ -73,7 +68,7 @@ export class ChallengeEditComponent implements OnInit {
         category: this.obj.category,
         prove: this.obj.prove,
         owner: this.obj.owner,
-        tags: tags
+        tags: this.obj.tags
       });
     } else {
       this.form.setValue({
@@ -84,7 +79,7 @@ export class ChallengeEditComponent implements OnInit {
         validity_end: this.obj.validity_end,
         category: this.obj.category,
         prove: this.obj.prove,
-        tags: tags
+        tags: this.obj.tags
       });
     }
   }
@@ -104,7 +99,6 @@ export class ChallengeEditComponent implements OnInit {
     }
 
     await this.service.save(this.obj);
-    await this.tag_service.setForChallenge(this.obj.id, this.form.controls.tags.value);
     this.router.navigate(["challenge"]);
   }
 

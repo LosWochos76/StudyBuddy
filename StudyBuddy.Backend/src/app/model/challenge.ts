@@ -12,6 +12,7 @@ export class Challenge {
     created:string;
     prove:number = 1;
     parent:number = 0;
+    tags:string = "";
 
     constructor() { 
         let today = (new Date()).toISOString().split('T')[0];
@@ -28,6 +29,7 @@ export class Challenge {
         this.validity_end = values.validity_end;
         this.category = +values.category;
         this.prove = +values.prove;
+        this.tags = values.tags;
 
         if (values.hasOwnProperty('owner')) 
             this.owner = +values.owner;
@@ -62,6 +64,7 @@ export class Challenge {
         obj.created = result["created"].split('T')[0];
         obj.prove = result["prove"];
         obj.parent = result["seriesParentID"];
+        obj.tags = result["tags"];
         return obj;
     }
 
@@ -77,7 +80,8 @@ export class Challenge {
             "OwnerID": this.owner,
             "created": this.created,
             "prove": this.prove,
-            "SeriesParentID": this.parent
+            "SeriesParentID": this.parent,
+            "tags": this.tags
         };
     }
 }

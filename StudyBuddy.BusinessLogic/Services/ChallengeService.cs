@@ -17,26 +17,16 @@ namespace StudyBuddy.BusinessLogic
             this.backend = backend;
         }
 
-        public IEnumerable<Challenge> All()
-        {
-            if (backend.CurrentUser == null || backend.CurrentUser.IsStudent)
-                throw new UnauthorizedAccessException("Unauthorized!");
-
-            if (backend.CurrentUser.IsAdmin)
-                return backend.Repository.Challenges.All();
-
-            if (backend.CurrentUser.IsInstructor)
-                return backend.Repository.Challenges.OfOwner(backend.CurrentUser.ID);
-
-            return null;
-        }
-
-        public IEnumerable<Challenge> ForToday()
+        public IEnumerable<Challenge> All(ChallengeFilter filter)
         {
             if (backend.CurrentUser == null)
                 throw new UnauthorizedAccessException("Unauthorized!");
 
-            return backend.Repository.Challenges.ForToday(DateTime.Now.Date);
+            if (filter == null)
+                filter = new ChallengeFilter();
+
+            filter.CurrentUserId = backend.CurrentUser.ID;
+            return backend.Repository.Challenges.All(filter);
         }
 
         public Challenge GetById(int id)
@@ -47,29 +37,22 @@ namespace StudyBuddy.BusinessLogic
             return backend.Repository.Challenges.ById(id);
         }
 
-        public IEnumerable<Challenge> GetByText(string text)
-        {
-            if (backend.CurrentUser == null)
-                throw new UnauthorizedAccessException("Unauthorized!");
-
-            if (backend.CurrentUser == null || !backend.CurrentUser.IsAdmin)
-                return backend.Repository.Challenges.OfOwnerByText(backend.CurrentUser.ID, text);
-
-            return backend.Repository.Challenges.ByText(text);
-        }
-
         public Challenge Update(Challenge obj)
         {
+            if (obj == null)
+                throw new Exception("Object is null!");
+
             if (backend.CurrentUser == null || backend.CurrentUser.IsStudent)
                 throw new UnauthorizedAccessException("Unauthorized!");
-
-            if (obj == null)
-                throw new Exception("Object invalid!");
 
             if (!backend.CurrentUser.IsAdmin && obj.OwnerID != backend.CurrentUser.ID)
                 throw new Exception("Unauthorized");
 
             backend.Repository.Challenges.Update(obj);
+            backend.Repository.Tags.RemoveAllTagsFromChallenge(obj.ID);
+            foreach (var tag in backend.TagService.CreateOrFindMultiple(obj.Tags))
+                backend.Repository.Tags.AddTagForChallenge(tag.ID, obj.ID);
+            
             return obj;
         }
 
@@ -83,10 +66,16 @@ namespace StudyBuddy.BusinessLogic
 
         public Challenge Insert(Challenge obj)
         {
+            if (obj == null)
+                throw new Exception("Object is null!");
+
             if (backend.CurrentUser == null || backend.CurrentUser.IsStudent)
                 throw new UnauthorizedAccessException("Unauthorized!");
 
             backend.Repository.Challenges.Insert(obj);
+            foreach (var tag in backend.TagService.CreateOrFindMultiple(obj.Tags))
+                backend.Repository.Tags.AddTagForChallenge(tag.ID, obj.ID);
+
             return obj;
         }
 
@@ -99,6 +88,7 @@ namespace StudyBuddy.BusinessLogic
             if (!backend.CurrentUser.IsAdmin && obj != null && obj.OwnerID != backend.CurrentUser.ID)
                 throw new Exception("Unauthorized");
 
+            backend.Repository.Tags.RemoveAllTagsFromChallenge(id);
             backend.Repository.Challenges.Delete(id);
         }
 

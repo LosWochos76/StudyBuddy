@@ -55,33 +55,5 @@ namespace StudyBuddy.Api
         {
             return Json(backend.TagService.CreateOrFindMultiple(tags));
         }
-
-        [Route("/Tag/Challenge/{challenge_id}")]
-        [HttpGet]
-        public IActionResult OfChallenge(int challenge_id)
-        {
-            return Json(backend.TagService.OfChallenge(challenge_id));
-        }
-
-        [Route("/Tag/Challenge/")]
-        [HttpPost]
-        public IActionResult SetForChallenge([FromBody] TagsForChallengeParameter parameter)
-        {
-            return Json(backend.TagService.SetForChallenge(parameter));
-        }
-
-        [Route("/Tag/Badge/{badge_id}")]
-        [HttpGet]
-        public IActionResult OfBadge(int badge_id)
-        {
-            return Json(backend.TagService.OfBadge(badge_id));
-        }
-
-        [Route("/Tag/Badge/")]
-        [HttpPost]
-        public IActionResult SetForBadge([FromBody] TagsForBadgeParameter parameter)
-        {
-            return Json(backend.TagService.SetForBadge(parameter));
-        }
     }
 }

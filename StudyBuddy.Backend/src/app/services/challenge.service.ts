@@ -21,9 +21,14 @@ export class ChallengeService {
     if (!this.auth.isLoggedIn())
       return null;
 
+    var query = { };
+    if (this.auth.getUser().isTeacher())
+      query['OwnerId'] = this.auth.getUser().id;
+
     let objects:Challenge[] = [];
     let result = await this.http.get(this.url + "Challenge", 
     {
+      params: query,
       headers: new HttpHeaders({ Authorization: this.auth.getToken() })
     }).toPromise();
 
@@ -84,9 +89,14 @@ export class ChallengeService {
     if (!this.auth.isLoggedIn())
       return null;
 
+    var query = { 'SearchText': text };
+    if (this.auth.getUser().isTeacher())
+      query['OwnerId'] = this.auth.getUser().id;
+
     let objects:Challenge[] = [];
-    let result = await this.http.get(this.url + "Challenge/ByText/" + text,
+    let result = await this.http.get(this.url + "Challenge", 
     {
+      params: query,
       headers: new HttpHeaders({ Authorization: this.auth.getToken() })
     }).toPromise();
 

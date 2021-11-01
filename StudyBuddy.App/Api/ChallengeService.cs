@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Net.Http;
@@ -14,7 +15,6 @@ namespace StudyBuddy.App.Api
         private readonly IApi api;
         private readonly string base_url;
         private readonly HttpClient client;
-        private List<ChallengeViewModel> cache;
         private AsyncMonitor monitor = new AsyncMonitor();
 
         public ChallengeService(IApi api, string base_url)
@@ -24,42 +24,25 @@ namespace StudyBuddy.App.Api
             client = new HttpClient(Helper.GetInsecureHandler());
         }
 
-        public async Task ForToday(ObservableCollection<ChallengeViewModel> list, string search_string, bool reload = false)
+        public async Task ForToday(ObservableCollection<ChallengeViewModel> list, string search_string)
         {
-            if (reload || cache == null)
-                await LoadFromServer(list, search_string);
-            else
-                await LoadFromCache(list, search_string);
-        }
+            var filter = new ChallengeFilter()
+            {
+                OnlyUnacceped = true,
+                SearchText = search_string,
+                ValidAt = DateTime.Now.Date
+            };
 
-        private async Task LoadFromCache(ObservableCollection<ChallengeViewModel> list, string search_string)
-        {
-            list.Clear();
-            foreach (var obj in cache)
-                if (obj.ContainsAny(search_string))
-                    list.Add(obj);
-        }
-
-        private async Task LoadFromServer(ObservableCollection<ChallengeViewModel> list, string search_string)
-        {
             using (await monitor.EnterAsync())
             {
                 var rh = new WebRequestHelper(api.Authentication.Token);
-                var items = await rh.Load<IEnumerable<Challenge>>(base_url + "Challenge/ForToday", HttpMethod.Get, search_string);
+                var items = await rh.Get<IEnumerable<Challenge>>(base_url + "Challenge", filter);
                 if (items == null)
                     return;
 
                 list.Clear();
-                this.cache = new List<ChallengeViewModel>();
                 foreach (var obj in items)
-                {
-                    var vmo = ChallengeViewModel.FromModel(obj);
-                    vmo.Tags = (await api.Tags.OfChallenge(obj.ID)).ToString();
-                    cache.Add(vmo);
-
-                    if (vmo.ContainsAny(search_string))
-                        list.Add(vmo);
-                }
+                    list.Add(ChallengeViewModel.FromModel(obj));
             }
         }
 
@@ -84,15 +67,6 @@ namespace StudyBuddy.App.Api
         }
 
         public async Task<ChallengeViewModel> GetById(int challenge_id)
-        {
-            var challenge = TryToFindByIdInCache(cache, challenge_id);
-            if (challenge != null)
-                return challenge;
-
-            return await GetByIdFromServer(challenge_id);
-        }
-
-        private async Task<ChallengeViewModel> GetByIdFromServer(int challenge_id)
         {
             var rh = new WebRequestHelper(api.Authentication.Token);
             var user = await rh.Load<Challenge>(base_url + "Challenge/" + challenge_id, HttpMethod.Get);

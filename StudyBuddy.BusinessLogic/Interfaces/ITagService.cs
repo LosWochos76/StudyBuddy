@@ -13,11 +13,5 @@ namespace StudyBuddy.BusinessLogic
         void Delete(int id);
 
         IEnumerable<Tag> CreateOrFindMultiple(string tags);
-
-        IEnumerable<Tag> OfChallenge(int challenge_id);
-        IEnumerable<Tag> SetForChallenge(TagsForChallengeParameter parameter);
-
-        IEnumerable<Tag> OfBadge(int badge_id);
-        IEnumerable<Tag> SetForBadge(TagsForBadgeParameter parameter);
     }
 }

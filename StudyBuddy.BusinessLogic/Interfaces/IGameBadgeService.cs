@@ -5,7 +5,7 @@ namespace StudyBuddy.BusinessLogic
 {
     public interface IGameBadgeService
     {
-        IEnumerable<GameBadge> All();
+        IEnumerable<GameBadge> All(GameBadgeFilter filter);
         GameBadge GetById(int id);
         GameBadge Insert(GameBadge obj);
         GameBadge Update(GameBadge obj);

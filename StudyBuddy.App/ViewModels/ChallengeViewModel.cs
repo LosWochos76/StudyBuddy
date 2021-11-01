@@ -74,7 +74,8 @@ namespace StudyBuddy.App.ViewModels
                 OwnerID = c.OwnerID,
                 Created = c.Created,
                 Prove = c.Prove,
-                SeriesParentID = c.SeriesParentID
+                SeriesParentID = c.SeriesParentID,
+                Tags = c.Tags
             };
         }
 

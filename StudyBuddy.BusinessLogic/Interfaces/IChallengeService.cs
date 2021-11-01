@@ -7,12 +7,10 @@ namespace StudyBuddy.BusinessLogic
     public interface IChallengeService
     {
         void AcceptFromQrCode(string payload);
-        IEnumerable<Challenge> All();
+        IEnumerable<Challenge> All(ChallengeFilter filter);
         void CreateSeries(CreateSeriesParameter param);
         void Delete(int id);
-        IEnumerable<Challenge> ForToday();
         Challenge GetById(int id);
-        IEnumerable<Challenge> GetByText(string text);
         Bitmap GetQrCode(int challenge_id);
         Challenge Insert(Challenge obj);
         IEnumerable<Challenge> OfBadge(int id);

@@ -1,3 +1,4 @@
+import { query } from '@angular/animations';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { EventEmitter, Injectable, Output } from '@angular/core';
 import { environment } from 'src/environments/environment';
@@ -35,10 +36,15 @@ export class GameBadgeService {
     if (!this.auth.isLoggedIn())
       return null;
 
+    var query = { };
+    if (this.auth.getUser().isTeacher)
+      query['OwnerId'] = this.auth.getUser().id;
+
     let objects:GameBadge[] = [];
     this.logger.debug("Getting all GameBadge");
     let result = await this.http.get(this.url + "GameBadge", 
     {
+      params: query,
       headers: new HttpHeaders({ Authorization: this.auth.getToken() })
     }).toPromise();
 

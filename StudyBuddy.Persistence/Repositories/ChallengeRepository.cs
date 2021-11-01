@@ -19,71 +19,70 @@ namespace StudyBuddy.Persistence
 
         public Challenge ById(int id)
         {
-            var qh = new QueryHelper<Challenge>(connection_string, FromReader, new {id});
-            return qh.ExecuteQueryToSingleObject(
-                "SELECT id,name,description,points,validity_start,validity_end," +
-                "category,owner_id,created,prove,series_parent_id " +
-                "FROM challenges where id=:id");
-        }
+            var qh = new QueryHelper<Challenge>(connection_string, FromReader);
+            qh.AddParameter(":id", id);
 
-        public IEnumerable<Challenge> All(int from = 0, int max = 1000)
-        {
-            var qh = new QueryHelper<Challenge>(connection_string, FromReader, new {from, max});
-            return qh.ExecuteQueryToObjectList(
-                "SELECT id,name,description,points,validity_start,validity_end," +
-                "category,owner_id,created,prove,series_parent_id " +
-                "FROM challenges order by created limit :max offset :from");
-        }
-
-        public IEnumerable<Challenge> ForToday(DateTime today, int from = 0, int max = 1000)
-        {
-            var qh = new QueryHelper<Challenge>(connection_string, FromReader, new {today, from, max});
-            return qh.ExecuteQueryToObjectList(
-                "SELECT id,name,description,points,validity_start,validity_end," +
-                "category,owner_id,challenges.created,prove,series_parent_id " +
+            var sql = "SELECT challenges.id, challenges.name, challenges.description, challenges.points, " +
+                "challenges.validity_start, challenges.validity_end, challenges.category, challenges.owner_id, " +
+                "challenges.created, challenges.prove, challenges.series_parent_id, " +
+                "String_agg('#' || tags.name, ' ') as tags_list " + 
                 "FROM challenges " +
-                "left outer join challenge_acceptance on id=challenge_id " +
-                "where challenge_id is null and :today>=validity_start and :today<=validity_end " +
-                "order by challenges.created limit :max offset :from");
+                "LEFT OUTER JOIN tags_challenges ON challenges.id = tags_challenges.challenge_id " +
+                "LEFT OUTER JOIN tags ON tags_challenges.tag_id = tags.id " +
+                "where challenges.id=:id " +
+                "group by challenges.id, challenges.name, challenges.description, challenges.points, " +
+                "challenges.validity_start, challenges.validity_end, challenges.category, challenges.owner_id, " +
+                "challenges.created, challenges.prove, challenges.series_parent_id";
+
+            return qh.ExecuteQueryToSingleObject(sql);
         }
 
-        public IEnumerable<Challenge> ByText(string text, int from = 0, int max = 1000)
+        public IEnumerable<Challenge> All(ChallengeFilter filter)
         {
             var qh = new QueryHelper<Challenge>(connection_string, FromReader);
-            qh.AddParameter(":from", from);
-            qh.AddParameter(":max", max);
-            qh.AddParameter(":text", "%" + text + "%");
-            return qh.ExecuteQueryToObjectList(
-                "SELECT id,name,description,points,validity_start,validity_end," +
-                "category,owner_id,created,prove,series_parent_id " +
-                "FROM challenges where name like :text or description like :text " +
-                "order by created limit :max offset :from");
-        }
+            qh.AddParameter(":max", filter.Count);
+            qh.AddParameter(":from", filter.Start);
+            qh.AddParameter(":user_id", filter.CurrentUserId);
 
-        public IEnumerable<Challenge> OfOwner(int owner_id, int from = 0, int max = 1000)
-        {
-            var qh = new QueryHelper<Challenge>(connection_string, FromReader);
-            qh.AddParameter(":from", from);
-            qh.AddParameter(":max", max);
-            qh.AddParameter(":owner_id", owner_id);
-            return qh.ExecuteQueryToObjectList(
-                "SELECT id,name,description,points,validity_start,validity_end," +
-                "category,owner_id,created,prove,series_parent_id " +
-                "FROM challenges where owner_id=:owner_id order by created limit :max offset :from");
-        }
+            var sql = "select * from (SELECT challenges.id, challenges.name, challenges.description, challenges.points, " +
+                "challenges.validity_start, challenges.validity_end, challenges.category, challenges.owner_id, " +
+                "challenges.created, challenges.prove, challenges.series_parent_id, " +
+                "String_agg('#' || tags.name, ' ') as tags_list, " +
+                "CASE WHEN challenges.id IN (" +
+		        "SELECT challenge_acceptance.challenge_id FROM challenge_acceptance WHERE challenge_acceptance.user_id = :user_id" +
+	            ") THEN 1 ELSE 0 END challenge_finished " +
+                "FROM challenges " +
+                "LEFT OUTER JOIN tags_challenges ON challenges.id = tags_challenges.challenge_id " +
+                "LEFT OUTER JOIN tags ON tags_challenges.tag_id = tags.id " +
+                "group by challenges.id, challenges.name, challenges.description, challenges.points, " +
+                "challenges.validity_start, challenges.validity_end, challenges.category, challenges.owner_id, " +
+                "challenges.created, challenges.prove, challenges.series_parent_id) b where true ";
 
-        public IEnumerable<Challenge> OfOwnerByText(int owner_id, string text, int from = 0, int max = 1000)
-        {
-            var qh = new QueryHelper<Challenge>(connection_string, FromReader);
-            qh.AddParameter(":from", from);
-            qh.AddParameter(":max", max);
-            qh.AddParameter(":owner_id", owner_id);
-            qh.AddParameter(":text", "%" + text + "%");
-            return qh.ExecuteQueryToObjectList(
-                "SELECT id,name,description,points,validity_start,validity_end," +
-                "category,owner_id,created,prove,series_parent_id " +
-                "FROM challenges where owner_id=:owner_id and " +
-                "(name like :text or description like :text) order by created limit :max offset :from");
+            if (!string.IsNullOrEmpty(filter.SearchText))
+            {
+                qh.AddParameter(":search_text", "%" + filter.SearchText + "%");
+                sql += " and (name ilike :search_text or description ilike :search_text or tags_list ilike :search_text)";
+            }
+
+            if (filter.OwnerId.HasValue)
+            {
+                qh.AddParameter(":owner_id", filter.OwnerId.Value);
+                sql += " and (owner_id=:owner_id)";
+            }
+
+            if (filter.ValidAt.HasValue)
+            {
+                qh.AddParameter(":valid_at", filter.ValidAt.Value);
+                sql += " and (validity_start<=:valid_at and validity_end>=:valid_at)";
+            }
+
+            if (filter.OnlyUnacceped)
+            {
+                sql += " and (challenge_finished = 0)";
+            }
+            
+            sql += " order by validity_start,validity_end,created limit :max offset :from";
+            return qh.ExecuteQueryToObjectList(sql);
         }
 
         public void Insert(Challenge obj)
@@ -257,6 +256,7 @@ namespace StudyBuddy.Persistence
             obj.Created = reader.GetDateTime(8);
             obj.Prove = (ChallengeProve) reader.GetInt32(9);
             obj.SeriesParentID = reader.IsDBNull(10) ? null : reader.GetInt32(10);
+            obj.Tags = reader.IsDBNull(11) ? string.Empty : reader.GetString(11);
             return obj;
         }
     }

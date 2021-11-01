@@ -1,4 +1,6 @@
-﻿using System.IO;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
 using System.Net.Http;
 using System.Text;
 using System.Text.Json;
@@ -27,6 +29,16 @@ namespace StudyBuddy.App.Api
             this.cancellationToken = cancellationToken;
         }
 
+        public async Task<T> Post<T>(string path, object payload)
+        {
+            return await Load<T>(path, HttpMethod.Post, payload);
+        }
+
+        public async Task<T> Put<T>(string path, object payload)
+        {
+            return await Load<T>(path, HttpMethod.Put, payload);
+        }
+
         public async Task<T> Load<T>(string path, HttpMethod method, object payload = null)
         {
             using (var message = new HttpRequestMessage(method, path))
@@ -48,6 +60,52 @@ namespace StudyBuddy.App.Api
                     throw exception;
                 }
             }
+        }
+
+        public async Task<T> Get<T>(string path, object query)
+        {
+            var dict = GetPropertyValuesAsDictionary(query);
+            var form = new FormUrlEncodedContent(dict);
+            var querystring = await form.ReadAsStringAsync();
+
+            using (var message = new HttpRequestMessage(HttpMethod.Get, path + "?" + querystring))
+            {
+                if (!string.IsNullOrEmpty(token))
+                    message.Headers.Add("Authorization", token);    
+
+                using (var response = await client.SendAsync(message, HttpCompletionOption.ResponseHeadersRead, cancellationToken))
+                {
+                    var stream = await response.Content.ReadAsStreamAsync();
+
+                    if (response.IsSuccessStatusCode)
+                        return await JsonSerializer.DeserializeAsync<T>(stream, options);
+
+                    var exception = await JsonSerializer.DeserializeAsync<ApiException>(stream, options);
+                    throw exception;
+                }
+            }
+        }
+
+        private Dictionary<string, string> GetPropertyValuesAsDictionary(object obj)
+        {
+            var dict = new Dictionary<string, string>();
+            foreach (var prop in obj.GetType().GetProperties())
+            {
+                var val = prop.GetValue(obj);
+                if (val != null)
+                {
+                    var type = val.GetType();
+                    if (type.Equals(typeof(DateTime)))
+                    {
+                        var d = (DateTime)val;
+                        dict.Add(prop.Name, d.ToString("yyyy-MM-dd"));
+                    }
+                    else
+                        dict.Add(prop.Name, val.ToString());
+                }
+            }
+
+            return dict;
         }
     }
 }

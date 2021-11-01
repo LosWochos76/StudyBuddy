@@ -14,6 +14,7 @@ namespace StudyBuddy.Model
         public DateTime Created { get; set; } = DateTime.Now.Date;
         public ChallengeProve Prove { get; set; } = ChallengeProve.ByTrust;
         public int? SeriesParentID { get; set; }
+        public string Tags { get; set; }
 
         public Challenge Clone()
         {

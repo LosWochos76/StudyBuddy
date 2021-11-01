@@ -19,30 +19,49 @@ namespace StudyBuddy.Persistence
         {
             var qh = new QueryHelper<GameBadge>(connection_string, FromReader);
             qh.AddParameter(":id", id);
-            return qh.ExecuteQueryToSingleObject(
-                "SELECT id,name,owner_id,created,required_coverage " +
-                "FROM game_badges where id=:id");
+
+            var sql = "select * from(SELECT game_badges.id,game_badges.name,game_badges.owner_id," +
+                "game_badges.created,game_badges.required_coverage,game_badges.description," +
+                "String_agg('#' || tags.name, ' ') as tags_list " +
+                "FROM game_badges " +
+                "LEFT OUTER JOIN tags_badges ON game_badges.id = tags_badges.badge_id " +
+                "LEFT OUTER JOIN tags ON tags_badges.tag_id = tags.id " +
+                "group by game_badges.id, game_badges.name, game_badges.owner_id, game_badges.created," +
+                "game_badges.required_coverage,game_badges.description) b where id=:id";
+
+            return qh.ExecuteQueryToSingleObject(sql);
         }
 
-        public IEnumerable<GameBadge> All(int from = 0, int max = 1000)
+        public IEnumerable<GameBadge> All(GameBadgeFilter filter)
         {
             var qh = new QueryHelper<GameBadge>(connection_string, FromReader);
-            qh.AddParameter(":from", from);
-            qh.AddParameter(":max", max);
-            return qh.ExecuteQueryToObjectList(
-                "SELECT id,name,owner_id,created,required_coverage " +
-                "FROM game_badges order by created,name limit :max offset :from");
-        }
+            qh.AddParameter(":from", filter.Start);
+            qh.AddParameter(":max", filter.Count);
 
-        public IEnumerable<GameBadge> OfOwner(int owner_id, int from = 0, int max = 1000)
-        {
-            var qh = new QueryHelper<GameBadge>(connection_string, FromReader);
-            qh.AddParameter(":from", from);
-            qh.AddParameter(":max", max);
-            qh.AddParameter(":owner_id", owner_id);
-            return qh.ExecuteQueryToObjectList(
-                "SELECT id,name,owner_id,created,required_coverage " +
-                "FROM game_badges where owner_id=:owner_id order by created,name limit :max offset :from");
+            var sql = "select * from(SELECT game_badges.id,game_badges.name,game_badges.owner_id," +
+                "game_badges.created,game_badges.required_coverage,game_badges.description," +
+                "String_agg('#' || tags.name, ' ') as tags_list " +
+                "FROM game_badges " +
+                "LEFT OUTER JOIN tags_badges ON game_badges.id = tags_badges.badge_id " +
+                "LEFT OUTER JOIN tags ON tags_badges.tag_id = tags.id " +
+                "group by game_badges.id, game_badges.name, game_badges.owner_id, game_badges.created," +
+                "game_badges.required_coverage,game_badges.description) b where true";
+
+            if (filter.OwnerId.HasValue)
+            {
+                qh.AddParameter(":owner_id", filter.OwnerId);
+                sql += " and owner_id=:owner_id";
+            }
+
+            if (!string.IsNullOrEmpty(filter.SearchText))
+            {
+                qh.AddParameter(":search_text", "%" + filter.SearchText + "%");
+                sql += " and (name ilike :search_text or description ilike :search_text or tags_list ilike :search_text)";
+            }
+
+            sql += " order by created, name limit :max offset :from";
+
+            return qh.ExecuteQueryToObjectList(sql);
         }
 
         public void Insert(GameBadge obj)
@@ -52,10 +71,11 @@ namespace StudyBuddy.Persistence
             qh.AddParameter(":owner_id", obj.OwnerID);
             qh.AddParameter(":created", obj.Created);
             qh.AddParameter(":required_coverage", obj.RequiredCoverage);
+            qh.AddParameter(":description", obj.Description);
+
             obj.ID = qh.ExecuteScalar(
-                "insert into game_badges (name,owner_id,created," +
-                "required_coverage) values (:name,:owner_id,:created," +
-                ":required_coverage) RETURNING id");
+                "insert into game_badges (name,owner_id,created,required_coverage,description) " +
+                "values (:name,:owner_id,:created,:required_coverage,:description) RETURNING id");
         }
 
         public void Update(GameBadge obj)
@@ -66,9 +86,11 @@ namespace StudyBuddy.Persistence
             qh.AddParameter(":owner_id", obj.OwnerID);
             qh.AddParameter(":created", obj.Created);
             qh.AddParameter(":required_coverage", obj.RequiredCoverage);
+            qh.AddParameter(":description", obj.Description);
+
             qh.ExecuteNonQuery(
-                "update game_badges set name=:name,owner_id=:owner_id," +
-                "created=:created,required_coverage=:required_coverage where id=:id");
+                "update game_badges set name=:name,owner_id=:owner_id,created=:created," +
+                "required_coverage=:required_coverage,description=:description where id=:id");
         }
 
         public void Save(GameBadge obj)
@@ -83,16 +105,16 @@ namespace StudyBuddy.Persistence
         {
             var qh = new QueryHelper<GameBadge>(connection_string, FromReader);
             qh.Delete("game_badges", "id", id);
-            qh.Delete("tags_badges", "badge_id", id);
         }
 
         // Get all of the badges that belong to the given challenge
+        // ToDo: Hier fehlt noch die Ermittlung der Tags
         public IEnumerable<GameBadge> GetBadgesForChallenge(int challenge_id)
         {
             var qh = new QueryHelper<GameBadge>(connection_string, FromReader);
             qh.AddParameter(":challenge_id", challenge_id);
             return qh.ExecuteQueryToObjectList(
-                "select distinct id,name,owner_id,created,required_coverage from game_badges " +
+                "select distinct id,name,owner_id,created,required_coverage,description from game_badges " +
                 "inner join tags_badges tb on id=tb.badge_id " +
                 "inner join tags_challenges tc on tb.tag_id = tc.tag_id " +
                 "where challenge_id=:challenge_id order by created,name");
@@ -140,9 +162,10 @@ namespace StudyBuddy.Persistence
                     "name varchar(100) not null, " +
                     "owner_id int not null, " +
                     "created date not null, " +
-                    "required_coverage numeric(3,2) not null)");
+                    "required_coverage numeric(3,2) not null," +
+                    "description text)");
 
-                rh.SetRevision(2);
+                rh.SetRevision(3);
             }
 
             if (rh.GetRevision() == 1)
@@ -158,6 +181,15 @@ namespace StudyBuddy.Persistence
             {
                 qh.ExecuteNonQuery("drop table game_badge_challenges");
             }
+
+            if (rh.GetRevision() == 2)
+            {
+                qh.ExecuteNonQuery(
+                    "ALTER TABLE game_badges " +
+                    "ADD COLUMN description text");
+
+                rh.SetRevision(3);
+            }
         }
 
         private GameBadge FromReader(NpgsqlDataReader reader)
@@ -168,6 +200,8 @@ namespace StudyBuddy.Persistence
             obj.OwnerID = reader.GetInt32(2);
             obj.Created = reader.GetDateTime(3);
             obj.RequiredCoverage = reader.GetDouble(4);
+            obj.Description = reader.IsDBNull(5) ? "" : reader.GetString(5);
+            obj.Tags = reader.IsDBNull(6) ? "" : reader.GetString(6);
             return obj;
         }
 

@@ -7,6 +7,11 @@
             'is-invalid': form.controls.name.invalid && form.controls.name.dirty,
             'is-valid': form.controls.name.valid && form.controls.name.dirty}">
     </div>
+    <div class="mb-3">
+        <label class="form-label" for="name">Beschreibung:</label>
+        <textarea class="form-control" id="description" formControlName="description" rows="3">
+        </textarea>
+    </div>
     <div class="col-md">
         <label class="form-label" for="required_coverage">Benötigte Abdeckung der Herausforderungen:</label>
         <select class="form-select" formControlName="required_coverage">

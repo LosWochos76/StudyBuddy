@@ -1,11 +1,11 @@
-import { Helper } from "../services/helper";
-
 export class GameBadge {
     id:number = 0;
     name:string = "";
     owner:number = 0;
     created:string;
     required_coverage:number = 0.5;
+    description:string = "";
+    tags:string = "";
     
     constructor() { 
         let today = (new Date()).toISOString().split('T')[0];
@@ -14,7 +14,9 @@ export class GameBadge {
 
     copyValues(values) {
         this.name = values.name;
+        this.description = values.description;
         this.required_coverage = +values.required_coverage;
+        this.tags = values.tags;
 
         if (values.hasOwnProperty('owner')) 
             this.owner = +values.owner;
@@ -27,6 +29,8 @@ export class GameBadge {
         obj.owner = result["ownerID"];
         obj.created = result["created"];
         obj.required_coverage = +result["requiredCoverage"];
+        obj.description = result["description"];
+        obj.tags = result["tags"];
         return obj;
     }
 
@@ -36,7 +40,9 @@ export class GameBadge {
             "name": this.name,
             "ownerId": this.owner,
             "created": this.created,
-            "requiredCoverage": +this.required_coverage
+            "requiredCoverage": +this.required_coverage,
+            "description": this.description,
+            "tags": this.tags
         };
     }
 }

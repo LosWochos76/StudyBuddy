@@ -15,9 +15,9 @@ namespace StudyBuddy.Api
 
         [Route("/GameBadge/")]
         [HttpGet]
-        public IActionResult Get()
+        public IActionResult Get([FromQuery] GameBadgeFilter filter)
         {
-            return Json(backend.GameBadgeService.All());
+            return Json(backend.GameBadgeService.All(filter));
         }
 
         [Route("/GameBadge/{id}")]

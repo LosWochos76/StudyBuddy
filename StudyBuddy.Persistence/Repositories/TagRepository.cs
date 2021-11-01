@@ -77,16 +77,6 @@ namespace StudyBuddy.Persistence
                 Update(obj);
         }
 
-        public IEnumerable<Tag> OfChallenge(int challenge_id)
-        {
-            var qh = new QueryHelper<Tag>(connection_string, FromReader);
-            qh.AddParameter(":challenge_id", challenge_id);
-            return qh.ExecuteQueryToObjectList(
-                "SELECT id,name FROM tags_challenges " +
-                "inner join tags on id=tag_id " +
-                "where challenge_id=:challenge_id order by name");
-        }
-
         public void RemoveAllTagsFromChallenge(int challenge_id)
         {
             var qh = new QueryHelper<Tag>(connection_string);
@@ -102,16 +92,6 @@ namespace StudyBuddy.Persistence
             qh.ExecuteNonQuery(
                 "insert into tags_challenges(challenge_id, tag_id) " +
                 "values(:challenge_id, :tag_id) ON CONFLICT DO NOTHING;");
-        }
-
-        public IEnumerable<Tag> OfBadge(int badge_id)
-        {
-            var qh = new QueryHelper<Tag>(connection_string, FromReader);
-            qh.AddParameter(":badge_id", badge_id);
-            return qh.ExecuteQueryToObjectList(
-                "SELECT id,name FROM tags_badges " +
-                "inner join tags on id=tag_id " +
-                "where badge_id=:badge_id order by name");
         }
 
         public void RemoveAllTagsFromBadge(int badge_id)

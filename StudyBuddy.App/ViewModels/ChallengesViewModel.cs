@@ -44,7 +44,7 @@ namespace StudyBuddy.App.ViewModels
             {
                 await Device.InvokeOnMainThreadAsync(() =>
                 {
-                    api.Challenges.ForToday(Challenges, SearchText, true);
+                    api.Challenges.ForToday(Challenges, SearchText);
                 });
             }
             catch (ApiException e)
@@ -60,7 +60,7 @@ namespace StudyBuddy.App.ViewModels
         {
             await Device.InvokeOnMainThreadAsync(() =>
             {
-                api.Challenges.ForToday(Challenges, SearchText, false);
+                api.Challenges.ForToday(Challenges, SearchText);
                 NotifyPropertyChanged("Challenges");
             });
         }
