@@ -76,6 +76,9 @@ export class UserService {
     if (!this.auth.isLoggedIn())
       return null;
     
+    if (this.users_cache == null)
+      await this.getAll();
+
     if (this.users_cache != null) {
       for(let i=0; i<this.users_cache.length; i++)
         if (this.users_cache[i].id == id)
