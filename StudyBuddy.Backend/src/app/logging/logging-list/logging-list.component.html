@@ -1,0 +1,29 @@
+<br>
+<div class="row">
+  <div class="col-10">
+    <button class="btn btn-danger" (click)="onFlush()">Löschen</button>
+  </div>
+</div>
+<br>
+<table class="table table-bordered">
+  <thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">Zeitpunkt</th>
+      <th scope="col">Level</th>
+      <th scope="col">UserId</th>
+      <th scope="col">Quelle</th>
+      <th scope="col">Nachricht</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let obj of objects; index as i">
+      <th scope="row">{{i + 1}}</th>
+      <td>{{obj.occurence}}</td>
+      <td>{{obj.level}}</td>
+      <td>{{obj.userId}}</td>
+      <td>{{obj.source}}</td>
+      <td>{{obj.message}}</td>
+    </tr>
+  </tbody>
+</table>

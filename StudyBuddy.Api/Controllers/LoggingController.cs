@@ -13,7 +13,7 @@ namespace StudyBuddy.Api.Controllers
             this.backend = backend;
         }
 
-        [Route("/Loggig/")]
+        [Route("/Logging/")]
         [HttpGet]
         public IActionResult GetAll([FromQuery] LogMessageFilter filter)
         {
@@ -28,6 +28,14 @@ namespace StudyBuddy.Api.Controllers
         public IActionResult Insert([FromBody] LogMessage obj)
         {
             backend.Logging.Log(obj);
+            return Json(new { Status = "ok" });
+        }
+
+        [Route("/Logging/")]
+        [HttpDelete]
+        public IActionResult Flush()
+        {
+            backend.Logging.Flush();
             return Json(new { Status = "ok" });
         }
     }

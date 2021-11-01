@@ -34,7 +34,6 @@ export class UserListComponent implements OnInit {
   }
 
   onSelect(obj: User) {
-    this.logger.debug("User selected a Term");
     this.selected = obj;
   }
 

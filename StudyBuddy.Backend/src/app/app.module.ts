@@ -38,6 +38,7 @@ import { SuccessComponent } from './challenge/success/success.component';
 import { NotificationPageComponent } from './notification/notification-page/notification-page.component';
 import { NotificationBroadcastComponent } from './notification/notification-broadcast/notification-broadcast.component';
 import { FcmTokenListComponent } from './notification/fcm-token-list/fcm-token-list.component';
+import { LoggingListComponent } from './logging/logging-list/logging-list.component';
 
 @NgModule({
   declarations: [
@@ -70,6 +71,7 @@ import { FcmTokenListComponent } from './notification/fcm-token-list/fcm-token-l
     NotificationPageComponent,
     NotificationBroadcastComponent,
     FcmTokenListComponent,
+    LoggingListComponent,
   ],
   imports: [
     BrowserModule,

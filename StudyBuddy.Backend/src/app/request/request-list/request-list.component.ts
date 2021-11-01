@@ -52,7 +52,6 @@ export class RequestListComponent implements OnInit {
   }
   
   onSelect(obj:Request) {
-    this.logger.debug("User selected a Request");
     this.selected = obj;
   }
 

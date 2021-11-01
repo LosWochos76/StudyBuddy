@@ -22,9 +22,10 @@ import { RegisterUserComponent } from './user/register-user/register-user.compon
 import { UserEditComponent } from './user/user-edit/user-edit.component';
 import { UserListComponent } from './user/user-list/user-list.component';
 import { UserSettingsComponent } from './user/user-settings/user-settings.component';
-import {NotificationPageComponent} from "./notification/notification-page/notification-page.component";
-import {NotificationBroadcastComponent} from "./notification/notification-broadcast/notification-broadcast.component";
+import { NotificationPageComponent} from "./notification/notification-page/notification-page.component";
+import { NotificationBroadcastComponent} from "./notification/notification-broadcast/notification-broadcast.component";
 import { FcmTokenListComponent } from './notification/fcm-token-list/fcm-token-list.component';
+import { LoggingListComponent } from './logging/logging-list/logging-list.component';
 
 const routes: Routes = [
   { path: 'info', component: InfoComponent },
@@ -42,19 +43,18 @@ const routes: Routes = [
   { path: 'user/:id', component: UserEditComponent, canActivate: [RouteGuardService] },
   { path: 'usersettings', component: UserSettingsComponent, canActivate: [RouteGuardService] },
   { path: 'request', component: RequestListComponent, canActivate: [RouteGuardService] },
-  { path: 'notification', component: NotificationPageComponent, canActivate: [RouteGuardService] , children: [
-      {path: 'broadcast', component: NotificationBroadcastComponent },
-      {path: 'tokens', component: FcmTokenListComponent  },
-
-      { path: '', redirectTo: 'broadcast', pathMatch: 'full' },
-        
-
+  { path: 'notification', component: NotificationPageComponent, canActivate: [RouteGuardService], 
+    children: [
+      { path: 'broadcast', component: NotificationBroadcastComponent },
+      { path: 'tokens', component: FcmTokenListComponent  },
+      { path: '', redirectTo: 'broadcast', pathMatch: 'full' }, 
     ]},
   { path: 'request/:id', component: RequestEditComponent, canActivate: [RouteGuardService] },
   { path: 'tag', component: TagListComponent, canActivate: [RouteGuardService] },
   { path: 'tag/:id', component: TagEditComponent, canActivate: [RouteGuardService] },
   { path: 'login', component: LoginComponent },
   { path: 'logout', component: LogoutComponent },
+  { path: 'logging', component: LoggingListComponent, canActivate: [RouteGuardService] },
   { path: '', redirectTo: 'info', pathMatch: 'full' },
   { path: '**', component: PageNotFoundComponent }
 ];

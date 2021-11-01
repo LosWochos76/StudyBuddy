@@ -11,6 +11,7 @@ import { LoggingService } from './loging.service';
 export class UserService {
   @Output() changed = new EventEmitter();
   private url = environment.api_url;
+  private users_cache: User[] = null;
 
   constructor(
     private logger: LoggingService,
@@ -20,6 +21,9 @@ export class UserService {
   async getCount(): Promise<number> {
     if (!this.auth.isLoggedIn())
       return null;
+    
+    if (this.users_cache != null)
+      return this.users_cache.length;
 
     let path = this.url + "User/Count";
     this.logger.debug("Getting count of Users");
@@ -34,6 +38,9 @@ export class UserService {
   async getAll(): Promise<User[]> {
     if (!this.auth.isLoggedIn())
       return null;
+    
+    if (this.users_cache != null)
+      return this.users_cache;
 
     let objects: User[] = [];
     this.logger.debug("Getting all Users");
@@ -45,6 +52,7 @@ export class UserService {
     for (let index in result)
       objects.push(User.fromApi(result[index]));
 
+    this.users_cache = objects.slice();
     return objects;
   }
 
@@ -59,6 +67,7 @@ export class UserService {
         headers: new HttpHeaders({ Authorization: this.auth.getToken() })
       }).toPromise();
 
+    this.users_cache = null;
     if ('status' in result)
       this.changed.emit();
   }
@@ -66,6 +75,12 @@ export class UserService {
   async byId(id: number): Promise<User> {
     if (!this.auth.isLoggedIn())
       return null;
+    
+    if (this.users_cache != null) {
+      for(let i=0; i<this.users_cache.length; i++)
+        if (this.users_cache[i].id == id)
+          return this.users_cache[i];
+    }
 
     let path = this.url + "User/" + id;
     this.logger.debug("Loading User from " + path);
@@ -97,6 +112,7 @@ export class UserService {
         }).toPromise();
     }
 
+    this.users_cache = null;
     this.changed.emit();
   }
 

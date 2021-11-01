@@ -38,7 +38,6 @@ export class GameBadgeListComponent implements OnInit {
   }
 
   onSelect(obj: GameBadge) {
-    this.logger.debug("User selected a GameBadge");
     this.selected = obj;
   }
 

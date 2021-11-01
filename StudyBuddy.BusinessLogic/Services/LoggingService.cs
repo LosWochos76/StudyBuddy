@@ -75,6 +75,9 @@ namespace StudyBuddy.BusinessLogic
 
         public void Log(LogMessage message)
         {
+            if (message == null)
+                return;
+
             backend.Repository.Logging.Log(message);
         }
 

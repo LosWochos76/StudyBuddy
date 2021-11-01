@@ -26,7 +26,6 @@ export class TagListComponent implements OnInit {
   }
 
   onSelect(obj: Tag) {
-    this.logger.debug("User selected a Tag");
     this.selected = obj;
   }
 

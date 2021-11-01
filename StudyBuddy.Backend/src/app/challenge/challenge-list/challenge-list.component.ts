@@ -41,7 +41,6 @@ export class ChallengeListComponent implements OnInit {
   }
 
   onSelect(obj: Challenge) {
-    this.logger.debug("User selected a Challenge");
     this.selected = obj;
   }
 
