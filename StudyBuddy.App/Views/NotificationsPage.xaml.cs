@@ -16,7 +16,6 @@ namespace StudyBuddy.App.Views
         public NotificationsPage()
         {
             InitializeComponent();
-
             BindingContext = TinyIoCContainer.Current.Resolve<NotificationsViewModel>();
         }
     }
