@@ -87,6 +87,21 @@ namespace StudyBuddy.Persistence
                 "return friend_count;\n" +
                 "end;$$;\n" +
                 "commit;");
+
+            qh.ExecuteNonQuery("begin;\n" +
+                "SELECT pg_advisory_xact_lock(5667323614921139925);\n" +
+                "create or replace function challenge_accepted(user_id_param int, challenge_id_param int)\n" +
+                "returns boolean\n" +
+                "language plpgsql\n" +
+                "as $$\n" +
+                "declare\n" +
+                "has_accepted boolean;\n" +
+                "begin\n" +
+                "select case When(select count(*) as count from challenge_acceptance\n" +
+                "where user_id = user_id_param and challenge_id = challenge_id_param) > 0 Then True else False end into has_accepted;\n" +
+                "return has_accepted;\n" +
+                "end;$$;\n" +
+                "commit;");
         }
 
         public User ById(int id)

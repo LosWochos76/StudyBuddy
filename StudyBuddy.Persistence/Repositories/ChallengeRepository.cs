@@ -22,19 +22,8 @@ namespace StudyBuddy.Persistence
             var qh = new QueryHelper<Challenge>(connection_string, FromReader);
             qh.AddParameter(":id", id);
 
-            var sql = "SELECT challenges.id, challenges.name, challenges.description, challenges.points, " +
-                "challenges.validity_start, challenges.validity_end, challenges.category, challenges.owner_id, " +
-                "challenges.created, challenges.prove, challenges.series_parent_id, " +
-                "String_agg('#' || tags.name, ' ') as tags_list " + 
-                "FROM challenges " +
-                "LEFT OUTER JOIN tags_challenges ON challenges.id = tags_challenges.challenge_id " +
-                "LEFT OUTER JOIN tags ON tags_challenges.tag_id = tags.id " +
-                "where challenges.id=:id " +
-                "group by challenges.id, challenges.name, challenges.description, challenges.points, " +
-                "challenges.validity_start, challenges.validity_end, challenges.category, challenges.owner_id, " +
-                "challenges.created, challenges.prove, challenges.series_parent_id";
-
-            return qh.ExecuteQueryToSingleObject(sql);
+            return qh.ExecuteQueryToSingleObject("select id,name,description,points,validity_start,validity_end,category," +
+                "owner_id,created,prove,series_parent_id,tags_of_challenge(id) from challenges where id=:id");
         }
 
         public IEnumerable<Challenge> All(ChallengeFilter filter)
@@ -42,21 +31,9 @@ namespace StudyBuddy.Persistence
             var qh = new QueryHelper<Challenge>(connection_string, FromReader);
             qh.AddParameter(":max", filter.Count);
             qh.AddParameter(":from", filter.Start);
-            qh.AddParameter(":user_id", filter.CurrentUserId);
-
-            var sql = "select * from (SELECT challenges.id, challenges.name, challenges.description, challenges.points, " +
-                "challenges.validity_start, challenges.validity_end, challenges.category, challenges.owner_id, " +
-                "challenges.created, challenges.prove, challenges.series_parent_id, " +
-                "String_agg('#' || tags.name, ' ') as tags_list, " +
-                "CASE WHEN challenges.id IN (" +
-		        "SELECT challenge_acceptance.challenge_id FROM challenge_acceptance WHERE challenge_acceptance.user_id = :user_id" +
-	            ") THEN 1 ELSE 0 END challenge_finished " +
-                "FROM challenges " +
-                "LEFT OUTER JOIN tags_challenges ON challenges.id = tags_challenges.challenge_id " +
-                "LEFT OUTER JOIN tags ON tags_challenges.tag_id = tags.id " +
-                "group by challenges.id, challenges.name, challenges.description, challenges.points, " +
-                "challenges.validity_start, challenges.validity_end, challenges.category, challenges.owner_id, " +
-                "challenges.created, challenges.prove, challenges.series_parent_id) b where true ";
+            
+            var sql = "select id,name,description,points,validity_start,validity_end,category," +
+                "owner_id,created,prove,series_parent_id,tags_of_challenge(id) from challenges where true ";
 
             if (!string.IsNullOrEmpty(filter.SearchText))
             {
@@ -78,7 +55,8 @@ namespace StudyBuddy.Persistence
 
             if (filter.OnlyUnacceped)
             {
-                sql += " and (challenge_finished = 0)";
+                qh.AddParameter(":user_id", filter.CurrentUserId);
+                sql += " and not challenge_accepted(:user_id, id)";
             }
             
             sql += " order by validity_start,validity_end,created limit :max offset :from";
@@ -122,8 +100,8 @@ namespace StudyBuddy.Persistence
             qh.AddParameter(":series_parent_id", obj.SeriesParentID.HasValue ? obj.SeriesParentID.Value : DBNull.Value);
 
             qh.ExecuteNonQuery("update challenges set name=:name,description=:description,points=:points," +
-                               "validity_start=:validity_start,validity_end=:validity_end,category=:category," +
-                               "owner_id=:owner_id,created=:created,prove=:prove,series_parent_id=:series_parent_id where id=:id");
+                "validity_start=:validity_start,validity_end=:validity_end,category=:category," +
+                "owner_id=:owner_id,created=:created,prove=:prove,series_parent_id=:series_parent_id where id=:id");
         }
 
         public void Save(Challenge obj)

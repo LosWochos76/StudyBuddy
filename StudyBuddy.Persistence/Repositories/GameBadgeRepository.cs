@@ -20,16 +20,8 @@ namespace StudyBuddy.Persistence
             var qh = new QueryHelper<GameBadge>(connection_string, FromReader);
             qh.AddParameter(":id", id);
 
-            var sql = "select * from(SELECT game_badges.id,game_badges.name,game_badges.owner_id," +
-                "game_badges.created,game_badges.required_coverage,game_badges.description," +
-                "String_agg('#' || tags.name, ' ') as tags_list " +
-                "FROM game_badges " +
-                "LEFT OUTER JOIN tags_badges ON game_badges.id = tags_badges.badge_id " +
-                "LEFT OUTER JOIN tags ON tags_badges.tag_id = tags.id " +
-                "group by game_badges.id, game_badges.name, game_badges.owner_id, game_badges.created," +
-                "game_badges.required_coverage,game_badges.description) b where id=:id";
-
-            return qh.ExecuteQueryToSingleObject(sql);
+            return qh.ExecuteQueryToSingleObject("select id,name,owner_id,created," +
+                "required_coverage,description,tags_of_badge(id) FROM game_badges where id=:id");
         }
 
         public IEnumerable<GameBadge> All(GameBadgeFilter filter)
@@ -38,14 +30,8 @@ namespace StudyBuddy.Persistence
             qh.AddParameter(":from", filter.Start);
             qh.AddParameter(":max", filter.Count);
 
-            var sql = "select * from(SELECT game_badges.id,game_badges.name,game_badges.owner_id," +
-                "game_badges.created,game_badges.required_coverage,game_badges.description," +
-                "String_agg('#' || tags.name, ' ') as tags_list " +
-                "FROM game_badges " +
-                "LEFT OUTER JOIN tags_badges ON game_badges.id = tags_badges.badge_id " +
-                "LEFT OUTER JOIN tags ON tags_badges.tag_id = tags.id " +
-                "group by game_badges.id, game_badges.name, game_badges.owner_id, game_badges.created," +
-                "game_badges.required_coverage,game_badges.description) b where true";
+            var sql = "select id,name,owner_id,created,required_coverage,description,tags_of_badge(id) " +
+                "FROM game_badges where true";
 
             if (filter.OwnerId.HasValue)
             {
