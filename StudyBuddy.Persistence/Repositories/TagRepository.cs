@@ -132,6 +132,22 @@ namespace StudyBuddy.Persistence
                     "challenge_id int not null, " +
                     "tag_id int not null," +
                     "unique (challenge_id, tag_id))");
+
+            qh.ExecuteNonQuery("begin;\n" +
+                "SELECT pg_advisory_xact_lock(7949957698783404873);\n" +
+                "create or replace function tags_of_challenge(challenge_id_param int)\n" +
+                "returns varchar\n" +
+                "language plpgsql\n" +
+                "as $$\n" +
+                "declare\n" +
+                "   tag_list varchar;\n" +
+                "begin\n" +
+                "   select string_agg('#' || name, ' ') into tag_list from tags_challenges\n" +
+                "   inner join tags on tags_challenges.tag_id = tags.id\n" +
+                "   where tags_challenges.challenge_id = challenge_id_param;\n" +
+                "   return tag_list;\n" +
+                "end;$$;\n" +
+                "commit;");
         }
 
         private void CreateBadgesTagsTable()
@@ -145,6 +161,22 @@ namespace StudyBuddy.Persistence
                     "badge_id int not null, " +
                     "tag_id int not null," +
                     "unique (badge_id, tag_id))");
+
+            qh.ExecuteNonQuery("begin;\n" +
+                "SELECT pg_advisory_xact_lock(3040531610174894300);\n" +
+                "create or replace function tags_of_badge(badge_id_param int)\n" +
+                "returns varchar\n" +
+                "language plpgsql\n" +
+                "as $$\n" +
+                "declare\n" +
+                "   tag_list varchar;\n" +
+                "begin\n" +
+                "   select string_agg('#' || name, ' ') into tag_list from tags_badges\n" +
+                "   inner join tags on tags_badges.tag_id = tags.id\n" +
+                "   where tags_badges.badge_id = badge_id_param;\n" +
+                "   return tag_list;\n" +
+                "end;$$;\n" +
+                "commit;");
         }
 
         private Tag FromReader(NpgsqlDataReader reader)

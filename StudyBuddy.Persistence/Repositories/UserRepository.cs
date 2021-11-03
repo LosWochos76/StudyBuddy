@@ -68,6 +68,25 @@ namespace StudyBuddy.Persistence
 
                 rh.SetRevision(2);
             }
+
+            qh.ExecuteNonQuery("begin;\n" +
+                "SELECT pg_advisory_xact_lock(2142616474639426746);\n" + 
+                "create or replace function common_friends(user_a_param int, user_b_param int)\n" +
+                "returns int\n" +
+                "language plpgsql\n" +
+                "as $$\n" +
+                "declare\n" +
+                "friend_count int;\n" +
+                "begin\n" +
+                "   if (user_a_param = user_b_param) then\n" +
+                "       return 0;\n" +
+                "   end if;\n\n" +
+                "select count(*) into friend_count from\n" +
+                "(select user_b from friends where user_a = user_a_param intersect\n" +
+                "select user_b from friends where user_a = user_b_param) as common_friends;\n" +
+                "return friend_count;\n" +
+                "end;$$;\n" +
+                "commit;");
         }
 
         public User ById(int id)
