@@ -1,4 +1,6 @@
 ﻿ using StudyBuddy.App.Api;
+﻿using Plugin.FirebasePushNotification;
+using StudyBuddy.App.Api;
 using StudyBuddy.App.Misc;
 using StudyBuddy.App.ViewModels;
 using StudyBuddy.App.Views;
@@ -34,6 +36,11 @@ namespace StudyBuddy.App
             TinyIoCContainer.Current.Register(TinyIoCContainer.Current.Resolve<FriendsViewModel>());
             TinyIoCContainer.Current.Register(TinyIoCContainer.Current.Resolve<NotificationsViewModel>());
             TinyIoCContainer.Current.Register(TinyIoCContainer.Current.Resolve<BadgesViewModel>());
+        }
+
+        private void SetupFirebasePushNotificationsHandler()
+        {
+        
         }
 
         protected override async void OnStart()

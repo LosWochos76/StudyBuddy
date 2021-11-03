@@ -38,10 +38,17 @@ namespace StudyBuddy.Persistence
 
         public FcmToken Save(FcmToken obj)
         {
-            if (obj.ID == 0)
+            var existingToken = GetByToken(obj.Token);
+
+            if (existingToken is null) 
+            {
                 Insert(obj);
+            }
             else
-                Update(obj);
+            {
+                Update(existingToken);
+            }
+
             return obj;
         }
 
@@ -82,6 +89,15 @@ namespace StudyBuddy.Persistence
             qh.AddParameter(":last_seen", obj.LastSeen);
 
             qh.ExecuteNonQuery("update fcm_tokens set token=:token,created=:created,last_seen=:last_seen where id=:id");
+        }
+
+        public FcmToken GetByToken(String token)
+        {
+            var qh = new QueryHelper<FcmToken>(connection_string, FromReader);
+            qh.AddParameter(":token", token);
+
+            return qh.ExecuteQueryToSingleObject("select * from fcm_tokens where token=:token");
+
         }
 
         private FcmToken FromReader(NpgsqlDataReader reader)
