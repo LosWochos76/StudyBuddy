@@ -10,7 +10,6 @@ namespace StudyBuddy.BusinessLogic
         IEnumerable<User> GetAll(UserFilter filter);
         IEnumerable<User> GetAllFriends(int user_id);
         IEnumerable<User> GetAllNotFriends(int user_id);
-        IEnumerable<User> GetAllUsersThatAcceptedChallenge(int challenge_id);
         User GetById(int user_id);
         int GetCount();
         int GetCountOfCommonFriends(int user_a_id, int user_b_id);
@@ -21,5 +20,8 @@ namespace StudyBuddy.BusinessLogic
         void RemoveFriends(int user_id);
         void SetFriends(MultipleFriendsParameter parameter);
         User Update(User obj);
+
+        IEnumerable<User> GetAllUsersThatAcceptedChallenge(int challenge_id);
+        IEnumerable<User> GetAllUsersHavingBadge(int badge_id);
     }
 }

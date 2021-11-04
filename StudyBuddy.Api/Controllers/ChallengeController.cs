@@ -36,13 +36,6 @@ namespace StudyBuddy.Api
             return Json(backend.ChallengeService.Update(obj));
         }
 
-        [Route("/Challenge/OfBadge/{id}")]
-        [HttpGet]
-        public IActionResult OfBadge(int id)
-        {
-            return Json(backend.ChallengeService.OfBadge(id));
-        }
-
         [Route("/Challenge/")]
         [HttpPost]
         public IActionResult Insert([FromBody] Challenge obj)
@@ -86,8 +79,8 @@ namespace StudyBuddy.Api
             return Json(new {Status = "ok"});
         }
 
-        [Route("/Challenge/{challenge_id}/RemoveAcceptance/{user_id}")]
-        [HttpPut]
+        [Route("/Challenge/{challenge_id}/User/{user_id}")]
+        [HttpDelete]
         public IActionResult RemoveAcceptance(int challenge_id, int user_id)
         {
             backend.ChallengeService.RemoveAcceptance(challenge_id, user_id);
@@ -99,6 +92,14 @@ namespace StudyBuddy.Api
         public IActionResult GetBadgesForChallenge(int challenge_id)
         {
             return Json(backend.GameBadgeService.GetBadgesForChallenge(challenge_id));
+        }
+
+        [Route("/Challenge/{challenge_id}/User")]
+        [HttpGet]
+        public IActionResult GetAllUsersThatAcceptedChallenge(int challenge_id)
+        {
+            var result = backend.UserService.GetAllUsersThatAcceptedChallenge(challenge_id);
+            return Json(result);
         }
     }
 }

@@ -271,6 +271,17 @@ namespace StudyBuddy.Persistence
                 "order by lastname,firstname,nickname");
         }
 
+        public IEnumerable<User> GetAllUsersHavingBadge(int badge_id)
+        {
+            var qh = new QueryHelper<User>(connection_string, FromReader);
+            qh.AddParameter(":badge_id", badge_id);
+            return qh.ExecuteQueryToObjectList(
+                "SELECT id,firstname,lastname,nickname,email,password_hash,role FROM users_badges " +
+                "inner join users on user_id=id " +
+                "where badge_id=:badge_id " +
+                "order by lastname,firstname,nickname");
+        }
+
         private User FromReader(NpgsqlDataReader reader)
         {
             var obj = new User();

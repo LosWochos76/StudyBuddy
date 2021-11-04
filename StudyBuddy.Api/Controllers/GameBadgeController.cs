@@ -55,5 +55,19 @@ namespace StudyBuddy.Api
         {
             return Json(backend.GameBadgeService.GetSuccessRate(badge_id, user_id));
         }
+
+        [Route("/GameBadge/{badge_id}/User/")]
+        [HttpGet]
+        public IActionResult GetAllUsersHavingBadge(int badge_id)
+        {
+            return Json(backend.UserService.GetAllUsersHavingBadge(badge_id));
+        }
+
+        [Route("/GameBadge/{badge_id}/Challenge")]
+        [HttpGet]
+        public IActionResult GetChallengesOfBadge(int badge_id)
+        {
+            return Json(backend.ChallengeService.GetChallengesOfBadge(badge_id));
+        }
     }
 }

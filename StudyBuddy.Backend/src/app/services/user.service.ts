@@ -165,13 +165,30 @@ export class UserService {
       }).toPromise();
   }
 
-  async getAcceptedUsersOfChallenge(challenge_id: number): Promise<User[]> {
+  async getUsersThatAcceptedChallenge(challenge_id: number): Promise<User[]> {
     if (!this.auth.isLoggedIn())
       return null;
 
     let objects: User[] = [];
     this.logger.debug("Getting all Users that accepted challenge " + challenge_id);
-    let result = await this.http.get(this.url + "User/ThatAcceptedChallenge/" + challenge_id,
+    let result = await this.http.get(this.url + "Challenge/" + challenge_id + "/User",
+      {
+        headers: new HttpHeaders({ Authorization: this.auth.getToken() })
+      }).toPromise();
+
+    for (let index in result)
+      objects.push(User.fromApi(result[index]));
+
+    return objects;
+  }
+
+  async getUsersHavingBadge(badge_id: number): Promise<User[]> {
+    if (!this.auth.isLoggedIn())
+      return null;
+
+    let objects: User[] = [];
+    this.logger.debug("Getting all Users having gamebadge " + badge_id);
+    let result = await this.http.get(this.url + "Badge/" + badge_id + "/User",
       {
         headers: new HttpHeaders({ Authorization: this.auth.getToken() })
       }).toPromise();

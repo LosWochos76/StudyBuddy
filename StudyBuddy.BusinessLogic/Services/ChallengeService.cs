@@ -56,12 +56,12 @@ namespace StudyBuddy.BusinessLogic
             return obj;
         }
 
-        public IEnumerable<Challenge> OfBadge(int id)
+        public IEnumerable<Challenge> GetChallengesOfBadge(int id)
         {
             if (backend.CurrentUser == null)
                 throw new UnauthorizedAccessException("Unauthorized!");
 
-            return backend.Repository.Challenges.OfBadge(id);
+            return backend.Repository.Challenges.GetChallengesOfBadge(id);
         }
 
         public Challenge Insert(Challenge obj)

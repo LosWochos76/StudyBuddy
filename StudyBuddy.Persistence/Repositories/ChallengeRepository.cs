@@ -118,7 +118,8 @@ namespace StudyBuddy.Persistence
             qh.Delete("challenges", "id", id);
         }
 
-        public IEnumerable<Challenge> OfBadge(int badge_id)
+        // ToDo: Nochmal prüfen, ob das auch so passt?
+        public IEnumerable<Challenge> GetChallengesOfBadge(int badge_id)
         {
             var qh = new QueryHelper<Challenge>(connection_string, FromReader);
             qh.AddParameter(":badge_id", badge_id);

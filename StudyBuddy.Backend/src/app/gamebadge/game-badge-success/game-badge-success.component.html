@@ -1,0 +1,28 @@
+<br>
+<h1>Erfolg von Abzeichen</h1>
+<p>Bislang haben {{objects.length}} Nutzer das Abzeichen erhalten.</p>
+<button class="btn btn-primary" (click)="goBack()">Zurück</button>&nbsp;
+<button class="btn btn-danger" [disabled]="!isSelected()" (click)="onRemove()" *ngIf="current_user.isAdmin()">Entfernen</button>
+<br>
+<br>
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Vorname</th>
+            <th scope="col">Nachname</th>
+            <th scope="col">Nickname</th>
+            <th scope="col">EMail</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let obj of objects; index as i" (click)="onSelect(obj)" 
+            [class.table-info]="obj == selected">
+            <th scope="row">{{i + 1}}</th>
+            <td>{{obj.firstname}}</td>
+            <td>{{obj.lastname}}</td>
+            <td>{{obj.nickname}}</td>
+            <td><a href="mailto:{{obj.email}}">{{obj.email}}</a></td>
+        </tr>
+    </tbody>
+</table>

@@ -34,11 +34,12 @@ import { RequestEditComponent } from './request/request-edit/request-edit.compon
 import { RequestListComponent } from './request/request-list/request-list.component';
 import { TagListComponent } from './tag/tag-list/tag-list.component';
 import { TagEditComponent } from './tag/tag-edit/tag-edit.component';
-import { SuccessComponent } from './challenge/success/success.component';
+import { ChallengeSuccessComponent } from './challenge/challenge-success/challenge-success.component';
 import { NotificationPageComponent } from './notification/notification-page/notification-page.component';
 import { NotificationBroadcastComponent } from './notification/notification-broadcast/notification-broadcast.component';
 import { FcmTokenListComponent } from './notification/fcm-token-list/fcm-token-list.component';
 import { LoggingListComponent } from './logging/logging-list/logging-list.component';
+import { GameBadgeSuccessComponent } from './gamebadge/game-badge-success/game-badge-success.component';
 
 @NgModule({
   declarations: [
@@ -67,11 +68,12 @@ import { LoggingListComponent } from './logging/logging-list/logging-list.compon
     RequestListComponent,
     TagListComponent,
     TagEditComponent,
-    SuccessComponent,
+    ChallengeSuccessComponent,
     NotificationPageComponent,
     NotificationBroadcastComponent,
     FcmTokenListComponent,
     LoggingListComponent,
+    GameBadgeSuccessComponent,
   ],
   imports: [
     BrowserModule,

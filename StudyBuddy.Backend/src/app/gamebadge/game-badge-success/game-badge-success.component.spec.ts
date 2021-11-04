@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { SuccessComponent } from './success.component';
+import { GameBadgeSuccessComponent } from './game-badge-success.component';
 
-describe('SuccessComponent', () => {
-  let component: SuccessComponent;
-  let fixture: ComponentFixture<SuccessComponent>;
+describe('GameBadgeSuccessComponent', () => {
+  let component: GameBadgeSuccessComponent;
+  let fixture: ComponentFixture<GameBadgeSuccessComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ SuccessComponent ]
+      declarations: [ GameBadgeSuccessComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(SuccessComponent);
+    fixture = TestBed.createComponent(GameBadgeSuccessComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

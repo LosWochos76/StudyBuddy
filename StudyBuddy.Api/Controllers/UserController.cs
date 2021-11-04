@@ -116,14 +116,6 @@ namespace StudyBuddy.Api
             return Json(new {Status = "ok"});
         }
 
-        [Route("/User/ThatAcceptedChallenge/{challenge_id}")]
-        [HttpGet]
-        public IActionResult ThatAcceptedChallenge(int challenge_id)
-        {
-            var result = backend.UserService.GetAllUsersThatAcceptedChallenge(challenge_id);
-            return Json(result);
-        }
-
         [Route("/User/{user_a_id}/CountOfCommonFriends/{user_b_id}")]
         [HttpGet]
         public IActionResult GetCountOfCommonFriends(int user_a_id, int user_b_id)

@@ -161,5 +161,20 @@ namespace StudyBuddy.BusinessLogic
 
             return backend.Repository.Users.GetCountOfCommonFriends(user_a_id, user_b_id);
         }
+
+        public IEnumerable<User> GetAllUsersHavingBadge(int badge_id)
+        {
+            if (backend.CurrentUser == null)
+                throw new UnauthorizedAccessException("Unauthorized!");
+
+            var badge = backend.Repository.GameBadges.ById(badge_id);
+            if (badge == null)
+                throw new Exception("GameBadge not found!");
+
+            if (!backend.CurrentUser.IsAdmin && badge.OwnerID != backend.CurrentUser.ID)
+                throw new UnauthorizedAccessException("Unauthorized!");
+
+            return backend.Repository.Users.GetAllUsersHavingBadge(badge_id);
+        }
     }
 }

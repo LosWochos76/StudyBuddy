@@ -2,6 +2,7 @@
 <div class="col-10">
   <button class="btn btn-primary" (click)="onAdd()">Neu</button>&nbsp;
   <button class="btn btn-success" [disabled]="!isSelected()" (click)="onEdit()">Bearbeiten</button>&nbsp;
+  <button class="btn btn-info"  [disabled]="!isSelected()" (click)="onSuccess()">Erfolg</button>&nbsp;
   <button class="btn btn-danger" [disabled]="!isSelected()" (click)="onDelete()">Löschen</button>
 </div>
 <br>

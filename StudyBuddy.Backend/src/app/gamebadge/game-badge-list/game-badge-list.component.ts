@@ -85,4 +85,12 @@ export class GameBadgeListComponent implements OnInit {
 
     return "";
   }
+
+  onSuccess() {
+    if (!this.isSelected())
+      return;
+
+    this.logger.debug("User wants to see success of GameBadge");
+    this.router.navigate(['/gamebadgesuccess/', this.selected.id]);
+  }
 }

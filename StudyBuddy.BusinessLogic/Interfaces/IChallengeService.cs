@@ -13,7 +13,7 @@ namespace StudyBuddy.BusinessLogic
         Challenge GetById(int id);
         Bitmap GetQrCode(int challenge_id);
         Challenge Insert(Challenge obj);
-        IEnumerable<Challenge> OfBadge(int id);
+        IEnumerable<Challenge> GetChallengesOfBadge(int badge_id);
         void RemoveAcceptance(int challenge_id, int user_id);
         Challenge Update(Challenge obj);
     }

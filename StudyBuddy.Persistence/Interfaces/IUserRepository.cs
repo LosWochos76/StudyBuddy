@@ -25,5 +25,6 @@ namespace StudyBuddy.Persistence
         int GetCountOfCommonFriends(int user_a_id, int user_b_id);
 
         IEnumerable<User> GetAllUsersThatAcceptedChallenge(int challenge_id);
+        IEnumerable<User> GetAllUsersHavingBadge(int badge_id);
     }
 }

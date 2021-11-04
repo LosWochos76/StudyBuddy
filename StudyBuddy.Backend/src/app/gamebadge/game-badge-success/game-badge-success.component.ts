@@ -2,16 +2,16 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { User } from 'src/app/model/user';
 import { AuthorizationService } from 'src/app/services/authorization.service';
-import { ChallengeService } from 'src/app/services/challenge.service';
+import { GameBadgeService } from 'src/app/services/gamebadge.service';
 import { LoggingService } from 'src/app/services/loging.service';
 import { UserService } from 'src/app/services/user.service';
 
 @Component({
-  selector: 'app-success',
-  templateUrl: './success.component.html',
-  styleUrls: ['./success.component.css']
+  selector: 'app-game-badge-success',
+  templateUrl: './game-badge-success.component.html',
+  styleUrls: ['./game-badge-success.component.css']
 })
-export class SuccessComponent implements OnInit {
+export class GameBadgeSuccessComponent implements OnInit {
   id: number = 0;
   objects: User[] = [];
   selected: User = null;
@@ -21,7 +21,7 @@ export class SuccessComponent implements OnInit {
     private logger: LoggingService,
     private route: ActivatedRoute,
     private user_service: UserService,
-    private challenge_service: ChallengeService,
+    private badge_service: GameBadgeService,
     private router: Router,
     private auth: AuthorizationService,) { 
       this.current_user = this.auth.getUser();
@@ -29,11 +29,10 @@ export class SuccessComponent implements OnInit {
 
   async ngOnInit() {
     this.id = this.route.snapshot.params['id'];
-    this.objects = await this.user_service.getAcceptedUsersOfChallenge(this.id);
+    //this.objects = await this.user_service.getAcceptedUsersOfChallenge(this.id);
   }
 
   onSelect(obj: User) {
-    this.logger.debug("User selected a Challenge");
     this.selected = obj;
   }
 
@@ -45,9 +44,9 @@ export class SuccessComponent implements OnInit {
     if (!this.current_user.isAdmin || !this.isSelected())
       return;
 
-    this.logger.debug("User wants to remove the acceptance of a user from a challenge");
-    await this.challenge_service.removeAcceptance(this.id, this.selected.id);
-    this.objects = await this.user_service.getAcceptedUsersOfChallenge(this.id);
+    this.logger.debug("User wants to remove of  of a user from a challenge");
+    //await this.challenge_service.removeAcceptance(this.id, this.selected.id);
+    //this.objects = await this.user_service.getAcceptedUsersOfChallenge(this.id);
   }
 
   goBack() {
