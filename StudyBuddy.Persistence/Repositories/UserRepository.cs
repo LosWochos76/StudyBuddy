@@ -112,9 +112,12 @@ namespace StudyBuddy.Persistence
                 "email,password_hash,role FROM users where id=:id");
         }
 
-        public IEnumerable<User> All(int from = 0, int max = 1000)
+        public IEnumerable<User> All(UserFilter filter)
         {
-            var qh = new QueryHelper<User>(connection_string, FromReader, new {from, max});
+            var qh = new QueryHelper<User>(connection_string, FromReader);
+            qh.AddParameter(":from", filter.Start);
+            qh.AddParameter(":max", filter.Count);
+
             return qh.ExecuteQueryToObjectList(
                 "SELECT id,firstname,lastname,nickname,email,password_hash,role " +
                 "FROM users order by lastname,firstname,nickname limit :max offset :from");
@@ -209,6 +212,7 @@ namespace StudyBuddy.Persistence
                 "users where lower(nickname)=lower(:nickname)");
         }
 
+        // Todo: Hier auch die den Filter einbauen und Common Friends mitladen und zurückgeben!
         public IEnumerable<User> GetFriends(int user_id, int from = 0, int max = 1000)
         {
             var qh = new QueryHelper<User>(connection_string, FromReader, new {user_id, from, max});
@@ -218,6 +222,7 @@ namespace StudyBuddy.Persistence
                 "order by lastname,firstname,nickname limit :max offset :from");
         }
 
+        // Todo: Hier auch den Filter einbauen und die Common Friends mitladen und zurückgeben!
         public IEnumerable<User> GetNotFriends(int user_id, int from = 0, int max = 1000)
         {
             var qh = new QueryHelper<User>(connection_string, FromReader, new { user_id, from, max });

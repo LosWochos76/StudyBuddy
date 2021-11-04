@@ -13,5 +13,9 @@ namespace StudyBuddy.BusinessLogic
         
         IEnumerable<GameBadge> GetBadgesForChallenge(int challenge_id);
         public BadgeSuccessRate GetSuccessRate(int badge_id, int user_id);
+
+        void AddBadgeToUser(int user_id, int badge_id);
+        void RemoveAllBadgesFromUser(int user_id);
+        IEnumerable<GameBadge> OfUser(int user_id);
     }
 }

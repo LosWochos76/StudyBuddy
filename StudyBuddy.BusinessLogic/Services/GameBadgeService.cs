@@ -91,5 +91,33 @@ namespace StudyBuddy.BusinessLogic
 
             return backend.Repository.GameBadges.GetSuccessRate(badge_id, user_id);
         }
+
+        public void AddBadgeToUser(int user_id, int badge_id)
+        {
+            if (backend.CurrentUser == null || (!backend.CurrentUser.IsAdmin && backend.CurrentUser.ID != user_id))
+                throw new Exception("Unauthorized!");
+
+            var obj = backend.Repository.GameBadges.ById(badge_id);
+            if (obj == null)
+                throw new Exception("Object not found!");
+
+            backend.Repository.GameBadges.AddBadgeToUser(user_id, badge_id);
+        }
+
+        public void RemoveAllBadgesFromUser(int user_id)
+        {
+            if (backend.CurrentUser == null || !backend.CurrentUser.IsAdmin)
+                throw new Exception("Unauthorized!");
+
+            backend.Repository.GameBadges.RemoveAllBadgesFromUser(user_id);
+        }
+
+        public IEnumerable<GameBadge> OfUser(int user_id)
+        {
+            if (backend.CurrentUser == null || (!backend.CurrentUser.IsAdmin && backend.CurrentUser.ID != user_id))
+                throw new Exception("Unauthorized!");
+
+            return backend.Repository.GameBadges.OfUser(user_id);
+        }
     }
 }

@@ -15,9 +15,9 @@ namespace StudyBuddy.Api
 
         [Route("/User/")]
         [HttpGet]
-        public IActionResult GetAll()
+        public IActionResult GetAll([FromQuery] UserFilter filter)
         {
-            return Json(backend.UserService.GetAll());
+            return Json(backend.UserService.GetAll(filter));
         }
 
         [Route("/User/Count")]
@@ -130,6 +130,30 @@ namespace StudyBuddy.Api
         {
             var result = backend.UserService.GetCountOfCommonFriends(user_a_id, user_b_id);
             return Json(result);
+        }
+
+        [Route("/User/{user_id}/Badge/")]
+        [HttpGet]
+        public IActionResult GetBadgesOfUser(int user_id)
+        {
+            var result = backend.GameBadgeService.OfUser(user_id);
+            return Json(result);
+        }
+
+        [Route("/User/{user_id}/Badge/{badge_id}")]
+        [HttpPost]
+        public IActionResult AddBadgeToUser(int user_id, int badge_id)
+        {
+            backend.GameBadgeService.AddBadgeToUser(user_id, badge_id);
+            return Json(new { Status = "ok" });
+        }
+
+        [Route("/User/{user_id}/Badge/")]
+        [HttpDelete]
+        public IActionResult RemoveAllBadgesFromUser(int user_id)
+        {
+            backend.GameBadgeService.RemoveAllBadgesFromUser(user_id);
+            return Json(new { Status = "ok" });
         }
     }
 }

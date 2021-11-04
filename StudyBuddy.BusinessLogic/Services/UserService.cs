@@ -13,12 +13,15 @@ namespace StudyBuddy.BusinessLogic
             this.backend = backend;
         }
 
-        public IEnumerable<User> GetAll()
+        public IEnumerable<User> GetAll(UserFilter filter)
         {
             if (backend.CurrentUser == null)
                 throw new Exception("Unauthorized!");
 
-            return backend.Repository.Users.All();
+            if (filter == null)
+                filter = new UserFilter();
+
+            return backend.Repository.Users.All(filter);
         }
 
         public int GetCount()

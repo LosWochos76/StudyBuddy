@@ -25,7 +25,10 @@ export class LoggingService {
     console.log(this.currDate() + " DEBUG: " + JSON.stringify(msg));
 
     let obj = new LogMessage();
-    obj.userId = this.auth.getUser().id;
+    var user = this.auth.getUser();
+    if (user != null)
+      obj.userId = user.id;
+
     obj.source = 3;
     obj.level = 1;
     obj.message = msg;
@@ -36,7 +39,10 @@ export class LoggingService {
     console.log(this.currDate() + " ERROR: " + JSON.stringify(msg));
 
     let obj = new LogMessage();
-    obj.userId = this.auth.getUser().id;
+    var user = this.auth.getUser();
+    if (user != null)
+      obj.userId = user.id;
+
     obj.source = 3;
     obj.level = 4;
     obj.message = JSON.stringify(msg);

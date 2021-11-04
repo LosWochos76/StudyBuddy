@@ -7,7 +7,7 @@ namespace StudyBuddy.BusinessLogic
     {
         void AddFriend(int user_id, int friend_id);
         void Delete(int user_id);
-        IEnumerable<User> GetAll();
+        IEnumerable<User> GetAll(UserFilter filter);
         IEnumerable<User> GetAllFriends(int user_id);
         IEnumerable<User> GetAllNotFriends(int user_id);
         IEnumerable<User> GetAllUsersThatAcceptedChallenge(int challenge_id);

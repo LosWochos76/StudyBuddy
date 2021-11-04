@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Npgsql;
 using StudyBuddy.Model;
@@ -13,6 +14,7 @@ namespace StudyBuddy.Persistence
             this.connection_string = connection_string;
 
             CreateBadgesTable();
+            CreateBadgesUserTable();
         }
 
         public GameBadge ById(int id)
@@ -93,17 +95,10 @@ namespace StudyBuddy.Persistence
             qh.Delete("game_badges", "id", id);
         }
 
-        // Get all of the badges that belong to the given challenge
-        // ToDo: Hier fehlt noch die Ermittlung der Tags
+        // ToDo: Implementieren!
         public IEnumerable<GameBadge> GetBadgesForChallenge(int challenge_id)
         {
-            var qh = new QueryHelper<GameBadge>(connection_string, FromReader);
-            qh.AddParameter(":challenge_id", challenge_id);
-            return qh.ExecuteQueryToObjectList(
-                "select distinct id,name,owner_id,created,required_coverage,description from game_badges " +
-                "inner join tags_badges tb on id=tb.badge_id " +
-                "inner join tags_challenges tc on tb.tag_id = tc.tag_id " +
-                "where challenge_id=:challenge_id order by created,name");
+            return null;
         }
 
         // Get the success rate of a specific user for a certain badge
@@ -133,6 +128,36 @@ namespace StudyBuddy.Persistence
                 "); ";
 
             return qh.ExecuteQueryToSingleObject(sql);
+        }
+
+        public void AddBadgeToUser(int user_id, int badge_id)
+        {
+            var qh = new QueryHelper<Tag>(connection_string);
+            qh.AddParameters(new { user_id, badge_id, created = DateTime.Now.Date });
+            qh.ExecuteNonQuery(
+                "insert into users_badges(user_id, badge_id, created) " +
+                "values(:user_id, :badge_id, :created) ON CONFLICT DO NOTHING;");
+        }
+
+        public void RemoveAllBadgesFromUser(int user_id)
+        {
+            var qh = new QueryHelper<Tag>(connection_string);
+            qh.AddParameter(":user_id", user_id);
+            qh.ExecuteNonQuery("delete from users_badges where user_id=:user_id");
+        }
+
+        public IEnumerable<GameBadge> OfUser(int user_id)
+        {
+            var qh = new QueryHelper<GameBadge>(connection_string, FromReader);
+            qh.AddParameter(":user_id", user_id);
+
+            var sql = "select id,name,owner_id,game_badges.created,required_coverage,description,tags_of_badge(id) " +
+                "from game_badges " +
+                "inner join users_badges on id=badge_id " +
+                "where user_id=:user_id " +
+                "order by users_badges.created desc";
+
+            return qh.ExecuteQueryToObjectList(sql);
         }
 
         private void CreateBadgesTable()
@@ -175,6 +200,22 @@ namespace StudyBuddy.Persistence
                     "ADD COLUMN description text");
 
                 rh.SetRevision(3);
+            }
+        }
+
+        private void CreateBadgesUserTable()
+        {
+            var rh = new RevisionHelper(connection_string, "users_badges");
+            var qh = new QueryHelper<GameBadge>(connection_string, FromReader);
+
+            if (!qh.TableExists("users_badges"))
+            {
+                qh.ExecuteNonQuery(
+                    "create table users_badges (" +
+                    "user_id int, " +
+                    "badge_id int," +
+                    "created date not null," +
+                    "unique (user_id, badge_id))");
             }
         }
 
