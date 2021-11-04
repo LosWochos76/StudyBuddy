@@ -167,4 +167,14 @@ export class ChallengeService {
       headers: new HttpHeaders({ Authorization: this.auth.getToken() })
     }).toPromise();
   }
+
+  async addAcceptance(challenge_id:number, user_id:number) {
+    if (!this.auth.isLoggedIn())
+      return null;
+
+    let result = await this.http.post(this.url + "Challenge/" + challenge_id + "/User/" + user_id, null,
+    {
+      headers: new HttpHeaders({ Authorization: this.auth.getToken() })
+    }).toPromise();
+  }
 }

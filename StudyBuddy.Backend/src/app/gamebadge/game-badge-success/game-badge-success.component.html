@@ -1,6 +1,6 @@
 <br>
 <h1>Erfolg von Abzeichen</h1>
-<p>Bislang haben {{objects.length}} Nutzer das Abzeichen erhalten.</p>
+<p>Bislang haben {{objects.length}} Nutzer das Abzeichen '{{badge.name}}' erhalten.</p>
 <button class="btn btn-primary" (click)="goBack()">Zurück</button>&nbsp;
 <button class="btn btn-danger" [disabled]="!isSelected()" (click)="onRemove()" *ngIf="current_user.isAdmin()">Entfernen</button>
 <br>
@@ -26,3 +26,12 @@
         </tr>
     </tbody>
 </table>
+<br>
+<div class="mb-3" *ngIf="current_user.isAdmin() && all_users.length > 0">
+    <label for="select" class="form-label">Email address</label>
+    <select id="select" class="form-select" aria-label="Default select example" #select>
+        <option *ngFor="let obj of all_users; index as i" value="{{obj.id}}">{{obj.fullName()}}</option>
+    </select>
+    <br>
+    <button type="submit" class="btn btn-primary" (click)="onAddUser(select.value)">Nutzer hinzufügen</button>
+</div>

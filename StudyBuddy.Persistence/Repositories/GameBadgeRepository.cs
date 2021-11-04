@@ -139,14 +139,15 @@ namespace StudyBuddy.Persistence
                 "values(:user_id, :badge_id, :created) ON CONFLICT DO NOTHING;");
         }
 
-        public void RemoveAllBadgesFromUser(int user_id)
+        public void RemoveBadgeFromUser(int user_id, int badge_id)
         {
             var qh = new QueryHelper<Tag>(connection_string);
             qh.AddParameter(":user_id", user_id);
-            qh.ExecuteNonQuery("delete from users_badges where user_id=:user_id");
+            qh.AddParameter(":badge_id", badge_id);
+            qh.ExecuteNonQuery("delete from users_badges where user_id=:user_id and badge_id=:badge_id");
         }
 
-        public IEnumerable<GameBadge> OfUser(int user_id)
+        public IEnumerable<GameBadge> GetBadgesOfUser(int user_id)
         {
             var qh = new QueryHelper<GameBadge>(connection_string, FromReader);
             qh.AddParameter(":user_id", user_id);

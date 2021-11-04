@@ -109,4 +109,13 @@ export class GameBadgeService {
     
     this.changed.emit();
   }
+
+  async removeUser(badge_id:number, user_id:number) {
+    this.logger.debug("Removing user from badge");
+
+    let result = await this.http.delete(this.url + "User/" + user_id + "/GameBadge/" + badge_id,
+    {
+      headers: new HttpHeaders({ Authorization: this.auth.getToken() })
+    }).toPromise();
+  }
 }

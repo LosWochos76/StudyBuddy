@@ -87,6 +87,14 @@ namespace StudyBuddy.Api
             return Json(new {Status = "ok"});
         }
 
+        [Route("/Challenge/{challenge_id}/User/{user_id}")]
+        [HttpPost]
+        public IActionResult AddAcceptance(int challenge_id, int user_id)
+        {
+            backend.ChallengeService.AddAcceptance(challenge_id, user_id);
+            return Json(new { Status = "ok" });
+        }
+
         [Route("/Challenge/{challenge_id}/Badge")]
         [HttpGet]
         public IActionResult GetBadgesForChallenge(int challenge_id)

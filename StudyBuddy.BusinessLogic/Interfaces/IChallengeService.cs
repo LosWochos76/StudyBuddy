@@ -15,6 +15,7 @@ namespace StudyBuddy.BusinessLogic
         Challenge Insert(Challenge obj);
         IEnumerable<Challenge> GetChallengesOfBadge(int badge_id);
         void RemoveAcceptance(int challenge_id, int user_id);
+        void AddAcceptance(int challenge_id, int user_id);
         Challenge Update(Challenge obj);
     }
 }

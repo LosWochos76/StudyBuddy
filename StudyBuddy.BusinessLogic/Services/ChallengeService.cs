@@ -180,5 +180,13 @@ namespace StudyBuddy.BusinessLogic
 
             backend.Repository.Challenges.RemoveAcceptance(challenge_id, user_id);
         }
+
+        public void AddAcceptance(int challenge_id, int user_id)
+        {
+            if (backend.CurrentUser == null || !backend.CurrentUser.IsAdmin)
+                throw new UnauthorizedAccessException("Unathorrized");
+
+            backend.Repository.Challenges.AddAcceptance(challenge_id, user_id);
+        }
     }
 }

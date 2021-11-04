@@ -94,7 +94,7 @@ namespace StudyBuddy.BusinessLogic
 
         public void AddBadgeToUser(int user_id, int badge_id)
         {
-            if (backend.CurrentUser == null || (!backend.CurrentUser.IsAdmin && backend.CurrentUser.ID != user_id))
+            if (backend.CurrentUser == null || !backend.CurrentUser.IsAdmin)
                 throw new Exception("Unauthorized!");
 
             var obj = backend.Repository.GameBadges.ById(badge_id);
@@ -104,20 +104,20 @@ namespace StudyBuddy.BusinessLogic
             backend.Repository.GameBadges.AddBadgeToUser(user_id, badge_id);
         }
 
-        public void RemoveAllBadgesFromUser(int user_id)
+        public void RemoveBadgeFromUser(int user_id, int badge_id)
         {
             if (backend.CurrentUser == null || !backend.CurrentUser.IsAdmin)
                 throw new Exception("Unauthorized!");
 
-            backend.Repository.GameBadges.RemoveAllBadgesFromUser(user_id);
+            backend.Repository.GameBadges.RemoveBadgeFromUser(user_id, badge_id);
         }
 
-        public IEnumerable<GameBadge> OfUser(int user_id)
+        public IEnumerable<GameBadge> GetBadgesOfUser(int user_id)
         {
             if (backend.CurrentUser == null || (!backend.CurrentUser.IsAdmin && backend.CurrentUser.ID != user_id))
                 throw new Exception("Unauthorized!");
 
-            return backend.Repository.GameBadges.OfUser(user_id);
+            return backend.Repository.GameBadges.GetBadgesOfUser(user_id);
         }
     }
 }

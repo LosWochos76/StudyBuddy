@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { GameBadge } from 'src/app/model/gamebadge';
 import { User } from 'src/app/model/user';
 import { AuthorizationService } from 'src/app/services/authorization.service';
 import { GameBadgeService } from 'src/app/services/gamebadge.service';
@@ -13,9 +14,11 @@ import { UserService } from 'src/app/services/user.service';
 })
 export class GameBadgeSuccessComponent implements OnInit {
   id: number = 0;
+  badge: GameBadge = new GameBadge();
   objects: User[] = [];
   selected: User = null;
   current_user: User = null;
+  all_users: User[] = [];
 
   constructor(
     private logger: LoggingService,
@@ -29,7 +32,28 @@ export class GameBadgeSuccessComponent implements OnInit {
 
   async ngOnInit() {
     this.id = this.route.snapshot.params['id'];
-    //this.objects = await this.user_service.getAcceptedUsersOfChallenge(this.id);
+    this.badge = await this.badge_service.byId(this.id);
+
+    await this.loadObjects();
+  }
+
+  async loadObjects() {
+    this.objects = await this.user_service.getUsersHavingBadge(this.id);
+
+    if (!this.current_user.isAdmin())
+      return;
+
+    this.all_users = [];
+    var users = await this.user_service.getAll();
+    
+    for (var user of users) {
+      if (!this.hasBadge(user.id))
+        this.all_users.push(user);
+    }
+  }
+
+  hasBadge(user_id:number) {
+    return (this.objects.find(obj => obj.id == user_id) != undefined);
   }
 
   onSelect(obj: User) {
@@ -44,12 +68,17 @@ export class GameBadgeSuccessComponent implements OnInit {
     if (!this.current_user.isAdmin || !this.isSelected())
       return;
 
-    this.logger.debug("User wants to remove of  of a user from a challenge");
-    //await this.challenge_service.removeAcceptance(this.id, this.selected.id);
-    //this.objects = await this.user_service.getAcceptedUsersOfChallenge(this.id);
+    this.logger.debug("User wants to remove a user from a badge");
+    await this.badge_service.removeUser(this.id, this.selected.id);
+    await this.loadObjects();
   }
 
   goBack() {
-    this.router.navigate(['challenge']);
+    this.router.navigate(['gamebadge']);
+  }
+
+  async onAddUser(user_id:number) {
+    await this.user_service.addBadgeToUser(user_id, this.id);
+    await this.loadObjects();
   }
 }

@@ -124,15 +124,15 @@ namespace StudyBuddy.Api
             return Json(result);
         }
 
-        [Route("/User/{user_id}/Badge/")]
+        [Route("/User/{user_id}/GameBadge/")]
         [HttpGet]
         public IActionResult GetBadgesOfUser(int user_id)
         {
-            var result = backend.GameBadgeService.OfUser(user_id);
+            var result = backend.GameBadgeService.GetBadgesOfUser(user_id);
             return Json(result);
         }
 
-        [Route("/User/{user_id}/Badge/{badge_id}")]
+        [Route("/User/{user_id}/GameBadge/{badge_id}")]
         [HttpPost]
         public IActionResult AddBadgeToUser(int user_id, int badge_id)
         {
@@ -140,11 +140,11 @@ namespace StudyBuddy.Api
             return Json(new { Status = "ok" });
         }
 
-        [Route("/User/{user_id}/Badge/")]
+        [Route("/User/{user_id}/GameBadge/{badge_id}")]
         [HttpDelete]
-        public IActionResult RemoveAllBadgesFromUser(int user_id)
+        public IActionResult RemoveBadgeFromUser(int user_id, int badge_id)
         {
-            backend.GameBadgeService.RemoveAllBadgesFromUser(user_id);
+            backend.GameBadgeService.RemoveBadgeFromUser(user_id, badge_id);
             return Json(new { Status = "ok" });
         }
     }

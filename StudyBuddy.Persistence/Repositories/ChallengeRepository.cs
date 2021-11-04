@@ -38,7 +38,7 @@ namespace StudyBuddy.Persistence
             if (!string.IsNullOrEmpty(filter.SearchText))
             {
                 qh.AddParameter(":search_text", "%" + filter.SearchText + "%");
-                sql += " and (name ilike :search_text or description ilike :search_text or tags_list ilike :search_text)";
+                sql += " and (name ilike :search_text or description ilike :search_text or tags_of_challenge(id) ilike :search_text)";
             }
 
             if (filter.OwnerId.HasValue)

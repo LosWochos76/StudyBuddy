@@ -188,7 +188,7 @@ export class UserService {
 
     let objects: User[] = [];
     this.logger.debug("Getting all Users having gamebadge " + badge_id);
-    let result = await this.http.get(this.url + "Badge/" + badge_id + "/User",
+    let result = await this.http.get(this.url + "GameBadge/" + badge_id + "/User",
       {
         headers: new HttpHeaders({ Authorization: this.auth.getToken() })
       }).toPromise();
@@ -197,5 +197,15 @@ export class UserService {
       objects.push(User.fromApi(result[index]));
 
     return objects;
+  }
+
+  async addBadgeToUser(user_id:number, badge_id:number) {
+    if (!this.auth.isLoggedIn())
+      return null;
+
+    let result = await this.http.post(this.url + "User/" + user_id + "/GameBadge/" + badge_id, null,
+    {
+      headers: new HttpHeaders({ Authorization: this.auth.getToken() })
+    }).toPromise();
   }
 }
