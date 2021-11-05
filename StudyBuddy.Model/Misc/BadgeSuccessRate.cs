@@ -14,7 +14,7 @@ namespace StudyBuddy.Model
         {
             get
             {
-                return OverallChallengeCount > 0 ? AcceptedChallengeCount / OverallChallengeCount : 0;
+                return OverallChallengeCount > 0 ? (double)AcceptedChallengeCount / OverallChallengeCount : 0;
             }
         }
     }

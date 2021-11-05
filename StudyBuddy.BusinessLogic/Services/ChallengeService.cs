@@ -170,6 +170,7 @@ namespace StudyBuddy.BusinessLogic
                 throw new Exception("Object is null!");
 
             backend.Repository.Challenges.AddAcceptance(challenge_id, backend.CurrentUser.ID);
+            OnChallengeAccepted(challenge, backend.CurrentUser);
             backend.BusinessEvent.TriggerEvent(this, new BusinessEventArgs(BusinessEventType.ChallengeAccepted, challenge));
 
             return challenge;
@@ -186,9 +187,19 @@ namespace StudyBuddy.BusinessLogic
         public void AddAcceptance(int challenge_id, int user_id)
         {
             if (backend.CurrentUser == null || !backend.CurrentUser.IsAdmin)
-                throw new UnauthorizedAccessException("Unathorrized");
+                throw new UnauthorizedAccessException("Unathorized");
+
+            var challenge = backend.Repository.Challenges.ById(challenge_id);
+            if (challenge == null)
+                throw new Exception("Object is null!");
+
+            var user = backend.Repository.Users.ById(user_id);
+            if (user == null)
+                throw new Exception("Object is null!");
 
             backend.Repository.Challenges.AddAcceptance(challenge_id, user_id);
+            OnChallengeAccepted(challenge, user);
+            backend.BusinessEvent.TriggerEvent(this, new BusinessEventArgs(BusinessEventType.ChallengeAccepted, challenge));
         }
 
         public void Accept(int challenge_id)
@@ -204,6 +215,36 @@ namespace StudyBuddy.BusinessLogic
                 throw new Exception("You need to provide a prove!");
 
             backend.Repository.Challenges.AddAcceptance(challenge_id, backend.CurrentUser.ID);
+            OnChallengeAccepted(challenge, backend.CurrentUser);
+            backend.BusinessEvent.TriggerEvent(this, new BusinessEventArgs(BusinessEventType.ChallengeAccepted, challenge));
+        }
+
+        private void OnChallengeAccepted(Challenge obj, User current_user)
+        {
+            var badges_of_user = backend.GameBadgeService.GetBadgesOfUser(current_user.ID);
+            var badges = backend.Repository.GameBadges.GetBadgesForChallenge(obj.ID);
+
+            foreach (var badge in badges)
+            {
+                if (!IsInList(badges_of_user, badge))
+                {
+                    var success_rate = backend.GameBadgeService.GetSuccessRate(badge.ID, current_user.ID);
+                    if (success_rate.Success >= badge.RequiredCoverage)
+                    {
+                        backend.Repository.GameBadges.AddBadgeToUser(current_user.ID, badge.ID);
+                        // ToDo: Neuigkeit erzeugen!
+                    }
+                }
+            }
+        }
+
+        private bool IsInList(IEnumerable<GameBadge> list, GameBadge badge)
+        {
+            foreach (var b in list)
+                if (b.ID.Equals(badge.ID))
+                    return true;
+
+            return false;
         }
     }
 }

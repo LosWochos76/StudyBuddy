@@ -95,10 +95,18 @@ namespace StudyBuddy.Persistence
             qh.Delete("game_badges", "id", id);
         }
 
-        // ToDo: Implementieren!
         public IEnumerable<GameBadge> GetBadgesForChallenge(int challenge_id)
         {
-            return null;
+            var qh = new QueryHelper<GameBadge>(connection_string, FromReader);
+            qh.AddParameter(":challenge_id", challenge_id);
+
+            var sql = "select distinct gb.id,gb.name,gb.owner_id,gb.created,gb.required_coverage,gb.description,tags_of_badge(gb.id) from game_badges gb " +
+                "inner join tags_badges tb on gb.id = tb.badge_id " +
+                "inner join tags_challenges tc on tc.tag_id = tb.tag_id " +
+                "where tc.challenge_id=:challenge_id " +
+                "order by created desc, name";
+
+            return qh.ExecuteQueryToObjectList(sql);
         }
 
         // Get the success rate of a specific user for a certain badge

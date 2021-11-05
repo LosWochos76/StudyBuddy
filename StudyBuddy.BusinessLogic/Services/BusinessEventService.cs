@@ -1,4 +1,5 @@
-﻿using StudyBuddy.Model;
+﻿using System.Collections.Generic;
+using StudyBuddy.Model;
 
 namespace StudyBuddy.BusinessLogic
 {
@@ -24,21 +25,38 @@ namespace StudyBuddy.BusinessLogic
                 args.CurrentUser = backend.CurrentUser;
 
             if (args.Type == BusinessEventType.ChallengeAccepted)
-                OnChallengeAccepted(args.Payload as Challenge);
+                OnChallengeAccepted(args.Payload as Challenge, args.CurrentUser);
 
             OnProcessOtherEvents();
-
         }
 
-        private void OnChallengeAccepted(Challenge obj)
+        private void OnChallengeAccepted(Challenge obj, User current_user)
         {
-            /*
-             * 1) Passende Badges finden --> diejenigen, die auch mindestens ein passendes Tag tragen
-             * 2) Für jedes dieser Badges:
-             * 3) Prüfen, ob der Nutzer diesen Badge bereits hat, wenn nein:
-             * 4) Das Verhältnis der möglichen Challenges (alle die entsprechende Tags tragen) zu den bereits abgeschlossenen Badges ermitteln --> x
-             * 5) Wenn x >= Coverage vom Badge, dann 
-             */
+            var badges_of_user = backend.GameBadgeService.GetBadgesOfUser(current_user.ID);
+            var badges = backend.Repository.GameBadges.GetBadgesForChallenge(obj.ID);
+
+            foreach (var badge in badges)
+            {
+                if (!IsInList(badges_of_user, badge))
+                {
+                    var success_rate = backend.GameBadgeService.GetSuccessRate(badge.ID, current_user.ID);
+                    if (success_rate.Success >= badge.RequiredCoverage)
+                    {
+                        backend.Repository.GameBadges.AddBadgeToUser(current_user.ID, badge.ID);
+
+                        // ToDo: Neuigkeit erzeugen!
+                    }
+                }
+            }
+        }
+
+        private bool IsInList(IEnumerable<GameBadge> list, GameBadge badge)
+        {
+            foreach (var b in list)
+                if (b.ID.Equals(badge.ID))
+                    return true;
+
+            return false;
         }
 
         private void OnProcessOtherEvents()
