@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
 using StudyBuddy.App.Api;
@@ -24,6 +23,19 @@ namespace StudyBuddy.App.ViewModels
             this.DetailsCommand = new Command<UserViewModel>(Details);
             this.AddFriendCommand = new Command(AddFriend);
             api.Authentication.LoginStateChanged += Authentication_LoginStateChanged;
+            api.FriendshipStateChanged += Api_FriendshipStateChanged;
+            api.RequestStateChanged += Api_RequestStateChanged;
+        }
+
+        private void Api_RequestStateChanged(object sender, RequestStateChangedEventArgs e)
+        {
+            if (e.Request.Type == Model.RequestType.Friendship)
+                Reload();
+        }
+
+        private void Api_FriendshipStateChanged(object sender, FriendshipStateChangedEventArgs e)
+        {
+            Reload();
         }
 
         private void Authentication_LoginStateChanged(object sender, LoginStateChangedArgs args)
@@ -34,12 +46,6 @@ namespace StudyBuddy.App.ViewModels
 
         public async void Reload()
         {
-            if (!IsRefreshing)
-            {
-                IsRefreshing = true;
-                NotifyPropertyChanged("IsRefreshing");
-            }
-
             try
             {
                 await Device.InvokeOnMainThreadAsync(() =>

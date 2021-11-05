@@ -8,7 +8,7 @@ namespace StudyBuddy.App.Api
     {
         Task GetFriends(ObservableCollection<UserViewModel> list, string search_text, bool reload = false);
         Task GetNotFriends(ObservableCollection<UserViewModel> list, string search_text, bool reload = false);
-        Task<bool> RemoveFriend(int friend_id);
+        Task<bool> RemoveFriend(UserViewModel uvm);
         Task<UserViewModel> GetById(int user_id);
     }
 }

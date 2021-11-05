@@ -24,6 +24,14 @@ namespace StudyBuddy.App.Api
             this.api = api;
             this.base_url = base_url;
             client = new HttpClient(Helper.GetInsecureHandler());
+
+            api.RequestStateChanged += Api_RequestStateChanged;
+        }
+
+        private void Api_RequestStateChanged(object sender, RequestStateChangedEventArgs e)
+        {
+            this.for_me_cache = null;
+            this.from_me_cache = null;
         }
 
         public async Task<bool> AskForFriendship(int other_user_id)
@@ -42,7 +50,8 @@ namespace StudyBuddy.App.Api
             if (content == null)
                 return false;
 
-            this.from_me_cache = null;
+            var rvm = RequestViewModel.FromModel(request);
+            api.RaiseRequestStateChanged(this, new RequestStateChangedEventArgs() { Request = rvm, Type = RequestStateChangedEventType.Created });
             return true;
         }
 
@@ -63,7 +72,8 @@ namespace StudyBuddy.App.Api
             if (content == null)
                 return false;
 
-            this.from_me_cache = null;
+            var rvm = RequestViewModel.FromModel(request);
+            api.RaiseRequestStateChanged(this, new RequestStateChangedEventArgs() { Request = rvm, Type = RequestStateChangedEventType.Created });
             return true;
         }
 
@@ -162,36 +172,36 @@ namespace StudyBuddy.App.Api
             return null;
         }
 
-        public async Task<bool> Accept(int request_id)
+        public async Task<bool> Accept(RequestViewModel request)
         {
             var rh = new WebRequestHelper(api.Authentication.Token);
-            var content = await rh.Load<RequestResult>(base_url + "Request/Accept/" + request_id, HttpMethod.Post);
+            var content = await rh.Load<RequestResult>(base_url + "Request/Accept/" + request.ID, HttpMethod.Post);
             if (content == null)
                 return false;
 
-            this.for_me_cache = null;
+            api.RaiseRequestStateChanged(this, new RequestStateChangedEventArgs() { Request = request, Type = RequestStateChangedEventType.Accepted });
             return content.IsOk;
         }
 
-        public async Task<bool> Deny(int request_id)
+        public async Task<bool> Deny(RequestViewModel request)
         {
             var rh = new WebRequestHelper(api.Authentication.Token);
-            var content = await rh.Load<RequestResult>(base_url + "Request/Deny/" + request_id, HttpMethod.Post);
+            var content = await rh.Load<RequestResult>(base_url + "Request/Deny/" + request.ID, HttpMethod.Post);
             if (content == null)
                 return false;
 
-            this.for_me_cache = null;
+            api.RaiseRequestStateChanged(this, new RequestStateChangedEventArgs() { Request = request, Type = RequestStateChangedEventType.Denied });
             return content.IsOk;
         }
 
-        public async Task<bool> Delete(int request_id)
+        public async Task<bool> Delete(RequestViewModel request)
         {
             var rh = new WebRequestHelper(api.Authentication.Token);
-            var content = await rh.Load<RequestResult>(base_url + "Request/" + request_id, HttpMethod.Delete);
+            var content = await rh.Load<RequestResult>(base_url + "Request/" + request.ID, HttpMethod.Delete);
             if (content == null)
                 return false;
 
-            this.from_me_cache = null;
+            api.RaiseRequestStateChanged(this, new RequestStateChangedEventArgs() { Request = request, Type = RequestStateChangedEventType.Deleted });
             return content.IsOk;
         }
     }

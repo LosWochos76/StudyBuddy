@@ -24,6 +24,7 @@ namespace StudyBuddy.App.ViewModels
             RefreshCommand = new Command(Reload);
             DetailsCommand = new Command<ChallengeViewModel>(ShowDetails);
             ScanQrCodeCommand = new Command(ScanQrCode);
+            api.ChallengeAccepted += (sender, e) => { Reload(); };
         }
 
         private void Authentication_LoginStateChanged(object sender, LoginStateChangedArgs args)
@@ -34,12 +35,6 @@ namespace StudyBuddy.App.ViewModels
 
         public async void Reload()
         {
-            if (!IsRefreshing)
-            {
-                IsRefreshing = true;
-                NotifyPropertyChanged("IsRefreshing");
-            }
-
             try
             {
                 await Device.InvokeOnMainThreadAsync(() =>

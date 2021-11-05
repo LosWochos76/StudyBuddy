@@ -60,28 +60,21 @@ namespace StudyBuddy.App.Api
                     if (obj.ContainsAny(search_text))
                         list.Add(obj);
 
-                    obj.CountOfCommonFriends = await GetCountOfCommonFriends(obj.ID);
                     friends_cache.Add(obj);
                 }
             }
         }
 
-        public async Task<int> GetCountOfCommonFriends(int other_user)
-        {
-            var current_user = api.Authentication.CurrentUser;
-            var rh = new WebRequestHelper(api.Authentication.Token);
-            return await rh.Load<Int32>(base_url + "User/" + current_user.ID + "/CountOfCommonFriends/" + other_user, HttpMethod.Get);
-        }
-
-        public async Task<bool> RemoveFriend(int friend_id)
+        public async Task<bool> RemoveFriend(UserViewModel uvm)
         {
             var current_user = api.Authentication.CurrentUser;
 
             var rh = new WebRequestHelper(api.Authentication.Token);
-            var content = await rh.Load<RequestResult>(base_url + "User/" + current_user.ID + "/Friend/" + friend_id, HttpMethod.Delete);
+            var content = await rh.Load<RequestResult>(base_url + "User/" + current_user.ID + "/Friend/" + uvm.ID, HttpMethod.Delete);
             if (content == null)
                 return false;
 
+            api.RaiseFriendsChanged(this, new FriendshipStateChangedEventArgs() { Friend = uvm, Type = FriendshipStateChangedType.Removed });
             return content.IsOk;
         }
 
@@ -120,7 +113,6 @@ namespace StudyBuddy.App.Api
                         list.Add(obj);
                     
                     not_friends_cache.Add(obj);
-                    obj.CountOfCommonFriends = await GetCountOfCommonFriends(obj.ID);
                     obj.FriendshipRequest = await api.Requests.GetFriendshipRequest(obj.ID);
                 }
             }

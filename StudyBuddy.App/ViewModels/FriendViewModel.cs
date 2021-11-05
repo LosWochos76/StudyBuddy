@@ -31,16 +31,13 @@ namespace StudyBuddy.App.ViewModels
                 return;
 
             var api = TinyIoCContainer.Current.Resolve<IApi>();
-            var result = await api.Users.RemoveFriend(User.ID);
+            var result = await api.Users.RemoveFriend(User);
 
             if (!result)
             {
                 await dialog.ShowError("Fehler!", "Der Freund konnte nicht entfernt werden!", "Ok", null);
                 return;
             }
-
-            var view_model = TinyIoCContainer.Current.Resolve<FriendsViewModel>();
-            view_model.Reload();
 
             var navigation = TinyIoCContainer.Current.Resolve<INavigationService>();
             await navigation.GoTo("//FriendsPage");

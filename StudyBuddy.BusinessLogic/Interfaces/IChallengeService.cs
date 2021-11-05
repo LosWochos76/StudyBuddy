@@ -6,7 +6,8 @@ namespace StudyBuddy.BusinessLogic
 {
     public interface IChallengeService
     {
-        void AcceptFromQrCode(string payload);
+        void Accept(int challenge_id);
+        Challenge AcceptFromQrCode(string payload);
         IEnumerable<Challenge> All(ChallengeFilter filter);
         void CreateSeries(CreateSeriesParameter param);
         void Delete(int id);

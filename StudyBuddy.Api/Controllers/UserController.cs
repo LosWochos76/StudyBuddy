@@ -72,16 +72,26 @@ namespace StudyBuddy.Api
 
         [Route("/User/{id}/Friends")]
         [HttpGet]
-        public IActionResult GetAllFriends(int id)
+        public IActionResult GetAllFriends(int id, [FromQuery] FriendFilter filter)
         {
-            return Json(backend.UserService.GetAllFriends(id));
+            if (filter == null)
+                filter = new FriendFilter() { UserId = id };
+            else
+                filter.UserId = id;
+
+            return Json(backend.UserService.GetAllFriends(filter));
         }
 
         [Route("/User/{id}/NotFriends")]
         [HttpGet]
-        public IActionResult GetAllNotFriends(int id)
+        public IActionResult GetAllNotFriends(int id, [FromQuery] FriendFilter filter)
         {
-            return Json(backend.UserService.GetAllNotFriends(id));
+            if (filter == null)
+                filter = new FriendFilter() { UserId = id };
+            else
+                filter.UserId = id;
+
+            return Json(backend.UserService.GetAllNotFriends(filter));
         }
 
         [Route("/User/{user_id}/Friend/{friend_id}")]

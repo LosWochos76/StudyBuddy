@@ -96,7 +96,7 @@ namespace StudyBuddy.App.ViewModels
             if (!answer)
                 return;
 
-            var result = await api.Requests.Accept(rvm.ID);
+            var result = await api.Requests.Accept(rvm);
             if (!result)
             {
                 await dialog.ShowError("Ein Fehler ist aufgetreten!", "Fehler!", "Ok", null);
@@ -123,7 +123,7 @@ namespace StudyBuddy.App.ViewModels
             if (!answer)
                 return;
 
-            var result = await api.Requests.Deny(rvm.ID);
+            var result = await api.Requests.Deny(rvm);
             if (!result)
             {
                 await dialog.ShowError("Ein Fehler ist aufgetreten!", "Fehler!", "Ok", null);

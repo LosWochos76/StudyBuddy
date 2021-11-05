@@ -43,7 +43,7 @@ namespace StudyBuddy.BusinessLogic
                 throw new Exception("Unauthorized!");
 
             var request = backend.Repository.Requests.ById(id);
-            if (request.SenderID != backend.CurrentUser.ID && request.RecipientID != backend.CurrentUser.ID)
+            if (!backend.CurrentUser.IsAdmin && request.SenderID != backend.CurrentUser.ID && request.RecipientID != backend.CurrentUser.ID)
                 throw new Exception("Unauthorized!");
 
             return request;

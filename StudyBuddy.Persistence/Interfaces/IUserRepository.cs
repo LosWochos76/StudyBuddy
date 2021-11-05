@@ -16,8 +16,8 @@ namespace StudyBuddy.Persistence
         void Update(User obj);
         void Delete(int id);
 
-        IEnumerable<User> GetFriends(int user_id, int from = 0, int max = 1000);
-        IEnumerable<User> GetNotFriends(int user_id, int from = 0, int max = 1000);
+        IEnumerable<User> GetFriends(FriendFilter filter);
+        IEnumerable<User> GetNotFriends(FriendFilter filter);
         void AddFriend(int user_id, int friend_id);
         void RemoveFriend(int user_id, int friend_id);
         void RemoveFriends(int user_id);

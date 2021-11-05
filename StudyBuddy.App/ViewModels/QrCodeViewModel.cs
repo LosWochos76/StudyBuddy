@@ -1,6 +1,5 @@
 ﻿using StudyBuddy.App.Api;
 using StudyBuddy.App.Misc;
-using TinyIoC;
 
 namespace StudyBuddy.App.ViewModels
 {
@@ -27,15 +26,13 @@ namespace StudyBuddy.App.ViewModels
                 return;
             }
 
-            var result = await api.Challenges.AcceptFromQrCode(text);
-            if (!result)
+            var cvm = await api.Challenges.AcceptFromQrCode(text);
+            if (cvm == null)
             {
                 await dialog.ShowError("Ein Fehler ist aufgetreten!", "Fehler!", "Ok", null);
                 return;
             }
 
-            var challenges_view_model = TinyIoCContainer.Current.Resolve<ChallengesViewModel>();
-            challenges_view_model.Reload();
             await navigation.GoTo("//StatisticsPage");
         }
     }

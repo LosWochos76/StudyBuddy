@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Net.Http;
 using StudyBuddy.App.Misc;
+using StudyBuddy.App.ViewModels;
 using TinyIoC;
 
 namespace StudyBuddy.App.Api
@@ -9,7 +10,7 @@ namespace StudyBuddy.App.Api
     {
         //private readonly string base_url = "https://localhost:5001/";
         private readonly string base_url = "https://studybuddy.hshl.de/";
-        private Version app_version = new Version(0, 0, 17, 0);
+        private Version app_version = new Version(0, 0, 18, 0);
 
         public IAuthenticationService Authentication { get; }
         public IChallengeService Challenges { get; }
@@ -48,6 +49,27 @@ namespace StudyBuddy.App.Api
                 await dialog.ShowError("App zu alt!", "Diese Version der App ist zu alt! Bitte updaten!", "Ok", null);
                 throw new Exception("App is too old! Please update!");
             }
+        }
+
+        public event EventHandler<ChallengeViewModel> ChallengeAccepted;
+        public void RaiseChallengeAcceptedEvent(object sender, ChallengeViewModel challenge)
+        {
+            if (ChallengeAccepted != null)
+                ChallengeAccepted(sender, challenge);
+        }
+
+        public event EventHandler<RequestStateChangedEventArgs> RequestStateChanged;
+        public void RaiseRequestStateChanged(object sender, RequestStateChangedEventArgs args)
+        {
+            if (RequestStateChanged != null)
+                RequestStateChanged(sender, args);
+        }
+
+        public event EventHandler<FriendshipStateChangedEventArgs> FriendshipStateChanged;
+        public void RaiseFriendsChanged(object sender, FriendshipStateChangedEventArgs args)
+        {
+            if (FriendshipStateChanged != null)
+                FriendshipStateChanged(sender, args);
         }
     }
 }

@@ -1,4 +1,6 @@
-﻿namespace StudyBuddy.Model
+﻿using System.Text.Json.Serialization;
+
+namespace StudyBuddy.Model
 {
     public class BadgeSuccessRate
     {
@@ -7,6 +9,7 @@
         public int OverallChallengeCount { get; set; }
         public int AcceptedChallengeCount { get; set; }
 
+        [JsonIgnore]
         public double Success
         {
             get

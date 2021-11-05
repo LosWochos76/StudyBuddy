@@ -83,20 +83,20 @@ namespace StudyBuddy.BusinessLogic
             return obj.ID;
         }
 
-        public IEnumerable<User> GetAllFriends(int user_id)
+        public IEnumerable<User> GetAllFriends(FriendFilter filter)
         {
-            if (backend.CurrentUser == null || !backend.CurrentUser.IsAdmin && backend.CurrentUser.ID != user_id)
+            if (backend.CurrentUser == null || !backend.CurrentUser.IsAdmin && backend.CurrentUser.ID != filter.UserId)
                 throw new Exception("Unauthorized!");
 
-            return backend.Repository.Users.GetFriends(user_id);
+            return backend.Repository.Users.GetFriends(filter);
         }
 
-        public IEnumerable<User> GetAllNotFriends(int user_id)
+        public IEnumerable<User> GetAllNotFriends(FriendFilter filter)
         {
-            if (backend.CurrentUser == null || !backend.CurrentUser.IsAdmin && backend.CurrentUser.ID != user_id)
+            if (backend.CurrentUser == null || !backend.CurrentUser.IsAdmin && backend.CurrentUser.ID != filter.UserId)
                 throw new Exception("Unauthorized!");
 
-            return backend.Repository.Users.GetNotFriends(user_id);
+            return backend.Repository.Users.GetNotFriends(filter);
         }
 
         public void AddFriend(int user_id, int friend_id)

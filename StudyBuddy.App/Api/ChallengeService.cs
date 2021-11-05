@@ -46,24 +46,16 @@ namespace StudyBuddy.App.Api
             }
         }
 
-        public async Task<bool> AcceptFromQrCode(string code)
+        public async Task<ChallengeViewModel> AcceptFromQrCode(string code)
         {
             var rh = new WebRequestHelper(api.Authentication.Token);
-            var status = await rh.Load<RequestResult>(base_url + "Challenge/AcceptFromQrCode", HttpMethod.Post, code);
-            if (status == null)
-                return false;
+            var obj = await rh.Load<Challenge>(base_url + "Challenge/AcceptFromQrCode", HttpMethod.Post, code);
+            if (obj == null)
+                return null;
 
-            return status.IsOk;
-        }
-
-        private ChallengeViewModel TryToFindByIdInCache(IEnumerable<ChallengeViewModel> cache, int challenge_id)
-        {
-            if (cache != null)
-                foreach (var obj in cache)
-                    if (obj.ID == challenge_id)
-                        return obj;
-
-            return null;
+            var cvm = ChallengeViewModel.FromModel(obj);
+            api.RaiseChallengeAcceptedEvent(this, cvm);
+            return cvm;
         }
 
         public async Task<ChallengeViewModel> GetById(int challenge_id)
@@ -75,6 +67,17 @@ namespace StudyBuddy.App.Api
 
             var uvm = ChallengeViewModel.FromModel(user);
             return uvm;
+        }
+
+        public async Task<bool> Accept(ChallengeViewModel cvm)
+        {
+            var rh = new WebRequestHelper(api.Authentication.Token);
+            var status = await rh.Load<RequestResult>(base_url + "Challenge/" + cvm.ID + "/Accept", HttpMethod.Post);
+            if (status == null)
+                return false;
+
+            api.RaiseChallengeAcceptedEvent(this, cvm);
+            return status.IsOk;
         }
     }
 }

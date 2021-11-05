@@ -1,4 +1,7 @@
-﻿namespace StudyBuddy.App.Api
+﻿using System;
+using StudyBuddy.App.ViewModels;
+
+namespace StudyBuddy.App.Api
 {
     public interface IApi
     {
@@ -10,5 +13,14 @@
         IBadgeService Badges { get; }
         IRequestService Requests { get; }
         ILoggingService Logging { get; }
+
+        event EventHandler<ChallengeViewModel> ChallengeAccepted;
+        void RaiseChallengeAcceptedEvent(object sender, ChallengeViewModel challenge);
+
+        event EventHandler<RequestStateChangedEventArgs> RequestStateChanged;
+        void RaiseRequestStateChanged(object sender, RequestStateChangedEventArgs args);
+
+        event EventHandler<FriendshipStateChangedEventArgs> FriendshipStateChanged;
+        void RaiseFriendsChanged(object sender, FriendshipStateChangedEventArgs args);
     }
 }

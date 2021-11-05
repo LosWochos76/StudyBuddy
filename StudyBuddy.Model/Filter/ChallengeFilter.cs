@@ -2,11 +2,9 @@ using System;
 
 namespace StudyBuddy.Model
 {
-    public class ChallengeFilter
+    public class ChallengeFilter : BaseFilter
     {
         public int CurrentUserId { get; set; } = 0;
-        public int Start { get; set; } = 0;
-        public int Count { get; set; } = 1000;
         public string SearchText { get; set; } = string.Empty;
         public bool WithTags { get; set; } = false;
         public bool OnlyUnacceped { get; set; } = false;

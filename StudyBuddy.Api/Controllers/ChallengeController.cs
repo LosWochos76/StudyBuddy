@@ -75,8 +75,15 @@ namespace StudyBuddy.Api
         [HttpPost]
         public IActionResult AcceptFromQrCode([FromBody] string parameter)
         {
-            backend.ChallengeService.AcceptFromQrCode(parameter);
-            return Json(new {Status = "ok"});
+            return Json(backend.ChallengeService.AcceptFromQrCode(parameter));
+        }
+
+        [Route("/Challenge/{challenge_id}/Accept/")]
+        [HttpPost]
+        public IActionResult Accept(int challenge_id)
+        {
+            backend.ChallengeService.Accept(challenge_id);
+            return Json(new { Status = "ok" });
         }
 
         [Route("/Challenge/{challenge_id}/User/{user_id}")]

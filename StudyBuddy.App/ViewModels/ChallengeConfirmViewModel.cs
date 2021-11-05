@@ -1,112 +1,120 @@
-﻿using StudyBuddy.App.Api;
-using StudyBuddy.App.Misc;
-using StudyBuddy.App.Views;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
+using System.Threading.Tasks;
 using System.Windows.Input;
+using StudyBuddy.App.Api;
+using StudyBuddy.App.Misc;
+using StudyBuddy.App.Views;
+using StudyBuddy.Model;
 using TinyIoC;
 using Xamarin.Forms;
 
 namespace StudyBuddy.App.ViewModels
 {
-    public class ChallengeConfirmViewModel : ChallengeViewModel
+    public class ChallengeConfirmViewModel
     {
-        private readonly int proveType = 1;
-        private readonly int iD;
-        public ChallengeConfirmViewModel(int x, int y)
+        private ChallengeViewModel challenge;
+        private IDialogService dialog;
+        private INavigationService navigation;
+        private IApi api;
+        public ICommand ConfirmChallenge { get; }
+
+        public ChallengeConfirmViewModel(ChallengeViewModel challenge)
         {
-            proveType = x;
-            iD = y;
-           
+            this.challenge = challenge;
+
             ConfirmChallenge = new Command(OnConfirm);
+            dialog = TinyIoCContainer.Current.Resolve<IDialogService>();
+            api = TinyIoCContainer.Current.Resolve<IApi>();
+            navigation = TinyIoCContainer.Current.Resolve<INavigationService>();
         }
 
-        public ICommand ConfirmChallenge { get; }
         private async void OnConfirm()
         {
-            var dialog = TinyIoCContainer.Current.Resolve<IDialogService>();
-            var api = TinyIoCContainer.Current.Resolve<IApi>();
-            var navigation = TinyIoCContainer.Current.Resolve<INavigationService>();
-            var friends = new ObservableCollection<UserViewModel>();
+            if (challenge.Prove == ChallengeProve.ByTrust)
+                await AcceptByTrust();
+
+            if (challenge.Prove == ChallengeProve.ByQrCode)
+                await AcceptByQrCode();
+
+            if (challenge.Prove == ChallengeProve.ByRandomTeamMember)
+                await AcceptByRandomTeamMember();
+
+            if (challenge.Prove == ChallengeProve.ByLocationCloseToOwner)
+                await AcceptByLocation();
+        }
+
+        private async Task AcceptByTrust()
+        {
             var answer = false;
 
-            if (proveType == 1)
+            await dialog.ShowMessage(
+                "Willst du die Herausforderung wirklich abschließen?",
+                "Herausforderung abschließen?",
+                "Ja", "Nein", a => { answer = a; });
+
+            if (!answer)
+                return;
+
+            var result = await api.Challenges.Accept(challenge);
+            if (!result)
             {
-                //just ask if user really wants to confirm and update accordingly
-                await dialog.ShowMessage(
-                    "Willst du die Herausforderung wirklich abschließen?",
-                    "Herausforderung abschließen?",
-                    "Ja", "Nein", a => { answer = a; });
-                if (!answer) 
-                    return;
-                var result = await api.Requests.Accept(iD);
-                if (!result)
-                {
-                    await dialog.ShowError("Ein Fehler ist aufgetreten!", "Fehler!", "Ok", null);
-                    return;
-                }
-            }
-            if (proveType == 2)
-            {
-                await navigation.Push(new QrCodePage());
+                await dialog.ShowError("Ein Fehler ist aufgetreten!", "Fehler!", "Ok", null);
                 return;
             }
-            if (proveType == 3)
+
+            await navigation.GoTo("//StatisticsPage");
+        }
+
+        private async Task AcceptByQrCode()
+        {
+            await navigation.Push(new QrCodePage());
+        }
+
+        private async Task AcceptByLocation()
+        {
+            await dialog.ShowMessage("Beweisverfahren noch nicht implementiert.", "Ungültiges Beweisverfahren!");
+        }
+
+        private async Task AcceptByRandomTeamMember()
+        {
+            var friends = new ObservableCollection<UserViewModel>();
+            await api.Users.GetFriends(friends, string.Empty);
+
+            if (!friends.Any())
             {
-                
-                await api.Users.GetFriends(friends, string.Empty);
-
-                if (!friends.Any())
-                {
-                    await dialog.ShowMessage("Offenbar hast du noch keine Freunde! Bitte vernetze mit deinen Mit-Studierenden!", "Keine Freunde gefunden!");
-                    return;
-                }
-
-                var list = new List<UserViewModel>(friends);
-                var random = new Random();
-                int index = random.Next(list.Count);
-                var user = list[index];
-
-                
-                await dialog.ShowMessage(
-                    "Willst du eine Bestätigungsanfrage an " + user.FullName + " schicken?",
-                    "Anfrage verschicken?",
-                    "Ja", "Nein", a => { answer = a; });
-
-                if (!answer)
-                    return;
-
-                var result = await api.Requests.AskForChallengeAcceptance(user.ID, iD);
-                if (!result)
-                {
-                    await dialog.ShowError("Ein Fehler ist aufgetreten!", "Fehler!", "Ok", null);
-                    return;
-                }
-                else
-                {
-                    await dialog.ShowMessageBox("Sobald dein Freund die Anfrage bestätigt, " +
-                        "bekommtst du die Punkte gutgeschrieben.", "Anfrage wurde verschickt!");
-                    await navigation.Pop();
-                    return;
-                } 
+                await dialog.ShowMessage("Offenbar hast du noch keine Freunde! Bitte vernetze mit deinen Mit-Studierenden!", "Keine Freunde gefunden!");
+                return;
             }
-            if (proveType == 4)
-            {
 
-                //check if user is in appropriate location or disable button if location is not matching
-                await dialog.ShowMessage("Beweisverfahren noch nicht implementiert.", "Ungültiges Beweisverfahren!");
+            var list = new List<UserViewModel>(friends);
+            var random = new Random();
+            int index = random.Next(list.Count);
+            var user = list[index];
+
+            var answer = false;
+            await dialog.ShowMessage(
+                "Willst du eine Bestätigungsanfrage an " + user.FullName + " schicken?",
+                "Anfrage verschicken?",
+                "Ja", "Nein", a => { answer = a; });
+
+            if (!answer)
+                return;
+
+            var result = await api.Requests.AskForChallengeAcceptance(user.ID, challenge.ID);
+            if (!result)
+            {
+                await dialog.ShowError("Ein Fehler ist aufgetreten!", "Fehler!", "Ok", null);
                 return;
             }
             else
             {
-                await dialog.ShowMessage("Diese Herausforderung kann nicht abgeschlossen werden.","Ungültiges Beweisverfahren!");
-                return;
-            } 
-                
+                await dialog.ShowMessageBox("Sobald dein Freund die Anfrage bestätigt, " +
+                    "bekommtst du die Punkte gutgeschrieben.", "Anfrage wurde verschickt!");
+                await navigation.Pop();
+            }
         }
-
     }
 }

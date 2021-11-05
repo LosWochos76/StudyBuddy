@@ -212,23 +212,29 @@ namespace StudyBuddy.Persistence
                 "users where lower(nickname)=lower(:nickname)");
         }
 
-        // Todo: Hier auch die den Filter einbauen und Common Friends mitladen und zurückgeben!
-        public IEnumerable<User> GetFriends(int user_id, int from = 0, int max = 1000)
+        public IEnumerable<User> GetFriends(FriendFilter filter)
         {
-            var qh = new QueryHelper<User>(connection_string, FromReader, new {user_id, from, max});
+            var qh = new QueryHelper<User>(connection_string, FromReaderWithCommonFriends);
+            qh.AddParameter(":user_id", filter.UserId);
+            qh.AddParameter(":from", filter.Start);
+            qh.AddParameter(":max", filter.Count);
+
             return qh.ExecuteQueryToObjectList(
-                "select id,firstname,lastname,nickname,email,password_hash,role from friends " +
+                "select id,firstname,lastname,nickname,email,password_hash,role,common_friends(id,:user_id) from friends " +
                 "inner join users on user_b = id where user_a=:user_id " +
                 "order by lastname,firstname,nickname limit :max offset :from");
         }
 
-        // Todo: Hier auch den Filter einbauen und die Common Friends mitladen und zurückgeben!
-        public IEnumerable<User> GetNotFriends(int user_id, int from = 0, int max = 1000)
+        public IEnumerable<User> GetNotFriends(FriendFilter filter)
         {
-            var qh = new QueryHelper<User>(connection_string, FromReader, new { user_id, from, max });
+            var qh = new QueryHelper<User>(connection_string, FromReaderWithCommonFriends);
+            qh.AddParameter(":user_id", filter.UserId);
+            qh.AddParameter(":from", filter.Start);
+            qh.AddParameter(":max", filter.Count);
+
             return qh.ExecuteQueryToObjectList(
-                "select id,firstname,lastname,nickname,email,password_hash,role from users " +
-                "where id not in (select user_b from friends where user_a = :user_id) and id != :user_id " +
+                "select id,firstname,lastname,nickname,email,password_hash,role,common_friends(id,:user_id) from users " +
+                "where id not in (select user_b from friends where user_a=:user_id) and id!=:user_id " +
                 "order by lastname,firstname,nickname limit :max offset :from");
         }
 
@@ -236,7 +242,7 @@ namespace StudyBuddy.Persistence
         {
             var qh = new QueryHelper<User>(connection_string, FromReader, new {user_id, friend_id});
             qh.ExecuteNonQuery(
-                "insert into friends (user_a, user_b) values(:user_id, :friend_id), (:friend_id, :user_id);");
+                "insert into friends (user_a, user_b) values (:user_id, :friend_id), (:friend_id, :user_id);");
         }
 
         public void RemoveFriend(int user_id, int friend_id)
@@ -295,14 +301,18 @@ namespace StudyBuddy.Persistence
             return obj;
         }
 
+        private User FromReaderWithCommonFriends(NpgsqlDataReader reader)
+        {
+            var user = FromReader(reader);
+            user.CommonFriends = reader.GetInt32(7);
+            return user;
+        }
+
         public int GetCountOfCommonFriends(int user_a_id, int user_b_id)
         {
             var qh = new QueryHelper<User>(connection_string);
             qh.AddParameters(new { user_a_id, user_b_id });
-            return qh.ExecuteQueryToSingleInt(
-                "select count(*) as count_of_common_friends from " +
-                "(select user_b from friends where user_a=:user_a_id intersect " +
-                "select user_b from friends where user_a=:user_b_id) as common_friends");
+            return qh.ExecuteQueryToSingleInt("select common_friends(:user_a_i, :user_b_id)");
         }
     }
 }

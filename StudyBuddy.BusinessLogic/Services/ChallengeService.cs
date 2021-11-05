@@ -141,7 +141,7 @@ namespace StudyBuddy.BusinessLogic
             return qrCode.GetGraphic(20);
         }
 
-        public void AcceptFromQrCode(string payload)
+        public Challenge AcceptFromQrCode(string payload)
         {
             if (backend.CurrentUser == null)
                 throw new UnauthorizedAccessException("Unauthorized!");
@@ -171,6 +171,8 @@ namespace StudyBuddy.BusinessLogic
 
             backend.Repository.Challenges.AddAcceptance(challenge_id, backend.CurrentUser.ID);
             backend.BusinessEvent.TriggerEvent(this, new BusinessEventArgs(BusinessEventType.ChallengeAccepted, challenge));
+
+            return challenge;
         }
 
         public void RemoveAcceptance(int challenge_id, int user_id)
@@ -187,6 +189,21 @@ namespace StudyBuddy.BusinessLogic
                 throw new UnauthorizedAccessException("Unathorrized");
 
             backend.Repository.Challenges.AddAcceptance(challenge_id, user_id);
+        }
+
+        public void Accept(int challenge_id)
+        {
+            if (backend.CurrentUser == null)
+                throw new UnauthorizedAccessException("Unathorrized");
+
+            var challenge = backend.Repository.Challenges.ById(challenge_id);
+            if (challenge == null)
+                throw new Exception("Object not found!");
+
+            if (challenge.Prove != ChallengeProve.ByTrust)
+                throw new Exception("You need to provide a prove!");
+
+            backend.Repository.Challenges.AddAcceptance(challenge_id, backend.CurrentUser.ID);
         }
     }
 }

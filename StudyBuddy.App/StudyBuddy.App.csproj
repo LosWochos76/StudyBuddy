@@ -19,7 +19,6 @@
         <None Remove="TinyIoC" />
         <None Remove="Interfaces\" />
         <None Remove="ZXing.Net.Mobile.Forms" />
-        <None Remove="Controls\" />
         <None Remove="ApiFacade\" />
         <None Remove="Plugin.FirebasePushNotification" />
         <None Remove="Newtonsoft.Json" />
@@ -27,7 +26,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="Xamarin.CommunityToolkit" Version="1.2.0" />
+        <PackageReference Include="Xamarin.CommunityToolkit" Version="1.3.0" />
         <PackageReference Include="Xamarin.Forms" Version="5.0.0.2196" />
         <PackageReference Include="Xamarin.Essentials" Version="1.7.0" />
         <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="5.0.2" />
@@ -38,7 +37,6 @@
     <ItemGroup>
         <Folder Include="Misc\" />
         <Folder Include="Interfaces\" />
-        <Folder Include="Controls\" />
     </ItemGroup>
     <ItemGroup>
       <ProjectReference Include="..\StudyBuddy.Model\StudyBuddy.Model.csproj" />

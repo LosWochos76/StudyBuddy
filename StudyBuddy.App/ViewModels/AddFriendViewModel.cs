@@ -20,17 +20,25 @@ namespace StudyBuddy.App.ViewModels
             RefreshCommand = new Command(Reload);
             SendFriendshipRequestCommand = new Command<UserViewModel>(SendFriendshipRequest);
             RemoveFriendshipRequestCommand = new Command<UserViewModel>(RemoveFriendshipRequest);
-            this.Reload();
+
+            api.FriendshipStateChanged += Api_FriendshipStateChanged;
+            api.RequestStateChanged += Api_RequestStateChanged;
+
+            Reload();
+        }
+
+        private void Api_RequestStateChanged(object sender, RequestStateChangedEventArgs e)
+        {
+            Reload();
+        }
+
+        private void Api_FriendshipStateChanged(object sender, FriendshipStateChangedEventArgs e)
+        {
+            Reload();
         }
 
         public async void Reload()
         {
-            if (!IsRefreshing)
-            {
-                IsRefreshing = true;
-                NotifyPropertyChanged("IsRefreshing");
-            }
-
             try
             {
                 await Device.InvokeOnMainThreadAsync(() =>
@@ -73,8 +81,6 @@ namespace StudyBuddy.App.ViewModels
                 await dialog.ShowError("Ein Fehler ist aufgetreten!", "Fehler!", "Ok", null);
                 return;
             }
-            else
-                Reload();
         }
 
         public async void RemoveFriendshipRequest(UserViewModel obj)
@@ -88,14 +94,12 @@ namespace StudyBuddy.App.ViewModels
             if (!answer)
                 return;
 
-            var result = await api.Requests.Delete(obj.FriendshipRequest.ID);
+            var result = await api.Requests.Delete(obj.FriendshipRequest);
             if (!result)
             {
                 await dialog.ShowError("Ein Fehler ist aufgetreten!", "Fehler!", "Ok", null);
                 return;
             }
-            else
-                Reload();
         }
     }
 }

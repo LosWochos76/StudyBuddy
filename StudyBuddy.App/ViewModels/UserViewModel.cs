@@ -7,14 +7,13 @@ namespace StudyBuddy.App.ViewModels
 {
     public class UserViewModel : INotifyPropertyChanged
     {
-        private int count_of_common_friends = 0;
-
         public int ID { get; set; }
         public string Firstname { get; set; }
         public string Lastname { get; set; }
         public string Nickname { get; set; }
         public string Email { get; set; }
         public Role Role { get; set; }
+        public int CountOfCommonFriends { get; set; }
 
         public bool IsAdmin => Role == Role.Admin;
         public bool IsStudent => Role == Role.Student;
@@ -60,7 +59,8 @@ namespace StudyBuddy.App.ViewModels
                 Lastname = u.Lastname,
                 Nickname = u.Nickname,
                 Email = u.Email,
-                Role = u.Role
+                Role = u.Role,
+                CountOfCommonFriends = u.CommonFriends
             };
         }
 
@@ -71,16 +71,6 @@ namespace StudyBuddy.App.ViewModels
 
             var keywords = Helper.SplitIntoKeywords(search_text);
             return Helper.ContainsAny(Firstname + Lastname + Nickname + Email, keywords);
-        }
-
-        public int CountOfCommonFriends
-        {
-            get { return count_of_common_friends; }
-            set
-            {
-                count_of_common_friends = value;
-                NotifyPropertyChanged();
-            }
         }
     }
 }

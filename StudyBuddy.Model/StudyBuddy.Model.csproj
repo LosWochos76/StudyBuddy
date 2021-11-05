@@ -6,8 +6,16 @@
 
     <ItemGroup>
       <None Remove="System.Net.Http.Json" />
+      <None Remove="Filter\" />
+      <None Remove="Model\" />
+      <None Remove="Misc\" />
     </ItemGroup>
     <ItemGroup>
       <PackageReference Include="System.Net.Http.Json" Version="5.0.0" />
+    </ItemGroup>
+    <ItemGroup>
+      <Folder Include="Filter\" />
+      <Folder Include="Model\" />
+      <Folder Include="Misc\" />
     </ItemGroup>
 </Project>

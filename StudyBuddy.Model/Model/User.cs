@@ -12,6 +12,9 @@ namespace StudyBuddy.Model
         public string Email { get; set; }
         public Role Role { get; set; }
 
+        // Is only loaded in certain contexts
+        public int CommonFriends { get; set; }
+
         [JsonIgnore]
         public bool IsAdmin => Role == Role.Admin;
 

@@ -8,8 +8,8 @@ namespace StudyBuddy.BusinessLogic
         void AddFriend(int user_id, int friend_id);
         void Delete(int user_id);
         IEnumerable<User> GetAll(UserFilter filter);
-        IEnumerable<User> GetAllFriends(int user_id);
-        IEnumerable<User> GetAllNotFriends(int user_id);
+        IEnumerable<User> GetAllFriends(FriendFilter filter);
+        IEnumerable<User> GetAllNotFriends(FriendFilter filter);
         User GetById(int user_id);
         int GetCount();
         int GetCountOfCommonFriends(int user_a_id, int user_b_id);
