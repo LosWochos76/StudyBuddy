@@ -5,19 +5,19 @@
              xmlns:viewmodels="clr-namespace:StudyBuddy.App.ViewModels"
              x:Class="StudyBuddy.App.Views.NotificationsPage"
              xmlns:sys="clr-namespace:System;assembly=mscorlib"
-             xmlns:controls="clr-namespace:StudyBuddy.App.Controls"
              x:DataType="viewmodels:NotificationsViewModel"
              x:Name="page"
              xmlns:local="clr-namespace:StudyBuddy.App.Views"
              xmlns:xct="http://xamarin.com/schemas/2020/toolkit">
     <xct:TabView TabStripPlacement="Top"
                  TabStripHeight="55"
-                 TabStripBackgroundColor="#2196F3"
                  TabIndicatorColor="White"
                  TabIndicatorPlacement="Bottom"
                  TabIndicatorHeight="5"
                  TabContentDataTemplate="{DataTemplate local:NotificationsPage}">
-        <xct:TabViewItem Text="News" TextColor="Black" TextColorSelected="White">
+        <xct:TabViewItem Text="News" 
+                         TextColor="White" 
+                         TextColorSelected="Green">
             <xct:TabViewItem.Content>
                 <StackLayout>
                     <RefreshView IsRefreshing="{Binding IsRefreshing}"
@@ -43,9 +43,9 @@
             </xct:TabViewItem.Content>
         </xct:TabViewItem>
         <xct:TabViewItem Text="Anfragen"
-                         TextColor="Black"
-                         TextColorSelected="White"
-                         BadgeText="10"
+                         TextColor="White"
+                         TextColorSelected="Green"
+                         BadgeText="2"
                          BadgeTextColor="White"
                          BadgeBackgroundColor="Red">
             <xct:TabViewItem.Content>
