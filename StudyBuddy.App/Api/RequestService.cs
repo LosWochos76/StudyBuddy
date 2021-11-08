@@ -34,13 +34,13 @@ namespace StudyBuddy.App.Api
             this.from_me_cache = null;
         }
 
-        public async Task<bool> AskForFriendship(int other_user_id)
+        public async Task<bool> AskForFriendship(UserViewModel obj)
         {
             var currentUser = api.Authentication.CurrentUser;
             var request = new Request()
             {
                 SenderID = currentUser.ID,
-                RecipientID = other_user_id,
+                RecipientID = obj.ID,
                 Created = DateTime.Now.Date,
                 Type = RequestType.Friendship
             };
@@ -50,7 +50,9 @@ namespace StudyBuddy.App.Api
             if (content == null)
                 return false;
 
-            var rvm = RequestViewModel.FromModel(request);
+            var rvm = RequestViewModel.FromModel(content);
+            rvm.Sender = UserViewModel.FromModel(currentUser);
+            obj.FriendshipRequest = rvm;
             api.RaiseRequestStateChanged(this, new RequestStateChangedEventArgs() { Request = rvm, Type = RequestStateChangedEventType.Created });
             return true;
         }
@@ -194,13 +196,19 @@ namespace StudyBuddy.App.Api
             return content.IsOk;
         }
 
-        public async Task<bool> Delete(RequestViewModel request)
+        public async Task<bool> DeleteFriendshipRequest(UserViewModel obj)
         {
+            if (obj == null || obj.FriendshipRequest == null)
+                return false;
+
+            var request = obj.FriendshipRequest;
             var rh = new WebRequestHelper(api.Authentication.Token);
             var content = await rh.Load<RequestResult>(base_url + "Request/" + request.ID, HttpMethod.Delete);
             if (content == null)
                 return false;
 
+            obj.FriendshipRequest = null;
+            from_me_cache.Remove(request);
             api.RaiseRequestStateChanged(this, new RequestStateChangedEventArgs() { Request = request, Type = RequestStateChangedEventType.Deleted });
             return content.IsOk;
         }

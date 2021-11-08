@@ -20,20 +20,6 @@ namespace StudyBuddy.App.ViewModels
             RefreshCommand = new Command(Reload);
             SendFriendshipRequestCommand = new Command<UserViewModel>(SendFriendshipRequest);
             RemoveFriendshipRequestCommand = new Command<UserViewModel>(RemoveFriendshipRequest);
-
-            api.FriendshipStateChanged += Api_FriendshipStateChanged;
-            api.RequestStateChanged += Api_RequestStateChanged;
-
-            Reload();
-        }
-
-        private void Api_RequestStateChanged(object sender, RequestStateChangedEventArgs e)
-        {
-            Reload();
-        }
-
-        private void Api_FriendshipStateChanged(object sender, FriendshipStateChangedEventArgs e)
-        {
             Reload();
         }
 
@@ -75,7 +61,7 @@ namespace StudyBuddy.App.ViewModels
             if (!answer)
                 return;
 
-            var result = await api.Requests.AskForFriendship(obj.ID);
+            var result = await api.Requests.AskForFriendship(obj);
             if (!result)
             {
                 await dialog.ShowError("Ein Fehler ist aufgetreten!", "Fehler!", "Ok", null);
@@ -94,7 +80,7 @@ namespace StudyBuddy.App.ViewModels
             if (!answer)
                 return;
 
-            var result = await api.Requests.Delete(obj.FriendshipRequest);
+            var result = await api.Requests.DeleteFriendshipRequest(obj);
             if (!result)
             {
                 await dialog.ShowError("Ein Fehler ist aufgetreten!", "Fehler!", "Ok", null);
