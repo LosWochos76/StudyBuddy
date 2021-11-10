@@ -113,7 +113,7 @@
                 <Label Margin="0,12,0,0"
                        Style="{StaticResource BaseLabel}"
                        Text="THEME" />
-                <Frame Style="{StaticResource SettingsFrame}"  
+                <Frame Style="{StaticResource SettingsFrame}"
                        HasShadow="True">
                     <Grid ColumnDefinitions="*,Auto,Auto,Auto,*"
                           ColumnSpacing="10"
@@ -136,7 +136,7 @@
                                     </Image>
                                     <Label Style="{StaticResource BaseLabel}"
                                            FontSize="Small"
-                                           Text="System"/>
+                                           Text="System" />
                                 </StackLayout>
                             </RadioButton.Content>
                         </RadioButton>
@@ -156,7 +156,7 @@
                                     </Image>
                                     <Label Style="{StaticResource BaseLabel}"
                                            FontSize="Small"
-                                           Text="Light"/>
+                                           Text="Light" />
                                 </StackLayout>
                             </RadioButton.Content>
                         </RadioButton>
@@ -176,7 +176,7 @@
                                     </Image>
                                     <Label Style="{StaticResource BaseLabel}"
                                            FontSize="Small"
-                                           Text="Dark"/>
+                                           Text="Dark" />
                                 </StackLayout>
                             </RadioButton.Content>
                         </RadioButton>
@@ -184,15 +184,12 @@
                 </Frame>
                 <Grid>
                     <StackLayout Padding="5">
-                        <Button Text="Ausloggen"
+                        <Button Style="{StaticResource BaseButton}"
+                                Text="Ausloggen"
                                 Command="{Binding LogoutCommand}" />
                     </StackLayout>
                 </Grid>
             </StackLayout>
         </Grid>
     </ScrollView>
-    <!-- <StackLayout Padding="5">
-            <Button Text="Ausloggen" Command="{Binding LogoutCommand}" />
-        </StackLayout> -->
-            
 </ContentPage>

@@ -9,7 +9,7 @@
              Style="{StaticResource BaseContentPage}">
     <ContentPage.Content>
         <StackLayout Padding="10">
-            <Button Text="Freund entfernen" Command="{Binding RemoveFriendCommand}" /> 
+            <Button Style="{StaticResource BaseButton}"  Text="Freund entfernen" Command="{Binding RemoveFriendCommand}" /> 
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

@@ -120,7 +120,7 @@
 
             <Style x:Key="SettingsFrame" TargetType="Frame">
                 <Setter Property="CornerRadius"
-                        Value="24" />
+                        Value="8" />
                 <Setter Property="BackgroundColor"
                         Value="{AppThemeBinding Dark={StaticResource SystemGray4Dark}, Light={StaticResource SystemGrayDark}}" />
             </Style>

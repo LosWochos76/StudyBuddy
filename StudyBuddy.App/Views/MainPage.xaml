@@ -18,6 +18,8 @@
                         Value="{AppThemeBinding Dark={StaticResource TextColorDark}, Light={StaticResource TextColor}}" />
                 <Setter Property="Shell.TabBarTitleColor"
                         Value="{AppThemeBinding Dark={StaticResource SystemBlueDark}, Light={StaticResource SystemBlueDark}}" />
+                <Setter Property="Shell.ForegroundColor"
+                        Value="{AppThemeBinding Dark={StaticResource TextColorDark}, Light={StaticResource TextColor}}" />
             </Style>
         </ResourceDictionary>
     </Shell.Resources>
