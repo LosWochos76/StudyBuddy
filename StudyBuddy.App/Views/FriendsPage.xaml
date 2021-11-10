@@ -19,7 +19,22 @@
         </ContentPage.ToolbarItems>
     <ContentPage.Content>
         <StackLayout>
-            <SearchBar x:Name="searchBar" TextChanged="searchBar_TextChanged" />
+            <Frame Padding="5"
+                   Margin="4"
+                   BackgroundColor="{StaticResource WindowBackgroundColor}"
+                   HasShadow="False"
+                   BorderColor="Black"
+                   CornerRadius="8"
+                   HeightRequest="45">
+                <Frame.IsVisible>
+                    <OnPlatform x:TypeArguments="x:Boolean"
+                                iOS="False"
+                                Android="True" />
+                </Frame.IsVisible>
+                    <SearchBar x:Name="searchBar"
+                               TextChanged="searchBar_TextChanged" />
+            </Frame>
+            
             <RefreshView
                 IsRefreshing="{Binding IsRefreshing}"
                 Command="{Binding RefreshCommand}"

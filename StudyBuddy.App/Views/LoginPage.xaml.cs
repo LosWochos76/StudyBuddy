@@ -15,5 +15,6 @@ namespace StudyBuddy.App.Views
             view_model = TinyIoCContainer.Current.Resolve<LoginViewModel>();
             BindingContext = view_model;
         }
+
     }
 }
