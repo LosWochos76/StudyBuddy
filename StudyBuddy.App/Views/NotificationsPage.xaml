@@ -17,7 +17,7 @@
                  TabIndicatorHeight="5"
                  SelectedIndex="0"
                  TabContentDataTemplate="{DataTemplate local:NotificationsPage}">
-        <xct:TabViewItem Text="News">
+        <xct:TabViewItem Text="News" IsSelected="{Binding NewsIsSelected, Mode=OneWayToSource}">
             <xct:TabViewItem.Content>
                 <StackLayout>
                     <RefreshView IsRefreshing="{Binding IsRefreshing}"
@@ -43,7 +43,8 @@
             </xct:TabViewItem.Content>
         </xct:TabViewItem>
         <xct:TabViewItem Text="Anfragen"
-                         BadgeText="2"
+                         IsSelected="{Binding RequestsIsSelected, Mode=OneWayToSource}"
+                         BadgeText="{Binding Requests.Count}"
                          BadgeTextColor="White"
                          BadgeBackgroundColor="Red">
             <xct:TabViewItem.Content>

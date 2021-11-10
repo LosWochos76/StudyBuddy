@@ -11,21 +11,10 @@ namespace StudyBuddy.App.ViewModels
 {
     public class NotificationsViewModel : ViewModelBase
     {
-        private int selected_view = 0;
-        public int SelectedView
-        {
-            get => selected_view;
 
-            set
-            {
-                selected_view = value;
-                NotifyPropertyChanged("NewsIsSelected");
-                NotifyPropertyChanged("RequestsIsSelected");
-            }
-        }
-
-        public bool NewsIsSelected { get { return SelectedView == 0; } }
-        public bool RequestsIsSelected { get { return SelectedView == 1; } }
+        private bool newsIsSelected = true;
+        public bool NewsIsSelected { get => newsIsSelected; set { newsIsSelected = value; } }
+        public bool RequestsIsSelected { get => newsIsSelected; set { newsIsSelected = !value; } }
 
         public ObservableCollection<RequestViewModel> Requests { get; private set; } = new ObservableCollection<RequestViewModel>();
         public IEnumerable<NewsViewModel> News { get; private set; } = new List<NewsViewModel>();
@@ -57,7 +46,7 @@ namespace StudyBuddy.App.ViewModels
 
         private async void Refresh()
         {
-            if (NewsIsSelected)
+            if (newsIsSelected)
                 await ReloadNews();
             else
                 await ReloadRequests();
