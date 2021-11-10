@@ -6,19 +6,22 @@
              xmlns:viewmodels="clr-namespace:StudyBuddy.App.ViewModels"
              x:DataType="viewmodels:LoginViewModel"
              Shell.FlyoutBehavior="Disabled"
-             Shell.NavBarIsVisible="False">
+             Shell.NavBarIsVisible="False"
+             Style="{StaticResource BaseContentPage}">
     <StackLayout>
         <StackLayout VerticalOptions="StartAndExpand">
-            <Frame BackgroundColor="#2196F3" CornerRadius="0">
+            <Frame CornerRadius="0">
                 <Frame.Padding>
                     <OnPlatform x:TypeArguments="Thickness">
                         <On Platform="iOS" Value="0,40,0,10" />
                         <On Platform="Default" Value="0,10,0,10" />
                     </OnPlatform>
                 </Frame.Padding>
-                <Label Text="Wilkommen beim StudyBuddy!"
+                <Label BackgroundColor="{AppThemeBinding Dark={StaticResource WindowBackgroundColorDark}, Light={StaticResource WindowBackgroundColor}}"
+                       Style="{StaticResource BaseLabel}"
+                       Text="Wilkommen beim StudyBuddy!"
                        HorizontalTextAlignment="Center"
-                       TextColor="White" FontSize="36" />
+                       FontSize="36" />
             </Frame>
             <StackLayout Padding="10,10,10,0">
                 <Label HorizontalTextAlignment="Center">
@@ -28,7 +31,8 @@
                                 <Span
                                     Text="Wenn du herausfinden willst, was der StudyBuddy 
                                     für dich als Studierender tun kann, klicke " />
-                                <Span Text="hier" TextColor="Blue" TextDecorations="Underline">
+                                <Span Text="hier"
+                                      TextColor="#0A84FF" TextDecorations="Underline">
                                     <Span.GestureRecognizers>
                                         <TapGestureRecognizer Command="{Binding TapCommand}"
                                                               CommandParameter="https://studybuddybackend.web.app/info" />
@@ -42,15 +46,16 @@
             </StackLayout>
         </StackLayout>
         <StackLayout Padding="10,10,10,10" VerticalOptions="CenterAndExpand">
-            <Entry Placeholder="E-Mail-Adresse" Text="{Binding EMail}" />
-            <Entry Placeholder="Passwort" IsPassword="True" Text="{Binding Password}" />
+            <Entry PlaceholderColor="{AppThemeBinding Dark={StaticResource SystemGray}, Light={StaticResource SystemGray4}}" Placeholder="E-Mail-Adresse" Text="{Binding EMail}" />
+            <Entry PlaceholderColor="{AppThemeBinding Dark={StaticResource SystemGray}, Light={StaticResource SystemGray4}}" Placeholder="Passwort" IsPassword="True" Text="{Binding Password}" />
             <Button Text="Anmelden" Command="{Binding LoginCommand}" />
 
             <Label HorizontalTextAlignment="Center">
                 <Label.FormattedText>
                     <FormattedString>
                         <FormattedString.Spans>
-                            <Span Text="Passwort vergessen?" TextColor="Blue" TextDecorations="Underline">
+                            <Span Text="Passwort vergessen?"
+                                  TextColor="#0A84FF" TextDecorations="Underline">
                                 <Span.GestureRecognizers>
                                     <TapGestureRecognizer 
                                         Command="{Binding PasswordForgottenCommand}" />
@@ -68,7 +73,8 @@
                 <Label.FormattedText>
                     <FormattedString>
                         <FormattedString.Spans>
-                            <Span Text="Impressum und Datenschutz" TextColor="Blue" TextDecorations="Underline">
+                            <Span Text="Impressum und Datenschutz"
+                                  TextColor="#0A84FF" TextDecorations="Underline">
                                 <Span.GestureRecognizers>
                                     <TapGestureRecognizer Command="{Binding ImprintCommand}" />
                                 </Span.GestureRecognizers>

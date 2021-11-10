@@ -35,7 +35,6 @@
         <PackageReference Include="Nito.AsyncEx" Version="5.1.2" />
     </ItemGroup>
     <ItemGroup>
-        <Folder Include="Misc\" />
         <Folder Include="Interfaces\" />
     </ItemGroup>
     <ItemGroup>

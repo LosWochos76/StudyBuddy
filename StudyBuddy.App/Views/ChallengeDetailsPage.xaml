@@ -5,7 +5,8 @@
     x:Class="StudyBuddy.App.Views.ChallengeDetailsPage"
     xmlns:viewmodels="clr-namespace:StudyBuddy.App.ViewModels"
     Shell.FlyoutBehavior="Disabled"
-    Title="Herausforderung" >
+    Title="Herausforderung"
+    Style="{StaticResource BaseContentPage}">
     <ContentPage.Content>
         <StackLayout Padding="15">
             <Grid ColumnSpacing="15" x:DataType="viewmodels:ChallengeViewModel" x:Name="grid">
@@ -26,40 +27,41 @@
                     <RowDefinition Height="1" />
                 </Grid.RowDefinitions>
 
-                <Label Grid.Column="0" Grid.Row="0"
+                <Label Style="{StaticResource BaseLabel}"
+                    Grid.Column="0" Grid.Row="0"
                     Text="{Binding CategorySymbol}"
                     FontFamily="{StaticResource FontAwesomeSolid}"
                     FontSize="50"
-                    HorizontalTextAlignment="End"/>
-                <Label Text="{Binding Name}" FontAttributes="Bold" Grid.Column="1" Grid.Row="0"/>
+                    HorizontalTextAlignment="End" />
+                <Label Style="{StaticResource BaseLabel}" Text="{Binding Name}" FontAttributes="Bold" Grid.Column="1" Grid.Row="0"/>
 
                 <BoxView HeightRequest="1" Color="Gray" Grid.ColumnSpan="2" Grid.Row="1" />
 
-                <Label Text="Beschreibung:" FontAttributes="Bold" Grid.Column="0" Grid.Row="2" HorizontalTextAlignment="End" />
-                <Label Text="{Binding Description}" Grid.Column="1" Grid.Row="2" />
+                <Label Style="{StaticResource BaseLabel}" Text="Beschreibung:" FontAttributes="Bold" Grid.Column="0" Grid.Row="2" HorizontalTextAlignment="End" />
+                <Label Style="{StaticResource BaseLabel}" Text="{Binding Description}" Grid.Column="1" Grid.Row="2" />
 
-                <Label Text="Kategorie:" FontAttributes="Bold" Grid.Column="0" Grid.Row="3" HorizontalTextAlignment="End" />
-                <Label Text="{Binding Category}" Grid.Column="1" Grid.Row="3" />
+                <Label Style="{StaticResource BaseLabel}" Text="Kategorie:" FontAttributes="Bold" Grid.Column="0" Grid.Row="3" HorizontalTextAlignment="End" />
+                <Label Style="{StaticResource BaseLabel}" Text="{Binding Category}" Grid.Column="1" Grid.Row="3" />
 
-                <Label Text="Tags:" FontAttributes="Bold" Grid.Column="0" Grid.Row="4" HorizontalTextAlignment="End" />
-                <Label Text="{Binding Tags}" Grid.Column="1" Grid.Row="4" />
+                <Label Style="{StaticResource BaseLabel}" Text="Tags:" FontAttributes="Bold" Grid.Column="0" Grid.Row="4" HorizontalTextAlignment="End" />
+                <Label Style="{StaticResource BaseLabel}" Text="{Binding Tags}" Grid.Column="1" Grid.Row="4" />
 
-                <Label Text="Punkte:" FontAttributes="Bold" Grid.Column="0" Grid.Row="5" HorizontalTextAlignment="End" />
-                <Label Text="{Binding Points}" Grid.Column="1" Grid.Row="5" />
+                <Label Style="{StaticResource BaseLabel}" Text="Punkte:" FontAttributes="Bold" Grid.Column="0" Grid.Row="5" HorizontalTextAlignment="End" />
+                <Label Style="{StaticResource BaseLabel}" Text="{Binding Points}" Grid.Column="1" Grid.Row="5" />
 
-                <Label Text="Gültig von:" FontAttributes="Bold" Grid.Column="0" Grid.Row="6" HorizontalTextAlignment="End" />
-                <Label Text="{Binding ValidityStart, StringFormat='{}{0:dd.MM.yyyy}'}" Grid.Column="1" Grid.Row="6" />
+                <Label Style="{StaticResource BaseLabel}" Text="Gültig von:" FontAttributes="Bold" Grid.Column="0" Grid.Row="6" HorizontalTextAlignment="End" />
+                <Label Style="{StaticResource BaseLabel}" Text="{Binding ValidityStart, StringFormat='{}{0:dd.MM.yyyy}'}" Grid.Column="1" Grid.Row="6" />
 
-                <Label Text="Gültig bis:" FontAttributes="Bold" Grid.Column="0" Grid.Row="7" HorizontalTextAlignment="End" />
-                <Label Text="{Binding ValidityEnd, StringFormat='{}{0:dd.MM.yyyy}'}" Grid.Column="1" Grid.Row="7" />
+                <Label Style="{StaticResource BaseLabel}" Text="Gültig bis:" FontAttributes="Bold" Grid.Column="0" Grid.Row="7" HorizontalTextAlignment="End" />
+                <Label Style="{StaticResource BaseLabel}" Text="{Binding ValidityEnd, StringFormat='{}{0:dd.MM.yyyy}'}" Grid.Column="1" Grid.Row="7" />
 
-                <Label Text="Beweis:" FontAttributes="Bold" Grid.Column="0" Grid.Row="8" HorizontalTextAlignment="End" />
-                <Label Text="{Binding Prove}" Grid.Column="1" Grid.Row="8" />
+                <Label Style="{StaticResource BaseLabel}" Text="Beweis:" FontAttributes="Bold" Grid.Column="0" Grid.Row="8" HorizontalTextAlignment="End" />
+                <Label Style="{StaticResource BaseLabel}" Text="{Binding Prove}" Grid.Column="1" Grid.Row="8" />
 
                 <BoxView HeightRequest="1" Color="Gray" Grid.ColumnSpan="2" Grid.Row="9" />
             </Grid>
             <StackLayout x:Name="stack" x:DataType="viewmodels:ChallengeConfirmViewModel">
-                <Button Text="Herausforderung Abschließen" FontAttributes="Bold" Command="{Binding ConfirmChallenge}"/>
+                <Button Style="{StaticResource BaseButton}"  Text="Herausforderung Abschließen" FontAttributes="Bold" Command="{Binding ConfirmChallenge}"/>
             </StackLayout>
         </StackLayout>
     </ContentPage.Content>

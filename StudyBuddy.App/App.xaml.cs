@@ -1,8 +1,9 @@
-﻿using StudyBuddy.App.Api;
+﻿ using StudyBuddy.App.Api;
 using StudyBuddy.App.Misc;
 using StudyBuddy.App.ViewModels;
 using StudyBuddy.App.Views;
 using TinyIoC;
+using Xamarin.Essentials;
 using Xamarin.Forms;
 
 namespace StudyBuddy.App
@@ -13,6 +14,7 @@ namespace StudyBuddy.App
         {
             InitializeComponent();
             SetupServices();
+            MainTheme.SetTheme();
 
             MainPage = new MainPage();
         }
@@ -44,14 +46,27 @@ namespace StudyBuddy.App
 
             if (result)
                 await Shell.Current.GoToAsync("//ChallengesPage");
+            OnResume();
         }
 
         protected override void OnSleep()
         {
+            MainTheme.SetTheme();
+            RequestedThemeChanged -= App_RequestedThemeChanged;
         }
 
         protected override async void OnResume()
         {
+            MainTheme.SetTheme();
+            RequestedThemeChanged += App_RequestedThemeChanged;
+        }
+
+        private void App_RequestedThemeChanged(object sender, AppThemeChangedEventArgs e)
+        {
+            MainThread.BeginInvokeOnMainThread(() =>
+            {
+                MainTheme.SetTheme();
+            });
         }
     }
 }

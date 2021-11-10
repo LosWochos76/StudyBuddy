@@ -7,7 +7,21 @@
        x:DataType="viewmodels:ChallengesViewModel"
        xmlns:fontAwesome="clr-namespace:StudyBuddy.App"
        x:Class="StudyBuddy.App.Views.MainPage"
-       xmlns:android="clr-namespace:Xamarin.Forms.PlatformConfiguration.AndroidSpecific;assembly=Xamarin.Forms.Core">
+       xmlns:android="clr-namespace:Xamarin.Forms.PlatformConfiguration.AndroidSpecific;assembly=Xamarin.Forms.Core"
+       BackgroundColor="{AppThemeBinding Dark={StaticResource WindowBackgroundColorDark}, Light={StaticResource WindowBackgroundColor}}">
+    <Shell.Resources>
+        <ResourceDictionary>
+            <Style ApplyToDerivedTypes="True" TargetType="Shell">
+                <Setter Property="Shell.TitleColor"
+                        Value="{AppThemeBinding Dark={StaticResource TextColorDark}, Light={StaticResource TextColor}}" />
+                <Setter Property="Shell.TabBarUnselectedColor"
+                        Value="{AppThemeBinding Dark={StaticResource TextColorDark}, Light={StaticResource TextColor}}" />
+                <Setter Property="Shell.TabBarTitleColor"
+                        Value="{AppThemeBinding Dark={StaticResource SystemBlueDark}, Light={StaticResource SystemBlueDark}}" />
+            </Style>
+        </ResourceDictionary>
+    </Shell.Resources>
+
        
     <ShellItem Route="LoginPage" FlyoutItemIsVisible="False">
         <ShellContent ContentTemplate="{DataTemplate local:LoginPage}" />
@@ -17,10 +31,10 @@
     </ShellItem>
     <TabBar>
         <Tab>
-            <ShellContent ContentTemplate="{DataTemplate local:ChallengesPage}" Route="ChallengesPage" />
+            <ShellContent ContentTemplate="{DataTemplate local:ChallengesPage}" Route="ChallengesPage"/>
             <Tab.Icon>
                 <FontImageSource FontFamily="{StaticResource FontAwesomeSolid}"
-                                 Glyph="{x:Static fontAwesome:FontAwesomeIcons.Table}" />
+                                 Glyph="{x:Static fontAwesome:FontAwesomeIcons.Table}"/>
             </Tab.Icon>
         </Tab>
         <Tab>

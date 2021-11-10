@@ -6,7 +6,9 @@
     xmlns:viewmodels="clr-namespace:StudyBuddy.App.ViewModels"
     xmlns:fontAwesome="clr-namespace:StudyBuddy.App"
     x:DataType="viewmodels:ChallengesViewModel"
-    x:Name="page" Title="{Binding Header}">
+             Style="{StaticResource BaseContentPage}"
+             x:Name="page" Title="{Binding Header}">
+    
     <ContentPage.ToolbarItems>
         <ToolbarItem Text="QR-Code scannen" Command="{Binding ScanQrCodeCommand}">
             <ToolbarItem.IconImageSource>
@@ -20,8 +22,8 @@
             <StackLayout.GestureRecognizers>
                 <SwipeGestureRecognizer Direction="Right" Command="{Binding ScanQrCodeCommand}" />
             </StackLayout.GestureRecognizers>
-            <SearchBar x:Name="searchBar" TextChanged="searchBar_TextChanged" />
-            <RefreshView
+            <SearchBar x:Name="searchBar" TextChanged="searchBar_TextChanged"/>
+            <RefreshView 
                 IsRefreshing="{Binding IsRefreshing}"
                 Command="{Binding RefreshCommand}"
                 Padding="8">
@@ -35,15 +37,15 @@
                                             <ColumnDefinition Width="70" />
                                             <ColumnDefinition Width="*" />
                                         </Grid.ColumnDefinitions>
-                                        <Label Grid.Column="0" Grid.Row="0"
+                                        <Label Style="{StaticResource IconLabel}" Grid.Column="0" Grid.Row="0"
                                         Text="{Binding CategorySymbol}"
                                         FontFamily="{StaticResource FontAwesomeSolid}"
                                         FontSize="50" />
                                         <StackLayout Grid.Column="1" Grid.Row="0" HorizontalOptions="FillAndExpand">
-                                            <Label Text="{Binding Name}" FontAttributes="Bold" />
+                                            <Label Style="{StaticResource BaseLabel}" Text="{Binding Name}" FontAttributes="Bold" />
                                             <StackLayout Orientation="Horizontal">
-                                                <Label Text="{Binding PointsText}" FontSize="Small" HorizontalOptions="FillAndExpand" />
-                                                <Label Text="{Binding Tags}" FontSize="Small" TextColor="Gray" />
+                                                <Label Style="{StaticResource BaseLabel}" Text="{Binding PointsText}" FontSize="Small" HorizontalOptions="FillAndExpand" />
+                                                <Label Style="{StaticResource TagLabel}" Text="{Binding Tags}" FontSize="Small"/>
                                             </StackLayout>
                                         </StackLayout>
                                         <Grid.GestureRecognizers>
@@ -52,7 +54,7 @@
                                                 CommandParameter="{Binding Source={x:Reference Item}, Path=BindingContext}"/>
                                         </Grid.GestureRecognizers>
                                     </Grid>
-                                    <BoxView HeightRequest="1" Color="Gray" />
+                                    <BoxView HeightRequest="1" />
                                 </StackLayout>
                             </ContentView>
                         </DataTemplate>

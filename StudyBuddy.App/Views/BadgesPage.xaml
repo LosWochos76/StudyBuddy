@@ -6,7 +6,8 @@
         xmlns:models="clr-namespace:StudyBuddy.Model;assembly=StudyBuddy.Model"
         x:DataType="viewmodels:BadgesViewModel"
         xmlns:fontAwesome="clr-namespace:StudyBuddy.App"
-        Title="Freunde" x:Name="page">
+        Title="Freunde" x:Name="page"
+        Style="{StaticResource BaseContentPage}">
     <ContentPage.Content>
         <StackLayout>
             <RefreshView 

@@ -7,7 +7,8 @@
     xmlns:models="clr-namespace:StudyBuddy.Model;assembly=StudyBuddy.Model"
     x:DataType="viewmodels:FriendsViewModel"
     xmlns:fontAwesome="clr-namespace:StudyBuddy.App"
-    Title="Freunde" x:Name="page">
+    Title="Freunde" x:Name="page"
+             Style="{StaticResource BaseContentPage}">
     <ContentPage.ToolbarItems>
         <ToolbarItem Text="Freund hinzufügen" Order="Primary" Priority="0" Command="{Binding AddFriendCommand}">
             <ToolbarItem.IconImageSource>
@@ -33,13 +34,14 @@
                                             <ColumnDefinition Width="70" />
                                             <ColumnDefinition Width="*" />
                                         </Grid.ColumnDefinitions>
-                                        <Label Grid.Column="0" Grid.Row="0"
+                                        <Label Style="{StaticResource BaseLabel}"
+                                            Grid.Column="0" Grid.Row="0"
                                             Text="{x:Static fontAwesome:FontAwesomeIcons.User}"
                                             FontFamily="{StaticResource FontAwesomeSolid}"
                                             FontSize="50" />
                                         <StackLayout Grid.Column="1" Grid.Row="0" HorizontalOptions="FillAndExpand">
-                                            <Label Text="{Binding FullName}" FontAttributes="Bold" />
-                                            <Label Text="{Binding CountOfCommonFriends, StringFormat='{0} gemeinsame Freunde'}" FontSize="Small"/>
+                                            <Label Style="{StaticResource BaseLabel}" Text="{Binding FullName}" FontAttributes="Bold" />
+                                            <Label Style="{StaticResource TagLabel}" Text="{Binding CountOfCommonFriends, StringFormat='{0} gemeinsame Freunde'}" FontSize="Small"/>
                                         </StackLayout>
                                         <Grid.GestureRecognizers>
                                             <TapGestureRecognizer
@@ -47,7 +49,7 @@
                                                 CommandParameter="{Binding Source={x:Reference Item}, Path=BindingContext}"/>
                                         </Grid.GestureRecognizers>
                                     </Grid>
-                                    <BoxView HeightRequest="1" Color="Gray" />
+                                    <BoxView HeightRequest="1" />
                                 </StackLayout>
                             </ContentView>
                         </DataTemplate>

@@ -6,7 +6,8 @@
     x:Class="StudyBuddy.App.Views.StatisticPage"
     xmlns:viewmodels="clr-namespace:StudyBuddy.App.ViewModels"
     x:DataType="viewmodels:StatisticsViewModel"
-    Title="Statistiken">
+    Title="Statistiken"
+             Style="{StaticResource BaseContentPage}">
     <ContentPage.Content>
 
     </ContentPage.Content>
