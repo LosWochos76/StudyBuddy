@@ -113,7 +113,11 @@ namespace StudyBuddy.App.Api
                         list.Add(obj);
                     
                     not_friends_cache.Add(obj);
-                    obj.FriendshipRequest = await api.Requests.GetFriendshipRequest(obj.ID);
+                }
+
+                foreach (var user in list)
+                {
+                    user.FriendshipRequest = await api.Requests.GetFriendshipRequest(user.ID);
                 }
             }
         }
