@@ -31,10 +31,27 @@
                                 iOS="False"
                                 Android="True" />
                 </Frame.IsVisible>
-                    <SearchBar x:Name="searchBar"
-                               TextChanged="searchBar_TextChanged" />
+                <SearchBar TextColor="{AppThemeBinding Dark={StaticResource TextColorDark}, Light={StaticResource TextColor}}"
+                           x:Name="searchBar"
+                           TextChanged="searchBar_TextChanged">
+                    <SearchBar.IsVisible>
+                        <OnPlatform x:TypeArguments="x:Boolean"
+                                    iOS="False"
+                                    Android="True" />
+                    </SearchBar.IsVisible>
+                </SearchBar>
+
             </Frame>
-            
+            <SearchBar TextColor="{AppThemeBinding Dark={StaticResource TextColorDark}, Light={StaticResource TextColor}}"
+                       x:Name="searchBarIos"
+                       TextChanged="searchBar_TextChanged">
+                <SearchBar.IsVisible>
+                    <OnPlatform x:TypeArguments="x:Boolean"
+                                iOS="True"
+                                Android="False" />
+                </SearchBar.IsVisible>
+            </SearchBar>
+
             <RefreshView
                 IsRefreshing="{Binding IsRefreshing}"
                 Command="{Binding RefreshCommand}"
