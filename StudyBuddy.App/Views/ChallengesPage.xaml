@@ -91,6 +91,12 @@
                             </ContentView>
                         </DataTemplate>
                     </CollectionView.ItemTemplate>
+                    <CollectionView.Footer>
+                        <StackLayout HorizontalOptions="Center" Orientation="Horizontal">
+                            <Label Style="{StaticResource BaseLabel}"
+                                   Text="{Binding Challenges.Count}" />
+                        </StackLayout>
+                    </CollectionView.Footer>
                 </CollectionView>
             </RefreshView>
         </StackLayout>
