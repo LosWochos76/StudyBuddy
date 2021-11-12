@@ -6,12 +6,15 @@
     xmlns:viewmodels="clr-namespace:StudyBuddy.App.ViewModels"
     xmlns:fontAwesome="clr-namespace:StudyBuddy.App"
     x:DataType="viewmodels:ChallengesViewModel"
-    x:Name="page" Title="{Binding Header}">
+             Style="{StaticResource BaseContentPage}"
+             x:Name="page" Title="{Binding Header}">
+    
     <ContentPage.ToolbarItems>
         <ToolbarItem Text="QR-Code scannen" Command="{Binding ScanQrCodeCommand}">
             <ToolbarItem.IconImageSource>
                 <FontImageSource FontFamily="{StaticResource FontAwesomeSolid}"
-                    Glyph="{x:Static fontAwesome:FontAwesomeIcons.Camera}" />
+                    Glyph="{x:Static fontAwesome:FontAwesomeIcons.Camera}" 
+                                 Color="{AppThemeBinding Dark={StaticResource TextColorDark}, Light={StaticResource TextColor}}"/>
            </ToolbarItem.IconImageSource>
         </ToolbarItem>
     </ContentPage.ToolbarItems>
@@ -20,8 +23,39 @@
             <StackLayout.GestureRecognizers>
                 <SwipeGestureRecognizer Direction="Right" Command="{Binding ScanQrCodeCommand}" />
             </StackLayout.GestureRecognizers>
-            <SearchBar x:Name="searchBar" TextChanged="searchBar_TextChanged" />
-            <RefreshView
+            <Frame Padding="5"
+                   Margin="4"
+                   BackgroundColor="{StaticResource WindowBackgroundColor}"
+                   HasShadow="False"
+                   BorderColor="Black"
+                   CornerRadius="8"
+                   HeightRequest="45">
+                <Frame.IsVisible>
+                    <OnPlatform x:TypeArguments="x:Boolean"
+                                iOS="False"
+                                Android="True" />
+                </Frame.IsVisible>
+                <SearchBar TextColor="{AppThemeBinding Dark={StaticResource TextColorDark}, Light={StaticResource TextColor}}"
+                           x:Name="searchBar"
+                           TextChanged="searchBar_TextChanged">
+                    <SearchBar.IsVisible>
+                        <OnPlatform x:TypeArguments="x:Boolean"
+                                    iOS="False"
+                                    Android="True" />
+                    </SearchBar.IsVisible>
+                </SearchBar>
+
+            </Frame>
+            <SearchBar TextColor="{AppThemeBinding Dark={StaticResource TextColorDark}, Light={StaticResource TextColor}}"
+                       x:Name="searchBarIos"
+                       TextChanged="searchBar_TextChanged">
+                <SearchBar.IsVisible>
+                    <OnPlatform x:TypeArguments="x:Boolean"
+                                iOS="True"
+                                Android="False" />
+                </SearchBar.IsVisible>
+            </SearchBar>
+            <RefreshView 
                 IsRefreshing="{Binding IsRefreshing}"
                 Command="{Binding RefreshCommand}"
                 Padding="8">
@@ -35,15 +69,15 @@
                                             <ColumnDefinition Width="70" />
                                             <ColumnDefinition Width="*" />
                                         </Grid.ColumnDefinitions>
-                                        <Label Grid.Column="0" Grid.Row="0"
+                                        <Label Style="{StaticResource IconLabel}" Grid.Column="0" Grid.Row="0"
                                         Text="{Binding CategorySymbol}"
                                         FontFamily="{StaticResource FontAwesomeSolid}"
                                         FontSize="50" />
                                         <StackLayout Grid.Column="1" Grid.Row="0" HorizontalOptions="FillAndExpand">
-                                            <Label Text="{Binding Name}" FontAttributes="Bold" />
+                                            <Label Style="{StaticResource BaseLabel}" Text="{Binding Name}" FontAttributes="Bold" />
                                             <StackLayout Orientation="Horizontal">
-                                                <Label Text="{Binding PointsText}" FontSize="Small" HorizontalOptions="FillAndExpand" />
-                                                <Label Text="{Binding Tags}" FontSize="Small" TextColor="Gray" />
+                                                <Label Style="{StaticResource BaseLabel}" Text="{Binding PointsText}" FontSize="Small" HorizontalOptions="FillAndExpand" />
+                                                <Label Style="{StaticResource TagLabel}" Text="{Binding Tags}" FontSize="Small"/>
                                             </StackLayout>
                                         </StackLayout>
                                         <Grid.GestureRecognizers>
@@ -52,11 +86,17 @@
                                                 CommandParameter="{Binding Source={x:Reference Item}, Path=BindingContext}"/>
                                         </Grid.GestureRecognizers>
                                     </Grid>
-                                    <BoxView HeightRequest="1" Color="Gray" />
+                                    <BoxView HeightRequest="1" />
                                 </StackLayout>
                             </ContentView>
                         </DataTemplate>
                     </CollectionView.ItemTemplate>
+                    <CollectionView.Footer>
+                        <StackLayout HorizontalOptions="Center" Orientation="Horizontal">
+                            <Label Style="{StaticResource BaseLabel}"
+                                   Text="{Binding Challenges.Count}" />
+                        </StackLayout>
+                    </CollectionView.Footer>
                 </CollectionView>
             </RefreshView>
         </StackLayout>

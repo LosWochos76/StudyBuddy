@@ -8,7 +8,8 @@
     xmlns:viewmodels="clr-namespace:StudyBuddy.App.ViewModels"
     x:DataType="viewmodels:QrCodeViewModel"
     Shell.FlyoutBehavior="Disabled"
-    Title="QR-Code scannen">
+    Title="QR-Code scannen"
+             Style="{StaticResource BaseContentPage}">
     <ContentPage.Content>
         <StackLayout Padding="10">
             <zxing:ZXingScannerView IsScanning="True" OnScanResult="ZXingScannerView_OnScanResult" />

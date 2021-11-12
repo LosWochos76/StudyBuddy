@@ -5,10 +5,11 @@
     x:Class="StudyBuddy.App.Views.FriendPage"
     xmlns:viewmodels="clr-namespace:StudyBuddy.App.ViewModels"
     x:DataType="viewmodels:FriendViewModel"
-    Title="{Binding User.FullName}">
+    Title="{Binding User.FullName}"
+             Style="{StaticResource BaseContentPage}">
     <ContentPage.Content>
         <StackLayout Padding="10">
-            <Button Text="Freund entfernen" Command="{Binding RemoveFriendCommand}" /> 
+            <Button Style="{StaticResource BaseButton}"  Text="Freund entfernen" Command="{Binding RemoveFriendCommand}" /> 
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

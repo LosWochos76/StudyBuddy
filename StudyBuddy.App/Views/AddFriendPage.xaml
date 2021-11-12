@@ -5,7 +5,8 @@
     x:Class="StudyBuddy.App.Views.AddFriendPage"
     xmlns:viewmodels="clr-namespace:StudyBuddy.App.ViewModels"
     x:DataType="viewmodels:AddFriendViewModel"
-    Title="Freund hinzufügen" x:Name="page">
+    Title="Freund hinzufügen" x:Name="page"
+    Style="{StaticResource BaseContentPage}">
     <ContentPage.Content>
         <StackLayout>
             <SearchBar x:Name="SearchBar" TextChanged="searchBar_TextChanged" />
@@ -25,16 +26,16 @@
                                         </Grid.ColumnDefinitions>
                                         <Image Grid.Column="0" Grid.Row="0" Source="{Binding ProfileImage}" />
                                         <StackLayout Grid.Column="1" Grid.Row="0" HorizontalOptions="FillAndExpand">
-                                            <Label Text="{Binding FullName}" FontAttributes="Bold" />
-                                            <Label Text="{Binding CountOfCommonFriends, StringFormat='{0} gemeinsame Freunde'}" FontSize="Small"/>
-                                            <Label Text="Freundschaft anfragen" IsVisible="{Binding NotRequestedForFriendship}">
+                                            <Label Style="{StaticResource BaseLabel}" Text="{Binding FullName}" FontAttributes="Bold" />
+                                            <Label Style="{StaticResource TagLabel}" Text="{Binding CountOfCommonFriends, StringFormat='{0} gemeinsame Freunde'}" FontSize="Small"/>
+                                            <Label Style="{StaticResource BaseLabel}" Text="Freundschaft anfragen" IsVisible="{Binding NotRequestedForFriendship}">
                                                 <Label.GestureRecognizers>
                                                     <TapGestureRecognizer
                                                         Command="{Binding BindingContext.SendFriendshipRequestCommand, Source={x:Reference Name=page}}"
                                                         CommandParameter="{Binding Source={x:Reference Item}, Path=BindingContext}"/>
                                                 </Label.GestureRecognizers>
                                             </Label>
-                                            <Label Text="Freundschaftsanfrage löschen" IsVisible="{Binding RequestedForFriendship}">
+                                            <Label Style="{StaticResource BaseLabel}" Text="Freundschaftsanfrage löschen" IsVisible="{Binding RequestedForFriendship}">
                                                 <Label.GestureRecognizers>
                                                     <TapGestureRecognizer
                                                         Command="{Binding BindingContext.RemoveFriendshipRequestCommand, Source={x:Reference Name=page}}"

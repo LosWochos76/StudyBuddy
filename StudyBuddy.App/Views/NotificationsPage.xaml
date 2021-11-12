@@ -7,15 +7,16 @@
              x:DataType="viewmodels:NotificationsViewModel"
              x:Name="page"
              xmlns:local="clr-namespace:StudyBuddy.App.Views"
-             xmlns:xct="http://xamarin.com/schemas/2020/toolkit">
+             xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
+             Style="{StaticResource BaseContentPage}">
     <xct:TabView TabStripPlacement="Top"
                  TabStripHeight="55"
-                 TabStripBackgroundColor="#2196F3"
-                 TabIndicatorColor="White"
+                 TabIndicatorColor="{AppThemeBinding Dark={StaticResource TextColorDark}, Light={StaticResource TextColor}}"
                  TabIndicatorPlacement="Bottom"
                  TabIndicatorHeight="5"
+                 SelectedIndex="0"
                  TabContentDataTemplate="{DataTemplate local:NotificationsPage}">
-        <xct:TabViewItem Text="News" TextColor="Black" TextColorSelected="White">
+        <xct:TabViewItem Text="News" IsSelected="{Binding NewsIsSelected, Mode=OneWayToSource}">
             <xct:TabViewItem.Content>
                 <StackLayout>
                     <RefreshView IsRefreshing="{Binding IsRefreshing}"
@@ -41,9 +42,8 @@
             </xct:TabViewItem.Content>
         </xct:TabViewItem>
         <xct:TabViewItem Text="Anfragen"
-                         TextColor="Black"
-                         TextColorSelected="White"
-                         BadgeText="10"
+                         IsSelected="{Binding RequestsIsSelected, Mode=OneWayToSource}"
+                         BadgeText="{Binding Requests.Count}"
                          BadgeTextColor="White"
                          BadgeBackgroundColor="Red">
             <xct:TabViewItem.Content>
@@ -62,7 +62,8 @@
                                                     <ColumnDefinition Width="70" />
                                                     <ColumnDefinition Width="*" />
                                                 </Grid.ColumnDefinitions>
-                                                <Label Grid.Column="0"
+                                                <Label Style="{StaticResource BaseLabel}"
+                                                       Grid.Column="0"
                                                        Grid.Row="0"
                                                        Text="{Binding TypeSymbol}"
                                                        FontFamily="{StaticResource FontAwesomeSolid}"
@@ -70,10 +71,12 @@
                                                 <StackLayout Grid.Column="1"
                                                              Grid.Row="0"
                                                              HorizontalOptions="FillAndExpand">
-                                                    <Label Text="{Binding Name}"
+                                                    <Label Style="{StaticResource BaseLabel}"
+                                                           Text="{Binding Name}"
                                                            FontAttributes="Bold" />
                                                     <StackLayout Orientation="Horizontal">
-                                                        <Label Text="Annehmen"
+                                                        <Label Style="{StaticResource BaseLabel}"
+                                                               Text="Annehmen"
                                                                FontSize="Small"
                                                                HorizontalOptions="FillAndExpand">
                                                             <Label.GestureRecognizers>
@@ -81,7 +84,8 @@
                                                                                       CommandParameter="{Binding Source={x:Reference requestItem}, Path=BindingContext}" />
                                                             </Label.GestureRecognizers>
                                                         </Label>
-                                                        <Label Text="Ablehnen"
+                                                        <Label Style="{StaticResource BaseLabel}"
+                                                               Text="Ablehnen"
                                                                FontSize="Small">
                                                             <Label.GestureRecognizers>
                                                                 <TapGestureRecognizer Command="{Binding BindingContext.DenyRequestCommand, Source={x:Reference Name=page}}"
@@ -91,8 +95,7 @@
                                                     </StackLayout>
                                                 </StackLayout>
                                             </Grid>
-                                            <BoxView HeightRequest="1"
-                                                     Color="Gray" />
+                                            <BoxView HeightRequest="1" Color="Gray" />
                                         </StackLayout>
                                     </ContentView>
                                 </DataTemplate>
