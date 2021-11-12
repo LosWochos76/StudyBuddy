@@ -8,7 +8,21 @@
     x:DataType="viewmodels:SettingsViewModel"
     Title="Einstellungen">
     <ContentPage.Content>
-        <StackLayout Padding="5">
+        <StackLayout Padding="10">
+            <Grid Padding="10" x:Name="Item">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="70" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <ImageButton
+                    Grid.Column="0" Grid.Row="0"
+                    Command="{Binding PickProfileImageCommand}"
+                    Source="{Binding User.ProfileImage}" />
+                <StackLayout Grid.Column="1" Grid.Row="0" HorizontalOptions="FillAndExpand">
+                    <Label Text="{Binding User.Name}" FontAttributes="Bold" />
+                    <Label Text="{Binding User.Nickname}" />
+                </StackLayout>
+            </Grid>
             <Button Text="Ausloggen" Command="{Binding LogoutCommand}" />
         </StackLayout>
     </ContentPage.Content>

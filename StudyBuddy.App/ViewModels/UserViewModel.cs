@@ -2,6 +2,7 @@
 using System.Runtime.CompilerServices;
 using StudyBuddy.App.Misc;
 using StudyBuddy.Model;
+using Xamarin.Forms;
 
 namespace StudyBuddy.App.ViewModels
 {
@@ -35,11 +36,41 @@ namespace StudyBuddy.App.ViewModels
         public bool RequestedForFriendship { get { return FriendshipRequest != null; } }
         public bool NotRequestedForFriendship { get { return FriendshipRequest == null; } }
 
+        public string Name
+        {
+            get
+            {
+                return $"{Firstname}  {Lastname}";
+            }
+        }
+
         public string FullName
         {
             get
             {
                 return string.Format("{0} {1} ({2})", Firstname, Lastname, Nickname);
+            }
+        }
+
+        private ImageSource profile_image = null;
+        public ImageSource ProfileImage
+        {
+            get
+            {
+                if (profile_image == null)
+                    return new FontImageSource()
+                    {
+                        FontFamily = Device.RuntimePlatform == Device.iOS ? "FontAwesome5Free-Solid" : "fasolid.otf#Regular",
+                        Glyph = FontAwesomeIcons.User
+                    };
+                else
+                    return profile_image;
+            }
+
+            set
+            {
+                profile_image = value;
+                NotifyPropertyChanged();
             }
         }
 

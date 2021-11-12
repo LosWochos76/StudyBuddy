@@ -33,10 +33,7 @@
                                             <ColumnDefinition Width="70" />
                                             <ColumnDefinition Width="*" />
                                         </Grid.ColumnDefinitions>
-                                        <Label Grid.Column="0" Grid.Row="0"
-                                            Text="{x:Static fontAwesome:FontAwesomeIcons.User}"
-                                            FontFamily="{StaticResource FontAwesomeSolid}"
-                                            FontSize="50" />
+                                        <Image Grid.Column="0" Grid.Row="0" Source="{Binding ProfileImage}" />
                                         <StackLayout Grid.Column="1" Grid.Row="0" HorizontalOptions="FillAndExpand">
                                             <Label Text="{Binding FullName}" FontAttributes="Bold" />
                                             <Label Text="{Binding CountOfCommonFriends, StringFormat='{0} gemeinsame Freunde'}" FontSize="Small"/>

@@ -1,4 +1,5 @@
 ﻿using Android.App;
+using Android.Content;
 using Android.Content.PM;
 using Android.OS;
 using Android.Runtime;
@@ -23,16 +24,17 @@ namespace App.Droid
             Forms.Init(this, savedInstanceState);
             ZXing.Net.Mobile.Forms.Android.Platform.Init();
 
+            base.OnCreate(savedInstanceState);
+
             LoadApplication(new StudyBuddy.App.App());
             
             FirebasePushNotificationManager.ProcessIntent(this, Intent);
         }
 
-        public override void OnRequestPermissionsResult(int requestCode, string[] permissions,
-            [GeneratedEnum] Permission[] grantResults)
+        public override void OnRequestPermissionsResult(int requestCode, string[] permissions, [GeneratedEnum] Permission[] grantResults)
         {
             Platform.OnRequestPermissionsResult(requestCode, permissions, grantResults);
-            PermissionsHandler.OnRequestPermissionsResult(requestCode, permissions, grantResults);
+            Xamarin.Essentials.Platform.OnRequestPermissionsResult(requestCode, permissions, grantResults);
 
             base.OnRequestPermissionsResult(requestCode, permissions, grantResults);
         }

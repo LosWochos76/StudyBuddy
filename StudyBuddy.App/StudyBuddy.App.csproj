@@ -23,6 +23,7 @@
         <None Remove="Plugin.FirebasePushNotification" />
         <None Remove="Newtonsoft.Json" />
         <None Remove="Nito.AsyncEx" />
+        <None Remove="Xamarin.MediaGallery" />
     </ItemGroup>
 
     <ItemGroup>

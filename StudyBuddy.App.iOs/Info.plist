@@ -1,48 +1,50 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
-    <dict>
-        <key>UIDeviceFamily</key>
-        <array>
-            <integer>1</integer>
-            <integer>2</integer>
-        </array>
-        <key>UISupportedInterfaceOrientations</key>
-        <array>
-            <string>UIInterfaceOrientationPortrait</string>
-            <string>UIInterfaceOrientationLandscapeLeft</string>
-            <string>UIInterfaceOrientationLandscapeRight</string>
-        </array>
-        <key>UISupportedInterfaceOrientations~ipad</key>
-        <array>
-            <string>UIInterfaceOrientationPortrait</string>
-            <string>UIInterfaceOrientationPortraitUpsideDown</string>
-            <string>UIInterfaceOrientationLandscapeLeft</string>
-            <string>UIInterfaceOrientationLandscapeRight</string>
-        </array>
-        <key>MinimumOSVersion</key>
-        <string>14</string>
-        <key>CFBundleDisplayName</key>
-        <string>StudyBuddy</string>
-        <key>CFBundleIdentifier</key>
-        <string>de.hshl.App</string>
-        <key>CFBundleVersion</key>
-        <string>1.0</string>
-        <key>UILaunchStoryboardName</key>
-        <string>LaunchScreen</string>
-        <key>CFBundleName</key>
-        <string>App</string>
-        <key>XSAppIconAssets</key>
-        <string>Assets.xcassets/AppIcon.appiconset</string>
-        <key>CFBundleDevelopmentRegion</key>
-        <string>de</string>
-        <key>UIAppFonts</key>
-        <array>
-            <string>fabrands.otf</string>
-            <string>faregular.otf</string>
-            <string>fasolid.otf</string>
-        </array>
-        <key>NSCameraUsageDescription</key>
-        <string>StudyBuddy möchte QR-Codes scannen.</string>
-    </dict>
+<dict>
+	<key>UIDeviceFamily</key>
+	<array>
+		<integer>1</integer>
+		<integer>2</integer>
+	</array>
+	<key>UISupportedInterfaceOrientations</key>
+	<array>
+		<string>UIInterfaceOrientationPortrait</string>
+		<string>UIInterfaceOrientationLandscapeLeft</string>
+		<string>UIInterfaceOrientationLandscapeRight</string>
+	</array>
+	<key>UISupportedInterfaceOrientations~ipad</key>
+	<array>
+		<string>UIInterfaceOrientationPortrait</string>
+		<string>UIInterfaceOrientationPortraitUpsideDown</string>
+		<string>UIInterfaceOrientationLandscapeLeft</string>
+		<string>UIInterfaceOrientationLandscapeRight</string>
+	</array>
+	<key>MinimumOSVersion</key>
+	<string>14</string>
+	<key>CFBundleDisplayName</key>
+	<string>StudyBuddy</string>
+	<key>CFBundleIdentifier</key>
+	<string>de.hshl.App</string>
+	<key>CFBundleVersion</key>
+	<string>1.0</string>
+	<key>UILaunchStoryboardName</key>
+	<string>LaunchScreen</string>
+	<key>CFBundleName</key>
+	<string>App</string>
+	<key>XSAppIconAssets</key>
+	<string>Assets.xcassets/AppIcon.appiconset</string>
+	<key>CFBundleDevelopmentRegion</key>
+	<string>de</string>
+	<key>UIAppFonts</key>
+	<array>
+		<string>fabrands.otf</string>
+		<string>faregular.otf</string>
+		<string>fasolid.otf</string>
+	</array>
+	<key>NSCameraUsageDescription</key>
+	<string>StudyBuddy möchte QR-Codes scannen.</string>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>Um ein Profilbild auszuwählen benötigt StudyBuddy zugriff auf die Photos.</string>
+</dict>
 </plist>

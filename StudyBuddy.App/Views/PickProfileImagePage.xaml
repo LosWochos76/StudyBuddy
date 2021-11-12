@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<ContentPage
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Class="StudyBuddy.App.Views.PickProfileImagePage"
+    Title="Profilbild auswählen">
+    <ContentPage.Content>
+        <StackLayout Padding="5">
+            <Button Clicked="Button_Clicked" Text="Bild auswählen"  />
+            <Button Clicked="Button_Clicked1" Text="Bild aufnehmen"  />
+
+            <Frame Padding="0" CornerRadius="150"
+                   HeightRequest="300"
+                   IsClippedToBounds="True"
+                   HorizontalOptions="Center"
+                   HasShadow="False">
+                <Image x:Name="image" Aspect="AspectFill" WidthRequest="300" HeightRequest="300" />
+            </Frame>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>
