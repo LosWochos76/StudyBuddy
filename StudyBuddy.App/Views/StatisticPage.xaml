@@ -1,14 +1,150 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
-
 <ContentPage
     xmlns="http://xamarin.com/schemas/2014/forms"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     x:Class="StudyBuddy.App.Views.StatisticPage"
     xmlns:viewmodels="clr-namespace:StudyBuddy.App.ViewModels"
     x:DataType="viewmodels:StatisticsViewModel"
-    Title="Statistiken"
-             Style="{StaticResource BaseContentPage}">
-    <ContentPage.Content>
+    Title="Statistiken">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <Style x:Key="TitleLabelStyle" TargetType="Label">
+                <Setter Property="FontSize" Value="14" />
+                <Setter Property="FontAttributes" Value="Bold" />
+                <Setter Property="TextColor" Value="Black" />
+            </Style>
 
+            <Style x:Key="DescriptionLabelStyle" TargetType="Label">
+                <Setter Property="FontSize" Value="12" />
+            </Style>
+
+            <Style x:Key="TotalPointsLabelStyle" TargetType="Label">
+                <Setter Property="FontSize" Value="30"/>
+                <Setter Property="FontAttributes" Value="Bold" />
+                <Setter Property="TextColor" Value="Black" />
+            </Style>
+
+            <Style x:Key="InfoLabelStyle" TargetType="Label">
+                <Setter Property="FontSize" Value="10"/>
+                <Setter Property="TextColor" Value="LightGray"></Setter>
+            </Style>
+
+            <Style x:Key="NetworkPointsLabelStyle" TargetType="Label">
+                <Setter Property="FontSize" Value="20"/>
+                <Setter Property="FontAttributes" Value="Bold" />
+                <Setter Property="TextColor" Value="#cc1444" />
+            </Style>
+
+            <Style x:Key="OrganizingPointsLabelStyle" TargetType="Label">
+                <Setter Property="FontSize" Value="20"/>
+                <Setter Property="FontAttributes" Value="Bold" />
+                <Setter Property="TextColor" Value="#a0f502" />
+            </Style>
+
+            <Style x:Key="LearningPointsLabelStyle" TargetType="Label">
+                <Setter Property="FontSize" Value="20"/>
+                <Setter Property="FontAttributes" Value="Bold" />
+                <Setter Property="TextColor" Value="#07c5bf" />
+            </Style>
+
+            <Style x:Key="FrameStyle" TargetType="Frame">
+                <Setter Property="CornerRadius" Value="15"/>
+            </Style>
+
+            <Style x:Key="ItemViewStackLayoutStyle" TargetType="StackLayout">
+                <Setter Property="Margin" Value="5" />
+                <Setter Property="HorizontalOptions" Value="FillAndExpand" />
+                <Setter Property="Spacing" Value="8" />
+            </Style>
+
+            <Style x:Key="DetailsStackLayoutStyle" TargetType="StackLayout">
+                <Setter Property="HorizontalOptions" Value="FillAndExpand" />
+                <Setter Property="VerticalOptions" Value="FillAndExpand" />
+                <Setter Property="Spacing" Value="2" />
+            </Style>
+
+            <Style x:Key="BadgeImageStyle" TargetType="Image">
+                <Setter Property="WidthRequest" Value="80" />
+                <Setter Property="HeightRequest" Value="60" />
+                <Setter Property="Aspect" Value="AspectFit" />
+            </Style>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+    <ContentPage.Content>
+        <Grid BackgroundColor="#f0f0f0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <StackLayout Margin="15" Orientation="Vertical">
+                <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand">
+                    <Label Text="Herausforderungen" FontSize="20" Margin="10"/>
+                </StackLayout>
+
+                <Frame Style="{StaticResource FrameStyle}" >
+                    <StackLayout Orientation="Vertical">
+                        <Label Style="{StaticResource TotalPointsLabelStyle}" HorizontalOptions="CenterAndExpand" HorizontalTextAlignment="Center" Text="{Binding TotalPoints}"></Label>
+                        <Label HorizontalOptions="CenterAndExpand" HorizontalTextAlignment="Center" Text="Punkte Gesamt"></Label>
+                        <StackLayout Margin="0,15,15,0" HorizontalOptions="FillAndExpand" Orientation="Horizontal">
+                            <StackLayout HorizontalOptions="CenterAndExpand" Orientation="Vertical">
+                                <Label Style="{StaticResource NetworkPointsLabelStyle}" HorizontalTextAlignment="Center" Text="{Binding NetworkingPointsCount}"></Label>
+                                <Label HorizontalTextAlignment="Center"  Text="Networking"></Label>
+                            </StackLayout>
+                            <StackLayout HorizontalOptions="CenterAndExpand" Orientation="Vertical">
+                                <Label Style="{StaticResource OrganizingPointsLabelStyle}" HorizontalTextAlignment="Center" Text="{Binding OrganizingPointsCount}"></Label>
+                                <Label HorizontalTextAlignment="Center"  Text="Organizing"></Label>
+                            </StackLayout>
+                            <StackLayout HorizontalOptions="CenterAndExpand" Orientation="Vertical">
+                                <Label Style="{StaticResource LearningPointsLabelStyle}" HorizontalTextAlignment="Center" Text="{Binding LearningPointsCount}"></Label>
+                                <Label HorizontalTextAlignment="Center"  Text="Learning"></Label>
+                            </StackLayout>
+                        </StackLayout>
+                    </StackLayout>
+                </Frame>
+
+                <Label Text="Mehr Statistiken" FontSize="20" Margin="10" ></Label>
+                <StackLayout HorizontalOptions="StartAndExpand" Orientation="Horizontal">
+                    <Frame Style="{StaticResource FrameStyle}" WidthRequest="200">
+                        <StackLayout HorizontalOptions="CenterAndExpand" Orientation="Vertical">
+                            <Label HorizontalTextAlignment="Center" Style="{StaticResource TotalPointsLabelStyle}" Text="7"></Label>
+                            <Label HorizontalTextAlignment="Center" Text="Abgschlossene Herausforderungen"></Label>
+                        </StackLayout>
+                    </Frame>
+                    <Frame Style="{StaticResource FrameStyle}" WidthRequest="200">
+                        <StackLayout HorizontalOptions="CenterAndExpand" Orientation="Vertical">
+                            <Label HorizontalTextAlignment="Center" Style="{StaticResource TotalPointsLabelStyle}" Text="#5"></Label>
+                            <Label HorizontalTextAlignment="Center" Text="Beste Platzierung"></Label>
+                        </StackLayout>
+                    </Frame>
+                </StackLayout>
+                
+                <CollectionView Margin="10,50,10,10" ItemsSource="{Binding Badges}">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate >
+                            <StackLayout Spacing="8" HorizontalOptions="EndAndExpand" >
+                                <Frame BackgroundColor="#fefefe" Style="{StaticResource FrameStyle}">
+                                    <StackLayout Orientation="Horizontal"  Style="{StaticResource ItemViewStackLayoutStyle}">
+
+                                        <!--<Image Style="{StaticResource BadgeImageStyle}" Source="{Binding ImagePath}"></Image> -->
+
+                                        <StackLayout x:Name="badge_info" Style="{StaticResource DetailsStackLayoutStyle}">
+                                            <!--
+                                            <Label Text="{Binding Name}" Style="{StaticResource TitleLabelStyle}"></Label>
+
+                                            <Label Text="{Binding Description}" Style="{StaticResource DescriptionLabelStyle}"></Label>
+                                            <Label Text="{Binding StudentAchievedCount}" Style="{StaticResource InfoLabelStyle}"></Label>
+                                            <ProgressBar Progress="{Binding Progress}" ProgressColor="Orange" />
+                                            <Label Text="{Binding DateAcquiredString}" Style="{StaticResource InfoLabelStyle}" HorizontalTextAlignment="End"></Label>
+                                        -->
+                                            <Label Text="2"></Label>
+                                        </StackLayout>
+                                    </StackLayout>
+                                </Frame>
+                            </StackLayout>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+
+            </StackLayout>
+        </Grid>
     </ContentPage.Content>
 </ContentPage>

@@ -28,6 +28,7 @@ namespace StudyBuddy.App
             TinyIoCContainer.Current.Register(TinyIoCContainer.Current.Resolve<LoginViewModel>());
             TinyIoCContainer.Current.Register(TinyIoCContainer.Current.Resolve<MainViewModel>());
             TinyIoCContainer.Current.Register(TinyIoCContainer.Current.Resolve<ChallengesViewModel>());
+            TinyIoCContainer.Current.Register(TinyIoCContainer.Current.Resolve<StatisticsViewModel>());
             TinyIoCContainer.Current.Register(TinyIoCContainer.Current.Resolve<QrCodeViewModel>());
             TinyIoCContainer.Current.Register(TinyIoCContainer.Current.Resolve<SettingsViewModel>());
             TinyIoCContainer.Current.Register(TinyIoCContainer.Current.Resolve<FriendsViewModel>());

@@ -179,7 +179,7 @@ namespace StudyBuddy.BusinessLogic
         public void RemoveAcceptance(int challenge_id, int user_id)
         {
             if (backend.CurrentUser == null || !backend.CurrentUser.IsAdmin)
-                throw new UnauthorizedAccessException("Unathorrized");
+                throw new UnauthorizedAccessException("Unauthorized");
 
             backend.Repository.Challenges.RemoveAcceptance(challenge_id, user_id);
         }
@@ -187,7 +187,7 @@ namespace StudyBuddy.BusinessLogic
         public void AddAcceptance(int challenge_id, int user_id)
         {
             if (backend.CurrentUser == null || !backend.CurrentUser.IsAdmin)
-                throw new UnauthorizedAccessException("Unathorized");
+                throw new UnauthorizedAccessException("Unauthorized");
 
             var challenge = backend.Repository.Challenges.ById(challenge_id);
             if (challenge == null)
@@ -202,10 +202,18 @@ namespace StudyBuddy.BusinessLogic
             backend.BusinessEvent.TriggerEvent(this, new BusinessEventArgs(BusinessEventType.ChallengeAccepted, challenge));
         }
 
+        public IEnumerable<Challenge> GetAcceptedChallenges()
+        {
+            if (backend.CurrentUser == null)
+                throw new UnauthorizedAccessException("Unauthorized");
+            
+            return backend.Repository.Challenges.Accepted(backend.CurrentUser.ID);
+        }
+
         public void Accept(int challenge_id)
         {
             if (backend.CurrentUser == null)
-                throw new UnauthorizedAccessException("Unathorrized");
+                throw new UnauthorizedAccessException("Unauthorized");
 
             var challenge = backend.Repository.Challenges.ById(challenge_id);
             if (challenge == null)

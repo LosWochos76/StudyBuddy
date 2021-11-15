@@ -1,12 +1,10 @@
 ﻿using Android.App;
-using Android.Content;
 using Android.Content.PM;
 using Android.OS;
 using Android.Runtime;
 using Plugin.FirebasePushNotification;
 using Xamarin.Forms;
 using Xamarin.Forms.Platform.Android;
-using ZXing.Net.Mobile.Android;
 using Platform = Xamarin.Essentials.Platform;
 
 namespace App.Droid
@@ -24,7 +22,7 @@ namespace App.Droid
             Forms.Init(this, savedInstanceState);
             ZXing.Net.Mobile.Forms.Android.Platform.Init();
 
-            base.OnCreate(savedInstanceState);
+            //base.OnCreate(savedInstanceState);
 
             LoadApplication(new StudyBuddy.App.App());
             

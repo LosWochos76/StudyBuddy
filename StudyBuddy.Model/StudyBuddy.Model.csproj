@@ -15,7 +15,6 @@
     </ItemGroup>
     <ItemGroup>
       <Folder Include="Filter\" />
-      <Folder Include="Model\" />
       <Folder Include="Misc\" />
     </ItemGroup>
 </Project>
