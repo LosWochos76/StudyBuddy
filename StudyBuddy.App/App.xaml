@@ -48,8 +48,11 @@
                         Value="{AppThemeBinding Dark={StaticResource WindowBackgroundColor}, Light={StaticResource WindowBackgroundColorDark}}" />
                 <Setter Property="TextColor"
                         Value="{AppThemeBinding Dark={StaticResource TextColor}, Light={StaticResource TextColorDark}}" />
-                <Setter Property="CornerRadius"
-                        Value="8" />
+                <Setter Property="CornerRadius">
+                    <Setter.Value>
+                        <OnPlatform Android="8" />
+                    </Setter.Value>
+                </Setter>
             </Style>
             
             <Style x:Key="BaseLabel"
