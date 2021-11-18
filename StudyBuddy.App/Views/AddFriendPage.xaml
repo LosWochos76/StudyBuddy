@@ -6,7 +6,8 @@
     xmlns:viewmodels="clr-namespace:StudyBuddy.App.ViewModels"
     x:DataType="viewmodels:AddFriendViewModel"
     Title="Freund hinzufügen" x:Name="page"
-    Style="{StaticResource BaseContentPage}">
+    Style="{StaticResource BaseContentPage}"
+    Shell.NavBarIsVisible="False">
     <ContentPage.Content>
         <StackLayout>
             <SearchBar x:Name="SearchBar" TextChanged="searchBar_TextChanged" />
