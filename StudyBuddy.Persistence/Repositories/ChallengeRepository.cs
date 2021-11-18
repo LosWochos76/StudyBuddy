@@ -59,7 +59,7 @@ namespace StudyBuddy.Persistence
                 sql += " and not challenge_accepted(:user_id, id)";
             }
             
-            sql += " order by validity_start,validity_end,created limit :max offset :from";
+            sql += " order by validity_start,validity_end,created,name limit :max offset :from";
             return qh.ExecuteQueryToObjectList(sql);
         }
 
