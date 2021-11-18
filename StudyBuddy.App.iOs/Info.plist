@@ -46,5 +46,11 @@
 	<string>StudyBuddy möchte QR-Codes scannen.</string>
 	<key>NSPhotoLibraryAddUsageDescription</key>
 	<string>Um ein Profilbild auszuwählen benötigt StudyBuddy zugriff auf die Photos.</string>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>remote-notification</string>
+	</array>
+	<key>FirebaseAppDelegateProxyEnabled</key>
+	<string>No</string>
 </dict>
 </plist>
