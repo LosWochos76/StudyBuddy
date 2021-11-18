@@ -7,10 +7,42 @@
     x:DataType="viewmodels:AddFriendViewModel"
     Title="Freund hinzufügen" x:Name="page"
     Style="{StaticResource BaseContentPage}"
-    Shell.NavBarIsVisible="True">
+    Shell.NavBarIsVisible="True"
+    Shell.TabBarIsVisible="True">
     <ContentPage.Content>
         <StackLayout>
-            <SearchBar x:Name="SearchBar" TextChanged="searchBar_TextChanged" />
+            <Frame Padding="5"
+                   Margin="4"
+                   BackgroundColor="{StaticResource WindowBackgroundColor}"
+                   HasShadow="False"
+                   BorderColor="Black"
+                   CornerRadius="8"
+                   HeightRequest="45">
+                <Frame.IsVisible>
+                    <OnPlatform x:TypeArguments="x:Boolean"
+                                iOS="False"
+                                Android="True" />
+                </Frame.IsVisible>
+                <SearchBar TextColor="{AppThemeBinding Dark={StaticResource TextColorDark}, Light={StaticResource TextColor}}"
+                           x:Name="searchBar"
+                           TextChanged="searchBar_TextChanged">
+                    <SearchBar.IsVisible>
+                        <OnPlatform x:TypeArguments="x:Boolean"
+                                    iOS="False"
+                                    Android="True" />
+                    </SearchBar.IsVisible>
+                </SearchBar>
+
+            </Frame>
+            <SearchBar TextColor="{AppThemeBinding Dark={StaticResource TextColorDark}, Light={StaticResource TextColor}}"
+                       x:Name="searchBarIos"
+                       TextChanged="searchBar_TextChanged">
+                <SearchBar.IsVisible>
+                    <OnPlatform x:TypeArguments="x:Boolean"
+                                iOS="True"
+                                Android="False" />
+                </SearchBar.IsVisible>
+            </SearchBar>
             <RefreshView
                 IsRefreshing="{Binding IsRefreshing}"
                 Command="{Binding RefreshCommand}"
