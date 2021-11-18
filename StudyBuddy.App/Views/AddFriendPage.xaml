@@ -7,7 +7,7 @@
     x:DataType="viewmodels:AddFriendViewModel"
     Title="Freund hinzufügen" x:Name="page"
     Style="{StaticResource BaseContentPage}"
-    Shell.NavBarIsVisible="False">
+    Shell.NavBarIsVisible="True">
     <ContentPage.Content>
         <StackLayout>
             <SearchBar x:Name="SearchBar" TextChanged="searchBar_TextChanged" />
