@@ -22,7 +22,7 @@ namespace StudyBuddy.App.Api
 
             api.Authentication.LoginStateChanged += (sender, args) =>
             {
-                if (args.IsLoggedIn == true)
+                if (args.IsLoggedIn)
                 {
                     this.UpdateToken();
 
@@ -62,14 +62,11 @@ namespace StudyBuddy.App.Api
 
         async void UpdateToken()
         {
-            try
-            {
+      
                 var token = await CrossFirebasePushNotification.Current.GetTokenAsync();
                 this.Save(token);
-            }
-            catch
-            {
-            }
+            
+     
         }
     }
 }

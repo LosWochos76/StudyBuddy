@@ -19,7 +19,7 @@ export class NotificationService {
     if (!this.auth.isLoggedIn())
       return null;
 
-    let path = `${this.url}Notification`;
+    let path = `${this.url}PushNotification`;
     let result = await this.http.post(path,{
       title,
       body,

@@ -12,7 +12,7 @@ namespace StudyBuddy.Api
             this.backend = backend;
         }
 
-        [Route("/Notification/")]
+        [Route("/PushNotification/")]
         [HttpPost]
         public IActionResult BroadcastMessage([FromBody] PushNotificationBroadcastDto obj)
         {

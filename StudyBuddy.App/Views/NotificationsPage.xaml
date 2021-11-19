@@ -22,16 +22,30 @@
                     <RefreshView IsRefreshing="{Binding IsRefreshing}"
                                  Command="{Binding RefreshCommand}"
                                  Padding="8">
-                        <CollectionView ItemsSource="{Binding News}">
+                        <CollectionView ItemsSource="{Binding NewsViewModel.News}">
                             <CollectionView.ItemTemplate>
                                 <DataTemplate x:DataType="viewmodels:NewsViewModel">
                                     <ContentView>
                                         <StackLayout>
-                                            <Grid Padding="10"
-                                                  x:Name="newsItem">
-                                            </Grid>
+                                
                                             <BoxView HeightRequest="1"
                                                      Color="Gray" />
+                                            <StackLayout Orientation="Horizontal">
+                                                <Label Text="{Binding Firstname}" ></Label>
+                                                <Label Text="{Binding Lastname}" ></Label>
+                                            </StackLayout>
+                                            
+                                            <StackLayout>
+                                                <Label Text="{Binding Created}"></Label>
+                                            </StackLayout>
+                                            
+                                            <StackLayout>
+                                                <Label Text="{Binding Title}"  FontAttributes="Bold" ></Label>
+                                                <Label Text="{Binding Body}" ></Label>
+
+                                            </StackLayout>
+
+                                            
                                         </StackLayout>
                                     </ContentView>
                                 </DataTemplate>

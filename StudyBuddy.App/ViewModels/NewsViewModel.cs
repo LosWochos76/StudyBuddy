@@ -1,6 +1,8 @@
-﻿namespace StudyBuddy.App.ViewModels
+﻿using StudyBuddy.Model.Model;
+
+namespace StudyBuddy.App.ViewModels
 {
-    public class NewsViewModel
+    public class NewsViewModel : UserNotification
     {
     }
 }
