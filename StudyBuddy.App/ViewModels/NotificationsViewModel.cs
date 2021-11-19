@@ -1,9 +1,13 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using StudyBuddy.App.Api;
 using StudyBuddy.App.Misc;
+using StudyBuddy.Model;
+using StudyBuddy.Model.Model;
 using TinyIoC;
 using Xamarin.Forms;
 
@@ -17,7 +21,7 @@ namespace StudyBuddy.App.ViewModels
         public bool RequestsIsSelected { get => newsIsSelected; set { newsIsSelected = !value; } }
 
         public ObservableCollection<RequestViewModel> Requests { get; private set; } = new ObservableCollection<RequestViewModel>();
-        public IEnumerable<NewsViewModel> News { get; private set; } = new List<NewsViewModel>();
+        public NotificationsViewModelNews NewsViewModel { get; private set; }
         public ICommand RefreshCommand { get; }
         public bool IsRefreshing { get; set; }
 
@@ -32,14 +36,17 @@ namespace StudyBuddy.App.ViewModels
             this.RefreshCommand = new Command(Refresh);
             this.AcceptRequestCommand = new Command<RequestViewModel>(AcceptRequest);
             this.DenyRequestCommand = new Command<RequestViewModel>(DenyRequest);
+            
+            this.NewsViewModel =  new NotificationsViewModelNews(api, dialog, navigation);
             api.Authentication.LoginStateChanged += Authentication_LoginStateChanged;
+            
         }
 
         private void Authentication_LoginStateChanged(object sender, LoginStateChangedArgs args)
         {
             if (args.IsLoggedIn)
             {
-                ReloadNews();
+                NewsViewModel.LoadNews();
                 ReloadRequests();
             }
         }
@@ -47,7 +54,7 @@ namespace StudyBuddy.App.ViewModels
         private async void Refresh()
         {
             if (newsIsSelected)
-                await ReloadNews();
+                await NewsViewModel.LoadNews();
             else
                 await ReloadRequests();
 
@@ -55,9 +62,7 @@ namespace StudyBuddy.App.ViewModels
             NotifyPropertyChanged("IsRefreshing");
         }
 
-        private async Task ReloadNews()
-        {
-        }
+   
 
         private async Task ReloadRequests()
         {
@@ -127,4 +132,27 @@ namespace StudyBuddy.App.ViewModels
             }
         }
     }
+
+    public class NotificationsViewModelNews : ViewModelBase
+    {
+        public ObservableCollection<UserNotification> News { get; private set; } = new ObservableCollection<UserNotification>();
+
+
+        public NotificationsViewModelNews(IApi api, IDialogService dialog, INavigationService navigation) : base(api,
+            dialog, navigation)
+        {
+      
+        }
+
+        public async Task LoadNews()
+        {
+            var response = await this.api.Notifications.GetMyNotificationFeed();
+            this.News.Clear();
+            foreach (var notification in response)
+            {
+                this.News.Add(notification);
+            }
+        }
+    }
+    
 }

@@ -13,6 +13,7 @@ namespace StudyBuddy.App.Api
         IBadgeService Badges { get; }
         IRequestService Requests { get; }
         ILoggingService Logging { get; }
+        NotificationService Notifications { get; }
 
         event EventHandler<ChallengeViewModel> ChallengeAccepted;
         void RaiseChallengeAcceptedEvent(object sender, ChallengeViewModel challenge);

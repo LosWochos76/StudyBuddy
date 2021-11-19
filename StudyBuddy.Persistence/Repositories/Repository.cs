@@ -23,8 +23,8 @@ namespace StudyBuddy.Persistence
         public IRequestRepository Requests { get; private set; }
         public ITagRepository Tags { get; private set; }
         public ILoggingRepository Logging { get; private set; }
-
         public IFcmTokenRepository FcmTokens { get; private set; }
+        public NotificationRepository Notifications { get; private set; }
 
         private void CreateRepositories()
         {
@@ -35,6 +35,7 @@ namespace StudyBuddy.Persistence
             Tags = new TagRepository(connection_string);
             FcmTokens = new FcmTokenRepository(connection_string);
             Logging = new LoggingRepository(connection_string);
+            Notifications = new NotificationRepository(connection_string);
         }
     }
 }

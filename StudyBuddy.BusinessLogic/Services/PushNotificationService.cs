@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using FirebaseAdmin.Messaging;
 
 namespace StudyBuddy.BusinessLogic
@@ -21,7 +22,8 @@ namespace StudyBuddy.BusinessLogic
                 {
                     Title = obj.Title,
                     Body = obj.Body,
-                }
+                    
+                },
             };
 
             foreach (var fcmToken in fcmTokens)
@@ -30,5 +32,26 @@ namespace StudyBuddy.BusinessLogic
                 FirebaseMessaging.DefaultInstance.SendAsync(message);
             }
         }
+
+        public async void SendMessage(string token, string title, string body, PushNotificationData pushNotificationData = null)
+        {
+
+            var data = new Dictionary<string, string>();
+            data.Add("data", pushNotificationData.toJson());
+            var message = new Message
+            {
+                Notification = new Notification
+                {
+                    Title = title,
+                    Body = body,
+                    
+                },
+                Data = data
+            };
+            
+            message.Token = token;
+            var response = await FirebaseMessaging.DefaultInstance.SendAsync(message);
+        }
+        
     }
 }

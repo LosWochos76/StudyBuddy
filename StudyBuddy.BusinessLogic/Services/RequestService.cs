@@ -102,6 +102,7 @@ namespace StudyBuddy.BusinessLogic
             backend.Repository.Requests.Delete(id);
 
             // ToDo: Erzeugen einer Neuigkeit!
+
         }
 
         public void Deny(int id)

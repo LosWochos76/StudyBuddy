@@ -240,7 +240,9 @@ namespace StudyBuddy.BusinessLogic
                     if (success_rate.Success >= badge.RequiredCoverage)
                     {
                         backend.Repository.GameBadges.AddBadgeToUser(current_user.ID, badge.ID);
-                        // ToDo: Neuigkeit erzeugen!
+                        // ToDo: Neuigkeit erzeugen! 
+                        backend.NotificationService.CreateNotificationForUser(current_user.ID, "ChallengeAccepted",  current_user.Nickname + "hat die Challenge accepted.");
+
                     }
                 }
             }

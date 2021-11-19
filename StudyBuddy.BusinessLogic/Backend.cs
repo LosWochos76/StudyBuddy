@@ -17,6 +17,7 @@ namespace StudyBuddy.BusinessLogic
         public IUserService UserService { get; set; }
         public IBusinessEventService BusinessEvent { get; private set; }
         public ILoggingService Logging { get; private set; }
+        public NotificationService NotificationService { get; }
 
         public Backend()
         {
@@ -31,6 +32,7 @@ namespace StudyBuddy.BusinessLogic
             UserService = new UserService(this);
             BusinessEvent = new BusinessEventService(this);
             Logging = new LoggingService(this);
+            NotificationService = new NotificationService(this);
         }
 
         public void SetCurrentUserFromToken(string token)
