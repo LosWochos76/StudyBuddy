@@ -75,9 +75,11 @@ namespace StudyBuddy.App.ViewModels
             navigation.Push(new FriendPage(obj));
         }
 
-        public void AddFriend()
+        public async void AddFriend()
         {
-            navigation.Push(new AddFriendPage());
+            //navigation.Push(new AddFriendPage());
+            var route = $"{nameof(AddFriendPage)}";
+            await Shell.Current.GoToAsync(route);
         }
     }
 }

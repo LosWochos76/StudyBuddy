@@ -81,11 +81,8 @@
             <Style TargetType="SearchBar">
                 <Setter Property="TextColor"
                         Value="{AppThemeBinding Dark={StaticResource TextColor}, Light={StaticResource TextColor}}" />
-                <Setter Property="BackgroundColor">
-                    <Setter.Value>
-                        <OnPlatform Android="{AppThemeBinding Dark={StaticResource WindowBackgroundColor}, Light={StaticResource WindowBackgroundColor}}" />
-                    </Setter.Value>
-                </Setter>
+                <Setter Property="BackgroundColor"
+                        Value="{AppThemeBinding Dark={StaticResource WindowBackgroundColor}, Light={StaticResource WindowBackgroundColor}}" />
             </Style>
 
             <Style x:Key="BaseContentPage" TargetType="ContentPage">

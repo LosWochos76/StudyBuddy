@@ -34,6 +34,7 @@ namespace StudyBuddy.App.ViewModels
 
         private void Authentication_LoginStateChanged(object sender, LoginStateChangedArgs args)
         {
+            if (args.IsLoggedIn)
             User = UserViewModel.FromModel(api.Authentication.CurrentUser);
         }
 
