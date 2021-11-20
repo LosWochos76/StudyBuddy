@@ -4,10 +4,10 @@
        xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
        xmlns:local="clr-namespace:StudyBuddy.App.Views"
        xmlns:viewmodels="clr-namespace:StudyBuddy.App.ViewModels"
-       x:DataType="viewmodels:ChallengesViewModel"
+       x:DataType="viewmodels:MainViewModel"
        xmlns:fontAwesome="clr-namespace:StudyBuddy.App"
        x:Class="StudyBuddy.App.Views.MainPage"
-       xmlns:android="clr-namespace:Xamarin.Forms.PlatformConfiguration.AndroidSpecific;assembly=Xamarin.Forms.Core"
+       FlyoutBehavior="Flyout"
        BackgroundColor="{AppThemeBinding Dark={StaticResource WindowBackgroundColorDark}, Light={StaticResource WindowBackgroundColor}}">
     <Shell.Resources>
         <ResourceDictionary>
@@ -23,49 +23,64 @@
             </Style>
         </ResourceDictionary>
     </Shell.Resources>
-
-       
     <ShellItem Route="LoginPage" FlyoutItemIsVisible="False">
         <ShellContent ContentTemplate="{DataTemplate local:LoginPage}" />
-    </ShellItem>
-    <ShellItem Route="ChallengeDetailsPage" FlyoutItemIsVisible="False">
-        <ShellContent ContentTemplate="{DataTemplate local:ChallengeDetailsPage}" />
     </ShellItem>
     <TabBar>
         <Tab>
             <ShellContent ContentTemplate="{DataTemplate local:ChallengesPage}" Route="ChallengesPage"/>
             <Tab.Icon>
                 <FontImageSource FontFamily="{StaticResource FontAwesomeSolid}"
-                                 Glyph="{x:Static fontAwesome:FontAwesomeIcons.Table}"/>
+                    Glyph="{x:Static fontAwesome:FontAwesomeIcons.Table}"/>
             </Tab.Icon>
         </Tab>
         <Tab>
             <ShellContent ContentTemplate="{DataTemplate local:StatisticPage}" Route="StatisticsPage" />
             <Tab.Icon>
                 <FontImageSource FontFamily="{StaticResource FontAwesomeSolid}"
-                                 Glyph="{x:Static fontAwesome:FontAwesomeIcons.Crown}" />
+                    Glyph="{x:Static fontAwesome:FontAwesomeIcons.Crown}" />
             </Tab.Icon>
         </Tab>
         <Tab>
-            <ShellContent ContentTemplate="{DataTemplate local:FriendsPage}" Route="FriendsPage" />
+            <ShellContent ContentTemplate="{DataTemplate local:NotificationsPage}" Route="NotificationPage" />
             <Tab.Icon>
                 <FontImageSource FontFamily="{StaticResource FontAwesomeSolid}"
-                                 Glyph="{x:Static fontAwesome:FontAwesomeIcons.UserFriends}" />
-            </Tab.Icon>
-        </Tab>
-        <Tab>
-            <ShellContent Shell.NavBarIsVisible="False" Shell.TabBarIsVisible="True" ContentTemplate="{DataTemplate local:NotificationsPage}" Route="NotificationPage" />
-            <Tab.Icon>
-                <FontImageSource FontFamily="{StaticResource FontAwesomeSolid}"
-                                 Glyph="{x:Static fontAwesome:FontAwesomeIcons.Bell}" />
-            </Tab.Icon>
-        </Tab>
-        <Tab>
-            <ShellContent ContentTemplate="{DataTemplate local:SettingsPage}" Route="SettingsPage" />
-            <Tab.Icon>
-                <FontImageSource FontFamily="{StaticResource FontAwesomeSolid}"
-                                 Glyph="{x:Static fontAwesome:FontAwesomeIcons.Gears}" />
+                    Glyph="{x:Static fontAwesome:FontAwesomeIcons.Bell}" />
             </Tab.Icon>
         </Tab>
     </TabBar>
+    <MenuItem Text="Profil" Command="{Binding ProfileCommand}">
+        <MenuItem.IconImageSource>
+            <FontImageSource FontFamily="{StaticResource FontAwesomeSolid}"
+                Glyph="{x:Static fontAwesome:FontAwesomeIcons.User}" />
+        </MenuItem.IconImageSource>
+    </MenuItem>
+    <MenuItem Text="Freunde" Command="{Binding FriendsCommand}">
+        <MenuItem.IconImageSource>
+            <FontImageSource FontFamily="{StaticResource FontAwesomeSolid}"
+                Glyph="{x:Static fontAwesome:FontAwesomeIcons.UserFriends}" />
+        </MenuItem.IconImageSource>
+    </MenuItem>
+    <MenuItem Text="Theme" Command="{Binding ThemeCommand}">
+        <MenuItem.IconImageSource>
+            <FontImageSource FontFamily="{StaticResource FontAwesomeSolid}"
+                Glyph="{x:Static fontAwesome:FontAwesomeIcons.Eye}" />
+        </MenuItem.IconImageSource>
+    </MenuItem>
+    <MenuItem>
+        <Shell.MenuItemTemplate>
+            <DataTemplate>
+                <Label HeightRequest="1" BackgroundColor="LightGray"></Label>
+            </DataTemplate>
+        </Shell.MenuItemTemplate>
+    </MenuItem>
+    <MenuItem Text="Ausloggen" Command="{Binding LogoutCommand}">
+        <MenuItem.IconImageSource>
+            <FontImageSource FontFamily="{StaticResource FontAwesomeSolid}"
+                Glyph="{x:Static fontAwesome:FontAwesomeIcons.DoorClosed}" />
+        </MenuItem.IconImageSource>
+    </MenuItem>
+    <Shell.FlyoutHeader>
+        <local:FlyoutHeaderView />
+    </Shell.FlyoutHeader>
 </Shell>

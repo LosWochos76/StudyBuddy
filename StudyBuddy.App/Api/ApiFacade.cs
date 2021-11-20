@@ -2,18 +2,16 @@
 using System.Net.Http;
 using StudyBuddy.App.Misc;
 using StudyBuddy.App.ViewModels;
-using StudyBuddy.Model;
 using TinyIoC;
 
 namespace StudyBuddy.App.Api
 {
     public class ApiFacade : IApi
     {
-        // private readonly string base_url = "https://localhost:5001/";
-        // private readonly string base_url = "https://studybuddy.hshl.de/";
+        //private readonly string base_url = "https://localhost:5001/";
+        private readonly string base_url = "https://studybuddy.hshl.de/";
+        //private readonly string base_url = "https://10.0.2.2:5001/";
         private Version app_version = new Version(0, 0, 18, 0);
-        private readonly string base_url = "https://10.0.2.2:5001/";
-        // private readonly string base_url = "https://studybuddy.hshl.de/";
 
         public IAuthenticationService Authentication { get; }
         public IChallengeService Challenges { get; }

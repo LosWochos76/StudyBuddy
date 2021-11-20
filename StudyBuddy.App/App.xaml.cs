@@ -1,6 +1,4 @@
-﻿ using StudyBuddy.App.Api;
-﻿using Plugin.FirebasePushNotification;
-using StudyBuddy.App.Api;
+﻿using StudyBuddy.App.Api;
 using StudyBuddy.App.Misc;
 using StudyBuddy.App.ViewModels;
 using StudyBuddy.App.Views;
@@ -16,26 +14,28 @@ namespace StudyBuddy.App
         {
             InitializeComponent();
             SetupServices();
-            MainTheme.SetTheme();
 
             MainPage = new MainPage();
         }
 
         private void SetupServices()
         {
+            var theme = new ThemeViewModel();
+            theme.RestoreTheme();
+            TinyIoCContainer.Current.Register(theme);
+
             TinyIoCContainer.Current.Register<IApi>(new ApiFacade());
             TinyIoCContainer.Current.Register<IDialogService>(new DialogService());
             TinyIoCContainer.Current.Register<INavigationService>(new NagigationService());
-
             TinyIoCContainer.Current.Register(TinyIoCContainer.Current.Resolve<LoginViewModel>());
             TinyIoCContainer.Current.Register(TinyIoCContainer.Current.Resolve<MainViewModel>());
             TinyIoCContainer.Current.Register(TinyIoCContainer.Current.Resolve<ChallengesViewModel>());
             TinyIoCContainer.Current.Register(TinyIoCContainer.Current.Resolve<StatisticsViewModel>());
             TinyIoCContainer.Current.Register(TinyIoCContainer.Current.Resolve<QrCodeViewModel>());
-            TinyIoCContainer.Current.Register(TinyIoCContainer.Current.Resolve<SettingsViewModel>());
             TinyIoCContainer.Current.Register(TinyIoCContainer.Current.Resolve<FriendsViewModel>());
             TinyIoCContainer.Current.Register(TinyIoCContainer.Current.Resolve<NotificationsViewModel>());
             TinyIoCContainer.Current.Register(TinyIoCContainer.Current.Resolve<BadgesViewModel>());
+            TinyIoCContainer.Current.Register(TinyIoCContainer.Current.Resolve<FlyoutHeaderViewModel>());
         }
 
         private void SetupFirebasePushNotificationsHandler()
@@ -59,13 +59,13 @@ namespace StudyBuddy.App
 
         protected override void OnSleep()
         {
-            MainTheme.SetTheme();
+            TinyIoCContainer.Current.Resolve<ThemeViewModel>().RestoreTheme();
             RequestedThemeChanged -= App_RequestedThemeChanged;
         }
 
         protected override async void OnResume()
         {
-            MainTheme.SetTheme();
+            TinyIoCContainer.Current.Resolve<ThemeViewModel>().RestoreTheme();
             RequestedThemeChanged += App_RequestedThemeChanged;
         }
 
@@ -73,7 +73,7 @@ namespace StudyBuddy.App
         {
             MainThread.BeginInvokeOnMainThread(() =>
             {
-                MainTheme.SetTheme();
+                TinyIoCContainer.Current.Resolve<ThemeViewModel>().RestoreTheme();
             });
         }
     }

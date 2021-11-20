@@ -8,13 +8,13 @@
     x:DataType="viewmodels:ChallengesViewModel"
              Style="{StaticResource BaseContentPage}"
              x:Name="page" Title="{Binding Header}">
-    
     <ContentPage.ToolbarItems>
         <ToolbarItem Text="QR-Code scannen" Command="{Binding ScanQrCodeCommand}">
             <ToolbarItem.IconImageSource>
                 <FontImageSource FontFamily="{StaticResource FontAwesomeSolid}"
                     Glyph="{x:Static fontAwesome:FontAwesomeIcons.Camera}" 
-                                 Color="{AppThemeBinding Dark={StaticResource TextColorDark}, Light={StaticResource TextColor}}"/>
+                    Color="{AppThemeBinding Dark={StaticResource TextColorDark},
+                    Light={StaticResource TextColor}}"/>
            </ToolbarItem.IconImageSource>
         </ToolbarItem>
     </ContentPage.ToolbarItems>

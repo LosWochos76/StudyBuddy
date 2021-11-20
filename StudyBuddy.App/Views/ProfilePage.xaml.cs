@@ -1,14 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using Xamarin.Essentials;
 using Xamarin.Forms;
 
 namespace StudyBuddy.App.Views
 {
-    public partial class PickProfileImagePage : ContentPage
+    public partial class ProfilePage : ContentPage
     {
-        public PickProfileImagePage()
+        public ProfilePage()
         {
             InitializeComponent();
         }
@@ -45,7 +44,7 @@ namespace StudyBuddy.App.Views
                     return;
 
                 var stream = await result.OpenReadAsync();
-              
+
                 image.Source = ImageSource.FromStream(() => stream);
                 await image.RotateTo(90);
             }

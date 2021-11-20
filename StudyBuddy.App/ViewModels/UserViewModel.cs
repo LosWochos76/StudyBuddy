@@ -40,7 +40,7 @@ namespace StudyBuddy.App.ViewModels
         {
             get
             {
-                return $"{Firstname}  {Lastname}";
+                return $"{Firstname} {Lastname}";
             }
         }
 

@@ -8,6 +8,8 @@ namespace StudyBuddy.App.Misc
     {
         public Task GoTo(string path)
         {
+            Shell.Current.FlyoutIsPresented = false;
+
             if (Shell.Current.Navigation.NavigationStack.Count > 0)
             {
                 var list = Shell.Current.Navigation.NavigationStack.ToList();
@@ -17,15 +19,19 @@ namespace StudyBuddy.App.Misc
             }
 
             return Shell.Current.GoToAsync(path);
+            
         }
 
         public Task Push(Page page)
         {
+            Shell.Current.FlyoutIsPresented = false;
             return Shell.Current.Navigation.PushAsync(page);
+            
         }
 
         public Task Pop()
         {
+            Shell.Current.FlyoutIsPresented = false;
             return Shell.Current.Navigation.PopAsync();
         }
     }

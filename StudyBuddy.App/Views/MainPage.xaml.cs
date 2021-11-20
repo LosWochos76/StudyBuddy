@@ -11,7 +11,7 @@ namespace StudyBuddy.App.Views
         public MainPage()
         {
             InitializeComponent();
-            Routing.RegisterRoute(nameof(AddFriendPage), typeof(AddFriendPage));
+
             view_model = TinyIoCContainer.Current.Resolve<MainViewModel>();
             BindingContext = view_model;
         }

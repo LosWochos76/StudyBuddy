@@ -6,9 +6,7 @@
     xmlns:viewmodels="clr-namespace:StudyBuddy.App.ViewModels"
     x:DataType="viewmodels:AddFriendViewModel"
     Title="Freund hinzufügen" x:Name="page"
-    Style="{StaticResource BaseContentPage}"
-    Shell.NavBarIsVisible="True"
-    Shell.TabBarIsVisible="True">
+    Style="{StaticResource BaseContentPage}">
     <ContentPage.Content>
         <StackLayout>
             <Frame Padding="5"

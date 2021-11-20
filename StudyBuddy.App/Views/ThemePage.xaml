@@ -1,27 +1,21 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
-<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<ContentPage
+    xmlns="http://xamarin.com/schemas/2014/forms"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    x:Class="StudyBuddy.App.Views.SettingsPage"
-    xmlns:viewmodels="clr-namespace:StudyBuddy.App.ViewModels"
-    x:DataType="viewmodels:SettingsViewModel"
     xmlns:fontAwesome="clr-namespace:StudyBuddy.App"
-    Title="Einstellungen"
-    Style="{StaticResource BaseContentPage}">
+    x:Class="StudyBuddy.App.Views.ThemePage"
+    Title="Theme">
     <ContentPage.Resources>
         <ResourceDictionary>
-
             <Color x:Key="LightRadioButtonColor">#F3F2F1</Color>
             <Color x:Key="DarkRadioButtonColor">#9B9A99</Color>
-
             <ControlTemplate x:Key="ThemeRadioTemplate">
                 <Frame Padding="0"
                        BackgroundColor="{AppThemeBinding Dark={StaticResource DarkRadioButtonColor},
                                                       Light={StaticResource LightRadioButtonColor}}"
                        BorderColor="{AppThemeBinding Dark={StaticResource DarkRadioButtonColor},
                                                   Light={StaticResource LightRadioButtonColor}}"
-                       CornerRadius="8"
-                       HasShadow="{OnPlatform iOS=false,
-                                           Android=true}"
+                       CornerRadius="8" HasShadow="{OnPlatform iOS=false, Android=true}"
                        HeightRequest="80"
                        HorizontalOptions="Start"
                        VerticalOptions="Start"
@@ -105,13 +99,9 @@
             </Style>
         </ResourceDictionary>
     </ContentPage.Resources>
-    <ScrollView>
-        <Grid Padding="12"
-              ColumnDefinitions=".05*,.9*,.05*">
-            <StackLayout Grid.Column="1">
-                <Label Margin="0,12,0,0"
-                       Style="{StaticResource BaseLabel}"
-                       Text="THEME" />
+    <ContentPage.Content>
+        <ScrollView>
+            <StackLayout>
                 <Frame Style="{StaticResource SettingsFrame}"
                        HasShadow="True">
                     <Grid ColumnDefinitions="*,Auto,Auto,Auto,*"
@@ -119,18 +109,14 @@
                           RadioButtonGroup.GroupName="ThemeGroup"
                           RowDefinitions="Auto,Auto"
                           RowSpacing="10">
-                        <RadioButton x:Name="RadioButtonSystem"
-                                     Grid.Column="1"
-                                     CheckedChanged="RadioButton_CheckedChanged"
-                                     Value="System">
+                        <RadioButton x:Name="RadioButtonSystem" Grid.Column="1" IsChecked="{Binding IsSystemTheme}">
                             <RadioButton.Content>
-                                <StackLayout HorizontalOptions="Center"
-                                             VerticalOptions="Center">
+                                <StackLayout HorizontalOptions="Center" VerticalOptions="Center">
                                     <Image Scale="0.75">
                                         <Image.Source>
                                             <FontImageSource FontFamily="{StaticResource FontAwesomeSolid}"
-                                                             Glyph="{x:Static fontAwesome:FontAwesomeIcons.UserCog}"
-                                                             Color="{AppThemeBinding Dark={StaticResource TextColorDark}, Light={StaticResource TextColor}}" />
+                                                Glyph="{x:Static fontAwesome:FontAwesomeIcons.UserCog}"
+                                                Color="{AppThemeBinding Dark={StaticResource TextColorDark}, Light={StaticResource TextColor}}" />
                                         </Image.Source>
                                     </Image>
                                     <Label Style="{StaticResource BaseLabel}"
@@ -139,66 +125,37 @@
                                 </StackLayout>
                             </RadioButton.Content>
                         </RadioButton>
-                        <RadioButton x:Name="RadioButtonLight"
-                                     Grid.Column="2"
-                                     CheckedChanged="RadioButton_CheckedChanged"
-                                     Value="Light">
+                        <RadioButton x:Name="RadioButtonLight" Grid.Column="2" IsChecked="{Binding IsLightTheme}">
                             <RadioButton.Content>
-                                <StackLayout HorizontalOptions="Center"
-                                             VerticalOptions="Center">
+                                <StackLayout HorizontalOptions="Center" VerticalOptions="Center">
                                     <Image Scale="0.75">
                                         <Image.Source>
                                             <FontImageSource FontFamily="{StaticResource FontAwesomeSolid}"
-                                                             Glyph="{x:Static fontAwesome:FontAwesomeIcons.Sun}"
-                                                             Color="{AppThemeBinding Dark={StaticResource TextColorDark}, Light={StaticResource TextColor}}" />
+                                                Glyph="{x:Static fontAwesome:FontAwesomeIcons.Sun}"
+                                                Color="{AppThemeBinding Dark={StaticResource TextColorDark}, Light={StaticResource TextColor}}" />
                                         </Image.Source>
                                     </Image>
-                                    <Label Style="{StaticResource BaseLabel}"
-                                           FontSize="Small"
-                                           Text="Light" />
+                                    <Label Style="{StaticResource BaseLabel}" FontSize="Small" Text="Light" />
                                 </StackLayout>
                             </RadioButton.Content>
                         </RadioButton>
-                        <RadioButton x:Name="RadioButtonDark"
-                                     Grid.Column="3"
-                                     CheckedChanged="RadioButton_CheckedChanged"
-                                     Value="Dark">
+                        <RadioButton x:Name="RadioButtonDark" Grid.Column="3" IsChecked="{Binding IsDarkTheme}">
                             <RadioButton.Content>
-                                <StackLayout HorizontalOptions="Center"
-                                             VerticalOptions="Center">
+                                <StackLayout HorizontalOptions="Center" VerticalOptions="Center">
                                     <Image Scale="0.75">
                                         <Image.Source>
                                             <FontImageSource FontFamily="{StaticResource FontAwesomeSolid}"
-                                                             Glyph="{x:Static fontAwesome:FontAwesomeIcons.Moon}"
-                                                             Color="{AppThemeBinding Dark={StaticResource TextColorDark}, Light={StaticResource TextColor}}" />
+                                                Glyph="{x:Static fontAwesome:FontAwesomeIcons.Moon}"
+                                                Color="{AppThemeBinding Dark={StaticResource TextColorDark}, Light={StaticResource TextColor}}" />
                                         </Image.Source>
                                     </Image>
-                                    <Label Style="{StaticResource BaseLabel}"
-                                           FontSize="Small"
-                                           Text="Dark" />
+                                    <Label Style="{StaticResource BaseLabel}" FontSize="Small" Text="Dark" />
                                 </StackLayout>
                             </RadioButton.Content>
                         </RadioButton>
                     </Grid>
                 </Frame>
-                <StackLayout Padding="10">
-                    <Grid Padding="10" x:Name="Item">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="70" />
-                            <ColumnDefinition Width="*" />
-                        </Grid.ColumnDefinitions>
-                        <ImageButton
-                            Grid.Column="0" Grid.Row="0"
-                            Command="{Binding PickProfileImageCommand}"
-                            Source="{Binding User.ProfileImage}" />
-                        <StackLayout Grid.Column="1" Grid.Row="0" HorizontalOptions="FillAndExpand">
-                            <Label Text="{Binding User.Name}" FontAttributes="Bold" />
-                            <Label Text="{Binding User.Nickname}" />
-                        </StackLayout>
-                    </Grid>
-                    <Button Text="Ausloggen" Command="{Binding LogoutCommand}" />
-                </StackLayout>
             </StackLayout>
-        </Grid>
-    </ScrollView>
+        </ScrollView>
+    </ContentPage.Content>
 </ContentPage>

@@ -70,16 +70,14 @@ namespace StudyBuddy.App.ViewModels
             });
         }
 
-        public void Details(UserViewModel obj)
+        public async void Details(UserViewModel obj)
         {
-            navigation.Push(new FriendPage(obj));
+            await navigation.Push(new FriendPage(obj));
         }
 
         public async void AddFriend()
         {
-            //navigation.Push(new AddFriendPage());
-            var route = $"{nameof(AddFriendPage)}";
-            await Shell.Current.GoToAsync(route);
+            await navigation.Push(new AddFriendPage());
         }
     }
 }

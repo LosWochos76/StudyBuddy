@@ -2,12 +2,12 @@
 <ContentPage
     xmlns="http://xamarin.com/schemas/2014/forms"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    x:Class="StudyBuddy.App.Views.PickProfileImagePage"
-    Title="Profilbild auswählen">
+    x:Class="StudyBuddy.App.Views.ProfilePage"
+    Title="Profil">
     <ContentPage.Content>
         <StackLayout Padding="5">
-            <Button Clicked="Button_Clicked" Text="Bild auswählen"  />
-            <Button Clicked="Button_Clicked1" Text="Bild aufnehmen"  />
+            <Button Style="{StaticResource BaseButton}" Clicked="Button_Clicked" Text="Bild auswählen"  />
+            <Button Style="{StaticResource BaseButton}" Clicked="Button_Clicked1" Text="Bild aufnehmen"  />
 
             <Frame Padding="0" CornerRadius="150"
                    HeightRequest="300"
