@@ -9,23 +9,29 @@ namespace StudyBuddy.App.ViewModels
     {
         private int theme = 0;
 
+        public ThemeViewModel()
+        {
+            theme = Preferences.Get(nameof(Theme), 0);
+            ApplyTheme();
+        }
+
         public int Theme
         {
             get
             {
-                return Preferences.Get(nameof(Theme), theme);
+                return theme;
             }
 
             set
             {
                 theme = value;
                 Preferences.Set(nameof(Theme), theme);
-                RestoreTheme();
+                ApplyTheme();
                 NotifyPropertyChanged();
             }
         }
 
-        public void RestoreTheme()
+        public void ApplyTheme()
         {
             switch (theme)
             {
@@ -43,37 +49,46 @@ namespace StudyBuddy.App.ViewModels
 
         public bool IsSystemTheme
         {
-            get
-            {
-                return Theme == 0;
-            }
+            get { return Theme == 0; }
             set
             {
-                Theme = 0;
+                if (value)
+                {
+                    Theme = 0;
+                    NotifyPropertyChanged("IsSystemTheme");
+                    NotifyPropertyChanged("IsLightTheme");
+                    NotifyPropertyChanged("IsDarkTheme");
+                }
             }
         }
 
         public bool IsLightTheme
         {
-            get
-            {
-                return Theme == 1;
-            }
+            get { return Theme == 1; }
             set
             {
-                Theme = 1;
+                if (value)
+                {
+                    Theme = 1;
+                    NotifyPropertyChanged("IsSystemTheme");
+                    NotifyPropertyChanged("IsLightTheme");
+                    NotifyPropertyChanged("IsDarkTheme");
+                }
             }
         }
 
         public bool IsDarkTheme
         {
-            get
-            {
-                return Theme == 2;
-            }
+            get { return Theme == 2; }
             set
             {
-                Theme = 2;
+                if (value)
+                {
+                    Theme = 2;
+                    NotifyPropertyChanged("IsSystemTheme");
+                    NotifyPropertyChanged("IsLightTheme");
+                    NotifyPropertyChanged("IsDarkTheme");
+                }
             }
         }
 

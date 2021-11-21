@@ -11,15 +11,15 @@
             <Color x:Key="DarkRadioButtonColor">#9B9A99</Color>
             <ControlTemplate x:Key="ThemeRadioTemplate">
                 <Frame Padding="0"
-                       BackgroundColor="{AppThemeBinding Dark={StaticResource DarkRadioButtonColor},
-                                                      Light={StaticResource LightRadioButtonColor}}"
-                       BorderColor="{AppThemeBinding Dark={StaticResource DarkRadioButtonColor},
-                                                  Light={StaticResource LightRadioButtonColor}}"
-                       CornerRadius="8" HasShadow="{OnPlatform iOS=false, Android=true}"
-                       HeightRequest="80"
-                       HorizontalOptions="Start"
-                       VerticalOptions="Start"
-                       WidthRequest="80">
+                    BackgroundColor="{AppThemeBinding Dark={StaticResource DarkRadioButtonColor},
+                    Light={StaticResource LightRadioButtonColor}}"
+                    BorderColor="{AppThemeBinding Dark={StaticResource DarkRadioButtonColor},
+                    Light={StaticResource LightRadioButtonColor}}"
+                    CornerRadius="8" HasShadow="{OnPlatform iOS=false, Android=true}"
+                    HeightRequest="80"
+                    HorizontalOptions="Start"
+                    VerticalOptions="Start"
+                    WidthRequest="80">
                     <Grid Margin="4"
                           WidthRequest="80">
                         <Grid HeightRequest="20"
@@ -101,60 +101,49 @@
     </ContentPage.Resources>
     <ContentPage.Content>
         <ScrollView>
-            <StackLayout>
-                <Frame Style="{StaticResource SettingsFrame}"
-                       HasShadow="True">
-                    <Grid ColumnDefinitions="*,Auto,Auto,Auto,*"
-                          ColumnSpacing="10"
-                          RadioButtonGroup.GroupName="ThemeGroup"
-                          RowDefinitions="Auto,Auto"
-                          RowSpacing="10">
-                        <RadioButton x:Name="RadioButtonSystem" Grid.Column="1" IsChecked="{Binding IsSystemTheme}">
-                            <RadioButton.Content>
-                                <StackLayout HorizontalOptions="Center" VerticalOptions="Center">
-                                    <Image Scale="0.75">
-                                        <Image.Source>
-                                            <FontImageSource FontFamily="{StaticResource FontAwesomeSolid}"
-                                                Glyph="{x:Static fontAwesome:FontAwesomeIcons.UserCog}"
-                                                Color="{AppThemeBinding Dark={StaticResource TextColorDark}, Light={StaticResource TextColor}}" />
-                                        </Image.Source>
-                                    </Image>
-                                    <Label Style="{StaticResource BaseLabel}"
-                                           FontSize="Small"
-                                           Text="System" />
-                                </StackLayout>
-                            </RadioButton.Content>
-                        </RadioButton>
-                        <RadioButton x:Name="RadioButtonLight" Grid.Column="2" IsChecked="{Binding IsLightTheme}">
-                            <RadioButton.Content>
-                                <StackLayout HorizontalOptions="Center" VerticalOptions="Center">
-                                    <Image Scale="0.75">
-                                        <Image.Source>
-                                            <FontImageSource FontFamily="{StaticResource FontAwesomeSolid}"
-                                                Glyph="{x:Static fontAwesome:FontAwesomeIcons.Sun}"
-                                                Color="{AppThemeBinding Dark={StaticResource TextColorDark}, Light={StaticResource TextColor}}" />
-                                        </Image.Source>
-                                    </Image>
-                                    <Label Style="{StaticResource BaseLabel}" FontSize="Small" Text="Light" />
-                                </StackLayout>
-                            </RadioButton.Content>
-                        </RadioButton>
-                        <RadioButton x:Name="RadioButtonDark" Grid.Column="3" IsChecked="{Binding IsDarkTheme}">
-                            <RadioButton.Content>
-                                <StackLayout HorizontalOptions="Center" VerticalOptions="Center">
-                                    <Image Scale="0.75">
-                                        <Image.Source>
-                                            <FontImageSource FontFamily="{StaticResource FontAwesomeSolid}"
-                                                Glyph="{x:Static fontAwesome:FontAwesomeIcons.Moon}"
-                                                Color="{AppThemeBinding Dark={StaticResource TextColorDark}, Light={StaticResource TextColor}}" />
-                                        </Image.Source>
-                                    </Image>
-                                    <Label Style="{StaticResource BaseLabel}" FontSize="Small" Text="Dark" />
-                                </StackLayout>
-                            </RadioButton.Content>
-                        </RadioButton>
-                    </Grid>
-                </Frame>
+            <StackLayout Margin="10">
+                <RadioButton IsChecked="{Binding IsSystemTheme}">
+                    <RadioButton.Content>
+                        <StackLayout HorizontalOptions="Center" VerticalOptions="Center">
+                            <Image Scale="0.75">
+                                <Image.Source>
+                                    <FontImageSource FontFamily="{StaticResource FontAwesomeSolid}"
+                                        Glyph="{x:Static fontAwesome:FontAwesomeIcons.UserCog}"
+                                        Color="{AppThemeBinding Dark={StaticResource TextColorDark}, Light={StaticResource TextColor}}" />
+                                </Image.Source>
+                            </Image>
+                            <Label Style="{StaticResource BaseLabel}" FontSize="Small" Text="System" />
+                        </StackLayout>
+                    </RadioButton.Content>
+                </RadioButton>
+                <RadioButton IsChecked="{Binding IsLightTheme}">
+                    <RadioButton.Content>
+                        <StackLayout HorizontalOptions="Center" VerticalOptions="Center">
+                            <Image Scale="0.75">
+                                <Image.Source>
+                                    <FontImageSource FontFamily="{StaticResource FontAwesomeSolid}"
+                                        Glyph="{x:Static fontAwesome:FontAwesomeIcons.Sun}"
+                                        Color="{AppThemeBinding Dark={StaticResource TextColorDark}, Light={StaticResource TextColor}}" />
+                                </Image.Source>
+                            </Image>
+                            <Label Style="{StaticResource BaseLabel}" FontSize="Small" Text="Light" />
+                        </StackLayout>
+                    </RadioButton.Content>
+                </RadioButton>
+                <RadioButton IsChecked="{Binding IsDarkTheme}">
+                    <RadioButton.Content>
+                        <StackLayout HorizontalOptions="Center" VerticalOptions="Center">
+                            <Image Scale="0.75">
+                                <Image.Source>
+                                    <FontImageSource FontFamily="{StaticResource FontAwesomeSolid}"
+                                        Glyph="{x:Static fontAwesome:FontAwesomeIcons.Moon}"
+                                        Color="{AppThemeBinding Dark={StaticResource TextColorDark}, Light={StaticResource TextColor}}" />
+                                </Image.Source>
+                            </Image>
+                            <Label Style="{StaticResource BaseLabel}" FontSize="Small" Text="Dark" />
+                        </StackLayout>
+                    </RadioButton.Content>
+                </RadioButton>
             </StackLayout>
         </ScrollView>
     </ContentPage.Content>

@@ -20,10 +20,7 @@ namespace StudyBuddy.App
 
         private void SetupServices()
         {
-            var theme = new ThemeViewModel();
-            theme.RestoreTheme();
-            TinyIoCContainer.Current.Register(theme);
-
+            TinyIoCContainer.Current.Register(new ThemeViewModel());
             TinyIoCContainer.Current.Register<IApi>(new ApiFacade());
             TinyIoCContainer.Current.Register<IDialogService>(new DialogService());
             TinyIoCContainer.Current.Register<INavigationService>(new NagigationService());
@@ -40,7 +37,6 @@ namespace StudyBuddy.App
 
         private void SetupFirebasePushNotificationsHandler()
         {
-        
         }
 
         protected override async void OnStart()
@@ -59,13 +55,13 @@ namespace StudyBuddy.App
 
         protected override void OnSleep()
         {
-            TinyIoCContainer.Current.Resolve<ThemeViewModel>().RestoreTheme();
+            TinyIoCContainer.Current.Resolve<ThemeViewModel>().ApplyTheme();
             RequestedThemeChanged -= App_RequestedThemeChanged;
         }
 
         protected override async void OnResume()
         {
-            TinyIoCContainer.Current.Resolve<ThemeViewModel>().RestoreTheme();
+            TinyIoCContainer.Current.Resolve<ThemeViewModel>().ApplyTheme();
             RequestedThemeChanged += App_RequestedThemeChanged;
         }
 
@@ -73,7 +69,7 @@ namespace StudyBuddy.App
         {
             MainThread.BeginInvokeOnMainThread(() =>
             {
-                TinyIoCContainer.Current.Resolve<ThemeViewModel>().RestoreTheme();
+                TinyIoCContainer.Current.Resolve<ThemeViewModel>().ApplyTheme();
             });
         }
     }
