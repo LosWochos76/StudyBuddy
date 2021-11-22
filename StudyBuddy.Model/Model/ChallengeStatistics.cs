@@ -4,7 +4,7 @@ using System.Text;
 
 namespace StudyBuddy.Model.Model
 {
-    public class ChallengeStatistics
+    public class Statistics
     {
         public int TotalNetworkChallengesCount { get; set; }
         public int TotalOrganizingChallengesCount { get; set; }

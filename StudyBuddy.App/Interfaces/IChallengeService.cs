@@ -10,6 +10,8 @@ namespace StudyBuddy.App.Api
         Task ForToday(ObservableCollection<ChallengeViewModel> list, string search_string);
         Task<ChallengeViewModel> AcceptFromQrCode(string code);
         Task<bool> Accept(ChallengeViewModel cvm);
+        Task GetAcceptedChallenges(ObservableCollection<ChallengeViewModel> list);
+        Task GetAcceptedChallengesForUser(ObservableCollection<ChallengeViewModel> list, int user_id);
         Task<ChallengeViewModel> GetById(int challenge_id);
     }
 }

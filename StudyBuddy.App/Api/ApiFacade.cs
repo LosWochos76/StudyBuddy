@@ -11,6 +11,8 @@ namespace StudyBuddy.App.Api
         //private readonly string base_url = "https://localhost:5001/";
         private readonly string base_url = "https://studybuddy.hshl.de/";
         //private readonly string base_url = "https://10.0.2.2:5001/";
+        //private readonly string base_url = "http://192.168.0.199:58947/";
+
         private Version app_version = new Version(0, 0, 18, 0);
 
         public IAuthenticationService Authentication { get; }

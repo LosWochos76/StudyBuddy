@@ -3,30 +3,94 @@
     using StudyBuddy.App.Api;
     using StudyBuddy.App.Misc;
     using StudyBuddy.Model.Model;
+    using System;
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
+    using Xamarin.Forms;
 
     public class StatisticsViewModel : ViewModelBase
     {
-        public ObservableCollection<ChallengeStatistics> ChallengeStatistic { get; set; } = new ObservableCollection<ChallengeStatistics>();
-        public string TotalPoints { get; set; }
-        public string NetworkingPointsCount { get; set; }
-        public string OrganizingPointsCount { get; set; }
-        public string LearningPointsCount { get; set; }
+        public ObservableCollection<ChallengeViewModel> AcceptedChallenges { get; private set; } = new ObservableCollection<ChallengeViewModel>();
+        public int TotalPoints { get; set; }
+        public int NetworkingPointsCount { get; set; }
+        public int OrganizingPointsCount { get; set; }
+        public int LearningPointsCount { get; set; }
+        public int AcceptedChallengesCount { get; set; }
+        public int OverallRank { get; set; }
+        public bool IsRefreshing { get; set; }
+
         public ObservableCollection<Badge> Badges { get; set; } = new ObservableCollection<Badge>();
 
         public StatisticsViewModel(IApi api, IDialogService dialog, INavigationService navigation) : base(api, dialog, navigation)
         {
-            this.Initialize();
+            api.Authentication.LoginStateChanged += Authentication_LoginStateChanged;
         }
 
-        private void Initialize()
+        private void Authentication_LoginStateChanged(object sender, LoginStateChangedArgs args)
         {
-            this.NetworkingPointsCount = "10";
-            this.OrganizingPointsCount = "432";
-            this.LearningPointsCount = "110";
-            this.TotalPoints = "552";
+            if (args.IsLoggedIn)
+                Initialize();
+        }
+
+        private async void Initialize()
+        {
+            //this.LoadAcceptedChallenges();
+            await api.Challenges.GetAcceptedChallenges(AcceptedChallenges);
+            this.Calculate();
+
+
             this.Badges = MockBadgeData();
+        }
+
+        private void Calculate()
+        {
+            foreach (var challenge in AcceptedChallenges)
+            {
+                switch (challenge.Category)
+                {
+                    case Model.ChallengeCategory.Learning:
+                        this.LearningPointsCount += challenge.Points;
+                        break;
+                    case Model.ChallengeCategory.Networking:
+                        this.NetworkingPointsCount += challenge.Points;
+                        break;
+                    case Model.ChallengeCategory.Organizing:
+                        this.OrganizingPointsCount += challenge.Points;
+                        break;
+                    default:
+                        throw new MissingMemberException("unknown ChallengeCategory");
+                }
+            }
+            
+            this.TotalPoints = this.NetworkingPointsCount + OrganizingPointsCount + LearningPointsCount;
+            this.AcceptedChallengesCount = AcceptedChallenges.Count;
+            this.OverallRank = 2;
+        }
+
+        private async void LoadAcceptedChallenges()
+        {
+            Console.WriteLine("-------------------------starting to Load Challenges");
+            try
+            {
+                await Device.InvokeOnMainThreadAsync(async () =>
+                {
+                    Console.WriteLine("---------- INVOKE MAIN THREAD ASYNC ENTERED");
+                    await api.Challenges.GetAcceptedChallenges(AcceptedChallenges);
+
+                });
+                Console.WriteLine("-------------------------SUCCESS Loading Challendes"+ this.AcceptedChallenges.Count);
+
+            }
+            catch (ApiException e)
+            {
+                Console.WriteLine("-------------------------FAILED to Load Challenges");
+
+                await dialog.ShowError(e, "Ein Fehler ist aufgetreten!", "Ok", null);
+            }
+
+            IsRefreshing = false;
+            NotifyPropertyChanged("IsRefreshing");
+
         }
 
         private ObservableCollection<Badge> MockBadgeData()
