@@ -1,16 +1,16 @@
+using Nito.AsyncEx;
+using StudyBuddy.App.Misc;
+using StudyBuddy.App.ViewModels;
+using StudyBuddy.Model;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Net.Http;
 using System.Threading.Tasks;
-using Nito.AsyncEx;
-using StudyBuddy.App.Misc;
-using StudyBuddy.App.ViewModels;
-using StudyBuddy.Model;
 
 namespace StudyBuddy.App.Api
 {
-    internal class ChallengeService : IChallengeService
+    internal class ChallengeService : IChallengeService<Challenge>
     {
         private readonly IApi api;
         private readonly string base_url;
@@ -24,26 +24,32 @@ namespace StudyBuddy.App.Api
             client = new HttpClient(Helper.GetInsecureHandler());
         }
 
-        public async Task ForToday(ObservableCollection<ChallengeViewModel> list, string search_string)
+        public async Task<IEnumerable<Challenge>> ForToday(string search_string)
         {
             var filter = new ChallengeFilter()
             {
                 OnlyUnacceped = true,
                 SearchText = search_string,
-                ValidAt = DateTime.Now.Date
+                ValidAt = DateTime.Now.Date,
+                Count = 10
+            };
+            var rh = new WebRequestHelper(api.Authentication.Token);
+            return await rh.Get<IEnumerable<Challenge>>(base_url + "Challenge", filter);
+        }
+
+        public async Task<IEnumerable<Challenge>> LoadMore(string search_string, int skip)
+        {
+            var filter = new ChallengeFilter()
+            {
+                OnlyUnacceped = true,
+                SearchText = search_string,
+                ValidAt = DateTime.Now.Date,
+                Count = 10,
+                Start = skip
             };
 
-            using (await monitor.EnterAsync())
-            {
-                var rh = new WebRequestHelper(api.Authentication.Token);
-                var items = await rh.Get<IEnumerable<Challenge>>(base_url + "Challenge", filter);
-                if (items == null)
-                    return;
-
-                list.Clear();
-                foreach (var obj in items)
-                    list.Add(ChallengeViewModel.FromModel(obj));
-            }
+            var rh = new WebRequestHelper(api.Authentication.Token);
+            return await rh.Get<IEnumerable<Challenge>>(base_url + "Challenge", filter);
         }
 
         public async Task<ChallengeViewModel> AcceptFromQrCode(string code)

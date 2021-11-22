@@ -59,7 +59,7 @@
                 IsRefreshing="{Binding IsRefreshing}"
                 Command="{Binding RefreshCommand}"
                 Padding="8">
-                <CollectionView ItemsSource="{Binding Challenges}">
+                <CollectionView ItemsSource="{Binding Challenges}" RemainingItemsThreshold="{Binding ItemThreshold}" RemainingItemsThresholdReachedCommand="{Binding LoadMoreCommand}">
                     <CollectionView.ItemTemplate>
                         <DataTemplate x:DataType="viewmodels:ChallengeViewModel">
                             <ContentView>

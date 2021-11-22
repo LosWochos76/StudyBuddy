@@ -1,12 +1,13 @@
 ﻿using System;
 using StudyBuddy.App.ViewModels;
+using StudyBuddy.Model;
 
 namespace StudyBuddy.App.Api
 {
     public interface IApi
     {
         IAuthenticationService Authentication { get; }
-        IChallengeService Challenges { get; }
+        IChallengeService<Challenge> Challenges { get; }
         IFcmTokenService FcmTokens { get; }
         IUserService Users { get; }
         ITagService Tags { get; }

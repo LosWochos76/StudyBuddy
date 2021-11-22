@@ -17,7 +17,7 @@ namespace StudyBuddy.App.Views
             view_model = TinyIoCContainer.Current.Resolve<ChallengesViewModel>();
             BindingContext = view_model;
         }
-
+        
         private void searchBar_TextChanged(System.Object sender, Xamarin.Forms.TextChangedEventArgs e)
         {
             view_model.SearchText = e.NewTextValue;

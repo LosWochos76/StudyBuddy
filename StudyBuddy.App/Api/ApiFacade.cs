@@ -2,6 +2,7 @@
 using System.Net.Http;
 using StudyBuddy.App.Misc;
 using StudyBuddy.App.ViewModels;
+using StudyBuddy.Model;
 using TinyIoC;
 
 namespace StudyBuddy.App.Api
@@ -14,7 +15,7 @@ namespace StudyBuddy.App.Api
         private Version app_version = new Version(0, 0, 18, 0);
 
         public IAuthenticationService Authentication { get; }
-        public IChallengeService Challenges { get; }
+        public IChallengeService<Challenge> Challenges { get; }
         public IFcmTokenService FcmTokens { get; }
         public IUserService Users { get; }
         public ITagService Tags { get; }
