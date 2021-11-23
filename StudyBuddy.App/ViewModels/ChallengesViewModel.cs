@@ -6,7 +6,6 @@ using System.Windows.Input;
 using StudyBuddy.App.Api;
 using StudyBuddy.App.Misc;
 using StudyBuddy.App.Views;
-using StudyBuddy.Model;
 using Xamarin.Forms;
 
 namespace StudyBuddy.App.ViewModels
@@ -62,12 +61,7 @@ namespace StudyBuddy.App.ViewModels
                 Skip = 10;
                 Challenges.Clear();
                 var challenges = await api.Challenges.ForToday(SearchText);
-                foreach (var obj in challenges)
-                {
-                    Challenges.Add(ChallengeViewModel.FromModel(obj));
-                }
-
-
+                Challenges.Add(challenges);
             }
             catch (ApiException e)
             {
@@ -78,7 +72,6 @@ namespace StudyBuddy.App.ViewModels
                 IsBusy = false;
             }
         }
-
 
         public async void ApplyFilter()
         {
@@ -98,10 +91,8 @@ namespace StudyBuddy.App.ViewModels
             try
             {
                 var items = await api.Challenges.LoadMore(SearchText, Skip);
-                foreach (var obj in items)
-                {
-                    Challenges.Add(ChallengeViewModel.FromModel(obj));
-                }
+                Challenges.Add(items);
+
                 if (items.Count() == 0)
                 {
                     ItemThreshold = -1;
@@ -110,7 +101,6 @@ namespace StudyBuddy.App.ViewModels
             }
             catch (Exception e)
             {
-
             }
             finally
             {

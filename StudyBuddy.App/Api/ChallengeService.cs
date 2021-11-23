@@ -4,13 +4,12 @@ using StudyBuddy.App.ViewModels;
 using StudyBuddy.Model;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Net.Http;
 using System.Threading.Tasks;
 
 namespace StudyBuddy.App.Api
 {
-    internal class ChallengeService : IChallengeService<Challenge>
+    internal class ChallengeService : IChallengeService
     {
         private readonly IApi api;
         private readonly string base_url;
@@ -24,7 +23,7 @@ namespace StudyBuddy.App.Api
             client = new HttpClient(Helper.GetInsecureHandler());
         }
 
-        public async Task<IEnumerable<Challenge>> ForToday(string search_string)
+        public async Task<IEnumerable<ChallengeViewModel>> ForToday(string search_string)
         {
             var filter = new ChallengeFilter()
             {
@@ -33,11 +32,19 @@ namespace StudyBuddy.App.Api
                 ValidAt = DateTime.Now.Date,
                 Count = 10
             };
+
+            var result = new List<ChallengeViewModel>();
+
             var rh = new WebRequestHelper(api.Authentication.Token);
-            return await rh.Get<IEnumerable<Challenge>>(base_url + "Challenge", filter);
+            var objects = await rh.Get<IEnumerable<Challenge>>(base_url + "Challenge", filter);
+
+            foreach (var obj in objects)
+                result.Add(ChallengeViewModel.FromModel(obj));
+
+            return result;
         }
 
-        public async Task<IEnumerable<Challenge>> LoadMore(string search_string, int skip)
+        public async Task<IEnumerable<ChallengeViewModel>> LoadMore(string search_string, int skip)
         {
             var filter = new ChallengeFilter()
             {
@@ -49,7 +56,13 @@ namespace StudyBuddy.App.Api
             };
 
             var rh = new WebRequestHelper(api.Authentication.Token);
-            return await rh.Get<IEnumerable<Challenge>>(base_url + "Challenge", filter);
+
+            var result = new List<ChallengeViewModel>();
+            var objects = await rh.Get<IEnumerable<Challenge>>(base_url + "Challenge", filter);
+            foreach (var obj in objects)
+                result.Add(ChallengeViewModel.FromModel(obj));
+
+            return result;
         }
 
         public async Task<ChallengeViewModel> AcceptFromQrCode(string code)
