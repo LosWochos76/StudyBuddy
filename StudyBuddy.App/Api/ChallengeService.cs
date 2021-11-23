@@ -43,28 +43,6 @@ namespace StudyBuddy.App.Api
 
             return result;
         }
-
-        public async Task<IEnumerable<ChallengeViewModel>> LoadMore(string search_string, int skip)
-        {
-            var filter = new ChallengeFilter()
-            {
-                OnlyUnacceped = true,
-                SearchText = search_string,
-                ValidAt = DateTime.Now.Date,
-                Count = 10,
-                Start = skip
-            };
-
-            var rh = new WebRequestHelper(api.Authentication.Token);
-
-            var result = new List<ChallengeViewModel>();
-            var objects = await rh.Get<IEnumerable<Challenge>>(base_url + "Challenge", filter);
-            foreach (var obj in objects)
-                result.Add(ChallengeViewModel.FromModel(obj));
-
-            return result;
-        }
-
         public async Task<ChallengeViewModel> AcceptFromQrCode(string code)
         {
             var rh = new WebRequestHelper(api.Authentication.Token);
