@@ -13,7 +13,6 @@ namespace StudyBuddy.App.ViewModels
     public class ChallengesViewModel : ViewModelBase
     {
         public RangeObservableCollection<ChallengeViewModel> Challenges { get; private set; }
-        public ICommand LoadAllChallengesCommand { get; }
         public ICommand RefreshCommand { get; }
         public ICommand DetailsCommand { get; }
         public ICommand ScanQrCodeCommand { get; }
@@ -21,25 +20,36 @@ namespace StudyBuddy.App.ViewModels
         public ICommand SearchCommand { get; }
         public bool IsRefreshing { get; set; } = false;
         public string Header => string.Format("Herausforderungen am {0}", DateTime.Now.ToShortDateString());
-        public string SearchText { get; set; }
-        private int Skip { get; set; }
+        private string _searchText = string.Empty;
+        public string SearchText
+        {
+            get { return _searchText; }
+            set
+            {
+                if (_searchText != value)
+                {
+                    _searchText = value ?? string.Empty;
+                    NotifyPropertyChanged(nameof(SearchText));
+                    if (SearchCommand.CanExecute(null))
+                    {
+                        SearchCommand.Execute(null);
+                    }
+                }
+            }
+        }
+        public int Skip { get; set; }
         public bool IsBusy { get; private set; } = false;
         public int ItemThreshold { get; set; } = 1;
+        public int PageNo { get; set; } = 0;
 
         public ChallengesViewModel(IApi api, IDialogService dialog, INavigationService navigation) : base(api, dialog, navigation)
         {
             Challenges = new RangeObservableCollection<ChallengeViewModel>();
             api.Authentication.LoginStateChanged += Authentication_LoginStateChanged;
-            LoadAllChallengesCommand = new Command(async () => await LoadChallengesCommand());
             LoadMoreCommand = new Command(async () => await ItemsThresholdReached());
-            SearchCommand = new Command<string>(async (Text) =>
-           {
-               SearchText = Text;
-               await LoadChallengesCommand();
-           });
+            SearchCommand = new Command(async () => await LoadChallengesCommand());
             RefreshCommand = new Command(async () =>
             {
-                SearchText = null;
                 await LoadChallengesCommand();
                 IsRefreshing = false;
                 NotifyPropertyChanged(nameof(IsRefreshing));
@@ -65,10 +75,11 @@ namespace StudyBuddy.App.ViewModels
             try
             {
                 ItemThreshold = 1;
-                Skip = 10;
                 Challenges.Clear();
                 var challenges = await api.Challenges.ForToday(SearchText);
                 Challenges.AddRange(challenges);
+                PageNo = 1;
+                Skip = 10;
             }
             catch (ApiException e)
             {
@@ -79,15 +90,6 @@ namespace StudyBuddy.App.ViewModels
                 IsBusy = false;
             }
         }
-
-        public async void ApplyFilter(string searchText)
-        {
-            await Device.InvokeOnMainThreadAsync(() =>
-            {
-                api.Challenges.ForToday(SearchText);
-            });
-        }
-
         async Task ItemsThresholdReached()
         {
             if (IsBusy)
@@ -97,6 +99,7 @@ namespace StudyBuddy.App.ViewModels
 
             try
             {
+                Skip = 10 * PageNo;
                 var items = await api.Challenges.ForToday(SearchText, Skip);
                 Challenges.AddRange(items);
 
@@ -105,6 +108,8 @@ namespace StudyBuddy.App.ViewModels
                     ItemThreshold = -1;
                     return;
                 }
+
+                PageNo++;
             }
             catch (ApiException e)
             {
@@ -112,7 +117,6 @@ namespace StudyBuddy.App.ViewModels
             }
             finally
             {
-                Skip += 10;
                 IsBusy = false;
             }
         }

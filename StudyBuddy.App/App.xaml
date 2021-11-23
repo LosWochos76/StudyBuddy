@@ -82,7 +82,7 @@
                 <Setter Property="TextColor"
                         Value="{AppThemeBinding Dark={StaticResource TextColor}, Light={StaticResource TextColor}}" />
                 <Setter Property="BackgroundColor"
-                        Value="{AppThemeBinding Dark={StaticResource WindowBackgroundColor}, Light={StaticResource WindowBackgroundColor}}" />
+                        Value="{AppThemeBinding Dark={StaticResource WindowBackgroundColorDark}, Light={StaticResource WindowBackgroundColor}}" />
             </Style>
 
             <Style x:Key="BaseContentPage" TargetType="ContentPage">

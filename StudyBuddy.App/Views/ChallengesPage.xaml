@@ -38,7 +38,7 @@
                 <SearchBar TextColor="{AppThemeBinding Dark={StaticResource TextColorDark}, Light={StaticResource TextColor}}"
                            x:Name="searchBar"
                            SearchCommand="{Binding SearchCommand}"
-                           SearchCommandParameter="{Binding Text, Source={x:Reference searchBar}}">
+                           Text="{Binding SearchText}">
                     <SearchBar.IsVisible>
                         <OnPlatform x:TypeArguments="x:Boolean"
                                     iOS="False"
