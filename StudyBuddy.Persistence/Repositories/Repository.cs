@@ -1,4 +1,6 @@
 using StudyBuddy.Model;
+using StudyBuddy.Persistence.Interfaces;
+using StudyBuddy.Persistence.Repositories;
 
 namespace StudyBuddy.Persistence
 {
@@ -25,6 +27,7 @@ namespace StudyBuddy.Persistence
         public ILoggingRepository Logging { get; private set; }
         public IFcmTokenRepository FcmTokens { get; private set; }
         public NotificationRepository Notifications { get; private set; }
+        public IStatisticsRepository Statistics { get; private set; }
 
         private void CreateRepositories()
         {
@@ -36,6 +39,7 @@ namespace StudyBuddy.Persistence
             FcmTokens = new FcmTokenRepository(connection_string);
             Logging = new LoggingRepository(connection_string);
             Notifications = new NotificationRepository(connection_string);
+            Statistics = new StatisticsRepository(connection_string);
         }
     }
 }

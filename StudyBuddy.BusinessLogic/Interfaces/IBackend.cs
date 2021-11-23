@@ -1,4 +1,5 @@
-﻿using StudyBuddy.Model;
+﻿using StudyBuddy.BusinessLogic.Interfaces;
+using StudyBuddy.Model;
 using StudyBuddy.Persistence;
 
 namespace StudyBuddy.BusinessLogic
@@ -15,6 +16,7 @@ namespace StudyBuddy.BusinessLogic
         IRequestService RequestService { get; set; }
         ITagService TagService { get; set; }
         IUserService UserService { get; set; }
+        IStatisticsService StatisticsService { get; set; }
         IBusinessEventService BusinessEvent { get; }
         ILoggingService Logging { get; }
         NotificationService NotificationService { get; }

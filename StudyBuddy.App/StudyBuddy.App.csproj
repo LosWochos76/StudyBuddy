@@ -37,9 +37,6 @@
         <PackageReference Include="Nito.AsyncEx" Version="5.1.2" />
     </ItemGroup>
     <ItemGroup>
-        <Folder Include="Interfaces\" />
-    </ItemGroup>
-    <ItemGroup>
       <ProjectReference Include="..\StudyBuddy.Model\StudyBuddy.Model.csproj" />
     </ItemGroup>
     <ItemGroup>

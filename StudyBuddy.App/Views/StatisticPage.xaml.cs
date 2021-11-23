@@ -15,5 +15,14 @@ namespace StudyBuddy.App.Views
             view_model = TinyIoCContainer.Current.Resolve<StatisticsViewModel>();
             BindingContext = view_model;
         }
+
+        protected override void OnAppearing()
+        {
+            base.OnAppearing();
+            System.Console.WriteLine("-----APPEARED-----");
+            view_model.Refresh();
+            
+            //your code here;
+        }
     }
 }
