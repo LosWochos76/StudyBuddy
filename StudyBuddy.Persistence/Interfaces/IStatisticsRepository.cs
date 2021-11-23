@@ -16,6 +16,9 @@ namespace StudyBuddy.Persistence.Interfaces
 
         IEnumerable<Badge> BadgesEarnedByUser(int user_id);
 
-        IEnumerable<KeyValuePair<string, int>> UserRankingByChallengePoints();
+        int RankingPositionForUser(int user_id);
+
+        int AcceptedChallengesCountForUser(int user_id);
+        //IEnumerable<KeyValuePair<string, int>> UserRankingByChallengePoints();
     }
 }

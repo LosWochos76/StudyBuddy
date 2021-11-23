@@ -1,4 +1,6 @@
-﻿using StudyBuddy.Model;
+﻿using StudyBuddy.BusinessLogic.Interfaces;
+using StudyBuddy.BusinessLogic.Services;
+using StudyBuddy.Model;
 using StudyBuddy.Persistence;
 
 namespace StudyBuddy.BusinessLogic
@@ -18,6 +20,7 @@ namespace StudyBuddy.BusinessLogic
         public IBusinessEventService BusinessEvent { get; private set; }
         public ILoggingService Logging { get; private set; }
         public NotificationService NotificationService { get; }
+        public IStatisticsService StatisticsService { get; set; }
 
         public Backend()
         {
@@ -33,6 +36,7 @@ namespace StudyBuddy.BusinessLogic
             BusinessEvent = new BusinessEventService(this);
             Logging = new LoggingService(this);
             NotificationService = new NotificationService(this);
+            StatisticsService = new StatisticsService(this);
         }
 
         public void SetCurrentUserFromToken(string token)

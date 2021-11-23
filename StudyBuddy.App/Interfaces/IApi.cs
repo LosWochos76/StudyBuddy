@@ -1,4 +1,5 @@
 ﻿using System;
+using StudyBuddy.App.Interfaces;
 using StudyBuddy.App.ViewModels;
 
 namespace StudyBuddy.App.Api
@@ -13,6 +14,8 @@ namespace StudyBuddy.App.Api
         IBadgeService Badges { get; }
         IRequestService Requests { get; }
         ILoggingService Logging { get; }
+        IStatisticsService Statistics { get; }
+
         NotificationService Notifications { get; }
 
         event EventHandler<ChallengeViewModel> ChallengeAccepted;

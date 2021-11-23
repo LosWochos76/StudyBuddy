@@ -6,16 +6,43 @@
     using System;
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
+    using System.ComponentModel;
     using Xamarin.Forms;
 
     public class StatisticsViewModel : ViewModelBase
     {
         public ObservableCollection<ChallengeViewModel> AcceptedChallenges { get; private set; } = new ObservableCollection<ChallengeViewModel>();
-        public int TotalPoints { get; set; }
+        
+        public int TotalPoints
+        {
+            get { return NetworkingPointsCount + OrganizingPointsCount + LearningPointsCount; }
+        }
+
         public int NetworkingPointsCount { get; set; }
         public int OrganizingPointsCount { get; set; }
-        public int LearningPointsCount { get; set; }
-        public int AcceptedChallengesCount { get; set; }
+        private int _learningPointsCount { get; set; }
+        public int LearningPointsCount
+        {
+            get { return _learningPointsCount; }
+            set
+            {
+                _learningPointsCount = value;
+                NotifyPropertyChanged("LearningPointsCount");
+                NotifyPropertyChanged("TotalPoints");
+            }
+        }
+        
+        private int _acceptedChallengesCount;
+        public int AcceptedChallengesCount 
+        { 
+            get { return _acceptedChallengesCount; }
+            set
+            {
+                _acceptedChallengesCount = value;
+                NotifyPropertyChanged("AcceptedChallengesCount");
+            } 
+        }
+
         public int OverallRank { get; set; }
         public bool IsRefreshing { get; set; }
 
@@ -32,16 +59,26 @@
                 Initialize();
         }
 
+        public async void Refresh()
+        {
+            Console.WriteLine("_----------REFRESHING");
+            AcceptedChallengesCount = await api.Statistics.AcceptedChallengesCount();
+            
+            Console.WriteLine(AcceptedChallengesCount);
+            LearningPointsCount = 15;
+            NotifyPropertyChanged("AcceptedChallengesCount");
+        }
+
         private async void Initialize()
         {
             //this.LoadAcceptedChallenges();
-            await api.Challenges.GetAcceptedChallenges(AcceptedChallenges);
-            this.Calculate();
+            //await api.Challenges.GetAcceptedChallenges(AcceptedChallenges);
+            //this.Calculate();
 
 
             this.Badges = MockBadgeData();
         }
-
+                
         private void Calculate()
         {
             foreach (var challenge in AcceptedChallenges)
@@ -62,8 +99,7 @@
                 }
             }
             
-            this.TotalPoints = this.NetworkingPointsCount + OrganizingPointsCount + LearningPointsCount;
-            this.AcceptedChallengesCount = AcceptedChallenges.Count;
+            
             this.OverallRank = 2;
         }
 
