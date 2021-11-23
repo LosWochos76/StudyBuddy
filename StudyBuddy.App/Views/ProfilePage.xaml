@@ -1,21 +1,135 @@
-﻿<?xml version="1.0" encoding="UTF-8" ?>
-<ContentPage
-    xmlns="http://xamarin.com/schemas/2014/forms"
-    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    x:Class="StudyBuddy.App.Views.ProfilePage"
-    Title="Profil">
-    <ContentPage.Content>
-        <StackLayout Padding="5">
-            <Button Style="{StaticResource BaseButton}" Clicked="Button_Clicked" Text="Bild auswählen"  />
-            <Button Style="{StaticResource BaseButton}" Clicked="Button_Clicked1" Text="Bild aufnehmen"  />
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="StudyBuddy.App.Views.ProfilePage"
+             xmlns:fontAwesome="clr-namespace:StudyBuddy.App"
+             Shell.TabBarIsVisible="False"
+    Title="Profileinstellungen">
+    <Grid BackgroundColor="White">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
 
-            <Frame Padding="0" CornerRadius="150"
-                   HeightRequest="300"
-                   IsClippedToBounds="True"
-                   HorizontalOptions="Center"
-                   HasShadow="False">
-                <Image x:Name="image" Aspect="AspectFill" WidthRequest="300" HeightRequest="300" />
-            </Frame>
+        <!-- 1. Profile picture-->
+
+        <StackLayout Padding="60">
+            <Image x:Name="image1"
+                   WidthRequest="200"
+                   HeightRequest="200"
+                           HorizontalOptions="Center"
+                           VerticalOptions="Center">
+                <Image.Source>
+                    <FontImageSource FontFamily="{StaticResource FontAwesomeSolid}"
+                                             Glyph="{x:Static fontAwesome:FontAwesomeIcons.User}"
+                                             Color="{AppThemeBinding Dark={StaticResource TextColorDark}, Light={StaticResource TextColor}}" 
+                                             Size="Large"/>
+                </Image.Source>
+                <Image.Clip>
+                    <EllipseGeometry Center="100,100" RadiusX="100" RadiusY="100" />
+                </Image.Clip>
+                <Image.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped"/>
+                </Image.GestureRecognizers>
+            </Image>
         </StackLayout>
-    </ContentPage.Content>
+        <!-- 2. Contact informaqtion frame-->
+        <StackLayout Grid.Row="0" BackgroundColor="White" VerticalOptions="End" >
+            <!-- Blocks: 3 and 4 -->
+            <Grid Padding="25,10,25,0" RowSpacing="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <!-- 4. Contact information-->
+                <Label Style="{StaticResource BaseLabel}" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" Text="{Binding User.Name}" FontAttributes="Bold" FontSize="30" IsEnabled="False" />
+                <Label Style="{StaticResource BaseLabel}" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3" Padding="0,10,0,0" FontSize="20">
+                    <Label.FormattedText>
+                        <FormattedString>
+                            <Span Text="Nickname:  " FontAttributes="Bold" />
+                            <Span Text="{Binding User.Nickname}"  />
+                        </FormattedString>
+                    </Label.FormattedText>
+                </Label>
+                <Label Style="{StaticResource BaseLabel}" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="3" Padding="0,10,0,0" FontSize="20">
+                    <Label.FormattedText>
+                        <FormattedString>
+                            <Span Text="Email:  " FontAttributes="Bold" />
+                            <Span Text="{Binding User.Email}"  />
+                        </FormattedString>
+                    </Label.FormattedText>
+                </Label>
+                <Label Style="{StaticResource BaseLabel}" Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="3" Padding="0,10,0,0" FontSize="20">
+                    <Label.FormattedText>
+                        <FormattedString>
+                            <Span Text="Rolle:  " FontAttributes="Bold" />
+                            <Span Text="{Binding User.Role}"  />
+                        </FormattedString>
+                    </Label.FormattedText>
+                </Label>
+                <Button Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="3" Style="{StaticResource BaseButton}"  Text="Bearbeiten" Margin="0,60,0,20" FontAttributes="Bold" FontSize="17" HeightRequest="45" Clicked="Button_Clicked"/>
+            </Grid>
+        </StackLayout>
+        <!-- Backdrop -->
+        <BoxView Color="#4B000000"
+                 Opacity="0"
+                 InputTransparent="True"
+                 x:Name="Backdrop">
+            <BoxView.GestureRecognizers>
+                <TapGestureRecognizer
+                    Tapped="TapGestureRecognizer_Tapped"/>
+            </BoxView.GestureRecognizers>
+        </BoxView>
+
+        <!-- Bottom Drawer -->
+        <Frame
+            x:Name="BottomToolbar"
+            HeightRequest="200"
+            VerticalOptions="End"
+            BackgroundColor="#FFFFFF"
+            CornerRadius="20"
+            TranslationY="260"
+            Padding="15,6">
+            <Frame.GestureRecognizers>
+                <PanGestureRecognizer
+                    PanUpdated="PanGestureRecognizer_PanUpdated"
+            />
+            </Frame.GestureRecognizers>
+            <StackLayout Orientation="Vertical" Padding="0,4">
+                <BoxView CornerRadius="2" HeightRequest="4" WidthRequest="40"
+                         BackgroundColor="LightGray"
+                         HorizontalOptions="Center"/>
+                <Label Text="Profilbild einstellen"
+                       HorizontalOptions="Center"
+                       FontSize="18"
+                       FontAttributes="Bold"/>
+                <TableView Intent="Settings" 
+                   VerticalOptions="End"
+                   BackgroundColor="White">
+                    <TableSection>
+                        <ViewCell Tapped="TextCell_Tapped">
+                            <StackLayout Orientation="Horizontal">
+                                <Label VerticalOptions="Center" FontFamily="{StaticResource FontAwesomeSolid}" Text="{x:Static fontAwesome:FontAwesomeIcons.Folder}" FontSize="30"/>
+                                <Label Text="Aus Gallerie auswählen" VerticalOptions="Center" HorizontalOptions="StartAndExpand" FontSize="18" FontAttributes="Bold"/>
+                            </StackLayout>
+                        </ViewCell>
+                        <ViewCell Tapped="TextCell_Tapped_1">
+                            <StackLayout Orientation="Horizontal">
+                                <Label VerticalOptions="Center" FontFamily="{StaticResource FontAwesomeSolid}" Text="{x:Static fontAwesome:FontAwesomeIcons.Camera}" FontSize="30"/>
+                                <Label Text="Kamera verwenden" VerticalOptions="Center" HorizontalOptions="StartAndExpand" FontSize="18" FontAttributes="Bold"/>
+                            </StackLayout>
+                        </ViewCell>
+                    </TableSection>
+
+                </TableView>
+            </StackLayout>
+
+        </Frame>
+    </Grid>
 </ContentPage>

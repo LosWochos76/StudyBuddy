@@ -61,6 +61,9 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Plugin.FirebasePushNotification" Version="3.3.16-beta" />
+    <PackageReference Include="Xam.Plugin.Media">
+      <Version>5.0.1</Version>
+    </PackageReference>
     <PackageReference Include="Xamarin.Forms" Version="5.0.0.2244" />
     <PackageReference Include="Xamarin.Essentials" Version="1.7.0" />
     <PackageReference Include="Xamarin.GooglePlayServices.Base" Version="117.6.0.2" />
@@ -156,6 +159,9 @@
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\values\ic_launcher_background.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\xml\file_paths.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <ProjectExtensions>

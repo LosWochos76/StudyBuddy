@@ -1,6 +1,7 @@
 ﻿using System;
 using StudyBuddy.App.Interfaces;
 using StudyBuddy.App.ViewModels;
+using StudyBuddy.Model;
 
 namespace StudyBuddy.App.Api
 {

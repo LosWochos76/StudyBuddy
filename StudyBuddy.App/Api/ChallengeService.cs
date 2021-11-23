@@ -1,12 +1,11 @@
-using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Net.Http;
-using System.Threading.Tasks;
 using Nito.AsyncEx;
 using StudyBuddy.App.Misc;
 using StudyBuddy.App.ViewModels;
 using StudyBuddy.Model;
+using System;
+using System.Collections.Generic;
+using System.Net.Http;
+using System.Threading.Tasks;
 
 namespace StudyBuddy.App.Api
 {
@@ -24,28 +23,27 @@ namespace StudyBuddy.App.Api
             client = new HttpClient(Helper.GetInsecureHandler());
         }
 
-        public async Task ForToday(ObservableCollection<ChallengeViewModel> list, string search_string)
+        public async Task<IEnumerable<ChallengeViewModel>> ForToday(string search_string = "", int skip = 0)
         {
             var filter = new ChallengeFilter()
             {
                 OnlyUnacceped = true,
                 SearchText = search_string,
-                ValidAt = DateTime.Now.Date
+                ValidAt = DateTime.Now.Date,
+                Count = 10,
+                Start = skip
             };
 
-            using (await monitor.EnterAsync())
-            {
-                var rh = new WebRequestHelper(api.Authentication.Token);
-                var items = await rh.Get<IEnumerable<Challenge>>(base_url + "Challenge", filter);
-                if (items == null)
-                    return;
+            var rh = new WebRequestHelper(api.Authentication.Token);
+            var objects = await rh.Get<IEnumerable<Challenge>>(base_url + "Challenge", filter);
 
-                list.Clear();
-                foreach (var obj in items)
-                    list.Add(ChallengeViewModel.FromModel(obj));
-            }
+            var result = new List<ChallengeViewModel>();
+            foreach (var obj in objects)
+                result.Add(ChallengeViewModel.FromModel(obj));
+
+            return result;
         }
-
+        
         public async Task GetAcceptedChallenges(ObservableCollection<ChallengeViewModel> list)
         {
             var filter = new ChallengeFilter()
@@ -67,7 +65,7 @@ namespace StudyBuddy.App.Api
                     list.Add(ChallengeViewModel.FromModel(obj));
             }
         }
-
+        
         public async Task<ChallengeViewModel> AcceptFromQrCode(string code)
         {
             var rh = new WebRequestHelper(api.Authentication.Token);
@@ -101,10 +99,10 @@ namespace StudyBuddy.App.Api
             api.RaiseChallengeAcceptedEvent(this, cvm);
             return status.IsOk;
         }
-
+        
         public Task GetAcceptedChallengesForUser(ObservableCollection<ChallengeViewModel> list, int user_id)
         {
-            //ToDo: Falls man nach abgeschlossenen Challenges eines anderen Users/Freundes suchen möchte
+            //ToDo: Falls man nach abgeschlossenen Challenges eines anderen Users/Freundes suchen mï¿½chte
             throw new NotImplementedException();
         }
     }

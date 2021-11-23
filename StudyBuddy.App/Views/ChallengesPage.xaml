@@ -37,7 +37,8 @@
                 </Frame.IsVisible>
                 <SearchBar TextColor="{AppThemeBinding Dark={StaticResource TextColorDark}, Light={StaticResource TextColor}}"
                            x:Name="searchBar"
-                           TextChanged="searchBar_TextChanged">
+                           SearchCommand="{Binding SearchCommand}"
+                           Text="{Binding SearchText}">
                     <SearchBar.IsVisible>
                         <OnPlatform x:TypeArguments="x:Boolean"
                                     iOS="False"
@@ -48,7 +49,8 @@
             </Frame>
             <SearchBar TextColor="{AppThemeBinding Dark={StaticResource TextColorDark}, Light={StaticResource TextColor}}"
                        x:Name="searchBarIos"
-                       TextChanged="searchBar_TextChanged">
+                       SearchCommand="{Binding SearchCommand}"
+                       SearchCommandParameter="{Binding Text, Source={x:Reference searchBar}}">
                 <SearchBar.IsVisible>
                     <OnPlatform x:TypeArguments="x:Boolean"
                                 iOS="True"
@@ -59,7 +61,7 @@
                 IsRefreshing="{Binding IsRefreshing}"
                 Command="{Binding RefreshCommand}"
                 Padding="8">
-                <CollectionView ItemsSource="{Binding Challenges}">
+                <CollectionView EmptyView="Keine Challenges" ItemsSource="{Binding Challenges}" RemainingItemsThreshold="{Binding ItemThreshold}" RemainingItemsThresholdReachedCommand="{Binding LoadMoreCommand}">
                     <CollectionView.ItemTemplate>
                         <DataTemplate x:DataType="viewmodels:ChallengeViewModel">
                             <ContentView>
