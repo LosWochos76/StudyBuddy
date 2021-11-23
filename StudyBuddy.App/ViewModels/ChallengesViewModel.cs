@@ -18,6 +18,7 @@ namespace StudyBuddy.App.ViewModels
         public ICommand DetailsCommand { get; }
         public ICommand ScanQrCodeCommand { get; }
         public ICommand LoadMoreCommand { get; }
+        public ICommand SearchCommand { get; }
         public bool IsRefreshing { get; set; } = false;
         public string Header => string.Format("Herausforderungen am {0}", DateTime.Now.ToShortDateString());
         public string SearchText { get; set; }
@@ -31,10 +32,17 @@ namespace StudyBuddy.App.ViewModels
             api.Authentication.LoginStateChanged += Authentication_LoginStateChanged;
             LoadAllChallengesCommand = new Command(async () => await LoadChallengesCommand());
             LoadMoreCommand = new Command(async () => await ItemsThresholdReached());
+            SearchCommand = new Command<string>(async (Text) =>
+           {
+               SearchText = Text;
+               await LoadChallengesCommand();
+           });
             RefreshCommand = new Command(async () =>
             {
+                SearchText = null;
                 await LoadChallengesCommand();
                 IsRefreshing = false;
+                NotifyPropertyChanged(nameof(IsRefreshing));
             });
             DetailsCommand = new Command<ChallengeViewModel>(ShowDetails);
             ScanQrCodeCommand = new Command(ScanQrCode);
@@ -72,7 +80,7 @@ namespace StudyBuddy.App.ViewModels
             }
         }
 
-        public async void ApplyFilter()
+        public async void ApplyFilter(string searchText)
         {
             await Device.InvokeOnMainThreadAsync(() =>
             {
@@ -98,8 +106,9 @@ namespace StudyBuddy.App.ViewModels
                     return;
                 }
             }
-            catch (Exception e)
+            catch (ApiException e)
             {
+                await dialog.ShowError(e, "Ein Fehler ist aufgetreten!", "Ok", null);
             }
             finally
             {

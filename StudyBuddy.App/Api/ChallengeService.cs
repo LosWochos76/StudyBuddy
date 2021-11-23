@@ -23,7 +23,7 @@ namespace StudyBuddy.App.Api
             client = new HttpClient(Helper.GetInsecureHandler());
         }
 
-        public async Task<IEnumerable<ChallengeViewModel>> ForToday(string search_string, int skip = 0)
+        public async Task<IEnumerable<ChallengeViewModel>> ForToday(string search_string = "", int skip = 0)
         {
             var filter = new ChallengeFilter()
             {
