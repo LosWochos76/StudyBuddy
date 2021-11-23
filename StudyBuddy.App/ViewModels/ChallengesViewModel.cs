@@ -12,7 +12,7 @@ namespace StudyBuddy.App.ViewModels
 {
     public class ChallengesViewModel : ViewModelBase
     {
-        public ObservableCollection<ChallengeViewModel> Challenges { get; private set; }
+        public RangeObservableCollection<ChallengeViewModel> Challenges { get; private set; }
         public ICommand LoadAllChallengesCommand { get; }
         public ICommand RefreshCommand { get; }
         public ICommand DetailsCommand { get; }
@@ -24,11 +24,10 @@ namespace StudyBuddy.App.ViewModels
         private int Skip { get; set; }
         public bool IsBusy { get; private set; } = false;
         public int ItemThreshold { get; set; } = 1;
-        
 
         public ChallengesViewModel(IApi api, IDialogService dialog, INavigationService navigation) : base(api, dialog, navigation)
         {
-            Challenges = new ObservableCollection<ChallengeViewModel>();
+            Challenges = new RangeObservableCollection<ChallengeViewModel>();
             api.Authentication.LoginStateChanged += Authentication_LoginStateChanged;
             LoadAllChallengesCommand = new Command(async () => await LoadChallengesCommand());
             LoadMoreCommand = new Command(async () => await ItemsThresholdReached());
@@ -61,7 +60,7 @@ namespace StudyBuddy.App.ViewModels
                 Skip = 10;
                 Challenges.Clear();
                 var challenges = await api.Challenges.ForToday(SearchText);
-                Challenges.Add(challenges);
+                Challenges.AddRange(challenges);
             }
             catch (ApiException e)
             {
@@ -90,8 +89,8 @@ namespace StudyBuddy.App.ViewModels
 
             try
             {
-                var items = await api.Challenges.LoadMore(SearchText, Skip);
-                Challenges.Add(items);
+                var items = await api.Challenges.ForToday(SearchText, Skip);
+                Challenges.AddRange(items);
 
                 if (items.Count() == 0)
                 {

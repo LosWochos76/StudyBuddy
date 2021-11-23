@@ -23,21 +23,21 @@ namespace StudyBuddy.App.Api
             client = new HttpClient(Helper.GetInsecureHandler());
         }
 
-        public async Task<IEnumerable<ChallengeViewModel>> ForToday(string search_string)
+        public async Task<IEnumerable<ChallengeViewModel>> ForToday(string search_string, int skip = 0)
         {
             var filter = new ChallengeFilter()
             {
                 OnlyUnacceped = true,
                 SearchText = search_string,
                 ValidAt = DateTime.Now.Date,
-                Count = 10
+                Count = 10,
+                Start = skip
             };
-
-            var result = new List<ChallengeViewModel>();
 
             var rh = new WebRequestHelper(api.Authentication.Token);
             var objects = await rh.Get<IEnumerable<Challenge>>(base_url + "Challenge", filter);
 
+            var result = new List<ChallengeViewModel>();
             foreach (var obj in objects)
                 result.Add(ChallengeViewModel.FromModel(obj));
 

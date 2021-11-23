@@ -15,7 +15,7 @@ namespace StudyBuddy.App.Api
         private Version app_version = new Version(0, 0, 19, 0);
 
         public IAuthenticationService Authentication { get; }
-        public IChallengeService<Challenge> Challenges { get; }
+        public IChallengeService Challenges { get; }
         public IFcmTokenService FcmTokens { get; }
         public IUserService Users { get; }
         public ITagService Tags { get; }
