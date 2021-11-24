@@ -153,8 +153,8 @@ namespace StudyBuddy.Persistence
             var qh = new QueryHelper<Challenge>(connection_string, FromReader);
             qh.AddParameter(":user_id", user_id);
             var sql = "select id,name,description,points,validity_start,validity_end," +
-                      "category,owner_id,created,prove,series_parent_id from challenge_acceptance " +
-                      "inner join challenges on challenge_id=id where user_id=:user_id " +
+                      "category,owner_id,ch.created,prove,series_parent_id,tags from challenge_acceptance " +
+                      "inner join challenges as ch on challenge_id=id where user_id=:user_id " +
                       "order by challenge_acceptance.created desc";
             return qh.ExecuteQueryToObjectList(sql);
         }
@@ -237,6 +237,11 @@ namespace StudyBuddy.Persistence
             obj.SeriesParentID = reader.IsDBNull(10) ? null : reader.GetInt32(10);
             obj.Tags = reader.IsDBNull(11) ? string.Empty : reader.GetString(11);
             return obj;
+        }
+
+        public IEnumerable<Challenge> Accepted()
+        {
+            throw new NotImplementedException();
         }
     }
 }

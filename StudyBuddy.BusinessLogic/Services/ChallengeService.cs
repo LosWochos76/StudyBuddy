@@ -29,6 +29,14 @@ namespace StudyBuddy.BusinessLogic
             return backend.Repository.Challenges.All(filter);
         }
 
+        public IEnumerable<Challenge> GetAcceptedChallenges()
+        {
+            if (backend.CurrentUser == null)
+                throw new UnauthorizedAccessException("Unauthorized!");
+
+            return backend.Repository.Challenges.Accepted(backend.CurrentUser.ID);
+        }
+
         public Challenge GetById(int id)
         {
             if (backend.CurrentUser == null)
@@ -200,14 +208,6 @@ namespace StudyBuddy.BusinessLogic
             backend.Repository.Challenges.AddAcceptance(challenge_id, user_id);
             OnChallengeAccepted(challenge, user);
             backend.BusinessEvent.TriggerEvent(this, new BusinessEventArgs(BusinessEventType.ChallengeAccepted, challenge));
-        }
-
-        public IEnumerable<Challenge> GetAcceptedChallenges()
-        {
-            if (backend.CurrentUser == null)
-                throw new UnauthorizedAccessException("Unauthorized");
-            
-            return backend.Repository.Challenges.Accepted(backend.CurrentUser.ID);
         }
 
         public void Accept(int challenge_id)
