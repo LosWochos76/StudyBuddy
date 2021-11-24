@@ -9,7 +9,7 @@ namespace StudyBuddy.Persistence
     internal class UserRepository : IUserRepository
     {
         private readonly string connection_string;
-        private readonly SimpleHash simpleHash = new();
+        private SimpleHash simpleHash = new SimpleHash();
 
         public UserRepository(string connection_string)
         {
@@ -127,15 +127,6 @@ namespace StudyBuddy.Persistence
         {
             var qh = new QueryHelper<User>(connection_string);
             return qh.GetCount("users");
-        }
-
-        public User ByEmailAndPassword(string email, string password)
-        {
-            var user = ByEmail(email);
-            if (user != null && simpleHash.Verify(password, user.PasswordHash))
-                return user;
-
-            return null;
         }
 
         public User ByEmail(string email)

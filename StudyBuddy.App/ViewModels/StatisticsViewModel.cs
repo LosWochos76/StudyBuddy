@@ -1,17 +1,14 @@
-﻿namespace StudyBuddy.App.ViewModels
-{
-    using StudyBuddy.App.Api;
-    using StudyBuddy.App.Misc;
-    using StudyBuddy.Model.Model;
-    using System;
-    using System.Collections.Generic;
-    using System.Collections.ObjectModel;
-    using System.ComponentModel;
-    using Xamarin.Forms;
+﻿using StudyBuddy.App.Api;
+using StudyBuddy.App.Misc;
+using StudyBuddy.Model.Model;
+using System;
+using System.Collections.ObjectModel;
 
+namespace StudyBuddy.App.ViewModels
+{
     public class StatisticsViewModel : ViewModelBase
     {
-        public ObservableCollection<ChallengeViewModel> AcceptedChallenges { get; private set; } = new ObservableCollection<ChallengeViewModel>();
+        public RangeObservableCollection<ChallengeViewModel> AcceptedChallenges { get; private set; } = new RangeObservableCollection<ChallengeViewModel>();
         
         public int TotalPoints
         {
@@ -21,6 +18,7 @@
         public int NetworkingPointsCount { get; set; }
         public int OrganizingPointsCount { get; set; }
         private int _learningPointsCount { get; set; }
+
         public int LearningPointsCount
         {
             get { return _learningPointsCount; }
@@ -46,7 +44,7 @@
         public int OverallRank { get; set; }
         public bool IsRefreshing { get; set; }
 
-        public ObservableCollection<Badge> Badges { get; set; } = new ObservableCollection<Badge>();
+        public RangeObservableCollection<Badge> Badges { get; set; } = new RangeObservableCollection<Badge>();
 
         public StatisticsViewModel(IApi api, IDialogService dialog, INavigationService navigation) : base(api, dialog, navigation)
         {
@@ -108,19 +106,15 @@
             Console.WriteLine("-------------------------starting to Load Challenges");
             try
             {
-                await Device.InvokeOnMainThreadAsync(async () =>
-                {
-                    Console.WriteLine("---------- INVOKE MAIN THREAD ASYNC ENTERED");
-                    await api.Challenges.GetAcceptedChallenges(AcceptedChallenges);
-
-                });
+                Console.WriteLine("---------- INVOKE MAIN THREAD ASYNC ENTERED");
+                var result = await api.Challenges.GetAcceptedChallenges();
+                AcceptedChallenges.AddRange(result);
                 Console.WriteLine("-------------------------SUCCESS Loading Challendes"+ this.AcceptedChallenges.Count);
 
             }
             catch (ApiException e)
             {
                 Console.WriteLine("-------------------------FAILED to Load Challenges");
-
                 await dialog.ShowError(e, "Ein Fehler ist aufgetreten!", "Ok", null);
             }
 
@@ -129,9 +123,8 @@
 
         }
 
-        private ObservableCollection<Badge> MockBadgeData()
+        private RangeObservableCollection<Badge> MockBadgeData()
         {
-
             var b1 = new Badge(1, "Ready to go", "Installiere StudyBuddy", true, 100);
             var b2 = new Badge(2, "Initializer", "Nimm deine erste Herausforderung an", true, 100);
             var b3 = new Badge(3, "Socializer", "Besuche die AStA Ersti Party", true, 100);
@@ -144,7 +137,7 @@
             var b10 = new Badge(10, "Party Animal", "Geh auf 5 Parties", false, 5);
             var b11 = new Badge(11, "High Performer", "Schließe 10 Herausforderungen ab", false, 15);
 
-            var list = new ObservableCollection<Badge>();
+            var list = new RangeObservableCollection<Badge>();
             list.Add(b1);
             list.Add(b2);
             list.Add(b3);

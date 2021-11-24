@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Net.Http;
+using StudyBuddy.App.Interfaces;
 using StudyBuddy.App.Misc;
 using StudyBuddy.App.ViewModels;
 using StudyBuddy.Model;
@@ -25,6 +26,7 @@ namespace StudyBuddy.App.Api
         public IRequestService Requests { get; }
         public ILoggingService Logging { get; }
         public NotificationService Notifications { get; }
+        public IStatisticsService Statistics { get; }
 
         public ApiFacade()
         {

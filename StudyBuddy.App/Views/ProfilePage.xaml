@@ -49,12 +49,12 @@
                     <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
                 <!--Profile information-->
-                <Label Style="{StaticResource BaseLabel}" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" Text="{Binding User.Name}" FontAttributes="Bold" FontSize="30" IsEnabled="False" />
+                <Label Style="{StaticResource BaseLabel}" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" Text="{Binding Name}" FontAttributes="Bold" FontSize="30" IsEnabled="False" />
                 <Label Style="{StaticResource BaseLabel}" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3" Padding="0,10,0,0" FontSize="20">
                     <Label.FormattedText>
                         <FormattedString>
                             <Span Text="Nickname:  " FontAttributes="Bold" />
-                            <Span Text="{Binding User.Nickname}"  />
+                            <Span Text="{Binding Nickname}"  />
                         </FormattedString>
                     </Label.FormattedText>
                 </Label>
@@ -62,7 +62,7 @@
                     <Label.FormattedText>
                         <FormattedString>
                             <Span Text="Email:  " FontAttributes="Bold" />
-                            <Span Text="{Binding User.Email}"  />
+                            <Span Text="{Binding Email}"  />
                         </FormattedString>
                     </Label.FormattedText>
                 </Label>
@@ -70,7 +70,7 @@
                     <Label.FormattedText>
                         <FormattedString>
                             <Span Text="Rolle:  " FontAttributes="Bold" />
-                            <Span Text="{Binding User.Role}"  />
+                            <Span Text="{Binding Role}"  />
                         </FormattedString>
                     </Label.FormattedText>
                 </Label>

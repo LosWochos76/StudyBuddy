@@ -1,11 +1,13 @@
 ﻿using System;
 using NETCore.MailKit;
 using NETCore.MailKit.Core;
+using SimpleHashing.Net;
 
 namespace StudyBuddy.BusinessLogic
 {
     class AuthenticationService : IAuthenticationService
     {
+        private SimpleHash simpleHash = new SimpleHash();
         private readonly IBackend backend;
 
         public AuthenticationService(IBackend backend)
@@ -18,16 +20,23 @@ namespace StudyBuddy.BusinessLogic
             if (uc == null || string.IsNullOrEmpty(uc.EMail) || string.IsNullOrEmpty(uc.Password))
                 throw new Exception("Missing email and password!");
 
-            var user = backend.Repository.Users.ByEmailAndPassword(uc.EMail, uc.Password);
+            var user = backend.Repository.Users.ByEmail(uc.EMail);
             if (user == null)
             {
-                backend.Logging.LogDebug("Wrong credentials?");
+                backend.Logging.LogDebug($"User with email {uc.EMail} not found!");
+                return null;
+            }
+
+            if (!simpleHash.Verify(uc.Password, user.PasswordHash))
+            {
+                backend.Logging.LogDebug($"Wrong password for {uc.EMail}!");
                 return null;
             }
 
             backend.Logging.LogDebug("Successfull login");
             user.PasswordHash = null;
             var jwt = new JwtToken(backend.Repository);
+
             return new
             {
                 Token = jwt.FromUser(user),

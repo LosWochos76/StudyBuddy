@@ -1,17 +1,10 @@
 ﻿using Plugin.Media;
 using Plugin.Media.Abstractions;
-using StudyBuddy.App.Misc;
 using StudyBuddy.App.ViewModels;
 using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Drawing;
 using System.IO;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using TinyIoC;
-using Xamarin.Essentials;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -27,6 +20,7 @@ namespace StudyBuddy.App.Views
 
             BindingContext = TinyIoCContainer.Current.Resolve<UserViewModel>();
         }
+
         uint duration = 100;
         double openY = (Device.RuntimePlatform == "Android") ? 20 : 60;
         double lastPanY = 0;

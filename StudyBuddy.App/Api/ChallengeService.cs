@@ -44,7 +44,7 @@ namespace StudyBuddy.App.Api
             return result;
         }
         
-        public async Task GetAcceptedChallenges(ObservableCollection<ChallengeViewModel> list)
+        public async Task<IEnumerable<ChallengeViewModel>> GetAcceptedChallenges()
         {
             var filter = new ChallengeFilter()
             {
@@ -58,11 +58,13 @@ namespace StudyBuddy.App.Api
                 var items = await rh.Get<IEnumerable<Challenge>>(base_url + "Challenge/Accepted/" + currentUserId , filter);
 
                 if (items == null)
-                    return;
+                    return null;
 
-                list.Clear();
+                var list = new List<ChallengeViewModel>();
                 foreach (var obj in items)
                     list.Add(ChallengeViewModel.FromModel(obj));
+
+                return list;
             }
         }
         
@@ -98,12 +100,6 @@ namespace StudyBuddy.App.Api
 
             api.RaiseChallengeAcceptedEvent(this, cvm);
             return status.IsOk;
-        }
-        
-        public Task GetAcceptedChallengesForUser(ObservableCollection<ChallengeViewModel> list, int user_id)
-        {
-            //ToDo: Falls man nach abgeschlossenen Challenges eines anderen Users/Freundes suchen m�chte
-            throw new NotImplementedException();
         }
     }
 }
