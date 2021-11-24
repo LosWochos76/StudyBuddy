@@ -1,9 +1,7 @@
-﻿using StudyBuddy.App.Interfaces;
-using System;
-using System.Net.Http;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Net.Http;
 using System.Threading.Tasks;
+using StudyBuddy.App.Interfaces;
+using StudyBuddy.Model.Model;
 
 namespace StudyBuddy.App.Api
 {
@@ -18,14 +16,14 @@ namespace StudyBuddy.App.Api
             this.base_url = base_url;
         }
 
-        public async Task<int> AcceptedChallengesCount()
+        public async Task<UserStatistics> GetUserStatistics(int user_id)
         {
-            var currentUser = api.Authentication.CurrentUser;
-
             var rh = new WebRequestHelper(api.Authentication.Token);
-            var challengesCount = await rh.Load<int>(base_url + "Statistics/AcceptedChallengesCount/" + currentUser.ID, HttpMethod.Get);
+            var obj = await rh.Load<UserStatistics>(base_url + "Statistics/" + user_id, HttpMethod.Get);
+            if (obj == null)
+                return null;
 
-            return challengesCount;
+            return obj;
         }
     }
 }

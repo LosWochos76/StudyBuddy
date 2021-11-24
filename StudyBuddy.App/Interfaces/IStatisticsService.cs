@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
+using StudyBuddy.Model.Model;
 
 namespace StudyBuddy.App.Interfaces
 {
     public interface IStatisticsService
     {
-        Task<int> AcceptedChallengesCount();
+        Task<UserStatistics> GetUserStatistics(int user_id);
     }
 }

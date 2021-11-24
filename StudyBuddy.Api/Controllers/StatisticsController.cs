@@ -12,11 +12,11 @@ namespace StudyBuddy.Api.Controllers
             this.backend = backend;
         }
 
-        [Route("/Statistics/AcceptedChallengesCount/{user_id}")]
+        [Route("/Statistics/{user_id}")]
         [HttpGet]
         public IActionResult GetAcceptedChallenges(int user_id)
         {
-            return Json(backend.StatisticsService.GetAcceptedChallengesCount(user_id));
+            return Json(backend.StatisticsService.GetUserStatistics(user_id));
         }
     }
 }

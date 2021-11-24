@@ -1,9 +1,5 @@
 ﻿using StudyBuddy.BusinessLogic.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using StudyBuddy.Model.Model;
 
 namespace StudyBuddy.BusinessLogic.Services
 {
@@ -16,12 +12,16 @@ namespace StudyBuddy.BusinessLogic.Services
             this.backend = backend;
         }
 
-        public int GetAcceptedChallengesCount(int user_id)
+        public UserStatistics GetUserStatistics(int user_id)
         {
-            //if (backend.CurrentUser == null)
-            //    throw new Exception("Unauthorized");
+            // Prüfen, ob user eingeloggt etc.
 
-            return backend.Repository.Statistics.AcceptedChallengesCountForUser(user_id);
+            var result = new UserStatistics();
+            var challenges = backend.Repository.Challenges.Accepted(user_id);
+
+            // Hier nun die die Punkte in den Kategorien berechnen und das Ergebnis-Objekt bestücken
+
+            return result;
         }
     }
 }

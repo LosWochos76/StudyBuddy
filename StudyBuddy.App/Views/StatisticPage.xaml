@@ -76,74 +76,26 @@
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
             <StackLayout Margin="15" Orientation="Vertical">
-                <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand">
-                    <Label Text="Herausforderungen" FontSize="20" Margin="10"/>
-                </StackLayout>
-                
                 <Frame Style="{StaticResource FrameStyle}" >
                     <StackLayout Orientation="Vertical">
-                        <Label Style="{StaticResource TotalPointsLabelStyle}" HorizontalOptions="CenterAndExpand" HorizontalTextAlignment="Center" Text="{Binding TotalPoints}"></Label>
+                        <Label Style="{StaticResource TotalPointsLabelStyle}" HorizontalOptions="CenterAndExpand" HorizontalTextAlignment="Center"></Label>
                         <Label HorizontalOptions="CenterAndExpand" HorizontalTextAlignment="Center" Text="Punkte Gesamt"></Label>
                         <StackLayout Margin="0,15,15,0" HorizontalOptions="FillAndExpand" Orientation="Horizontal">
                             <StackLayout HorizontalOptions="CenterAndExpand" Orientation="Vertical">
-                                <Label Style="{StaticResource NetworkPointsLabelStyle}" HorizontalTextAlignment="Center" Text="{Binding NetworkingPointsCount}"></Label>
+                                <Label Style="{StaticResource NetworkPointsLabelStyle}" HorizontalTextAlignment="Center"></Label>
                                 <Label HorizontalTextAlignment="Center"  Text="Networking"></Label>
                             </StackLayout>
                             <StackLayout HorizontalOptions="CenterAndExpand" Orientation="Vertical">
-                                <Label Style="{StaticResource OrganizingPointsLabelStyle}" HorizontalTextAlignment="Center" Text="{Binding OrganizingPointsCount}"></Label>
+                                <Label Style="{StaticResource OrganizingPointsLabelStyle}" HorizontalTextAlignment="Center"></Label>
                                 <Label HorizontalTextAlignment="Center"  Text="Organizing"></Label>
                             </StackLayout>
                             <StackLayout HorizontalOptions="CenterAndExpand" Orientation="Vertical">
-                                <Label Style="{StaticResource LearningPointsLabelStyle}" HorizontalTextAlignment="Center" Text="{Binding LearningPointsCount}"></Label>
+                                <Label Style="{StaticResource LearningPointsLabelStyle}" HorizontalTextAlignment="Center"></Label>
                                 <Label HorizontalTextAlignment="Center"  Text="Learning"></Label>
                             </StackLayout>
                         </StackLayout>
                     </StackLayout>
                 </Frame>
-
-                <Label Text="Mehr Statistiken" FontSize="20" Margin="10" ></Label>
-                <StackLayout HorizontalOptions="StartAndExpand" Orientation="Horizontal">
-                    <Frame Style="{StaticResource FrameStyle}" WidthRequest="200">
-                        <StackLayout HorizontalOptions="CenterAndExpand" Orientation="Vertical">
-                            <Label HorizontalTextAlignment="Center" Style="{StaticResource TotalPointsLabelStyle}" Text="{Binding AcceptedChallengesCount}"></Label>
-                            <Label HorizontalTextAlignment="Center" Text="Abgschlossene Herausforderungen"></Label>
-                        </StackLayout>
-                    </Frame>
-                    <Frame Style="{StaticResource FrameStyle}" WidthRequest="200">
-                        <StackLayout HorizontalOptions="CenterAndExpand" Orientation="Vertical">
-                            <Label HorizontalTextAlignment="Center" Style="{StaticResource TotalPointsLabelStyle}" Text="{Binding OverallRank}"></Label>
-                            <Label HorizontalTextAlignment="Center" Text="Beste Platzierung"></Label>
-                        </StackLayout>
-                    </Frame>
-                </StackLayout>
-                
-                <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand">
-                    <Label Text="Letzte Herausforderungen" FontSize="20" Margin="10"/>
-                </StackLayout>
-                <CollectionView Margin="10,10,10,10" ItemsSource="{Binding AcceptedChallenges}">
-                    <CollectionView.ItemTemplate>
-                        <DataTemplate x:DataType="viewmodels:ChallengeViewModel">
-                            <StackLayout Spacing="8" HorizontalOptions="EndAndExpand" >
-                                <Frame BackgroundColor="#fefefe" Style="{StaticResource FrameStyle}">
-                                    <StackLayout Orientation="Horizontal"  Style="{StaticResource ItemViewStackLayoutStyle}">
-
-                                        <!--<Image Style="{StaticResource BadgeImageStyle}" Source="{Binding ImagePath}"></Image> -->
-
-                                        <StackLayout x:Name="badge_info" Style="{StaticResource DetailsStackLayoutStyle}">
-                                            
-                                            <Label Text="{Binding Name}" Style="{StaticResource TitleLabelStyle}"></Label>
-                                            <!--
-                                            <Label Text="{Binding Description}" Style="{StaticResource DescriptionLabelStyle}"></Label>
-                                            <Label Text="{Binding StudentAchievedCount}" Style="{StaticResource InfoLabelStyle}"></Label>
-                                        -->
-                                        </StackLayout>
-                                    </StackLayout>
-                                </Frame>
-                            </StackLayout>
-                        </DataTemplate>
-                    </CollectionView.ItemTemplate>
-                </CollectionView>
-
             </StackLayout>
         </Grid>
     </ContentPage.Content>

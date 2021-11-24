@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using StudyBuddy.Model.Model;
 
 namespace StudyBuddy.BusinessLogic.Interfaces
 {
     public interface IStatisticsService
     {
-        int GetAcceptedChallengesCount(int user_id);
+        public UserStatistics GetUserStatistics(int user_id);
     }
 }

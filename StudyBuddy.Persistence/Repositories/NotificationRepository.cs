@@ -7,7 +7,6 @@ namespace StudyBuddy.Persistence
 {
     public class NotificationRepository
     {
-        
         private readonly string connection_string;
 
         public NotificationRepository(string connection_string)
@@ -37,8 +36,6 @@ namespace StudyBuddy.Persistence
         public IEnumerable<Notification> All(NotificationFilter filter)
         {
             var qh = new QueryHelper<Notification>(connection_string, FromNotificationReader);
-            
-
             var sql = "select id, owner_id, title, body, created, updated from notifications where true";
             
             if (filter.OwnerId.HasValue)
@@ -77,7 +74,6 @@ namespace StudyBuddy.Persistence
                 "inner join notifications on users.id = notifications.owner_id ");
         }
         
-        
         private Notification FromNotificationReader(NpgsqlDataReader reader)
         {
             var obj = new Notification();
@@ -108,8 +104,5 @@ namespace StudyBuddy.Persistence
 
             return obj;
         }
-        
-        
-
     }
 }
