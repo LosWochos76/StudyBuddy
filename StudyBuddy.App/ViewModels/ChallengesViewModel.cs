@@ -126,9 +126,10 @@ namespace StudyBuddy.App.ViewModels
             navigation.Push(new ChallengeDetailsPage(obj));
         }
 
-        private void ScanQrCode()
+        private async void ScanQrCode()
         {
-            navigation.Push(new QrCodePage());
+            var route = $"{nameof(QrCodePage)}";
+            await Shell.Current.GoToAsync(route);
         }
     }
 }

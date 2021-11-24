@@ -2,15 +2,17 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="StudyBuddy.App.Views.ProfilePage"
-             xmlns:fontAwesome="clr-namespace:StudyBuddy.App"
+             xmlns:fontAwesome="clr-namespace:StudyBuddy.App" 
+             xmlns:viewmodels="clr-namespace:StudyBuddy.App.ViewModels"
              Shell.TabBarIsVisible="False"
-    Title="Profileinstellungen">
+             x:DataType="viewmodels:UserViewModel"
+             Title="Profileinstellungen">
     <Grid BackgroundColor="White">
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
-        <!-- 1. Profile picture-->
+        <!--Profile picture-->
 
         <StackLayout Padding="60">
             <Image x:Name="image1"
@@ -32,9 +34,8 @@
                 </Image.GestureRecognizers>
             </Image>
         </StackLayout>
-        <!-- 2. Contact informaqtion frame-->
+        <!--Profile information frame-->
         <StackLayout Grid.Row="0" BackgroundColor="White" VerticalOptions="End" >
-            <!-- Blocks: 3 and 4 -->
             <Grid Padding="25,10,25,0" RowSpacing="0">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
@@ -47,7 +48,7 @@
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
-                <!-- 4. Contact information-->
+                <!--Profile information-->
                 <Label Style="{StaticResource BaseLabel}" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" Text="{Binding User.Name}" FontAttributes="Bold" FontSize="30" IsEnabled="False" />
                 <Label Style="{StaticResource BaseLabel}" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3" Padding="0,10,0,0" FontSize="20">
                     <Label.FormattedText>

@@ -13,8 +13,8 @@ namespace StudyBuddy.App.Views
         {
             InitializeComponent();
 
-            view_model = TinyIoCContainer.Current.Resolve<ChallengesViewModel>();
-            BindingContext = view_model;
+            BindingContext = TinyIoCContainer.Current.Resolve<ChallengesViewModel>();
+            
         }
     }
 }

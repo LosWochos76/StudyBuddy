@@ -25,7 +25,7 @@ namespace StudyBuddy.App.Views
         {
             InitializeComponent();
 
-            BindingContext = TinyIoCContainer.Current.Resolve<FlyoutHeaderViewModel>();
+            BindingContext = TinyIoCContainer.Current.Resolve<UserViewModel>();
         }
         uint duration = 100;
         double openY = (Device.RuntimePlatform == "Android") ? 20 : 60;
