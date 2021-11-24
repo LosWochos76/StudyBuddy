@@ -9,6 +9,6 @@ namespace StudyBuddy.Persistence
         ITagRepository Tags { get; }
         IFcmTokenRepository FcmTokens { get; }
         ILoggingRepository Logging { get; }
-        NotificationRepository Notifications { get; }
+        INotificationRepository Notifications { get; }
     }
 }

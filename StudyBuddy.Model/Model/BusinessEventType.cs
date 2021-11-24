@@ -1,4 +1,4 @@
-﻿namespace StudyBuddy.BusinessLogic
+﻿namespace StudyBuddy.Model
 {
     public enum BusinessEventType
     {
