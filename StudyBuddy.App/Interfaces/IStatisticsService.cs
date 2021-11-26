@@ -1,10 +1,10 @@
-﻿using System.Threading.Tasks;
-using StudyBuddy.Model.Model;
+﻿using StudyBuddy.App.Models;
+using System.Threading.Tasks;
 
 namespace StudyBuddy.App.Interfaces
 {
     public interface IStatisticsService
     {
-        Task<UserStatistics> GetUserStatistics(int user_id);
+        Task<UserStatistics> GetUserStatistics();
     }
 }

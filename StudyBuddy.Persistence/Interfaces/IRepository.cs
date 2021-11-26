@@ -1,3 +1,5 @@
+using StudyBuddy.Persistence;
+
 namespace StudyBuddy.Persistence
 {
     public interface IRepository
@@ -10,5 +12,6 @@ namespace StudyBuddy.Persistence
         IFcmTokenRepository FcmTokens { get; }
         ILoggingRepository Logging { get; }
         INotificationRepository Notifications { get; }
+        IStatisticsRepository StatisticsRepository { get; }
     }
 }

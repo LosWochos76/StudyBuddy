@@ -78,19 +78,19 @@
             <StackLayout Margin="15" Orientation="Vertical">
                 <Frame Style="{StaticResource FrameStyle}" >
                     <StackLayout Orientation="Vertical">
-                        <Label Style="{StaticResource TotalPointsLabelStyle}" HorizontalOptions="CenterAndExpand" HorizontalTextAlignment="Center"></Label>
+                        <Label Style="{StaticResource TotalPointsLabelStyle}" HorizontalOptions="CenterAndExpand" HorizontalTextAlignment="Center" Text="{Binding UserStatistics.TotalPoints}"></Label>
                         <Label HorizontalOptions="CenterAndExpand" HorizontalTextAlignment="Center" Text="Punkte Gesamt"></Label>
                         <StackLayout Margin="0,15,15,0" HorizontalOptions="FillAndExpand" Orientation="Horizontal">
                             <StackLayout HorizontalOptions="CenterAndExpand" Orientation="Vertical">
-                                <Label Style="{StaticResource NetworkPointsLabelStyle}" HorizontalTextAlignment="Center"></Label>
+                                <Label Style="{StaticResource NetworkPointsLabelStyle}" HorizontalTextAlignment="Center" Text="{Binding UserStatistics.TotalNetworkChallengesPoints}" ></Label>
                                 <Label HorizontalTextAlignment="Center"  Text="Networking"></Label>
                             </StackLayout>
                             <StackLayout HorizontalOptions="CenterAndExpand" Orientation="Vertical">
-                                <Label Style="{StaticResource OrganizingPointsLabelStyle}" HorizontalTextAlignment="Center"></Label>
+                                <Label Style="{StaticResource OrganizingPointsLabelStyle}" HorizontalTextAlignment="Center" Text="{Binding UserStatistics.TotalOrganizingChallengesPoints}"></Label>
                                 <Label HorizontalTextAlignment="Center"  Text="Organizing"></Label>
                             </StackLayout>
                             <StackLayout HorizontalOptions="CenterAndExpand" Orientation="Vertical">
-                                <Label Style="{StaticResource LearningPointsLabelStyle}" HorizontalTextAlignment="Center"></Label>
+                                <Label Style="{StaticResource LearningPointsLabelStyle}" HorizontalTextAlignment="Center" Text="{Binding UserStatistics.TotalLearningChallengesPoints}"></Label>
                                 <Label HorizontalTextAlignment="Center"  Text="Learning"></Label>
                             </StackLayout>
                         </StackLayout>

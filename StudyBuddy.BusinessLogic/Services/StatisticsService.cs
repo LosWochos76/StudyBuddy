@@ -1,5 +1,6 @@
 ﻿using StudyBuddy.BusinessLogic.Interfaces;
 using StudyBuddy.Model.Model;
+using System;
 
 namespace StudyBuddy.BusinessLogic.Services
 {
@@ -14,14 +15,10 @@ namespace StudyBuddy.BusinessLogic.Services
 
         public UserStatistics GetUserStatistics(int user_id)
         {
-            // Prüfen, ob user eingeloggt etc.
+            if (backend.CurrentUser == null || !backend.CurrentUser.IsAdmin)
+                throw new Exception("Unauthorized!");
 
-            var result = new UserStatistics();
-            var challenges = backend.Repository.Challenges.Accepted(user_id);
-
-            // Hier nun die die Punkte in den Kategorien berechnen und das Ergebnis-Objekt bestücken
-
-            return result;
+            return backend.Repository.StatisticsRepository.GetUserStatistics(user_id);
         }
     }
 }

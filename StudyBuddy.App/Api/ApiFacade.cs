@@ -39,6 +39,7 @@ namespace StudyBuddy.App.Api
             Requests = new RequestService(this, base_url);
             Logging = new LoggingService(this, base_url);
             Notifications = new NotificationService(this, base_url);
+            Statistics = new StatisticsService(this, base_url);
 
             CheckVersion();
         }
