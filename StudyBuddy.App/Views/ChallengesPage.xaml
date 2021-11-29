@@ -20,17 +20,14 @@
         </ToolbarItem>
     </ContentPage.ToolbarItems>
     <ContentPage.Content>
-        <StackLayout>
-            <StackLayout.GestureRecognizers>
-                <SwipeGestureRecognizer Direction="Right" Command="{Binding ScanQrCodeCommand}" />
-            </StackLayout.GestureRecognizers>
+        <StackLayout Padding="0,5,0,5">
             <Frame Padding="5"
                    Margin="4"
-                   BackgroundColor="{StaticResource WindowBackgroundColor}"
+                   BackgroundColor="{AppThemeBinding Dark={StaticResource CardBackgroundDark}, Light={StaticResource CardBackground}}"
                    HasShadow="False"
-                   BorderColor="Black"
+                   BorderColor="{AppThemeBinding Dark={StaticResource TextColorDark}, Light={StaticResource TextColor}}"
                    CornerRadius="8"
-                   HeightRequest="45">
+                   HeightRequest="35">
                 <Frame.IsVisible>
                     <OnPlatform x:TypeArguments="x:Boolean"
                                 iOS="False"
@@ -39,7 +36,8 @@
                 <SearchBar TextColor="{AppThemeBinding Dark={StaticResource TextColorDark}, Light={StaticResource TextColor}}"
                            x:Name="searchBar"
                            SearchCommand="{Binding SearchCommand}"
-                           Text="{Binding SearchText}">
+                           Text="{Binding SearchText}"
+                           BackgroundColor="{AppThemeBinding Dark={StaticResource CardBackgroundDark}, Light={StaticResource CardBackground}}">
                     <SearchBar.IsVisible>
                         <OnPlatform x:TypeArguments="x:Boolean"
                                     iOS="False"
@@ -51,7 +49,8 @@
             <SearchBar TextColor="{AppThemeBinding Dark={StaticResource TextColorDark}, Light={StaticResource TextColor}}"
                        x:Name="searchBarIos"
                        SearchCommand="{Binding SearchCommand}"
-                       SearchCommandParameter="{Binding Text, Source={x:Reference searchBar}}">
+                       Text="{Binding SearchText}"
+                       BackgroundColor="{AppThemeBinding Dark={StaticResource WindowBackgroundColorDark}, Light={StaticResource WindowBackgroundColor}}">
                 <SearchBar.IsVisible>
                     <OnPlatform x:TypeArguments="x:Boolean"
                                 iOS="True"
@@ -65,18 +64,19 @@
                 <CollectionView EmptyView="Keine Challenges"
                                 ItemsSource="{Binding Challenges}" 
                                 RemainingItemsThreshold="{Binding ItemThreshold}" 
-                                RemainingItemsThresholdReachedCommand="{Binding LoadMoreCommand}">
+                                RemainingItemsThresholdReachedCommand="{Binding LoadMoreCommand}"
+                                ItemsUpdatingScrollMode="KeepItemsInView">
                     <CollectionView.ItemTemplate>
                         <DataTemplate x:DataType="viewmodels:ChallengeViewModel">
                             <SwipeView android:SwipeView.SwipeTransitionMode="Drag">
                                 <SwipeView.RightItems>
                                     <SwipeItems>
                                         <SwipeItem Text="Abschließen" 
-                                                   BackgroundColor="Green" />
+                                                   BackgroundColor="Green"/>
                                     </SwipeItems>
                                 </SwipeView.RightItems>
                                 <Grid x:Name="Item" 
-                                      Padding="5" 
+                                      Padding="0,8,0,0" 
                                       BackgroundColor="{AppThemeBinding Dark={StaticResource WindowBackgroundColorDark}, Light={StaticResource WindowBackgroundColor}}">
                                 <Frame CornerRadius="10"
                                        HasShadow="True"
@@ -104,6 +104,7 @@
 
                                                     <Label Style="{StaticResource BaseLabel}" 
                                                            
+                                                           HorizontalOptions="FillAndExpand"
                                                            HorizontalTextAlignment="Start" 
                                                            Grid.Row="0" 
                                                            Grid.Column="0"
@@ -117,8 +118,6 @@
                                                     </Label>
 
                                                     <Label Style="{StaticResource BaseLabel}" 
-                                                           HorizontalOptions="FillAndExpand"
-                                                           HorizontalTextAlignment="End" 
                                                            Grid.Row="0" 
                                                            Grid.Column="1">
                                                         <Label.FormattedText>

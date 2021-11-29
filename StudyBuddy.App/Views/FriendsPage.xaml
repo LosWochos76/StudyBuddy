@@ -19,11 +19,11 @@
         <StackLayout>
             <Frame Padding="5"
                    Margin="4"
-                   BackgroundColor="{StaticResource WindowBackgroundColor}"
+                   BackgroundColor="{AppThemeBinding Dark={StaticResource CardBackgroundDark}, Light={StaticResource CardBackground}}"
                    HasShadow="False"
-                   BorderColor="Black"
+                   BorderColor="{AppThemeBinding Dark={StaticResource TextColorDark}, Light={StaticResource TextColor}}"
                    CornerRadius="8"
-                   HeightRequest="45">
+                   HeightRequest="35">
                 <Frame.IsVisible>
                     <OnPlatform x:TypeArguments="x:Boolean"
                                 iOS="False"
@@ -31,7 +31,8 @@
                 </Frame.IsVisible>
                 <SearchBar TextColor="{AppThemeBinding Dark={StaticResource TextColorDark}, Light={StaticResource TextColor}}"
                            x:Name="searchBar"
-                           TextChanged="searchBar_TextChanged">
+                           TextChanged="searchBar_TextChanged"
+                           BackgroundColor="{AppThemeBinding Dark={StaticResource CardBackgroundDark}, Light={StaticResource CardBackground}}">
                     <SearchBar.IsVisible>
                         <OnPlatform x:TypeArguments="x:Boolean"
                                     iOS="False"

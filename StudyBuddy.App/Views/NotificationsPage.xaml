@@ -8,15 +8,20 @@
              x:Name="page"
              xmlns:local="clr-namespace:StudyBuddy.App.Views"
              xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
-             Style="{StaticResource BaseContentPage}">
+             Style="{StaticResource BaseContentPage}"
+             Title="Benachrichtigungen">
     <xct:TabView TabStripPlacement="Top"
                  TabStripHeight="55"
                  TabIndicatorColor="{AppThemeBinding Dark={StaticResource TextColorDark}, Light={StaticResource TextColor}}"
+                 TabStripBackgroundColor="{AppThemeBinding Dark={StaticResource CardBackgroundDark}, Light={StaticResource CardBackground}}"
                  TabIndicatorPlacement="Bottom"
                  TabIndicatorHeight="5"
                  SelectedIndex="0"
                  TabContentDataTemplate="{DataTemplate local:NotificationsPage}">
-        <xct:TabViewItem Text="News" IsSelected="{Binding NewsIsSelected, Mode=OneWayToSource}">
+        <xct:TabViewItem Text="News" 
+                         IsSelected="{Binding NewsIsSelected, Mode=OneWayToSource}" 
+                         TextColor="{StaticResource SecondaryFont}" 
+                         TextColorSelected="{AppThemeBinding Dark={StaticResource TextColorDark}, Light={StaticResource TextColor}}">
             <xct:TabViewItem.Content>
                 <StackLayout>
                     <RefreshView IsRefreshing="{Binding IsRefreshing}"
@@ -58,6 +63,8 @@
         <xct:TabViewItem Text="Anfragen"
                          IsSelected="{Binding RequestsIsSelected, Mode=OneWayToSource}"
                          BadgeText="{Binding Requests.Count}"
+                         TextColor="{StaticResource SecondaryFont}" 
+                         TextColorSelected="{AppThemeBinding Dark={StaticResource TextColorDark}, Light={StaticResource TextColor}}"
                          BadgeTextColor="White"
                          BadgeBackgroundColor="Red">
             <xct:TabViewItem.Content>

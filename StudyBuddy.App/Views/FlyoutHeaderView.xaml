@@ -3,17 +3,20 @@
     xmlns="http://xamarin.com/schemas/2014/forms"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
-    x:Class="StudyBuddy.App.Views.FlyoutHeaderView">
+    xmlns:viewmodels="clr-namespace:StudyBuddy.App.ViewModels"
+    x:Class="StudyBuddy.App.Views.FlyoutHeaderView"
+    x:DataType="viewmodels:FlyoutHeaderViewModel">
     <ContentView.Content>
         <StackLayout Margin="10">
             <xct:AvatarView
                 Text="AS"
                 Source="{Binding User.ProfileImage}"
                 Size="50"
-                HorizontalOptions="Start"/>
-            <Label Text="{Binding User.Name}" FontSize="Large"/>
-            <Label Text="{Binding User.Nickname}" TextColor="Gray"/>
-            <Label Text="20 Freunde" Margin="0,5,0,5"/>
+                HorizontalOptions="Start"
+                TextColor="{AppThemeBinding Dark={StaticResource TextColorDark}, Light={StaticResource TextColor}}"/>
+            <Label Style="{StaticResource BaseLabel}" Text="{Binding User.Name}" FontSize="Large" FontAttributes="Bold"/>
+            <Label Style="{StaticResource BaseLabel}" Text="{Binding User.Nickname}" TextColor="{StaticResource SecondaryFont}" FontSize="Medium"/>
+            <Label Style="{StaticResource BaseLabel}" Text="20 Freunde" Margin="0,5,0,5"/>
         </StackLayout>
     </ContentView.Content>
 </ContentView>
