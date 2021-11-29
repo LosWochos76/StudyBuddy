@@ -20,6 +20,13 @@ namespace StudyBuddy.App.ViewModels
         public ChallengeProve Prove { get; set; } = ChallengeProve.ByTrust;
         public int? SeriesParentID { get; set; }
         public string Tags { get; set; }
+        public string ValidityEndText
+        {
+            get
+            {
+                return ValidityEnd.ToString("dd.MM.yyyy");
+            }
+        }
 
         public string ValidityText
         {

@@ -68,50 +68,59 @@
                         <CollectionView ItemsSource="{Binding Requests}">
                             <CollectionView.ItemTemplate>
                                 <DataTemplate x:DataType="viewmodels:RequestViewModel">
-                                    <ContentView>
-                                        <StackLayout>
-                                            <Grid Padding="10"
-                                                  x:Name="requestItem">
-                                                <Grid.ColumnDefinitions>
-                                                    <ColumnDefinition Width="70" />
-                                                    <ColumnDefinition Width="*" />
-                                                </Grid.ColumnDefinitions>
-                                                <Label Style="{StaticResource BaseLabel}"
-                                                       Grid.Column="0"
-                                                       Grid.Row="0"
-                                                       Text="{Binding TypeSymbol}"
-                                                       FontFamily="{StaticResource FontAwesomeSolid}"
-                                                       FontSize="50" />
-                                                <StackLayout Grid.Column="1"
-                                                             Grid.Row="0"
-                                                             HorizontalOptions="FillAndExpand">
+                                    <Grid Padding="10"
+                                          x:Name="requestItem">
+                                        <Frame CornerRadius="10"
+                                                   HasShadow="True"
+                                                   BackgroundColor="{AppThemeBinding Dark={StaticResource CardBackgroundDark}, Light={StaticResource CardBackground}}">
+                                            <StackLayout Orientation="Horizontal">
+                                                <Image WidthRequest="45"
+                                                       HeightRequest="45">
+                                                    <Image.Source>
+                                                        <FontImageSource FontFamily="{StaticResource FontAwesomeSolid}"
+                                                                         Glyph="{Binding TypeSymbol}"
+                                                                         Color="{AppThemeBinding Dark={StaticResource TextColorDark}, Light={StaticResource TextColor}}"/>
+                                                    </Image.Source>
+                                                </Image>
+
+                                                <StackLayout Padding="10,0,0,0" VerticalOptions="Center">
                                                     <Label Style="{StaticResource BaseLabel}"
                                                            Text="{Binding Name}"
                                                            FontAttributes="Bold" />
-                                                    <StackLayout Orientation="Horizontal">
-                                                        <Label Style="{StaticResource BaseLabel}"
+                                                    <Grid>
+                                                        <Grid.ColumnDefinitions>
+                                                            <ColumnDefinition Width="0" />
+                                                            <ColumnDefinition Width="*" />
+                                                        </Grid.ColumnDefinitions>
+                                                        <StackLayout Grid.Column="1" Grid.Row="0" HorizontalOptions="FillAndExpand" Orientation="Horizontal">
+                                                            <Label
+                                                                Style="{StaticResource BaseLabel}"
                                                                Text="Annehmen"
                                                                FontSize="Small"
-                                                               HorizontalOptions="FillAndExpand">
-                                                            <Label.GestureRecognizers>
-                                                                <TapGestureRecognizer Command="{Binding BindingContext.AcceptRequestCommand, Source={x:Reference Name=page}}"
+                                                                HorizontalOptions="FillAndExpand">
+                                                                <Label.GestureRecognizers>
+                                                                    <TapGestureRecognizer Command="{Binding BindingContext.AcceptRequestCommand, Source={x:Reference Name=page}}"
                                                                                       CommandParameter="{Binding Source={x:Reference requestItem}, Path=BindingContext}" />
-                                                            </Label.GestureRecognizers>
-                                                        </Label>
-                                                        <Label Style="{StaticResource BaseLabel}"
+                                                                </Label.GestureRecognizers>
+                                                            </Label>
+                                                            <Label Style="{StaticResource BaseLabel}"
                                                                Text="Ablehnen"
                                                                FontSize="Small">
-                                                            <Label.GestureRecognizers>
-                                                                <TapGestureRecognizer Command="{Binding BindingContext.DenyRequestCommand, Source={x:Reference Name=page}}"
+                                                                <Label.GestureRecognizers>
+                                                                    <TapGestureRecognizer Command="{Binding BindingContext.DenyRequestCommand, Source={x:Reference Name=page}}"
                                                                                       CommandParameter="{Binding Source={x:Reference requestItem}, Path=BindingContext}" />
-                                                            </Label.GestureRecognizers>
-                                                        </Label>
-                                                    </StackLayout>
+                                                                </Label.GestureRecognizers>
+                                                            </Label>
+                                                        </StackLayout>
+                                                        
+                                                    </Grid>
+
                                                 </StackLayout>
-                                            </Grid>
-                                            <BoxView HeightRequest="1" Color="Gray" />
-                                        </StackLayout>
-                                    </ContentView>
+
+                                            </StackLayout>
+                                        </Frame>
+                                    </Grid>
+                                        
                                 </DataTemplate>
                             </CollectionView.ItemTemplate>
                         </CollectionView>

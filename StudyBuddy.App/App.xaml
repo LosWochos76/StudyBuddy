@@ -6,12 +6,15 @@
     <Application.Resources>
         <ResourceDictionary>
             <Color x:Key="Primary">#000000</Color>
-            <Color x:Key="TextColor">#000000</Color>
-            <Color x:Key="TextColorDark">White</Color>
-            <Color x:Key="WindowBackgroundColor">#f2f2f7</Color>
-            <Color x:Key="WindowBackgroundColorDark">Black</Color>
-            <Color x:Key="CardBackground">White</Color>
-            <Color x:Key="CardBackgroundDark">#1C1C1E</Color>
+            <Color x:Key="TextColor">#111111</Color>
+            <Color x:Key="TextColorDark">#C0C0C0</Color>
+            <Color x:Key="SecondaryFont">#696969</Color>
+            <Color x:Key="WindowBackgroundColor">#B0E0E6</Color>
+            <Color x:Key="WindowBackgroundColorDark">#01012E</Color>
+            <Color x:Key="CardBackground">#87CEFA</Color>
+            <Color x:Key="CardBackgroundDark">#191970</Color>
+            <Color x:Key="ButtonBackground">#45A5D9</Color>
+            <Color x:Key="ButtonBackgroundDark">#00008b</Color>
             <Color x:Key="SystemBlue">#007AFF</Color>
             <Color x:Key="SystemGreen">#34C759</Color>
             <Color x:Key="SystemIndigo">#5856D6</Color>
@@ -45,7 +48,7 @@
 
             <Style x:Key="BaseButton" TargetType="Button">
                 <Setter Property="BackgroundColor"
-                        Value="{AppThemeBinding Dark={StaticResource WindowBackgroundColor}, Light={StaticResource WindowBackgroundColorDark}}" />
+                        Value="{AppThemeBinding Dark={StaticResource ButtonBackgroundDark}, Light={StaticResource ButtonBackground}}" />
                 <Setter Property="TextColor"
                         Value="{AppThemeBinding Dark={StaticResource TextColor}, Light={StaticResource TextColorDark}}" />
                 <Setter Property="CornerRadius">

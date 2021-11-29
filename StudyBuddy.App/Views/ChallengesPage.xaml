@@ -6,6 +6,7 @@
     xmlns:viewmodels="clr-namespace:StudyBuddy.App.ViewModels"
     xmlns:fontAwesome="clr-namespace:StudyBuddy.App"
     x:DataType="viewmodels:ChallengesViewModel"
+    xmlns:android="clr-namespace:Xamarin.Forms.PlatformConfiguration.AndroidSpecific;assembly=Xamarin.Forms.Core"
              Style="{StaticResource BaseContentPage}"
              x:Name="page" Title="{Binding Header}">
     <ContentPage.ToolbarItems>
@@ -61,36 +62,87 @@
                 IsRefreshing="{Binding IsRefreshing}"
                 Command="{Binding RefreshCommand}"
                 Padding="8">
-                <CollectionView EmptyView="Keine Challenges" ItemsSource="{Binding Challenges}" RemainingItemsThreshold="{Binding ItemThreshold}" RemainingItemsThresholdReachedCommand="{Binding LoadMoreCommand}">
+                <CollectionView EmptyView="Keine Challenges"
+                                ItemsSource="{Binding Challenges}" 
+                                RemainingItemsThreshold="{Binding ItemThreshold}" 
+                                RemainingItemsThresholdReachedCommand="{Binding LoadMoreCommand}">
                     <CollectionView.ItemTemplate>
                         <DataTemplate x:DataType="viewmodels:ChallengeViewModel">
-                            <ContentView>
-                                <StackLayout>
-                                    <Grid Padding="10" x:Name="Item">
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="70" />
-                                            <ColumnDefinition Width="*" />
-                                        </Grid.ColumnDefinitions>
-                                        <Label Style="{StaticResource IconLabel}" Grid.Column="0" Grid.Row="0"
-                                        Text="{Binding CategorySymbol}"
-                                        FontFamily="{StaticResource FontAwesomeSolid}"
-                                        FontSize="50" />
-                                        <StackLayout Grid.Column="1" Grid.Row="0" HorizontalOptions="FillAndExpand">
-                                            <Label Style="{StaticResource BaseLabel}" Text="{Binding Name}" FontAttributes="Bold" />
-                                            <StackLayout Orientation="Horizontal">
-                                                <Label Style="{StaticResource BaseLabel}" Text="{Binding PointsText}" FontSize="Small" HorizontalOptions="FillAndExpand" />
-                                                <Label Style="{StaticResource TagLabel}" Text="{Binding Tags}" FontSize="Small"/>
+                            <SwipeView android:SwipeView.SwipeTransitionMode="Drag">
+                                <SwipeView.RightItems>
+                                    <SwipeItems>
+                                        <SwipeItem Text="Abschließen" 
+                                                   BackgroundColor="Green" />
+                                    </SwipeItems>
+                                </SwipeView.RightItems>
+                                <Grid x:Name="Item" 
+                                      Padding="5" 
+                                      BackgroundColor="{AppThemeBinding Dark={StaticResource WindowBackgroundColorDark}, Light={StaticResource WindowBackgroundColor}}">
+                                <Frame CornerRadius="10"
+                                       HasShadow="True"
+                                       BackgroundColor="{AppThemeBinding Dark={StaticResource CardBackgroundDark}, Light={StaticResource CardBackground}}">
+                                        <StackLayout Orientation="Horizontal">
+                                            <Image WidthRequest="45"
+                                                   HeightRequest="45">
+                                                <Image.Source>
+                                                    <FontImageSource FontFamily="{StaticResource FontAwesomeSolid}"
+                                                                     Glyph="{Binding CategorySymbol}" 
+                                                                     Color="{AppThemeBinding Dark={StaticResource TextColorDark}, Light={StaticResource TextColor}}" 
+                                                                     />
+                                                </Image.Source>
+                                            </Image>
+                                            <StackLayout VerticalOptions="Center">
+                                                <Label Padding="10,0,0,0" Style="{StaticResource BaseLabel}"  Text="{Binding Name}" FontSize="16" FontAttributes="Bold"/>
+                                                <Grid Padding="10,0,0,0">
+                                                    <Grid.RowDefinitions>
+                                                        <RowDefinition Height="*" />
+                                                    </Grid.RowDefinitions>
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="200" />
+                                                        <ColumnDefinition Width="*" />
+                                                    </Grid.ColumnDefinitions>
+
+                                                    <Label Style="{StaticResource BaseLabel}" 
+                                                           
+                                                           HorizontalTextAlignment="Start" 
+                                                           Grid.Row="0" 
+                                                           Grid.Column="0"
+                                                           WidthRequest="150">
+                                                        <Label.FormattedText>
+                                                            <FormattedString>
+                                                                <Span Text="Endet: " FontAttributes="Bold" TextColor="{StaticResource SecondaryFont}"/>
+                                                                <Span Text="{Binding ValidityEndText}"  />
+                                                            </FormattedString>
+                                                        </Label.FormattedText>
+                                                    </Label>
+
+                                                    <Label Style="{StaticResource BaseLabel}" 
+                                                           HorizontalOptions="FillAndExpand"
+                                                           HorizontalTextAlignment="End" 
+                                                           Grid.Row="0" 
+                                                           Grid.Column="1">
+                                                        <Label.FormattedText>
+                                                            <FormattedString>
+                                                                <Span Text="Punkte: " FontAttributes="Bold" TextColor="{StaticResource SecondaryFont}"/>
+                                                                <Span Text="{Binding Points}"  />
+                                                            </FormattedString>
+                                                        </Label.FormattedText>
+                                                    </Label>
+
+                                                </Grid>
                                             </StackLayout>
+                                            
                                         </StackLayout>
-                                        <Grid.GestureRecognizers>
+                                        <Frame.GestureRecognizers>
                                             <TapGestureRecognizer
                                                 Command="{Binding BindingContext.DetailsCommand, Source={x:Reference Name=page}}"
                                                 CommandParameter="{Binding Source={x:Reference Item}, Path=BindingContext}"/>
-                                        </Grid.GestureRecognizers>
-                                    </Grid>
-                                    <BoxView HeightRequest="1" />
-                                </StackLayout>
-                            </ContentView>
+                                        </Frame.GestureRecognizers>
+                                    </Frame>
+                                    
+                                </Grid>
+
+                            </SwipeView>
                         </DataTemplate>
                     </CollectionView.ItemTemplate>
                     <CollectionView.Footer>

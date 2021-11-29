@@ -20,6 +20,8 @@
                         Value="{AppThemeBinding Dark={StaticResource SystemBlueDark}, Light={StaticResource SystemBlueDark}}" />
                 <Setter Property="Shell.ForegroundColor"
                         Value="{AppThemeBinding Dark={StaticResource TextColorDark}, Light={StaticResource TextColor}}" />
+                <Setter Property="Shell.FlyoutBackgroundColor"
+                        Value="{AppThemeBinding Dark={StaticResource WindowBackgroundColorDark}, Light={StaticResource WindowBackgroundColor}}" />
             </Style>
         </ResourceDictionary>
     </Shell.Resources>
