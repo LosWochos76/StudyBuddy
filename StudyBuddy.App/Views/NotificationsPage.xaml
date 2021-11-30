@@ -36,13 +36,14 @@
                                             <BoxView HeightRequest="1"
                                                      Color="Gray" />
                                             <StackLayout Orientation="Horizontal">
-                                                <Label Text="{Binding Firstname}" ></Label>
-                                                <Label Text="{Binding Lastname}" ></Label>
+                                                <Label Text="{Binding Owner.Firstname}" ></Label>
+                                                <Label Text="{Binding Owner.Lastname}" ></Label>
                                             </StackLayout>
                                             
                                             <StackLayout>
                                                 <Label Text="{Binding Created}"></Label>
                                             </StackLayout>
+                                            
                                             
                                             <StackLayout>
                                                 <Label Text="{Binding Title}"  FontAttributes="Bold" ></Label>

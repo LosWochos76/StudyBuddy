@@ -135,7 +135,7 @@ namespace StudyBuddy.App.ViewModels
 
     public class NotificationsViewModelNews : ViewModelBase
     {
-        public ObservableCollection<UserNotification> News { get; private set; } = new ObservableCollection<UserNotification>();
+        public ObservableCollection<Notification> News { get; private set; } = new ObservableCollection<Notification>();
 
 
         public NotificationsViewModelNews(IApi api, IDialogService dialog, INavigationService navigation) : base(api,

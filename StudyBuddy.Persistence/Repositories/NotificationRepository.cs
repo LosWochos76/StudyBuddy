@@ -60,15 +60,17 @@ namespace StudyBuddy.Persistence
                 "insert into notifications (owner_id, title, body, created , updated) values (:owner_id, :title, :body, :created , :updated) returning id");
         }
 
-        public IEnumerable<UserNotification> GetUserNotificationsFeed(NotificationFilter filter)
+        public IEnumerable<Notification> GetUserNotificationsFeed(NotificationFilter filter)
         {
-            var qh = new QueryHelper<UserNotification>(connection_string, FromUserNotificationReader);
+            var qh = new QueryHelper<Notification>(connection_string, FromNotificationReader);
             qh.AddParameter(":user_id", filter.OwnerId);
             qh.AddParameter(":from", filter.Start);
             qh.AddParameter(":max", filter.Count);
-
+            
+            
             return qh.ExecuteQueryToObjectList(
-                "select notifications.id, notifications.owner_id, notifications.title, notifications.body, notifications.created, notifications.updated, users.firstname, users.lastname, users.nickname " +
+                "select notifications.id, notifications.owner_id, notifications.title, notifications.body, notifications.created, notifications.updated, " +
+                "users.firstname, users.lastname, users.nickname " +
                 "from friends " +
                 "inner join users on friends.user_b = :user_id " +
                 "inner join notifications on users.id = notifications.owner_id ");
@@ -85,24 +87,16 @@ namespace StudyBuddy.Persistence
             obj.Created = reader.GetDateTime(4);
             obj.Updated = reader.GetDateTime(5);
 
+            var owner = new User();
+            owner.Firstname = reader.GetString(6);
+            owner.Lastname= reader.GetString(7);
+            owner.Nickname = reader.GetString(8);
+
+            obj.Owner = owner;
+            
             return obj;
         }
 
-        private UserNotification FromUserNotificationReader(NpgsqlDataReader reader)
-        {
-            var obj = new UserNotification();
-
-            obj.Id = reader.GetInt32(0);
-            obj.OwnerId = reader.GetInt32(1);
-            obj.Title = reader.GetString(2);
-            obj.Body = reader.GetString(3);
-            obj.Created = reader.GetDateTime(4);
-            obj.Updated = reader.GetDateTime(5);
-            obj.Firstname = reader.GetString(6);
-            obj.Lastname = reader.GetString(7);
-            obj.Nickname = reader.GetString(8);
-
-            return obj;
-        }
+  
     }
 }
