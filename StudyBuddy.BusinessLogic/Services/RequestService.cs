@@ -90,13 +90,13 @@ namespace StudyBuddy.BusinessLogic
             {
                 backend.Repository.Users.AddFriend(obj.SenderID, obj.RecipientID);
                 var friend = backend.Repository.Users.ById(obj.RecipientID);
-                backend.BusinessEvent.TriggerEvent(this, new BusinessEventArgs(BusinessEventType.FriendAdded, friend) { CurrentUser = user });
+                backend.BusinessEventService.TriggerEvent(this, new BusinessEventArgs(BusinessEventType.FriendAdded, friend) { CurrentUser = user });
             }
             else if (obj.Type == RequestType.ChallengeAcceptance)
             {
                 backend.Repository.Challenges.AddAcceptance(obj.ChallengeID.Value, obj.SenderID);
                 var challenge = backend.Repository.Challenges.ById(obj.ChallengeID.Value);
-                backend.BusinessEvent.TriggerEvent(this, new BusinessEventArgs(BusinessEventType.ChallengeAccepted, challenge) { CurrentUser = user });
+                backend.BusinessEventService.TriggerEvent(this, new BusinessEventArgs(BusinessEventType.ChallengeAccepted, challenge) { CurrentUser = user });
             }
 
             backend.Repository.Requests.Delete(id);

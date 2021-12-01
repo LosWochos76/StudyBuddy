@@ -1,0 +1,27 @@
+<br>
+<h1>Bearbeite Ereignis</h1>
+<form [formGroup]="form" (ngSubmit)="onSubmit()">
+    <div class="mb-3">
+        <label class="form-label" for="name">Name:</label>
+        <input type="text" class="form-control" id="name" formControlName="name" [ngClass]="{
+            'is-invalid': form.controls.name.invalid && form.controls.name.dirty,
+            'is-valid': form.controls.name.valid && form.controls.name.dirty}">
+    </div>
+    <div class="col-md">
+        <label class="form-label" for="category">Typ:</label>
+        <select class="form-select" formControlName="type">
+            <option value="1">Neuer Benutzer wurde registriert</option>
+            <option value="2">Eine Herausforderung wurde abgeschlossen</option>
+            <option value="3">Freund wurde hinzugefügt</option>
+            <option value="4">Ein Abzeichen wurde erreicht</option>
+        </select>
+    </div>
+    <br>
+    <div class="mb-3">
+        <label class="form-label" for="code">Programmcode:</label>
+        <textarea class="form-control" id="code" formControlName="code" rows="15">
+        </textarea>
+    </div>
+    <button type="submit" class="btn btn-primary">Ok</button>&nbsp;
+    <button type="button" class="btn btn-success" (click)="onCancel()">Abbrechen</button>
+</form>

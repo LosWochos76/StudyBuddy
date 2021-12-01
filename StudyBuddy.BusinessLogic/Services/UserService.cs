@@ -52,7 +52,7 @@ namespace StudyBuddy.BusinessLogic
         public User Insert(User obj)
         {
             backend.Repository.Users.Insert(obj);
-            backend.BusinessEvent.TriggerEvent(this, new BusinessEventArgs(BusinessEventType.UserRegistered, obj));
+            backend.BusinessEventService.TriggerEvent(this, new BusinessEventArgs(BusinessEventType.UserRegistered, obj));
             return obj;
         }
 
@@ -108,7 +108,7 @@ namespace StudyBuddy.BusinessLogic
 
             var user = backend.Repository.Users.ById(user_id);
             var friend = backend.Repository.Users.ById(friend_id);
-            backend.BusinessEvent.TriggerEvent(this, new BusinessEventArgs(BusinessEventType.FriendAdded, friend) { CurrentUser = user });
+            backend.BusinessEventService.TriggerEvent(this, new BusinessEventArgs(BusinessEventType.FriendAdded, friend) { CurrentUser = user });
         }
 
         public void RemoveFriend(int user_id, int friend_id)

@@ -27,6 +27,8 @@ import { NotificationBroadcastComponent} from "./notification/notification-broad
 import { FcmTokenListComponent } from './notification/fcm-token-list/fcm-token-list.component';
 import { LoggingListComponent } from './logging/logging-list/logging-list.component';
 import { GameBadgeSuccessComponent } from './gamebadge/game-badge-success/game-badge-success.component';
+import { BusinessEventListComponent } from './businessevent/businessevent-list/businessevent-list.component';
+import { BusinessEventEditComponent } from './businessevent/businessevent-edit/businessevent-edit.component';
 
 const routes: Routes = [
   { path: 'info', component: InfoComponent },
@@ -57,6 +59,8 @@ const routes: Routes = [
   { path: 'login', component: LoginComponent },
   { path: 'logout', component: LogoutComponent },
   { path: 'logging', component: LoggingListComponent, canActivate: [RouteGuardService] },
+  { path: 'businessevent', component: BusinessEventListComponent, canActivate: [RouteGuardService] },
+  { path: 'businessevent/:id', component: BusinessEventEditComponent, canActivate: [RouteGuardService] },
   { path: '', redirectTo: 'info', pathMatch: 'full' },
   { path: '**', component: PageNotFoundComponent }
 ];

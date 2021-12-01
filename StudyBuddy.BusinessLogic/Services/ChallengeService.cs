@@ -179,7 +179,7 @@ namespace StudyBuddy.BusinessLogic
 
             backend.Repository.Challenges.AddAcceptance(challenge_id, backend.CurrentUser.ID);
             OnChallengeAccepted(challenge, backend.CurrentUser);
-            backend.BusinessEvent.TriggerEvent(this, new BusinessEventArgs(BusinessEventType.ChallengeAccepted, challenge));
+            backend.BusinessEventService.TriggerEvent(this, new BusinessEventArgs(BusinessEventType.ChallengeAccepted, challenge));
 
             return challenge;
         }
@@ -207,7 +207,7 @@ namespace StudyBuddy.BusinessLogic
 
             backend.Repository.Challenges.AddAcceptance(challenge_id, user_id);
             OnChallengeAccepted(challenge, user);
-            backend.BusinessEvent.TriggerEvent(this, new BusinessEventArgs(BusinessEventType.ChallengeAccepted, challenge));
+            backend.BusinessEventService.TriggerEvent(this, new BusinessEventArgs(BusinessEventType.ChallengeAccepted, challenge));
         }
 
         public void Accept(int challenge_id)
@@ -224,7 +224,7 @@ namespace StudyBuddy.BusinessLogic
 
             backend.Repository.Challenges.AddAcceptance(challenge_id, backend.CurrentUser.ID);
             OnChallengeAccepted(challenge, backend.CurrentUser);
-            backend.BusinessEvent.TriggerEvent(this, new BusinessEventArgs(BusinessEventType.ChallengeAccepted, challenge));
+            backend.BusinessEventService.TriggerEvent(this, new BusinessEventArgs(BusinessEventType.ChallengeAccepted, challenge));
         }
 
         private void OnChallengeAccepted(Challenge obj, User current_user)

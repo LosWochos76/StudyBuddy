@@ -40,6 +40,8 @@ import { NotificationBroadcastComponent } from './notification/notification-broa
 import { FcmTokenListComponent } from './notification/fcm-token-list/fcm-token-list.component';
 import { LoggingListComponent } from './logging/logging-list/logging-list.component';
 import { GameBadgeSuccessComponent } from './gamebadge/game-badge-success/game-badge-success.component';
+import { BusinessEventListComponent } from './businessevent/businessevent-list/businessevent-list.component';
+import { BusinessEventEditComponent } from './businessevent/businessevent-edit/businessevent-edit.component';
 
 @NgModule({
   declarations: [
@@ -74,6 +76,8 @@ import { GameBadgeSuccessComponent } from './gamebadge/game-badge-success/game-b
     FcmTokenListComponent,
     LoggingListComponent,
     GameBadgeSuccessComponent,
+    BusinessEventListComponent,
+    BusinessEventEditComponent
   ],
   imports: [
     BrowserModule,

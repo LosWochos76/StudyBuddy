@@ -17,7 +17,7 @@ namespace StudyBuddy.BusinessLogic
         public IRequestService RequestService { get; set; }
         public ITagService TagService { get; set; }
         public IUserService UserService { get; set; }
-        public IBusinessEventService BusinessEvent { get; private set; }
+        public IBusinessEventService BusinessEventService { get; private set; }
         public ILoggingService Logging { get; private set; }
         public NotificationService NotificationService { get; }
         public IStatisticsService StatisticsService { get; set; }
@@ -33,7 +33,7 @@ namespace StudyBuddy.BusinessLogic
             RequestService = new RequestService(this);
             TagService = new TagService(this);
             UserService = new UserService(this);
-            BusinessEvent = new BusinessEventService(this);
+            BusinessEventService = new BusinessEventService(this);
             Logging = new LoggingService(this);
             NotificationService = new NotificationService(this);
             StatisticsService = new StatisticsService(this);

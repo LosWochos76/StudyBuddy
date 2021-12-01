@@ -13,5 +13,6 @@ namespace StudyBuddy.Persistence
         ILoggingRepository Logging { get; }
         INotificationRepository Notifications { get; }
         IStatisticsRepository StatisticsRepository { get; }
+        IBusinessEventRepository BusinessEvents { get; }
     }
 }

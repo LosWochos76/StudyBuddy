@@ -34,10 +34,13 @@ namespace StudyBuddy.App.Api
                 Start = skip
             };
 
+            var result = new List<ChallengeViewModel>();
             var rh = new WebRequestHelper(api.Authentication.Token);
             var objects = await rh.Get<IEnumerable<Challenge>>(base_url + "Challenge", filter);
 
-            var result = new List<ChallengeViewModel>();
+            if (objects == null)
+                return result;
+
             foreach (var obj in objects)
                 result.Add(ChallengeViewModel.FromModel(obj));
 

@@ -46,18 +46,29 @@ namespace StudyBuddy.App.Api
                 if (!string.IsNullOrEmpty(token))
                     message.Headers.Add("Authorization", token);
 
-                var json_string = payload == null ? "" : JsonSerializer.Serialize(payload);
-                message.Content = new StringContent(json_string, Encoding.UTF8, "application/json"); ;
+                if (payload != null)
+                {
+                    var json_string = JsonSerializer.Serialize(payload);
+                    message.Content = new StringContent(json_string, Encoding.UTF8, "application/json");
+                }
 
                 using (var response = await client.SendAsync(message, HttpCompletionOption.ResponseHeadersRead, cancellationToken))
                 {
-                    var stream = await response.Content.ReadAsStreamAsync();
+                    if (!response.IsSuccessStatusCode)
+                    {
+                        var stream = await response.Content.ReadAsStringAsync();
+                        return default(T);
+                    }
 
-                    if (response.IsSuccessStatusCode)
+                    try
+                    { 
+                        var stream = await response.Content.ReadAsStreamAsync();
                         return await JsonSerializer.DeserializeAsync<T>(stream, options);
-
-                    var exception = await JsonSerializer.DeserializeAsync<ApiException>(stream, options);
-                    throw exception;
+                    }
+                    catch
+                    {
+                        return default(T);
+                    }
                 }
             }
         }
@@ -75,13 +86,21 @@ namespace StudyBuddy.App.Api
 
                 using (var response = await client.SendAsync(message, HttpCompletionOption.ResponseHeadersRead, cancellationToken))
                 {
-                    var stream = await response.Content.ReadAsStreamAsync();
+                    if (!response.IsSuccessStatusCode)
+                    {
+                        var stream = await response.Content.ReadAsStringAsync();
+                        return default(T);
+                    }
 
-                    if (response.IsSuccessStatusCode)
+                    try
+                    { 
+                        var stream = await response.Content.ReadAsStreamAsync();
                         return await JsonSerializer.DeserializeAsync<T>(stream, options);
-
-                    var exception = await JsonSerializer.DeserializeAsync<ApiException>(stream, options);
-                    throw exception;
+                    }
+                    catch
+                    {
+                        return default(T);
+                    }
                 }
             }
         }

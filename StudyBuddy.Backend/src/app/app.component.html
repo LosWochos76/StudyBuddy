@@ -10,13 +10,14 @@
         <li class="nav-item dropdown" *ngIf="is_logged_in && current_user.isAdmin()">
           <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown"
             aria-expanded="false">
-            Stammdaten
+            Administration
           </a>
           <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
             <li><a class="dropdown-item" routerLink="user">Benutzer</a></li>
             <li><a class="dropdown-item" routerLink="request">Anfragen</a></li>
             <li><a class="dropdown-item" routerLink="tag">Tags</a></li>
             <li><a class="dropdown-item" routerLink="logging">Logging</a></li>
+            <li><a class="dropdown-item" routerLink="businessevent">Events</a></li>
           </ul>
         </li>
         <li class="nav-item dropdown" *ngIf="is_logged_in">
