@@ -6,6 +6,7 @@ namespace StudyBuddy.BusinessLogic
     public interface IBusinessEventService
     {
         void TriggerEvent(object sender, BusinessEventArgs args);
+        void Execute(int id);
 
         // CRUD:
         IEnumerable<BusinessEvent> All(BusinessEventFilter filter);

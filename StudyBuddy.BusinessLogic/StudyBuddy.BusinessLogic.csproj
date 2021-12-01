@@ -18,6 +18,8 @@
         <None Remove="QRCoder" />
         <None Remove="NETCore.Encrypt" />
         <None Remove="Interfaces\" />
+        <None Remove="Microsoft.CodeAnalysis.CSharp.Scripting" />
+        <None Remove="Microsoft.CSharp" />
     </ItemGroup>
     <ItemGroup>
         <Folder Include="Parameters\" />
@@ -29,5 +31,7 @@
         <PackageReference Include="NETCore.MailKit" Version="2.0.3" />
         <PackageReference Include="QRCoder" Version="1.4.2" />
         <PackageReference Include="NETCore.Encrypt" Version="2.1.0" />
+        <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Scripting" Version="4.0.1" />
+        <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
     </ItemGroup>
 </Project>

@@ -96,4 +96,16 @@ export class BusinessEventService {
     
     this.changed.emit();
   }
+
+  async execute(id:number) {
+    if (!this.auth.isLoggedIn())
+      return;
+
+    let path = this.url + "BusinessEvent/" + id;
+    this.logger.debug("Executing BusinessEvent from " + path);
+    let result = await this.http.head(path, 
+    {
+      headers: new HttpHeaders({ Authorization: this.auth.getToken() })
+    }).toPromise();
+  }
 }

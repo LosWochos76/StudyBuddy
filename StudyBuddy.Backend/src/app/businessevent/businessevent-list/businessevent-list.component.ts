@@ -68,4 +68,8 @@ export class BusinessEventListComponent implements OnInit {
     this.logger.debug("User wants to add a BusinessEvent");
     this.router.navigate(['/businessevent/0']);
   }
+
+  onExecute() {
+    this.service.execute(this.selected.id);
+  }
 }

@@ -48,5 +48,13 @@ namespace StudyBuddy.Api.Controllers
             backend.BusinessEventService.Delete(id);
             return Json(new { Status = "ok" });
         }
+
+        [Route("/BusinessEvent/{id}")]
+        [HttpHead]
+        public IActionResult Execute(int id)
+        {
+            backend.BusinessEventService.Execute(id);
+            return Json(new { Status = "ok" });
+        }
     }
 }

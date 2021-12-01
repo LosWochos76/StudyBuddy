@@ -14,5 +14,10 @@ namespace StudyBuddy.BusinessLogic
             Type = type;
             Payload = payload;
         }
+
+        public BusinessEventArgs(BusinessEventType type)
+        {
+            Type = type;
+        }
     }
 }

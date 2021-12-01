@@ -37,7 +37,7 @@ namespace StudyBuddy.Persistence
             qh.AddParameter(":level", (int)obj.Level);
             qh.AddParameter(":user_id", obj.UserId);
             qh.AddParameter(":source", (int)obj.Source);
-            qh.AddParameter(":message", obj.Message);
+            qh.AddParameter(":message", obj.Message.Truncate(195));
             qh.ExecuteNonQuery(
                 "insert into logging (occurence,level,source,user_id,message) values " +
                 "(:occurence,:level,:source,:user_id,:message)");
