@@ -30,10 +30,10 @@ namespace StudyBuddy.App.Api
             return content;
         }
         
-        public async Task<IEnumerable<UserNotification>> GetMyNotificationFeed()
+        public async Task<IEnumerable<Notification>> GetMyNotificationFeed()
         {
             var rh = new WebRequestHelper(api.Authentication.Token);
-            var content = await rh.Load<IEnumerable<UserNotification>>(base_url + "Notification/Feed", HttpMethod.Get);
+            var content = await rh.Load<IEnumerable<Notification>>(base_url + "Notification/Feed", HttpMethod.Get);
             return content;
         }
         

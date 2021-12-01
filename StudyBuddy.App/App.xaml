@@ -53,6 +53,7 @@
                         Value="{AppThemeBinding Dark={StaticResource TextColor}, Light={StaticResource TextColorDark}}" />
                 <Setter Property="CornerRadius">
                     <Setter.Value>
+                        
                         <OnPlatform Android="8" />
                     </Setter.Value>
                 </Setter>

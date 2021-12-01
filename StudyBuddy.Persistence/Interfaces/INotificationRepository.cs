@@ -7,7 +7,7 @@ namespace StudyBuddy.Persistence
     public interface INotificationRepository
     {
         IEnumerable<Notification> All(NotificationFilter filter);
-        IEnumerable<UserNotification> GetUserNotificationsFeed(NotificationFilter filter);
+        IEnumerable<Notification> GetUserNotificationsFeed(NotificationFilter filter);
         void Insert(Notification obj);
     }
 }

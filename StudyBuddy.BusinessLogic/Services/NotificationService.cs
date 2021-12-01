@@ -35,7 +35,7 @@ namespace StudyBuddy.BusinessLogic
                 return response;
             }
             
-            public IEnumerable<UserNotification> GetNotificationFeedForUser(int userId)
+            public IEnumerable<Notification> GetNotificationFeedForUser(int userId)
             {
                 return backend.Repository.Notifications.GetUserNotificationsFeed(new NotificationFilter()
                 {
