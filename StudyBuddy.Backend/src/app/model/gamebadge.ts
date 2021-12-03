@@ -3,7 +3,7 @@ export class GameBadge {
     name:string = "";
     owner:number = 0;
     created:string;
-    required_coverage:number = 0.5;
+    required_coverage:number = 0.3;
     description:string = "";
     tags:string = "";
     
