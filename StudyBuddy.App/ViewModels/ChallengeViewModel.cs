@@ -20,6 +20,8 @@ namespace StudyBuddy.App.ViewModels
         public ChallengeProve Prove { get; set; } = ChallengeProve.ByTrust;
         public int? SeriesParentID { get; set; }
         public string Tags { get; set; }
+        public string ProveAddendum { get; set; }
+
         public string ValidityEndText
         {
             get
@@ -67,6 +69,22 @@ namespace StudyBuddy.App.ViewModels
             }
         }
 
+        public string ProveText
+        {
+            get
+            {
+                switch (Prove)
+                {
+                    case ChallengeProve.ByTrust: return "Durch Vertrauen";
+                    case ChallengeProve.ByQrCode: return "Durch einen QR-Code";
+                    case ChallengeProve.ByFriend: return "Durch Bestätigung eines Freundes";
+                    case ChallengeProve.ByLocation: return "Durch geographische Position";
+                    case ChallengeProve.ByKeyword: return "Durch Schlüsselwort";
+                    default: return "";
+                }
+            }
+        }
+
         public static ChallengeViewModel FromModel(Challenge c)
         {
             return new ChallengeViewModel()
@@ -82,7 +100,8 @@ namespace StudyBuddy.App.ViewModels
                 Created = c.Created,
                 Prove = c.Prove,
                 SeriesParentID = c.SeriesParentID,
-                Tags = c.Tags
+                Tags = c.Tags,
+                ProveAddendum = c.ProveAddendum
             };
         }
 

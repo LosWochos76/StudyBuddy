@@ -184,6 +184,34 @@ namespace StudyBuddy.BusinessLogic
             return challenge;
         }
 
+        public bool AcceptWithAddendum(int challenge_id, string prove_addendum)
+        {
+            if (backend.CurrentUser == null)
+                throw new UnauthorizedAccessException("Unauthorized!");
+
+            var challenge = backend.Repository.Challenges.ById(challenge_id);
+            if (challenge == null)
+                throw new Exception("Object is null!");
+
+            if (challenge.Prove == ChallengeProve.ByLocation)
+            {
+                // Hier nun prüfen, ob die übergebenen Koordinaten im erlaubten Radius liegen.
+            }
+
+            if (challenge.Prove == ChallengeProve.ByKeyword)
+            {
+                if (prove_addendum.Equals(challenge.ProveAddendum))
+                {
+                    backend.Repository.Challenges.AddAcceptance(challenge_id, backend.CurrentUser.ID);
+                    OnChallengeAccepted(challenge, backend.CurrentUser);
+                    backend.BusinessEventService.TriggerEvent(this, new BusinessEventArgs(BusinessEventType.ChallengeAccepted, challenge));
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
         public void RemoveAcceptance(int challenge_id, int user_id)
         {
             if (backend.CurrentUser == null || !backend.CurrentUser.IsAdmin)

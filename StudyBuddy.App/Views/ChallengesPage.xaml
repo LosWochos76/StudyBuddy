@@ -30,8 +30,8 @@
                    HeightRequest="35">
                 <Frame.IsVisible>
                     <OnPlatform x:TypeArguments="x:Boolean"
-                                iOS="False"
-                                Android="True" />
+                        iOS="False"
+                        Android="True" />
                 </Frame.IsVisible>
                 <SearchBar TextColor="{AppThemeBinding Dark={StaticResource TextColorDark}, Light={StaticResource TextColor}}"
                            x:Name="searchBar"
@@ -40,11 +40,10 @@
                            BackgroundColor="{AppThemeBinding Dark={StaticResource CardBackgroundDark}, Light={StaticResource CardBackground}}">
                     <SearchBar.IsVisible>
                         <OnPlatform x:TypeArguments="x:Boolean"
-                                    iOS="False"
-                                    Android="True" />
+                            iOS="False"
+                            Android="True" />
                     </SearchBar.IsVisible>
                 </SearchBar>
-
             </Frame>
             <SearchBar TextColor="{AppThemeBinding Dark={StaticResource TextColorDark}, Light={StaticResource TextColor}}"
                        x:Name="searchBarIos"
@@ -53,8 +52,8 @@
                        BackgroundColor="{AppThemeBinding Dark={StaticResource WindowBackgroundColorDark}, Light={StaticResource WindowBackgroundColor}}">
                 <SearchBar.IsVisible>
                     <OnPlatform x:TypeArguments="x:Boolean"
-                                iOS="True"
-                                Android="False" />
+                        iOS="True"
+                        Android="False" />
                 </SearchBar.IsVisible>
             </SearchBar>
             <RefreshView 
@@ -62,17 +61,18 @@
                 Command="{Binding RefreshCommand}"
                 Padding="8">
                 <CollectionView EmptyView="Keine Challenges"
-                                ItemsSource="{Binding Challenges}" 
-                                RemainingItemsThreshold="{Binding ItemThreshold}" 
-                                RemainingItemsThresholdReachedCommand="{Binding LoadMoreCommand}"
-                                ItemsUpdatingScrollMode="KeepItemsInView">
+                    ItemsSource="{Binding Challenges}" 
+                    RemainingItemsThreshold="{Binding ItemThreshold}" 
+                    RemainingItemsThresholdReachedCommand="{Binding LoadMoreCommand}"
+                    ItemsUpdatingScrollMode="KeepItemsInView">
                     <CollectionView.ItemTemplate>
                         <DataTemplate x:DataType="viewmodels:ChallengeViewModel">
                             <SwipeView android:SwipeView.SwipeTransitionMode="Drag">
                                 <SwipeView.RightItems>
                                     <SwipeItems>
-                                        <SwipeItem Text="Abschließen" 
-                                                   BackgroundColor="Green"/>
+                                        <SwipeItem
+                                            Text="Abschließen" 
+                                            BackgroundColor="Green"/>
                                     </SwipeItems>
                                 </SwipeView.RightItems>
                                 <Grid x:Name="Item" 
@@ -86,13 +86,13 @@
                                                    HeightRequest="45">
                                                 <Image.Source>
                                                     <FontImageSource FontFamily="{StaticResource FontAwesomeSolid}"
-                                                                     Glyph="{Binding CategorySymbol}" 
-                                                                     Color="{AppThemeBinding Dark={StaticResource TextColorDark}, Light={StaticResource TextColor}}" 
-                                                                     />
+                                                        Glyph="{Binding CategorySymbol}" 
+                                                        Color="{AppThemeBinding Dark={StaticResource TextColorDark},
+                                                            Light={StaticResource TextColor}}" />
                                                 </Image.Source>
                                             </Image>
                                             <StackLayout VerticalOptions="Center">
-                                                <Label Padding="10,0,0,0" Style="{StaticResource BaseLabel}"  Text="{Binding Name}" FontSize="16" FontAttributes="Bold"/>
+                                                <Label Padding="10,0,0,0" Style="{StaticResource BaseLabel}" Text="{Binding Name}" FontSize="16" FontAttributes="Bold"/>
                                                 <Grid Padding="10,0,0,0">
                                                     <Grid.RowDefinitions>
                                                         <RowDefinition Height="*" />
@@ -101,9 +101,7 @@
                                                         <ColumnDefinition Width="200" />
                                                         <ColumnDefinition Width="*" />
                                                     </Grid.ColumnDefinitions>
-
                                                     <Label Style="{StaticResource BaseLabel}" 
-                                                           
                                                            HorizontalOptions="FillAndExpand"
                                                            HorizontalTextAlignment="Start" 
                                                            Grid.Row="0" 
@@ -116,7 +114,6 @@
                                                             </FormattedString>
                                                         </Label.FormattedText>
                                                     </Label>
-
                                                     <Label Style="{StaticResource BaseLabel}" 
                                                            Grid.Row="0" 
                                                            Grid.Column="1">
@@ -127,10 +124,8 @@
                                                             </FormattedString>
                                                         </Label.FormattedText>
                                                     </Label>
-
                                                 </Grid>
                                             </StackLayout>
-                                            
                                         </StackLayout>
                                         <Frame.GestureRecognizers>
                                             <TapGestureRecognizer
@@ -138,18 +133,10 @@
                                                 CommandParameter="{Binding Source={x:Reference Item}, Path=BindingContext}"/>
                                         </Frame.GestureRecognizers>
                                     </Frame>
-                                    
                                 </Grid>
-
                             </SwipeView>
                         </DataTemplate>
                     </CollectionView.ItemTemplate>
-                    <CollectionView.Footer>
-                        <StackLayout HorizontalOptions="Center" Orientation="Horizontal">
-                            <Label Style="{StaticResource BaseLabel}"
-                                   Text="{Binding Challenges.Count}" />
-                        </StackLayout>
-                    </CollectionView.Footer>
                 </CollectionView>
             </RefreshView>
         </StackLayout>

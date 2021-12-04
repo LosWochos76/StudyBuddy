@@ -104,5 +104,16 @@ namespace StudyBuddy.App.Api
             api.RaiseChallengeAcceptedEvent(this, cvm);
             return status.IsOk;
         }
+
+        public async Task<bool> AcceptWithAddendum(ChallengeViewModel cvm, string prove_addendum)
+        {
+            var rh = new WebRequestHelper(api.Authentication.Token);
+            var status = await rh.Load<bool>(base_url + "Challenge/" + cvm.ID + "/AcceptWithAddendum", HttpMethod.Post);
+
+            if (status)
+                api.RaiseChallengeAcceptedEvent(this, cvm);
+
+            return status;
+        }
     }
 }

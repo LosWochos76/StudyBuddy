@@ -39,11 +39,14 @@ namespace StudyBuddy.App.ViewModels
             if (challenge.Prove == ChallengeProve.ByQrCode)
                 await AcceptByQrCode();
 
-            if (challenge.Prove == ChallengeProve.ByRandomTeamMember)
+            if (challenge.Prove == ChallengeProve.ByFriend)
                 await AcceptByRandomTeamMember();
 
-            if (challenge.Prove == ChallengeProve.ByLocationCloseToOwner)
+            if (challenge.Prove == ChallengeProve.ByLocation)
                 await AcceptByLocation();
+
+            if (challenge.Prove == ChallengeProve.ByKeyword)
+                await AcceptByKeyword();
         }
 
         private async Task AcceptByTrust()
@@ -71,11 +74,6 @@ namespace StudyBuddy.App.ViewModels
         private async Task AcceptByQrCode()
         {
             await navigation.Push(new QrCodePage());
-        }
-
-        private async Task AcceptByLocation()
-        {
-            await dialog.ShowMessage("Beweisverfahren noch nicht implementiert.", "Ungültiges Beweisverfahren!");
         }
 
         private async Task AcceptByRandomTeamMember()
@@ -115,6 +113,20 @@ namespace StudyBuddy.App.ViewModels
                     "bekommtst du die Punkte gutgeschrieben.", "Anfrage wurde verschickt!");
                 await navigation.Pop();
             }
+        }
+
+        private async Task AcceptByLocation()
+        {
+            await dialog.ShowMessage("Beweisverfahren noch nicht implementiert.", "Ungültiges Beweisverfahren!");
+
+            // Hier die aktuellen Koordinaten auslesen, die neue Methode AcceptWithAddendum benutzen Koordinaten übergeben
+        }
+
+        private async Task AcceptByKeyword()
+        {
+            await dialog.ShowMessage("Beweisverfahren noch nicht implementiert.", "Ungültiges Beweisverfahren!");
+
+            // Hier das Schlüsselwort vom Nutzer abfragen, die neue Methode AcceptWithAddendum benutzen und das Schlüsselwort übergeben
         }
     }
 }

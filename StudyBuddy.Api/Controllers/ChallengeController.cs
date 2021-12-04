@@ -78,6 +78,13 @@ namespace StudyBuddy.Api
             return Json(backend.ChallengeService.AcceptFromQrCode(parameter));
         }
 
+        [Route("/Challenge/{challenge_id}/AcceptWithAddendum/")]
+        [HttpPost]
+        public IActionResult AcceptWithAddendum(int challenge_id, [FromBody] string prove_addendum)
+        {
+            return Json(backend.ChallengeService.AcceptWithAddendum(challenge_id, prove_addendum));
+        }
+
         [Route("/Challenge/{challenge_id}/Accept/")]
         [HttpPost]
         public IActionResult Accept(int challenge_id)

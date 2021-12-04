@@ -6,17 +6,20 @@ namespace StudyBuddy.BusinessLogic
 {
     public interface IChallengeService
     {
-        void Accept(int challenge_id);
-        Challenge AcceptFromQrCode(string payload);
-        IEnumerable<Challenge> All(ChallengeFilter filter);
-        void CreateSeries(CreateSeriesParameter param);
-        void Delete(int id);
         Challenge GetById(int id);
-        Bitmap GetQrCode(int challenge_id);
+        IEnumerable<Challenge> All(ChallengeFilter filter);
         Challenge Insert(Challenge obj);
+        Challenge Update(Challenge obj);
+        void Delete(int id);
+        
+        Bitmap GetQrCode(int challenge_id);
+        void CreateSeries(CreateSeriesParameter param);
         IEnumerable<Challenge> GetChallengesOfBadge(int badge_id);
+
         void RemoveAcceptance(int challenge_id, int user_id);
         void AddAcceptance(int challenge_id, int user_id);
-        Challenge Update(Challenge obj);
+        void Accept(int challenge_id);
+        Challenge AcceptFromQrCode(string payload);
+        bool AcceptWithAddendum(int challenge_id, string prove_addendum);
     }
 }

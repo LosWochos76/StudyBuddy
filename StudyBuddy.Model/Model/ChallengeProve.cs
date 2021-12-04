@@ -4,7 +4,8 @@ namespace StudyBuddy.Model
     {
         ByTrust = 1,
         ByQrCode = 2,
-        ByRandomTeamMember = 3,
-        ByLocationCloseToOwner = 4
+        ByFriend = 3,
+        ByLocation = 4,
+        ByKeyword = 5
     }
 }
