@@ -50,12 +50,42 @@
             <select class="form-select" formControlName="prove">
                 <option value="1">Durch Vertrauen</option>
                 <option value="2">Durch einen QR-Code</option>
-                <option value="3">Bestätigung eines Team-Mitglieds</option>
-                <option value="4">Standort nahe beim Besitzer</option>
+                <option value="3">Durch Bestätigung eines Freundes</option>
+                <option value="4">Durch Standort</option>
+                <option value="5">Durch ein Schlüsselwort</option>
             </select>
         </div>
     </div>
     <br>
+    <div class="row g-2" *ngIf="form.controls.prove.value == 4">
+        <div class="col-md">
+            <label class="form-label" for="latitude">Breitengrad:</label>
+            <input type="text" class="form-control" id="latitude" formControlName="latitude" [ngClass]="{
+                'is-invalid': form.controls.latitude.invalid && form.controls.latitude.dirty,
+                'is-valid': form.controls.latitude.valid && form.controls.latitude.dirty}">
+        </div>
+        <div class="col-md">
+            <label class="form-label" for="longitude">Längengrad:</label>
+            <input type="text" class="form-control" id="longitude" formControlName="longitude" [ngClass]="{
+                'is-invalid': form.controls.longitude.invalid && form.controls.validity_end.dirty,
+                'is-valid': form.controls.longitude.valid && form.controls.longitude.dirty}">
+        </div>
+        <div class="col-md">
+            <label class="form-label" for="radius">Radius (m):</label>
+            <input type="text" class="form-control" id="radius" formControlName="radius" [ngClass]="{
+                'is-invalid': form.controls.radius.invalid && form.controls.radius.dirty,
+                'is-valid': form.controls.radius.valid && form.controls.radius.dirty}">
+        </div>
+    </div>
+    <div class="row g-2" *ngIf="form.controls.prove.value == 5">
+        <div class="col-md">
+            <label class="form-label" for="keyword">Schlüsselwort:</label>
+            <input type="text" class="form-control" id="keyword" formControlName="keyword" [ngClass]="{
+                'is-invalid': form.controls.keyword.invalid && form.controls.keyword.dirty,
+                'is-valid': form.controls.keyword.valid && form.controls.keyword.dirty}">
+        </div>
+    </div>
+    <br *ngIf="form.controls.prove.value == 4 || form.controls.prove.value == 5">
     <div class="mb-3">
         <label class="form-label" for="name">Tags:</label>
         <input type="text" class="form-control" id="tags" formControlName="tags" [ngClass]="{

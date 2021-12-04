@@ -13,6 +13,7 @@ namespace StudyBuddy.Model
         public int OwnerID { get; set; }
         public DateTime Created { get; set; } = DateTime.Now.Date;
         public ChallengeProve Prove { get; set; } = ChallengeProve.ByTrust;
+        public string ProveAddendum { get; set; }
         public int? SeriesParentID { get; set; }
         public string Tags { get; set; }
 
@@ -28,6 +29,7 @@ namespace StudyBuddy.Model
             clone.OwnerID = OwnerID;
             clone.Created = DateTime.Now.Date;
             clone.Prove = Prove;
+            clone.ProveAddendum = ProveAddendum;
             clone.SeriesParentID = SeriesParentID;
             return clone;
         }

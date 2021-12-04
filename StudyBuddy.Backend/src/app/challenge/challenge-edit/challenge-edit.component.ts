@@ -36,6 +36,10 @@ export class ChallengeEditComponent implements OnInit {
       validity_start: new FormControl("", [Validators.required]),
       validity_end: new FormControl("", [Validators.required]),
       category: new FormControl("", [Validators.required]),
+      latitude: new FormControl("", [Validators.pattern('\\-?\\d*\\.?\\d*')]),
+      longitude: new FormControl("", [Validators.pattern('\\-?\\d*\\.?\\d*')]),
+      radius: new FormControl("", [Validators.pattern('\\-?\\d*\\.?\\d*')]),
+      keyword: new FormControl(""),
       prove: new FormControl("", [Validators.required]),
       tags: new FormControl("")
     });
@@ -57,6 +61,22 @@ export class ChallengeEditComponent implements OnInit {
 
     if (this.user.isAdmin())
       this.all_users = await this.user_service.getAll();
+    
+    let keyword = "";
+    let latitude = 51.682730;
+    let longitude = 7.840930;
+    let radius = 100;
+
+    if (this.obj.prove == 4) {
+      var parts = this.obj.prove_addendum.split(";");
+      latitude = +parts[0];
+      longitude = +parts[1];
+      radius = +parts[2];
+    }
+
+    if (this.obj.prove == 5) {
+      keyword = this.obj.prove_addendum;
+    }
 
     if (this.user.isAdmin()) {
       this.form.setValue({
@@ -68,7 +88,11 @@ export class ChallengeEditComponent implements OnInit {
         category: this.obj.category,
         prove: this.obj.prove,
         owner: this.obj.owner,
-        tags: this.obj.tags
+        tags: this.obj.tags,
+        latitude: latitude,
+        longitude: longitude,
+        radius: radius,
+        keyword: keyword
       });
     } else {
       this.form.setValue({
@@ -79,7 +103,11 @@ export class ChallengeEditComponent implements OnInit {
         validity_end: this.obj.validity_end,
         category: this.obj.category,
         prove: this.obj.prove,
-        tags: this.obj.tags
+        tags: this.obj.tags,
+        latitude: latitude,
+        longitude: longitude,
+        radius: radius,
+        keyword: keyword
       });
     }
   }

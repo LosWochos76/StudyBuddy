@@ -23,7 +23,7 @@ namespace StudyBuddy.Persistence
             qh.AddParameter(":id", id);
 
             return qh.ExecuteQueryToSingleObject("select id,name,description,points,validity_start,validity_end,category," +
-                "owner_id,created,prove,series_parent_id,tags_of_challenge(id) from challenges where id=:id");
+                "owner_id,created,prove,series_parent_id,tags_of_challenge(id),prove_addendum from challenges where id=:id");
         }
 
         public IEnumerable<Challenge> All(ChallengeFilter filter)
@@ -33,7 +33,7 @@ namespace StudyBuddy.Persistence
             qh.AddParameter(":from", filter.Start);
             
             var sql = "select id,name,description,points,validity_start,validity_end,category," +
-                "owner_id,created,prove,series_parent_id,tags_of_challenge(id) from challenges where true ";
+                "owner_id,created,prove,series_parent_id,tags_of_challenge(id),prove_addendum from challenges where true ";
 
             if (!string.IsNullOrEmpty(filter.SearchText))
             {
@@ -76,12 +76,13 @@ namespace StudyBuddy.Persistence
             qh.AddParameter(":created", obj.Created);
             qh.AddParameter(":prove", (int) obj.Prove);
             qh.AddParameter(":series_parent_id", obj.SeriesParentID.HasValue ? obj.SeriesParentID.Value : DBNull.Value);
+            qh.AddParameter(":prove_addendum", obj.ProveAddendum);
 
             obj.ID = qh.ExecuteScalar(
                 "insert into challenges (name,description,points," +
-                "validity_start,validity_end,category,owner_id,created,prove,series_parent_id) values " +
+                "validity_start,validity_end,category,owner_id,created,prove,series_parent_id,prove_addendum) values " +
                 "(:name,:description,:points,:validity_start,:validity_end,:category," +
-                ":owner_id,:created,:prove,:series_parent_id) RETURNING id");
+                ":owner_id,:created,:prove,:series_parent_id,:prove_addendum) RETURNING id");
         }
 
         public void Update(Challenge obj)
@@ -98,10 +99,12 @@ namespace StudyBuddy.Persistence
             qh.AddParameter(":created", obj.Created);
             qh.AddParameter(":prove", (int) obj.Prove);
             qh.AddParameter(":series_parent_id", obj.SeriesParentID.HasValue ? obj.SeriesParentID.Value : DBNull.Value);
+            qh.AddParameter(":prove_addendum", obj.ProveAddendum);
 
             qh.ExecuteNonQuery("update challenges set name=:name,description=:description,points=:points," +
                 "validity_start=:validity_start,validity_end=:validity_end,category=:category," +
-                "owner_id=:owner_id,created=:created,prove=:prove,series_parent_id=:series_parent_id where id=:id");
+                "owner_id=:owner_id,created=:created,prove=:prove,series_parent_id=:series_parent_id," +
+                "prove_addendum=:prove_addendum where id=:id");
         }
 
         public void Save(Challenge obj)
@@ -118,14 +121,13 @@ namespace StudyBuddy.Persistence
             qh.Delete("challenges", "id", id);
         }
 
-        // ToDo: Nochmal prüfen, ob das auch so passt?
         public IEnumerable<Challenge> GetChallengesOfBadge(int badge_id)
         {
             var qh = new QueryHelper<Challenge>(connection_string, FromReader);
             qh.AddParameter(":badge_id", badge_id);
             return qh.ExecuteQueryToObjectList(
                 "select distinct id,name,description,points,validity_start,validity_end," +
-                "category,owner_id,created,prove,series_parent_id from challenges " +
+                "category,owner_id,created,prove,series_parent_id,prove_addendum from challenges " +
                 "inner join tags_challenges tc on id = tc.challenge_id " +
                 "inner join tags_badges tb on tc.tag_id = tb.tag_id " +
                 "where tb.badge_id=:badge_id order by created desc,name");
@@ -153,9 +155,10 @@ namespace StudyBuddy.Persistence
             var qh = new QueryHelper<Challenge>(connection_string, FromReader);
             qh.AddParameter(":user_id", user_id);
             var sql = "select id,name,description,points,validity_start,validity_end," +
-                      "category,owner_id,ch.created,prove,series_parent_id,tags from challenge_acceptance " +
+                      "category,owner_id,ch.created,prove,series_parent_id,tags,prove_addendum from challenge_acceptance " +
                       "inner join challenges as ch on challenge_id=id where user_id=:user_id " +
                       "order by challenge_acceptance.created desc";
+
             return qh.ExecuteQueryToObjectList(sql);
         }
 
@@ -179,10 +182,9 @@ namespace StudyBuddy.Persistence
                     "created date not null, " +
                     "prove smallint not null, " +
                     "series_parent_id int, " +
-                    "valid_for_study_program_id int, " +
-                    "valid_for_for_enrolled_since_term_id int)");
+                    "prove_addendum varchar(100)");
 
-                rh.SetRevision(2);
+                rh.SetRevision(4);
             }
 
             var revision = rh.GetRevision();
@@ -204,6 +206,15 @@ namespace StudyBuddy.Persistence
                     "drop column if exists valid_for_for_enrolled_since_term_id");
 
                 rh.SetRevision(3);
+            }
+
+            if (revision == 3)
+            {
+                qh.ExecuteNonQuery(
+                    "alter table challenges " +
+                    "add column prove_addendum varchar(100)");
+
+                rh.SetRevision(4);
             }
         }
 
@@ -236,6 +247,7 @@ namespace StudyBuddy.Persistence
             obj.Prove = (ChallengeProve) reader.GetInt32(9);
             obj.SeriesParentID = reader.IsDBNull(10) ? null : reader.GetInt32(10);
             obj.Tags = reader.IsDBNull(11) ? string.Empty : reader.GetString(11);
+            obj.ProveAddendum = reader.IsDBNull(12) ? string.Empty : reader.GetString(12);
             return obj;
         }
 
