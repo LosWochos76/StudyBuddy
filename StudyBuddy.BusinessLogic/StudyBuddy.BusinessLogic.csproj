@@ -20,6 +20,8 @@
         <None Remove="Interfaces\" />
         <None Remove="Microsoft.CodeAnalysis.CSharp.Scripting" />
         <None Remove="Microsoft.CSharp" />
+        <None Remove="GeoCoordinate.NetCore" />
+        <None Remove="Geolocation.NetStandard" />
     </ItemGroup>
     <ItemGroup>
         <Folder Include="Parameters\" />

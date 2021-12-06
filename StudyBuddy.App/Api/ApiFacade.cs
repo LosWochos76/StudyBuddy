@@ -3,7 +3,6 @@ using System.Net.Http;
 using StudyBuddy.App.Interfaces;
 using StudyBuddy.App.Misc;
 using StudyBuddy.App.ViewModels;
-using StudyBuddy.Model;
 using TinyIoC;
 
 namespace StudyBuddy.App.Api
@@ -54,7 +53,7 @@ namespace StudyBuddy.App.Api
             if (api_version > app_version)
             {
                 var dialog = TinyIoCContainer.Current.Resolve<IDialogService>();
-                Logging.LogError("App too old!");
+                await Logging.LogError("App too old!");
                 await dialog.ShowError("App zu alt!", "Diese Version der App ist zu alt! Bitte updaten!", "Ok", null);
                 throw new Exception("App is too old! Please update!");
             }

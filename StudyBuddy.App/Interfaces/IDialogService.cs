@@ -15,5 +15,7 @@ namespace StudyBuddy.App.Misc
 
         Task ShowMessageBox(string message, string title);
         void OpenBrowser(string url);
+
+        Task<string> DisplayPrompt(string message, string title);
     }
 }
