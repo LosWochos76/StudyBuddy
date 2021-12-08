@@ -195,12 +195,14 @@ namespace StudyBuddy.BusinessLogic
 
             if (challenge.Prove == ChallengeProve.ByLocation)
             {
-                // Hier nun prüfen, ob die übergebenen Koordinaten im erlaubten Radius liegen.
+                var expected_coordinates = GeoCoordinate.FromString(challenge.ProveAddendum);
+                var delivered_coordinates = GeoCoordinate.FromString(prove_addendum);
+                return expected_coordinates.IsInRadius(delivered_coordinates);
             }
 
             if (challenge.Prove == ChallengeProve.ByKeyword)
             {
-                if (prove_addendum.Equals(challenge.ProveAddendum))
+                if (prove_addendum.ToLower().Equals(challenge.ProveAddendum.ToLower()))
                 {
                     backend.Repository.Challenges.AddAcceptance(challenge_id, backend.CurrentUser.ID);
                     OnChallengeAccepted(challenge, backend.CurrentUser);

@@ -18,7 +18,7 @@ namespace StudyBuddy.App.Views
         {
             InitializeComponent();
 
-            BindingContext = TinyIoCContainer.Current.Resolve<UserViewModel>();
+            BindingContext = TinyIoCContainer.Current.Resolve<FlyoutHeaderViewModel>();
         }
 
         uint duration = 100;

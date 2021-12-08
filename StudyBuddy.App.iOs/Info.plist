@@ -52,5 +52,7 @@
 	</array>
 	<key>FirebaseAppDelegateProxyEnabled</key>
 	<string>No</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Um manche Herausforderungen abzuschließen, benötigt der StudyBuddy den aktuellen Standort.</string>
 </dict>
 </plist>

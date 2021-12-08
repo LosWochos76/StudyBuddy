@@ -9,6 +9,7 @@ using StudyBuddy.App.Misc;
 using StudyBuddy.App.Views;
 using StudyBuddy.Model;
 using TinyIoC;
+using Xamarin.Essentials;
 using Xamarin.Forms;
 
 namespace StudyBuddy.App.ViewModels
@@ -52,7 +53,6 @@ namespace StudyBuddy.App.ViewModels
         private async Task AcceptByTrust()
         {
             var answer = false;
-
             await dialog.ShowMessage(
                 "Willst du die Herausforderung wirklich abschließen?",
                 "Herausforderung abschließen?",
@@ -117,16 +117,63 @@ namespace StudyBuddy.App.ViewModels
 
         private async Task AcceptByLocation()
         {
-            await dialog.ShowMessage("Beweisverfahren noch nicht implementiert.", "Ungültiges Beweisverfahren!");
+            var answer = false;
+            await dialog.ShowMessage(
+                "Willst du die Herausforderung wirklich abschließen, indem deina aktuelle Geo-Position gecheckt wird?",
+                "Herausforderung abschließen?",
+                "Ja", "Nein", a => { answer = a; });
 
-            // Hier die aktuellen Koordinaten auslesen, die neue Methode AcceptWithAddendum benutzen Koordinaten übergeben
+            if (!answer)
+                return;
+
+            Location location = null;
+            try
+            {
+                location = await Geolocation.GetLocationAsync();
+            }
+            catch (Exception e)
+            {
+                await api.Logging.LogError(e.ToString());
+            }
+
+            if (location == null)
+            {
+                await dialog.ShowError("Ein Fehler ist aufgetreten! Deine Geo-Koordinaten konnten nicht bestimmt werden!", "Fehler!", "Ok", null);
+                return;
+            }
+
+            var prove_addendum = location.Latitude + ";" + location.Longitude;
+            bool result = await api.Challenges.AcceptWithAddendum(challenge, prove_addendum);
+
+            if (!result)
+            {
+                await dialog.ShowError("Ein Fehler ist aufgetreten! Wahrscheinlich hast du nicht die richtige Position!", "Fehler!", "Ok", null);
+                return;
+            }
+            else
+            {
+                await navigation.Pop();
+            }
         }
 
         private async Task AcceptByKeyword()
         {
-            await dialog.ShowMessage("Beweisverfahren noch nicht implementiert.", "Ungültiges Beweisverfahren!");
+            var keyword = await dialog.DisplayPrompt("Bitte Schlüsselwort eingeben!", "Schlüsselwort");
 
-            // Hier das Schlüsselwort vom Nutzer abfragen, die neue Methode AcceptWithAddendum benutzen und das Schlüsselwort übergeben
+            if (string.IsNullOrEmpty(keyword))
+                return;
+
+            bool result = await api.Challenges.AcceptWithAddendum(challenge, keyword);
+
+            if (!result)
+            {
+                await dialog.ShowError("Ein Fehler ist aufgetreten! Wahrscheinlich hast du nicht das richtige Schlüsselwort eingegeben!", "Fehler!", "Ok", null);
+                return;
+            }
+            else
+            {
+                await navigation.Pop();
+            }
         }
     }
 }

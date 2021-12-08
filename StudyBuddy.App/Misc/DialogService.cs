@@ -34,9 +34,7 @@ namespace StudyBuddy.App.Misc
             if (afterHideCallback != null) afterHideCallback();
         }
 
-        public async Task ShowMessage(
-            string message,
-            string title)
+        public async Task ShowMessage(string message, string title)
         {
             await Application.Current.MainPage.DisplayAlert(
                 title,
@@ -75,9 +73,7 @@ namespace StudyBuddy.App.Misc
             return result;
         }
 
-        public async Task ShowMessageBox(
-            string message,
-            string title)
+        public async Task ShowMessageBox(string message, string title)
         {
             await Application.Current.MainPage.DisplayAlert(
                 title,
@@ -88,6 +84,11 @@ namespace StudyBuddy.App.Misc
         public void OpenBrowser(string url)
         {
             Launcher.OpenAsync(new Uri(url));
+        }
+
+        public async Task<string> DisplayPrompt(string message, string title)
+        {
+            return await Application.Current.MainPage.DisplayPromptAsync(title, message);
         }
     }
 }
