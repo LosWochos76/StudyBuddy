@@ -1,16 +1,16 @@
 ﻿<?xml version="1.0" encoding="UTF-8" ?>
-<ContentPage
-    xmlns="http://xamarin.com/schemas/2014/forms"
-    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    x:Class="StudyBuddy.App.Views.FriendPage"
-    xmlns:viewmodels="clr-namespace:StudyBuddy.App.ViewModels"
-    x:DataType="viewmodels:FriendViewModel"
-    Title="{Binding User.FullName}"
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="StudyBuddy.App.Views.FriendPage"
+             xmlns:viewmodels="clr-namespace:StudyBuddy.App.ViewModels"
+             xmlns:fontAwesome="clr-namespace:StudyBuddy.App"
+             x:DataType="viewmodels:FriendViewModel"
+             Title="{Binding User.FullName}"
              Style="{StaticResource BaseContentPage}">
     <ContentPage.Resources>
         <ResourceDictionary>
             <Style x:Key="FrameStyle" TargetType="Frame">
-                <Setter Property="CornerRadius" Value="15"/>
+                <Setter Property="CornerRadius" Value="10"/>
             </Style>
             
             <Style x:Key="TotalPointsLabelStyle" TargetType="Label">
@@ -40,35 +40,81 @@
         </ResourceDictionary>
     </ContentPage.Resources>
     <ContentPage.Content>
-        <StackLayout Padding="10">
-            <StackLayout Orientation="Horizontal">
-                <Label Text="Statistiken für"></Label>
-                <Label Text="{Binding User.FullName}"></Label>
+        <Grid BackgroundColor="{AppThemeBinding Dark={StaticResource WindowBackgroundColorDark}, Light={StaticResource WindowBackgroundColor}}">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <StackLayout Padding="60">
+                <Image x:Name="image1"
+                       WidthRequest="80"
+                       HeightRequest="80"
+                       HorizontalOptions="Center"
+                       VerticalOptions="Center">
+                    <Image.Source>
+                        <FontImageSource FontFamily="{StaticResource FontAwesomeSolid}"
+                                             Glyph="{x:Static fontAwesome:FontAwesomeIcons.User}"
+                                             Color="{AppThemeBinding Dark={StaticResource TextColorDark}, Light={StaticResource TextColor}}" 
+                                             Size="Large"/>
+                    </Image.Source>
+                    <Image.Clip>
+                        <EllipseGeometry Center="40,40" RadiusX="40" RadiusY="40" />
+                    </Image.Clip>
+                </Image>
             </StackLayout>
-            <StackLayout Margin="15" Orientation="Vertical">
-                <Frame Style="{StaticResource FrameStyle}" >
-                    <StackLayout Orientation="Vertical">
-                        <Label Style="{StaticResource TotalPointsLabelStyle}" HorizontalOptions="CenterAndExpand" HorizontalTextAlignment="Center" Text="{Binding UserStatistics.TotalPoints}"></Label>
-                        <Label HorizontalOptions="CenterAndExpand" HorizontalTextAlignment="Center" Text="Punkte Gesamt"></Label>
-                        <StackLayout Margin="0,15,15,0" HorizontalOptions="FillAndExpand" Orientation="Horizontal">
-                            <StackLayout HorizontalOptions="CenterAndExpand" Orientation="Vertical">
-                                <Label Style="{StaticResource NetworkPointsLabelStyle}" HorizontalTextAlignment="Center" Text="{Binding UserStatistics.TotalNetworkChallengesPoints}" ></Label>
-                                <Label HorizontalTextAlignment="Center"  Text="Networking"></Label>
-                            </StackLayout>
-                            <StackLayout HorizontalOptions="CenterAndExpand" Orientation="Vertical">
-                                <Label Style="{StaticResource OrganizingPointsLabelStyle}" HorizontalTextAlignment="Center" Text="{Binding UserStatistics.TotalOrganizingChallengesPoints}"></Label>
-                                <Label HorizontalTextAlignment="Center"  Text="Organizing"></Label>
-                            </StackLayout>
-                            <StackLayout HorizontalOptions="CenterAndExpand" Orientation="Vertical">
-                                <Label Style="{StaticResource LearningPointsLabelStyle}" HorizontalTextAlignment="Center" Text="{Binding UserStatistics.TotalLearningChallengesPoints}"></Label>
-                                <Label HorizontalTextAlignment="Center"  Text="Learning"></Label>
-                            </StackLayout>
+            <StackLayout Grid.Row="0" BackgroundColor="{AppThemeBinding Dark={StaticResource WindowBackgroundColorDark}, Light={StaticResource WindowBackgroundColor}}" VerticalOptions="End" >
+                <Grid Padding="25,10,25,0" RowSpacing="0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <!--Profile information-->
+                    <Label Style="{StaticResource BaseLabel}" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" Text="{Binding User.Name}" FontAttributes="Bold" FontSize="30" IsEnabled="False" />
+                    <Label Style="{StaticResource BaseLabel}" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3" Padding="0,10,0,0" FontSize="20">
+                        <Label.FormattedText>
+                            <FormattedString>
+                                <Span Text="Nickname:  " FontAttributes="Bold" />
+                                <Span Text="{Binding User.Nickname}"  />
+                            </FormattedString>
+                        </Label.FormattedText>
+                    </Label>
+                    <StackLayout Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="3" Padding="0,0,0,0">
+                        <StackLayout Orientation="Horizontal">
+                            <Label Text="Statistiken für"></Label>
+                            <Label Text="{Binding User.FullName}"></Label>
+                        </StackLayout>
+                        <StackLayout Margin="0" Orientation="Vertical">
+                            <Frame Style="{StaticResource FrameStyle}" >
+                                <StackLayout Orientation="Vertical">
+                                    <Label Style="{StaticResource TotalPointsLabelStyle}" HorizontalOptions="CenterAndExpand" HorizontalTextAlignment="Center" Text="{Binding UserStatistics.TotalPoints}"></Label>
+                                    <Label HorizontalOptions="CenterAndExpand" HorizontalTextAlignment="Center" Text="Punkte Gesamt"></Label>
+                                    <StackLayout Margin="0,15,15,0" HorizontalOptions="FillAndExpand" Orientation="Horizontal">
+                                        <StackLayout HorizontalOptions="CenterAndExpand" Orientation="Vertical">
+                                            <Label Style="{StaticResource NetworkPointsLabelStyle}" HorizontalTextAlignment="Center" Text="{Binding UserStatistics.TotalNetworkChallengesPoints}" ></Label>
+                                            <Label HorizontalTextAlignment="Center"  Text="Networking"></Label>
+                                        </StackLayout>
+                                        <StackLayout HorizontalOptions="CenterAndExpand" Orientation="Vertical">
+                                            <Label Style="{StaticResource OrganizingPointsLabelStyle}" HorizontalTextAlignment="Center" Text="{Binding UserStatistics.TotalOrganizingChallengesPoints}"></Label>
+                                            <Label HorizontalTextAlignment="Center"  Text="Organizing"></Label>
+                                        </StackLayout>
+                                        <StackLayout HorizontalOptions="CenterAndExpand" Orientation="Vertical">
+                                            <Label Style="{StaticResource LearningPointsLabelStyle}" HorizontalTextAlignment="Center" Text="{Binding UserStatistics.TotalLearningChallengesPoints}"></Label>
+                                            <Label HorizontalTextAlignment="Center"  Text="Learning"></Label>
+                                        </StackLayout>
+                                    </StackLayout>
+                                </StackLayout>
+                            </Frame>
                         </StackLayout>
                     </StackLayout>
-                </Frame>
+                    <Button Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="3" Style="{StaticResource BaseButton}"  Text="Freund entfernen" Command="{Binding RemoveFriendCommand}" Margin="0,30,0,30" FontAttributes="Bold" FontSize="17" HeightRequest="45" />
+                </Grid>
             </StackLayout>
-            
-            <Button Style="{StaticResource BaseButton}"  Text="Freund entfernen" Command="{Binding RemoveFriendCommand}" /> 
-        </StackLayout>
+        </Grid>
     </ContentPage.Content>
 </ContentPage>
