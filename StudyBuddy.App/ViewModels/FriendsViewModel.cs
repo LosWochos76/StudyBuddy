@@ -72,7 +72,8 @@ namespace StudyBuddy.App.ViewModels
 
         public async void Details(UserViewModel obj)
         {
-            await navigation.Push(new FriendPage(obj));
+            var userStatistics = await api.Statistics.GetUserStatisticsForUser(obj.ID);
+            await navigation.Push(new FriendPage(obj,userStatistics));
         }
 
         public async void AddFriend()

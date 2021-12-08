@@ -7,8 +7,67 @@
     x:DataType="viewmodels:FriendViewModel"
     Title="{Binding User.FullName}"
              Style="{StaticResource BaseContentPage}">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <Style x:Key="FrameStyle" TargetType="Frame">
+                <Setter Property="CornerRadius" Value="15"/>
+            </Style>
+            
+            <Style x:Key="TotalPointsLabelStyle" TargetType="Label">
+                <Setter Property="FontSize" Value="30"/>
+                <Setter Property="FontAttributes" Value="Bold" />
+                <Setter Property="TextColor" Value="Black" />
+            </Style>
+            
+            <Style x:Key="NetworkPointsLabelStyle" TargetType="Label">
+                <Setter Property="FontSize" Value="20"/>
+                <Setter Property="FontAttributes" Value="Bold" />
+                <Setter Property="TextColor" Value="#cc1444" />
+            </Style>
+            
+            <Style x:Key="OrganizingPointsLabelStyle" TargetType="Label">
+                <Setter Property="FontSize" Value="20"/>
+                <Setter Property="FontAttributes" Value="Bold" />
+                <Setter Property="TextColor" Value="#a0f502" />
+            </Style>
+
+            <Style x:Key="LearningPointsLabelStyle" TargetType="Label">
+                <Setter Property="FontSize" Value="20"/>
+                <Setter Property="FontAttributes" Value="Bold" />
+                <Setter Property="TextColor" Value="#07c5bf" />
+            </Style>
+            
+        </ResourceDictionary>
+    </ContentPage.Resources>
     <ContentPage.Content>
         <StackLayout Padding="10">
+            <StackLayout Orientation="Horizontal">
+                <Label Text="Statistiken für"></Label>
+                <Label Text="{Binding User.FullName}"></Label>
+            </StackLayout>
+            <StackLayout Margin="15" Orientation="Vertical">
+                <Frame Style="{StaticResource FrameStyle}" >
+                    <StackLayout Orientation="Vertical">
+                        <Label Style="{StaticResource TotalPointsLabelStyle}" HorizontalOptions="CenterAndExpand" HorizontalTextAlignment="Center" Text="{Binding UserStatistics.TotalPoints}"></Label>
+                        <Label HorizontalOptions="CenterAndExpand" HorizontalTextAlignment="Center" Text="Punkte Gesamt"></Label>
+                        <StackLayout Margin="0,15,15,0" HorizontalOptions="FillAndExpand" Orientation="Horizontal">
+                            <StackLayout HorizontalOptions="CenterAndExpand" Orientation="Vertical">
+                                <Label Style="{StaticResource NetworkPointsLabelStyle}" HorizontalTextAlignment="Center" Text="{Binding UserStatistics.TotalNetworkChallengesPoints}" ></Label>
+                                <Label HorizontalTextAlignment="Center"  Text="Networking"></Label>
+                            </StackLayout>
+                            <StackLayout HorizontalOptions="CenterAndExpand" Orientation="Vertical">
+                                <Label Style="{StaticResource OrganizingPointsLabelStyle}" HorizontalTextAlignment="Center" Text="{Binding UserStatistics.TotalOrganizingChallengesPoints}"></Label>
+                                <Label HorizontalTextAlignment="Center"  Text="Organizing"></Label>
+                            </StackLayout>
+                            <StackLayout HorizontalOptions="CenterAndExpand" Orientation="Vertical">
+                                <Label Style="{StaticResource LearningPointsLabelStyle}" HorizontalTextAlignment="Center" Text="{Binding UserStatistics.TotalLearningChallengesPoints}"></Label>
+                                <Label HorizontalTextAlignment="Center"  Text="Learning"></Label>
+                            </StackLayout>
+                        </StackLayout>
+                    </StackLayout>
+                </Frame>
+            </StackLayout>
+            
             <Button Style="{StaticResource BaseButton}"  Text="Freund entfernen" Command="{Binding RemoveFriendCommand}" /> 
         </StackLayout>
     </ContentPage.Content>

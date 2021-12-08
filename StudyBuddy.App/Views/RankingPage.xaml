@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="StudyBuddy.App.Views.RankingPage"
+             xmlns:viewmodels="clr-namespace:StudyBuddy.App.ViewModels"
+             x:DataType="viewmodels:RankingViewModel"
+             Title="Ranking (Freunde)">
+    <ContentPage.Content>
+        <StackLayout>
+            <CollectionView ItemsSource="{Binding Ranks}">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <ContentView>
+                            <StackLayout Orientation="Horizontal">
+                                <Label Text="{Binding Rank}"></Label>
+                                <Label Text="{Binding Nickname}"></Label>
+                                <Label Text="{Binding Total_points}"></Label>
+                            </StackLayout>
+                        </ContentView>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

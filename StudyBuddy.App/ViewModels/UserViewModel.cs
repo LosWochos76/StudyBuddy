@@ -20,6 +20,7 @@ namespace StudyBuddy.App.ViewModels
         public bool IsStudent => Role == Role.Student;
         public bool IsInstructor => Role == Role.Instructor;
 
+
         private RequestViewModel request;
         public RequestViewModel FriendshipRequest
         {

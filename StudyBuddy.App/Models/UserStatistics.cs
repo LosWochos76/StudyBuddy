@@ -6,6 +6,7 @@ namespace StudyBuddy.App.Models
 {
     public class UserStatistics
     {
+        public int UserId { get; set; }
         public int TotalNetworkChallengesCount { get; set; }
         public int TotalOrganizingChallengesCount { get; set; }
         public int TotalLearningChallengesCount { get; set; }
@@ -21,5 +22,7 @@ namespace StudyBuddy.App.Models
         {
             get { return TotalNetworkChallengesPoints + TotalOrganizingChallengesPoints + TotalLearningChallengesPoints; }
         }
+
+        public IEnumerable<RankEntry> FriendsRank { get; set; }
     }
 }
