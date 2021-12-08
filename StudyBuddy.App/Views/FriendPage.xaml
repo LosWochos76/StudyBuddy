@@ -1,66 +1,74 @@
 ﻿<?xml version="1.0" encoding="UTF-8" ?>
-<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="StudyBuddy.App.Views.FriendPage"
-             xmlns:viewmodels="clr-namespace:StudyBuddy.App.ViewModels"
-             xmlns:fontAwesome="clr-namespace:StudyBuddy.App"
-             x:DataType="viewmodels:FriendViewModel"
-             Title="{Binding User.Name}"
+<ContentPage
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Class="StudyBuddy.App.Views.FriendPage"
+    xmlns:viewmodels="clr-namespace:StudyBuddy.App.ViewModels"
+    x:DataType="viewmodels:FriendViewModel"
+    Title="{Binding User.FullName}"
              Style="{StaticResource BaseContentPage}">
-    <Grid BackgroundColor="{AppThemeBinding Dark={StaticResource WindowBackgroundColorDark}, Light={StaticResource WindowBackgroundColor}}">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="*" />
-        </Grid.RowDefinitions>
-        <!--Profile picture-->
-        <StackLayout Padding="60">
-            <Image x:Name="image1"
-                   WidthRequest="200"
-                   HeightRequest="200"
-                           HorizontalOptions="Center"
-                           VerticalOptions="Center">
-                <Image.Source>
-                    <FontImageSource FontFamily="{StaticResource FontAwesomeSolid}"
-                                             Glyph="{x:Static fontAwesome:FontAwesomeIcons.User}"
-                                             Color="{AppThemeBinding Dark={StaticResource TextColorDark}, Light={StaticResource TextColor}}" 
-                                             Size="Large"/>
-                </Image.Source>
-                <Image.Clip>
-                    <EllipseGeometry Center="100,100" RadiusX="100" RadiusY="100" />
-                </Image.Clip>
-            </Image>
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <Style x:Key="FrameStyle" TargetType="Frame">
+                <Setter Property="CornerRadius" Value="15"/>
+            </Style>
+            
+            <Style x:Key="TotalPointsLabelStyle" TargetType="Label">
+                <Setter Property="FontSize" Value="30"/>
+                <Setter Property="FontAttributes" Value="Bold" />
+                <Setter Property="TextColor" Value="Black" />
+            </Style>
+            
+            <Style x:Key="NetworkPointsLabelStyle" TargetType="Label">
+                <Setter Property="FontSize" Value="20"/>
+                <Setter Property="FontAttributes" Value="Bold" />
+                <Setter Property="TextColor" Value="#cc1444" />
+            </Style>
+            
+            <Style x:Key="OrganizingPointsLabelStyle" TargetType="Label">
+                <Setter Property="FontSize" Value="20"/>
+                <Setter Property="FontAttributes" Value="Bold" />
+                <Setter Property="TextColor" Value="#a0f502" />
+            </Style>
+
+            <Style x:Key="LearningPointsLabelStyle" TargetType="Label">
+                <Setter Property="FontSize" Value="20"/>
+                <Setter Property="FontAttributes" Value="Bold" />
+                <Setter Property="TextColor" Value="#07c5bf" />
+            </Style>
+            
+        </ResourceDictionary>
+    </ContentPage.Resources>
+    <ContentPage.Content>
+        <StackLayout Padding="10">
+            <StackLayout Orientation="Horizontal">
+                <Label Text="Statistiken für"></Label>
+                <Label Text="{Binding User.FullName}"></Label>
+            </StackLayout>
+            <StackLayout Margin="15" Orientation="Vertical">
+                <Frame Style="{StaticResource FrameStyle}" >
+                    <StackLayout Orientation="Vertical">
+                        <Label Style="{StaticResource TotalPointsLabelStyle}" HorizontalOptions="CenterAndExpand" HorizontalTextAlignment="Center" Text="{Binding UserStatistics.TotalPoints}"></Label>
+                        <Label HorizontalOptions="CenterAndExpand" HorizontalTextAlignment="Center" Text="Punkte Gesamt"></Label>
+                        <StackLayout Margin="0,15,15,0" HorizontalOptions="FillAndExpand" Orientation="Horizontal">
+                            <StackLayout HorizontalOptions="CenterAndExpand" Orientation="Vertical">
+                                <Label Style="{StaticResource NetworkPointsLabelStyle}" HorizontalTextAlignment="Center" Text="{Binding UserStatistics.TotalNetworkChallengesPoints}" ></Label>
+                                <Label HorizontalTextAlignment="Center"  Text="Networking"></Label>
+                            </StackLayout>
+                            <StackLayout HorizontalOptions="CenterAndExpand" Orientation="Vertical">
+                                <Label Style="{StaticResource OrganizingPointsLabelStyle}" HorizontalTextAlignment="Center" Text="{Binding UserStatistics.TotalOrganizingChallengesPoints}"></Label>
+                                <Label HorizontalTextAlignment="Center"  Text="Organizing"></Label>
+                            </StackLayout>
+                            <StackLayout HorizontalOptions="CenterAndExpand" Orientation="Vertical">
+                                <Label Style="{StaticResource LearningPointsLabelStyle}" HorizontalTextAlignment="Center" Text="{Binding UserStatistics.TotalLearningChallengesPoints}"></Label>
+                                <Label HorizontalTextAlignment="Center"  Text="Learning"></Label>
+                            </StackLayout>
+                        </StackLayout>
+                    </StackLayout>
+                </Frame>
+            </StackLayout>
+            
+            <Button Style="{StaticResource BaseButton}"  Text="Freund entfernen" Command="{Binding RemoveFriendCommand}" /> 
         </StackLayout>
-        <StackLayout Grid.Row="0" BackgroundColor="{AppThemeBinding Dark={StaticResource WindowBackgroundColorDark}, Light={StaticResource WindowBackgroundColor}}" VerticalOptions="End" >
-            <Grid Padding="25,10,25,0" RowSpacing="0">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="*"/>
-                </Grid.ColumnDefinitions>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                </Grid.RowDefinitions>
-                <!--Profile information-->
-                <Label Style="{StaticResource BaseLabel}" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" Text="{Binding User.Name}" FontAttributes="Bold" FontSize="30" IsEnabled="False" />
-                <Label Style="{StaticResource BaseLabel}" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3" Padding="0,10,0,0" FontSize="20">
-                    <Label.FormattedText>
-                        <FormattedString>
-                            <Span Text="Nickname:  " FontAttributes="Bold" />
-                            <Span Text="{Binding User.Nickname}"  />
-                        </FormattedString>
-                    </Label.FormattedText>
-                </Label>
-                <Label Style="{StaticResource BaseLabel}" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="3" Padding="0,10,0,0" FontSize="20">
-                    <Label.FormattedText>
-                        <FormattedString>
-                            <Span Text="Email:  " FontAttributes="Bold" />
-                            <Span Text="{Binding User.Email}"  />
-                        </FormattedString>
-                    </Label.FormattedText>
-                </Label>
-                <Button Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="3" Style="{StaticResource BaseButton}"  Text="Freund entfernen" Command="{Binding RemoveFriendCommand}" Margin="0,30,0,30" FontAttributes="Bold" FontSize="17" HeightRequest="45"/>
-            </Grid>
-        </StackLayout>
-    </Grid>
+    </ContentPage.Content>
 </ContentPage>

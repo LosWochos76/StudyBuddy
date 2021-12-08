@@ -94,8 +94,27 @@
                                 <Label HorizontalTextAlignment="Center"  Text="Learning"></Label>
                             </StackLayout>
                         </StackLayout>
+                        
                     </StackLayout>
+                    
                 </Frame>
+                <StackLayout HorizontalOptions="StartAndExpand" Orientation="Horizontal">
+                    <Frame Style="{StaticResource FrameStyle}" WidthRequest="200">
+                        <StackLayout HorizontalOptions="CenterAndExpand" Orientation="Vertical">
+                            <Label HorizontalTextAlignment="Center" Style="{StaticResource TotalPointsLabelStyle}" Text="{Binding UserStatistics.TotalAcceptedChallenges}"></Label>
+                            <Label HorizontalTextAlignment="Center" Text="Abgschlossene Herausforderungen"></Label>
+                        </StackLayout>
+                    </Frame>
+                    <Frame Style="{StaticResource FrameStyle}" WidthRequest="200">
+                        <StackLayout HorizontalOptions="CenterAndExpand" Orientation="Vertical">
+                            <StackLayout.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding RanksCommand}"/>
+                            </StackLayout.GestureRecognizers>
+                            <Label HorizontalTextAlignment="Center" Style="{StaticResource TotalPointsLabelStyle}" Text="#5"></Label>
+                            <Label HorizontalTextAlignment="Center" Text="Beste Platzierung"></Label>
+                        </StackLayout>
+                    </Frame>
+                </StackLayout>
             </StackLayout>
         </Grid>
     </ContentPage.Content>

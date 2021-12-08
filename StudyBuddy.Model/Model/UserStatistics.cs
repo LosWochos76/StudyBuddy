@@ -1,7 +1,10 @@
-﻿namespace StudyBuddy.Model.Model
+﻿using System.Collections.Generic;
+
+namespace StudyBuddy.Model.Model
 {
     public class UserStatistics
     {
+        public int UserId { get; set; }
         public int TotalNetworkChallengesCount { get; set; }
         public int TotalOrganizingChallengesCount { get; set; }
         public int TotalLearningChallengesCount { get; set; }
@@ -18,5 +21,7 @@
         {
             get { return TotalLearningChallengesPoints + TotalOrganizingChallengesPoints + TotalLearningChallengesPoints; }
         }
+
+        public IEnumerable<RankEntry> FriendsRank{ get; set; }
     }
 }

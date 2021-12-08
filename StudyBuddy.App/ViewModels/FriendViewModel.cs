@@ -1,7 +1,7 @@
-﻿using System;
-using System.Windows.Input;
+﻿using System.Windows.Input;
 using StudyBuddy.App.Api;
 using StudyBuddy.App.Misc;
+using StudyBuddy.App.Models;
 using TinyIoC;
 using Xamarin.Forms;
 
@@ -12,9 +12,12 @@ namespace StudyBuddy.App.ViewModels
         public UserViewModel User { get; set; }
         public ICommand RemoveFriendCommand { get; set; }
 
-        public FriendViewModel(UserViewModel obj)
+        public UserStatistics UserStatistics { get; set; }
+
+        public FriendViewModel(UserViewModel obj, UserStatistics userStatistics)
         {
             this.User = obj;
+            this.UserStatistics = userStatistics;
             RemoveFriendCommand = new Command(RemoveFriend);
         }
 

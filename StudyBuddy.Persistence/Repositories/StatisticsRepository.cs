@@ -1,5 +1,4 @@
 ﻿using StudyBuddy.Model.Model;
-using System;
 using System.Collections.Generic;
 using Npgsql;
 using StudyBuddy.Model;
@@ -26,7 +25,26 @@ namespace StudyBuddy.Persistence
             var challengeStatisticsDtoList = qh.ExecuteQueryToObjectList(sql);
             var userStatistic = TransformDto(challengeStatisticsDtoList);
 
+            userStatistic.UserId = user_id;
+            userStatistic.FriendsRank = GetRankingWithFriends(user_id);
+
             return userStatistic;
+        }
+
+        public IEnumerable<RankEntry> GetRankingWithFriends(int user_id)
+        {
+            var qh = new QueryHelper<RankEntry>(connection_string, RankReader);
+
+            qh.AddParameter(":user_id", user_id);
+
+            var sql = "select total_rank, nickname, total_points from(Select user_id, us.nickname, sum(points) as total_points, RANK() over " +
+                    "(order by sum(points) desc) as total_rank from challenge_acceptance inner join challenges as ch on challenge_id=id " +
+                    "inner join users as us on user_id=us.id where user_id in (select user_b from friends where user_a = :user_id) or user_id = :user_id " +
+                    "group by user_id, us.nickname)  sub";
+
+            var ranking = qh.ExecuteQueryToObjectList(sql);
+            
+            return ranking;
         }
 
         private UserStatistics TransformDto(IEnumerable<ChallengeStatisticsDto> csDtoList)
@@ -64,6 +82,15 @@ namespace StudyBuddy.Persistence
             challengeStatisticsDto.ChallengeCount = reader.GetInt32(2);
             
             return challengeStatisticsDto;
+        }
+
+        public RankEntry RankReader(NpgsqlDataReader reader)
+        {
+            var rankEntry = new RankEntry();
+            rankEntry.Rank = reader.GetInt32(0);
+            rankEntry.Nickname = reader.GetString(1);
+            rankEntry.Total_points = reader.GetInt32(2);
+            return rankEntry;
         }
 
         public class ChallengeStatisticsDto
