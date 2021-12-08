@@ -1,4 +1,5 @@
 ﻿using System.Collections.ObjectModel;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using StudyBuddy.App.ViewModels;
 
@@ -6,8 +7,8 @@ namespace StudyBuddy.App.Api
 {
     public interface IUserService
     {
-        Task GetFriends(ObservableCollection<UserViewModel> list, string search_text, bool reload = false);
-        Task GetNotFriends(ObservableCollection<UserViewModel> list, string search_text, bool reload = false);
+        Task<IEnumerable<UserViewModel>> GetFriends(string search_string = "", int skip = 0);
+        Task<IEnumerable<UserViewModel>> GetNotFriends(string search_string = "", int skip = 0);
         Task<bool> RemoveFriend(UserViewModel uvm);
         Task<UserViewModel> GetById(int user_id);
     }

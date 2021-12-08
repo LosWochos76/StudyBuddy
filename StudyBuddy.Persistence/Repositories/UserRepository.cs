@@ -210,10 +210,17 @@ namespace StudyBuddy.Persistence
             qh.AddParameter(":from", filter.Start);
             qh.AddParameter(":max", filter.Count);
 
-            return qh.ExecuteQueryToObjectList(
-                "select id,firstname,lastname,nickname,email,password_hash,role,common_friends(id,:user_id) from friends " +
-                "inner join users on user_b = id where user_a=:user_id " +
-                "order by lastname,firstname,nickname limit :max offset :from");
+            var sql = "select id,firstname,lastname,nickname,email,password_hash,role,common_friends(id,:user_id) from friends where true ";
+
+            if (!string.IsNullOrEmpty(filter.SearchText))
+            {
+                qh.AddParameter(":search_text", "%" + filter.SearchText + "%");
+                sql += " and (firstname ilike :search_text or lastname ilike :search_text or email ilike :search_text)";
+            }
+
+            sql += " inner join users on user_b = id where user_a=:user_id " + 
+                   "order by lastname,firstname,nickname limit :max offset :from";
+            return qh.ExecuteQueryToObjectList(sql);
         }
 
         public IEnumerable<User> GetNotFriends(FriendFilter filter)
@@ -223,10 +230,17 @@ namespace StudyBuddy.Persistence
             qh.AddParameter(":from", filter.Start);
             qh.AddParameter(":max", filter.Count);
 
-            return qh.ExecuteQueryToObjectList(
-                "select id,firstname,lastname,nickname,email,password_hash,role,common_friends(id,:user_id) from users " +
-                "where id not in (select user_b from friends where user_a=:user_id) and id!=:user_id " +
-                "order by lastname,firstname,nickname limit :max offset :from");
+            var sql = "select id,firstname,lastname,nickname,email,password_hash,role,common_friends(id,:user_id) from users " +
+                      "where id not in (select user_b from friends where user_a=:user_id) and id!=:user_id ";
+
+            if (!string.IsNullOrEmpty(filter.SearchText))
+            {
+                qh.AddParameter(":search_text", "%" + filter.SearchText + "%");
+                sql += " and (firstname ilike :search_text or lastname ilike :search_text or email ilike :search_text)";
+            }
+
+            sql += " order by lastname,firstname,nickname limit :max offset :from";
+            return qh.ExecuteQueryToObjectList(sql);
         }
 
         public void AddFriend(int user_id, int friend_id)

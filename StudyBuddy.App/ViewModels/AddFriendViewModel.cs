@@ -1,4 +1,6 @@
 ﻿using System.Collections.ObjectModel;
+using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Input;
 using StudyBuddy.App.Api;
 using StudyBuddy.App.Misc;
@@ -8,48 +10,105 @@ namespace StudyBuddy.App.ViewModels
 {
     public class AddFriendViewModel: ViewModelBase
     {
-        public ObservableCollection<UserViewModel> Users { get; private set; } = new ObservableCollection<UserViewModel>();
+        public RangeObservableCollection<UserViewModel> Users { get; private set; }
         public bool IsRefreshing { get; set; }
         public ICommand RefreshCommand { get; }
-        public string SearchText { get; set; }
         public ICommand SendFriendshipRequestCommand { get; set; }
         public ICommand RemoveFriendshipRequestCommand { get; set; }
+        public ICommand SearchCommand { get; }
+        public ICommand LoadMoreCommand { get; }
+        private string _searchText = string.Empty;
+        public string SearchText
+        {
+            get { return _searchText; }
+            set
+            {
+                if (_searchText != value)
+                {
+                    _searchText = value ?? string.Empty;
+                    NotifyPropertyChanged(nameof(SearchText));
+                    if (SearchCommand.CanExecute(null))
+                    {
+                        SearchCommand.Execute(null);
+                    }
+                }
+            }
+        }
+        public int Skip { get; set; }
+        public bool IsBusy { get; private set; } = false;
+        public int ItemThreshold { get; set; } = 1;
+        public int PageNo { get; set; } = 0;
 
         public AddFriendViewModel(IApi api, IDialogService dialog, INavigationService navigation) : base(api, dialog, navigation)
         {
-            RefreshCommand = new Command(Reload);
+            Users = new RangeObservableCollection<UserViewModel>();
+            LoadMoreCommand = new Command(async () => await ItemsThresholdReached());
+            SearchCommand = new Command(async () => await LoadNotFriendsCommand());
+            RefreshCommand = new Command(async () =>
+            {
+                await LoadNotFriendsCommand();
+                IsRefreshing = false;
+                NotifyPropertyChanged(nameof(IsRefreshing));
+            });
             SendFriendshipRequestCommand = new Command<UserViewModel>(SendFriendshipRequest);
             RemoveFriendshipRequestCommand = new Command<UserViewModel>(RemoveFriendshipRequest);
-            Reload();
+            RefreshCommand.Execute(null);
         }
-
-        public async void Reload()
+        async Task LoadNotFriendsCommand()
         {
+            if (IsBusy)
+                return;
+
+            IsBusy = true;
+
             try
             {
-                await Device.InvokeOnMainThreadAsync(() =>
-                {
-                    api.Users.GetNotFriends(Users, SearchText, true);
-                });
+                ItemThreshold = 1;
+                Users.Clear();
+                var friends = await api.Users.GetNotFriends(SearchText);
+                Users.AddRange(friends);
+                PageNo = 1;
+                Skip = 10;
             }
             catch (ApiException e)
             {
                 await dialog.ShowError(e, "Ein Fehler ist aufgetreten!", "Ok", null);
             }
-
-            IsRefreshing = false;
-            NotifyPropertyChanged("IsRefreshing");
-        }
-
-        public async void ApplyFilter()
-        {
-            await Device.InvokeOnMainThreadAsync(() =>
+            finally
             {
-                api.Users.GetNotFriends(Users, SearchText, false);
-                NotifyPropertyChanged("Users");
-            });
+                IsBusy = false;
+            }
         }
+        async Task ItemsThresholdReached()
+        {
+            if (IsBusy)
+                return;
 
+            IsBusy = true;
+
+            try
+            {
+                Skip = 10 * PageNo;
+                var friends = await api.Users.GetNotFriends(SearchText, Skip);
+                Users.AddRange(friends);
+
+                if (friends.Count() == 0)
+                {
+                    ItemThreshold = -1;
+                    return;
+                }
+
+                PageNo++;
+            }
+            catch (ApiException e)
+            {
+                await dialog.ShowError(e, "Ein Fehler ist aufgetreten!", "Ok", null);
+            }
+            finally
+            {
+                IsBusy = false;
+            }
+        }
         public async void SendFriendshipRequest(UserViewModel obj)
         {
             var answer = false;

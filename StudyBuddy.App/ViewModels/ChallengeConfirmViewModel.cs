@@ -78,8 +78,9 @@ namespace StudyBuddy.App.ViewModels
 
         private async Task AcceptByRandomTeamMember()
         {
-            var friends = new ObservableCollection<UserViewModel>();
-            await api.Users.GetFriends(friends, string.Empty);
+            var friends = new RangeObservableCollection<UserViewModel>();
+            var recipients = await api.Users.GetFriends();
+            friends.AddRange(recipients);
 
             if (!friends.Any())
             {

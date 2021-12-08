@@ -16,7 +16,7 @@
         </ToolbarItem>
         </ContentPage.ToolbarItems>
     <ContentPage.Content>
-        <StackLayout>
+        <StackLayout Padding="0,5,0,5">
             <Frame Padding="5"
                    Margin="4"
                    BackgroundColor="{AppThemeBinding Dark={StaticResource CardBackgroundDark}, Light={StaticResource CardBackground}}"
@@ -31,7 +31,8 @@
                 </Frame.IsVisible>
                 <SearchBar TextColor="{AppThemeBinding Dark={StaticResource TextColorDark}, Light={StaticResource TextColor}}"
                            x:Name="searchBar"
-                           TextChanged="searchBar_TextChanged"
+                           SearchCommand="{Binding SearchCommand}"
+                           Text="{Binding SearchText}"
                            BackgroundColor="{AppThemeBinding Dark={StaticResource CardBackgroundDark}, Light={StaticResource CardBackground}}">
                     <SearchBar.IsVisible>
                         <OnPlatform x:TypeArguments="x:Boolean"
@@ -43,7 +44,8 @@
             </Frame>
             <SearchBar TextColor="{AppThemeBinding Dark={StaticResource TextColorDark}, Light={StaticResource TextColor}}"
                        x:Name="searchBarIos"
-                       TextChanged="searchBar_TextChanged">
+                       SearchCommand="{Binding SearchCommand}"
+                       Text="{Binding SearchText}">
                 <SearchBar.IsVisible>
                     <OnPlatform x:TypeArguments="x:Boolean"
                                 iOS="True"
@@ -58,7 +60,8 @@
                 <CollectionView ItemsSource="{Binding Friends}"
                                 EmptyView="Keine Freunde"
                                 ItemsUpdatingScrollMode="KeepItemsInView"
-                                >
+                                RemainingItemsThreshold="{Binding ItemThreshold}" 
+                                RemainingItemsThresholdReachedCommand="{Binding LoadMoreCommand}">
                     <CollectionView.ItemTemplate>
                         <DataTemplate x:DataType="viewmodels:UserViewModel">
                             <Grid x:Name="Item" 

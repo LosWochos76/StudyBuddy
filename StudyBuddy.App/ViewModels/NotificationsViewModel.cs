@@ -102,7 +102,7 @@ namespace StudyBuddy.App.ViewModels
             if (rvm.Type == Model.RequestType.Friendship)
             {
                 var vm = TinyIoCContainer.Current.Resolve<FriendsViewModel>();
-                vm.Reload();
+                vm.RefreshCommand.Execute(null);
             }
         }
 
@@ -128,7 +128,7 @@ namespace StudyBuddy.App.ViewModels
 
             if (rvm.Type == Model.RequestType.Friendship)
             {
-                TinyIoCContainer.Current.Resolve<FriendsViewModel>().Reload();
+                TinyIoCContainer.Current.Resolve<FriendsViewModel>().RefreshCommand.Execute(null);
             }
         }
     }

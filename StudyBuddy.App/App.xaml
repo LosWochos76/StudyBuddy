@@ -48,12 +48,11 @@
 
             <Style x:Key="BaseButton" TargetType="Button">
                 <Setter Property="BackgroundColor"
-                        Value="{AppThemeBinding Dark={StaticResource ButtonBackgroundDark}, Light={StaticResource ButtonBackground}}" />
+                        Value="{AppThemeBinding Dark={StaticResource CardBackgroundDark}, Light={StaticResource CardBackground}}" />
                 <Setter Property="TextColor"
-                        Value="{AppThemeBinding Dark={StaticResource TextColor}, Light={StaticResource TextColorDark}}" />
+                        Value="{AppThemeBinding Dark={StaticResource TextColorDark}, Light={StaticResource TextColor}}" />
                 <Setter Property="CornerRadius">
                     <Setter.Value>
-                        
                         <OnPlatform Android="8" />
                     </Setter.Value>
                 </Setter>

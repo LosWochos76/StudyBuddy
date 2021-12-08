@@ -1,15 +1,66 @@
 ﻿<?xml version="1.0" encoding="UTF-8" ?>
-<ContentPage
-    xmlns="http://xamarin.com/schemas/2014/forms"
-    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    x:Class="StudyBuddy.App.Views.FriendPage"
-    xmlns:viewmodels="clr-namespace:StudyBuddy.App.ViewModels"
-    x:DataType="viewmodels:FriendViewModel"
-    Title="{Binding User.FullName}"
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="StudyBuddy.App.Views.FriendPage"
+             xmlns:viewmodels="clr-namespace:StudyBuddy.App.ViewModels"
+             xmlns:fontAwesome="clr-namespace:StudyBuddy.App"
+             x:DataType="viewmodels:FriendViewModel"
+             Title="{Binding User.Name}"
              Style="{StaticResource BaseContentPage}">
-    <ContentPage.Content>
-        <StackLayout Padding="10">
-            <Button Style="{StaticResource BaseButton}"  Text="Freund entfernen" Command="{Binding RemoveFriendCommand}" /> 
+    <Grid BackgroundColor="{AppThemeBinding Dark={StaticResource WindowBackgroundColorDark}, Light={StaticResource WindowBackgroundColor}}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <!--Profile picture-->
+        <StackLayout Padding="60">
+            <Image x:Name="image1"
+                   WidthRequest="200"
+                   HeightRequest="200"
+                           HorizontalOptions="Center"
+                           VerticalOptions="Center">
+                <Image.Source>
+                    <FontImageSource FontFamily="{StaticResource FontAwesomeSolid}"
+                                             Glyph="{x:Static fontAwesome:FontAwesomeIcons.User}"
+                                             Color="{AppThemeBinding Dark={StaticResource TextColorDark}, Light={StaticResource TextColor}}" 
+                                             Size="Large"/>
+                </Image.Source>
+                <Image.Clip>
+                    <EllipseGeometry Center="100,100" RadiusX="100" RadiusY="100" />
+                </Image.Clip>
+            </Image>
         </StackLayout>
-    </ContentPage.Content>
+        <StackLayout Grid.Row="0" BackgroundColor="{AppThemeBinding Dark={StaticResource WindowBackgroundColorDark}, Light={StaticResource WindowBackgroundColor}}" VerticalOptions="End" >
+            <Grid Padding="25,10,25,0" RowSpacing="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <!--Profile information-->
+                <Label Style="{StaticResource BaseLabel}" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" Text="{Binding User.Name}" FontAttributes="Bold" FontSize="30" IsEnabled="False" />
+                <Label Style="{StaticResource BaseLabel}" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3" Padding="0,10,0,0" FontSize="20">
+                    <Label.FormattedText>
+                        <FormattedString>
+                            <Span Text="Nickname:  " FontAttributes="Bold" />
+                            <Span Text="{Binding User.Nickname}"  />
+                        </FormattedString>
+                    </Label.FormattedText>
+                </Label>
+                <Label Style="{StaticResource BaseLabel}" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="3" Padding="0,10,0,0" FontSize="20">
+                    <Label.FormattedText>
+                        <FormattedString>
+                            <Span Text="Email:  " FontAttributes="Bold" />
+                            <Span Text="{Binding User.Email}"  />
+                        </FormattedString>
+                    </Label.FormattedText>
+                </Label>
+                <Button Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="3" Style="{StaticResource BaseButton}"  Text="Freund entfernen" Command="{Binding RemoveFriendCommand}" Margin="0,30,0,30" FontAttributes="Bold" FontSize="17" HeightRequest="45"/>
+            </Grid>
+        </StackLayout>
+    </Grid>
 </ContentPage>
