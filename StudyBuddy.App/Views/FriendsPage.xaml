@@ -55,30 +55,33 @@
                 IsRefreshing="{Binding IsRefreshing}"
                 Command="{Binding RefreshCommand}"
                 Padding="8">
-                <CollectionView ItemsSource="{Binding Friends}">
+                <CollectionView ItemsSource="{Binding Friends}"
+                                EmptyView="Keine Freunde"
+                                ItemsUpdatingScrollMode="KeepItemsInView"
+                                >
                     <CollectionView.ItemTemplate>
                         <DataTemplate x:DataType="viewmodels:UserViewModel">
-                            <ContentView>
-                                <StackLayout Padding="10">
-                                    <Grid Padding="10" x:Name="Item">
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="70" />
-                                            <ColumnDefinition Width="*" />
-                                        </Grid.ColumnDefinitions>
-                                        <Image Grid.Column="0" Grid.Row="0" Source="{Binding ProfileImage}" />
-                                        <StackLayout Grid.Column="1" Grid.Row="0" HorizontalOptions="FillAndExpand">
-                                            <Label Style="{StaticResource BaseLabel}" Text="{Binding FullName}" FontAttributes="Bold" />
-                                            <Label Style="{StaticResource TagLabel}" Text="{Binding CountOfCommonFriends, StringFormat='{0} gemeinsame Freunde'}" FontSize="Small"/>
+                            <Grid x:Name="Item" 
+                                      Padding="0,8,0,0" 
+                                      BackgroundColor="{AppThemeBinding Dark={StaticResource WindowBackgroundColorDark}, Light={StaticResource WindowBackgroundColor}}">
+                                <Frame CornerRadius="10"
+                                       HasShadow="False"
+                                       BackgroundColor="{AppThemeBinding Dark={StaticResource CardBackgroundDark}, Light={StaticResource CardBackground}}">
+                                    <StackLayout Orientation="Horizontal">
+                                        <Image HeightRequest="45" WidthRequest="45" Grid.Column="0" Grid.Row="0" Source="{Binding ProfileImage}" />
+                                        <StackLayout VerticalOptions="Center">
+                                            <Label Padding="10,0,0,0" Style="{StaticResource BaseLabel}" Text="{Binding FullName}" FontAttributes="Bold" />
+                                            <Label Padding="10,0,0,0" Style="{StaticResource TagLabel}" Text="{Binding CountOfCommonFriends, StringFormat='{0} gemeinsame Freunde'}" FontSize="Small"/>
                                         </StackLayout>
-                                        <Grid.GestureRecognizers>
-                                            <TapGestureRecognizer
+                                    </StackLayout>
+                                    <Frame.GestureRecognizers>
+                                        <TapGestureRecognizer
                                                 Command="{Binding BindingContext.DetailsCommand, Source={x:Reference Name=page}}"
                                                 CommandParameter="{Binding Source={x:Reference Item}, Path=BindingContext}"/>
-                                        </Grid.GestureRecognizers>
-                                    </Grid>
-                                    <BoxView HeightRequest="1" />
-                                </StackLayout>
-                            </ContentView>
+                                    </Frame.GestureRecognizers>
+                                </Frame>
+                            </Grid>
+                            
                         </DataTemplate>
                     </CollectionView.ItemTemplate>
                 </CollectionView>

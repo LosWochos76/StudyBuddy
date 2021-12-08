@@ -79,7 +79,7 @@
                                       Padding="0,8,0,0" 
                                       BackgroundColor="{AppThemeBinding Dark={StaticResource WindowBackgroundColorDark}, Light={StaticResource WindowBackgroundColor}}">
                                 <Frame CornerRadius="10"
-                                       HasShadow="True"
+                                       HasShadow="False"
                                        BackgroundColor="{AppThemeBinding Dark={StaticResource CardBackgroundDark}, Light={StaticResource CardBackground}}">
                                         <StackLayout Orientation="Horizontal">
                                             <Image WidthRequest="45"
@@ -98,7 +98,7 @@
                                                         <RowDefinition Height="*" />
                                                     </Grid.RowDefinitions>
                                                     <Grid.ColumnDefinitions>
-                                                        <ColumnDefinition Width="200" />
+                                                        <ColumnDefinition Width="*" />
                                                         <ColumnDefinition Width="*" />
                                                     </Grid.ColumnDefinitions>
                                                     <Label Style="{StaticResource BaseLabel}" 
