@@ -5,9 +5,9 @@
              xmlns:fontAwesome="clr-namespace:StudyBuddy.App" 
              xmlns:viewmodels="clr-namespace:StudyBuddy.App.ViewModels"
              Shell.TabBarIsVisible="False"
-             x:DataType="viewmodels:UserViewModel"
+             x:DataType="viewmodels:FlyoutHeaderViewModel"
              Title="Profileinstellungen">
-    <Grid BackgroundColor="White">
+    <Grid BackgroundColor="{AppThemeBinding Dark={StaticResource WindowBackgroundColorDark}, Light={StaticResource WindowBackgroundColor}}">
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
@@ -35,7 +35,7 @@
             </Image>
         </StackLayout>
         <!--Profile information frame-->
-        <StackLayout Grid.Row="0" BackgroundColor="White" VerticalOptions="End" >
+        <StackLayout Grid.Row="0" BackgroundColor="{AppThemeBinding Dark={StaticResource WindowBackgroundColorDark}, Light={StaticResource WindowBackgroundColor}}" VerticalOptions="End" >
             <Grid Padding="25,10,25,0" RowSpacing="0">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
@@ -49,12 +49,12 @@
                     <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
                 <!--Profile information-->
-                <Label Style="{StaticResource BaseLabel}" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" Text="{Binding Name}" FontAttributes="Bold" FontSize="30" IsEnabled="False" />
+                <Label Style="{StaticResource BaseLabel}" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" Text="{Binding User.Name}" FontAttributes="Bold" FontSize="30" IsEnabled="False" />
                 <Label Style="{StaticResource BaseLabel}" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3" Padding="0,10,0,0" FontSize="20">
                     <Label.FormattedText>
                         <FormattedString>
                             <Span Text="Nickname:  " FontAttributes="Bold" />
-                            <Span Text="{Binding Nickname}"  />
+                            <Span Text="{Binding User.Nickname}"  />
                         </FormattedString>
                     </Label.FormattedText>
                 </Label>
@@ -62,7 +62,7 @@
                     <Label.FormattedText>
                         <FormattedString>
                             <Span Text="Email:  " FontAttributes="Bold" />
-                            <Span Text="{Binding Email}"  />
+                            <Span Text="{Binding User.Email}"  />
                         </FormattedString>
                     </Label.FormattedText>
                 </Label>
@@ -70,7 +70,7 @@
                     <Label.FormattedText>
                         <FormattedString>
                             <Span Text="Rolle:  " FontAttributes="Bold" />
-                            <Span Text="{Binding Role}"  />
+                            <Span Text="{Binding User.Role}"  />
                         </FormattedString>
                     </Label.FormattedText>
                 </Label>
