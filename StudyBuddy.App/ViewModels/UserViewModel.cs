@@ -20,7 +20,6 @@ namespace StudyBuddy.App.ViewModels
         public bool IsStudent => Role == Role.Student;
         public bool IsInstructor => Role == Role.Instructor;
 
-
         private RequestViewModel request;
         public RequestViewModel FriendshipRequest
         {
@@ -58,20 +57,21 @@ namespace StudyBuddy.App.ViewModels
         {
             get
             {
-                if (profile_image == null)
-                    return new FontImageSource()
-                    {
-                        FontFamily = Device.RuntimePlatform == Device.iOS ? "FontAwesome5Free-Solid" : "fasolid.otf#Regular",
-                        Glyph = FontAwesomeIcons.User
-                    };
-                else
-                    return profile_image;
+                return profile_image;
             }
 
             set
             {
                 profile_image = value;
                 NotifyPropertyChanged();
+            }
+        }
+
+        public string Initials
+        {
+            get
+            {
+                return (Firstname.Substring(0, 1) + Lastname.Substring(0, 1)).ToUpper();
             }
         }
 

@@ -4,36 +4,29 @@
              x:Class="StudyBuddy.App.Views.ProfilePage"
              xmlns:fontAwesome="clr-namespace:StudyBuddy.App" 
              xmlns:viewmodels="clr-namespace:StudyBuddy.App.ViewModels"
+             xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
              Shell.TabBarIsVisible="False"
-             x:DataType="viewmodels:FlyoutHeaderViewModel"
+             x:DataType="viewmodels:ProfileViewModel"
              Title="Profileinstellungen">
-    <Grid BackgroundColor="{AppThemeBinding Dark={StaticResource WindowBackgroundColorDark}, Light={StaticResource WindowBackgroundColor}}">
+    <Grid
+        BackgroundColor="{AppThemeBinding Dark={StaticResource WindowBackgroundColorDark},
+        Light={StaticResource WindowBackgroundColor}}">
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
         <!--Profile picture-->
-
         <StackLayout Padding="60">
-            <Image x:Name="image1"
-                   WidthRequest="200"
-                   HeightRequest="200"
-                           HorizontalOptions="Center"
-                           VerticalOptions="Center">
-                <Image.Source>
-                    <FontImageSource FontFamily="{StaticResource FontAwesomeSolid}"
-                                             Glyph="{x:Static fontAwesome:FontAwesomeIcons.User}"
-                                             Color="{AppThemeBinding Dark={StaticResource TextColorDark}, Light={StaticResource TextColor}}" 
-                                             Size="Large"/>
-                </Image.Source>
-                <Image.Clip>
-                    <EllipseGeometry Center="100,100" RadiusX="100" RadiusY="100" />
-                </Image.Clip>
-                <Image.GestureRecognizers>
-                    <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped"/>
-                </Image.GestureRecognizers>
-            </Image>
+            <xct:AvatarView Size="160"
+                HorizontalOptions="Center" VerticalOptions="Center"
+                Text="{Binding User.Initials}"
+                Source="{Binding User.ProfileImage}" >
+                <xct:AvatarView.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="ProfileImage_Tapped"/>
+                </xct:AvatarView.GestureRecognizers>
+            </xct:AvatarView>
         </StackLayout>
+
         <!--Profile information frame-->
         <StackLayout Grid.Row="0" BackgroundColor="{AppThemeBinding Dark={StaticResource WindowBackgroundColorDark}, Light={StaticResource WindowBackgroundColor}}" VerticalOptions="End" >
             <Grid Padding="25,10,25,0" RowSpacing="0">
@@ -58,7 +51,8 @@
                         </FormattedString>
                     </Label.FormattedText>
                 </Label>
-                <Label Style="{StaticResource BaseLabel}" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="3" Padding="0,10,0,0" FontSize="20">
+                <Label Style="{StaticResource BaseLabel}" Grid.Row="2" Grid.Column="0"
+                       Grid.ColumnSpan="3" Padding="0,10,0,0" FontSize="20">
                     <Label.FormattedText>
                         <FormattedString>
                             <Span Text="Email:  " FontAttributes="Bold" />
@@ -66,7 +60,8 @@
                         </FormattedString>
                     </Label.FormattedText>
                 </Label>
-                <Label Style="{StaticResource BaseLabel}" Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="3" Padding="0,10,0,0" FontSize="20">
+                <Label Style="{StaticResource BaseLabel}" Grid.Row="3" Grid.Column="0"
+                       Grid.ColumnSpan="3" Padding="0,10,0,0" FontSize="20">
                     <Label.FormattedText>
                         <FormattedString>
                             <Span Text="Rolle:  " FontAttributes="Bold" />
@@ -74,9 +69,13 @@
                         </FormattedString>
                     </Label.FormattedText>
                 </Label>
-                <Button Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="3" Style="{StaticResource BaseButton}"  Text="Bearbeiten" Margin="0,60,0,20" FontAttributes="Bold" FontSize="17" HeightRequest="45" Clicked="Button_Clicked"/>
+                <Button Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="3"
+                        Style="{StaticResource BaseButton}"  Text="Bearbeiten"
+                        Margin="0,60,0,20" FontAttributes="Bold" FontSize="17"
+                        HeightRequest="45" Clicked="Button_Clicked"/>
             </Grid>
         </StackLayout>
+
         <!-- Backdrop -->
         <BoxView Color="#4B000000"
                  Opacity="0"
@@ -84,7 +83,7 @@
                  x:Name="Backdrop">
             <BoxView.GestureRecognizers>
                 <TapGestureRecognizer
-                    Tapped="TapGestureRecognizer_Tapped"/>
+                    Tapped="ProfileImage_Tapped"/>
             </BoxView.GestureRecognizers>
         </BoxView>
 
@@ -114,23 +113,21 @@
                    VerticalOptions="End"
                    BackgroundColor="White">
                     <TableSection>
-                        <ViewCell Tapped="TextCell_Tapped">
+                        <ViewCell Tapped="SelectProfileImageFromGalery">
                             <StackLayout Orientation="Horizontal">
                                 <Label VerticalOptions="Center" FontFamily="{StaticResource FontAwesomeSolid}" Text="{x:Static fontAwesome:FontAwesomeIcons.Folder}" FontSize="30"/>
                                 <Label Text="Aus Gallerie auswählen" VerticalOptions="Center" HorizontalOptions="StartAndExpand" FontSize="18" FontAttributes="Bold"/>
                             </StackLayout>
                         </ViewCell>
-                        <ViewCell Tapped="TextCell_Tapped_1">
+                        <ViewCell Tapped="SelectProfileImageFromCamera">
                             <StackLayout Orientation="Horizontal">
                                 <Label VerticalOptions="Center" FontFamily="{StaticResource FontAwesomeSolid}" Text="{x:Static fontAwesome:FontAwesomeIcons.Camera}" FontSize="30"/>
                                 <Label Text="Kamera verwenden" VerticalOptions="Center" HorizontalOptions="StartAndExpand" FontSize="18" FontAttributes="Bold"/>
                             </StackLayout>
                         </ViewCell>
                     </TableSection>
-
                 </TableView>
             </StackLayout>
-
         </Frame>
     </Grid>
 </ContentPage>

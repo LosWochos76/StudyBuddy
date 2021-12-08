@@ -37,11 +37,13 @@ namespace StudyBuddy.App.Api
             var result = new List<UserViewModel>();
             var rh = new WebRequestHelper(api.Authentication.Token);
             var objects = await rh.Get<IEnumerable<User>>(base_url + "User/" + currentUserId + "/Friends/", filter);
+
             foreach (var user in objects)
                 result.Add(UserViewModel.FromModel(user));
 
             return result;
         }
+
         public async Task<IEnumerable<UserViewModel>> GetNotFriends(string search_string = "", int skip = 0)
         {
             var filter = new FriendFilter()
@@ -50,15 +52,18 @@ namespace StudyBuddy.App.Api
                 Start = skip,
                 SearchText = search_string
             };
+
             var currentUserId = api.Authentication.CurrentUser.ID;
             var rh = new WebRequestHelper(api.Authentication.Token);
             var objects = await rh.Get<IEnumerable<User>>(base_url + "User/" + currentUserId + "/NotFriends/", filter);
             var result = new List<UserViewModel>();
+
             foreach (var user in objects)
                 result.Add(UserViewModel.FromModel(user));
 
             return result;
         }
+
         public async Task<bool> RemoveFriend(UserViewModel uvm)
         {
             var current_user = api.Authentication.CurrentUser;
@@ -71,6 +76,7 @@ namespace StudyBuddy.App.Api
             api.RaiseFriendsChanged(this, new FriendshipStateChangedEventArgs() { Friend = uvm, Type = FriendshipStateChangedType.Removed });
             return content.IsOk;
         }
+
         public async Task<UserViewModel> GetById(int user_id)
         {
             var rh = new WebRequestHelper(api.Authentication.Token);
@@ -79,6 +85,11 @@ namespace StudyBuddy.App.Api
                 return null;
 
             return UserViewModel.FromModel(content);
+        }
+
+        public async Task<bool> SaveProfileImage(UserViewModel user)
+        {
+            return false;
         }
     }
 }

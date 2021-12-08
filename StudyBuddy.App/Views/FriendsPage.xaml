@@ -5,6 +5,7 @@
     x:Class="StudyBuddy.App.Views.FriendsPage"
     xmlns:viewmodels="clr-namespace:StudyBuddy.App.ViewModels"
     x:DataType="viewmodels:FriendsViewModel"
+    xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
     xmlns:fontAwesome="clr-namespace:StudyBuddy.App"
     Title="Freunde" x:Name="page" Style="{StaticResource BaseContentPage}">
     <ContentPage.ToolbarItems>
@@ -71,7 +72,8 @@
                                        HasShadow="False"
                                        BackgroundColor="{AppThemeBinding Dark={StaticResource CardBackgroundDark}, Light={StaticResource CardBackground}}">
                                     <StackLayout Orientation="Horizontal">
-                                        <Image HeightRequest="45" WidthRequest="45" Grid.Column="0" Grid.Row="0" Source="{Binding ProfileImage}" />
+                                        <xct:AvatarView Size="45" Grid.Column="0" Grid.Row="0"
+                                            Text="{Binding Initials}" Source="{Binding ProfileImage}" />
                                         <StackLayout VerticalOptions="Center">
                                             <Label Padding="10,0,0,0" Style="{StaticResource BaseLabel}" Text="{Binding FullName}" FontAttributes="Bold" />
                                             <Label Padding="10,0,0,0" Style="{StaticResource TagLabel}" Text="{Binding CountOfCommonFriends, StringFormat='{0} gemeinsame Freunde'}" FontSize="Small"/>

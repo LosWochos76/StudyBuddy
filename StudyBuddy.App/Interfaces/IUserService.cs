@@ -1,5 +1,4 @@
-﻿using System.Collections.ObjectModel;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using StudyBuddy.App.ViewModels;
 
@@ -11,5 +10,6 @@ namespace StudyBuddy.App.Api
         Task<IEnumerable<UserViewModel>> GetNotFriends(string search_string = "", int skip = 0);
         Task<bool> RemoveFriend(UserViewModel uvm);
         Task<UserViewModel> GetById(int user_id);
+        Task<bool> SaveProfileImage(UserViewModel user);
     }
 }

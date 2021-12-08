@@ -10,44 +10,43 @@ using Xamarin.Forms.Xaml;
 
 namespace StudyBuddy.App.Views
 {
-    [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class ProfilePage : ContentPage
     {
+        public ProfileViewModel ViewModel { get; set; }
 
         public ProfilePage()
         {
             InitializeComponent();
 
-            BindingContext = TinyIoCContainer.Current.Resolve<FlyoutHeaderViewModel>();
+            ViewModel = TinyIoCContainer.Current.Resolve<ProfileViewModel>();
+            BindingContext = ViewModel;
         }
 
         uint duration = 100;
         double openY = (Device.RuntimePlatform == "Android") ? 20 : 60;
         double lastPanY = 0;
         bool isBackdropTapEnabled = true;
-        async void TapGestureRecognizer_Tapped(object sender, EventArgs e)
+
+        private async void ProfileImage_Tapped(object sender, EventArgs e)
         {
             if (Backdrop.Opacity == 0)
-            {
                 await OpenDrawer();
-            }
             else
-            {
                 await CloseDrawer();
-            }
         }
 
-        async Task OpenDrawer()
+        private async Task OpenDrawer()
         {
             await Task.WhenAll
             (
                 Backdrop.FadeTo(1, length: duration),
                 BottomToolbar.TranslateTo(0, openY, length: duration, easing: Easing.SinIn)
             );
+
             Backdrop.InputTransparent = false;
         }
 
-        async Task CloseDrawer()
+        private async Task CloseDrawer()
         {
             await Task.WhenAll
             (
@@ -56,7 +55,8 @@ namespace StudyBuddy.App.Views
             );
             Backdrop.InputTransparent = true;
         }
-        async void TapGestureRecognizer_Tapped1(System.Object sender, System.EventArgs e)
+
+        private async void TapGestureRecognizer_Tapped1(System.Object sender, System.EventArgs e)
         {
             if (isBackdropTapEnabled)
             {
@@ -64,7 +64,7 @@ namespace StudyBuddy.App.Views
             }
         }
 
-        async void PanGestureRecognizer_PanUpdated(System.Object sender, Xamarin.Forms.PanUpdatedEventArgs e)
+        private async void PanGestureRecognizer_PanUpdated(System.Object sender, Xamarin.Forms.PanUpdatedEventArgs e)
         {
             if (e.StatusType == GestureStatus.Running)
             {
@@ -90,68 +90,62 @@ namespace StudyBuddy.App.Views
             }
         }
 
-        private async void TextCell_Tapped(object sender, EventArgs e)
+        private async void SelectProfileImageFromGalery(object sender, EventArgs e)
         {
             await CloseDrawer();
             await CrossMedia.Current.Initialize();
+
             if (!CrossMedia.Current.IsPickPhotoSupported)
             {
                 await DisplayAlert("Gallerie nicht verfügbar", "StudyBuddy hat keine Berechtigung auf Fotos auf diesem Gerät zuzugreifen", "OK");
                 return;
             }
+
             var file = await CrossMedia.Current.PickPhotoAsync(new PickMediaOptions
             {
                 PhotoSize = PhotoSize.Full,
                 SaveMetaData = true
             });
+
             if (file == null)
                 return;
-            image1.Source = ImageSource.FromStream(() =>
+
+            ViewModel.User.ProfileImage = ImageSource.FromStream(() =>
             {
                 var stream = file.GetStream();
                 return stream;
             });
-
         }
 
-        private async void TextCell_Tapped_1(object sender, EventArgs e)
+        private async void SelectProfileImageFromCamera(object sender, EventArgs e)
         {
             await CloseDrawer();
             await CrossMedia.Current.Initialize();
+
             if (!CrossMedia.Current.IsCameraAvailable || !CrossMedia.Current.IsTakePhotoSupported)
             {
                 await DisplayAlert("Kamera nicht verfügbar", "StudyBuddy hat keine Berechtigung auf die Kamera zuzugreifen", "OK");
                 return;
             }
+
             var file = await CrossMedia.Current.TakePhotoAsync(new StoreCameraMediaOptions
             {
                 PhotoSize = PhotoSize.Full,
                 SaveMetaData = true
             });
+
             if (file == null)
                 return;
-            var storableImage = ImageToByteA(file);
 
-        }
-
-        public byte[] ImageToByteA(MediaFile image)
-        {
-            image1.Source = ImageSource.FromStream(() =>
+            ViewModel.User.ProfileImage = ImageSource.FromStream(() =>
             {
-                var stream = image.GetStream();
-                return stream;
+                return file.GetStream();
             });
-            using (var memoryStream = new MemoryStream())
-            {
-                image.GetStream().CopyTo(memoryStream);
-                image.Dispose();
-                return memoryStream.ToArray();
-            }
         }
 
         private void Button_Clicked(object sender, EventArgs e)
         {
-
+            // Profil bearbeiten
         }
     }
 }

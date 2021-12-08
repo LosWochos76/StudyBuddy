@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using StudyBuddy.App.ViewModels;
+﻿using StudyBuddy.App.ViewModels;
 using TinyIoC;
 using Xamarin.Forms;
 
