@@ -107,12 +107,12 @@
                     </Frame>
                     <Frame Style="{StaticResource FrameStyle}" WidthRequest="200">
                         <StackLayout HorizontalOptions="CenterAndExpand" Orientation="Vertical">
-                            <StackLayout.GestureRecognizers>
-                                <TapGestureRecognizer Command="{Binding RanksCommand}"/>
-                            </StackLayout.GestureRecognizers>
                             <Label HorizontalTextAlignment="Center" Style="{StaticResource TotalPointsLabelStyle}" Text="#5"></Label>
                             <Label HorizontalTextAlignment="Center" Text="Beste Platzierung"></Label>
                         </StackLayout>
+                        <Frame.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding RanksCommand}"/>
+                        </Frame.GestureRecognizers>
                     </Frame>
                 </StackLayout>
             </StackLayout>

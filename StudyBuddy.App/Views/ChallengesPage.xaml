@@ -56,6 +56,7 @@
                         Android="False" />
                 </SearchBar.IsVisible>
             </SearchBar>
+            <ActivityIndicator IsVisible="{Binding IsBusy}" IsRunning="{Binding IsBusy}" />
             <RefreshView 
                 IsRefreshing="{Binding IsRefreshing}"
                 Command="{Binding RefreshCommand}"

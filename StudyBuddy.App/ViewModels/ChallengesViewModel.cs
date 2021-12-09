@@ -26,19 +26,33 @@ namespace StudyBuddy.App.ViewModels
             get { return _searchText; }
             set
             {
-                if (_searchText != value)
+                if (_searchText == value)
+                    return;
+
+                _searchText = value ?? string.Empty;
+                Task.Run(async () =>
                 {
-                    _searchText = value ?? string.Empty;
-                    NotifyPropertyChanged(nameof(SearchText));
-                    if (SearchCommand.CanExecute(null))
+                    string SearchText = _searchText;
+                    await Task.Delay(1000);
+                    if (_searchText == SearchText)
                     {
-                        SearchCommand.Execute(null);
+                        await LoadChallengesCommand();
                     }
-                }
+                        
+                });
             }
         }
         public int Skip { get; set; }
-        public bool IsBusy { get; private set; } = false;
+        private bool _isBusy;
+        public bool IsBusy
+        {
+            get { return _isBusy; }
+            set
+            {
+                _isBusy = value;
+                NotifyPropertyChanged(nameof(IsBusy));
+            }
+        }
         public int ItemThreshold { get; set; } = 1;
         public int PageNo { get; set; } = 0;
 
