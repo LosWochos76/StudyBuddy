@@ -6,8 +6,7 @@
              xmlns:viewmodels="clr-namespace:StudyBuddy.App.ViewModels"
              x:DataType="viewmodels:LoginViewModel"
              Shell.FlyoutBehavior="Disabled"
-             Shell.NavBarIsVisible="False"
-             Style="{StaticResource BaseContentPage}">
+             Shell.NavBarIsVisible="False">
     <StackLayout>
         <StackLayout VerticalOptions="StartAndExpand">
             <Frame CornerRadius="0">
@@ -18,13 +17,12 @@
                     </OnPlatform>
                 </Frame.Padding>
                 <Label BackgroundColor="{AppThemeBinding Dark={StaticResource WindowBackgroundColorDark}, Light={StaticResource WindowBackgroundColor}}"
-                       Style="{StaticResource BaseLabel}"
                        Text="Wilkommen beim StudyBuddy!"
                        HorizontalTextAlignment="Center"
                        FontSize="36" />
             </Frame>
             <StackLayout Padding="10,10,10,0">
-                <Label Style="{StaticResource BaseLabel}" HorizontalTextAlignment="Center">
+                <Label HorizontalTextAlignment="Center">
                     <Label.FormattedText>
                         <FormattedString>
                             <FormattedString.Spans>
@@ -46,20 +44,16 @@
             </StackLayout>
         </StackLayout>
         <StackLayout Padding="10,10,10,10" VerticalOptions="CenterAndExpand">
-            <Entry PlaceholderColor="{AppThemeBinding Dark={StaticResource SystemGray4}, Light={StaticResource SystemGray2Dark}}"
-                   Placeholder="E-Mail-Adresse"
-                   Text="{Binding EMail}"
-                   TextColor="{AppThemeBinding Dark={StaticResource TextColorDark}, Light={StaticResource TextColor}}" />
-            <Entry x:Name="Entry" 
-                   PlaceholderColor="{AppThemeBinding Dark={StaticResource SystemGray4}, Light={StaticResource SystemGray2Dark}}"
+            <Entry Placeholder="E-Mail-Adresse"
+                   Text="{Binding EMail}" />
+            <Entry x:Name="Entry"
                    Placeholder="Passwort"
                    IsPassword="True"
                    Text="{Binding Password}"
-                   TextColor="{AppThemeBinding Dark={StaticResource TextColorDark}, Light={StaticResource TextColor}}"
                    ReturnCommand="{Binding LoginCommand}"/>
-            <Button Style="{StaticResource BaseButton}" Text="Anmelden" Command="{Binding LoginCommand}" />
+            <Button Text="Anmelden" Command="{Binding LoginCommand}" />
 
-            <Label Style="{StaticResource BaseLabel}" HorizontalTextAlignment="Center">
+            <Label HorizontalTextAlignment="Center">
                 <Label.FormattedText>
                     <FormattedString>
                         <FormattedString.Spans>
@@ -77,8 +71,8 @@
         </StackLayout>
 
         <StackLayout VerticalOptions="EndAndExpand" Padding="10,0,10,20">
-            <Button Style="{StaticResource BaseButton}" Text="Neuen Account erstellen" Command="{Binding RegisterCommand}" />
-            <Label Style="{StaticResource BaseLabel}" HorizontalOptions="CenterAndExpand">
+            <Button Text="Neuen Account erstellen" Command="{Binding RegisterCommand}" />
+            <Label HorizontalOptions="CenterAndExpand">
                 <Label.FormattedText>
                     <FormattedString>
                         <FormattedString.Spans>

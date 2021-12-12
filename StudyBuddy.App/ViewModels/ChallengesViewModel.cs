@@ -6,6 +6,7 @@ using System.Windows.Input;
 using StudyBuddy.App.Api;
 using StudyBuddy.App.Misc;
 using StudyBuddy.App.Views;
+using StudyBuddy.Model;
 using Xamarin.Forms;
 
 namespace StudyBuddy.App.ViewModels
@@ -13,6 +14,16 @@ namespace StudyBuddy.App.ViewModels
     public class ChallengesViewModel : ViewModelBase
     {
         public RangeObservableCollection<ChallengeViewModel> Challenges { get; private set; }
+        private ChallengeViewModel selectedChallenge;
+        public ChallengeViewModel SelectedChallenge
+        {
+            get { return selectedChallenge; }
+            set
+            {
+                selectedChallenge = value;
+                NotifyPropertyChanged(nameof(SelectedChallenge));
+            }
+        }
         public ICommand RefreshCommand { get; }
         public ICommand DetailsCommand { get; }
         public ICommand ScanQrCodeCommand { get; }
@@ -56,6 +67,7 @@ namespace StudyBuddy.App.ViewModels
         public int ItemThreshold { get; set; } = 1;
         public int PageNo { get; set; } = 0;
 
+
         public ChallengesViewModel(IApi api, IDialogService dialog, INavigationService navigation) : base(api, dialog, navigation)
         {
             Challenges = new RangeObservableCollection<ChallengeViewModel>();
@@ -68,7 +80,7 @@ namespace StudyBuddy.App.ViewModels
                 IsRefreshing = false;
                 NotifyPropertyChanged(nameof(IsRefreshing));
             });
-            DetailsCommand = new Command<ChallengeViewModel>(ShowDetails);
+            DetailsCommand = new Command(ShowDetails);
             ScanQrCodeCommand = new Command(ScanQrCode);
             api.ChallengeAccepted += (sender, e) => { _ = LoadChallengesCommand(); };
         }
@@ -135,9 +147,13 @@ namespace StudyBuddy.App.ViewModels
             }
         }
 
-        private void ShowDetails(ChallengeViewModel obj)
+        private async void ShowDetails()
         {
-            navigation.Push(new ChallengeDetailsPage(obj));
+            if (SelectedChallenge == null)
+                return;
+            
+            await navigation.Push(new ChallengeDetailsPage(SelectedChallenge));
+            SelectedChallenge = null;
         }
 
         private async void ScanQrCode()

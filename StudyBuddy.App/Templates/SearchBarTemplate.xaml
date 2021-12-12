@@ -1,0 +1,36 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<StackLayout xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="StudyBuddy.App.Templates.SearchBarTemplate"
+             Padding="5,5,5,0">
+    <Frame Padding="5"
+               Margin="4"
+               HasShadow="False"
+               CornerRadius="8"
+               HeightRequest="35">
+            <Frame.IsVisible>
+                <OnPlatform x:TypeArguments="x:Boolean"
+                            iOS="False"
+                            Android="True" />
+            </Frame.IsVisible>
+            <SearchBar SearchCommand="{Binding SearchCommand}"
+                       Text="{Binding SearchText}">
+                <SearchBar.IsVisible>
+                    <OnPlatform x:TypeArguments="x:Boolean"
+                                iOS="False"
+                                Android="True" />
+                </SearchBar.IsVisible>
+            </SearchBar>
+        </Frame>
+        <SearchBar SearchCommand="{Binding SearchCommand}"
+                   Text="{Binding SearchText}">
+            <SearchBar.IsVisible>
+                <OnPlatform x:TypeArguments="x:Boolean"
+                            iOS="True"
+                            Android="False" />
+            </SearchBar.IsVisible>
+        </SearchBar>
+
+    <ActivityIndicator IsVisible="{Binding IsBusy}"
+                       IsRunning="{Binding IsBusy}" />
+</StackLayout>

@@ -8,7 +8,8 @@
        x:DataType="viewmodels:MainViewModel"
        x:Class="StudyBuddy.App.Views.MainPage"
        FlyoutBehavior="Flyout"
-       BackgroundColor="{AppThemeBinding Dark={StaticResource CardBackgroundDark}, Light={StaticResource CardBackground}}">
+       BackgroundColor="{AppThemeBinding Dark={StaticResource WindowBackgroundColorDark}, Light={StaticResource WindowBackgroundColor
+    }}">
     <Shell.Resources>
         <ResourceDictionary>
             <Style ApplyToDerivedTypes="True" TargetType="Shell">
@@ -17,7 +18,7 @@
                 <Setter Property="Shell.TabBarUnselectedColor"
                         Value="{AppThemeBinding Dark={StaticResource TextColorDark}, Light={StaticResource TextColor}}" />
                 <Setter Property="Shell.TabBarTitleColor"
-                        Value="{AppThemeBinding Dark={StaticResource WindowBackgroundColorDark}, Light={StaticResource WindowBackgroundColor}}" />
+                        Value="{AppThemeBinding Dark={StaticResource TextColorDark}, Light={StaticResource TextColor}}" />
                 <Setter Property="Shell.ForegroundColor"
                         Value="{AppThemeBinding Dark={StaticResource TextColorDark}, Light={StaticResource TextColor}}" />
                 <Setter Property="Shell.FlyoutBackgroundColor"
@@ -68,7 +69,6 @@
                     </Image>
                     <Label Grid.Column="1" 
                            Text="{Binding Text, Source={x:Reference this}}"
-                           TextColor="{AppThemeBinding Dark={StaticResource TextColorDark}, Light={StaticResource TextColor}}" 
                            VerticalTextAlignment="Center"/>
                 </Grid>
             </DataTemplate>
@@ -88,7 +88,6 @@
                     </Image>
                     <Label Grid.Column="1" 
                            Text="{Binding Text, Source={x:Reference this1}}"
-                           TextColor="{AppThemeBinding Dark={StaticResource TextColorDark}, Light={StaticResource TextColor}}" 
                            VerticalTextAlignment="Center"/>
                 </Grid>
             </DataTemplate>
@@ -108,7 +107,6 @@
                     </Image>
                     <Label Grid.Column="1" 
                            Text="{Binding Text, Source={x:Reference this2}}"
-                           TextColor="{AppThemeBinding Dark={StaticResource TextColorDark}, Light={StaticResource TextColor}}" 
                            VerticalTextAlignment="Center"
                            x:DataType="MenuItem" />
                 </Grid>
@@ -136,7 +134,6 @@
                     </Image>
                     <Label Grid.Column="1" 
                            Text="{Binding Text, Source={x:Reference this3}}"
-                           TextColor="{AppThemeBinding Dark={StaticResource TextColorDark}, Light={StaticResource TextColor}}" 
                            VerticalTextAlignment="Center"
                            x:DataType="MenuItem"/>
                 </Grid>

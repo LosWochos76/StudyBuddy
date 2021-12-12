@@ -53,6 +53,7 @@ namespace StudyBuddy.App.ViewModels
         public AddFriendViewModel(IApi api, IDialogService dialog, INavigationService navigation) : base(api, dialog, navigation)
         {
             Users = new RangeObservableCollection<UserViewModel>();
+            api.Authentication.LoginStateChanged += Authentication_LoginStateChanged;
             LoadMoreCommand = new Command(async () => await ItemsThresholdReached());
             SearchCommand = new Command(async () => await LoadNotFriendsCommand());
             RefreshCommand = new Command(async () =>
@@ -63,8 +64,14 @@ namespace StudyBuddy.App.ViewModels
             });
             SendFriendshipRequestCommand = new Command<UserViewModel>(SendFriendshipRequest);
             RemoveFriendshipRequestCommand = new Command<UserViewModel>(RemoveFriendshipRequest);
-            RefreshCommand.Execute(null);
         }
+
+        private void Authentication_LoginStateChanged(object sender, LoginStateChangedArgs args)
+        {
+            if (args.IsLoggedIn)
+                RefreshCommand.Execute(null);
+        }
+
         async Task LoadNotFriendsCommand()
         {
             if (IsBusy)

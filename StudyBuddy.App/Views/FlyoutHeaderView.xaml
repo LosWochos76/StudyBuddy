@@ -14,9 +14,9 @@
                 Size="50"
                 HorizontalOptions="Start"
                 TextColor="{AppThemeBinding Dark={StaticResource TextColorDark}, Light={StaticResource TextColor}}"/>
-            <Label Style="{StaticResource BaseLabel}" Text="{Binding User.Name}" FontSize="Large" FontAttributes="Bold"/>
-            <Label Style="{StaticResource BaseLabel}" Text="{Binding User.Nickname}" TextColor="{StaticResource SecondaryFont}" FontSize="Medium"/>
-            <Label Style="{StaticResource BaseLabel}" Text="20 Freunde" Margin="0,5,0,5"/>
+            <Label Text="{Binding User.Name}" FontSize="Large" FontAttributes="Bold"/>
+            <Label Text="{Binding User.Nickname}" TextColor="{StaticResource SecondaryFont}" FontSize="Medium"/>
+            <Label Text="20 Freunde" Margin="0,5,0,5"/>
         </StackLayout>
     </ContentView.Content>
 </ContentView>

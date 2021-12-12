@@ -1,96 +1,74 @@
 ﻿<?xml version="1.0" encoding="UTF-8" ?>
-<ContentPage
-    xmlns="http://xamarin.com/schemas/2014/forms"
-    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    x:Class="StudyBuddy.App.Views.FriendsPage"
-    xmlns:viewmodels="clr-namespace:StudyBuddy.App.ViewModels"
-    x:DataType="viewmodels:FriendsViewModel"
-    xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
-    xmlns:fontAwesome="clr-namespace:StudyBuddy.App"
-    Title="Freunde" x:Name="page" Style="{StaticResource BaseContentPage}">
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="StudyBuddy.App.Views.FriendsPage"
+             xmlns:viewmodels="clr-namespace:StudyBuddy.App.ViewModels"
+             x:DataType="viewmodels:FriendsViewModel"
+             xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
+             xmlns:fontAwesome="clr-namespace:StudyBuddy.App"
+             xmlns:templates="clr-namespace:StudyBuddy.App.Templates"
+             Title="Freunde"
+             x:Name="page">
     <ContentPage.ToolbarItems>
-        <ToolbarItem Text="Freund hinzufügen" Order="Primary" Priority="0" Command="{Binding AddFriendCommand}">
+        <ToolbarItem Text="Freund hinzufügen"
+                     Order="Primary"
+                     Priority="0"
+                     Command="{Binding AddFriendCommand}">
             <ToolbarItem.IconImageSource>
                 <FontImageSource FontFamily="{StaticResource FontAwesomeSolid}"
                                  Glyph="{x:Static fontAwesome:FontAwesomeIcons.Plus}" />
             </ToolbarItem.IconImageSource>
         </ToolbarItem>
-        </ContentPage.ToolbarItems>
-    <ContentPage.Content>
-        <StackLayout Padding="0,5,0,5">
-            <Frame Padding="5"
-                   Margin="4"
-                   BackgroundColor="{AppThemeBinding Dark={StaticResource CardBackgroundDark}, Light={StaticResource CardBackground}}"
-                   HasShadow="False"
-                   BorderColor="{AppThemeBinding Dark={StaticResource TextColorDark}, Light={StaticResource TextColor}}"
-                   CornerRadius="8"
-                   HeightRequest="35">
-                <Frame.IsVisible>
-                    <OnPlatform x:TypeArguments="x:Boolean"
-                                iOS="False"
-                                Android="True" />
-                </Frame.IsVisible>
-                <SearchBar TextColor="{AppThemeBinding Dark={StaticResource TextColorDark}, Light={StaticResource TextColor}}"
-                           x:Name="searchBar"
-                           SearchCommand="{Binding SearchCommand}"
-                           Text="{Binding SearchText}"
-                           BackgroundColor="{AppThemeBinding Dark={StaticResource CardBackgroundDark}, Light={StaticResource CardBackground}}">
-                    <SearchBar.IsVisible>
-                        <OnPlatform x:TypeArguments="x:Boolean"
-                                    iOS="False"
-                                    Android="True" />
-                    </SearchBar.IsVisible>
-                </SearchBar>
-
-            </Frame>
-            <SearchBar TextColor="{AppThemeBinding Dark={StaticResource TextColorDark}, Light={StaticResource TextColor}}"
-                       x:Name="searchBarIos"
-                       SearchCommand="{Binding SearchCommand}"
-                       Text="{Binding SearchText}">
-                <SearchBar.IsVisible>
-                    <OnPlatform x:TypeArguments="x:Boolean"
-                                iOS="True"
-                                Android="False" />
-                </SearchBar.IsVisible>
-            </SearchBar>
-            <ActivityIndicator IsVisible="{Binding IsBusy}" IsRunning="{Binding IsBusy}" />
-            <RefreshView
-                IsRefreshing="{Binding IsRefreshing}"
-                Command="{Binding RefreshCommand}"
-                Padding="8">
-                <CollectionView ItemsSource="{Binding Friends}"
-                                EmptyView="Keine Freunde"
-                                ItemsUpdatingScrollMode="KeepItemsInView"
-                                RemainingItemsThreshold="{Binding ItemThreshold}" 
-                                RemainingItemsThresholdReachedCommand="{Binding LoadMoreCommand}">
-                    <CollectionView.ItemTemplate>
-                        <DataTemplate x:DataType="viewmodels:UserViewModel">
-                            <Grid x:Name="Item" 
-                                      Padding="0,8,0,0" 
-                                      BackgroundColor="{AppThemeBinding Dark={StaticResource WindowBackgroundColorDark}, Light={StaticResource WindowBackgroundColor}}">
-                                <Frame CornerRadius="10"
-                                       HasShadow="False"
-                                       BackgroundColor="{AppThemeBinding Dark={StaticResource CardBackgroundDark}, Light={StaticResource CardBackground}}">
-                                    <StackLayout Orientation="Horizontal">
-                                        <xct:AvatarView Size="45" Grid.Column="0" Grid.Row="0"
-                                            Text="{Binding Initials}" Source="{Binding ProfileImage}" />
-                                        <StackLayout VerticalOptions="Center">
-                                            <Label Padding="10,0,0,0" Style="{StaticResource BaseLabel}" Text="{Binding FullName}" FontAttributes="Bold" />
-                                            <Label Padding="10,0,0,0" Style="{StaticResource TagLabel}" Text="{Binding CountOfCommonFriends, StringFormat='{0} gemeinsame Freunde'}" FontSize="Small"/>
-                                        </StackLayout>
-                                    </StackLayout>
-                                    <Frame.GestureRecognizers>
-                                        <TapGestureRecognizer
-                                                Command="{Binding BindingContext.DetailsCommand, Source={x:Reference Name=page}}"
-                                                CommandParameter="{Binding Source={x:Reference Item}, Path=BindingContext}"/>
-                                    </Frame.GestureRecognizers>
-                                </Frame>
-                            </Grid>
-                            
-                        </DataTemplate>
-                    </CollectionView.ItemTemplate>
-                </CollectionView>
-            </RefreshView>
-        </StackLayout>
-    </ContentPage.Content>
+    </ContentPage.ToolbarItems>
+    <RefreshView IsRefreshing="{Binding IsRefreshing}"
+                 Command="{Binding RefreshCommand}"
+                 Padding="8">
+        <CollectionView ItemsSource="{Binding Friends}"
+                        ItemsUpdatingScrollMode="KeepItemsInView"
+                        RemainingItemsThreshold="{Binding ItemThreshold}"
+                        RemainingItemsThresholdReachedCommand="{Binding LoadMoreCommand}"
+                        Header="{Binding .}">
+            <CollectionView.EmptyView>
+                <StackLayout Padding="12">
+                    <Label HorizontalOptions="Center"
+                           Text="Keine Freunde" />
+                </StackLayout>
+            </CollectionView.EmptyView>
+            <CollectionView.HeaderTemplate>
+                <DataTemplate>
+                    <templates:SearchBarTemplate />
+                </DataTemplate>
+            </CollectionView.HeaderTemplate>
+            <CollectionView.ItemTemplate>
+                <DataTemplate x:DataType="viewmodels:UserViewModel">
+                    <Grid x:Name="Item"
+                          Padding="0,8,0,0">
+                        <Frame CornerRadius="10"
+                               HasShadow="False">
+                            <StackLayout Orientation="Horizontal">
+                                <xct:AvatarView Size="45"
+                                                Grid.Column="0"
+                                                Grid.Row="0"
+                                                Text="{Binding Initials}"
+                                                Source="{Binding ProfileImage}" />
+                                <StackLayout VerticalOptions="Center">
+                                    <Label Text="{Binding FullName}"
+                                           Padding="10,0,0,0"
+                                           FontAttributes="Bold" />
+                                    <Label Style="{StaticResource TagLabel}"
+                                           Text="{Binding CountOfCommonFriends, StringFormat='{0} gemeinsame Freunde'}"
+                                           Padding="10,0,0,0"
+                                           FontSize="Small" />
+                                </StackLayout>
+                            </StackLayout>
+                            <Frame.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding BindingContext.DetailsCommand, Source={x:Reference Name=page}}"
+                                                      CommandParameter="{Binding Source={x:Reference Item}, Path=BindingContext}" />
+                            </Frame.GestureRecognizers>
+                        </Frame>
+                    </Grid>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+    </RefreshView>
 </ContentPage>
