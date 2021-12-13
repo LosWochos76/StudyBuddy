@@ -210,7 +210,8 @@ namespace StudyBuddy.Persistence
             qh.AddParameter(":from", filter.Start);
             qh.AddParameter(":max", filter.Count);
 
-            var sql = "select id,firstname,lastname,nickname,email,password_hash,role,common_friends(id,:user_id) from friends where true ";
+            var sql = "select id,firstname,lastname,nickname,email,password_hash,role,common_friends(id:user_id) from friends" +
+                " inner join users on user_b = id where user_a=:user_id ";
 
             if (!string.IsNullOrEmpty(filter.SearchText))
             {
@@ -218,8 +219,7 @@ namespace StudyBuddy.Persistence
                 sql += " and (firstname ilike :search_text or lastname ilike :search_text or email ilike :search_text)";
             }
 
-            sql += " inner join users on user_b = id where user_a=:user_id " + 
-                   "order by lastname,firstname,nickname limit :max offset :from";
+            sql += "order by lastname,firstname,nickname limit :max offset :from";
             return qh.ExecuteQueryToObjectList(sql);
         }
 
