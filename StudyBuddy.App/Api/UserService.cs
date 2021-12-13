@@ -34,9 +34,13 @@ namespace StudyBuddy.App.Api
             };
 
             var currentUserId = api.Authentication.CurrentUser.ID;
-            var result = new List<UserViewModel>();
+            
             var rh = new WebRequestHelper(api.Authentication.Token);
             var objects = await rh.Get<IEnumerable<User>>(base_url + "User/" + currentUserId + "/Friends/", filter);
+
+            var result = new List<UserViewModel>();
+            if (objects == null)
+                return result;
 
             foreach (var user in objects)
                 result.Add(UserViewModel.FromModel(user));
@@ -56,7 +60,10 @@ namespace StudyBuddy.App.Api
             var currentUserId = api.Authentication.CurrentUser.ID;
             var rh = new WebRequestHelper(api.Authentication.Token);
             var objects = await rh.Get<IEnumerable<User>>(base_url + "User/" + currentUserId + "/NotFriends/", filter);
+
             var result = new List<UserViewModel>();
+            if (objects == null)
+                return result;
 
             foreach (var user in objects)
                 result.Add(UserViewModel.FromModel(user));

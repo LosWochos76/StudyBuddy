@@ -210,13 +210,13 @@ namespace StudyBuddy.Persistence
             qh.AddParameter(":from", filter.Start);
             qh.AddParameter(":max", filter.Count);
 
-            var sql = "select id,firstname,lastname,nickname,email,password_hash,role,common_friends(id:user_id) from friends" +
+            var sql = "select id,firstname,lastname,nickname,email,password_hash,role,common_friends(id, :user_id) from friends" +
                 " inner join users on user_b = id where user_a=:user_id ";
 
             if (!string.IsNullOrEmpty(filter.SearchText))
             {
                 qh.AddParameter(":search_text", "%" + filter.SearchText + "%");
-                sql += " and (firstname ilike :search_text or lastname ilike :search_text or email ilike :search_text)";
+                sql += " and (firstname ilike :search_text or lastname ilike :search_text or email ilike :search_text) ";
             }
 
             sql += "order by lastname,firstname,nickname limit :max offset :from";
