@@ -17,6 +17,7 @@ namespace StudyBuddy.App.ViewModels
         public ICommand RemoveFriendshipRequestCommand { get; set; }
         public ICommand SearchCommand { get; }
         public ICommand LoadMoreCommand { get; }
+
         private string _searchText = string.Empty;
         public string SearchText
         {
@@ -32,11 +33,13 @@ namespace StudyBuddy.App.ViewModels
                     string SearchText = _searchText;
                     await Task.Delay(1000);
                     if (_searchText == SearchText)
-                        await LoadNotFriendsCommand();
+                        await LoadNotFriends();
                 });
             }
         }
+
         public int Skip { get; set; }
+
         private bool _isBusy;
         public bool IsBusy
         {
@@ -47,21 +50,25 @@ namespace StudyBuddy.App.ViewModels
                 NotifyPropertyChanged(nameof(IsBusy));
             }
         }
+
         public int ItemThreshold { get; set; } = 1;
         public int PageNo { get; set; } = 0;
 
         public AddFriendViewModel(IApi api, IDialogService dialog, INavigationService navigation) : base(api, dialog, navigation)
         {
             Users = new RangeObservableCollection<UserViewModel>();
+            LoadNotFriends();
+
             api.Authentication.LoginStateChanged += Authentication_LoginStateChanged;
             LoadMoreCommand = new Command(async () => await ItemsThresholdReached());
-            SearchCommand = new Command(async () => await LoadNotFriendsCommand());
-            RefreshCommand = new Command(async () =>
+            SearchCommand = new Command(async () => await LoadNotFriends());
+            RefreshCommand = new Command(async() =>
             {
-                await LoadNotFriendsCommand();
+                await LoadNotFriends();
                 IsRefreshing = false;
                 NotifyPropertyChanged(nameof(IsRefreshing));
             });
+
             SendFriendshipRequestCommand = new Command<UserViewModel>(SendFriendshipRequest);
             RemoveFriendshipRequestCommand = new Command<UserViewModel>(RemoveFriendshipRequest);
         }
@@ -72,7 +79,7 @@ namespace StudyBuddy.App.ViewModels
                 RefreshCommand.Execute(null);
         }
 
-        async Task LoadNotFriendsCommand()
+        private async Task LoadNotFriends()
         {
             if (IsBusy)
                 return;
@@ -97,7 +104,8 @@ namespace StudyBuddy.App.ViewModels
                 IsBusy = false;
             }
         }
-        async Task ItemsThresholdReached()
+
+        private async Task ItemsThresholdReached()
         {
             if (IsBusy)
                 return;
@@ -127,6 +135,7 @@ namespace StudyBuddy.App.ViewModels
                 IsBusy = false;
             }
         }
+
         public async void SendFriendshipRequest(UserViewModel obj)
         {
             var answer = false;

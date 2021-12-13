@@ -1,5 +1,6 @@
 ﻿using Plugin.Media;
 using Plugin.Media.Abstractions;
+using StudyBuddy.App.Api;
 using StudyBuddy.App.ViewModels;
 using System;
 using System.IO;
@@ -103,18 +104,17 @@ namespace StudyBuddy.App.Views
 
             var file = await CrossMedia.Current.PickPhotoAsync(new PickMediaOptions
             {
-                PhotoSize = PhotoSize.Full,
-                SaveMetaData = true
+                PhotoSize = PhotoSize.MaxWidthHeight,
+                MaxWidthHeight = 500,
+                SaveMetaData = true,
             });
 
             if (file == null)
                 return;
 
-            ViewModel.User.ProfileImage = ImageSource.FromStream(() =>
-            {
-                var stream = file.GetStream();
-                return stream;
-            });
+            ViewModel.User.SetProfileImage(file);
+            var api = TinyIoCContainer.Current.Resolve<IApi>();
+            await api.ImageService.SaveProfileImage(ViewModel.User.Image);
         }
 
         private async void SelectProfileImageFromCamera(object sender, EventArgs e)
@@ -128,19 +128,19 @@ namespace StudyBuddy.App.Views
                 return;
             }
 
-            var file = await CrossMedia.Current.TakePhotoAsync(new StoreCameraMediaOptions
+            MediaFile file = await CrossMedia.Current.TakePhotoAsync(new StoreCameraMediaOptions
             {
-                PhotoSize = PhotoSize.Full,
-                SaveMetaData = true
+                PhotoSize = PhotoSize.MaxWidthHeight,
+                MaxWidthHeight = 500,
+                SaveMetaData = true,
             });
 
             if (file == null)
                 return;
 
-            ViewModel.User.ProfileImage = ImageSource.FromStream(() =>
-            {
-                return file.GetStream();
-            });
+            ViewModel.User.SetProfileImage(file);
+            var api = TinyIoCContainer.Current.Resolve<IApi>();
+            await api.ImageService.SaveProfileImage(ViewModel.User.Image);
         }
 
         private void Button_Clicked(object sender, EventArgs e)

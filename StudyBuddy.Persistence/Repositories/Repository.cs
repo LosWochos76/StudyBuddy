@@ -27,6 +27,7 @@ namespace StudyBuddy.Persistence
         public INotificationRepository Notifications { get; private set; }
         public IBusinessEventRepository BusinessEvents { get; private set; }
         public IStatisticsRepository StatisticsRepository { get; private set; }
+        public IImageRepository Images { get; private set; }
 
         private void CreateRepositories()
         {
@@ -40,6 +41,7 @@ namespace StudyBuddy.Persistence
             Notifications = new NotificationRepository(connection_string);
             BusinessEvents = new BusinessEventRepository(connection_string);
             StatisticsRepository = new StatisticsRepository(connection_string);
+            Images = new ImageRepository(connection_string);
         }
     }
 }

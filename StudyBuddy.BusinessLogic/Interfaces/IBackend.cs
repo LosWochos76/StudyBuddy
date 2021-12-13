@@ -19,7 +19,9 @@ namespace StudyBuddy.BusinessLogic
         IStatisticsService StatisticsService { get; set; }
         IBusinessEventService BusinessEventService { get; }
         ILoggingService Logging { get; }
-        NotificationService NotificationService { get; }
+        INotificationService NotificationService { get; }
+        IImageService ImageService { get; }
+
         public void SetCurrentUserFromToken(string token);
     }
 }

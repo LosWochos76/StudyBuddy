@@ -16,6 +16,7 @@ namespace StudyBuddy.App.Api
         IRequestService Requests { get; }
         ILoggingService Logging { get; }
         IStatisticsService Statistics { get; }
+        IImageService ImageService { get; }
 
         NotificationService Notifications { get; }
 

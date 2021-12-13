@@ -19,6 +19,7 @@ namespace StudyBuddy.App.ViewModels
         public ICommand SearchCommand { get; }
         public ICommand LoadMoreCommand { get; }
         public bool IsRefreshing { get; set; } = false;
+
         private string _searchText = string.Empty;
         public string SearchText
         {
@@ -38,6 +39,7 @@ namespace StudyBuddy.App.ViewModels
                 });
             }
         }
+
         public int Skip { get; set; }
         private bool _isBusy;
         public bool IsBusy
@@ -49,6 +51,7 @@ namespace StudyBuddy.App.ViewModels
                 NotifyPropertyChanged(nameof(IsBusy));
             }
         }
+
         public int ItemThreshold { get; set; } = 1;
         public int PageNo { get; set; } = 0;
 
@@ -63,6 +66,7 @@ namespace StudyBuddy.App.ViewModels
                 IsRefreshing = false;
                 NotifyPropertyChanged(nameof(IsRefreshing));
             });
+
             DetailsCommand = new Command<UserViewModel>(Details);
             AddFriendCommand = new Command(AddFriend);
             api.Authentication.LoginStateChanged += Authentication_LoginStateChanged;
@@ -87,7 +91,7 @@ namespace StudyBuddy.App.ViewModels
                 RefreshCommand.Execute(null);
         }
 
-        async Task LoadFriendsCommand()
+        private async Task LoadFriendsCommand()
         {
             if (IsBusy)
                 return;
@@ -112,7 +116,8 @@ namespace StudyBuddy.App.ViewModels
                 IsBusy = false;
             }
         }
-        async Task ItemsThresholdReached()
+
+        private async Task ItemsThresholdReached()
         {
             if (IsBusy)
                 return;
@@ -142,6 +147,7 @@ namespace StudyBuddy.App.ViewModels
                 IsBusy = false;
             }
         }
+
         public async void Details(UserViewModel obj)
         {
             var userStatistics = await api.Statistics.GetUserStatisticsForUser(obj.ID);

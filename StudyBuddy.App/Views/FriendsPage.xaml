@@ -7,31 +7,31 @@
              xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
              xmlns:fontAwesome="clr-namespace:StudyBuddy.App"
              xmlns:templates="clr-namespace:StudyBuddy.App.Templates"
-             Title="Freunde"
-             x:Name="page">
+             x:Name="page"
+             Title="Freunde">
     <ContentPage.ToolbarItems>
         <ToolbarItem Text="Freund hinzufügen"
-                     Order="Primary"
-                     Priority="0"
-                     Command="{Binding AddFriendCommand}">
+            Order="Primary"
+            Priority="0"
+            Command="{Binding AddFriendCommand}">
             <ToolbarItem.IconImageSource>
                 <FontImageSource FontFamily="{StaticResource FontAwesomeSolid}"
-                                 Glyph="{x:Static fontAwesome:FontAwesomeIcons.Plus}" />
+                    Glyph="{x:Static fontAwesome:FontAwesomeIcons.Plus}" />
             </ToolbarItem.IconImageSource>
         </ToolbarItem>
     </ContentPage.ToolbarItems>
     <RefreshView IsRefreshing="{Binding IsRefreshing}"
-                 Command="{Binding RefreshCommand}"
-                 Padding="8">
+        Command="{Binding RefreshCommand}"
+        Padding="8">
         <CollectionView ItemsSource="{Binding Friends}"
-                        ItemsUpdatingScrollMode="KeepItemsInView"
-                        RemainingItemsThreshold="{Binding ItemThreshold}"
-                        RemainingItemsThresholdReachedCommand="{Binding LoadMoreCommand}"
-                        Header="{Binding .}">
+            ItemsUpdatingScrollMode="KeepItemsInView"
+            RemainingItemsThreshold="{Binding ItemThreshold}"
+            RemainingItemsThresholdReachedCommand="{Binding LoadMoreCommand}"
+            Header="{Binding .}">
             <CollectionView.EmptyView>
                 <StackLayout Padding="12">
                     <Label HorizontalOptions="Center"
-                           Text="Keine Freunde" />
+                        Text="Keine Freunde" />
                 </StackLayout>
             </CollectionView.EmptyView>
             <CollectionView.HeaderTemplate>
@@ -41,16 +41,14 @@
             </CollectionView.HeaderTemplate>
             <CollectionView.ItemTemplate>
                 <DataTemplate x:DataType="viewmodels:UserViewModel">
-                    <Grid x:Name="Item"
-                          Padding="0,8,0,0">
-                        <Frame CornerRadius="10"
-                               HasShadow="False">
+                    <Grid x:Name="Item" Padding="0,8,0,0">
+                        <Frame CornerRadius="10" HasShadow="False">
                             <StackLayout Orientation="Horizontal">
-                                <xct:AvatarView Size="45"
-                                                Grid.Column="0"
-                                                Grid.Row="0"
-                                                Text="{Binding Initials}"
-                                                Source="{Binding ProfileImage}" />
+                                <xct:AvatarView Size="45" VerticalOptions="Center"
+                                    Grid.Column="0"
+                                    Grid.Row="0"
+                                    Text="{Binding Initials}"
+                                    Source="{Binding ProfileImage}" />
                                 <StackLayout VerticalOptions="Center">
                                     <Label Text="{Binding FullName}"
                                            Padding="10,0,0,0"
@@ -63,7 +61,7 @@
                             </StackLayout>
                             <Frame.GestureRecognizers>
                                 <TapGestureRecognizer Command="{Binding BindingContext.DetailsCommand, Source={x:Reference Name=page}}"
-                                                      CommandParameter="{Binding Source={x:Reference Item}, Path=BindingContext}" />
+                                    CommandParameter="{Binding Source={x:Reference Item}, Path=BindingContext}" />
                             </Frame.GestureRecognizers>
                         </Frame>
                     </Grid>

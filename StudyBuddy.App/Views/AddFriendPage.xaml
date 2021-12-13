@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="StudyBuddy.App.Views.AddFriendPage"
              xmlns:viewmodels="clr-namespace:StudyBuddy.App.ViewModels"
+             xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
              x:DataType="viewmodels:AddFriendViewModel"
              Title="Freund hinzufügen"
              x:Name="page">
@@ -15,15 +16,15 @@
                    HeightRequest="35">
                 <Frame.IsVisible>
                     <OnPlatform x:TypeArguments="x:Boolean"
-                                iOS="False"
-                                Android="True" />
+                        iOS="False"
+                        Android="True" />
                 </Frame.IsVisible>
                 <SearchBar SearchCommand="{Binding SearchCommand}"
                            Text="{Binding SearchText}">
                     <SearchBar.IsVisible>
                         <OnPlatform x:TypeArguments="x:Boolean"
-                                    iOS="False"
-                                    Android="True" />
+                            iOS="False"
+                            Android="True" />
                     </SearchBar.IsVisible>
                 </SearchBar>
             </Frame>
@@ -45,16 +46,14 @@
                                 RemainingItemsThresholdReachedCommand="{Binding LoadMoreCommand}">
                     <CollectionView.ItemTemplate>
                         <DataTemplate x:DataType="viewmodels:UserViewModel">
-                            <Grid Padding="0,8,0,0"
-                                  x:Name="Item">
-                                <Frame CornerRadius="10"
-                                       HasShadow="False">
+                            <Grid Padding="0,8,0,0" x:Name="Item">
+                                <Frame CornerRadius="10" HasShadow="False">
                                     <StackLayout Orientation="Horizontal">
-                                        <Image HeightRequest="45"
-                                               WidthRequest="45"
-                                               Grid.Column="0"
-                                               Grid.Row="0"
-                                               Source="{Binding ProfileImage}" />
+                                        <xct:AvatarView Size="45" VerticalOptions="Center"
+                                            Grid.Column="0"
+                                            Grid.Row="0"
+                                            Text="{Binding Initials}"
+                                            Source="{Binding ProfileImage}" />
                                         <StackLayout VerticalOptions="Center">
                                             <Label Padding="10,0,0,0"
                                                    Text="{Binding FullName}"
@@ -68,7 +67,7 @@
                                                    IsVisible="{Binding NotRequestedForFriendship}">
                                                 <Label.GestureRecognizers>
                                                     <TapGestureRecognizer Command="{Binding BindingContext.SendFriendshipRequestCommand, Source={x:Reference Name=page}}"
-                                                                          CommandParameter="{Binding Source={x:Reference Item}, Path=BindingContext}" />
+                                                        CommandParameter="{Binding Source={x:Reference Item}, Path=BindingContext}" />
                                                 </Label.GestureRecognizers>
                                             </Label>
                                             <Label Padding="10,0,0,0"
@@ -76,7 +75,7 @@
                                                    IsVisible="{Binding RequestedForFriendship}">
                                                 <Label.GestureRecognizers>
                                                     <TapGestureRecognizer Command="{Binding BindingContext.RemoveFriendshipRequestCommand, Source={x:Reference Name=page}}"
-                                                                          CommandParameter="{Binding Source={x:Reference Item}, Path=BindingContext}" />
+                                                        CommandParameter="{Binding Source={x:Reference Item}, Path=BindingContext}" />
                                                 </Label.GestureRecognizers>
                                             </Label>
                                         </StackLayout>

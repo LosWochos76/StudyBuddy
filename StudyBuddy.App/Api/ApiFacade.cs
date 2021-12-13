@@ -9,8 +9,8 @@ namespace StudyBuddy.App.Api
 {
     public class ApiFacade : IApi
     {
-        //private readonly string base_url = "https://localhost:5001/";
-        private readonly string base_url = "https://studybuddy.hshl.de/";
+        private readonly string base_url = "https://localhost:5001/";
+        //private readonly string base_url = "https://studybuddy.hshl.de/";
         //private readonly string base_url = "https://10.0.2.2:5001/";
         //private readonly string base_url = "http://192.168.0.199:58947/";
         
@@ -26,6 +26,7 @@ namespace StudyBuddy.App.Api
         public ILoggingService Logging { get; }
         public NotificationService Notifications { get; }
         public IStatisticsService Statistics { get; }
+        public IImageService ImageService { get; set; }
 
         public ApiFacade()
         {
@@ -39,6 +40,7 @@ namespace StudyBuddy.App.Api
             Logging = new LoggingService(this, base_url);
             Notifications = new NotificationService(this, base_url);
             Statistics = new StatisticsService(this, base_url);
+            ImageService = new ImageService(this, base_url);
 
             CheckVersion();
         }

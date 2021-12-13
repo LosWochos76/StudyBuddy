@@ -1,51 +1,43 @@
 using System.Collections.Generic;
-using FirebaseAdmin.Auth;
 using StudyBuddy.Model;
-using StudyBuddy.Model.Model;
 
 namespace StudyBuddy.BusinessLogic
 {
-    public class NotificationService
+    public class NotificationService : INotificationService
     {
-            private readonly IBackend backend;
-       
-            public NotificationService(IBackend backend)
-            { 
-                this.backend = backend;
-            }
-            
-            public void CreateNotificationForUser(int userId, string title,  string body)
+        private readonly IBackend backend;
+
+        public NotificationService(IBackend backend)
+        {
+            this.backend = backend;
+        }
+
+        public void CreateNotificationForUser(int userId, string title, string body)
+        {
+            backend.Repository.Notifications.Insert(new Notification()
             {
-                backend.Repository.Notifications.Insert(new Notification()
-                {
-                    OwnerId = userId,
-                    Title = title,
-                    Body = body
-                });
-            }
+                OwnerId = userId,
+                Title = title,
+                Body = body
+            });
+        }
 
-
-            public IEnumerable<Notification> GetNotificationFromUser(int userId)
+        public IEnumerable<Notification> GetNotificationFromUser(int userId)
+        {
+            var response = backend.Repository.Notifications.All(new NotificationFilter()
             {
-                var response = backend.Repository.Notifications.All(new NotificationFilter()
-                {
-                    OwnerId = userId
-                });
+                OwnerId = userId
+            });
 
-                return response;
-            }
-            
-            public IEnumerable<Notification> GetNotificationFeedForUser(int userId)
+            return response;
+        }
+
+        public IEnumerable<Notification> GetNotificationFeedForUser(int userId)
+        {
+            return backend.Repository.Notifications.GetUserNotificationsFeed(new NotificationFilter()
             {
-                return backend.Repository.Notifications.GetUserNotificationsFeed(new NotificationFilter()
-                {
-                    OwnerId = userId
-                });
-            }
-
-
-
-
-
+                OwnerId = userId
+            });
+        }
     }
 }

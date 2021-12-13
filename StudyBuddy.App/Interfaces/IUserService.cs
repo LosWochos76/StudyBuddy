@@ -10,6 +10,5 @@ namespace StudyBuddy.App.Api
         Task<IEnumerable<UserViewModel>> GetNotFriends(string search_string = "", int skip = 0);
         Task<bool> RemoveFriend(UserViewModel uvm);
         Task<UserViewModel> GetById(int user_id);
-        Task<bool> SaveProfileImage(UserViewModel user);
     }
 }

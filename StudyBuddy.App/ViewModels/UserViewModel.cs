@@ -1,5 +1,7 @@
 ﻿using System.ComponentModel;
+using System.IO;
 using System.Runtime.CompilerServices;
+using Plugin.Media.Abstractions;
 using StudyBuddy.App.Misc;
 using StudyBuddy.Model;
 using Xamarin.Forms;
@@ -52,18 +54,45 @@ namespace StudyBuddy.App.ViewModels
             }
         }
 
-        private ImageSource profile_image = null;
-        public ImageSource ProfileImage
+        private PersistentImageViewModel profile_image = null;
+        public PersistentImageViewModel Image
         {
-            get
-            {
-                return profile_image;
-            }
-
+            get { return profile_image; }
             set
             {
                 profile_image = value;
                 NotifyPropertyChanged();
+                NotifyPropertyChanged("ProfileImage");
+            }
+        }
+
+        public void SetProfileImage(MediaFile file)
+        {
+            if (profile_image == null)
+            {
+                profile_image = new PersistentImageViewModel();
+                profile_image.UserID = this.ID;
+                profile_image.Name = "profile.jpg";
+            }
+
+            using (var ms = new MemoryStream())
+            {
+                file.GetStreamWithImageRotatedForExternalStorage().CopyTo(ms);
+                profile_image.Content = ms.ToArray();
+                profile_image.Length = profile_image.Content.Length;
+            }
+
+            NotifyPropertyChanged("ProfileImage");
+        }
+
+        public ImageSource ProfileImage
+        {
+            get
+            {
+                if (profile_image != null)
+                    return profile_image.ToImageSource();
+                else
+                    return null;
             }
         }
 

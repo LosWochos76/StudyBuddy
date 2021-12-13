@@ -1,12 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
+﻿using System.Collections.Generic;
+using System.IO;
 using System.Net.Http;
 using System.Threading.Tasks;
-using Nito.AsyncEx;
 using StudyBuddy.App.Misc;
 using StudyBuddy.App.ViewModels;
 using StudyBuddy.Model;
+using Xamarin.Forms;
 
 namespace StudyBuddy.App.Api
 {
@@ -15,7 +14,6 @@ namespace StudyBuddy.App.Api
         private readonly IApi api;
         private readonly string base_url;
         private readonly HttpClient client;
-        private AsyncMonitor monitor = new AsyncMonitor();
 
         public UserService(IApi api, string base_url)
         {
@@ -92,11 +90,6 @@ namespace StudyBuddy.App.Api
                 return null;
 
             return UserViewModel.FromModel(content);
-        }
-
-        public async Task<bool> SaveProfileImage(UserViewModel user)
-        {
-            return false;
         }
     }
 }
