@@ -12,7 +12,7 @@
     <xct:TabView TabStripPlacement="Top"
                  TabStripHeight="55"
                  TabIndicatorColor="{AppThemeBinding Dark={StaticResource TextColorDark}, Light={StaticResource TextColor}}"
-                 TabStripBackgroundColor="{AppThemeBinding Dark={StaticResource CardBackgroundDark}, Light={StaticResource CardBackground}}"
+                 TabStripBackgroundColor="{AppThemeBinding Dark={StaticResource WindowBackgroundColorDark}, Light={StaticResource WindowBackgroundColor}}"
                  TabIndicatorPlacement="Bottom"
                  TabIndicatorHeight="5"
                  SelectedIndex="0"
@@ -73,7 +73,7 @@
                                           x:Name="requestItem">
                                         <Frame CornerRadius="10"
                                                HasShadow="True"
-                                               BackgroundColor="{AppThemeBinding Dark={StaticResource CardBackgroundDark}, Light={StaticResource CardBackground}}">
+                                               BackgroundColor="{AppThemeBinding Dark={StaticResource WindowBackgroundColorDark}, Light={StaticResource WindowBackgroundColor}}">
                                             <StackLayout Orientation="Horizontal">
                                                 <Image WidthRequest="45"
                                                        HeightRequest="45">
