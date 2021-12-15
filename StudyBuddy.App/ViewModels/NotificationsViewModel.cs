@@ -62,8 +62,6 @@ namespace StudyBuddy.App.ViewModels
             NotifyPropertyChanged("IsRefreshing");
         }
 
-   
-
         private async Task ReloadRequests()
         {
             try

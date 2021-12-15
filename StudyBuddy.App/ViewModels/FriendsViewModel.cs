@@ -104,9 +104,7 @@ namespace StudyBuddy.App.ViewModels
                 Friends.Clear();
                 var friends = await api.Users.GetFriends(SearchText);
                 Friends.AddRange(friends);
-
-                foreach (var user in Friends)
-                    await api.ImageService.GetProfileImage(user);
+                api.ImageService.GetProfileImages(Friends);
 
                 PageNo = 1;
                 Skip = 10;

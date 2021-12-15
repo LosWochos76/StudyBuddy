@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System.Collections.Generic;
+using System.IO;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Plugin.Media.Abstractions;
@@ -49,6 +50,12 @@ namespace StudyBuddy.App.Api
 
             user.ProfileImage = ImageSource.FromStream(() => new MemoryStream(result.Content));
             return true;
+        }
+
+        public async void GetProfileImages(IList<UserViewModel> users)
+        {
+            foreach (var user in users)
+                await GetProfileImage(user);
         }
     }
 }

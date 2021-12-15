@@ -92,9 +92,7 @@ namespace StudyBuddy.App.ViewModels
                 Users.Clear();
                 var friends = await api.Users.GetNotFriends(SearchText);
                 Users.AddRange(friends);
-
-                foreach (var user in Users)
-                    await api.ImageService.GetProfileImage(user);
+                api.ImageService.GetProfileImages(Users);
 
                 PageNo = 1;
                 Skip = 10;
