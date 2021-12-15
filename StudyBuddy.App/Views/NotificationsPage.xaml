@@ -26,7 +26,7 @@
                     <RefreshView IsRefreshing="{Binding IsRefreshing}"
                                  Command="{Binding RefreshCommand}"
                                  Padding="8">
-                        <CollectionView ItemsSource="{Binding NewsViewModel.News}">
+                        <CollectionView ItemsSource="{Binding News}">
                             <CollectionView.ItemTemplate>
                                 <DataTemplate x:DataType="viewmodels:NewsViewModel">
                                     <ContentView>
