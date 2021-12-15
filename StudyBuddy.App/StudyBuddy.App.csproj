@@ -24,6 +24,7 @@
         <None Remove="Newtonsoft.Json" />
         <None Remove="Nito.AsyncEx" />
         <None Remove="Xamarin.MediaGallery" />
+        <Compile Remove="ViewModels\NotificationsViewModelNews.cs" />
     </ItemGroup>
 
     <ItemGroup>
