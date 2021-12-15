@@ -57,6 +57,7 @@
     <CodesignProvision>VS: de.hshl.App Development</CodesignProvision>
     <CodesignKey>Apple Development: Alexander Stuckenholz (FF9JERN36B)</CodesignKey>
     <CodesignEntitlements>Entitlements.plist</CodesignEntitlements>
+    <MtouchExtraArgs>--weak-framework=SensorKit.framework/SensorKit</MtouchExtraArgs>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|iPhone' ">
     <DebugType>none</DebugType>
