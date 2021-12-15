@@ -1,8 +1,11 @@
-﻿using System.Net.Http;
+﻿using System.IO;
+using System.Net.Http;
 using System.Threading.Tasks;
+using Plugin.Media.Abstractions;
 using StudyBuddy.App.Misc;
 using StudyBuddy.App.ViewModels;
 using StudyBuddy.Model;
+using Xamarin.Forms;
 
 namespace StudyBuddy.App.Api
 {
@@ -19,23 +22,33 @@ namespace StudyBuddy.App.Api
             client = new HttpClient(Helper.GetInsecureHandler());
         }
 
-        public async Task<bool> SaveProfileImage(PersistentImageViewModel image)
+        public async Task<bool> SaveProfileImage(UserViewModel user, MediaFile image)
         {
-            var rh = new WebRequestHelper(api.Authentication.Token);
-            var result = await rh.Load<PersistentImage>(base_url + "Image/", HttpMethod.Post, image);
-
-            if (result != null)
+            var pi = new PersistentImage() { UserID = user.ID };
+            using (var m = new MemoryStream())
             {
-                image = PersistentImageViewModel.FromModel(result);
-                return true;
+                image.GetStream().CopyTo(m);
+                pi.Content = m.ToArray();
+                pi.Length = pi.Content.Length;
+                pi.Name = "profile_image.jpg";
             }
 
-            return false;
+            var rh = new WebRequestHelper(api.Authentication.Token);
+            var result = await rh.Load<PersistentImage>(base_url + "Image/OfUser", HttpMethod.Post, pi);
+            user.ProfileImage = ImageSource.FromStream(() => new MemoryStream(result.Content));
+
+            return true;
         }
 
         public async Task<bool> GetProfileImage(UserViewModel user)
         {
-            return false;
+            var rh = new WebRequestHelper(api.Authentication.Token);
+            var result = await rh.Load<PersistentImage>(base_url + "Image/OfUser/" + user.ID, HttpMethod.Get);
+            if (result == null)
+                return false;
+
+            user.ProfileImage = ImageSource.FromStream(() => new MemoryStream(result.Content));
+            return true;
         }
     }
 }

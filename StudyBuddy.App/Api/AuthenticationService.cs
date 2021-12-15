@@ -4,6 +4,7 @@ using System.Net.Http.Json;
 using System.Text.Json;
 using System.Threading.Tasks;
 using StudyBuddy.App.Misc;
+using StudyBuddy.App.ViewModels;
 using StudyBuddy.Model;
 using Xamarin.Forms;
 
@@ -24,7 +25,7 @@ namespace StudyBuddy.App.Api
 
         public event LoginStateChangedHandler LoginStateChanged;
         public string Token { get; private set; } = string.Empty;
-        public User CurrentUser { get; private set; }
+        public UserViewModel CurrentUser { get; private set; }
 
         public async Task<bool> Login(UserCredentials credentials)
         {
@@ -42,7 +43,6 @@ namespace StudyBuddy.App.Api
             }
             catch (Exception exp)
             {
-                var test = exp;
                 return false;
             }
         }
@@ -58,7 +58,14 @@ namespace StudyBuddy.App.Api
 
             Token = token_element.ToString();
             var options = new JsonSerializerOptions() { PropertyNameCaseInsensitive = true };
-            CurrentUser = JsonSerializer.Deserialize<User>(user_element.GetRawText(), options);
+
+            var user = JsonSerializer.Deserialize<User>(user_element.GetRawText(), options);
+            CurrentUser = UserViewModel.FromModel(user);
+
+            // ToDo: Hier muss noch das Profilbild nachgeladen werden
+            await api.ImageService.GetProfileImage(CurrentUser);
+
+            // Zudem sollte hier auch noch gecheckt werden, ob die wiederhergestellten Credentials auch noch valide sind?!?
 
             // Save the Login-Data to the context to be resumed
             Application.Current.Properties["Login"] = content;

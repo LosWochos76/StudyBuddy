@@ -55,7 +55,18 @@ namespace StudyBuddy.BusinessLogic
             return backend.Repository.Images.Insert(obj);
         }
 
-        public PersistentImage OfUser(int user_id)
+        public PersistentImage Update(PersistentImage obj)
+        {
+            if (backend.CurrentUser == null)
+                throw new UnauthorizedAccessException("Unauthorized!");
+
+            if (!backend.CurrentUser.IsAdmin && backend.CurrentUser.ID != obj.UserID)
+                throw new UnauthorizedAccessException("Unauthorized!");
+
+            return backend.Repository.Images.Update(obj);
+        }
+
+        public PersistentImage GetOfUser(int user_id)
         {
             if (backend.CurrentUser == null)
                 throw new UnauthorizedAccessException("Unauthorized!");
@@ -66,15 +77,24 @@ namespace StudyBuddy.BusinessLogic
             return backend.Repository.Images.OfUser(user_id);
         }
 
-        public PersistentImage Update(PersistentImage obj)
+        public PersistentImage SaveOfUser(PersistentImage image)
         {
             if (backend.CurrentUser == null)
                 throw new UnauthorizedAccessException("Unauthorized!");
 
-            if (!backend.CurrentUser.IsAdmin && backend.CurrentUser.ID != obj.UserID)
+            if (!backend.CurrentUser.IsAdmin && backend.CurrentUser.ID != image.UserID.Value)
                 throw new UnauthorizedAccessException("Unauthorized!");
 
-            return backend.Repository.Images.Update(obj);
+            var old_image = backend.Repository.Images.OfUser(image.UserID.Value);
+            if (old_image != null)
+            {
+                old_image.Content = image.Content;
+                return backend.Repository.Images.Update(old_image);
+            }
+            else
+            {
+                return backend.Repository.Images.Insert(image);
+            }
         }
     }
 }

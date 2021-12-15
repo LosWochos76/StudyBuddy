@@ -17,9 +17,9 @@
                     </OnPlatform>
                 </Frame.Padding>
                 <Label BackgroundColor="{AppThemeBinding Dark={StaticResource WindowBackgroundColorDark}, Light={StaticResource WindowBackgroundColor}}"
-                       Text="Wilkommen beim StudyBuddy!"
-                       HorizontalTextAlignment="Center"
-                       FontSize="36" />
+                        Text="Wilkommen beim StudyBuddy!"
+                        HorizontalTextAlignment="Center"
+                        FontSize="36" />
             </Frame>
             <StackLayout Padding="10,10,10,0">
                 <Label HorizontalTextAlignment="Center">
@@ -30,10 +30,10 @@
                                     Text="Wenn du herausfinden willst, was der StudyBuddy 
                                     für dich als Studierender tun kann, klicke " />
                                 <Span Text="hier"
-                                      TextColor="#0A84FF" TextDecorations="Underline">
+                                        TextColor="#0A84FF" TextDecorations="Underline">
                                     <Span.GestureRecognizers>
                                         <TapGestureRecognizer Command="{Binding TapCommand}"
-                                                              CommandParameter="https://studybuddybackend.web.app/info" />
+                                                                CommandParameter="https://studybuddybackend.web.app/info" />
                                     </Span.GestureRecognizers>
                                 </Span>
                                 <Span Text="." />
@@ -45,12 +45,12 @@
         </StackLayout>
         <StackLayout Padding="10,10,10,10" VerticalOptions="CenterAndExpand">
             <Entry Placeholder="E-Mail-Adresse"
-                   Text="{Binding EMail}" />
+                    Text="{Binding EMail}" />
             <Entry x:Name="Entry"
-                   Placeholder="Passwort"
-                   IsPassword="True"
-                   Text="{Binding Password}"
-                   ReturnCommand="{Binding LoginCommand}"/>
+                    Placeholder="Passwort"
+                    IsPassword="True"
+                    Text="{Binding Password}"
+                    ReturnCommand="{Binding LoginCommand}"/>
             <Button Text="Anmelden" Command="{Binding LoginCommand}" />
 
             <Label HorizontalTextAlignment="Center">
@@ -58,7 +58,7 @@
                     <FormattedString>
                         <FormattedString.Spans>
                             <Span Text="Passwort vergessen?"
-                                  TextColor="#0A84FF" TextDecorations="Underline">
+                                    TextColor="#0A84FF" TextDecorations="Underline">
                                 <Span.GestureRecognizers>
                                     <TapGestureRecognizer 
                                         Command="{Binding PasswordForgottenCommand}" />
@@ -77,7 +77,7 @@
                     <FormattedString>
                         <FormattedString.Spans>
                             <Span Text="Impressum und Datenschutz"
-                                  TextColor="#0A84FF" TextDecorations="Underline">
+                                    TextColor="#0A84FF" TextDecorations="Underline">
                                 <Span.GestureRecognizers>
                                     <TapGestureRecognizer Command="{Binding ImprintCommand}" />
                                 </Span.GestureRecognizers>

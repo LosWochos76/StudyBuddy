@@ -53,7 +53,14 @@ namespace StudyBuddy.Api.Controllers
         [HttpGet]
         public IActionResult OfUser(int user_id)
         {
-            return Json(backend.ImageService.OfUser(user_id));
+            return Json(backend.ImageService.GetOfUser(user_id));
+        }
+
+        [Route("/Image/OfUser/")]
+        [HttpPost]
+        public IActionResult OfUser([FromBody] PersistentImage obj)
+        {
+            return Json(backend.ImageService.SaveOfUser(obj));
         }
     }
 }

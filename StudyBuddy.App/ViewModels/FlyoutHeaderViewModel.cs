@@ -1,5 +1,4 @@
-﻿using System;
-using StudyBuddy.App.Api;
+﻿using StudyBuddy.App.Api;
 using StudyBuddy.App.Misc;
 
 namespace StudyBuddy.App.ViewModels
@@ -17,7 +16,7 @@ namespace StudyBuddy.App.ViewModels
         {
             if (args.IsLoggedIn)
             {
-                User = UserViewModel.FromModel(args.User);
+                User = args.User;
                 NotifyPropertyChanged("User");
             }
         }

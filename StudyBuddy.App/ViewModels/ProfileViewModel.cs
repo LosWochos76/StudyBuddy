@@ -9,7 +9,7 @@ namespace StudyBuddy.App.ViewModels
 
         public ProfileViewModel(IApi api, IDialogService dialog, INavigationService navigation) : base(api, dialog, navigation)
         {
-            this.User = UserViewModel.FromModel(api.Authentication.CurrentUser);
+            this.User = api.Authentication.CurrentUser;
         }
     }
 }

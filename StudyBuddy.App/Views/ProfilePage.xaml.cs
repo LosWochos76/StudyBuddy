@@ -71,22 +71,17 @@ namespace StudyBuddy.App.Views
             {
                 isBackdropTapEnabled = false;
                 lastPanY = e.TotalY;
-                if (e.TotalY > 0)
-                {
-                    BottomToolbar.TranslationY = openY + e.TotalY;
-                }
 
+                if (e.TotalY > 0)
+                    BottomToolbar.TranslationY = openY + e.TotalY;
             }
             else if (e.StatusType == GestureStatus.Completed)
             {
                 if (lastPanY < 110)
-                {
                     await OpenDrawer();
-                }
                 else
-                {
                     await CloseDrawer();
-                }
+
                 isBackdropTapEnabled = true;
             }
         }
@@ -112,9 +107,10 @@ namespace StudyBuddy.App.Views
             if (file == null)
                 return;
 
-            ViewModel.User.SetProfileImage(file);
+            ViewModel.User.ProfileImage = ImageSource.FromStream(() => file.GetStream());
+ 
             var api = TinyIoCContainer.Current.Resolve<IApi>();
-            await api.ImageService.SaveProfileImage(ViewModel.User.Image);
+            await api.ImageService.SaveProfileImage(ViewModel.User, file);
         }
 
         private async void SelectProfileImageFromCamera(object sender, EventArgs e)
@@ -138,9 +134,10 @@ namespace StudyBuddy.App.Views
             if (file == null)
                 return;
 
-            ViewModel.User.SetProfileImage(file);
+            ViewModel.User.ProfileImage = ImageSource.FromStream(() => file.GetStreamWithImageRotatedForExternalStorage());
+
             var api = TinyIoCContainer.Current.Resolve<IApi>();
-            await api.ImageService.SaveProfileImage(ViewModel.User.Image);
+            await api.ImageService.SaveProfileImage(ViewModel.User, file);
         }
 
         private void Button_Clicked(object sender, EventArgs e)

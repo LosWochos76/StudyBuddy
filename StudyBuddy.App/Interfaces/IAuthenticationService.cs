@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
-using StudyBuddy.Model;
+using StudyBuddy.App.ViewModels;
 
 namespace StudyBuddy.App.Api
 {
@@ -8,7 +8,7 @@ namespace StudyBuddy.App.Api
 
     public class LoginStateChangedArgs : EventArgs
     {
-        public LoginStateChangedArgs(bool is_logged_in, User user, string token)
+        public LoginStateChangedArgs(bool is_logged_in, UserViewModel user, string token)
         {
             IsLoggedIn = is_logged_in;
             IsLoggedOut = !is_logged_in;
@@ -18,14 +18,14 @@ namespace StudyBuddy.App.Api
 
         public bool IsLoggedIn { get; }
         public bool IsLoggedOut { get; }
-        public User User { get; }
+        public UserViewModel User { get; }
         public string Token { get; set; }
     }
 
     public interface IAuthenticationService
     {
         string Token { get; }
-        User CurrentUser { get; }
+        UserViewModel CurrentUser { get; }
         bool IsLoggedIn { get; }
         Task<bool> Login(UserCredentials credentials);
         Task<bool> LoginFromJson(string content);

@@ -51,7 +51,7 @@ namespace StudyBuddy.App.Api
                 return false;
 
             var rvm = RequestViewModel.FromModel(content);
-            rvm.Sender = UserViewModel.FromModel(currentUser);
+            rvm.Sender = currentUser;
             obj.FriendshipRequest = rvm;
             api.RaiseRequestStateChanged(this, new RequestStateChangedEventArgs() { Request = rvm, Type = RequestStateChangedEventType.Created });
             return true;
