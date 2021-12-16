@@ -223,6 +223,14 @@ namespace StudyBuddy.Persistence
             return qh.ExecuteQueryToObjectList(sql);
         }
 
+        public int GetFriendsCount(int user_id)
+        {
+            var qh = new QueryHelper<User>(connection_string, FromReaderWithCommonFriends);
+            qh.AddParameter(":user_id", user_id);
+            var sql = "select count(*) from friends inner join users on user_b=id where user_a=:user_id";
+            return qh.ExecuteQueryToSingleInt(sql);
+        }
+
         public IEnumerable<User> GetNotFriends(FriendFilter filter)
         {
             var qh = new QueryHelper<User>(connection_string, FromReaderWithCommonFriends);

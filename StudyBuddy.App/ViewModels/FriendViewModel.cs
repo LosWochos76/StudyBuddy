@@ -43,7 +43,7 @@ namespace StudyBuddy.App.ViewModels
             }
 
             var navigation = TinyIoCContainer.Current.Resolve<INavigationService>();
-            await navigation.GoTo("//FriendsPage");
+            await navigation.Pop();
         }
     }
 }

@@ -16,7 +16,7 @@
                 TextColor="{AppThemeBinding Dark={StaticResource TextColorDark}, Light={StaticResource TextColor}}"/>
             <Label Text="{Binding User.Name}" FontSize="Large" FontAttributes="Bold"/>
             <Label Text="{Binding User.Nickname}" TextColor="{StaticResource SecondaryFont}" FontSize="Medium"/>
-            <Label Text="20 Freunde" Margin="0,5,0,5"/>
+            <Label Text="{Binding FriendsCount, StringFormat='{0} Freunde'}" Margin="0,5,0,5"/>
         </StackLayout>
     </ContentView.Content>
 </ContentView>

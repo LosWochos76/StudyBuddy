@@ -182,6 +182,11 @@ namespace StudyBuddy.App.Api
                 return false;
 
             api.RaiseRequestStateChanged(this, new RequestStateChangedEventArgs() { Request = request, Type = RequestStateChangedEventType.Accepted });
+            if (request.Type == RequestType.Friendship)
+            {
+                api.RaiseFriendsChanged(this, new FriendshipStateChangedEventArgs() { Type = FriendshipStateChangedType.Added, Friend = request.Sender });
+            }
+
             return content.IsOk;
         }
 

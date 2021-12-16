@@ -31,14 +31,14 @@ namespace StudyBuddy.Api
             return Json(backend.UserService.GetCount());
         }
 
-        [Route("/User/{id}")]
+        [Route("/User/{user_id}")]
         [HttpGet]
-        public IActionResult GetById(int id)
+        public IActionResult GetById(int user_id)
         {
-            return Json(backend.UserService.GetById(id));
+            return Json(backend.UserService.GetById(user_id));
         }
 
-        [Route("/User/{id}")]
+        [Route("/User/{user_id}")]
         [HttpPut]
         public IActionResult Update([FromBody] User obj)
         {
@@ -52,11 +52,11 @@ namespace StudyBuddy.Api
             return Json(backend.UserService.Insert(obj));
         }
 
-        [Route("/User/{id}")]
+        [Route("/User/{user_id}")]
         [HttpDelete]
-        public IActionResult Delete(int id)
+        public IActionResult Delete(int user_id)
         {
-            backend.UserService.Delete(id);
+            backend.UserService.Delete(user_id);
             return Json(new {Status = "ok"});
         }
 
@@ -74,26 +74,33 @@ namespace StudyBuddy.Api
             return Json(new {Id = backend.UserService.GetUserIdByEmail(email)});
         }
 
-        [Route("/User/{id}/Friends")]
+        [Route("/User/{user_id}/Friends")]
         [HttpGet]
-        public IActionResult GetAllFriends(int id, [FromQuery] FriendFilter filter)
+        public IActionResult GetAllFriends(int user_id, [FromQuery] FriendFilter filter)
         {
             if (filter == null)
-                filter = new FriendFilter() { UserId = id };
+                filter = new FriendFilter() { UserId = user_id };
             else
-                filter.UserId = id;
+                filter.UserId = user_id;
 
             return Json(backend.UserService.GetAllFriends(filter));
         }
 
-        [Route("/User/{id}/NotFriends")]
+        [Route("/User/{user_id}/Friends/Count")]
         [HttpGet]
-        public IActionResult GetAllNotFriends(int id, [FromQuery] FriendFilter filter)
+        public IActionResult GetAllFriendsCount(int user_id)
+        {
+            return Json(backend.UserService.GetAllFriendsCount(user_id));
+        }
+
+        [Route("/User/{user_id}/NotFriends")]
+        [HttpGet]
+        public IActionResult GetAllNotFriends(int user_id, [FromQuery] FriendFilter filter)
         {
             if (filter == null)
-                filter = new FriendFilter() { UserId = id };
+                filter = new FriendFilter() { UserId = user_id };
             else
-                filter.UserId = id;
+                filter.UserId = user_id;
 
             return Json(backend.UserService.GetAllNotFriends(filter));
         }

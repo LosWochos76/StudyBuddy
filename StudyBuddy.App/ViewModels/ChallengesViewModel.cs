@@ -6,24 +6,15 @@ using System.Windows.Input;
 using StudyBuddy.App.Api;
 using StudyBuddy.App.Misc;
 using StudyBuddy.App.Views;
-using StudyBuddy.Model;
 using Xamarin.Forms;
 
 namespace StudyBuddy.App.ViewModels
 {
     public class ChallengesViewModel : ViewModelBase
     {
+        private int skip = 0;
+
         public RangeObservableCollection<ChallengeViewModel> Challenges { get; private set; }
-        private ChallengeViewModel selectedChallenge;
-        public ChallengeViewModel SelectedChallenge
-        {
-            get { return selectedChallenge; }
-            set
-            {
-                selectedChallenge = value;
-                NotifyPropertyChanged(nameof(SelectedChallenge));
-            }
-        }
         public ICommand RefreshCommand { get; }
         public ICommand DetailsCommand { get; }
         public ICommand ScanQrCodeCommand { get; }
@@ -31,58 +22,63 @@ namespace StudyBuddy.App.ViewModels
         public ICommand SearchCommand { get; }
         public bool IsRefreshing { get; set; } = false;
         public string Header => string.Format("Herausforderungen am {0}", DateTime.Now.ToShortDateString());
-        private string _searchText = string.Empty;
+        public ChallengeViewModel SelectedChallenge { get; set; }
+
+        private string search_text = string.Empty;
         public string SearchText
         {
-            get { return _searchText; }
+            get { return search_text; }
             set
             {
-                if (_searchText == value)
+                if (search_text == value)
                     return;
 
-                _searchText = value ?? string.Empty;
+                search_text = value ?? string.Empty;
                 Task.Run(async () =>
                 {
-                    string SearchText = _searchText;
+                    string SearchText = search_text;
                     await Task.Delay(1000);
-                    if (_searchText == SearchText)
+                    if (search_text == SearchText)
                     {
-                        await LoadChallengesCommand();
+                        await Refresh();
                     }
-                        
                 });
             }
         }
-        public int Skip { get; set; }
-        private bool _isBusy;
-        public bool IsBusy
+
+        private int item_treshold = 1;
+        public int ItemThreshold
         {
-            get { return _isBusy; }
+            get { return item_treshold; }
             set
             {
-                _isBusy = value;
-                NotifyPropertyChanged(nameof(IsBusy));
+                item_treshold = value;
+                NotifyPropertyChanged();
             }
         }
-        public int ItemThreshold { get; set; } = 1;
-        public int PageNo { get; set; } = 0;
 
+        private bool is_busy = false;
+        public bool IsBusy
+        {
+            get { return is_busy; }
+            set
+            {
+                is_busy = value;
+                NotifyPropertyChanged();
+            }
+        }
 
         public ChallengesViewModel(IApi api, IDialogService dialog, INavigationService navigation) : base(api, dialog, navigation)
         {
             Challenges = new RangeObservableCollection<ChallengeViewModel>();
             api.Authentication.LoginStateChanged += Authentication_LoginStateChanged;
-            LoadMoreCommand = new Command(async () => await ItemsThresholdReached());
-            SearchCommand = new Command(async () => await LoadChallengesCommand());
-            RefreshCommand = new Command(async () =>
-            {
-                await LoadChallengesCommand();
-                IsRefreshing = false;
-                NotifyPropertyChanged(nameof(IsRefreshing));
-            });
+            api.ChallengeAccepted += (sender, e) => { _ = LoadChallenges(); };
+
+            LoadMoreCommand = new Command(async () => await LoadChallenges());
+            SearchCommand = new Command(async () => await Refresh());
             DetailsCommand = new Command(ShowDetails);
             ScanQrCodeCommand = new Command(ScanQrCode);
-            api.ChallengeAccepted += (sender, e) => { _ = LoadChallengesCommand(); };
+            RefreshCommand = new Command(async () => await Refresh());
         }
 
         private void Authentication_LoginStateChanged(object sender, LoginStateChangedArgs args)
@@ -91,7 +87,16 @@ namespace StudyBuddy.App.ViewModels
               RefreshCommand.Execute(null);
         }
 
-        async Task LoadChallengesCommand()
+        private async Task Refresh()
+        {
+            Challenges.Clear();
+            skip = 0;
+            await LoadChallenges();
+            IsRefreshing = false;
+            NotifyPropertyChanged(nameof(IsRefreshing));
+        }
+
+        private async Task LoadChallenges()
         {
             if (IsBusy)
                 return;
@@ -101,41 +106,15 @@ namespace StudyBuddy.App.ViewModels
             try
             {
                 ItemThreshold = 1;
-                Challenges.Clear();
-                var challenges = await api.Challenges.ForToday(SearchText);
-                Challenges.AddRange(challenges);
-                PageNo = 1;
-                Skip = 10;
-            }
-            catch (ApiException e)
-            {
-                await dialog.ShowError(e, "Ein Fehler ist aufgetreten!", "Ok", null);
-            }
-            finally
-            {
-                IsBusy = false;
-            }
-        }
-        async Task ItemsThresholdReached()
-        {
-            if (IsBusy)
-                return;
-
-            IsBusy = true;
-
-            try
-            {
-                Skip = 10 * PageNo;
-                var items = await api.Challenges.ForToday(SearchText, Skip);
-                Challenges.AddRange(items);
-
-                if (items.Count() == 0)
+                var challenges = await api.Challenges.ForToday(SearchText, skip);
+                if (challenges.Count() == 0)
                 {
                     ItemThreshold = -1;
                     return;
                 }
 
-                PageNo++;
+                Challenges.AddRange(challenges);
+                skip += 10;
             }
             catch (ApiException e)
             {

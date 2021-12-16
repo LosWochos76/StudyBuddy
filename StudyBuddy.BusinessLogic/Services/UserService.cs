@@ -92,6 +92,14 @@ namespace StudyBuddy.BusinessLogic
             return backend.Repository.Users.GetFriends(filter);
         }
 
+        public int GetAllFriendsCount(int user_id)
+        {
+            if (backend.CurrentUser == null || !backend.CurrentUser.IsAdmin && backend.CurrentUser.ID != user_id)
+                throw new Exception("Unauthorized!");
+
+            return backend.Repository.Users.GetFriendsCount(user_id);
+        }
+
         public IEnumerable<User> GetAllNotFriends(FriendFilter filter)
         {
             if (backend.CurrentUser == null || !backend.CurrentUser.IsAdmin && backend.CurrentUser.ID != filter.UserId)

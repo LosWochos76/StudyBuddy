@@ -1,11 +1,9 @@
 ﻿using System.Collections.Generic;
-using System.IO;
 using System.Net.Http;
 using System.Threading.Tasks;
 using StudyBuddy.App.Misc;
 using StudyBuddy.App.ViewModels;
 using StudyBuddy.Model;
-using Xamarin.Forms;
 
 namespace StudyBuddy.App.Api
 {
@@ -20,6 +18,13 @@ namespace StudyBuddy.App.Api
             this.api = api;
             this.base_url = base_url;
             client = new HttpClient(Helper.GetInsecureHandler());
+        }
+
+        public async Task<int> GetFriendsCount()
+        {
+            var currentUserId = api.Authentication.CurrentUser.ID;
+            var rh = new WebRequestHelper(api.Authentication.Token);
+            return await rh.Load<int>(base_url + "User/" + currentUserId + "/Friends/Count", HttpMethod.Get);
         }
 
         public async Task<IEnumerable<UserViewModel>> GetFriends(string search_string = "", int skip = 0)

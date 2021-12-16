@@ -89,12 +89,6 @@ namespace StudyBuddy.App.ViewModels
             }
 
             await ReloadRequests();
-
-            if (rvm.Type == Model.RequestType.Friendship)
-            {
-                var vm = TinyIoCContainer.Current.Resolve<FriendsViewModel>();
-                vm.RefreshCommand.Execute(null);
-            }
         }
 
         public async void DenyRequest(RequestViewModel rvm)

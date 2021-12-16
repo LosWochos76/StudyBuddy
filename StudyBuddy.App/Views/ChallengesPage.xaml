@@ -23,10 +23,9 @@
                 <templates:OrganizingChallengeTemplate />
             </DataTemplate>
             <tempsel:ChallengeDataTemplateSelector x:Key="ChallengeTemplateSelector"
-                                                   LearningChallengeTemplate="{StaticResource Learning}"
-                                                   NetworkingChallengeTemplate="{StaticResource Networking}"
-                                                   OrganizingChallengeTemplate="{StaticResource Organizing}" />
-
+                LearningChallengeTemplate="{StaticResource Learning}"
+                NetworkingChallengeTemplate="{StaticResource Networking}"
+                OrganizingChallengeTemplate="{StaticResource Organizing}" />
         </ResourceDictionary>
         </ContentPage.Resources>
     <ContentPage.ToolbarItems>
@@ -40,28 +39,29 @@
             </ToolbarItem.IconImageSource>
         </ToolbarItem>
     </ContentPage.ToolbarItems>
-    <RefreshView IsRefreshing="{Binding IsRefreshing}"
-                 Command="{Binding RefreshCommand}">
-        <CollectionView ItemsSource="{Binding Challenges}"
-                        SelectedItem="{Binding SelectedChallenge}"
-                        SelectionMode="Single"
-                        SelectionChangedCommand="{Binding DetailsCommand}"
-                        RemainingItemsThreshold="{Binding ItemThreshold}"
-                        RemainingItemsThresholdReachedCommand="{Binding LoadMoreCommand}"
-                        ItemsUpdatingScrollMode="KeepItemsInView"
-                        Header="{Binding .}"
-                        ItemTemplate="{StaticResource ChallengeTemplateSelector}">
-            <CollectionView.EmptyView>
-                <StackLayout Padding="12">
-                    <Label HorizontalOptions="Center"
-                           Text="Keine Challenges" />
-                </StackLayout>
-            </CollectionView.EmptyView>
-            <CollectionView.HeaderTemplate>
-                <DataTemplate>
-                    <templates:SearchBarTemplate />
-                </DataTemplate>
-            </CollectionView.HeaderTemplate>
-        </CollectionView>
-    </RefreshView>
+    <StackLayout VerticalOptions="CenterAndExpand">
+        <RefreshView IsRefreshing="{Binding IsRefreshing}"
+            Command="{Binding RefreshCommand}">
+            <CollectionView ItemsSource="{Binding Challenges}"
+                SelectedItem="{Binding SelectedChallenge}"
+                SelectionMode="Single"
+                SelectionChangedCommand="{Binding DetailsCommand}"
+                RemainingItemsThreshold="{Binding ItemThreshold}"
+                RemainingItemsThresholdReachedCommand="{Binding LoadMoreCommand}"
+                ItemsUpdatingScrollMode="KeepItemsInView"
+                Header="{Binding .}"
+                ItemTemplate="{StaticResource ChallengeTemplateSelector}">
+                <CollectionView.EmptyView>
+                    <StackLayout Padding="12">
+                        <Label HorizontalOptions="Center" Text="Keine Challenges" />
+                    </StackLayout>
+                </CollectionView.EmptyView>
+                <CollectionView.HeaderTemplate>
+                    <DataTemplate>
+                        <templates:SearchBarTemplate />
+                    </DataTemplate>
+                </CollectionView.HeaderTemplate>
+            </CollectionView>
+        </RefreshView>
+    </StackLayout>
 </ContentPage>
