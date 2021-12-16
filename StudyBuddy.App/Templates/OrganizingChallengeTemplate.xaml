@@ -14,9 +14,9 @@
                    HeightRequest="45">
                 <Image.Source>
                     <FontImageSource FontFamily="{StaticResource FontAwesomeSolid}"
-                                     Glyph="{Binding CategorySymbol}"
-                                     Color="{AppThemeBinding Dark={StaticResource SystemTealDark},
-                                                            Light={StaticResource SystemTeal}}" />
+                        Glyph="{Binding CategorySymbol}"
+                        Color="{AppThemeBinding Dark={StaticResource SystemTealDark},
+                            Light={StaticResource SystemTeal}}" />
                 </Image.Source>
             </Image>
             <StackLayout VerticalOptions="Center">

@@ -39,29 +39,28 @@
             </ToolbarItem.IconImageSource>
         </ToolbarItem>
     </ContentPage.ToolbarItems>
-    <StackLayout VerticalOptions="CenterAndExpand">
-        <RefreshView IsRefreshing="{Binding IsRefreshing}"
-            Command="{Binding RefreshCommand}">
-            <CollectionView ItemsSource="{Binding Challenges}"
-                SelectedItem="{Binding SelectedChallenge}"
-                SelectionMode="Single"
-                SelectionChangedCommand="{Binding DetailsCommand}"
-                RemainingItemsThreshold="{Binding ItemThreshold}"
-                RemainingItemsThresholdReachedCommand="{Binding LoadMoreCommand}"
-                ItemsUpdatingScrollMode="KeepItemsInView"
-                Header="{Binding .}"
-                ItemTemplate="{StaticResource ChallengeTemplateSelector}">
-                <CollectionView.EmptyView>
-                    <StackLayout Padding="12">
-                        <Label HorizontalOptions="Center" Text="Keine Challenges" />
-                    </StackLayout>
-                </CollectionView.EmptyView>
-                <CollectionView.HeaderTemplate>
-                    <DataTemplate>
-                        <templates:SearchBarTemplate />
-                    </DataTemplate>
-                </CollectionView.HeaderTemplate>
-            </CollectionView>
-        </RefreshView>
-    </StackLayout>
+    <RefreshView IsRefreshing="{Binding IsRefreshing}"
+                 Command="{Binding RefreshCommand}">
+        <CollectionView ItemsSource="{Binding Challenges}"
+                        SelectedItem="{Binding SelectedChallenge}"
+                        SelectionMode="Single"
+                        SelectionChangedCommand="{Binding DetailsCommand}"
+                        RemainingItemsThreshold="{Binding ItemThreshold}"
+                        RemainingItemsThresholdReachedCommand="{Binding LoadMoreCommand}"
+                        ItemsUpdatingScrollMode="KeepItemsInView"
+                        Header="{Binding .}"
+                        ItemTemplate="{StaticResource ChallengeTemplateSelector}">
+            <CollectionView.EmptyView>
+                <StackLayout Padding="12">
+                    <Label HorizontalOptions="Center"
+                           Text="Keine Challenges" />
+                </StackLayout>
+            </CollectionView.EmptyView>
+            <CollectionView.HeaderTemplate>
+                <DataTemplate>
+                    <templates:SearchBarTemplate />
+                </DataTemplate>
+            </CollectionView.HeaderTemplate>
+        </CollectionView>
+    </RefreshView>
 </ContentPage>

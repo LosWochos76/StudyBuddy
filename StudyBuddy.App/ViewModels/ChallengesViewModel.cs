@@ -38,6 +38,7 @@ namespace StudyBuddy.App.ViewModels
                 {
                     string SearchText = search_text;
                     await Task.Delay(1000);
+
                     if (search_text == SearchText)
                     {
                         await Refresh();
