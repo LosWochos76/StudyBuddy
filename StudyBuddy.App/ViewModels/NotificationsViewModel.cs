@@ -67,11 +67,10 @@ namespace StudyBuddy.App.ViewModels
 
         public async void AcceptRequest(RequestViewModel rvm)
         {
-            var answer = false;
-            await dialog.ShowMessage(
+            var answer = await dialog.ShowMessage(
                 "Wollen Sie die " + rvm.TypeString + " annehmen?",
                 "Anfrage annehmen?",
-                "Ja", "Nein", a => { answer = a; });
+                "Ja", "Nein", null);
 
             if (!answer)
                 return;
@@ -79,7 +78,7 @@ namespace StudyBuddy.App.ViewModels
             var result = await api.Requests.Accept(rvm);
             if (!result)
             {
-                await dialog.ShowError("Ein Fehler ist aufgetreten!", "Fehler!", "Ok", null);
+                dialog.ShowError("Ein Fehler ist aufgetreten!", "Fehler!", "Ok", null);
                 return;
             }
 
@@ -88,11 +87,10 @@ namespace StudyBuddy.App.ViewModels
 
         public async void DenyRequest(RequestViewModel rvm)
         {
-            var answer = false;
-            await dialog.ShowMessage(
+            var answer = await dialog.ShowMessage(
                 "Wollen Sie die " + rvm.TypeString + " ablehnen?",
                 "Anfrage ablehnen?",
-                "Ja", "Nein", a => { answer = a; });
+                "Ja", "Nein", null);
 
             if (!answer)
                 return;
@@ -100,7 +98,7 @@ namespace StudyBuddy.App.ViewModels
             var result = await api.Requests.Deny(rvm);
             if (!result)
             {
-                await dialog.ShowError("Ein Fehler ist aufgetreten!", "Fehler!", "Ok", null);
+                dialog.ShowError("Ein Fehler ist aufgetreten!", "Fehler!", "Ok", null);
                 return;
             }
 

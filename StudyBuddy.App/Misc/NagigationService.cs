@@ -1,12 +1,11 @@
 ﻿using System.Linq;
-using System.Threading.Tasks;
 using Xamarin.Forms;
 
 namespace StudyBuddy.App.Misc
 {
     public class NagigationService : INavigationService
     {
-        public Task GoTo(string path)
+        public async void GoTo(string path)
         {
             Shell.Current.FlyoutIsPresented = false;
 
@@ -18,21 +17,21 @@ namespace StudyBuddy.App.Misc
                         Shell.Current.Navigation.RemovePage(page);
             }
 
-            return Shell.Current.GoToAsync(path);
+            await Shell.Current.GoToAsync(path);
             
         }
 
-        public Task Push(Page page)
+        public async void Push(Page page)
         {
             Shell.Current.FlyoutIsPresented = false;
-            return Shell.Current.Navigation.PushAsync(page);
+            await Shell.Current.Navigation.PushAsync(page);
             
         }
 
-        public Task Pop()
+        public async void Pop()
         {
             Shell.Current.FlyoutIsPresented = false;
-            return Shell.Current.Navigation.PopAsync();
+            await Shell.Current.Navigation.PopAsync();
         }
     }
 }

@@ -1,12 +1,11 @@
-﻿using System.Threading.Tasks;
-using Xamarin.Forms;
+﻿using Xamarin.Forms;
 
 namespace StudyBuddy.App.Misc
 {
     public interface INavigationService
     {
-        Task GoTo(string path);
-        Task Push(Page page);
-        Task Pop();
+        void GoTo(string path);
+        void Push(Page page);
+        void Pop();
     }
 }

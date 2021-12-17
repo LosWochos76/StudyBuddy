@@ -17,6 +17,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StudyBuddy.Persistence", "S
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StudyBuddy.BusinessLogic", "StudyBuddy.BusinessLogic\StudyBuddy.BusinessLogic.csproj", "{CEE885C6-7974-47A4-9183-A1B3FE1E08A7}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StudyBuddy.Test", "StudyBuddy.Test\StudyBuddy.Test.csproj", "{DB275A1D-ADBF-4799-B368-1A7ED32E4CAF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -112,6 +114,18 @@ Global
 		{CEE885C6-7974-47A4-9183-A1B3FE1E08A7}.Release|iPhone.Build.0 = Release|Any CPU
 		{CEE885C6-7974-47A4-9183-A1B3FE1E08A7}.Release|iPhoneSimulator.ActiveCfg = Release|Any CPU
 		{CEE885C6-7974-47A4-9183-A1B3FE1E08A7}.Release|iPhoneSimulator.Build.0 = Release|Any CPU
+		{DB275A1D-ADBF-4799-B368-1A7ED32E4CAF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DB275A1D-ADBF-4799-B368-1A7ED32E4CAF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DB275A1D-ADBF-4799-B368-1A7ED32E4CAF}.Debug|iPhone.ActiveCfg = Debug|Any CPU
+		{DB275A1D-ADBF-4799-B368-1A7ED32E4CAF}.Debug|iPhone.Build.0 = Debug|Any CPU
+		{DB275A1D-ADBF-4799-B368-1A7ED32E4CAF}.Debug|iPhoneSimulator.ActiveCfg = Debug|Any CPU
+		{DB275A1D-ADBF-4799-B368-1A7ED32E4CAF}.Debug|iPhoneSimulator.Build.0 = Debug|Any CPU
+		{DB275A1D-ADBF-4799-B368-1A7ED32E4CAF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DB275A1D-ADBF-4799-B368-1A7ED32E4CAF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DB275A1D-ADBF-4799-B368-1A7ED32E4CAF}.Release|iPhone.ActiveCfg = Release|Any CPU
+		{DB275A1D-ADBF-4799-B368-1A7ED32E4CAF}.Release|iPhone.Build.0 = Release|Any CPU
+		{DB275A1D-ADBF-4799-B368-1A7ED32E4CAF}.Release|iPhoneSimulator.ActiveCfg = Release|Any CPU
+		{DB275A1D-ADBF-4799-B368-1A7ED32E4CAF}.Release|iPhoneSimulator.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

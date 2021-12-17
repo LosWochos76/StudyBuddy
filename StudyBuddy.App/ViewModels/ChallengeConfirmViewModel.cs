@@ -32,31 +32,30 @@ namespace StudyBuddy.App.ViewModels
             navigation = TinyIoCContainer.Current.Resolve<INavigationService>();
         }
 
-        private async void OnConfirm()
+        private void OnConfirm()
         {
             if (challenge.Prove == ChallengeProve.ByTrust)
-                await AcceptByTrust();
+                AcceptByTrust();
 
             if (challenge.Prove == ChallengeProve.ByQrCode)
-                await AcceptByQrCode();
+                AcceptByQrCode();
 
             if (challenge.Prove == ChallengeProve.ByFriend)
-                await AcceptByRandomTeamMember();
+                AcceptByRandomTeamMember();
 
             if (challenge.Prove == ChallengeProve.ByLocation)
-                await AcceptByLocation();
+                AcceptByLocation();
 
             if (challenge.Prove == ChallengeProve.ByKeyword)
-                await AcceptByKeyword();
+                AcceptByKeyword();
         }
 
-        private async Task AcceptByTrust()
+        private async void AcceptByTrust()
         {
-            var answer = false;
-            await dialog.ShowMessage(
+            var answer = await dialog.ShowMessage(
                 "Willst du die Herausforderung wirklich abschließen?",
                 "Herausforderung abschließen?",
-                "Ja", "Nein", a => { answer = a; });
+                "Ja", "Nein", null);
 
             if (!answer)
                 return;
@@ -64,19 +63,19 @@ namespace StudyBuddy.App.ViewModels
             var result = await api.Challenges.Accept(challenge);
             if (!result)
             {
-                await dialog.ShowError("Ein Fehler ist aufgetreten!", "Fehler!", "Ok", null);
+                dialog.ShowError("Ein Fehler ist aufgetreten!", "Fehler!", "Ok", null);
                 return;
             }
 
-            await navigation.GoTo("//StatisticsPage");
+            navigation.GoTo("//StatisticsPage");
         }
 
-        private async Task AcceptByQrCode()
+        private void AcceptByQrCode()
         {
-            await navigation.Push(new QrCodePage());
+            navigation.Push(new QrCodePage());
         }
 
-        private async Task AcceptByRandomTeamMember()
+        private async void AcceptByRandomTeamMember()
         {
             var friends = new RangeObservableCollection<UserViewModel>();
             var recipients = await api.Users.GetFriends();
@@ -84,7 +83,7 @@ namespace StudyBuddy.App.ViewModels
 
             if (!friends.Any())
             {
-                await dialog.ShowMessage("Offenbar hast du noch keine Freunde! Bitte vernetze mit deinen Mit-Studierenden!", "Keine Freunde gefunden!");
+                dialog.ShowMessage("Offenbar hast du noch keine Freunde! Bitte vernetze mit deinen Mit-Studierenden!", "Keine Freunde gefunden!");
                 return;
             }
 
@@ -93,11 +92,10 @@ namespace StudyBuddy.App.ViewModels
             int index = random.Next(list.Count);
             var user = list[index];
 
-            var answer = false;
-            await dialog.ShowMessage(
+            var answer = await dialog.ShowMessage(
                 "Willst du eine Bestätigungsanfrage an " + user.FullName + " schicken?",
                 "Anfrage verschicken?",
-                "Ja", "Nein", a => { answer = a; });
+                "Ja", "Nein", null);
 
             if (!answer)
                 return;
@@ -105,24 +103,21 @@ namespace StudyBuddy.App.ViewModels
             var result = await api.Requests.AskForChallengeAcceptance(user.ID, challenge.ID);
             if (!result)
             {
-                await dialog.ShowError("Ein Fehler ist aufgetreten!", "Fehler!", "Ok", null);
+                dialog.ShowError("Ein Fehler ist aufgetreten!", "Fehler!", "Ok", null);
                 return;
             }
-            else
-            {
-                await dialog.ShowMessageBox("Sobald dein Freund die Anfrage bestätigt, " +
-                    "bekommtst du die Punkte gutgeschrieben.", "Anfrage wurde verschickt!");
-                await navigation.Pop();
-            }
+
+            dialog.ShowMessageBox("Sobald dein Freund die Anfrage bestätigt, " +
+                "bekommtst du die Punkte gutgeschrieben.", "Anfrage wurde verschickt!");
+            navigation.Pop();
         }
 
-        private async Task AcceptByLocation()
+        private async void AcceptByLocation()
         {
-            var answer = false;
-            await dialog.ShowMessage(
+            var answer = await dialog.ShowMessage(
                 "Willst du die Herausforderung wirklich abschließen, indem deina aktuelle Geo-Position gecheckt wird?",
                 "Herausforderung abschließen?",
-                "Ja", "Nein", a => { answer = a; });
+                "Ja", "Nein", null);
 
             if (!answer)
                 return;
@@ -139,7 +134,7 @@ namespace StudyBuddy.App.ViewModels
 
             if (location == null)
             {
-                await dialog.ShowError("Ein Fehler ist aufgetreten! Deine Geo-Koordinaten konnten nicht bestimmt werden!", "Fehler!", "Ok", null);
+                dialog.ShowError("Ein Fehler ist aufgetreten! Deine Geo-Koordinaten konnten nicht bestimmt werden!", "Fehler!", "Ok", null);
                 return;
             }
 
@@ -148,16 +143,14 @@ namespace StudyBuddy.App.ViewModels
 
             if (!result)
             {
-                await dialog.ShowError("Ein Fehler ist aufgetreten! Wahrscheinlich hast du nicht die richtige Position!", "Fehler!", "Ok", null);
+                dialog.ShowError("Ein Fehler ist aufgetreten! Wahrscheinlich hast du nicht die richtige Position!", "Fehler!", "Ok", null);
                 return;
             }
-            else
-            {
-                await navigation.Pop();
-            }
+
+            navigation.Pop();
         }
 
-        private async Task AcceptByKeyword()
+        private async void AcceptByKeyword()
         {
             var keyword = await dialog.DisplayPrompt("Bitte Schlüsselwort eingeben!", "Schlüsselwort");
 
@@ -165,16 +158,13 @@ namespace StudyBuddy.App.ViewModels
                 return;
 
             bool result = await api.Challenges.AcceptWithAddendum(challenge, keyword);
-
             if (!result)
             {
-                await dialog.ShowError("Ein Fehler ist aufgetreten! Wahrscheinlich hast du nicht das richtige Schlüsselwort eingegeben!", "Fehler!", "Ok", null);
+                dialog.ShowError("Ein Fehler ist aufgetreten! Wahrscheinlich hast du nicht das richtige Schlüsselwort eingegeben!", "Fehler!", "Ok", null);
                 return;
             }
-            else
-            {
-                await navigation.Pop();
-            }
+
+            navigation.Pop();
         }
     }
 }

@@ -11,7 +11,6 @@ namespace StudyBuddy.App.ViewModels
     {
         public UserViewModel User { get; set; }
         public ICommand RemoveFriendCommand { get; set; }
-
         public UserStatistics UserStatistics { get; set; }
 
         public FriendViewModel(UserViewModel obj, UserStatistics userStatistics)
@@ -24,11 +23,10 @@ namespace StudyBuddy.App.ViewModels
         public async void RemoveFriend()
         {
             var dialog = TinyIoCContainer.Current.Resolve<IDialogService>();
-            var answer = false;
-            await dialog.ShowMessage(
+            var answer = await dialog.ShowMessage(
                 "Wollen Sie " + User.Firstname + " als Freund entfernen?",
                 "Freund entfernen?",
-                "Ja", "Nein", a => { answer = a; });
+                "Ja", "Nein", null);
 
             if (!answer)
                 return;
@@ -38,12 +36,12 @@ namespace StudyBuddy.App.ViewModels
 
             if (!result)
             {
-                await dialog.ShowError("Fehler!", "Der Freund konnte nicht entfernt werden!", "Ok", null);
+                dialog.ShowError("Fehler!", "Der Freund konnte nicht entfernt werden!", "Ok", null);
                 return;
             }
 
             var navigation = TinyIoCContainer.Current.Resolve<INavigationService>();
-            await navigation.Pop();
+            navigation.Pop();
         }
     }
 }

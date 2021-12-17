@@ -7,7 +7,7 @@ using StudyBuddy.Model;
 
 namespace StudyBuddy.App.Api
 {
-    public class NotificationService
+    public class NotificationService : INotificationService
     {
         private readonly IApi api;
         private readonly string base_url;
@@ -24,10 +24,10 @@ namespace StudyBuddy.App.Api
         {
             var rh = new WebRequestHelper(api.Authentication.Token);
             var content = await rh.Load<IEnumerable<Notification>>(base_url + "Notification", HttpMethod.Get);
-            
+
             return content;
         }
-        
+
         public async Task<IEnumerable<NewsViewModel>> GetMyNotificationFeed()
         {
             var rh = new WebRequestHelper(api.Authentication.Token);
@@ -40,6 +40,6 @@ namespace StudyBuddy.App.Api
                 result.Add(NewsViewModel.FromNotification(obj));
 
             return result;
-        } 
+        }
     }
 }

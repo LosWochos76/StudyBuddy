@@ -7,8 +7,7 @@ namespace StudyBuddy.App.ViewModels
 {
     public class LoginViewModel : ViewModelBase
     {
-        public LoginViewModel(IApi api, IDialogService dialog, INavigationService navigation) : base(api, dialog,
-            navigation)
+        public LoginViewModel(IApi api, IDialogService dialog, INavigationService navigation) : base(api, dialog, navigation)
         {
             LoginCommand = new Command(Login);
             RegisterCommand = new Command(Register);
@@ -44,12 +43,9 @@ namespace StudyBuddy.App.ViewModels
             var result = await api.Authentication.Login(uc);
 
             if (result)
-            {
-                await navigation.GoTo("//ChallengesPage");
-            }
-   
+                navigation.GoTo("//ChallengesPage");
             else
-                await dialog.ShowMessageBox("Achtung!", "Anmdeldung nicht erfolgreich! Zugangsdaten korrekt?");
+                dialog.ShowMessageBox("Achtung!", "Anmdeldung nicht erfolgreich! Zugangsdaten korrekt?");
         }
     }
 }

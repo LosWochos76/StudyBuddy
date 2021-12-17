@@ -14,26 +14,25 @@ namespace StudyBuddy.App.ViewModels
             if (!text.StartsWith("qr:"))
                 return;
 
-            var answer = false;
-            await dialog.ShowMessage(
+            var answer = await dialog.ShowMessage(
                 "StudyBuddy QR-Code gefunden! Wollen Sie die Herausforderung annehmen?",
                 "Herausforderung annehmen?",
-                "Ja", "Nein", a => { answer = a; });
+                "Ja", "Nein", null);
 
             if (!answer)
             {
-                await navigation.GoTo("//ChallengesPage");
+                navigation.GoTo("//ChallengesPage");
                 return;
             }
 
             var cvm = await api.Challenges.AcceptFromQrCode(text);
             if (cvm == null)
             {
-                await dialog.ShowError("Ein Fehler ist aufgetreten!", "Fehler!", "Ok", null);
+                dialog.ShowError("Ein Fehler ist aufgetreten!", "Fehler!", "Ok", null);
                 return;
             }
 
-            await navigation.GoTo("//StatisticsPage");
+            navigation.GoTo("//StatisticsPage");
         }
     }
 }

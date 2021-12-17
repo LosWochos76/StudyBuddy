@@ -106,7 +106,7 @@ namespace StudyBuddy.App.ViewModels
             }
             catch (ApiException e)
             {
-                await dialog.ShowError(e, "Ein Fehler ist aufgetreten!", "Ok", null);
+                dialog.ShowError(e, "Ein Fehler ist aufgetreten!", "Ok", null);
             }
             finally
             {
@@ -128,7 +128,7 @@ namespace StudyBuddy.App.ViewModels
             var result = await api.Requests.AskForFriendship(obj);
             if (!result)
             {
-                await dialog.ShowError("Ein Fehler ist aufgetreten!", "Fehler!", "Ok", null);
+                dialog.ShowError("Ein Fehler ist aufgetreten!", "Fehler!", "Ok", null);
                 return;
             }
         }
@@ -147,7 +147,7 @@ namespace StudyBuddy.App.ViewModels
             var result = await api.Requests.DeleteFriendshipRequest(obj);
             if (!result)
             {
-                await dialog.ShowError("Ein Fehler ist aufgetreten!", "Fehler!", "Ok", null);
+                dialog.ShowError("Ein Fehler ist aufgetreten!", "Fehler!", "Ok", null);
                 return;
             }
         }

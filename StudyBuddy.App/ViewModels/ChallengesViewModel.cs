@@ -117,7 +117,7 @@ namespace StudyBuddy.App.ViewModels
             }
             catch (ApiException e)
             {
-                await dialog.ShowError(e, "Ein Fehler ist aufgetreten!", "Ok", null);
+                dialog.ShowError(e, "Ein Fehler ist aufgetreten!", "Ok", null);
             }
             finally
             {
@@ -130,7 +130,7 @@ namespace StudyBuddy.App.ViewModels
             if (SelectedChallenge == null)
                 return;
             
-            await navigation.Push(new ChallengeDetailsPage(SelectedChallenge));
+            navigation.Push(new ChallengeDetailsPage(SelectedChallenge));
             SelectedChallenge = null;
         }
 

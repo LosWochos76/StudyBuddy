@@ -5,17 +5,13 @@ namespace StudyBuddy.App.Misc
 {
     public interface IDialogService
     {
-        Task ShowError(string message, string title, string buttonText, Action afterHideCallback);
-        Task ShowError(Exception error, string title, string buttonText, Action afterHideCallback);
-        Task ShowMessage(string message, string title);
-        Task ShowMessage(string message, string title, string buttonText, Action afterHideCallback);
-
-        Task<bool> ShowMessage(string message, string title, string buttonConfirmText, string buttonCancelText,
-            Action<bool> afterHideCallback);
-
-        Task ShowMessageBox(string message, string title);
+        void ShowError(string message, string title, string buttonText, Action afterHideCallback);
+        void ShowError(Exception error, string title, string buttonText, Action afterHideCallback);
+        void ShowMessage(string message, string title);
+        void ShowMessage(string message, string title, string buttonText, Action afterHideCallback);
+        void ShowMessageBox(string message, string title);
         void OpenBrowser(string url);
-
+        Task<bool> ShowMessage(string message, string title, string buttonConfirmText, string buttonCancelText, Action<bool> afterHideCallback);
         Task<string> DisplayPrompt(string message, string title);
     }
 }

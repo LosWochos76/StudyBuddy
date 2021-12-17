@@ -2,7 +2,6 @@
 using StudyBuddy.App.Misc;
 using StudyBuddy.App.Models;
 using StudyBuddy.App.Views;
-using System;
 using System.Windows.Input;
 using Xamarin.Forms;
 
@@ -10,7 +9,6 @@ namespace StudyBuddy.App.ViewModels
 {
     public class StatisticsViewModel : ViewModelBase
     {
-
         private UserStatistics _userStatistic;
         public UserStatistics UserStatistics
         {
@@ -21,8 +19,8 @@ namespace StudyBuddy.App.ViewModels
                 NotifyPropertyChanged("UserStatistics");
             }
         }
-        public ICommand RanksCommand { get; set; }
 
+        public ICommand RanksCommand { get; set; }
 
         public StatisticsViewModel(IApi api, IDialogService dialog, INavigationService navigation) : base(api, dialog, navigation)
         {
@@ -30,14 +28,13 @@ namespace StudyBuddy.App.ViewModels
             api.Authentication.LoginStateChanged += Authentication_LoginStateChanged;
         }
 
-        private async void ShowRanks()
+        private void ShowRanks()
         {
-            await navigation.Push(new RankingPage(UserStatistics.FriendsRank));
+            navigation.Push(new RankingPage(UserStatistics.FriendsRank));
         }
 
         private void Authentication_LoginStateChanged(object sender, LoginStateChangedArgs args)
         {
-
         }
 
         public async void Refresh()
@@ -45,7 +42,6 @@ namespace StudyBuddy.App.ViewModels
             try
             {
                UserStatistics = await api.Statistics.GetUserStatistics();
-
             }
             catch (System.Exception)
             {

@@ -126,7 +126,7 @@ namespace StudyBuddy.App.ViewModels
             }
             catch (ApiException e)
             {
-                await dialog.ShowError(e, "Ein Fehler ist aufgetreten!", "Ok", null);
+                dialog.ShowError(e, "Ein Fehler ist aufgetreten!", "Ok", null);
             }
             finally
             {
@@ -137,12 +137,12 @@ namespace StudyBuddy.App.ViewModels
         public async void Details(UserViewModel obj)
         {
             var userStatistics = await api.Statistics.GetUserStatisticsForUser(obj.ID);
-            await navigation.Push(new FriendPage(obj,userStatistics));
+            navigation.Push(new FriendPage(obj,userStatistics));
         }
 
-        public async void AddFriend()
+        public void AddFriend()
         {
-            await navigation.Push(new AddFriendPage());
+            navigation.Push(new AddFriendPage());
         }
     }
 }
