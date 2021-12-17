@@ -3,7 +3,6 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using StudyBuddy.App.Misc;
 using StudyBuddy.Model;
-using StudyBuddy.Model.Model;
 
 namespace StudyBuddy.App.Api
 {

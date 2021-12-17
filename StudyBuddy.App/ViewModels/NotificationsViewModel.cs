@@ -3,7 +3,6 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using StudyBuddy.App.Api;
 using StudyBuddy.App.Misc;
-using StudyBuddy.Model;
 using TinyIoC;
 using Xamarin.Forms;
 
@@ -16,7 +15,7 @@ namespace StudyBuddy.App.ViewModels
         public bool NewsIsSelected { get => newsIsSelected; set { newsIsSelected = value; } }
         public bool RequestsIsSelected { get => newsIsSelected; set { newsIsSelected = !value; } }
 
-        public ObservableCollection<Notification> News { get; private set; } = new ObservableCollection<Notification>();
+        public ObservableCollection<NewsViewModel> News { get; private set; } = new ObservableCollection<NewsViewModel>();
         public ObservableCollection<RequestViewModel> Requests { get; private set; } = new ObservableCollection<RequestViewModel>();
         public ICommand RefreshCommand { get; }
         public bool IsRefreshing { get; set; }
@@ -127,7 +126,7 @@ namespace StudyBuddy.App.ViewModels
             this.News.Clear();
             foreach (var notification in response)
             {
-                this.News.Add(notification);
+                this.News.Add(NewsViewModel.FromNotification(notification));
             }
         }
     }

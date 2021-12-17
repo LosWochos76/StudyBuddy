@@ -14,7 +14,7 @@ namespace StudyBuddy.Api.Controllers
         
         [Route("/Notification/")]
         [HttpGet]
-        public IActionResult GetAllNotifications([FromBody] CreateNotificationParameter obj)
+        public IActionResult GetAllNotifications()
         {
             var userId = backend.CurrentUser.ID;
             var notifications = backend.NotificationService.GetNotificationFromUser(userId);
@@ -23,7 +23,7 @@ namespace StudyBuddy.Api.Controllers
         
         [Route("/Notification/Feed")]
         [HttpGet]
-        public IActionResult NotificationFeed([FromBody] CreateNotificationParameter obj)
+        public IActionResult NotificationFeed()
         {
             var userId = backend.CurrentUser.ID;
             var notifications = backend.NotificationService.GetNotificationFeedForUser(userId);
