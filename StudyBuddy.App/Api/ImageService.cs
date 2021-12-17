@@ -52,7 +52,7 @@ namespace StudyBuddy.App.Api
             return true;
         }
 
-        public async void GetProfileImages(IList<UserViewModel> users)
+        public async void GetProfileImages(IEnumerable<UserViewModel> users)
         {
             foreach (var user in users)
                 await GetProfileImage(user);

@@ -40,9 +40,7 @@ namespace StudyBuddy.App.ViewModels
                     await Task.Delay(1000);
 
                     if (search_text == SearchText)
-                    {
-                        await Refresh();
-                    }
+                        Refresh();
                 });
             }
         }
@@ -73,13 +71,13 @@ namespace StudyBuddy.App.ViewModels
         {
             Challenges = new RangeObservableCollection<ChallengeViewModel>();
             api.Authentication.LoginStateChanged += Authentication_LoginStateChanged;
-            api.ChallengeAccepted += (sender, e) => { _ = LoadChallenges(); };
+            api.ChallengeAccepted += (sender, e) => { LoadChallenges(); };
 
-            LoadMoreCommand = new Command(async () => await LoadChallenges());
-            SearchCommand = new Command(async () => await Refresh());
+            LoadMoreCommand = new Command(LoadChallenges);
+            SearchCommand = new Command(Refresh);
             DetailsCommand = new Command(ShowDetails);
             ScanQrCodeCommand = new Command(ScanQrCode);
-            RefreshCommand = new Command(async () => await Refresh());
+            RefreshCommand = new Command(Refresh);
         }
 
         private void Authentication_LoginStateChanged(object sender, LoginStateChangedArgs args)
@@ -88,16 +86,16 @@ namespace StudyBuddy.App.ViewModels
               RefreshCommand.Execute(null);
         }
 
-        private async Task Refresh()
+        private void Refresh()
         {
             Challenges.Clear();
             skip = 0;
-            await LoadChallenges();
+            LoadChallenges();
             IsRefreshing = false;
             NotifyPropertyChanged(nameof(IsRefreshing));
         }
 
-        private async Task LoadChallenges()
+        private async void LoadChallenges()
         {
             if (IsBusy)
                 return;

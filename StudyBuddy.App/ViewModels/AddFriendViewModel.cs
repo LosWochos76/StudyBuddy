@@ -10,6 +10,7 @@ namespace StudyBuddy.App.ViewModels
 {
     public class AddFriendViewModel: ViewModelBase
     {
+        private int skip = 0;
         public RangeObservableCollection<UserViewModel> Users { get; private set; }
         public bool IsRefreshing { get; set; }
         public ICommand RefreshCommand { get; }
@@ -33,12 +34,10 @@ namespace StudyBuddy.App.ViewModels
                     string SearchText = _searchText;
                     await Task.Delay(1000);
                     if (_searchText == SearchText)
-                        await LoadNotFriends();
+                        Refresh();
                 });
             }
         }
-
-        public int Skip { get; set; }
 
         private bool _isBusy;
         public bool IsBusy
@@ -51,35 +50,39 @@ namespace StudyBuddy.App.ViewModels
             }
         }
 
-        public int ItemThreshold { get; set; } = 1;
-        public int PageNo { get; set; } = 0;
+        private int item_treshold = 0;
+        public int ItemThreshold
+        {
+            get { return item_treshold; }
+            set
+            {
+                item_treshold = value;
+                NotifyPropertyChanged();
+            }
+        }
 
         public AddFriendViewModel(IApi api, IDialogService dialog, INavigationService navigation) : base(api, dialog, navigation)
         {
             Users = new RangeObservableCollection<UserViewModel>();
-            LoadNotFriends();
-
-            api.Authentication.LoginStateChanged += Authentication_LoginStateChanged;
-            LoadMoreCommand = new Command(async () => await ItemsThresholdReached());
-            SearchCommand = new Command(async () => await LoadNotFriends());
-            RefreshCommand = new Command(async() =>
-            {
-                await LoadNotFriends();
-                IsRefreshing = false;
-                NotifyPropertyChanged(nameof(IsRefreshing));
-            });
-
+            LoadMoreCommand = new Command(LoadNotFriends);
+            SearchCommand = new Command(LoadNotFriends);
+            RefreshCommand = new Command(Refresh);
             SendFriendshipRequestCommand = new Command<UserViewModel>(SendFriendshipRequest);
             RemoveFriendshipRequestCommand = new Command<UserViewModel>(RemoveFriendshipRequest);
+
+            Refresh();
         }
 
-        private void Authentication_LoginStateChanged(object sender, LoginStateChangedArgs args)
+        private void Refresh()
         {
-            if (args.IsLoggedIn)
-                RefreshCommand.Execute(null);
+            Users.Clear();
+            skip = 0;
+            LoadNotFriends();
+            IsRefreshing = false;
+            NotifyPropertyChanged(nameof(IsRefreshing));
         }
 
-        private async Task LoadNotFriends()
+        private async void LoadNotFriends()
         {
             if (IsBusy)
                 return;
@@ -89,44 +92,17 @@ namespace StudyBuddy.App.ViewModels
             try
             {
                 ItemThreshold = 1;
-                Users.Clear();
-                var friends = await api.Users.GetNotFriends(SearchText);
-                Users.AddRange(friends);
-                api.ImageService.GetProfileImages(Users);
-
-                PageNo = 1;
-                Skip = 10;
-            }
-            catch (ApiException e)
-            {
-                await dialog.ShowError(e, "Ein Fehler ist aufgetreten!", "Ok", null);
-            }
-            finally
-            {
-                IsBusy = false;
-            }
-        }
-
-        private async Task ItemsThresholdReached()
-        {
-            if (IsBusy)
-                return;
-
-            IsBusy = true;
-
-            try
-            {
-                Skip = 10 * PageNo;
-                var friends = await api.Users.GetNotFriends(SearchText, Skip);
-                Users.AddRange(friends);
-
+                var friends = await api.Users.GetNotFriends(SearchText, skip);
                 if (friends.Count() == 0)
                 {
                     ItemThreshold = -1;
                     return;
                 }
 
-                PageNo++;
+                Users.AddRange(friends);
+                api.ImageService.GetProfileImages(friends);
+                api.Requests.AddFriendshipRequests(friends);
+                skip += 10;
             }
             catch (ApiException e)
             {

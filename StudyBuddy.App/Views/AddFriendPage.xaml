@@ -9,41 +9,16 @@
              x:Name="page">
     <ContentPage.Content>
         <StackLayout Padding="0,5,0,5">
-            <Frame Padding="5"
-                   Margin="4"
-                   HasShadow="False"
-                   CornerRadius="8"
-                   HeightRequest="35">
-                <Frame.IsVisible>
-                    <OnPlatform x:TypeArguments="x:Boolean"
-                        iOS="False"
-                        Android="True" />
-                </Frame.IsVisible>
-                <SearchBar SearchCommand="{Binding SearchCommand}"
-                           Text="{Binding SearchText}">
-                    <SearchBar.IsVisible>
-                        <OnPlatform x:TypeArguments="x:Boolean"
-                            iOS="False"
-                            Android="True" />
-                    </SearchBar.IsVisible>
-                </SearchBar>
-            </Frame>
-            <SearchBar SearchCommand="{Binding SearchCommand}"
-                       Text="{Binding SearchText}">
-                <SearchBar.IsVisible>
-                    <OnPlatform x:TypeArguments="x:Boolean"
-                                iOS="True"
-                                Android="False" />
-                </SearchBar.IsVisible>
-            </SearchBar>
+            <SearchBar SearchCommand="{Binding SearchCommand}" Text="{Binding SearchText}" />
+            <ActivityIndicator IsVisible="{Binding IsBusy}" IsRunning="{Binding IsBusy}" />
             <RefreshView IsRefreshing="{Binding IsRefreshing}"
-                         Command="{Binding RefreshCommand}"
-                         Padding="8">
+                Command="{Binding RefreshCommand}"
+                Padding="8">
                 <CollectionView ItemsSource="{Binding Users}"
-                                EmptyView="Keine neuen Freunde"
-                                ItemsUpdatingScrollMode="KeepItemsInView"
-                                RemainingItemsThreshold="{Binding ItemThreshold}"
-                                RemainingItemsThresholdReachedCommand="{Binding LoadMoreCommand}">
+                        EmptyView="Keine weiteren Personen"
+                        ItemsUpdatingScrollMode="KeepItemsInView"
+                        RemainingItemsThreshold="{Binding ItemThreshold}"
+                        RemainingItemsThresholdReachedCommand="{Binding LoadMoreCommand}">
                     <CollectionView.ItemTemplate>
                         <DataTemplate x:DataType="viewmodels:UserViewModel">
                             <Grid Padding="0,8,0,0" x:Name="Item">

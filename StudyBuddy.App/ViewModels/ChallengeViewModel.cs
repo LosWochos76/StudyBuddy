@@ -1,8 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using StudyBuddy.App.Misc;
 using StudyBuddy.Model;
+using Xamarin.Forms;
 
 namespace StudyBuddy.App.ViewModels
 {
@@ -66,6 +65,20 @@ namespace StudyBuddy.App.ViewModels
                     return FontAwesomeIcons.PeopleArrows;
 
                 return FontAwesomeIcons.Tasks;
+            }
+        }
+
+        public Color CategoryColor
+        {
+            get
+            {
+                switch (Category)
+                {
+                    case ChallengeCategory.Learning: return Application.Current.UserAppTheme == OSAppTheme.Light ? Color.FromHex("#007AFF") : Color.FromHex("#0A84FF");
+                    case ChallengeCategory.Networking: return Application.Current.UserAppTheme == OSAppTheme.Light ? Color.FromHex("#5856D6") : Color.FromHex("#5E5CE6");
+                    case ChallengeCategory.Organizing: return Application.Current.UserAppTheme == OSAppTheme.Light ? Color.FromHex("#5AC8FA") : Color.FromHex("#64D2FF");
+                    default: return Color.Black;
+                }
             }
         }
 

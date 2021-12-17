@@ -96,5 +96,11 @@ namespace StudyBuddy.App.Api
 
             return UserViewModel.FromModel(content);
         }
+
+        public async void AddSenders(IEnumerable<RequestViewModel> requests)
+        {
+            foreach (var request in requests)
+                request.Sender = await GetById(request.SenderID);
+        }
     }
 }

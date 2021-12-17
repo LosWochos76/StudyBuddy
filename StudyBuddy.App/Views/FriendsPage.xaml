@@ -6,7 +6,6 @@
              x:DataType="viewmodels:FriendsViewModel"
              xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
              xmlns:fontAwesome="clr-namespace:StudyBuddy.App"
-             xmlns:templates="clr-namespace:StudyBuddy.App.Templates"
              x:Name="page"
              Title="Freunde">
     <ContentPage.ToolbarItems>
@@ -20,53 +19,51 @@
             </ToolbarItem.IconImageSource>
         </ToolbarItem>
     </ContentPage.ToolbarItems>
-    <RefreshView IsRefreshing="{Binding IsRefreshing}"
-        Command="{Binding RefreshCommand}"
-        Padding="8">
-        <CollectionView ItemsSource="{Binding Friends}"
-            ItemsUpdatingScrollMode="KeepItemsInView"
-            RemainingItemsThreshold="{Binding ItemThreshold}"
-            RemainingItemsThresholdReachedCommand="{Binding LoadMoreCommand}"
-            Header="{Binding .}">
-            <CollectionView.EmptyView>
-                <StackLayout Padding="12">
-                    <Label HorizontalOptions="Center"
-                        Text="Keine Freunde" />
-                </StackLayout>
-            </CollectionView.EmptyView>
-            <CollectionView.HeaderTemplate>
-                <DataTemplate>
-                    <templates:SearchBarTemplate />
-                </DataTemplate>
-            </CollectionView.HeaderTemplate>
-            <CollectionView.ItemTemplate>
-                <DataTemplate x:DataType="viewmodels:UserViewModel">
-                    <Grid x:Name="Item" Padding="0,8,0,0">
-                        <Frame CornerRadius="10" HasShadow="False">
-                            <StackLayout Orientation="Horizontal">
-                                <xct:AvatarView Size="45" VerticalOptions="Center"
-                                    Grid.Column="0"
-                                    Grid.Row="0"
-                                    Text="{Binding Initials}"
-                                    Source="{Binding ProfileImage}" />
-                                <StackLayout VerticalOptions="Center">
-                                    <Label Text="{Binding FullName}"
-                                           Padding="10,0,0,0"
-                                           FontAttributes="Bold" />
-                                    <Label Style="{StaticResource TagLabel}"
-                                           Text="{Binding CountOfCommonFriends, StringFormat='{0} gemeinsame Freunde'}"
-                                           Padding="10,0,0,0"
-                                           FontSize="Small" />
+    <StackLayout>
+        <SearchBar SearchCommand="{Binding SearchCommand}" Text="{Binding SearchText}" />
+        <ActivityIndicator IsVisible="{Binding IsBusy}" IsRunning="{Binding IsBusy}" />
+        <RefreshView IsRefreshing="{Binding IsRefreshing}"
+            Command="{Binding RefreshCommand}"
+            Padding="8">
+            <CollectionView ItemsSource="{Binding Friends}"
+                ItemsUpdatingScrollMode="KeepItemsInView"
+                RemainingItemsThreshold="{Binding ItemThreshold}"
+                RemainingItemsThresholdReachedCommand="{Binding LoadMoreCommand}">
+                <CollectionView.EmptyView>
+                    <StackLayout Padding="12">
+                        <Label HorizontalOptions="Center"
+                            Text="Keine Freunde" />
+                    </StackLayout>
+                </CollectionView.EmptyView>
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="viewmodels:UserViewModel">
+                        <Grid x:Name="Item" Padding="0,8,0,0">
+                            <Frame CornerRadius="10" HasShadow="False">
+                                <StackLayout Orientation="Horizontal">
+                                    <xct:AvatarView Size="45" VerticalOptions="Center"
+                                        Grid.Column="0"
+                                        Grid.Row="0"
+                                        Text="{Binding Initials}"
+                                        Source="{Binding ProfileImage}" />
+                                    <StackLayout VerticalOptions="Center">
+                                        <Label Text="{Binding FullName}"
+                                               Padding="10,0,0,0"
+                                               FontAttributes="Bold" />
+                                        <Label Style="{StaticResource TagLabel}"
+                                               Text="{Binding CountOfCommonFriends, StringFormat='{0} gemeinsame Freunde'}"
+                                               Padding="10,0,0,0"
+                                               FontSize="Small" />
+                                    </StackLayout>
                                 </StackLayout>
-                            </StackLayout>
-                            <Frame.GestureRecognizers>
-                                <TapGestureRecognizer Command="{Binding BindingContext.DetailsCommand, Source={x:Reference Name=page}}"
-                                    CommandParameter="{Binding Source={x:Reference Item}, Path=BindingContext}" />
-                            </Frame.GestureRecognizers>
-                        </Frame>
-                    </Grid>
-                </DataTemplate>
-            </CollectionView.ItemTemplate>
-        </CollectionView>
-    </RefreshView>
+                                <Frame.GestureRecognizers>
+                                    <TapGestureRecognizer Command="{Binding BindingContext.DetailsCommand, Source={x:Reference Name=page}}"
+                                        CommandParameter="{Binding Source={x:Reference Item}, Path=BindingContext}" />
+                                </Frame.GestureRecognizers>
+                            </Frame>
+                        </Grid>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </RefreshView>
+    </StackLayout>
 </ContentPage>

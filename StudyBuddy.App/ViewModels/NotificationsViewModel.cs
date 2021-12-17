@@ -1,5 +1,4 @@
 using System.Collections.ObjectModel;
-using System.Threading.Tasks;
 using System.Windows.Input;
 using StudyBuddy.App.Api;
 using StudyBuddy.App.Misc;
@@ -10,13 +9,13 @@ namespace StudyBuddy.App.ViewModels
 {
     public class NotificationsViewModel : ViewModelBase
     {
-
         private bool newsIsSelected = true;
         public bool NewsIsSelected { get => newsIsSelected; set { newsIsSelected = value; } }
         public bool RequestsIsSelected { get => newsIsSelected; set { newsIsSelected = !value; } }
 
-        public ObservableCollection<NewsViewModel> News { get; private set; } = new ObservableCollection<NewsViewModel>();
-        public ObservableCollection<RequestViewModel> Requests { get; private set; } = new ObservableCollection<RequestViewModel>();
+        public RangeObservableCollection<NewsViewModel> News { get; private set; } = new RangeObservableCollection<NewsViewModel>();
+        public RangeObservableCollection<RequestViewModel> Requests { get; private set; } = new RangeObservableCollection<RequestViewModel>();
+
         public ICommand RefreshCommand { get; }
         public bool IsRefreshing { get; set; }
 
@@ -28,9 +27,9 @@ namespace StudyBuddy.App.ViewModels
 
         public NotificationsViewModel(IApi api, IDialogService dialog, INavigationService navigation) : base(api, dialog, navigation)
         {
-            this.RefreshCommand = new Command(Refresh);
-            this.AcceptRequestCommand = new Command<RequestViewModel>(AcceptRequest);
-            this.DenyRequestCommand = new Command<RequestViewModel>(DenyRequest);
+            RefreshCommand = new Command(Refresh);
+            AcceptRequestCommand = new Command<RequestViewModel>(AcceptRequest);
+            DenyRequestCommand = new Command<RequestViewModel>(DenyRequest);
             api.Authentication.LoginStateChanged += Authentication_LoginStateChanged;
         }
 
@@ -43,30 +42,27 @@ namespace StudyBuddy.App.ViewModels
             }
         }
 
-        private async void Refresh()
+        private void Refresh()
         {
             if (newsIsSelected)
-                await LoadNews();
+                LoadNews();
             else
-                await ReloadRequests();
+                ReloadRequests();
 
             IsRefreshing = false;
             NotifyPropertyChanged("IsRefreshing");
         }
 
-        private async Task ReloadRequests()
+        private async void ReloadRequests()
         {
-            try
-            {
-                await Device.InvokeOnMainThreadAsync(() =>
-                {
-                    api.Requests.ForMe(Requests, true);
-                });
-            }
-            catch (ApiException e)
-            {
-                await dialog.ShowError(e, "Ein Fehler ist aufgetreten!", "Ok", null);
-            }
+            var response = await api.Requests.ForMe();
+            if (response is null)
+                return;
+
+            Requests.Clear();
+            Requests.AddRange(response);
+            api.Users.AddSenders(Requests);
+            api.Challenges.AddChallenges(Requests);
         }
 
         public async void AcceptRequest(RequestViewModel rvm)
@@ -87,7 +83,7 @@ namespace StudyBuddy.App.ViewModels
                 return;
             }
 
-            await ReloadRequests();
+            ReloadRequests();
         }
 
         public async void DenyRequest(RequestViewModel rvm)
@@ -108,7 +104,7 @@ namespace StudyBuddy.App.ViewModels
                 return;
             }
 
-            await ReloadRequests();
+            ReloadRequests();
 
             if (rvm.Type == Model.RequestType.Friendship)
             {
@@ -116,18 +112,14 @@ namespace StudyBuddy.App.ViewModels
             }
         }
         
-        public async Task LoadNews()
+        public async void LoadNews()
         {
-            
             var response = await this.api.Notifications.GetMyNotificationFeed();
-
-            if (response is null) return;
+            if (response is null)
+                return;
         
-            this.News.Clear();
-            foreach (var notification in response)
-            {
-                this.News.Add(NewsViewModel.FromNotification(notification));
-            }
+            News.Clear();
+            News.AddRange(response);
         }
     }
 }

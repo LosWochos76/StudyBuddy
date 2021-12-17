@@ -115,5 +115,12 @@ namespace StudyBuddy.App.Api
 
             return status;
         }
+
+        public async void AddChallenges(IEnumerable<RequestViewModel> requests)
+        {
+            foreach (var request in requests)
+                if (request.Type == RequestType.ChallengeAcceptance)
+                    request.Challenge = await GetById(request.ChallengeID.Value);
+        }
     }
 }

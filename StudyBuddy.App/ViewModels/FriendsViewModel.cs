@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -12,6 +11,7 @@ namespace StudyBuddy.App.ViewModels
 {
     public class FriendsViewModel : ViewModelBase
     {
+        private int skip = 0;
         public RangeObservableCollection<UserViewModel> Friends { get; private set; }
         public ICommand RefreshCommand { get; }
         public ICommand DetailsCommand { get; }
@@ -20,55 +20,58 @@ namespace StudyBuddy.App.ViewModels
         public ICommand LoadMoreCommand { get; }
         public bool IsRefreshing { get; set; } = false;
 
-        private string _searchText = string.Empty;
+        private string search_text = string.Empty;
         public string SearchText
         {
-            get { return _searchText; }
+            get { return search_text; }
             set
             {
-                if (_searchText == value)
+                if (search_text == value)
                     return;
 
-                _searchText = value ?? string.Empty;
+                search_text = value ?? string.Empty;
                 Task.Run(async () =>
                 {
-                    string SearchText = _searchText;
+                    string SearchText = search_text;
                     await Task.Delay(1000);
-                    if (_searchText == SearchText)
-                        await LoadFriendsCommand();
+
+                    if (search_text == SearchText)
+                        Refresh();
                 });
             }
         }
 
-        public int Skip { get; set; }
-        private bool _isBusy;
+        private bool is_busy;
         public bool IsBusy
         {
-            get { return _isBusy; }
+            get { return is_busy; }
             set
             {
-                _isBusy = value;
+                is_busy = value;
                 NotifyPropertyChanged(nameof(IsBusy));
             }
         }
 
-        public int ItemThreshold { get; set; } = 1;
-        public int PageNo { get; set; } = 0;
+        private int item_treshold = 1;
+        public int ItemThreshold
+        {
+            get { return item_treshold; }
+            set
+            {
+                item_treshold = value;
+                NotifyPropertyChanged();
+            }
+        }
 
         public FriendsViewModel(IApi api, IDialogService dialog, INavigationService navigation) : base(api, dialog, navigation)
         {
             Friends = new RangeObservableCollection<UserViewModel>();
-            LoadMoreCommand = new Command(async () => await ItemsThresholdReached());
-            SearchCommand = new Command(async () => await LoadFriendsCommand());
-            RefreshCommand = new Command(async () =>
-            {
-                await LoadFriendsCommand();
-                IsRefreshing = false;
-                NotifyPropertyChanged(nameof(IsRefreshing));
-            });
-
+            LoadMoreCommand = new Command(LoadFriends);
+            SearchCommand = new Command(Refresh);
+            RefreshCommand = new Command(Refresh);
             DetailsCommand = new Command<UserViewModel>(Details);
             AddFriendCommand = new Command(AddFriend);
+
             api.Authentication.LoginStateChanged += Authentication_LoginStateChanged;
             api.FriendshipStateChanged += Api_FriendshipStateChanged;
             api.RequestStateChanged += Api_RequestStateChanged;
@@ -77,21 +80,30 @@ namespace StudyBuddy.App.ViewModels
         private void Api_RequestStateChanged(object sender, RequestStateChangedEventArgs e)
         {
             if (e.Request.Type == Model.RequestType.Friendship)
-                RefreshCommand.Execute(null);
+                Refresh();
         }
 
         private void Api_FriendshipStateChanged(object sender, FriendshipStateChangedEventArgs e)
         {
-            RefreshCommand.Execute(null);
+            Refresh();
         }
 
         private void Authentication_LoginStateChanged(object sender, LoginStateChangedArgs args)
         {
             if (args.IsLoggedIn)
-                RefreshCommand.Execute(null);
+                Refresh();
         }
 
-        private async Task LoadFriendsCommand()
+        private void Refresh()
+        {
+            Friends.Clear();
+            skip = 0;
+            LoadFriends();
+            IsRefreshing = false;
+            NotifyPropertyChanged(nameof(IsRefreshing));
+        }
+
+        private async void LoadFriends()
         {
             if (IsBusy)
                 return;
@@ -101,44 +113,16 @@ namespace StudyBuddy.App.ViewModels
             try
             {
                 ItemThreshold = 1;
-                Friends.Clear();
-                var friends = await api.Users.GetFriends(SearchText);
-                Friends.AddRange(friends);
-                api.ImageService.GetProfileImages(Friends);
-
-                PageNo = 1;
-                Skip = 10;
-            }
-            catch (ApiException e)
-            {
-                await dialog.ShowError(e, "Ein Fehler ist aufgetreten!", "Ok", null);
-            }
-            finally
-            {
-                IsBusy = false;
-            }
-        }
-
-        private async Task ItemsThresholdReached()
-        {
-            if (IsBusy)
-                return;
-
-            IsBusy = true;
-
-            try
-            {
-                Skip = 10 * PageNo;
-                var friends = await api.Users.GetFriends(SearchText, Skip);
-                Friends.AddRange(friends);
-
+                var friends = await api.Users.GetFriends(SearchText, skip);
                 if (friends.Count() == 0)
                 {
                     ItemThreshold = -1;
                     return;
                 }
 
-                PageNo++;
+                Friends.AddRange(friends);
+                api.ImageService.GetProfileImages(friends);
+                skip += 10;
             }
             catch (ApiException e)
             {

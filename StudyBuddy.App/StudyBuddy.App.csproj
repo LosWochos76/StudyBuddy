@@ -41,18 +41,6 @@
       <ProjectReference Include="..\StudyBuddy.Model\StudyBuddy.Model.csproj" />
     </ItemGroup>
     <ItemGroup>
-      <EmbeddedResource Update="Templates\LearningChallengeTemplate.xaml">
-        <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-      </EmbeddedResource>
-      <EmbeddedResource Update="Templates\NetworkingChallengeTemplate.xaml">
-        <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-      </EmbeddedResource>
-      <EmbeddedResource Update="Templates\OrganizingChallengeTemplate.xaml">
-        <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-      </EmbeddedResource>
-      <EmbeddedResource Update="Templates\SearchBarTemplate.xaml">
-        <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-      </EmbeddedResource>
       <EmbeddedResource Update="Views\RankingPage.xaml">
         <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
       </EmbeddedResource>

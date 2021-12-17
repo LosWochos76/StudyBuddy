@@ -12,5 +12,6 @@ namespace StudyBuddy.App.Api
         Task<bool> Accept(ChallengeViewModel cvm);
         Task<ChallengeViewModel> AcceptFromQrCode(string code);
         Task<bool> AcceptWithAddendum(ChallengeViewModel cvm, string prove_addendum);
+        void AddChallenges(IEnumerable<RequestViewModel> requests);
     }
 }

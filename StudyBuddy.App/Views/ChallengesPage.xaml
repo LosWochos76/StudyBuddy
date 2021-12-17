@@ -4,63 +4,89 @@
              x:Class="StudyBuddy.App.Views.ChallengesPage"
              xmlns:viewmodels="clr-namespace:StudyBuddy.App.ViewModels"
              xmlns:fontAwesome="clr-namespace:StudyBuddy.App"
-             xmlns:tempsel="clr-namespace:StudyBuddy.App.Misc"
              x:DataType="viewmodels:ChallengesViewModel"
-             xmlns:android="clr-namespace:Xamarin.Forms.PlatformConfiguration.AndroidSpecific;assembly=Xamarin.Forms.Core"
-             xmlns:templates="clr-namespace:StudyBuddy.App.Templates"
-             x:Name="page"
-             Title="{Binding Header}">
-    <ContentPage.Resources>
-        <ResourceDictionary>
-            
-            <DataTemplate x:Key="Learning">
-                <templates:LearningChallengeTemplate />
-            </DataTemplate>
-            <DataTemplate x:Key="Networking">
-                <templates:NetworkingChallengeTemplate />
-            </DataTemplate>
-            <DataTemplate x:Key="Organizing">
-                <templates:OrganizingChallengeTemplate />
-            </DataTemplate>
-            <tempsel:ChallengeDataTemplateSelector x:Key="ChallengeTemplateSelector"
-                LearningChallengeTemplate="{StaticResource Learning}"
-                NetworkingChallengeTemplate="{StaticResource Networking}"
-                OrganizingChallengeTemplate="{StaticResource Organizing}" />
-        </ResourceDictionary>
-        </ContentPage.Resources>
+             x:Name="page" Title="{Binding Header}">
     <ContentPage.ToolbarItems>
         <ToolbarItem Text="QR-Code scannen"
-                     Command="{Binding ScanQrCodeCommand}">
+            Command="{Binding ScanQrCodeCommand}">
             <ToolbarItem.IconImageSource>
                 <FontImageSource FontFamily="{StaticResource FontAwesomeSolid}"
-                                 Glyph="{x:Static fontAwesome:FontAwesomeIcons.Camera}"
-                                 Color="{AppThemeBinding Dark={StaticResource TextColorDark},
+                    Glyph="{x:Static fontAwesome:FontAwesomeIcons.Camera}"
+                    Color="{AppThemeBinding Dark={StaticResource TextColorDark},
                     Light={StaticResource TextColor}}" />
             </ToolbarItem.IconImageSource>
         </ToolbarItem>
     </ContentPage.ToolbarItems>
-    <RefreshView IsRefreshing="{Binding IsRefreshing}"
-                 Command="{Binding RefreshCommand}">
-        <CollectionView ItemsSource="{Binding Challenges}"
-                        SelectedItem="{Binding SelectedChallenge}"
-                        SelectionMode="Single"
-                        SelectionChangedCommand="{Binding DetailsCommand}"
-                        RemainingItemsThreshold="{Binding ItemThreshold}"
-                        RemainingItemsThresholdReachedCommand="{Binding LoadMoreCommand}"
-                        ItemsUpdatingScrollMode="KeepItemsInView"
-                        Header="{Binding .}"
-                        ItemTemplate="{StaticResource ChallengeTemplateSelector}">
-            <CollectionView.EmptyView>
-                <StackLayout Padding="12">
-                    <Label HorizontalOptions="Center"
-                           Text="Keine Challenges" />
-                </StackLayout>
-            </CollectionView.EmptyView>
-            <CollectionView.HeaderTemplate>
-                <DataTemplate>
-                    <templates:SearchBarTemplate />
-                </DataTemplate>
-            </CollectionView.HeaderTemplate>
-        </CollectionView>
-    </RefreshView>
+    <StackLayout>
+        <SearchBar SearchCommand="{Binding SearchCommand}" Text="{Binding SearchText}" />
+        <ActivityIndicator IsVisible="{Binding IsBusy}" IsRunning="{Binding IsBusy}" />
+        <RefreshView IsRefreshing="{Binding IsRefreshing}" Command="{Binding RefreshCommand}">
+            <CollectionView ItemsSource="{Binding Challenges}"
+                    SelectedItem="{Binding SelectedChallenge}"
+                    SelectionMode="Single"
+                    SelectionChangedCommand="{Binding DetailsCommand}"
+                    RemainingItemsThreshold="{Binding ItemThreshold}"
+                    RemainingItemsThresholdReachedCommand="{Binding LoadMoreCommand}"
+                    ItemsUpdatingScrollMode="KeepItemsInView">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="viewmodels:ChallengeViewModel">
+                        <Frame CornerRadius="10" HasShadow="False" BorderColor="{Binding CategoryColor}">
+                            <StackLayout Orientation="Horizontal">
+                                <Image WidthRequest="45" HeightRequest="45">
+                                    <Image.Source>
+                                        <FontImageSource FontFamily="{StaticResource FontAwesomeSolid}"
+                                            Glyph="{Binding CategorySymbol}"
+                                            Color="{Binding CategoryColor}" />
+                                    </Image.Source>
+                                </Image>
+                                <StackLayout VerticalOptions="Center">
+                                    <Label Text="{Binding Name}"
+                                           FontSize="16"
+                                           FontAttributes="Bold" />
+                                    <Grid Padding="10,0,0,0">
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="*" />
+                                        </Grid.RowDefinitions>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="*" />
+                                        </Grid.ColumnDefinitions>
+                                        <Label HorizontalOptions="FillAndExpand"
+                                               HorizontalTextAlignment="Start"
+                                               Grid.Row="0"
+                                               Grid.Column="0"
+                                               WidthRequest="150">
+                                            <Label.FormattedText>
+                                                <FormattedString>
+                                                    <Span Text="Endet: "
+                                                        FontAttributes="Bold"
+                                                        TextColor="{StaticResource SecondaryFont}" />
+                                                    <Span Text="{Binding ValidityEndText}" />
+                                                </FormattedString>
+                                            </Label.FormattedText>
+                                        </Label>
+                                        <Label Grid.Row="0" Grid.Column="1">
+                                            <Label.FormattedText>
+                                                <FormattedString>
+                                                    <Span Text="Punkte: "
+                                                        FontAttributes="Bold"
+                                                        TextColor="{StaticResource SecondaryFont}" />
+                                                    <Span Text="{Binding Points}" />
+                                                </FormattedString>
+                                            </Label.FormattedText>
+                                        </Label>
+                                    </Grid>
+                                </StackLayout>
+                            </StackLayout>
+                        </Frame>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+                <CollectionView.EmptyView>
+                    <StackLayout Padding="12">
+                        <Label HorizontalOptions="Center" Text="Keine Challenges" />
+                    </StackLayout>
+                </CollectionView.EmptyView>
+            </CollectionView>
+        </RefreshView>
+    </StackLayout>
 </ContentPage>

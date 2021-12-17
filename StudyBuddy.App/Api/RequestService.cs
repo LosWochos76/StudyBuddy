@@ -15,23 +15,12 @@ namespace StudyBuddy.App.Api
         private readonly IApi api;
         private readonly string base_url;
         private readonly HttpClient client;
-        private List<RequestViewModel> for_me_cache = null;
-        private List<RequestViewModel> from_me_cache = null;
-        private AsyncMonitor monitor = new AsyncMonitor();
 
         public RequestService(IApi api, string base_url)
         {
             this.api = api;
             this.base_url = base_url;
             client = new HttpClient(Helper.GetInsecureHandler());
-
-            api.RequestStateChanged += Api_RequestStateChanged;
-        }
-
-        private void Api_RequestStateChanged(object sender, RequestStateChangedEventArgs e)
-        {
-            this.for_me_cache = null;
-            this.from_me_cache = null;
         }
 
         public async Task<bool> AskForFriendship(UserViewModel obj)
@@ -79,99 +68,44 @@ namespace StudyBuddy.App.Api
             return true;
         }
 
-        public async Task ForMe(ObservableCollection<RequestViewModel> list, bool reload = false)
+        public async Task<IEnumerable<RequestViewModel>> ForMe()
         {
-            if (for_me_cache == null || reload)
-                await ForMeFromServer(list);
-            else
-                await ForMeFromCache(list);
+            var currentUser = api.Authentication.CurrentUser;
+            var rh = new WebRequestHelper(api.Authentication.Token);
+            var content = await rh.Load<IEnumerable<Request>>(base_url + "Request/ForRecipient/" + currentUser.ID, HttpMethod.Get);
+            if (content == null)
+                return null;
+
+            var result = new List<RequestViewModel>();
+            foreach (var obj in content)
+                result.Add(RequestViewModel.FromModel(obj));
+
+            return result;
         }
 
-        private async Task ForMeFromServer(ObservableCollection<RequestViewModel> list)
+        public async Task<IEnumerable<RequestViewModel>> FromMe()
         {
-            using (await monitor.EnterAsync())
-            {
-                var currentUser = api.Authentication.CurrentUser;
-                var rh = new WebRequestHelper(api.Authentication.Token);
-                var content = await rh.Load<IEnumerable<Request>>(base_url + "Request/ForRecipient/" + currentUser.ID, HttpMethod.Get);
-                if (content == null)
-                    return;
+            var currentUser = api.Authentication.CurrentUser;
+            var rh = new WebRequestHelper(api.Authentication.Token);
+            var content = await rh.Load<IEnumerable<Request>>(base_url + "Request/OfSender/" + currentUser.ID, HttpMethod.Get);
+            if (content == null)
+                return null;
 
-                list.Clear();
-                for_me_cache = new List<RequestViewModel>();
-                foreach (var obj in content)
-                {
-                    var rvm = RequestViewModel.FromModel(obj);
-                    list.Add(rvm);
-                    for_me_cache.Add(rvm);
+            var result = new List<RequestViewModel>();
+            foreach (var obj in content)
+                result.Add(RequestViewModel.FromModel(obj));
 
-                    rvm.Sender = await api.Users.GetById(rvm.SenderID);
-                    if (rvm.Type == RequestType.ChallengeAcceptance)
-                        rvm.Challenge = await api.Challenges.GetById(rvm.ChallengeID.Value);
-                }
-            }
+            return result;
         }
 
-        private async Task ForMeFromCache(ObservableCollection<RequestViewModel> list)
+        public async void AddFriendshipRequests(IEnumerable<UserViewModel> users)
         {
-            list.Clear();
-            foreach (var obj in for_me_cache)
-                list.Add(obj);
-        }
+            var requests = await FromMe();
 
-        public async Task FromMe(ObservableCollection<RequestViewModel> list, bool reload = false)
-        {
-            if (this.from_me_cache == null || reload)
-                await FromMeFromServer(list);
-            else
-                await FromMeFromCache(list);
-        }
-
-        private async Task FromMeFromServer(ObservableCollection<RequestViewModel> list)
-        {
-            using (await monitor.EnterAsync())
-            {
-                var currentUser = api.Authentication.CurrentUser;
-                var rh = new WebRequestHelper(api.Authentication.Token);
-                var content = await rh.Load<IEnumerable<Request>>(base_url + "Request/OfSender/" + currentUser.ID, HttpMethod.Get);
-                if (content == null)
-                    return;
-
-                list.Clear();
-                from_me_cache = new List<RequestViewModel>();
-                foreach (var obj in content)
-                {
-                    var rvm = RequestViewModel.FromModel(obj);
-                    list.Add(rvm);
-                    from_me_cache.Add(rvm);
-
-                    rvm.Sender = await api.Users.GetById(rvm.SenderID);
-                    if (rvm.Type == RequestType.ChallengeAcceptance)
-                        rvm.Challenge = await api.Challenges.GetById(rvm.ChallengeID.Value);
-                }
-            }
-        }
-
-        private async Task FromMeFromCache(ObservableCollection<RequestViewModel> list)
-        {
-            list.Clear();
-            foreach (var obj in from_me_cache)
-                list.Add(obj);
-        }
-
-        public async Task<RequestViewModel> GetFriendshipRequest(int other_user_id)
-        {
-            if (from_me_cache == null)
-            {
-                var temp = new ObservableCollection<RequestViewModel>();
-                await FromMeFromServer(temp);
-            }
-
-            foreach (var r in from_me_cache)
-                if (r.Type == RequestType.Friendship && r.RecipientID == other_user_id)
-                    return r;
-
-            return null;
+            foreach (var user in users)
+                foreach (var req in requests)
+                    if (user.ID == req.RecipientID)
+                        user.FriendshipRequest = req;
         }
 
         public async Task<bool> Accept(RequestViewModel request)
@@ -213,7 +147,6 @@ namespace StudyBuddy.App.Api
                 return false;
 
             obj.FriendshipRequest = null;
-            from_me_cache.Remove(request);
             api.RaiseRequestStateChanged(this, new RequestStateChangedEventArgs() { Request = request, Type = RequestStateChangedEventType.Deleted });
             return content.IsOk;
         }
