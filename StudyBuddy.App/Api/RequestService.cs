@@ -5,8 +5,6 @@ using System.Threading.Tasks;
 using StudyBuddy.App.Misc;
 using StudyBuddy.Model;
 using StudyBuddy.App.ViewModels;
-using Nito.AsyncEx;
-using System.Collections.ObjectModel;
 
 namespace StudyBuddy.App.Api
 {

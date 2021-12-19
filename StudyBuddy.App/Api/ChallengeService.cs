@@ -1,4 +1,3 @@
-using Nito.AsyncEx;
 using StudyBuddy.App.Misc;
 using StudyBuddy.App.ViewModels;
 using StudyBuddy.Model;
@@ -14,7 +13,6 @@ namespace StudyBuddy.App.Api
         private readonly IApi api;
         private readonly string base_url;
         private readonly HttpClient client;
-        private AsyncMonitor monitor = new AsyncMonitor();
 
         public ChallengeService(IApi api, string base_url)
         {
@@ -54,21 +52,18 @@ namespace StudyBuddy.App.Api
                 OnlyUnacceped = false
             };
 
-            using (await monitor.EnterAsync())
-            {
-                var rh = new WebRequestHelper(api.Authentication.Token);
-                var currentUserId = api.Authentication.CurrentUser.ID;
-                var items = await rh.Get<IEnumerable<Challenge>>(base_url + "Challenge/Accepted/" + currentUserId , filter);
+            var rh = new WebRequestHelper(api.Authentication.Token);
+            var currentUserId = api.Authentication.CurrentUser.ID;
+            var items = await rh.Get<IEnumerable<Challenge>>(base_url + "Challenge/Accepted/" + currentUserId , filter);
 
-                if (items == null)
-                    return null;
+            if (items == null)
+                return null;
 
-                var list = new List<ChallengeViewModel>();
-                foreach (var obj in items)
-                    list.Add(ChallengeViewModel.FromModel(obj));
+            var list = new List<ChallengeViewModel>();
+            foreach (var obj in items)
+                list.Add(ChallengeViewModel.FromModel(obj));
 
-                return list;
-            }
+            return list;
         }
         
         public async Task<ChallengeViewModel> AcceptFromQrCode(string code)
