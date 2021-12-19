@@ -21,7 +21,7 @@ namespace StudyBuddy.App.ViewModels
 
             if (!answer)
             {
-                navigation.GoTo("//ChallengesPage");
+                await navigation.GoTo("//ChallengesPage");
                 return;
             }
 
@@ -32,7 +32,7 @@ namespace StudyBuddy.App.ViewModels
                 return;
             }
 
-            navigation.GoTo("//StatisticsPage");
+            await navigation.GoTo("//StatisticsPage");
         }
     }
 }

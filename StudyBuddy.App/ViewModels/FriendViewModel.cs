@@ -1,28 +1,26 @@
-﻿using System.Windows.Input;
+﻿using System.Threading.Tasks;
 using StudyBuddy.App.Api;
 using StudyBuddy.App.Misc;
 using StudyBuddy.App.Models;
-using TinyIoC;
-using Xamarin.Forms;
+using Xamarin.CommunityToolkit.ObjectModel;
 
 namespace StudyBuddy.App.ViewModels
 {
-    public class FriendViewModel
+    public class FriendViewModel : ViewModelBase
     {
         public UserViewModel User { get; set; }
-        public ICommand RemoveFriendCommand { get; set; }
+        public IAsyncCommand RemoveFriendCommand { get; set; }
         public UserStatistics UserStatistics { get; set; }
 
-        public FriendViewModel(UserViewModel obj, UserStatistics userStatistics)
+        public FriendViewModel(IApi api, IDialogService dialog, INavigationService navigation, UserViewModel obj, UserStatistics userStatistics) : base(api, dialog, navigation)
         {
-            this.User = obj;
-            this.UserStatistics = userStatistics;
-            RemoveFriendCommand = new Command(RemoveFriend);
+            User = obj;
+            UserStatistics = userStatistics;
+            RemoveFriendCommand = new AsyncCommand(RemoveFriend);
         }
 
-        public async void RemoveFriend()
+        public async Task RemoveFriend()
         {
-            var dialog = TinyIoCContainer.Current.Resolve<IDialogService>();
             var answer = await dialog.ShowMessage(
                 "Wollen Sie " + User.Firstname + " als Freund entfernen?",
                 "Freund entfernen?",
@@ -31,7 +29,6 @@ namespace StudyBuddy.App.ViewModels
             if (!answer)
                 return;
 
-            var api = TinyIoCContainer.Current.Resolve<IApi>();
             var result = await api.Users.RemoveFriend(User);
 
             if (!result)
@@ -40,8 +37,7 @@ namespace StudyBuddy.App.ViewModels
                 return;
             }
 
-            var navigation = TinyIoCContainer.Current.Resolve<INavigationService>();
-            navigation.Pop();
+            await navigation.Pop();
         }
     }
 }

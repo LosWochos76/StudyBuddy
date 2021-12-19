@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using StudyBuddy.App.Api;
 using StudyBuddy.App.ViewModels;
@@ -13,15 +14,25 @@ namespace StudyBuddy.Test.Mocks
 
         public ChallengeServiceMock()
         {
-            challenges.Add(new ChallengeViewModel()
-            {
-                ID = 1,
-                Category = ChallengeCategory.Learning,
-                Name = "Test-Challenge1",
-                Points = 5,
-                OwnerID = 1,
-                Prove = ChallengeProve.ByTrust
-            });
+            for (int i=0; i<100; i++)
+                challenges.Add(new ChallengeViewModel()
+                {
+                    ID = i+1,
+                    Category = RandomEnumValue<ChallengeCategory>(),
+                    Name = "Test-Challenge " + (i+1).ToString(),
+                    Points = _R.Next(1, 100),
+                    OwnerID = _R.Next(1, 10),
+                    ValidityStart = DateTime.Now.Date,
+                    ValidityEnd = DateTime.Now.Date.AddDays(1),
+                    Prove = RandomEnumValue<ChallengeProve>()
+                });
+        }
+
+        static Random _R = new Random();
+        static T RandomEnumValue<T>()
+        {
+            var v = Enum.GetValues(typeof(T));
+            return (T)v.GetValue(_R.Next(v.Length));
         }
 
         public Task<bool> Accept(ChallengeViewModel cvm)
@@ -36,7 +47,7 @@ namespace StudyBuddy.Test.Mocks
         {
             return Task.Run(() =>
             {
-                return challenges[0];
+                return challenges[2];
             });
         }
 
@@ -56,7 +67,7 @@ namespace StudyBuddy.Test.Mocks
         {
             return Task.Run(() =>
             {
-                return (IEnumerable<ChallengeViewModel>)challenges;
+                return challenges.Where(c => c.ContainsAny(search_string)).Skip(skip).Take(10);
             });
         }
 

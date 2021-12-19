@@ -6,21 +6,21 @@ using System.Windows.Input;
 using StudyBuddy.App.Api;
 using StudyBuddy.App.Misc;
 using StudyBuddy.App.Views;
+using Xamarin.CommunityToolkit.ObjectModel;
 using Xamarin.Forms;
 
 namespace StudyBuddy.App.ViewModels
 {
     public class ChallengesViewModel : ViewModelBase
     {
-        private int skip = 0;
-
         public RangeObservableCollection<ChallengeViewModel> Challenges { get; private set; }
-        public ICommand RefreshCommand { get; }
-        public ICommand DetailsCommand { get; }
-        public ICommand ScanQrCodeCommand { get; }
-        public ICommand LoadMoreCommand { get; }
-        public ICommand SearchCommand { get; }
+        public IAsyncCommand RefreshCommand { get; }
+        public IAsyncCommand DetailsCommand { get; }
+        public IAsyncCommand ScanQrCodeCommand { get; }
+        public IAsyncCommand LoadMoreCommand { get; }
+        public IAsyncCommand SearchCommand { get; }
         public bool IsRefreshing { get; set; } = false;
+        public int Skip { get; set; }
         public string Header => string.Format("Herausforderungen am {0}", DateTime.Now.ToShortDateString());
         public ChallengeViewModel SelectedChallenge { get; set; }
 
@@ -40,7 +40,7 @@ namespace StudyBuddy.App.ViewModels
                     await Task.Delay(1000);
 
                     if (search_text == SearchText)
-                        Refresh();
+                        await Refresh();
                 });
             }
         }
@@ -71,13 +71,13 @@ namespace StudyBuddy.App.ViewModels
         {
             Challenges = new RangeObservableCollection<ChallengeViewModel>();
             api.Authentication.LoginStateChanged += Authentication_LoginStateChanged;
-            api.ChallengeAccepted += (sender, e) => { LoadChallenges(); };
+            api.ChallengeAccepted += async (sender, e) => { await LoadChallenges(); };
 
-            LoadMoreCommand = new Command(LoadChallenges);
-            SearchCommand = new Command(Refresh);
-            DetailsCommand = new Command(ShowDetails);
-            ScanQrCodeCommand = new Command(ScanQrCode);
-            RefreshCommand = new Command(Refresh);
+            LoadMoreCommand = new AsyncCommand(LoadChallenges);
+            SearchCommand = new AsyncCommand(Refresh);
+            DetailsCommand = new AsyncCommand(ShowDetails);
+            ScanQrCodeCommand = new AsyncCommand(ScanQrCode);
+            RefreshCommand = new AsyncCommand(Refresh);
         }
 
         private void Authentication_LoginStateChanged(object sender, LoginStateChangedArgs args)
@@ -86,16 +86,16 @@ namespace StudyBuddy.App.ViewModels
               RefreshCommand.Execute(null);
         }
 
-        private void Refresh()
+        private async Task Refresh()
         {
             Challenges.Clear();
-            skip = 0;
-            LoadChallenges();
+            Skip = 0;
+            await LoadChallenges();
             IsRefreshing = false;
             NotifyPropertyChanged(nameof(IsRefreshing));
         }
 
-        private async void LoadChallenges()
+        private async Task LoadChallenges()
         {
             if (IsBusy)
                 return;
@@ -105,7 +105,7 @@ namespace StudyBuddy.App.ViewModels
             try
             {
                 ItemThreshold = 1;
-                var challenges = await api.Challenges.ForToday(SearchText, skip);
+                var challenges = await api.Challenges.ForToday(SearchText, Skip);
                 if (challenges.Count() == 0)
                 {
                     ItemThreshold = -1;
@@ -113,7 +113,7 @@ namespace StudyBuddy.App.ViewModels
                 }
 
                 Challenges.AddRange(challenges);
-                skip += 10;
+                Skip += 10;
             }
             catch (ApiException e)
             {
@@ -125,16 +125,16 @@ namespace StudyBuddy.App.ViewModels
             }
         }
 
-        private async void ShowDetails()
+        private async Task ShowDetails()
         {
             if (SelectedChallenge == null)
                 return;
             
-            navigation.Push(new ChallengeDetailsPage(SelectedChallenge));
+            await navigation.Push(new ChallengeDetailsPage(SelectedChallenge));
             SelectedChallenge = null;
         }
 
-        private async void ScanQrCode()
+        private async Task ScanQrCode()
         {
             var route = $"{nameof(QrCodePage)}";
             await Shell.Current.GoToAsync(route);

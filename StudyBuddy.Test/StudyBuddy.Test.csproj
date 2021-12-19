@@ -1,22 +1,27 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>netstandard2.1</TargetFramework>
-        <ProduceReferenceAssembly>true</ProduceReferenceAssembly>
+        <TargetFramework>netcoreapp3.1</TargetFramework>
+        <OutputType>Library</OutputType>
+        <GenerateErrorForMissingTargetingPacks>false</GenerateErrorForMissingTargetingPacks>
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
         <DebugType>portable</DebugType>
+        <WarningLevel>4</WarningLevel>
         <DebugSymbols>true</DebugSymbols>
     </PropertyGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\StudyBuddy.App\StudyBuddy.App.csproj" />
+    <ProjectReference Include="..\StudyBuddy.Model\StudyBuddy.Model.csproj" />
   </ItemGroup>
   <ItemGroup>
     <None Remove="Mocks\" />
     <None Remove="xunit" />
     <None Remove="Microsoft.NET.Test.Sdk" />
+    <None Remove="xunit.runner.visualstudio" />
+    <None Remove="xunit.runner.console" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Mocks\" />
@@ -24,5 +29,13 @@
   <ItemGroup>
     <PackageReference Include="xunit" Version="2.4.1" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.0.0" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.4.3">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+    <PackageReference Include="xunit.runner.console" Version="2.4.1">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
   </ItemGroup>
 </Project>

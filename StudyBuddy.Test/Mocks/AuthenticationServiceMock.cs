@@ -17,6 +17,10 @@ namespace StudyBuddy.Test.Mocks
             {
                 CurrentUser = new UserViewModel() { ID = 1, Firstname = "Test", Lastname = "Test" };
                 Token = "secret_token";
+
+                if (LoginStateChanged != null)
+                    LoginStateChanged(this, new LoginStateChangedArgs(true, CurrentUser, Token));
+
                 return true;
             });
         }

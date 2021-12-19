@@ -1,6 +1,8 @@
-﻿using System.Windows.Input;
+﻿using System.Threading.Tasks;
+using System.Windows.Input;
 using StudyBuddy.App.Api;
 using StudyBuddy.App.Misc;
+using Xamarin.CommunityToolkit.ObjectModel;
 using Xamarin.Forms;
 
 namespace StudyBuddy.App.ViewModels
@@ -9,13 +11,13 @@ namespace StudyBuddy.App.ViewModels
     {
         public LoginViewModel(IApi api, IDialogService dialog, INavigationService navigation) : base(api, dialog, navigation)
         {
-            LoginCommand = new Command(Login);
+            LoginCommand = new AsyncCommand(Login);
             RegisterCommand = new Command(Register);
             PasswordForgottenCommand = new Command(PasswordForgotten);
             ImprintCommand = new Command(Imprint);
         }
 
-        public ICommand LoginCommand { get; }
+        public IAsyncCommand LoginCommand { get; }
         public ICommand RegisterCommand { get; }
         public ICommand PasswordForgottenCommand { get; }
         public ICommand ImprintCommand { get; }
@@ -37,7 +39,7 @@ namespace StudyBuddy.App.ViewModels
             dialog.OpenBrowser("https://studybuddybackend.web.app/imprint");
         }
 
-        private async void Login()
+        private async Task Login()
         {
             var uc = new UserCredentials {EMail = EMail, Password = Password};
             var result = await api.Authentication.Login(uc);

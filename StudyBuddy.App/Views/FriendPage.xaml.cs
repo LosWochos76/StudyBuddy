@@ -1,6 +1,7 @@
-﻿using StudyBuddy.App.Api;
+﻿using System.Collections.Generic;
 using StudyBuddy.App.Models;
 using StudyBuddy.App.ViewModels;
+using TinyIoC;
 using Xamarin.Forms;
 
 namespace StudyBuddy.App.Views
@@ -13,9 +14,9 @@ namespace StudyBuddy.App.Views
         {
             InitializeComponent();
 
-            view_model = new FriendViewModel(obj, userStatistics);
+            var parms = NamedParameterOverloads.FromIDictionary(new Dictionary<string, object>() { { "obj", obj }, { "userStatistics", userStatistics } });
+            view_model = TinyIoCContainer.Current.Resolve<FriendViewModel>(parms);
             BindingContext = view_model;
         }
-
     }
 }
