@@ -17,7 +17,7 @@
                     </OnPlatform>
                 </Frame.Padding>
                 <Label BackgroundColor="{AppThemeBinding Dark={StaticResource WindowBackgroundColorDark}, Light={StaticResource WindowBackgroundColor}}"
-                        Text="Wilkommen beim StudyBuddy!"
+                        Text="Wilkommen bei Gameucation!"
                         HorizontalTextAlignment="Center"
                         FontSize="36" />
             </Frame>
@@ -27,7 +27,7 @@
                         <FormattedString>
                             <FormattedString.Spans>
                                 <Span
-                                    Text="Wenn du herausfinden willst, was der StudyBuddy 
+                                    Text="Wenn du herausfinden willst, was Gameucation 
                                     für dich als Studierender tun kann, klicke " />
                                 <Span Text="hier"
                                         TextColor="#0A84FF" TextDecorations="Underline">

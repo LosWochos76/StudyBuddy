@@ -6,7 +6,7 @@
 	<string>development</string>
 	<key>keychain-access-groups</key>
 	<array>
-		<string>$(AppIdentifierPrefix)de.hshl.App</string>
+		<string>$(AppIdentifierPrefix)de.gameucation</string>
 	</array>
 </dict>
 </plist>

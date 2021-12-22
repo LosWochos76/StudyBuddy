@@ -22,10 +22,6 @@
 	</array>
 	<key>MinimumOSVersion</key>
 	<string>14</string>
-	<key>CFBundleDisplayName</key>
-	<string>StudyBuddy</string>
-	<key>CFBundleIdentifier</key>
-	<string>de.hshl.App</string>
 	<key>CFBundleVersion</key>
 	<string>1.0</string>
 	<key>UILaunchStoryboardName</key>
@@ -56,5 +52,23 @@
 	<string>Um manche Herausforderungen abzuschließen, benötigt der StudyBuddy den aktuellen Standort.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Um ein Profilbild auszuwählen benötigt StudyBuddy Zugriff auf die Photos.</string>
+	<key>CFBundleShortVersionString</key>
+	<string>0.1.1</string>
+	<key>CFBundleIdentifier</key>
+	<string>de.gameucation</string>
+	<key>CFBundleDisplayName</key>
+	<string>Gameucation</string>
+	<key>NSContactsUsageDescription</key>
+	<string>Gameucation benötigt keinen Zugriff. Warum diese Beschreibung notwendig ist, ist unklar.</string>
+	<key>NSCalendarsUsageDescription</key>
+	<string>Gameucation benötigt keinen Zugriff. Warum diese Beschreibung notwendig ist, ist unklar.</string>
+	<key>NSMicrophoneUsageDescription </key>
+	<string>Gameucation benötigt keinen Zugriff. Warum diese Beschreibung notwendig ist, ist unklar.</string>
+	<key>NSAppleMusicUsageDescription </key>
+	<string>Gameucation benötigt keinen Zugriff. Warum diese Beschreibung notwendig ist, ist unklar.</string>
+	<key>NSSiriUsageDescription</key>
+	<string>Gameucation benötigt keinen Zugriff. Warum diese Beschreibung notwendig ist, ist unklar.</string>
+	<key>NSBluetoothAlwaysUsageDescription</key>
+	<string>Gameucation benötigt keinen Zugriff. Warum diese Beschreibung notwendig ist, ist unklar.</string>
 </dict>
 </plist>
