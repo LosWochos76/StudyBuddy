@@ -10,7 +10,7 @@ namespace StudyBuddy.Persistence
     {
         private readonly string connection_string;
         private readonly ObjectReader<T> object_reader;
-        private readonly Dictionary<string, object> parameters = new();
+        private readonly Dictionary<string, object> parameters = new Dictionary<string, object>();
 
         public QueryHelper(string connection_string)
         {

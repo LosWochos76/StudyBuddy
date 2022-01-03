@@ -15,7 +15,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StudyBuddy.Persistence", "S
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StudyBuddy.BusinessLogic", "StudyBuddy.BusinessLogic\StudyBuddy.BusinessLogic.csproj", "{CEE885C6-7974-47A4-9183-A1B3FE1E08A7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StudyBuddy.Test", "StudyBuddy.Test\StudyBuddy.Test.csproj", "{DB275A1D-ADBF-4799-B368-1A7ED32E4CAF}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StudyBuddy.App.Test", "StudyBuddy.App.Test\StudyBuddy.App.Test.csproj", "{DB275A1D-ADBF-4799-B368-1A7ED32E4CAF}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StudyBuddy.App.iOS", "StudyBuddy.App.iOS\StudyBuddy.App.iOS.csproj", "{EFCF5052-1DCF-4D19-8544-7C57C468353D}"
 EndProject

@@ -57,6 +57,10 @@ namespace StudyBuddy.BusinessLogic
             if (backend.CurrentUser == null || !backend.CurrentUser.IsAdmin && backend.CurrentUser.ID != obj.SenderID)
                 throw new Exception("Unauthorized!");
 
+            var other = backend.Repository.Requests.FindSimilar(obj);
+            if (other != null)
+                return other;
+
             backend.Repository.Requests.Insert(obj);
             return obj;
         }
