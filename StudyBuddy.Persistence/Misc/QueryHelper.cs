@@ -61,7 +61,8 @@ namespace StudyBuddy.Persistence
 
                     using (var reader = cmd.ExecuteReader())
                     {
-                        if (reader.Read()) result = object_reader(reader);
+                        if (reader.Read())
+                            result = object_reader(reader);
                     }
                 }
             }
