@@ -8,7 +8,7 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:483028289697:android:f899d5af156e480f9388e0",
+        "mobilesdk_app_id": "1:483028289697:android:b65424c38da878ab9388e0",
         "android_client_info": {
           "package_name": "de.gameucation"
         }
@@ -30,6 +30,13 @@
             {
               "client_id": "483028289697-ltm19r42difdm4e91v9skk72ao2dh2mc.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "483028289697-1knn1196d53onbl47p6c4spceuqs01gu.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "de.hshl.App"
+              }
             }
           ]
         }
