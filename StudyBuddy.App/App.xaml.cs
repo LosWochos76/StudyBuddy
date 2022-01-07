@@ -56,12 +56,14 @@ namespace StudyBuddy.App
         {
             TinyIoCContainer.Current.Resolve<ThemeViewModel>().ApplyTheme();
             RequestedThemeChanged -= App_RequestedThemeChanged;
+            Connectivity.ConnectivityChanged -= App_ConnectivityChanged;
         }
 
         protected override async void OnResume()
         {
             TinyIoCContainer.Current.Resolve<ThemeViewModel>().ApplyTheme();
             RequestedThemeChanged += App_RequestedThemeChanged;
+            Connectivity.ConnectivityChanged += App_ConnectivityChanged;
         }
 
         private void App_RequestedThemeChanged(object sender, AppThemeChangedEventArgs e)
@@ -69,6 +71,18 @@ namespace StudyBuddy.App
             MainThread.BeginInvokeOnMainThread(() =>
             {
                 TinyIoCContainer.Current.Resolve<ThemeViewModel>().ApplyTheme();
+            });
+        }
+
+        private void App_ConnectivityChanged(object sender, ConnectivityChangedEventArgs e)
+        {
+            MainThread.BeginInvokeOnMainThread(async () =>
+            {
+                if (e.NetworkAccess == NetworkAccess.None || e.NetworkAccess == NetworkAccess.Unknown ||
+                    e.NetworkAccess == NetworkAccess.Local || e.NetworkAccess == NetworkAccess.ConstrainedInternet)
+                {
+                    await Current.MainPage.DisplayAlert("Achtung!",$"Es wurde keine Internetverbindung gefunden!\nVerbindungstyp: {e.NetworkAccess.ToString()}","Ok");
+                }
             });
         }
     }
