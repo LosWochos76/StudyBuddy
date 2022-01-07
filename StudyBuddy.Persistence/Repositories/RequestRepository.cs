@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Runtime.CompilerServices;
 using Npgsql;
 using StudyBuddy.Model;
 
@@ -94,6 +93,28 @@ namespace StudyBuddy.Persistence
                     "add column created date;");
 
                 rh.SetRevision(2);
+            }
+        }
+
+        public Request FindSimilar(Request obj)
+        {
+            var qh = new QueryHelper<Request>(connection_string, FromReader);
+            qh.AddParameter(":sender_id", obj.SenderID);
+            qh.AddParameter(":recipient_id", obj.RecipientID);
+            qh.AddParameter(":type", (int)obj.Type);
+
+            if (obj.ChallengeID == null)
+            {
+                return qh.ExecuteQueryToSingleObject(
+                "select id,created,sender_id,recipient_id,type,challenge_id " +
+                "from requests where sender_id=:sender_id and recipient_id=:recipient_id and type=:type and challenge_id is null");
+            }
+            else
+            {
+                qh.AddParameter(":challenge_id", obj.ChallengeID.HasValue ? obj.ChallengeID.Value : DBNull.Value);
+                return qh.ExecuteQueryToSingleObject(
+                    "select id,created,sender_id,recipient_id,type,challenge_id " +
+                    "from requests where sender_id=:sender_id and recipient_id=:recipient_id and type=:type and challenge_id=:challenge_id");
             }
         }
 

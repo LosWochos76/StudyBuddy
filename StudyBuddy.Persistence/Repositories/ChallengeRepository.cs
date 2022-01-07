@@ -250,10 +250,5 @@ namespace StudyBuddy.Persistence
             obj.ProveAddendum = reader.IsDBNull(12) ? string.Empty : reader.GetString(12);
             return obj;
         }
-
-        public IEnumerable<Challenge> Accepted()
-        {
-            throw new NotImplementedException();
-        }
     }
 }
