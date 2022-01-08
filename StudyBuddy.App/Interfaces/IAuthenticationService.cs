@@ -31,5 +31,6 @@ namespace StudyBuddy.App.Api
         Task<bool> LoginFromJson(string content);
         void Logout();
         event LoginStateChangedHandler LoginStateChanged;
+        Task<bool> IsTokenValid(string token);
     }
 }

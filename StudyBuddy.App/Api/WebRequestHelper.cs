@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
-using System.IO;
 using System.Net.Http;
 using System.Text;
 using System.Text.Json;
@@ -18,11 +16,15 @@ namespace StudyBuddy.App.Api
         private CancellationToken cancellationToken;
         private JsonSerializerOptions options = new JsonSerializerOptions();
 
-        public WebRequestHelper(string token)
+        public WebRequestHelper()
         {
             options.PropertyNameCaseInsensitive = true;
-            this.token = token;
             this.client = new HttpClient(Helper.GetInsecureHandler());
+        }
+
+        public WebRequestHelper(string token) : this()
+        {
+            this.token = token;
         }
 
         public WebRequestHelper(string token, CancellationToken cancellationToken) : this(token)

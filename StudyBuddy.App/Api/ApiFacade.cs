@@ -9,8 +9,8 @@ namespace StudyBuddy.App.Api
 {
     public class ApiFacade : IApi
     {
-        //private readonly string base_url = "https://localhost:5001/";
-        private readonly string base_url = "https://studybuddy.hshl.de/";
+        private readonly string base_url = "https://localhost:5001/";
+        //private readonly string base_url = "https://studybuddy.hshl.de/";
         //private readonly string base_url = "https://10.0.2.2:5001/";
         //private readonly string base_url = "http://192.168.0.199:58947/";
         
@@ -47,7 +47,7 @@ namespace StudyBuddy.App.Api
 
         private async void CheckVersion()
         {
-            var rh = new WebRequestHelper("");
+            var rh = new WebRequestHelper();
             var api_version = await rh.Get<Version>(base_url + "ApiVersion", HttpMethod.Get);
             if (api_version == null)
                 return;

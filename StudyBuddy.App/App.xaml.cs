@@ -49,6 +49,9 @@ namespace StudyBuddy.App
 
             if (result)
                 await Shell.Current.GoToAsync("//ChallengesPage");
+            else
+                Current.Properties.Remove("Login");
+
             OnResume();
         }
 
@@ -81,7 +84,7 @@ namespace StudyBuddy.App
                 if (e.NetworkAccess == NetworkAccess.None || e.NetworkAccess == NetworkAccess.Unknown ||
                     e.NetworkAccess == NetworkAccess.Local || e.NetworkAccess == NetworkAccess.ConstrainedInternet)
                 {
-                    await Current.MainPage.DisplayAlert("Achtung!",$"Es wurde keine Internetverbindung gefunden!\nVerbindungstyp: {e.NetworkAccess.ToString()}","Ok");
+                    await Current.MainPage.DisplayAlert("Achtung!", $"Es wurde keine Internetverbindung gefunden!\nVerbindungstyp: {e.NetworkAccess.ToString()}", "Ok");
                 }
             });
         }

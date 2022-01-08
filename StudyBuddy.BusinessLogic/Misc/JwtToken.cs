@@ -4,58 +4,58 @@ using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using Microsoft.IdentityModel.Tokens;
-using StudyBuddy.Model;
-using StudyBuddy.Persistence;
 
 namespace StudyBuddy.BusinessLogic
 {
     public class JwtToken
     {
         private readonly byte[] key;
-        private readonly IRepository repository;
-        private readonly JwtSecurityTokenHandler tokenHandler = new();
+        private readonly JwtSecurityTokenHandler tokenHandler = new JwtSecurityTokenHandler();
+        private readonly string domain_name;
 
-        public JwtToken(IRepository repository)
+        public JwtToken()
         {
-            this.repository = repository;
-
             var key_string = Model.Environment.GetOrDefault("JWT_KEY", "thisisasupersecretkey");
+            domain_name = Model.Environment.GetOrDefault("DOMAIN_NAME", "localhost");
             key = Encoding.ASCII.GetBytes(key_string);
         }
 
-        public string FromUser(User user)
+        public string FromUser(int user_id)
         {
-            var tokenDescriptor = new SecurityTokenDescriptor();
-            tokenDescriptor.Subject = new ClaimsIdentity(new[] {new Claim("id", user.ID.ToString())});
-            tokenDescriptor.Expires = DateTime.UtcNow.AddDays(7);
-            tokenDescriptor.SigningCredentials = new SigningCredentials(
-                new SymmetricSecurityKey(key),
-                SecurityAlgorithms.HmacSha256Signature);
+            var tokenDescriptor = new SecurityTokenDescriptor()
+            {
+                Subject = new ClaimsIdentity(new[] { new Claim("id", user_id.ToString()) }),
+                Expires = DateTime.UtcNow.AddDays(7),
+                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature),
+                Issuer = domain_name
+            };
 
             var token = tokenHandler.CreateToken(tokenDescriptor);
             return tokenHandler.WriteToken(token);
         }
 
-        public User FromToken(string token)
+        public int FromToken(string token)
         {
             try
             {
-                tokenHandler.ValidateToken(token, new TokenValidationParameters
+                var tp = new TokenValidationParameters
                 {
                     ValidateIssuerSigningKey = true,
                     IssuerSigningKey = new SymmetricSecurityKey(key),
                     ValidateIssuer = false,
                     ValidateAudience = false,
-                    ClockSkew = TimeSpan.Zero
-                }, out var validatedToken);
+                    ClockSkew = TimeSpan.Zero,
+                    ValidIssuer = domain_name
+                };
 
+                tokenHandler.ValidateToken(token, tp, out var validatedToken);
                 var jwtToken = (JwtSecurityToken) validatedToken;
                 var user_id = int.Parse(jwtToken.Claims.First(x => x.Type == "id").Value);
-                return repository.Users.ById(user_id);
+                return user_id;
             }
             catch
             {
-                return null;
+                return 0;
             }
         }
     }

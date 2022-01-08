@@ -19,6 +19,13 @@ namespace StudyBuddy.Api
             return Json(backend.AuthenticationService.Login(uc));
         }
 
+        [Route("/Login/")]
+        [HttpPut]
+        public IActionResult CheckToken([FromBody] string token)
+        {
+            return Json(backend.AuthenticationService.CheckToken(token));
+        }
+
         [Route("/Login/SendPasswortResetMail/")]
         [HttpPost]
         public IActionResult SendPasswortResetMail([FromBody] string email)

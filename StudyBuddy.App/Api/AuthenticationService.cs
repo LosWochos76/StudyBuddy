@@ -56,16 +56,16 @@ namespace StudyBuddy.App.Api
                 !obj.RootElement.TryGetProperty("user", out user_element))
                 return false;
 
-            Token = token_element.ToString();
-            var options = new JsonSerializerOptions() { PropertyNameCaseInsensitive = true };
+            var token = token_element.ToString();
+            var is_valid = await api.Authentication.IsTokenValid(token);
+            if (!is_valid)
+                return false;
 
+            Token = token;
+            var options = new JsonSerializerOptions() { PropertyNameCaseInsensitive = true };
             var user = JsonSerializer.Deserialize<User>(user_element.GetRawText(), options);
             CurrentUser = UserViewModel.FromModel(user);
-
-            // ToDo: Hier muss noch das Profilbild nachgeladen werden
             await api.ImageService.GetProfileImage(CurrentUser);
-
-            // Zudem sollte hier auch noch gecheckt werden, ob die wiederhergestellten Credentials auch noch valide sind?!?
 
             // Save the Login-Data to the context to be resumed
             Application.Current.Properties["Login"] = content;
@@ -91,6 +91,12 @@ namespace StudyBuddy.App.Api
         {
             if (LoginStateChanged != null)
                 LoginStateChanged(this, new LoginStateChangedArgs(is_logged_in, CurrentUser, Token));
+        }
+
+        public async Task<bool> IsTokenValid(string token)
+        {
+            var rh = new WebRequestHelper();
+            return await rh.Put<bool>(base_url + "Login", token);
         }
     }
 }
