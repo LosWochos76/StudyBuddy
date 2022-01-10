@@ -9,13 +9,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StudyBuddy.App", "StudyBudd
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StudyBuddy.Model", "StudyBuddy.Model\StudyBuddy.Model.csproj", "{AA0D0CB8-7AF6-4AF5-9CB9-E02CEC1F7D58}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StudyBuddy.Api", "StudyBuddy.Api\StudyBuddy.Api.csproj", "{AEFBA758-829E-4F31-9C47-5A1CF23CC3C7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StudyBuddy.Api", "StudyBuddy.Api\StudyBuddy.Api.csproj", "{AEFBA758-829E-4F31-9C47-5A1CF23CC3C7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StudyBuddy.Persistence", "StudyBuddy.Persistence\StudyBuddy.Persistence.csproj", "{3AC9E106-011C-4F71-AC75-C37056444F15}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StudyBuddy.Persistence", "StudyBuddy.Persistence\StudyBuddy.Persistence.csproj", "{3AC9E106-011C-4F71-AC75-C37056444F15}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StudyBuddy.BusinessLogic", "StudyBuddy.BusinessLogic\StudyBuddy.BusinessLogic.csproj", "{CEE885C6-7974-47A4-9183-A1B3FE1E08A7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StudyBuddy.BusinessLogic", "StudyBuddy.BusinessLogic\StudyBuddy.BusinessLogic.csproj", "{CEE885C6-7974-47A4-9183-A1B3FE1E08A7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StudyBuddy.App.Test", "StudyBuddy.App.Test\StudyBuddy.App.Test.csproj", "{DB275A1D-ADBF-4799-B368-1A7ED32E4CAF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StudyBuddy.App.Test", "StudyBuddy.App.Test\StudyBuddy.App.Test.csproj", "{DB275A1D-ADBF-4799-B368-1A7ED32E4CAF}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StudyBuddy.App.iOS", "StudyBuddy.App.iOS\StudyBuddy.App.iOS.csproj", "{EFCF5052-1DCF-4D19-8544-7C57C468353D}"
 EndProject

@@ -85,7 +85,7 @@
                                                BackgroundColor="{StaticResource WindowBackgroundColor}"
                                                Margin="0"
                                                Padding="0"
-                                               HeightRequest="100"
+                                               HeightRequest="110"
                                                xct:ShadowEffect.Color="Black"
                                                xct:ShadowEffect.Opacity="1"
                                                xct:ShadowEffect.Radius="5"
@@ -134,19 +134,19 @@
                                                                      Padding="0,0,8,8">
                                                             <Button Text="Annehmen"
                                                                     FontAttributes="Bold"
-                                                                    FontSize="10"
-                                                                    HeightRequest="30"
+                                                                    FontSize="14"
+                                                                    HeightRequest="35"
                                                                     WidthRequest="120"
                                                                     HorizontalOptions="Start"
                                                                     BackgroundColor="{StaticResource ConfirmButton}"
                                                                     Command="{Binding BindingContext.AcceptRequestCommand, Source={x:Reference Name=page}}"
                                                                     CommandParameter="{Binding Source={x:Reference requestItem}, Path=BindingContext}">
-
+                                                                
                                                             </Button>
                                                             <Button Text="Ablehnen"
                                                                     FontAttributes="Bold"
-                                                                    FontSize="10"
-                                                                    HeightRequest="30"
+                                                                    FontSize="14"
+                                                                    HeightRequest="35"
                                                                     WidthRequest="120"
                                                                     HorizontalOptions="EndAndExpand"
                                                                     BackgroundColor="{StaticResource DeclineButton}"

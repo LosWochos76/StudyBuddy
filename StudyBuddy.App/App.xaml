@@ -54,12 +54,9 @@
             </Style>
             
             <Style TargetType="Button">
-                <Setter Property="BackgroundColor"
-                        Value="{StaticResource WindowBackgroundColor}" />
-                <Setter Property="TextColor"
-                        Value="{StaticResource TextColor}" />
                 <Setter Property="CornerRadius">
-                    <On Platform="Android" Value="10"/>
+                    <On Platform="Android"
+                        Value="10"></On>
                 </Setter>
             </Style>
 
