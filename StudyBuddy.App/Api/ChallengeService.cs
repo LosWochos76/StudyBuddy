@@ -111,7 +111,7 @@ namespace StudyBuddy.App.Api
             return status;
         }
 
-        public async void AddChallenges(IEnumerable<RequestViewModel> requests)
+        public async Task AddChallenges(IEnumerable<RequestViewModel> requests)
         {
             foreach (var request in requests)
                 if (request.Type == RequestType.ChallengeAcceptance)

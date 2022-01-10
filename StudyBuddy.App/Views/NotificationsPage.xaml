@@ -72,8 +72,7 @@
                     <CollectionView ItemsSource="{Binding Requests}">
                             <CollectionView.ItemTemplate>
                                 <DataTemplate x:DataType="viewmodels:RequestViewModel">
-                                    <Grid x:Name="requestItem"
-                                          Padding="8,8,8,8">
+                                    <Grid x:Name="requestItem" Padding="8,8,8,8">
                                         <Grid.RowDefinitions>
                                             <RowDefinition Height="*" />
                                         </Grid.RowDefinitions>
@@ -92,7 +91,6 @@
                                                xct:ShadowEffect.OffsetY="-2"
                                                xct:ShadowEffect.OffsetX="-2">
                                             <Grid BackgroundColor="Transparent">
-
                                                 <Grid.RowDefinitions>
                                                     <RowDefinition Height="*" />
                                                     <RowDefinition Height="*" />
@@ -110,8 +108,8 @@
                                                                     Padding="8,0,2,0"
                                                                     Grid.Column="0"
                                                                     Grid.Row="0"
-                                                                    Text="{Binding Initials}"
-                                                                    Source="{Binding ProfileImage}" />
+                                                                    Text="{Binding Sender.Initials}"
+                                                                    Source="{Binding Sender.ProfileImage}" />
                                                 </StackLayout>
                                                 <Frame Grid.Row="0"
                                                        Grid.RowSpan="2"

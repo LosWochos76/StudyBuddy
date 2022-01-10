@@ -61,8 +61,9 @@ namespace StudyBuddy.App.ViewModels
 
             Requests.Clear();
             Requests.AddRange(response);
-            api.Users.AddSenders(Requests);
+            await api.Users.AddSenders(Requests);
             api.Challenges.AddChallenges(Requests);
+            api.ImageService.GetProfileImages(Requests);
         }
 
         public async void AcceptRequest(RequestViewModel rvm)
