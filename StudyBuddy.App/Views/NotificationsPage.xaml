@@ -11,8 +11,8 @@
              Title="Benachrichtigungen">
     <xct:TabView TabStripPlacement="Top"
                  TabStripHeight="55"
-                 TabIndicatorColor="{AppThemeBinding Dark={StaticResource TextColorDark}, Light={StaticResource TextColor}}"
-                 TabStripBackgroundColor="{AppThemeBinding Dark={StaticResource WindowBackgroundColorDark}, Light={StaticResource WindowBackgroundColor}}"
+                 TabIndicatorColor="{StaticResource PrimaryAccent}"
+                 TabStripBackgroundColor="{StaticResource WindowBackgroundColor}"
                  TabIndicatorPlacement="Bottom"
                  TabIndicatorHeight="5"
                  SelectedIndex="0"
@@ -20,15 +20,17 @@
         <xct:TabViewItem Text="News" 
                          IsSelected="{Binding NewsIsSelected, Mode=OneWayToSource}" 
                          TextColor="{StaticResource SecondaryFont}" 
-                         TextColorSelected="{AppThemeBinding Dark={StaticResource TextColorDark}, Light={StaticResource TextColor}}">
+                         TextColorSelected="{StaticResource TextColor}"
+                         FontAttributes="Bold"
+                         Padding="0,0,0,5">
             <xct:TabViewItem.Content>
                 <StackLayout>
                     <RefreshView IsRefreshing="{Binding IsRefreshing}"
-                                 Command="{Binding RefreshCommand}"
-                                 Padding="8">
+                                 Command="{Binding RefreshCommand}">
                         <CollectionView ItemsSource="{Binding News}">
                             <CollectionView.ItemTemplate>
                                 <DataTemplate x:DataType="viewmodels:NewsViewModel">
+                                    
                                     <ContentView>
                                         <StackLayout>
                                             <BoxView HeightRequest="1"
@@ -58,63 +60,105 @@
                          IsSelected="{Binding RequestsIsSelected, Mode=OneWayToSource}"
                          BadgeText="{Binding Requests.Count}"
                          TextColor="{StaticResource SecondaryFont}" 
-                         TextColorSelected="{AppThemeBinding Dark={StaticResource TextColorDark}, Light={StaticResource TextColor}}"
+                         TextColorSelected="{StaticResource TextColor}"
+                         FontAttributes="Bold"
                          BadgeTextColor="White"
-                         BadgeBackgroundColor="Red">
+                         BadgeBackgroundColor="{StaticResource ConfirmButton}"
+                         Padding="0,0,0,5">
             <xct:TabViewItem.Content>
-                <StackLayout>
-                    <RefreshView IsRefreshing="{Binding IsRefreshing}"
-                                 Command="{Binding RefreshCommand}"
-                                 Padding="8">
-                        <CollectionView ItemsSource="{Binding Requests}">
+                <StackLayout Padding="0,15,0,0">
+                <RefreshView IsRefreshing="{Binding IsRefreshing}"
+                                 Command="{Binding RefreshCommand}">
+                    <CollectionView ItemsSource="{Binding Requests}">
                             <CollectionView.ItemTemplate>
                                 <DataTemplate x:DataType="viewmodels:RequestViewModel">
-                                    <Grid Padding="10"
-                                          x:Name="requestItem">
+                                    <Grid x:Name="requestItem"
+                                          Padding="8,8,8,8">
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="*" />
+                                        </Grid.RowDefinitions>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*" />
+                                        </Grid.ColumnDefinitions>
                                         <Frame CornerRadius="10"
                                                HasShadow="True"
-                                               BackgroundColor="{AppThemeBinding Dark={StaticResource WindowBackgroundColorDark}, Light={StaticResource WindowBackgroundColor}}">
-                                            <StackLayout Orientation="Horizontal">
-                                                <Image WidthRequest="45"
-                                                       HeightRequest="45">
-                                                    <Image.Source>
-                                                        <FontImageSource FontFamily="{StaticResource FontAwesomeSolid}"
-                                                                         Glyph="{Binding TypeSymbol}"
-                                                                         Color="{AppThemeBinding Dark={StaticResource TextColorDark}, Light={StaticResource TextColor}}" />
-                                                    </Image.Source>
-                                                </Image>
-                                                <StackLayout Padding="10,0,0,0"
-                                                             VerticalOptions="Center">
-                                                    <Label Text="{Binding Name}"
-                                                           FontAttributes="Bold" />
-                                                    <Grid>
-                                                        <Grid.ColumnDefinitions>
-                                                            <ColumnDefinition Width="0" />
-                                                            <ColumnDefinition Width="*" />
-                                                        </Grid.ColumnDefinitions>
-                                                        <StackLayout Grid.Column="1"
-                                                                     Grid.Row="0"
-                                                                     HorizontalOptions="FillAndExpand"
-                                                                     Orientation="Horizontal">
-                                                            <Label Text="Annehmen"
-                                                                   FontSize="Small"
-                                                                   HorizontalOptions="FillAndExpand">
-                                                                <Label.GestureRecognizers>
-                                                                    <TapGestureRecognizer Command="{Binding BindingContext.AcceptRequestCommand, Source={x:Reference Name=page}}"
-                                                                                          CommandParameter="{Binding Source={x:Reference requestItem}, Path=BindingContext}" />
-                                                                </Label.GestureRecognizers>
-                                                            </Label>
-                                                            <Label Text="Ablehnen"
-                                                                   FontSize="Small">
-                                                                <Label.GestureRecognizers>
-                                                                    <TapGestureRecognizer Command="{Binding BindingContext.DenyRequestCommand, Source={x:Reference Name=page}}"
-                                                                                          CommandParameter="{Binding Source={x:Reference requestItem}, Path=BindingContext}" />
-                                                                </Label.GestureRecognizers>
-                                                            </Label>
-                                                        </StackLayout>
-                                                    </Grid>
+                                               BackgroundColor="{StaticResource WindowBackgroundColor}"
+                                               Margin="0"
+                                               Padding="0"
+                                               HeightRequest="100"
+                                               xct:ShadowEffect.Color="Black"
+                                               xct:ShadowEffect.Opacity="1"
+                                               xct:ShadowEffect.Radius="5"
+                                               xct:ShadowEffect.OffsetY="-2"
+                                               xct:ShadowEffect.OffsetX="-2">
+                                            <Grid BackgroundColor="Transparent">
+
+                                                <Grid.RowDefinitions>
+                                                    <RowDefinition Height="*" />
+                                                    <RowDefinition Height="*" />
+                                                </Grid.RowDefinitions>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="80" />
+                                                    <ColumnDefinition Width="*" />
+                                                    <ColumnDefinition Width="*" />
+                                                </Grid.ColumnDefinitions>
+                                                <StackLayout Grid.RowSpan="2"
+                                                             VerticalOptions="Center"
+                                                             BackgroundColor="Transparent">
+                                                    <xct:AvatarView Size="70"
+                                                                    VerticalOptions="Center"
+                                                                    Padding="8,0,2,0"
+                                                                    Grid.Column="0"
+                                                                    Grid.Row="0"
+                                                                    Text="{Binding Initials}"
+                                                                    Source="{Binding ProfileImage}" />
                                                 </StackLayout>
-                                            </StackLayout>
+                                                <Frame Grid.Row="0"
+                                                       Grid.RowSpan="2"
+                                                       Grid.Column="1"
+                                                       Grid.ColumnSpan="2"
+                                                       HasShadow="False"
+                                                       CornerRadius="10"
+                                                       Padding="0,0,0,0"
+                                                       xct:ShadowEffect.Color="Black"
+                                                       xct:ShadowEffect.Opacity="1"
+                                                       xct:ShadowEffect.Radius="5">
+                                                    <StackLayout BackgroundColor="Transparent"
+                                                                 Padding="8,0,0,0">
+                                                        <Label Text="{Binding Name}"
+                                                               FontSize="14"
+                                                               HeightRequest="60"
+                                                               VerticalTextAlignment="Center"
+                                                               FontAttributes="Bold"/>
+                                                        <StackLayout Orientation="Horizontal"
+                                                                     Padding="0,0,8,8">
+                                                            <Button Text="Annehmen"
+                                                                    FontAttributes="Bold"
+                                                                    FontSize="10"
+                                                                    HeightRequest="30"
+                                                                    WidthRequest="120"
+                                                                    HorizontalOptions="Start"
+                                                                    BackgroundColor="{StaticResource ConfirmButton}"
+                                                                    Command="{Binding BindingContext.AcceptRequestCommand, Source={x:Reference Name=page}}"
+                                                                    CommandParameter="{Binding Source={x:Reference requestItem}, Path=BindingContext}">
+
+                                                            </Button>
+                                                            <Button Text="Ablehnen"
+                                                                    FontAttributes="Bold"
+                                                                    FontSize="10"
+                                                                    HeightRequest="30"
+                                                                    WidthRequest="120"
+                                                                    HorizontalOptions="EndAndExpand"
+                                                                    BackgroundColor="{StaticResource DeclineButton}"
+                                                                    Command="{Binding BindingContext.DenyRequestCommand, Source={x:Reference Name=page}}"
+                                                                    CommandParameter="{Binding Source={x:Reference requestItem}, Path=BindingContext}">
+
+                                                            </Button>
+                                                        </StackLayout>
+
+                                                    </StackLayout>
+                                                </Frame>
+                                            </Grid>
                                         </Frame>
                                     </Grid>
                                 </DataTemplate>

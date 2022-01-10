@@ -2,6 +2,7 @@ using System;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using StudyBuddy.Model;
+using Xamarin.Forms;
 
 namespace StudyBuddy.App.ViewModels
 {
@@ -29,10 +30,25 @@ namespace StudyBuddy.App.ViewModels
             get
             {
                 if (Type == RequestType.Friendship)
-                    return Sender.FullName + " möchte sich mit dir befreunden.";
+                    return Sender.Name + " möchte sich mit dir befreunden.";
 
-                return Sender.FullName + " möchte, dass du die Herausforderung \""
+                return Sender.Name + " möchte, dass du die Herausforderung \""
                     + Challenge.Name + "\" bestätigst.";
+            }
+        }
+        public string Initials
+        {
+            get
+            {
+                return Sender.Initials;
+            }
+        }
+
+        public ImageSource ProfileImage
+        {
+            get
+            {
+                return Sender.ProfileImage;
             }
         }
 

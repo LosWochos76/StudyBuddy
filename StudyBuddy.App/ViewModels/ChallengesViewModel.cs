@@ -132,6 +132,7 @@ namespace StudyBuddy.App.ViewModels
             
             await navigation.Push(new ChallengeDetailsPage(SelectedChallenge));
             SelectedChallenge = null;
+            NotifyPropertyChanged(nameof(SelectedChallenge));
         }
 
         private async Task ScanQrCode()

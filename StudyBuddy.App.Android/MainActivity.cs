@@ -2,6 +2,7 @@
 using Android.Content.PM;
 using Android.OS;
 using Android.Runtime;
+using Android.Views;
 using Plugin.FirebasePushNotification;
 using Xamarin.Forms;
 using Xamarin.Forms.Platform.Android;
@@ -17,7 +18,6 @@ namespace App.Droid
         protected override void OnCreate(Bundle savedInstanceState)
         {
             base.OnCreate(savedInstanceState);
-
             Platform.Init(this, savedInstanceState);
             Forms.Init(this, savedInstanceState);
             ZXing.Net.Mobile.Forms.Android.Platform.Init();
@@ -25,7 +25,6 @@ namespace App.Droid
             //base.OnCreate(savedInstanceState);
 
             LoadApplication(new StudyBuddy.App.App());
-            
             FirebasePushNotificationManager.ProcessIntent(this, Intent);
         }
 

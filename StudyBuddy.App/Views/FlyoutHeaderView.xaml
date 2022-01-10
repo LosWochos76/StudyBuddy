@@ -8,15 +8,20 @@
     x:DataType="viewmodels:FlyoutHeaderViewModel">
     <ContentView.Content>
         <StackLayout Margin="10">
-            <xct:AvatarView
-                Text="AS"
-                Source="{Binding User.ProfileImage}"
-                Size="50"
-                HorizontalOptions="Start"
-                TextColor="{AppThemeBinding Dark={StaticResource TextColorDark}, Light={StaticResource TextColor}}"/>
-            <Label Text="{Binding User.Name}" FontSize="Large" FontAttributes="Bold"/>
-            <Label Text="{Binding User.Nickname}" TextColor="{StaticResource SecondaryFont}" FontSize="Medium"/>
-            <Label Text="{Binding FriendsCount, StringFormat='{0} Freunde'}" Margin="0,5,0,5"/>
+            <StackLayout Orientation="Horizontal" >
+                <xct:AvatarView Text="{Binding User.Initials}"
+                                Source="{Binding User.ProfileImage}"
+                                Size="50"
+                                HorizontalOptions="Start"
+                                TextColor="{StaticResource TextColor}" />
+                <Label Text="{Binding User.Name}"
+                       FontSize="Large"
+                       FontAttributes="Bold" 
+                       VerticalTextAlignment="Center"
+                       Padding="10,0,0,0"/>
+            </StackLayout>
+            <Label Text="{Binding User.Nickname}" TextColor="{StaticResource SecondaryFont}" FontSize="Medium" />
+            <Label Text="{Binding FriendsCount, StringFormat='{0} Freunde'}" />
         </StackLayout>
     </ContentView.Content>
 </ContentView>

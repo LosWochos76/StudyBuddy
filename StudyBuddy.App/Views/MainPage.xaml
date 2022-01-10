@@ -7,28 +7,30 @@
        xmlns:viewmodels="clr-namespace:StudyBuddy.App.ViewModels"
        x:DataType="viewmodels:MainViewModel"
        x:Class="StudyBuddy.App.Views.MainPage"
-       FlyoutBehavior="Flyout"
-       BackgroundColor="{AppThemeBinding Dark={StaticResource WindowBackgroundColorDark}, Light={StaticResource WindowBackgroundColor
-    }}">
+       FlyoutBehavior="Flyout">
     <Shell.Resources>
         <ResourceDictionary>
             <Style ApplyToDerivedTypes="True" TargetType="Shell">
                 <Setter Property="Shell.TitleColor"
-                        Value="{AppThemeBinding Dark={StaticResource TextColorDark}, Light={StaticResource TextColor}}" />
+                        Value="{StaticResource TextColor}" />
                 <Setter Property="Shell.TabBarUnselectedColor"
-                        Value="{AppThemeBinding Dark={StaticResource TextColorDark}, Light={StaticResource TextColor}}" />
+                        Value="{StaticResource TextColor}" />
                 <Setter Property="Shell.TabBarTitleColor"
-                        Value="{AppThemeBinding Dark={StaticResource TextColorDark}, Light={StaticResource TextColor}}" />
+                        Value="{StaticResource PrimaryAccent}" />
                 <Setter Property="Shell.ForegroundColor"
-                        Value="{AppThemeBinding Dark={StaticResource TextColorDark}, Light={StaticResource TextColor}}" />
+                        Value="{StaticResource TextColor}" />
+                <Setter Property="Shell.BackgroundColor"
+                        Value="{StaticResource WindowBackgroundColor}" />
                 <Setter Property="Shell.FlyoutBackgroundColor"
-                        Value="{AppThemeBinding Dark={StaticResource WindowBackgroundColorDark}, Light={StaticResource WindowBackgroundColor}}" />
+                        Value="{StaticResource WindowBackgroundColor}" />
+                <Setter Property="Shell.NavBarHasShadow"
+                        Value="False" />
             </Style>
         </ResourceDictionary>
     </Shell.Resources>
 
-
-    <ShellItem Route="LoginPage" FlyoutItemIsVisible="False">
+    <ShellItem Route="LoginPage"
+               FlyoutItemIsVisible="False">
         <ShellContent ContentTemplate="{DataTemplate local:LoginPage}" />
     </ShellItem>
     <TabBar>
@@ -64,7 +66,7 @@
                         <Image.Source>
                             <FontImageSource FontFamily="{StaticResource FontAwesomeSolid}"
                              Glyph="{x:Static fontAwesome:FontAwesomeIcons.User}" 
-                             Color="{AppThemeBinding Dark={StaticResource TextColorDark}, Light={StaticResource TextColor}}"/>
+                             Color="{StaticResource TextColor}"/>
                         </Image.Source>
                     </Image>
                     <Label Grid.Column="1" 
@@ -82,7 +84,7 @@
                         <Image.Source>
                             <FontImageSource FontFamily="{StaticResource FontAwesomeSolid}"
                              Glyph="{x:Static fontAwesome:FontAwesomeIcons.UserFriends}" 
-                             Color="{AppThemeBinding Dark={StaticResource TextColorDark}, Light={StaticResource TextColor}}"
+                             Color="{StaticResource TextColor}"
                              />
                         </Image.Source>
                     </Image>
@@ -93,30 +95,11 @@
             </DataTemplate>
         </Shell.MenuItemTemplate>
     </MenuItem>
-    <MenuItem x:Name="this2" Text="Theme" Command="{Binding ThemeCommand}">
-        <Shell.MenuItemTemplate>
-            <DataTemplate>
-                <Grid ColumnDefinitions="0.2*,0.8*" Padding="0,10,0,20">
-                    <Image Grid.Column="0">
-                        <Image.Source>
-                            <FontImageSource FontFamily="{StaticResource FontAwesomeSolid}"
-                             Glyph="{x:Static fontAwesome:FontAwesomeIcons.Eye}" 
-                             Color="{AppThemeBinding Dark={StaticResource TextColorDark}, Light={StaticResource TextColor}}"
-                             />
-                        </Image.Source>
-                    </Image>
-                    <Label Grid.Column="1" 
-                           Text="{Binding Text, Source={x:Reference this2}}"
-                           VerticalTextAlignment="Center"
-                           x:DataType="MenuItem" />
-                </Grid>
-            </DataTemplate>
-        </Shell.MenuItemTemplate>
-    </MenuItem>
+    
     <MenuItem>
         <Shell.MenuItemTemplate>
             <DataTemplate>
-                <Label HeightRequest="1" BackgroundColor="{AppThemeBinding Dark={StaticResource TextColorDark}, Light={StaticResource TextColor}}" />
+                <Label HeightRequest="1" BackgroundColor="{StaticResource TextColor}" />
             </DataTemplate>
         </Shell.MenuItemTemplate>
     </MenuItem>
@@ -128,7 +111,7 @@
                         <Image.Source>
                             <FontImageSource FontFamily="{StaticResource FontAwesomeSolid}"
                              Glyph="{x:Static fontAwesome:FontAwesomeIcons.DoorClosed}" 
-                             Color="{AppThemeBinding Dark={StaticResource TextColorDark}, Light={StaticResource TextColor}}"
+                             Color="{StaticResource TextColor}"
                              />
                         </Image.Source>
                     </Image>

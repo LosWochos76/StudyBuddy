@@ -1,0 +1,43 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="StudyBuddy.App.Views.EditProfilePage"
+             xmlns:viewmodels="clr-namespace:StudyBuddy.App.ViewModels"
+             x:DataType="viewmodels:EditProfileViewModel"
+             Title="Profil bearbeiten"
+             Shell.TabBarIsVisible="False">
+    <ContentPage.Content>
+        <StackLayout Padding="8">
+            <Label Text="Vorname:"></Label>
+            <Entry Placeholder="{Binding User.Firstname}"
+                   PlaceholderColor="{StaticResource TextColor}"
+                   MaxLength="100"
+                   ClearButtonVisibility="WhileEditing"
+                   ReturnType="Next"></Entry>
+            <Label Text="Nachname:"></Label>
+            <Entry Placeholder="{Binding User.Lastname}"
+                   PlaceholderColor="{StaticResource TextColor}"
+                   MaxLength="100"
+                   ClearButtonVisibility="WhileEditing"
+                   ReturnType="Next"></Entry>
+            <Label Text="Nickname:"></Label>
+            <Entry Placeholder="{Binding User.Nickname}"
+                   PlaceholderColor="{StaticResource TextColor}"
+                   MaxLength="100"
+                   ClearButtonVisibility="WhileEditing"
+                   ReturnType="Next"></Entry>
+            <Label Text="Passwort:"></Label>
+            <Entry Placeholder="Passwort"
+                   PlaceholderColor="{StaticResource TextColor}"
+                   IsPassword="True"
+                   ClearButtonVisibility="WhileEditing"
+                   ReturnType="Next"></Entry>
+            <Label Text="Passwort bestätigen:"></Label>
+            <Entry Placeholder="Passwort bestätigen"
+                   PlaceholderColor="{StaticResource TextColor}"
+                   IsPassword="True"
+                   ClearButtonVisibility="WhileEditing"
+                   ReturnType="Done"></Entry>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

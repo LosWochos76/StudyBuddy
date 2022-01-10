@@ -97,7 +97,9 @@
                         FontAttributes="Bold"
                         FontSize="17"
                         HeightRequest="45"
-                        Clicked="Button_Clicked" />
+                        Command="{Binding EditProfileCommand}"
+                        BackgroundColor="{StaticResource PrimaryAccent}"
+                        TextColor="{StaticResource WindowBackgroundColor}"/>
             </Grid>
         </StackLayout>
 
@@ -115,7 +117,6 @@
         <Frame x:Name="BottomToolbar"
                HeightRequest="200"
                VerticalOptions="End"
-               BackgroundColor="#FFFFFF"
                CornerRadius="20"
                TranslationY="260"
                Padding="15,6">
@@ -127,7 +128,7 @@
                 <BoxView CornerRadius="2"
                          HeightRequest="4"
                          WidthRequest="40"
-                         BackgroundColor="LightGray"
+                         BackgroundColor="{StaticResource TextColor}"
                          HorizontalOptions="Center" />
                 <Label Text="Profilbild einstellen"
                        HorizontalOptions="Center"
@@ -135,7 +136,7 @@
                        FontAttributes="Bold" />
                 <TableView Intent="Settings"
                            VerticalOptions="End"
-                           BackgroundColor="White">
+                           BackgroundColor="Transparent">
                     <TableSection>
                         <ViewCell Tapped="SelectProfileImageFromGalery">
                             <StackLayout Orientation="Horizontal">

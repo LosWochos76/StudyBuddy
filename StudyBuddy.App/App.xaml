@@ -1,17 +1,19 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Application xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
              x:Class="StudyBuddy.App.App">
     <Application.Resources>
         <ResourceDictionary>
             <Color x:Key="Primary">#000000</Color>
-            <Color x:Key="TextColor">#111111</Color>
+            <Color x:Key="PrimaryAccent">#3700B3</Color>
+            <Color x:Key="TextColor">#1C1C1E</Color>
             <Color x:Key="TextColorDark">#C0C0C0</Color>
             <Color x:Key="SecondaryFont">#696969</Color>
-            <Color x:Key="WindowBackgroundColor">#E5E5EA</Color>
-            <Color x:Key="WindowBackgroundColorDark">#1C1C1E</Color>
+            <Color x:Key="WindowBackgroundColor">#F2F2F7</Color>
             <Color x:Key="ButtonBackground">#45A5D9</Color>
-            <Color x:Key="ButtonBackgroundDark">#00008b</Color>
+            <Color x:Key="ConfirmButton">#81C784</Color>
+            <Color x:Key="DeclineButton">#E57373</Color>
             <Color x:Key="Learning">#007AFF</Color>
             <Color x:Key="Networking">#5856D6</Color>
             <Color x:Key="Organizing">#5AC8FA</Color>
@@ -48,15 +50,14 @@
 
             <Style TargetType="ContentPage">
                 <Setter Property="BackgroundColor"
-                        Value="{AppThemeBinding Dark={StaticResource WindowBackgroundColorDark}, 
-                        Light={StaticResource WindowBackgroundColor}}" />
+                        Value="{StaticResource WindowBackgroundColor}" />
             </Style>
-
+            
             <Style TargetType="Button">
                 <Setter Property="BackgroundColor"
-                        Value="{AppThemeBinding Dark={StaticResource WindowBackgroundColorDark}, Light={StaticResource WindowBackgroundColor}}" />
+                        Value="{StaticResource WindowBackgroundColor}" />
                 <Setter Property="TextColor"
-                        Value="{AppThemeBinding Dark={StaticResource TextColorDark}, Light={StaticResource TextColor}}" />
+                        Value="{StaticResource TextColor}" />
                 <Setter Property="CornerRadius">
                     <Setter.Value>
                         <OnPlatform Android="10" />
@@ -66,44 +67,44 @@
 
             <Style TargetType="SearchBar">
                 <Setter Property="TextColor"
-                        Value="{AppThemeBinding Dark={StaticResource TextColorDark}, Light={StaticResource TextColor}}" />
+                        Value="{StaticResource TextColor}" />
                 <Setter Property="BackgroundColor"
-                        Value="{AppThemeBinding Dark={StaticResource WindowBackgroundColorDark}, Light={StaticResource WindowBackgroundColor}}" />
+                        Value="{StaticResource WindowBackgroundColor}" />
             </Style>
 
             <Style TargetType="Entry">
                 <Setter Property="PlaceholderColor"
-                        Value="{AppThemeBinding Dark={StaticResource SystemGray4}, Light={StaticResource SystemGray2Dark}}" />
+                        Value="{StaticResource SystemGray2Dark}" />
                 <Setter Property="TextColor"
-                        Value="{AppThemeBinding Dark={StaticResource TextColorDark}, Light={StaticResource TextColor}}" />
+                        Value="{StaticResource TextColor}" />
             </Style>
 
             <Style TargetType="StackLayout" ApplyToDerivedTypes="True">
                 <Setter Property="BackgroundColor"
-                        Value="{AppThemeBinding Dark={StaticResource WindowBackgroundColorDark}, Light={StaticResource WindowBackgroundColor}}" />
+                        Value="{StaticResource WindowBackgroundColor}" />
             </Style>
 
             <Style TargetType="Grid" ApplyToDerivedTypes="True">
                 <Setter Property="BackgroundColor"
-                        Value="{AppThemeBinding Dark={StaticResource WindowBackgroundColorDark}, Light={StaticResource WindowBackgroundColor}}" />
+                        Value="{StaticResource WindowBackgroundColor}" />
             </Style>
             
             <Style TargetType="Frame">
                 <Setter Property="BackgroundColor"
-                        Value="{AppThemeBinding Dark={StaticResource WindowBackgroundColorDark}, Light={StaticResource WindowBackgroundColor}}" />
+                        Value="{StaticResource WindowBackgroundColor}" />
                 <Setter Property="BorderColor"
-                        Value="{AppThemeBinding Dark={StaticResource TextColorDark}, Light={StaticResource TextColor}}" />
+                        Value="{StaticResource WindowBackgroundColor}" />
             </Style>
 
             <Style TargetType="Label">
                 <Setter Property="TextColor"
-                        Value="{AppThemeBinding Dark={StaticResource TextColorDark}, Light={StaticResource TextColor}}" />
+                        Value="{StaticResource TextColor}" />
             </Style>
 
             <Style x:Key="TagLabel"
                    TargetType="Label">
                 <Setter Property="TextColor"
-                        Value="{AppThemeBinding Dark={StaticResource SystemGray}, Light={StaticResource SystemGray}}" />
+                        Value="{StaticResource SystemGray}" />
             </Style>
 
             <Style TargetType="RefreshView">

@@ -4,8 +4,20 @@
              x:Class="StudyBuddy.App.Views.ChallengesPage"
              xmlns:viewmodels="clr-namespace:StudyBuddy.App.ViewModels"
              xmlns:fontAwesome="clr-namespace:StudyBuddy.App"
+             xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
              x:DataType="viewmodels:ChallengesViewModel"
-             x:Name="page" Title="{Binding Header}">
+             x:Name="page" Title="{Binding Header}"
+             Shell.TitleColor="{StaticResource PrimaryAccent}">
+    <Shell.TitleView>
+        <Label Text="{Binding Header}"
+               VerticalTextAlignment="Center"
+               WidthRequest="200"
+               HeightRequest="50"
+               FontSize="18"
+               FontAttributes="Bold" />
+
+    </Shell.TitleView>
+
     <ContentPage.ToolbarItems>
         <ToolbarItem Text="QR-Code scannen"
             Command="{Binding ScanQrCodeCommand}">
@@ -22,68 +34,143 @@
         <ActivityIndicator IsVisible="{Binding IsBusy}" IsRunning="{Binding IsBusy}" />
         <RefreshView IsRefreshing="{Binding IsRefreshing}" Command="{Binding RefreshCommand}">
             <CollectionView ItemsSource="{Binding Challenges}"
-                    SelectedItem="{Binding SelectedChallenge}"
-                    SelectionMode="Single"
-                    SelectionChangedCommand="{Binding DetailsCommand}"
-                    RemainingItemsThreshold="{Binding ItemThreshold}"
-                    RemainingItemsThresholdReachedCommand="{Binding LoadMoreCommand}"
-                    ItemsUpdatingScrollMode="KeepItemsInView">
+                            SelectedItem="{Binding SelectedChallenge}"
+                            SelectionMode="Single"
+                            SelectionChangedCommand="{Binding DetailsCommand}"
+                            RemainingItemsThreshold="{Binding ItemThreshold}"
+                            RemainingItemsThresholdReachedCommand="{Binding LoadMoreCommand}"
+                            ItemsUpdatingScrollMode="KeepItemsInView">
                 <CollectionView.ItemTemplate>
                     <DataTemplate x:DataType="viewmodels:ChallengeViewModel">
-                        <Frame CornerRadius="10" HasShadow="False" BorderColor="{Binding CategoryColor}">
-                            <StackLayout Orientation="Horizontal">
-                                <Image WidthRequest="45" HeightRequest="45">
-                                    <Image.Source>
-                                        <FontImageSource FontFamily="{StaticResource FontAwesomeSolid}"
-                                            Glyph="{Binding CategorySymbol}"
-                                            Color="{Binding CategoryColor}" />
-                                    </Image.Source>
-                                </Image>
-                                <StackLayout VerticalOptions="Center">
-                                    <Label Text="{Binding Name}"
-                                           FontSize="16"
-                                           FontAttributes="Bold" />
-                                    <Grid Padding="10,0,0,0">
-                                        <Grid.RowDefinitions>
-                                            <RowDefinition Height="*" />
-                                        </Grid.RowDefinitions>
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="*" />
-                                            <ColumnDefinition Width="*" />
-                                        </Grid.ColumnDefinitions>
-                                        <Label HorizontalOptions="FillAndExpand"
-                                               HorizontalTextAlignment="Start"
-                                               Grid.Row="0"
-                                               Grid.Column="0"
-                                               WidthRequest="150">
-                                            <Label.FormattedText>
-                                                <FormattedString>
-                                                    <Span Text="Endet: "
-                                                        FontAttributes="Bold"
-                                                        TextColor="{StaticResource SecondaryFont}" />
-                                                    <Span Text="{Binding ValidityEndText}" />
-                                                </FormattedString>
-                                            </Label.FormattedText>
-                                        </Label>
-                                        <Label Grid.Row="0" Grid.Column="1">
-                                            <Label.FormattedText>
-                                                <FormattedString>
-                                                    <Span Text="Punkte: "
-                                                        FontAttributes="Bold"
-                                                        TextColor="{StaticResource SecondaryFont}" />
-                                                    <Span Text="{Binding Points}" />
-                                                </FormattedString>
-                                            </Label.FormattedText>
-                                        </Label>
-                                    </Grid>
-                                </StackLayout>
-                            </StackLayout>
-                        </Frame>
+                        <Grid x:Name="Item"
+                              Padding="5,5,5,5">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*" />
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <Frame CornerRadius="10"
+                                   HasShadow="False"
+                                   Margin="0"
+                                   Padding="0"
+                                   HeightRequest="100"
+                                   BorderColor="{Binding CategoryColor}"
+                                   BackgroundColor="{Binding CategoryColor}"
+                                   xct:ShadowEffect.Color="Black"
+                                   xct:ShadowEffect.Opacity="1"
+                                   xct:ShadowEffect.Radius="5"
+                                   xct:ShadowEffect.OffsetY="-2"
+                                   xct:ShadowEffect.OffsetX="-2">
+                                <Grid BackgroundColor="Transparent"
+                                      Padding="0,1,1.5,1.5">
+
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="*" />
+                                        <RowDefinition Height="*" />
+                                    </Grid.RowDefinitions>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="60" />
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <StackLayout Grid.RowSpan="2"
+                                                 VerticalOptions="Center"
+                                                 BackgroundColor="Transparent"
+                                                 Padding="8,0,2,0">
+                                        <Image WidthRequest="45"
+                                               HeightRequest="45"
+                                               VerticalOptions="Center">
+                                            <Image.Source>
+                                                <FontImageSource FontFamily="{StaticResource FontAwesomeSolid}"
+                                                                 Glyph="{Binding CategorySymbol}"
+                                                                 Color="{StaticResource TextColor}" />
+                                            </Image.Source>
+                                        </Image>
+                                    </StackLayout>
+                                    <Frame Grid.Row="0"
+                                           Grid.RowSpan="2"
+                                           Grid.Column="1"
+                                           Grid.ColumnSpan="2"
+                                           HasShadow="False"
+                                           CornerRadius="10"
+                                           Padding="0,0,0,0"
+                                           xct:ShadowEffect.Color="Black"
+                                           xct:ShadowEffect.Opacity="1"
+                                           xct:ShadowEffect.Radius="6">
+
+                                        <StackLayout BackgroundColor="Transparent">
+                                            <Label Text="{Binding Name}"
+                                                   HeightRequest="65"
+                                                   FontSize="18"
+                                                   FontAttributes="Bold"
+                                                   VerticalOptions="Center"
+                                                   Padding="20,10,0,10"/>
+                                            <Grid Padding="20,0,0,0"
+                                                  BackgroundColor="Transparent">
+                                                <Grid.RowDefinitions>
+                                                    <RowDefinition Height="*" />
+                                                </Grid.RowDefinitions>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="*" />
+                                                    <ColumnDefinition Width="*" />
+                                                </Grid.ColumnDefinitions>
+                                                <Image Grid.Row="0"
+                                                       Grid.Column="0"
+                                                       VerticalOptions="Center"
+                                                       HorizontalOptions="Start"
+                                                       WidthRequest="20">
+                                                    <Image.Source>
+                                                        <FontImageSource FontFamily="{StaticResource FontAwesomeSolid}"
+                                                                         Glyph="{x:Static fontAwesome:FontAwesomeIcons.HourglassEnd}"
+                                                                         Color="{StaticResource TextColor}"
+                                                                         Size="16" />
+
+                                                    </Image.Source>
+                                                </Image>
+                                                <Label Grid.Row="0"
+                                                       Grid.Column="0"
+                                                       VerticalOptions="Center"
+                                                       HorizontalOptions="Center"
+                                                       WidthRequest="100"
+                                                       Padding="0"
+                                                       FontSize="16"
+                                                       Text="{Binding ValidityEndText}"/>
+                                                <Image Grid.Row="0"
+                                                       Grid.Column="1"
+                                                       VerticalOptions="Center"
+                                                       HorizontalOptions="Start"
+                                                       WidthRequest="70">
+                                                    <Image.Source>
+                                                        <FontImageSource FontFamily="{StaticResource FontAwesomeSolid}"
+                                                                         Glyph="{x:Static fontAwesome:FontAwesomeIcons.Star}"
+                                                                         Color="{StaticResource TextColor}"
+                                                                         Size="16" />
+
+                                                    </Image.Source>
+                                                </Image>
+                                                <Label Grid.Row="0"
+                                                       Grid.Column="1"
+                                                       VerticalOptions="Center"
+                                                       HorizontalOptions="End"
+                                                       WidthRequest="100"
+                                                       Padding="0"
+                                                       FontSize="16"
+                                                       Text="{Binding Points}"/>
+                                            </Grid>
+                                        </StackLayout>
+
+                                    </Frame>
+
+                                </Grid>
+                            </Frame>
+                        </Grid>
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
                 <CollectionView.EmptyView>
                     <StackLayout Padding="12">
-                        <Label HorizontalOptions="Center" Text="Keine Challenges" />
+                        <Label HorizontalOptions="Center" 
+                               Text="Keine Challenges" />
                     </StackLayout>
                 </CollectionView.EmptyView>
             </CollectionView>
