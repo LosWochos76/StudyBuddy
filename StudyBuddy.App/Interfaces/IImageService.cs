@@ -9,6 +9,7 @@ namespace StudyBuddy.App.Api
     {
         Task<bool> GetProfileImage(UserViewModel user);
         Task<bool> SaveProfileImage(UserViewModel user, MediaFile file);
-        void GetProfileImages(IEnumerable<UserViewModel> users);
+        Task GetProfileImages(IEnumerable<UserViewModel> users);
+        Task GetProfileImages(IEnumerable<RequestViewModel> requests);
     }
 }
