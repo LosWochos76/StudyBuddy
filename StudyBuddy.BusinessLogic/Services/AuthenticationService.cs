@@ -35,11 +35,11 @@ namespace StudyBuddy.BusinessLogic
 
             backend.Logging.LogDebug("Successfull login");
             user.PasswordHash = null;
-            var jwt = new JwtToken(backend.Repository);
+            var jwt = new JwtToken();
 
             return new
             {
-                Token = jwt.FromUser(user),
+                Token = jwt.FromUser(user.ID),
                 User = user
             };
         }
@@ -59,6 +59,12 @@ namespace StudyBuddy.BusinessLogic
             var provider = new MailKitProvider(options);
             var mail = new EmailService(provider);
             mail.Send(email, "Passwort zurücksetzen", "Bla", true);
+        }
+
+        public bool CheckToken(string token)
+        {
+            var jwt = new JwtToken();
+            return jwt.FromToken(token) != 0;
         }
     }
 }

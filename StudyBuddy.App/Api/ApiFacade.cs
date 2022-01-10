@@ -47,7 +47,7 @@ namespace StudyBuddy.App.Api
 
         private async void CheckVersion()
         {
-            var rh = new WebRequestHelper("");
+            var rh = new WebRequestHelper();
             var api_version = await rh.Get<Version>(base_url + "ApiVersion", HttpMethod.Get);
             if (api_version == null)
                 return;

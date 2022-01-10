@@ -7,6 +7,8 @@ namespace StudyBuddy.BusinessLogic
 {
     public class Backend : IBackend
     {
+        private JwtToken jwt = new JwtToken();
+
         public IRepository Repository { get; private set; }
         public User CurrentUser { get; set; }
         public IAuthenticationService AuthenticationService { get; private set; }
@@ -46,8 +48,8 @@ namespace StudyBuddy.BusinessLogic
             if (string.IsNullOrEmpty(token))
                 return;
 
-            var jwt = new JwtToken(Repository);
-            CurrentUser = jwt.FromToken(token);
+            int user_id = jwt.FromToken(token);
+            CurrentUser = user_id != 0 ? Repository.Users.ById(user_id) : null;
         }
     }
 }
