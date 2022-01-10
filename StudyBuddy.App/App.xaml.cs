@@ -20,7 +20,6 @@ namespace StudyBuddy.App
 
         private void SetupServices()
         {
-            TinyIoCContainer.Current.Register(new ThemeViewModel());
             TinyIoCContainer.Current.Register<IApi>(new ApiFacade());
             TinyIoCContainer.Current.Register<IDialogService>(new DialogService());
             TinyIoCContainer.Current.Register<INavigationService>(new NagigationService());
@@ -57,25 +56,14 @@ namespace StudyBuddy.App
 
         protected override void OnSleep()
         {
-            TinyIoCContainer.Current.Resolve<ThemeViewModel>().ApplyTheme();
-            RequestedThemeChanged -= App_RequestedThemeChanged;
             Connectivity.ConnectivityChanged -= App_ConnectivityChanged;
         }
 
         protected override async void OnResume()
         {
-            TinyIoCContainer.Current.Resolve<ThemeViewModel>().ApplyTheme();
-            RequestedThemeChanged += App_RequestedThemeChanged;
             Connectivity.ConnectivityChanged += App_ConnectivityChanged;
         }
 
-        private void App_RequestedThemeChanged(object sender, AppThemeChangedEventArgs e)
-        {
-            MainThread.BeginInvokeOnMainThread(() =>
-            {
-                TinyIoCContainer.Current.Resolve<ThemeViewModel>().ApplyTheme();
-            });
-        }
 
         private void App_ConnectivityChanged(object sender, ConnectivityChangedEventArgs e)
         {

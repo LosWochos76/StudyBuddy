@@ -15,14 +15,21 @@ namespace StudyBuddy.App.ViewModels
             RegisterCommand = new Command(Register);
             PasswordForgottenCommand = new Command(PasswordForgotten);
             ImprintCommand = new Command(Imprint);
+            TapCommand = new Command(Tap);
         }
 
         public IAsyncCommand LoginCommand { get; }
         public ICommand RegisterCommand { get; }
         public ICommand PasswordForgottenCommand { get; }
         public ICommand ImprintCommand { get; }
+        public ICommand TapCommand { get; }
         public string EMail { get; set; }
         public string Password { get; set; }
+
+        private void Tap()
+        {
+            dialog.OpenBrowser("https://studybuddybackend.web.app/info");
+        }
 
         private void Register()
         {

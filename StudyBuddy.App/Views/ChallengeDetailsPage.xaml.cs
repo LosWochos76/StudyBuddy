@@ -1,4 +1,5 @@
-﻿using StudyBuddy.App.ViewModels;
+﻿using StudyBuddy.App.Misc;
+using StudyBuddy.App.ViewModels;
 using Xamarin.Forms;
 
 namespace StudyBuddy.App.Views
@@ -10,10 +11,12 @@ namespace StudyBuddy.App.Views
         public ChallengeDetailsPage(ChallengeViewModel challenge)
         {
             InitializeComponent();
-
             this.challenge = challenge;
             grid.BindingContext = challenge;
             stack.BindingContext = new ChallengeConfirmViewModel(challenge);
+
         }
+
+        
     }
 }

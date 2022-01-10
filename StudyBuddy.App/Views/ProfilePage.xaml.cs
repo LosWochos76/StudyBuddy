@@ -140,9 +140,5 @@ namespace StudyBuddy.App.Views
             await api.ImageService.SaveProfileImage(ViewModel.User, file);
         }
 
-        private void Button_Clicked(object sender, EventArgs e)
-        {
-            // Profil bearbeiten
-        }
     }
 }

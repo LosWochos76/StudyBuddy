@@ -6,6 +6,7 @@
              xmlns:fontAwesome="clr-namespace:StudyBuddy.App"
              x:DataType="viewmodels:FriendViewModel"
              xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
+             Shell.TabBarIsVisible="False"
              Title="{Binding User.FullName}">
     <ContentPage.Resources>
         <ResourceDictionary>
@@ -45,13 +46,13 @@
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
             <StackLayout Padding="20">
-                <xct:AvatarView Size="160" HorizontalOptions="Center" VerticalOptions="Center"
+                <xct:AvatarView Size="120" HorizontalOptions="Center" VerticalOptions="Center"
                     Text="{Binding User.Initials}"
                     Source="{Binding User.ProfileImage}" />
             </StackLayout>
             <StackLayout Grid.Row="0"
                          VerticalOptions="End" >
-                <Grid Padding="0,10,25,0" RowSpacing="0">
+                <Grid Padding="10,10,10,0" RowSpacing="0">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="*"/>
@@ -76,10 +77,16 @@
                     <StackLayout Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="3" Padding="0,0,0,0">
                         <StackLayout Orientation="Horizontal">
                             <Label Text="Statistiken für"></Label>
-                            <Label Text="{Binding User.FullName}"></Label>
+                            <Label Text="{Binding User.Name}"></Label>
                         </StackLayout>
                         <StackLayout Margin="0" Orientation="Vertical">
-                            <Frame Style="{StaticResource FrameStyle}" >
+                            <Frame Style="{StaticResource FrameStyle}"
+                                   HasShadow="False"
+                                   xct:ShadowEffect.Color="Black"
+                                   xct:ShadowEffect.Opacity="1"
+                                   xct:ShadowEffect.Radius="5"
+                                   xct:ShadowEffect.OffsetY="-2"
+                                   xct:ShadowEffect.OffsetX="-2">
                                 <StackLayout Orientation="Vertical">
                                     <Label Style="{StaticResource TotalPointsLabelStyle}" HorizontalOptions="CenterAndExpand" HorizontalTextAlignment="Center" Text="{Binding UserStatistics.TotalPoints}"></Label>
                                     <Label HorizontalOptions="CenterAndExpand" HorizontalTextAlignment="Center" Text="Punkte Gesamt"></Label>
@@ -101,7 +108,16 @@
                             </Frame>
                         </StackLayout>
                     </StackLayout>
-                    <Button Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="3" Text="Freund entfernen" Command="{Binding RemoveFriendCommand}" Margin="0,30,0,30" FontAttributes="Bold" FontSize="17" HeightRequest="45" />
+                    <Button Grid.Row="4" 
+                            Grid.Column="0" 
+                            Grid.ColumnSpan="3" 
+                            Text="Freund entfernen" 
+                            Command="{Binding RemoveFriendCommand}" 
+                            Margin="0,30,0,30" 
+                            FontAttributes="Bold" 
+                            FontSize="17" 
+                            HeightRequest="45"
+                            BackgroundColor="{StaticResource DeclineButton}"/>
                 </Grid>
             </StackLayout>
         </Grid>

@@ -9,31 +9,34 @@
              Shell.NavBarIsVisible="False">
     <StackLayout>
         <StackLayout VerticalOptions="StartAndExpand">
+            <Image></Image>
             <Frame CornerRadius="0">
                 <Frame.Padding>
                     <OnPlatform x:TypeArguments="Thickness">
-                        <On Platform="iOS" Value="0,40,0,10" />
-                        <On Platform="Default" Value="0,10,0,10" />
+                        <On Platform="iOS"
+                            Value="0,40,0,10" />
+                        <On Platform="Default"
+                            Value="0,10,0,10" />
                     </OnPlatform>
                 </Frame.Padding>
-                <Label BackgroundColor="{AppThemeBinding Dark={StaticResource WindowBackgroundColorDark}, Light={StaticResource WindowBackgroundColor}}"
-                        Text="Wilkommen bei Gameucation!"
-                        HorizontalTextAlignment="Center"
-                        FontSize="36" />
+                <Label BackgroundColor="{StaticResource WindowBackgroundColor}"
+                       Text="Wilkommen bei Gameucation!"
+                       HorizontalTextAlignment="Center"
+                       FontSize="36" />
             </Frame>
-            <StackLayout Padding="10,10,10,0">
+            <StackLayout Padding="10">
                 <Label HorizontalTextAlignment="Center">
                     <Label.FormattedText>
                         <FormattedString>
                             <FormattedString.Spans>
-                                <Span
-                                    Text="Wenn du herausfinden willst, was Gameucation 
+                                <Span Text="Wenn du herausfinden willst, was Gameucation 
                                     für dich als Studierender tun kann, klicke " />
                                 <Span Text="hier"
-                                        TextColor="#0A84FF" TextDecorations="Underline">
+                                      TextColor="#0A84FF"
+                                      TextDecorations="Underline">
                                     <Span.GestureRecognizers>
                                         <TapGestureRecognizer Command="{Binding TapCommand}"
-                                                                CommandParameter="https://studybuddybackend.web.app/info" />
+                                                              CommandParameter="https://studybuddybackend.web.app/info" />
                                     </Span.GestureRecognizers>
                                 </Span>
                                 <Span Text="." />
@@ -43,7 +46,7 @@
                 </Label>
             </StackLayout>
         </StackLayout>
-        <StackLayout Padding="10,10,10,10" VerticalOptions="CenterAndExpand">
+        <StackLayout Padding="10" VerticalOptions="CenterAndExpand">
             <Entry Placeholder="E-Mail-Adresse"
                     Text="{Binding EMail}" />
             <Entry x:Name="Entry"
@@ -51,7 +54,8 @@
                     IsPassword="True"
                     Text="{Binding Password}"
                     ReturnCommand="{Binding LoginCommand}"/>
-            <Button Text="Anmelden" Command="{Binding LoginCommand}" />
+            <Button Text="Anmelden" Command="{Binding LoginCommand}" 
+                    BackgroundColor="{StaticResource ConfirmButton}"/>
 
             <Label HorizontalTextAlignment="Center">
                 <Label.FormattedText>
@@ -71,7 +75,9 @@
         </StackLayout>
 
         <StackLayout VerticalOptions="EndAndExpand" Padding="10,0,10,20">
-            <Button Text="Neuen Account erstellen" Command="{Binding RegisterCommand}" />
+            <Button Text="Neuen Account erstellen" Command="{Binding RegisterCommand}" 
+                    BackgroundColor="{StaticResource PrimaryAccent}"
+                    TextColor="{StaticResource WindowBackgroundColor}"/>
             <Label HorizontalOptions="CenterAndExpand">
                 <Label.FormattedText>
                     <FormattedString>

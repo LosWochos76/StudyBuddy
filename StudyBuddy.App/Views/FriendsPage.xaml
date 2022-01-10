@@ -7,6 +7,7 @@
              xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
              xmlns:fontAwesome="clr-namespace:StudyBuddy.App"
              x:Name="page"
+             Shell.TabBarIsVisible="False"
              Title="Freunde">
     <ContentPage.ToolbarItems>
         <ToolbarItem Text="Freund hinzufügen"
@@ -23,8 +24,7 @@
         <SearchBar SearchCommand="{Binding SearchCommand}" Text="{Binding SearchText}" />
         <ActivityIndicator IsVisible="{Binding IsBusy}" IsRunning="{Binding IsBusy}" />
         <RefreshView IsRefreshing="{Binding IsRefreshing}"
-            Command="{Binding RefreshCommand}"
-            Padding="8">
+                     Command="{Binding RefreshCommand}">
             <CollectionView ItemsSource="{Binding Friends}"
                 ItemsUpdatingScrollMode="KeepItemsInView"
                 RemainingItemsThreshold="{Binding ItemThreshold}"
@@ -37,28 +37,77 @@
                 </CollectionView.EmptyView>
                 <CollectionView.ItemTemplate>
                     <DataTemplate x:DataType="viewmodels:UserViewModel">
-                        <Grid x:Name="Item" Padding="0,8,0,0">
-                            <Frame CornerRadius="10" HasShadow="False">
-                                <StackLayout Orientation="Horizontal">
-                                    <xct:AvatarView Size="45" VerticalOptions="Center"
-                                        Grid.Column="0"
-                                        Grid.Row="0"
-                                        Text="{Binding Initials}"
-                                        Source="{Binding ProfileImage}" />
-                                    <StackLayout VerticalOptions="Center">
-                                        <Label Text="{Binding FullName}"
-                                               Padding="10,0,0,0"
-                                               FontAttributes="Bold" />
-                                        <Label Style="{StaticResource TagLabel}"
-                                               Text="{Binding CountOfCommonFriends, StringFormat='{0} gemeinsame Freunde'}"
-                                               Padding="10,0,0,0"
-                                               FontSize="Small" />
-                                    </StackLayout>
-                                </StackLayout>
+                        <Grid x:Name="Item"
+                              Padding="8,8,8,8">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*" />
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <Frame CornerRadius="10"
+                                   HasShadow="False"
+                                   Margin="0"
+                                   Padding="0"
+                                   HeightRequest="85"
+                                   BorderColor="{StaticResource WindowBackgroundColor}"
+                                   BackgroundColor="{StaticResource WindowBackgroundColor}"
+                                   xct:ShadowEffect.Color="Black"
+                                   xct:ShadowEffect.Opacity="1"
+                                   xct:ShadowEffect.Radius="5"
+                                   xct:ShadowEffect.OffsetY="-2"
+                                   xct:ShadowEffect.OffsetX="-2">
                                 <Frame.GestureRecognizers>
                                     <TapGestureRecognizer Command="{Binding BindingContext.DetailsCommand, Source={x:Reference Name=page}}"
-                                        CommandParameter="{Binding Source={x:Reference Item}, Path=BindingContext}" />
+                                                          CommandParameter="{Binding Source={x:Reference Item}, Path=BindingContext}" />
                                 </Frame.GestureRecognizers>
+                                <Grid BackgroundColor="Transparent">
+
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="*" />
+                                        <RowDefinition Height="*" />
+                                    </Grid.RowDefinitions>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="80" />
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <StackLayout Grid.RowSpan="2"
+                                                 VerticalOptions="Center"
+                                                 BackgroundColor="Transparent">
+                                        <xct:AvatarView Size="70"
+                                                        VerticalOptions="Center"
+                                                        Padding="8,0,2,0"
+                                                        Grid.Column="0"
+                                                        Grid.Row="0"
+                                                        Text="{Binding Initials}"
+                                                        Source="{Binding ProfileImage}" />
+                                    </StackLayout>
+                                    <Frame Grid.Row="0"
+                                           Grid.RowSpan="2"
+                                           Grid.Column="1"
+                                           Grid.ColumnSpan="2"
+                                           HasShadow="False"
+                                           CornerRadius="10"
+                                           Padding="0,0,0,0"
+                                           xct:ShadowEffect.Color="Black"
+                                           xct:ShadowEffect.Opacity="1"
+                                           xct:ShadowEffect.Radius="6">
+
+                                        <StackLayout BackgroundColor="Transparent">
+                                            <Label Text="{Binding FullName}"
+                                                   HeightRequest="60"
+                                                   FontSize="18"
+                                                   FontAttributes="Bold"
+                                                   VerticalOptions="Center"
+                                                   Padding="20,10,0,10" />
+                                            <Label Style="{StaticResource TagLabel}"
+                                                   Text="{Binding CountOfCommonFriends, StringFormat='{0} gemeinsame Freunde'}"
+                                                   Padding="20,0,0,10"
+                                                   FontSize="Small" />
+                                        </StackLayout>
+                                    </Frame>
+                                </Grid>
                             </Frame>
                         </Grid>
                     </DataTemplate>

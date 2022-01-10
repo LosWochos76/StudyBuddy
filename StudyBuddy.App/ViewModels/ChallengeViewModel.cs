@@ -1,11 +1,13 @@
 ﻿using System;
+using System.Windows.Input;
+using StudyBuddy.App.Api;
 using StudyBuddy.App.Misc;
 using StudyBuddy.Model;
 using Xamarin.Forms;
 
 namespace StudyBuddy.App.ViewModels
 {
-    public class ChallengeViewModel
+    public class ChallengeViewModel 
     {
         public int ID { get; set; }
         public string Name { get; set; }
@@ -20,7 +22,6 @@ namespace StudyBuddy.App.ViewModels
         public int? SeriesParentID { get; set; }
         public string Tags { get; set; }
         public string ProveAddendum { get; set; }
-
         public string ValidityEndText
         {
             get

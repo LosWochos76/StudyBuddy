@@ -23,7 +23,7 @@ namespace StudyBuddy.App.ViewModels
 
         private void Theme(object obj)
         {
-            navigation.Push(new ThemePage());
+            // navigation.Push(new ThemePage());
         }
 
         private void Friends(object obj)
