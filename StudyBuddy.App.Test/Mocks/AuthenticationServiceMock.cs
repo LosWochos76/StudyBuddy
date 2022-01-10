@@ -7,6 +7,7 @@ namespace StudyBuddy.Test.Mocks
     public class AuthenticationServiceMock : IAuthenticationService
     {
         public event LoginStateChangedHandler LoginStateChanged;
+        private readonly string base_url;
         public string Token { get; private set; } = string.Empty;
         public UserViewModel CurrentUser { get; private set; }
         public bool IsLoggedIn => Token != string.Empty;
@@ -34,6 +35,11 @@ namespace StudyBuddy.Test.Mocks
         {
             CurrentUser = null;
             Token = string.Empty;
+        }
+        public async Task<bool> IsTokenValid(string token)
+        {
+            var rh = new WebRequestHelper();
+            return await rh.Put<bool>(base_url + "Login", token);
         }
     }
 }

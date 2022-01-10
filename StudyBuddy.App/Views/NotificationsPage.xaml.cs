@@ -20,5 +20,6 @@ namespace StudyBuddy.App.Views
             On<Xamarin.Forms.PlatformConfiguration.iOS> ().SetUseSafeArea(true);
             BindingContext = TinyIoCContainer.Current.Resolve<NotificationsViewModel>();
         }
+        
     }
 }

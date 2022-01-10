@@ -38,7 +38,7 @@
                                            HasShadow="False"
                                            Margin="0"
                                            Padding="0"
-                                           HeightRequest="85"
+                                           HeightRequest="100"
                                            BorderColor="{StaticResource WindowBackgroundColor}"
                                            BackgroundColor="{StaticResource WindowBackgroundColor}"
                                            xct:ShadowEffect.Color="Black"
@@ -51,13 +51,14 @@
                                         <Grid.RowDefinitions>
                                             <RowDefinition Height="*" />
                                             <RowDefinition Height="*" />
+                                            <RowDefinition Height="*" />
                                         </Grid.RowDefinitions>
                                         <Grid.ColumnDefinitions>
                                             <ColumnDefinition Width="80" />
                                             <ColumnDefinition Width="*" />
                                             <ColumnDefinition Width="*" />
                                         </Grid.ColumnDefinitions>
-                                        <StackLayout Grid.RowSpan="2"
+                                        <StackLayout Grid.RowSpan="3"
                                                      VerticalOptions="Center"
                                                      BackgroundColor="Transparent">
                                             <xct:AvatarView Size="70"
@@ -69,7 +70,7 @@
                                                             Source="{Binding ProfileImage}" />
                                         </StackLayout>
                                         <Frame Grid.Row="0"
-                                               Grid.RowSpan="2"
+                                               Grid.RowSpan="3"
                                                Grid.Column="1"
                                                Grid.ColumnSpan="2"
                                                HasShadow="False"
@@ -79,36 +80,35 @@
                                                xct:ShadowEffect.Opacity="1"
                                                xct:ShadowEffect.Radius="6">
 
-                                            <StackLayout BackgroundColor="Transparent">
+                                            <StackLayout BackgroundColor="Transparent" Padding="0">
                                                 <Label Text="{Binding FullName}"
-                                                       HeightRequest="60"
+                                                       HeightRequest="40"
                                                        FontSize="18"
                                                        FontAttributes="Bold"
                                                        VerticalOptions="Center"
-                                                       Padding="20,10,0,10" />
-                                                <Label Style="{StaticResource TagLabel}"
+                                                       Padding="20,10,0,0" />
+                                                <Label HeightRequest="30"
+                                                       Style="{StaticResource TagLabel}"
                                                        Text="{Binding CountOfCommonFriends, StringFormat='{0} gemeinsame Freunde'}"
-                                                       Padding="20,0,0,10"
-                                                       FontSize="Small" />
+                                                       Padding="20,0,0,0"
+                                                       FontSize="12" />
 
-                                                <StackLayout>
+                                                <StackLayout Padding="0">
 
-                                                    <Label Padding="10,0,0,0"
-                                                           Text="Freundschaft anfragen"
-                                                           IsVisible="{Binding NotRequestedForFriendship}">
-                                                        <Label.GestureRecognizers>
-                                                            <TapGestureRecognizer Command="{Binding BindingContext.SendFriendshipRequestCommand, Source={x:Reference Name=page}}"
-                                                                                  CommandParameter="{Binding Source={x:Reference Item}, Path=BindingContext}" />
-                                                        </Label.GestureRecognizers>
-                                                    </Label>
-                                                    <Label Padding="10,0,0,0"
-                                                           Text="Freundschaftsanfrage löschen"
-                                                           IsVisible="{Binding RequestedForFriendship}">
-                                                        <Label.GestureRecognizers>
-                                                            <TapGestureRecognizer Command="{Binding BindingContext.RemoveFriendshipRequestCommand, Source={x:Reference Name=page}}"
-                                                                                  CommandParameter="{Binding Source={x:Reference Item}, Path=BindingContext}" />
-                                                        </Label.GestureRecognizers>
-                                                    </Label>
+                                                    <Button Padding="20,0,0,10"
+                                                            Text="Freundschaft anfragen"
+                                                            IsVisible="{Binding NotRequestedForFriendship}"
+                                                            BackgroundColor="{StaticResource ConfirmButton}"
+                                                            Command="{Binding BindingContext.SendFriendshipRequestCommand, Source={x:Reference Name=page}}"
+                                                            CommandParameter="{Binding Source={x:Reference Item}, Path=BindingContext}" >
+                                                    </Button>
+                                                    <Button Padding="20,0,0,10"
+                                                            Text="Freundschaftsanfrage löschen"
+                                                            IsVisible="{Binding RequestedForFriendship}"
+                                                            BackgroundColor="{StaticResource DeclineButton}"
+                                                            Command="{Binding BindingContext.RemoveFriendshipRequestCommand, Source={x:Reference Name=page}}"
+                                                            CommandParameter="{Binding Source={x:Reference Item}, Path=BindingContext}" >
+                                                    </Button>
                                                 </StackLayout>
                                             </StackLayout>
                                         </Frame>
