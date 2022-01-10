@@ -24,13 +24,15 @@ namespace StudyBuddy.App.Api
             {
                 if (args.IsLoggedIn == true)
                 {
+#if DEBUG
+
                     this.UpdateToken();
 
                     CrossFirebasePushNotification.Current.OnTokenRefresh += (source, eventArgs) =>
                     {
                         this.Save(eventArgs.Token);
                     };
-
+#endif
                 }
             };
         }

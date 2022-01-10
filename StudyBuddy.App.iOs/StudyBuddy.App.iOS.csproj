@@ -28,7 +28,8 @@
         <MtouchLink>None</MtouchLink>
         <MtouchDebug>true</MtouchDebug>
         <CodesignKey>Apple Development: Alexander Stuckenholz (FF9JERN36B)</CodesignKey>
-        <CodesignProvision>VS: WildCard Development</CodesignProvision>
+        <CodesignProvision>VS: de.hshl.App Development</CodesignProvision>
+        <CodesignEntitlements>Entitlements.plist</CodesignEntitlements>
     </PropertyGroup>
     <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|iPhoneSimulator' ">
         <DebugType>none</DebugType>
@@ -38,8 +39,8 @@
         <WarningLevel>4</WarningLevel>
         <MtouchLink>None</MtouchLink>
         <MtouchArch>x86_64</MtouchArch>
-        <CodesignProvision>VS: WildCard Development</CodesignProvision>
         <CodesignKey>Apple Development: Alexander Stuckenholz (FF9JERN36B)</CodesignKey>
+        <CodesignEntitlements>Entitlements.plist</CodesignEntitlements>
     </PropertyGroup>
     <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|iPhone' ">
         <DebugSymbols>true</DebugSymbols>
@@ -151,5 +152,6 @@
         <BundleResource Include="Resources\fabrands.otf" />
         <BundleResource Include="Resources\faregular.otf" />
         <BundleResource Include="Resources\fasolid.otf" />
+        <BundleResource Include="GoogleService-Info.plist" />
     </ItemGroup>
 </Project>
