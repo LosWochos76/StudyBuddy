@@ -91,7 +91,7 @@ namespace StudyBuddy.App.ViewModels
                 {
                     case ChallengeProve.ByTrust: return "Durch Vertrauen";
                     case ChallengeProve.ByQrCode: return "Durch einen QR-Code";
-                    case ChallengeProve.ByFriend: return "Durch Bestätigung eines Freundes";
+                    case ChallengeProve.ByFriend: return "Durch Bestätigung eines/einer Freundes/Freundin";
                     case ChallengeProve.ByLocation: return "Durch geographische Position";
                     case ChallengeProve.ByKeyword: return "Durch Schlüsselwort";
                     default: return "";
