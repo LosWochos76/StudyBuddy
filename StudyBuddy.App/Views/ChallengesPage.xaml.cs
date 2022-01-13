@@ -16,5 +16,14 @@ namespace StudyBuddy.App.Views
             BindingContext = TinyIoCContainer.Current.Resolve<ChallengesViewModel>();
             
         }
+
+        protected override void OnAppearing()
+        {
+            base.OnAppearing();
+            if(BindingContext is ChallengesViewModel vm)
+            {
+                vm.RefreshCommand.Execute(null);
+            }
+        }
     }
 }
