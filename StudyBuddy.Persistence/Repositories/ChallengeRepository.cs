@@ -182,7 +182,7 @@ namespace StudyBuddy.Persistence
                     "created date not null, " +
                     "prove smallint not null, " +
                     "series_parent_id int, " +
-                    "prove_addendum varchar(100)");
+                    "prove_addendum varchar(100))");
 
                 rh.SetRevision(4);
             }
