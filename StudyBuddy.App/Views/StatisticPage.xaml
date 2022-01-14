@@ -32,19 +32,19 @@
             <Style x:Key="NetworkPointsLabelStyle" TargetType="Label">
                 <Setter Property="FontSize" Value="20"/>
                 <Setter Property="FontAttributes" Value="Bold" />
-                <Setter Property="TextColor" Value="#cc1444" />
+                <Setter Property="TextColor" Value="#5856D6" />
             </Style>
 
             <Style x:Key="OrganizingPointsLabelStyle" TargetType="Label">
                 <Setter Property="FontSize" Value="20"/>
                 <Setter Property="FontAttributes" Value="Bold" />
-                <Setter Property="TextColor" Value="#a0f502" />
+                <Setter Property="TextColor" Value="#5AC8FA" />
             </Style>
 
             <Style x:Key="LearningPointsLabelStyle" TargetType="Label">
                 <Setter Property="FontSize" Value="20"/>
                 <Setter Property="FontAttributes" Value="Bold" />
-                <Setter Property="TextColor" Value="#07c5bf" />
+                <Setter Property="TextColor" Value="#007AFF" />
             </Style>
 
             <Style x:Key="FrameStyle" TargetType="Frame">
@@ -98,7 +98,7 @@
                     </StackLayout>
                     
                 </Frame>
-                <StackLayout HorizontalOptions="StartAndExpand" Orientation="Horizontal">
+                <StackLayout HorizontalOptions="StartAndExpand" Orientation="Horizontal" BackgroundColor="Transparent">
                     <Frame Style="{StaticResource FrameStyle}" WidthRequest="200">
                         <StackLayout HorizontalOptions="CenterAndExpand" Orientation="Vertical">
                             <Label HorizontalTextAlignment="Center" Style="{StaticResource TotalPointsLabelStyle}" Text="{Binding UserStatistics.TotalAcceptedChallenges}"></Label>

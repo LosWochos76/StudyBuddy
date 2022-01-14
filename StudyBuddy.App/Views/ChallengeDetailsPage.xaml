@@ -31,6 +31,7 @@
                 <Label Grid.Column="0"
                        Grid.Row="0"
                        Text="{Binding CategorySymbol}"
+                       TextColor="{Binding CategoryColor}"
                        FontFamily="{StaticResource FontAwesomeSolid}"
                        FontSize="50"
                        HorizontalTextAlignment="End" />
