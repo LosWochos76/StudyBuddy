@@ -20,7 +20,7 @@
                     </OnPlatform>
                 </Frame.Padding>
                 <Label BackgroundColor="{StaticResource WindowBackgroundColor}"
-                       Text="Wilkommen bei Gameucation!"
+                       Text="Willkommen bei Gameucation!"
                        HorizontalTextAlignment="Center"
                        FontSize="36" />
             </Frame>
@@ -29,8 +29,7 @@
                     <Label.FormattedText>
                         <FormattedString>
                             <FormattedString.Spans>
-                                <Span Text="Wenn du herausfinden willst, was Gameucation 
-                                    für dich als Studierender tun kann, klicke " />
+                                <Span Text="Wenn du herausfinden willst, was Gameucation &#10; für dich als Studierender tun kann, klicke " />
                                 <Span Text="hier"
                                       TextColor="#0A84FF"
                                       TextDecorations="Underline">
