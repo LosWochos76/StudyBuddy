@@ -26,9 +26,12 @@
         <RefreshView IsRefreshing="{Binding IsRefreshing}"
                      Command="{Binding RefreshCommand}">
             <CollectionView ItemsSource="{Binding Friends}"
-                ItemsUpdatingScrollMode="KeepItemsInView"
-                RemainingItemsThreshold="{Binding ItemThreshold}"
-                RemainingItemsThresholdReachedCommand="{Binding LoadMoreCommand}">
+                            SelectedItem="{Binding SelectedUser}"
+                            SelectionMode="Single"
+                            SelectionChangedCommand="{Binding DetailsCommand}"
+                            RemainingItemsThreshold="{Binding ItemThreshold}"
+                            RemainingItemsThresholdReachedCommand="{Binding LoadMoreCommand}"
+                            ItemsUpdatingScrollMode="KeepItemsInView">
                 <CollectionView.EmptyView>
                     <StackLayout Padding="12">
                         <Label HorizontalOptions="Center"
@@ -57,10 +60,6 @@
                                    xct:ShadowEffect.Radius="5"
                                    xct:ShadowEffect.OffsetY="-2"
                                    xct:ShadowEffect.OffsetX="-2">
-                                <Frame.GestureRecognizers>
-                                    <TapGestureRecognizer Command="{Binding BindingContext.DetailsCommand, Source={x:Reference Name=page}}"
-                                                          CommandParameter="{Binding Source={x:Reference Item}, Path=BindingContext}" />
-                                </Frame.GestureRecognizers>
                                 <Grid BackgroundColor="Transparent">
 
                                     <Grid.RowDefinitions>

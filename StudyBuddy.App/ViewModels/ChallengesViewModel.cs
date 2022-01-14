@@ -13,7 +13,9 @@ namespace StudyBuddy.App.ViewModels
 {
     public class ChallengesViewModel : ViewModelBase
     {
+        public string Header => string.Format("Herausforderungen am {0}", DateTime.Now.ToShortDateString());
         public RangeObservableCollection<ChallengeViewModel> Challenges { get; private set; }
+        public ChallengeViewModel SelectedChallenge { get; set; }
         public IAsyncCommand RefreshCommand { get; }
         public IAsyncCommand DetailsCommand { get; }
         public IAsyncCommand ScanQrCodeCommand { get; }
@@ -21,9 +23,7 @@ namespace StudyBuddy.App.ViewModels
         public IAsyncCommand SearchCommand { get; }
         public bool IsRefreshing { get; set; } = false;
         public int Skip { get; set; }
-        public string Header => string.Format("Herausforderungen am {0}", DateTime.Now.ToShortDateString());
-        public ChallengeViewModel SelectedChallenge { get; set; }
-
+        
         private string search_text = string.Empty;
         public string SearchText
         {
@@ -70,14 +70,14 @@ namespace StudyBuddy.App.ViewModels
         public ChallengesViewModel(IApi api, IDialogService dialog, INavigationService navigation) : base(api, dialog, navigation)
         {
             Challenges = new RangeObservableCollection<ChallengeViewModel>();
-            api.Authentication.LoginStateChanged += Authentication_LoginStateChanged;
-            api.ChallengeAccepted += async (sender, e) => { await LoadChallenges(); };
-
             LoadMoreCommand = new AsyncCommand(LoadChallenges);
             SearchCommand = new AsyncCommand(Refresh);
             DetailsCommand = new AsyncCommand(ShowDetails);
             ScanQrCodeCommand = new AsyncCommand(ScanQrCode);
             RefreshCommand = new AsyncCommand(Refresh);
+
+            api.Authentication.LoginStateChanged += Authentication_LoginStateChanged;
+            api.ChallengeAccepted += async (sender, e) => { await LoadChallenges(); };
         }
 
         private void Authentication_LoginStateChanged(object sender, LoginStateChangedArgs args)

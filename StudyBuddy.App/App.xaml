@@ -55,8 +55,9 @@
             
             <Style TargetType="Button">
                 <Setter Property="CornerRadius">
-                    <On Platform="Android"
-                        Value="10"></On>
+                    <OnPlatform x:TypeArguments="x:Int32">
+                        <On Platform="Android">10</On>
+                    </OnPlatform>
                 </Setter>
             </Style>
 

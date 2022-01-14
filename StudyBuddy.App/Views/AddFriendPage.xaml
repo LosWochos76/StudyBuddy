@@ -15,9 +15,9 @@
             <RefreshView IsRefreshing="{Binding IsRefreshing}"
                          Command="{Binding RefreshCommand}">
                 <CollectionView ItemsSource="{Binding Users}"
-                        ItemsUpdatingScrollMode="KeepItemsInView"
-                        RemainingItemsThreshold="{Binding ItemThreshold}"
-                        RemainingItemsThresholdReachedCommand="{Binding LoadMoreCommand}">
+                                RemainingItemsThreshold="{Binding ItemThreshold}"
+                                RemainingItemsThresholdReachedCommand="{Binding LoadMoreCommand}"
+                                ItemsUpdatingScrollMode="KeepItemsInView">
                     <CollectionView.EmptyView>
                         <StackLayout Padding="12">
                             <Label HorizontalOptions="Center"
@@ -87,9 +87,9 @@
                                                        FontAttributes="Bold"
                                                        VerticalOptions="Center"
                                                        Padding="20,10,0,0" />
-                                                <Label HeightRequest="30"
-                                                       Style="{StaticResource TagLabel}"
+                                                <Label Style="{StaticResource TagLabel}"
                                                        Text="{Binding CountOfCommonFriends, StringFormat='{0} gemeinsame Freunde'}"
+                                                       HeightRequest="30"
                                                        Padding="20,0,0,0"
                                                        FontSize="12" />
 
@@ -100,14 +100,24 @@
                                                             IsVisible="{Binding NotRequestedForFriendship}"
                                                             BackgroundColor="{StaticResource ConfirmButton}"
                                                             Command="{Binding BindingContext.SendFriendshipRequestCommand, Source={x:Reference Name=page}}"
-                                                            CommandParameter="{Binding Source={x:Reference Item}, Path=BindingContext}" >
+                                                            CommandParameter="{Binding Source={x:Reference Item}, Path=BindingContext}">
+                                                        <Button.CornerRadius>
+                                                            <OnPlatform x:TypeArguments="x:Int32">
+                                                                <On Platform="Android">0</On>
+                                                            </OnPlatform>
+                                                        </Button.CornerRadius>
                                                     </Button>
                                                     <Button Padding="20,0,0,10"
                                                             Text="Freundschaftsanfrage löschen"
                                                             IsVisible="{Binding RequestedForFriendship}"
                                                             BackgroundColor="{StaticResource DeclineButton}"
                                                             Command="{Binding BindingContext.RemoveFriendshipRequestCommand, Source={x:Reference Name=page}}"
-                                                            CommandParameter="{Binding Source={x:Reference Item}, Path=BindingContext}" >
+                                                            CommandParameter="{Binding Source={x:Reference Item}, Path=BindingContext}">
+                                                        <Button.CornerRadius>
+                                                            <OnPlatform x:TypeArguments="x:Int32">
+                                                                <On Platform="Android">0</On>
+                                                            </OnPlatform>
+                                                        </Button.CornerRadius>
                                                     </Button>
                                                 </StackLayout>
                                             </StackLayout>

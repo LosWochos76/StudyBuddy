@@ -6,8 +6,7 @@
              xmlns:fontAwesome="clr-namespace:StudyBuddy.App"
              xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
              x:DataType="viewmodels:ChallengesViewModel"
-             x:Name="page" Title="{Binding Header}"
-             Shell.TitleColor="{StaticResource PrimaryAccent}">
+             x:Name="page">
     <Shell.TitleView>
         <Label Text="{Binding Header}"
                VerticalTextAlignment="Center"
@@ -32,7 +31,8 @@
     <StackLayout>
         <SearchBar SearchCommand="{Binding SearchCommand}" Text="{Binding SearchText}" />
         <ActivityIndicator IsVisible="{Binding IsBusy}" IsRunning="{Binding IsBusy}" />
-        <RefreshView IsRefreshing="{Binding IsRefreshing}" Command="{Binding RefreshCommand}">
+        <RefreshView IsRefreshing="{Binding IsRefreshing}" 
+                     Command="{Binding RefreshCommand}">
             <CollectionView ItemsSource="{Binding Challenges}"
                             SelectedItem="{Binding SelectedChallenge}"
                             SelectionMode="Single"
