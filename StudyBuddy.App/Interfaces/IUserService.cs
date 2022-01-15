@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using StudyBuddy.App.ViewModels;
+using StudyBuddy.Model;
 
 namespace StudyBuddy.App.Api
 {
@@ -12,5 +13,6 @@ namespace StudyBuddy.App.Api
         Task<UserViewModel> GetById(int user_id);
         Task<int> GetFriendsCount();
         Task AddSenders(IEnumerable<RequestViewModel> requests);
+        Task<bool> Update(User uvm);
     }
 }

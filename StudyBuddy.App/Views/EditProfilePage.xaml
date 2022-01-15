@@ -11,18 +11,21 @@
             <Label Text="Vorname:"></Label>
             <Entry Placeholder="{Binding User.Firstname}"
                    PlaceholderColor="{StaticResource TextColor}"
+                   Text="{Binding Firstname}"
                    MaxLength="100"
                    ClearButtonVisibility="WhileEditing"
                    ReturnType="Next"></Entry>
             <Label Text="Nachname:"></Label>
             <Entry Placeholder="{Binding User.Lastname}"
                    PlaceholderColor="{StaticResource TextColor}"
+                   Text="{Binding Lastname}"
                    MaxLength="100"
                    ClearButtonVisibility="WhileEditing"
                    ReturnType="Next"></Entry>
             <Label Text="Nickname:"></Label>
             <Entry Placeholder="{Binding User.Nickname}"
                    PlaceholderColor="{StaticResource TextColor}"
+                   Text="{Binding Nickname}"
                    MaxLength="100"
                    ClearButtonVisibility="WhileEditing"
                    ReturnType="Next"></Entry>
@@ -38,6 +41,9 @@
                    IsPassword="True"
                    ClearButtonVisibility="WhileEditing"
                    ReturnType="Done"></Entry>
+            <Button BackgroundColor="{StaticResource ConfirmButton}"
+                    Text="Fertig"
+                    Command="{Binding ConfirmCommand}"></Button>
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

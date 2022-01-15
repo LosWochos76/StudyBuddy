@@ -96,6 +96,18 @@ namespace StudyBuddy.App.ViewModels
                 CountOfCommonFriends = u.CommonFriends
             };
         }
+        public static User ToModel(UserViewModel u)
+        {
+            return new User()
+            {
+                ID = u.ID,
+                Firstname = u.Firstname,
+                Lastname = u.Lastname,
+                Nickname = u.Nickname,
+                Email = u.Email,
+                Role = u.Role,
+            };
+        }
 
         public bool ContainsAny(string search_text)
         {

@@ -102,5 +102,15 @@ namespace StudyBuddy.App.Api
             foreach (var request in requests)
                 request.Sender = await GetById(request.SenderID);
         }
+
+        public async Task<bool> Update(User uvm)
+        {
+            var rh = new WebRequestHelper(api.Authentication.Token);
+            var content = await rh.Put<User>(base_url + "User/" + uvm.ID, uvm);
+            if (content == null)
+                return false;
+            return true;
+        }
+
     }
 }
