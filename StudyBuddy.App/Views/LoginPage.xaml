@@ -14,7 +14,7 @@
                 <Frame.Padding>
                     <OnPlatform x:TypeArguments="Thickness">
                         <On Platform="iOS"
-                            Value="0,40,0,10" />
+                            Value="0,10,0,10" />
                         <On Platform="Default"
                             Value="0,10,0,10" />
                     </OnPlatform>
@@ -47,12 +47,14 @@
         </StackLayout>
         <StackLayout Padding="10" VerticalOptions="CenterAndExpand">
             <Entry Placeholder="E-Mail-Adresse"
-                    Text="{Binding EMail}" />
+                   Text="{Binding EMail}" 
+                   BackgroundColor="{StaticResource WindowBackgroundColor}"/>
             <Entry x:Name="Entry"
-                    Placeholder="Passwort"
-                    IsPassword="True"
-                    Text="{Binding Password}"
-                    ReturnCommand="{Binding LoginCommand}"/>
+                   Placeholder="Passwort"
+                   IsPassword="True"
+                   Text="{Binding Password}"
+                   ReturnCommand="{Binding LoginCommand}"
+                   BackgroundColor="{StaticResource WindowBackgroundColor}"/>
             <Button Text="Anmelden" Command="{Binding LoginCommand}" 
                     BackgroundColor="{StaticResource ConfirmButton}"/>
 
