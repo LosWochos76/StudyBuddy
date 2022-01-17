@@ -54,7 +54,7 @@ namespace StudyBuddy.App.ViewModels
             if (result)
                 navigation.GoTo("//ChallengesPage");
             else
-                dialog.ShowMessageBox("Achtung!", "Anmdeldung nicht erfolgreich! Zugangsdaten korrekt?");
+                dialog.ShowMessageBox("Anmeldung nicht erfolgreich! Zugangsdaten korrekt?", "Achtung!");
         }
     }
 }
