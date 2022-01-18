@@ -4,21 +4,14 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="StudyBuddy.App.Views.LoginPage"
              xmlns:viewmodels="clr-namespace:StudyBuddy.App.ViewModels"
+             xmlns:ios="clr-namespace:Xamarin.Forms.PlatformConfiguration.iOSSpecific;assembly=Xamarin.Forms.Core"
              x:DataType="viewmodels:LoginViewModel"
              Shell.FlyoutBehavior="Disabled"
-             Shell.NavBarIsVisible="False">
+             Shell.NavBarIsVisible="False"
+             ios:Page.UseSafeArea="True">
     <StackLayout>
         <StackLayout VerticalOptions="StartAndExpand">
-            <Image></Image>
-            <Frame CornerRadius="0">
-                <Frame.Padding>
-                    <OnPlatform x:TypeArguments="Thickness">
-                        <On Platform="iOS"
-                            Value="0,10,0,10" />
-                        <On Platform="Default"
-                            Value="0,10,0,10" />
-                    </OnPlatform>
-                </Frame.Padding>
+            <Frame CornerRadius="0" Padding="0,10,0,10">
                 <Label BackgroundColor="{StaticResource WindowBackgroundColor}"
                        Text="Willkommen bei Gameucation!"
                        HorizontalTextAlignment="Center"
