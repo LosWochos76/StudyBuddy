@@ -8,9 +8,6 @@ import { CreateSeriesComponent } from './challenge/create-series/create-series.c
 import { ChallengeSuccessComponent } from './challenge/challenge-success/challenge-success.component';
 import { GameBadgeEditComponent } from './gamebadge/game-badge-edit/game-badge-edit.component';
 import { GameBadgeListComponent } from './gamebadge/game-badge-list/game-badge-list.component';
-import { ImprintComponent } from './misc/imprint/imprint.component';
-import { InfoComponent } from './misc/info/info.component';
-import { PrivacyComponent } from './misc/privacy/privacy.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { RequestEditComponent } from './request/request-edit/request-edit.component';
 import { RequestListComponent } from './request/request-list/request-list.component';
@@ -31,9 +28,6 @@ import { BusinessEventListComponent } from './businessevent/businessevent-list/b
 import { BusinessEventEditComponent } from './businessevent/businessevent-edit/businessevent-edit.component';
 
 const routes: Routes = [
-  { path: 'info', component: InfoComponent },
-  { path: 'imprint', component: ImprintComponent },
-  { path: 'privacy', component: PrivacyComponent },
   { path: 'register', component: RegisterUserComponent },
   { path: 'registersuccess', component: RegisterUserSuccessComponent },
   { path: 'challenge', component: ChallengeListComponent, canActivate: [RouteGuardService] },
@@ -61,7 +55,7 @@ const routes: Routes = [
   { path: 'logging', component: LoggingListComponent, canActivate: [RouteGuardService] },
   { path: 'businessevent', component: BusinessEventListComponent, canActivate: [RouteGuardService] },
   { path: 'businessevent/:id', component: BusinessEventEditComponent, canActivate: [RouteGuardService] },
-  { path: '', redirectTo: 'info', pathMatch: 'full' },
+  { path: '', redirectTo: 'challenge', pathMatch: 'full' },
   { path: '**', component: PageNotFoundComponent }
 ];
 

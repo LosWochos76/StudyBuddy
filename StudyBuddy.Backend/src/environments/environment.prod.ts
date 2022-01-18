@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  api_url: "https://studybuddy.hshl.de/"
+  api_url: "https://api.gameucation.eu/"
 };

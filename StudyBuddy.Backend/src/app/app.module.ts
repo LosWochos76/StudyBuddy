@@ -14,9 +14,6 @@ import { UserEditComponent } from './user/user-edit/user-edit.component';
 import { RegisterUserSuccessComponent } from './user/register-user-success/register-user-success.component';
 import { UserSelectComponent } from './user/user-select/user-select.component';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { InfoComponent } from './misc/info/info.component';
-import { ImprintComponent } from './misc/imprint/imprint.component';
-import { PrivacyComponent } from './misc/privacy/privacy.component';
 import { ChallengeListComponent } from './challenge/challenge-list/challenge-list.component';
 import { ChallengeEditComponent } from './challenge/challenge-edit/challenge-edit.component';
 import { ChallengeService } from './services/challenge.service';
@@ -56,9 +53,6 @@ import { BusinessEventEditComponent } from './businessevent/businessevent-edit/b
     UserEditComponent,
     RegisterUserSuccessComponent,
     UserSelectComponent,
-    InfoComponent,
-    ImprintComponent,
-    PrivacyComponent,
     ChallengeListComponent,
     ChallengeEditComponent,
     CreateSeriesComponent,
