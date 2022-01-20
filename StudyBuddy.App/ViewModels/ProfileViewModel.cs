@@ -9,18 +9,33 @@ namespace StudyBuddy.App.ViewModels
     public class ProfileViewModel : ViewModelBase
     {
         public UserViewModel User { get; set; }
-        public ICommand EditProfileCommand { get; set; }
+        public Command EditProfileCommand { get; set; }
+        public bool IsEditing;
         public ProfileViewModel(IApi api, IDialogService dialog, INavigationService navigation) : base(api, dialog, navigation)
         {
 
             User = api.Authentication.CurrentUser;
-            EditProfileCommand = new Command(EditProfile);
+            EditProfileCommand = new Command(execute: async () =>
+            {
+                IsEditing = true;
+                RefreshCanExecute();
+                EditProfile();
+            },
+            canExecute: () =>
+            {
+                return !IsEditing;
+            });
 
         }
-
-        public void EditProfile()
+        public void RefreshCanExecute()
         {
-            navigation.Push(new EditProfilePage());
+            EditProfileCommand.ChangeCanExecute();
+        }
+        public async void EditProfile()
+        {
+            await Shell.Current.Navigation.PushAsync(new EditProfilePage());
+            IsEditing = false;
+            RefreshCanExecute();
         }
     }
 }
