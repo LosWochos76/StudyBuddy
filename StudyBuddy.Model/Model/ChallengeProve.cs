@@ -6,6 +6,7 @@ namespace StudyBuddy.Model
         ByQrCode = 2,
         ByFriend = 3,
         ByLocation = 4,
-        ByKeyword = 5
+        ByKeyword = 5,
+        BySystem = 6
     }
 }

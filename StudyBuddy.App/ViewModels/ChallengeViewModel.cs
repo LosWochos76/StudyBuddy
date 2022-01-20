@@ -94,6 +94,7 @@ namespace StudyBuddy.App.ViewModels
                     case ChallengeProve.ByFriend: return "Durch Bestätigung eines/einer Freundes/Freundin";
                     case ChallengeProve.ByLocation: return "Durch geographische Position";
                     case ChallengeProve.ByKeyword: return "Durch Schlüsselwort";
+                    case ChallengeProve.BySystem: return "Durch Systembeweis";
                     default: return "";
                 }
             }
