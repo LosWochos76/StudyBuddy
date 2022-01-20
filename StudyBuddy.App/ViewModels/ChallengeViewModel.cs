@@ -22,6 +22,10 @@ namespace StudyBuddy.App.ViewModels
         public int? SeriesParentID { get; set; }
         public string Tags { get; set; }
         public string ProveAddendum { get; set; }
+        public string PointsTextZero
+        {
+            get => Points.ToString("D3") + "/100";
+        }
         public string ValidityEndText
         {
             get => ValidityEnd.ToString("dd.MM.yyyy");

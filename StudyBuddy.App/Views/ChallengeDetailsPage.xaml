@@ -67,7 +67,10 @@
                            HasShadow="False"
                            CornerRadius="10"
                            Padding="0"
-                           Margin="2,2,2.5,2.5">
+                           Margin="2,2,2.5,2.5"
+                           xct:ShadowEffect.Color="Black"
+                           xct:ShadowEffect.Opacity="1"
+                           xct:ShadowEffect.Radius="5">
                         <StackLayout Padding="12,10,12,10">
                             <Label Text="Beschreibung:"
                                    FontAttributes="Bold"
