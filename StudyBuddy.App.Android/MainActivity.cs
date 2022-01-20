@@ -6,6 +6,7 @@ using Android.Views;
 using Plugin.FirebasePushNotification;
 using Xamarin.Forms;
 using Xamarin.Forms.Platform.Android;
+using Xamarin.Forms.PlatformConfiguration.AndroidSpecific;
 using Platform = Xamarin.Essentials.Platform;
 
 namespace App.Droid
@@ -23,8 +24,8 @@ namespace App.Droid
             ZXing.Net.Mobile.Forms.Android.Platform.Init();
 
             //base.OnCreate(savedInstanceState);
-
             LoadApplication(new StudyBuddy.App.App());
+            Xamarin.Forms.Application.Current.On<Xamarin.Forms.PlatformConfiguration.Android>().UseWindowSoftInputModeAdjust(WindowSoftInputModeAdjust.Resize);
             FirebasePushNotificationManager.ProcessIntent(this, Intent);
         }
 

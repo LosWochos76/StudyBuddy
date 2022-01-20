@@ -4,122 +4,117 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     x:Class="StudyBuddy.App.Views.ChallengeDetailsPage"
     xmlns:viewmodels="clr-namespace:StudyBuddy.App.ViewModels"
-    Shell.FlyoutBehavior="Disabled"
-    Title="Herausforderung">
+             xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
+             xmlns:fontAwesome="clr-namespace:StudyBuddy.App"
+             Shell.FlyoutBehavior="Disabled"
+    Shell.NavBarHasShadow="true"
+    x:DataType="viewmodels:ChallengeViewModel"
+    Title="Herausforderungsdetails">
     <ContentPage.Content>
-        <StackLayout Padding="15">
-            <Grid ColumnSpacing="15"
-                  x:DataType="viewmodels:ChallengeViewModel"
-                  x:Name="grid">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="120" />
-                    <ColumnDefinition Width="*" />
-                </Grid.ColumnDefinitions>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="1" />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="1" />
-                </Grid.RowDefinitions>
-
-                <Label Grid.Column="0"
-                       Grid.Row="0"
-                       Text="{Binding CategorySymbol}"
-                       TextColor="{Binding CategoryColor}"
-                       FontFamily="{StaticResource FontAwesomeSolid}"
-                       FontSize="50"
-                       HorizontalTextAlignment="End" />
-                <Label Text="{Binding Name}"
-                       FontAttributes="Bold"
-                       Grid.Column="1"
-                       Grid.Row="0" />
-
-                <BoxView HeightRequest="1"
-                         Color="Gray"
-                         Grid.ColumnSpan="2"
-                         Grid.Row="1" />
-
-                <Label Text="Beschreibung:"
-                       FontAttributes="Bold"
-                       Grid.Column="0"
-                       Grid.Row="2"
-                       HorizontalTextAlignment="End" />
-                <Label Text="{Binding Description}"
-                       Grid.Column="1"
-                       Grid.Row="2" />
-
-                <Label Text="Kategorie:"
-                       FontAttributes="Bold"
-                       Grid.Column="0"
-                       Grid.Row="3"
-                       HorizontalTextAlignment="End" />
-                <Label Text="{Binding Category}"
-                       Grid.Column="1"
-                       Grid.Row="3" />
-
-                <Label Text="Tags:"
-                       FontAttributes="Bold"
-                       Grid.Column="0"
-                       Grid.Row="4"
-                       HorizontalTextAlignment="End" />
-                <Label Text="{Binding Tags}"
-                       Grid.Column="1"
-                       Grid.Row="4" />
-
-                <Label Text="Punkte:"
-                       FontAttributes="Bold"
-                       Grid.Column="0"
-                       Grid.Row="5"
-                       HorizontalTextAlignment="End" />
-                <Label Text="{Binding Points}"
-                       Grid.Column="1"
-                       Grid.Row="5" />
-
-                <Label Text="Gültig von:"
-                       FontAttributes="Bold"
-                       Grid.Column="0"
-                       Grid.Row="6"
-                       HorizontalTextAlignment="End" />
-                <Label Text="{Binding ValidityStart, StringFormat='{}{0:dd.MM.yyyy}'}"
-                       Grid.Column="1"
-                       Grid.Row="6" />
-
-                <Label Text="Gültig bis:"
-                       FontAttributes="Bold"
-                       Grid.Column="0"
-                       Grid.Row="7"
-                       HorizontalTextAlignment="End" />
-                <Label Text="{Binding ValidityEnd, StringFormat='{}{0:dd.MM.yyyy}'}"
-                       Grid.Column="1"
-                       Grid.Row="7" />
-
-                <Label Text="Beweis:"
-                       FontAttributes="Bold"
-                       Grid.Column="0"
-                       Grid.Row="8"
-                       HorizontalTextAlignment="End" />
-                <Label Text="{Binding ProveText}"
-                       Grid.Column="1"
-                       Grid.Row="8" />
-
-                <BoxView HeightRequest="1"
-                         Color="Gray"
-                         Grid.ColumnSpan="2"
-                         Grid.Row="9" />
-            </Grid>
-            <StackLayout x:Name="stack"
-                         x:DataType="viewmodels:ChallengeConfirmViewModel">
-                <Button Text="Herausforderung Abschließen"
-                        FontAttributes="Bold"
-                        Command="{Binding ConfirmChallenge}"
-                        BackgroundColor="{StaticResource ConfirmButton}" />
-            </StackLayout>
-        </StackLayout>
+        <Grid x:Name="grid"
+              Padding="20">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Frame Padding="0"
+                   Margin="0"
+                   BorderColor="{Binding CategoryColor}"
+                   BackgroundColor="{Binding CategoryColor}"
+                   CornerRadius="10"
+                   HasShadow="False"
+                   xct:ShadowEffect.Color="Black"
+                   xct:ShadowEffect.Opacity="1"
+                   xct:ShadowEffect.Radius="8"
+                   xct:ShadowEffect.OffsetX="-3"
+                   xct:ShadowEffect.OffsetY="-3">
+                <Grid BackgroundColor="Transparent">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <StackLayout Grid.ColumnSpan="3"
+                                 Grid.RowSpan="1"
+                                 Orientation="Horizontal"
+                                 BackgroundColor="Transparent"
+                                 Padding="30,10,10,10">
+                        <Image  HeightRequest="80"
+                                WidthRequest="80"
+                                VerticalOptions="Center">
+                            <Image.Source>
+                                <FontImageSource FontFamily="{StaticResource FontAwesomeSolid}"
+                                                 Glyph="{Binding CategorySymbol}"
+                                                 Color="{StaticResource TextColor}" />
+                            </Image.Source>
+                        </Image>
+                        <Label VerticalTextAlignment="Center"
+                               Text="{Binding Name}"
+                               FontAttributes="Bold"
+                               FontSize="20"
+                               Padding="20,0,0,0"></Label>
+                    </StackLayout>
+                    <Frame Grid.Row="1"
+                           Grid.RowSpan="3"
+                           Grid.Column="0"
+                           Grid.ColumnSpan="3"
+                           HasShadow="False"
+                           CornerRadius="10"
+                           Padding="0"
+                           Margin="2,2,2.5,2.5">
+                        <StackLayout Padding="12,10,12,10">
+                            <Label Text="Beschreibung:"
+                                   FontAttributes="Bold"
+                                   FontSize="19"></Label>
+                            <Label  Margin="0,0,0,10"
+                                    Text="{Binding Description}"
+                                    FontSize="18"></Label>
+                            <StackLayout>
+                                <Label HorizontalOptions="StartAndExpand"
+                                       FontSize="18">
+                                    <Label.FormattedText>
+                                        <FormattedString>
+                                            <Span CharacterSpacing="13"
+                                                  FontSize="19"
+                                                  FontFamily="{StaticResource FontAwesomeSolid}"
+                                                  Text="{x:Static fontAwesome:FontAwesomeIcons.Stopwatch}"></Span>
+                                            <Span Text="{Binding ValidityText}"></Span>
+                                        </FormattedString>
+                                    </Label.FormattedText>
+                                </Label>
+                                <Label HorizontalOptions="StartAndExpand"
+                                       VerticalOptions="Center"
+                                       FontSize="18">
+                                    <Label.FormattedText>
+                                        <FormattedString>
+                                            <Span CharacterSpacing="16"
+                                                  FontSize="17"
+                                                  FontFamily="{StaticResource FontAwesomeSolid}"
+                                                  Text="{x:Static fontAwesome:FontAwesomeIcons.CheckCircle}"></Span>
+                                            <Span Text="{Binding Points}"></Span>
+                                            <Span Text=" Punkte"></Span>
+                                            <Span Text="  "></Span>
+                                            <Span Text="{Binding CategoryText}"></Span>
+                                        </FormattedString>
+                                    </Label.FormattedText>
+                                </Label>
+                            </StackLayout>
+                            <Button x:Name="button1"
+                                    x:DataType="viewmodels:ChallengeConfirmViewModel"
+                                    VerticalOptions="EndAndExpand"
+                                    Text="Herausforderung Abschließen"
+                                    Command="{Binding ConfirmChallenge}"
+                                    BackgroundColor="{StaticResource ConfirmButton}"></Button>
+                        </StackLayout>
+                    </Frame>
+                </Grid>
+            </Frame>
+        </Grid>
     </ContentPage.Content>
 </ContentPage>

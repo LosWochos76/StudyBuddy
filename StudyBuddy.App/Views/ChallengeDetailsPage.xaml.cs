@@ -13,7 +13,7 @@ namespace StudyBuddy.App.Views
             InitializeComponent();
             this.challenge = challenge;
             grid.BindingContext = challenge;
-            stack.BindingContext = new ChallengeConfirmViewModel(challenge);
+            button1.BindingContext = new ChallengeConfirmViewModel(challenge);
 
         }
 

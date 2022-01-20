@@ -24,12 +24,12 @@ namespace StudyBuddy.App.ViewModels
         public string ProveAddendum { get; set; }
         public string ValidityEndText
         {
-            get
-            {
-                return ValidityEnd.ToString("dd.MM.yyyy");
-            }
+            get => ValidityEnd.ToString("dd.MM.yyyy");
         }
-
+        public string ValidityStartText
+        {
+            get => ValidityStart.ToString("dd.MM.yyyy");
+        }
         public string ValidityText
         {
             get
@@ -53,6 +53,10 @@ namespace StudyBuddy.App.ViewModels
             {
                 return Points > 1 ? Points + " Punkte" : Points + " Punkt";
             }
+        }
+        public string CategoryText
+        {
+            get => "(" + Category.ToString() + ")";
         }
 
         public string CategorySymbol

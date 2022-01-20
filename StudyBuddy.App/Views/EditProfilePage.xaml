@@ -8,16 +8,9 @@
              x:DataType="viewmodels:EditProfileViewModel"
              Title="Profil bearbeiten"
              Shell.TabBarIsVisible="False">
-    <ContentPage.Resources>
-        <ResourceDictionary>
-            <Style x:Key="invalidentry" TargetType="Entry">
-                <Setter Property="TextColor"
-                        Value="Red"></Setter>
-            </Style>
-        </ResourceDictionary>
-    </ContentPage.Resources>
-    <ContentPage.Content>
-        <ScrollView>
+
+    <ScrollView>
+        <ScrollView.Content>
             <StackLayout Padding="8">
                 <Label Text="Vorname:" FontAttributes="Bold" ></Label>
                 <Entry Placeholder="{Binding User.Firstname}"
@@ -124,6 +117,6 @@
                         Command="{Binding ConfirmCommand}"
                         BackgroundColor="{StaticResource ConfirmButton}"></Button>
             </StackLayout>
-        </ScrollView>
-    </ContentPage.Content>
+        </ScrollView.Content>
+    </ScrollView>
 </ContentPage>
