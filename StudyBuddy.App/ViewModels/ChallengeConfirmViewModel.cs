@@ -48,6 +48,14 @@ namespace StudyBuddy.App.ViewModels
 
             if (challenge.Prove == ChallengeProve.ByKeyword)
                 AcceptByKeyword();
+            
+            if (challenge.Prove == ChallengeProve.BySystem)
+                AcceptBySystem();
+        }
+
+        private async void AcceptBySystem()
+        {
+            // to be programmed
         }
 
         private async void AcceptByTrust()
