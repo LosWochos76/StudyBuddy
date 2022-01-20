@@ -3,47 +3,127 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="StudyBuddy.App.Views.EditProfilePage"
              xmlns:viewmodels="clr-namespace:StudyBuddy.App.ViewModels"
+             xmlns:fontawesome="clr-namespace:StudyBuddy.App"
+             xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
              x:DataType="viewmodels:EditProfileViewModel"
              Title="Profil bearbeiten"
              Shell.TabBarIsVisible="False">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <Style x:Key="invalidentry" TargetType="Entry">
+                <Setter Property="TextColor"
+                        Value="Red"></Setter>
+            </Style>
+        </ResourceDictionary>
+    </ContentPage.Resources>
     <ContentPage.Content>
-        <StackLayout Padding="8">
-            <Label Text="Vorname:"></Label>
-            <Entry Placeholder="{Binding User.Firstname}"
-                   PlaceholderColor="{StaticResource TextColor}"
-                   Text="{Binding Firstname}"
-                   MaxLength="100"
-                   ClearButtonVisibility="WhileEditing"
-                   ReturnType="Next"></Entry>
-            <Label Text="Nachname:"></Label>
-            <Entry Placeholder="{Binding User.Lastname}"
-                   PlaceholderColor="{StaticResource TextColor}"
-                   Text="{Binding Lastname}"
-                   MaxLength="100"
-                   ClearButtonVisibility="WhileEditing"
-                   ReturnType="Next"></Entry>
-            <Label Text="Nickname:"></Label>
-            <Entry Placeholder="{Binding User.Nickname}"
-                   PlaceholderColor="{StaticResource TextColor}"
-                   Text="{Binding Nickname}"
-                   MaxLength="100"
-                   ClearButtonVisibility="WhileEditing"
-                   ReturnType="Next"></Entry>
-            <Label Text="Passwort:"></Label>
-            <Entry Placeholder="Passwort"
-                   PlaceholderColor="{StaticResource TextColor}"
-                   IsPassword="True"
-                   ClearButtonVisibility="WhileEditing"
-                   ReturnType="Next"></Entry>
-            <Label Text="Passwort bestätigen:"></Label>
-            <Entry Placeholder="Passwort bestätigen"
-                   PlaceholderColor="{StaticResource TextColor}"
-                   IsPassword="True"
-                   ClearButtonVisibility="WhileEditing"
-                   ReturnType="Done"></Entry>
-            <Button BackgroundColor="{StaticResource ConfirmButton}"
-                    Text="Fertig"
-                    Command="{Binding ConfirmCommand}"></Button>
-        </StackLayout>
+        <ScrollView>
+            <StackLayout Padding="8">
+                <Label Text="Vorname:" FontAttributes="Bold" ></Label>
+                <Entry Placeholder="{Binding User.Firstname}"
+                       PlaceholderColor="{StaticResource SecondaryFont}"
+                       Text="{Binding Firstname}"
+                       MaxLength="100"
+                       ClearButtonVisibility="WhileEditing"
+                       ReturnType="Next">
+                    <Entry.Behaviors>
+                        <xct:CharactersValidationBehavior CharacterType="Digit"
+                                                          Flags="ValidateOnValueChanging"
+                                                          IsNotValid="{Binding FirstnameNotValid}"
+                                                          MaximumCharacterCount="0"
+                                                          MinimumLength="1"
+                                                          MaximumLength="100"
+                                                          DecorationFlags="Trim">
+
+                        </xct:CharactersValidationBehavior>
+                    </Entry.Behaviors>
+                </Entry>
+                <Label Text="Vorname darf nicht leer sein oder Zahlen enthalten."
+                       TextColor="Red"
+                       IsVisible="{Binding FirstnameNotValid}"></Label>
+                <Label Text="Nachname:"></Label>
+                <Entry Placeholder="{Binding User.Lastname}"
+                       PlaceholderColor="{StaticResource SecondaryFont}"
+                       Text="{Binding Lastname}"
+                       MaxLength="100"
+                       ClearButtonVisibility="WhileEditing"
+                       ReturnType="Next">
+                    <Entry.Behaviors>
+                        <xct:CharactersValidationBehavior CharacterType="Digit"
+                                                          Flags="ValidateOnValueChanging"
+                                                          IsNotValid="{Binding LastnameNotValid}"
+                                                          MaximumCharacterCount="0"
+                                                          MinimumLength="1"
+                                                          MaximumLength="100"
+                                                          DecorationFlags="Trim">
+
+                        </xct:CharactersValidationBehavior>
+                    </Entry.Behaviors>
+                </Entry>
+                <Label Text="Nachname darf nicht leer sein oder Zahlen enthalten."
+                       TextColor="Red"
+                       IsVisible="{Binding LastnameNotValid}"></Label>
+                <Label Text="Nickname:"></Label>
+                <Entry Placeholder="{Binding User.Nickname}"
+                       PlaceholderColor="{StaticResource SecondaryFont}"
+                       Text="{Binding Nickname}"
+                       MaxLength="100"
+                       ClearButtonVisibility="WhileEditing"
+                       ReturnType="Next">
+                    <Entry.Behaviors>
+                        <xct:TextValidationBehavior Flags="ValidateOnValueChanging"
+                                                    IsNotValid="{Binding NicknameNotValid}"
+                                                    MinimumLength="1"
+                                                    MaximumLength="100"
+                                                    DecorationFlags="Trim">
+
+                        </xct:TextValidationBehavior>
+                    </Entry.Behaviors>
+                </Entry>
+                <Label Text="Nickname darf nicht leer sein."
+                       TextColor="Red"
+                       IsVisible="{Binding NicknameNotValid}"></Label>
+                <Label Text="Passwort:"></Label>
+                <Entry Placeholder="Passwort"
+                       PlaceholderColor="{StaticResource SecondaryFont}"
+                       Text="{Binding Password}"
+                       IsPassword="True"
+                       ClearButtonVisibility="WhileEditing"
+                       ReturnType="Next">
+                    <Entry.Behaviors>
+                        <xct:TextValidationBehavior Flags="ValidateOnValueChanging"
+                                                    IsNotValid="{Binding PasswordNotValid}"
+                                                    RegexPattern="{Binding PasswordPattern}"
+                                                    MinimumLength="1">
+                            
+                        </xct:TextValidationBehavior>
+                    </Entry.Behaviors>
+                </Entry>
+                <Label Text="{Binding PasswordCriteria}"
+                       IsVisible="{Binding PasswordNotValid}"
+                       TextColor="Red">
+                </Label>
+                <Label Text="Passwort bestätigen:"></Label>
+                <Entry Placeholder="Passwort bestätigen"
+                       PlaceholderColor="{StaticResource SecondaryFont}"
+                       Text="{Binding PasswordConfirm}"
+                       IsPassword="True"
+                       ClearButtonVisibility="WhileEditing"
+                       ReturnType="Done">
+                    <Entry.Behaviors>
+                        <xct:RequiredStringValidationBehavior Flags="ValidateOnValueChanging"
+                                                              RequiredString="{Binding Password}" 
+                                                              IsNotValid="{Binding PasswordConfirmNotValid}">
+                        </xct:RequiredStringValidationBehavior>
+                    </Entry.Behaviors>
+                </Entry>
+                <Label Text="Passörter müssen übereinstimmen"
+                       TextColor="Red"
+                       IsVisible="{Binding PasswordConfirmNotValid}"></Label>
+                <Button Text="Fertig"
+                        Command="{Binding ConfirmCommand}"
+                        BackgroundColor="{StaticResource ConfirmButton}"></Button>
+            </StackLayout>
+        </ScrollView>
     </ContentPage.Content>
 </ContentPage>
