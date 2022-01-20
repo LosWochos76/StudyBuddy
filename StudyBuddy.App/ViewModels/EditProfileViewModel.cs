@@ -160,7 +160,8 @@ namespace StudyBuddy.App.ViewModels
             }
             finally
             {
-                await Shell.Current.Navigation.PopAsync();
+                api.Authentication.Logout();
+                await Shell.Current.Navigation.PushAsync(new LoginPage());
             }
         }
         
