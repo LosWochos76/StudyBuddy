@@ -32,5 +32,6 @@ namespace StudyBuddy.App.Api
         void Logout();
         event LoginStateChangedHandler LoginStateChanged;
         Task<bool> IsTokenValid(string token);
+        Task<bool> SendPasswortResetMail(string email);
     }
 }

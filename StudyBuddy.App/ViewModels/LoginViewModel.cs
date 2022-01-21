@@ -11,39 +11,77 @@ namespace StudyBuddy.App.ViewModels
     {
         public LoginViewModel(IApi api, IDialogService dialog, INavigationService navigation) : base(api, dialog, navigation)
         {
-            LoginCommand = new AsyncCommand(Login);
+            LoginCommand = new AsyncCommand(Login, () => { return IsEMailValid && IsPasswordValid; });
             RegisterCommand = new Command(Register);
-            PasswordForgottenCommand = new Command(PasswordForgotten);
+            PasswordForgottenCommand = new AsyncCommand(PasswordForgotten, () => { return IsEMailValid; });
             ImprintCommand = new Command(Imprint);
-            TapCommand = new Command(Tap);
+            InfoCommand = new Command(Info);
         }
 
         public IAsyncCommand LoginCommand { get; }
         public ICommand RegisterCommand { get; }
-        public ICommand PasswordForgottenCommand { get; }
+        public IAsyncCommand PasswordForgottenCommand { get; }
         public ICommand ImprintCommand { get; }
-        public ICommand TapCommand { get; }
+        public ICommand InfoCommand { get; }
         public string EMail { get; set; }
         public string Password { get; set; }
 
-        private void Tap()
+        private bool is_email_valid = false;
+        public bool IsEMailValid
         {
-            dialog.OpenBrowser("https://studybuddybackend.web.app/info");
+            get { return is_email_valid; }
+            set
+            {
+                is_email_valid = value;
+                NotifyPropertyChanged();
+                LoginCommand.RaiseCanExecuteChanged();
+                PasswordForgottenCommand.RaiseCanExecuteChanged();
+            }
+        }
+
+        private bool is_password_valid = false;
+        public bool IsPasswordValid
+        {
+            get { return is_password_valid; }
+            set
+            {
+                is_password_valid = value;
+                NotifyPropertyChanged();
+                LoginCommand.RaiseCanExecuteChanged();
+                PasswordForgottenCommand.RaiseCanExecuteChanged();
+            }
+        }
+
+        private void Info()
+        {
+            dialog.OpenBrowser("https://gameucation.eu/");
         }
 
         private void Register()
         {
-            dialog.OpenBrowser("https://studybuddybackend.web.app/register");
+            dialog.OpenBrowser("https://backend.gameucation.eu/register/");
         }
 
-        private void PasswordForgotten()
+        private async Task PasswordForgotten()
         {
-            dialog.OpenBrowser("https://studybuddybackend.web.app/passwordforgotten");
+            var answer = await dialog.ShowMessage(
+                "Wollen Sie eine E-Mail an '" + EMail + "' schicken, um das Passwort zurückzusetzen?",
+                "Passwort zurücksetzen?",
+                "Ja", "Nein", null);
+
+            if (!answer)
+                return;
+
+            answer = await api.Authentication.SendPasswortResetMail(EMail);
+            if (!answer)
+                dialog.ShowError("Ein Fehler ist aufgetreten!", "Fehler!", "Ok", null);
+            else
+                dialog.ShowMessage("Eine E-Mail zum zurücksetzen des Passworts wurde verschickt.", "Passwort zurücksetzen");
         }
 
         private void Imprint()
         {
-            dialog.OpenBrowser("https://studybuddybackend.web.app/imprint");
+            dialog.OpenBrowser("https://gameucation.eu/impressum/");
         }
 
         private async Task Login()

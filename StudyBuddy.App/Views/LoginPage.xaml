@@ -4,6 +4,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="StudyBuddy.App.Views.LoginPage"
              xmlns:viewmodels="clr-namespace:StudyBuddy.App.ViewModels"
+             xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
              xmlns:ios="clr-namespace:Xamarin.Forms.PlatformConfiguration.iOSSpecific;assembly=Xamarin.Forms.Core"
              x:DataType="viewmodels:LoginViewModel"
              Shell.FlyoutBehavior="Disabled"
@@ -27,8 +28,7 @@
                                       TextColor="#0A84FF"
                                       TextDecorations="Underline">
                                     <Span.GestureRecognizers>
-                                        <TapGestureRecognizer Command="{Binding TapCommand}"
-                                                              CommandParameter="https://studybuddybackend.web.app/info" />
+                                        <TapGestureRecognizer Command="{Binding InfoCommand}" />
                                     </Span.GestureRecognizers>
                                 </Span>
                                 <Span Text="." />
@@ -39,18 +39,19 @@
             </StackLayout>
         </StackLayout>
         <StackLayout Padding="10" VerticalOptions="CenterAndExpand">
-            <Entry Placeholder="E-Mail-Adresse"
-                   Text="{Binding EMail}" 
-                   BackgroundColor="{StaticResource WindowBackgroundColor}"/>
-            <Entry x:Name="Entry"
-                   Placeholder="Passwort"
-                   IsPassword="True"
-                   Text="{Binding Password}"
-                   ReturnCommand="{Binding LoginCommand}"
-                   BackgroundColor="{StaticResource WindowBackgroundColor}"/>
-            <Button Text="Anmelden" Command="{Binding LoginCommand}" 
-                    BackgroundColor="{StaticResource ConfirmButton}"/>
-
+            <Entry Placeholder="E-Mail-Adresse" Text="{Binding EMail}" 
+                   BackgroundColor="{StaticResource WindowBackgroundColor}">
+                <Entry.Behaviors>
+                    <xct:EmailValidationBehavior Flags="ValidateOnValueChanging,ValidateOnAttaching" MinimumLength="1" IsValid="{Binding IsEMailValid}"/>
+                </Entry.Behaviors>
+            </Entry>
+            <Entry x:Name="Entry" Placeholder="Passwort" IsPassword="True" Text="{Binding Password}" ReturnCommand="{Binding LoginCommand}"
+                   BackgroundColor="{StaticResource WindowBackgroundColor}">
+                <Entry.Behaviors>
+                    <xct:TextValidationBehavior Flags="ValidateOnValueChanging,ValidateOnAttaching" MinimumLength="3" MaximumLength="12" IsValid="{Binding IsPasswordValid}" />
+                </Entry.Behaviors>
+            </Entry>
+            <Button Text="Anmelden" Command="{Binding LoginCommand}" BackgroundColor="{StaticResource ConfirmButton}"/>
             <Label HorizontalTextAlignment="Center">
                 <Label.FormattedText>
                     <FormattedString>
@@ -67,7 +68,6 @@
                 </Label.FormattedText>
             </Label>
         </StackLayout>
-
         <StackLayout VerticalOptions="EndAndExpand" Padding="10,0,10,20">
             <Button Text="Neuen Account erstellen" Command="{Binding RegisterCommand}" 
                     BackgroundColor="{StaticResource PrimaryAccent}"
@@ -76,8 +76,7 @@
                 <Label.FormattedText>
                     <FormattedString>
                         <FormattedString.Spans>
-                            <Span Text="Impressum und Datenschutz"
-                                    TextColor="#0A84FF" TextDecorations="Underline">
+                            <Span Text="Impressum und Datenschutz" TextColor="#0A84FF" TextDecorations="Underline">
                                 <Span.GestureRecognizers>
                                     <TapGestureRecognizer Command="{Binding ImprintCommand}" />
                                 </Span.GestureRecognizers>

@@ -178,7 +178,7 @@
     <Reference Include="Xamarin.iOS" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Plugin.FirebasePushNotification" Version="3.3.16-beta" />
+    <PackageReference Include="Plugin.FirebasePushNotification" Version="3.4.1" />
     <PackageReference Include="Xam.Plugin.Media">
       <Version>5.0.1</Version>
     </PackageReference>

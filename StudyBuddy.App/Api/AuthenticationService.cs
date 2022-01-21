@@ -98,5 +98,16 @@ namespace StudyBuddy.App.Api
             var rh = new WebRequestHelper();
             return await rh.Put<bool>(base_url + "Login", token);
         }
+
+        public async Task<bool> SendPasswortResetMail(string email)
+        {
+            var rh = new WebRequestHelper();
+            var status = await rh.Load<RequestResult>(base_url + "Login/SendPasswortResetMail", HttpMethod.Post, email);
+
+            if (status == null)
+                return false;
+
+            return status.IsOk;
+        }
     }
 }
