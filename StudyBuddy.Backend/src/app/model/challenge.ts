@@ -2,8 +2,8 @@ import { Helper } from "../services/helper";
 
 export class Challenge {
     id:number = 0;
-    name:string = "";;
-    description:string = "";;
+    name:string = "";
+    description:string = "";
     points:number = 1;
     validity_start:string;
     validity_end:string;
