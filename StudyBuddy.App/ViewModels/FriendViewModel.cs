@@ -37,7 +37,7 @@ namespace StudyBuddy.App.ViewModels
                 return;
             }
 
-            await navigation.Pop();
+            await Navigation.Pop();
         }
     }
 }

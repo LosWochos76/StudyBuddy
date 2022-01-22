@@ -63,8 +63,7 @@ namespace StudyBuddy.App.Api
 
             Token = token;
             var options = new JsonSerializerOptions() { PropertyNameCaseInsensitive = true };
-            var user = JsonSerializer.Deserialize<User>(user_element.GetRawText(), options);
-            CurrentUser = UserViewModel.FromModel(user);
+            CurrentUser = JsonSerializer.Deserialize<UserViewModel>(user_element.GetRawText(), options);
             await api.ImageService.GetProfileImage(CurrentUser);
 
             // Save the Login-Data to the context to be resumed

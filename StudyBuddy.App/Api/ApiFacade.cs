@@ -15,13 +15,12 @@ namespace StudyBuddy.App.Api
         //private readonly string base_url = "https://10.0.2.2:5001/";
         //private readonly string base_url = "http://192.168.0.199:58947/";
 
-        private Version app_version = new Version(0, 0, 19, 0);
+        private Version app_version = new Version(0, 0, 20, 0);
 
         public IAuthenticationService Authentication { get; }
         public IChallengeService Challenges { get; }
         public IFcmTokenService FcmTokens { get; }
         public IUserService Users { get; }
-        public ITagService Tags { get; }
         public IBadgeService Badges { get; }
         public IRequestService Requests { get; }
         public ILoggingService Logging { get; }
@@ -35,7 +34,6 @@ namespace StudyBuddy.App.Api
             Challenges = new ChallengeService(this, base_url);
             FcmTokens = new FcmTokenService(this, base_url);
             Users = new UserService(this, base_url);
-            Tags = new TagService(this, base_url);
             Badges = new BadgeService(this, base_url);
             Requests = new RequestService(this, base_url);
             Logging = new LoggingService(this, base_url);

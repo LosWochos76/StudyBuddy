@@ -12,7 +12,6 @@ namespace StudyBuddy.App.Api
         Task<bool> RemoveFriend(UserViewModel uvm);
         Task<UserViewModel> GetById(int user_id);
         Task<int> GetFriendsCount();
-        Task AddSenders(IEnumerable<RequestViewModel> requests);
         Task<bool> Update(User uvm);
     }
 }

@@ -1,26 +1,14 @@
 ﻿using System.ComponentModel;
-using System.IO;
 using System.Runtime.CompilerServices;
-using Plugin.Media.Abstractions;
 using StudyBuddy.App.Misc;
 using StudyBuddy.Model;
 using Xamarin.Forms;
 
 namespace StudyBuddy.App.ViewModels
 {
-    public class UserViewModel : INotifyPropertyChanged
+    public class UserViewModel : User, INotifyPropertyChanged
     {
-        public int ID { get; set; }
-        public string Firstname { get; set; }
-        public string Lastname { get; set; }
-        public string Nickname { get; set; }
-        public string Email { get; set; }
-        public Role Role { get; set; }
         public int CountOfCommonFriends { get; set; }
-
-        public bool IsAdmin => Role == Role.Admin;
-        public bool IsStudent => Role == Role.Student;
-        public bool IsInstructor => Role == Role.Instructor;
 
         private RequestViewModel request;
         public RequestViewModel FriendshipRequest
@@ -81,41 +69,6 @@ namespace StudyBuddy.App.ViewModels
         protected void NotifyPropertyChanged([CallerMemberName] string propertyName = "")
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
-
-        public static UserViewModel FromModel(User u)
-        {
-            return new UserViewModel()
-            {
-                ID = u.ID,
-                Firstname = u.Firstname,
-                Lastname = u.Lastname,
-                Nickname = u.Nickname,
-                Email = u.Email,
-                Role = u.Role,
-                CountOfCommonFriends = u.CommonFriends
-            };
-        }
-        public static User ToModel(UserViewModel u)
-        {
-            return new User()
-            {
-                ID = u.ID,
-                Firstname = u.Firstname,
-                Lastname = u.Lastname,
-                Nickname = u.Nickname,
-                Email = u.Email,
-                Role = u.Role,
-            };
-        }
-
-        public bool ContainsAny(string search_text)
-        {
-            if (string.IsNullOrEmpty(search_text))
-                return true;
-
-            var keywords = Helper.SplitIntoKeywords(search_text);
-            return Helper.ContainsAny(Firstname + Lastname + Nickname + Email, keywords);
         }
     }
 }

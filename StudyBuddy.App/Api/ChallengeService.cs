@@ -32,17 +32,8 @@ namespace StudyBuddy.App.Api
                 Start = skip
             };
 
-            var result = new List<ChallengeViewModel>();
             var rh = new WebRequestHelper(api.Authentication.Token);
-            var objects = await rh.Get<IEnumerable<Challenge>>(base_url + "Challenge", filter);
-
-            if (objects == null)
-                return result;
-
-            foreach (var obj in objects)
-                result.Add(ChallengeViewModel.FromModel(obj));
-
-            return result;
+            return await rh.Get<IEnumerable<ChallengeViewModel>>(base_url + "Challenge", filter);
         }
         
         public async Task<IEnumerable<ChallengeViewModel>> GetAcceptedChallenges()
@@ -54,39 +45,19 @@ namespace StudyBuddy.App.Api
 
             var rh = new WebRequestHelper(api.Authentication.Token);
             var currentUserId = api.Authentication.CurrentUser.ID;
-            var items = await rh.Get<IEnumerable<Challenge>>(base_url + "Challenge/Accepted/" + currentUserId , filter);
-
-            if (items == null)
-                return null;
-
-            var list = new List<ChallengeViewModel>();
-            foreach (var obj in items)
-                list.Add(ChallengeViewModel.FromModel(obj));
-
-            return list;
+            return await rh.Get<IEnumerable<ChallengeViewModel>>(base_url + "Challenge/Accepted/" + currentUserId , filter);
         }
         
         public async Task<ChallengeViewModel> AcceptFromQrCode(string code)
         {
             var rh = new WebRequestHelper(api.Authentication.Token);
-            var obj = await rh.Load<Challenge>(base_url + "Challenge/AcceptFromQrCode", HttpMethod.Post, code);
-            if (obj == null)
-                return null;
-
-            var cvm = ChallengeViewModel.FromModel(obj);
-            api.RaiseChallengeAcceptedEvent(this, cvm);
-            return cvm;
+            return await rh.Load<ChallengeViewModel>(base_url + "Challenge/AcceptFromQrCode", HttpMethod.Post, code);
         }
 
         public async Task<ChallengeViewModel> GetById(int challenge_id)
         {
             var rh = new WebRequestHelper(api.Authentication.Token);
-            var user = await rh.Load<Challenge>(base_url + "Challenge/" + challenge_id, HttpMethod.Get);
-            if (user == null)
-                return null;
-
-            var uvm = ChallengeViewModel.FromModel(user);
-            return uvm;
+            return await rh.Load<ChallengeViewModel>(base_url + "Challenge/" + challenge_id, HttpMethod.Get);
         }
 
         public async Task<bool> Accept(ChallengeViewModel cvm)
@@ -109,13 +80,6 @@ namespace StudyBuddy.App.Api
                 api.RaiseChallengeAcceptedEvent(this, cvm);
 
             return status;
-        }
-
-        public async Task AddChallenges(IEnumerable<RequestViewModel> requests)
-        {
-            foreach (var request in requests)
-                if (request.Type == RequestType.ChallengeAcceptance)
-                    request.Challenge = await GetById(request.ChallengeID.Value);
         }
     }
 }

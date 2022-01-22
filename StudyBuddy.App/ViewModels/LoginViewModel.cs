@@ -90,7 +90,7 @@ namespace StudyBuddy.App.ViewModels
             var result = await api.Authentication.Login(uc);
 
             if (result)
-                navigation.GoTo("//ChallengesPage");
+                Navigation.GoTo("//ChallengesPage");
             else
                 dialog.ShowMessageBox("Anmeldung nicht erfolgreich! Zugangsdaten korrekt?", "Achtung!");
         }

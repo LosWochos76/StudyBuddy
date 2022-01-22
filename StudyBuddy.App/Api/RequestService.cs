@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using StudyBuddy.App.Misc;
 using StudyBuddy.Model;
 using StudyBuddy.App.ViewModels;
+using StudyBuddy.Model.Filter;
 
 namespace StudyBuddy.App.Api
 {
@@ -33,14 +34,13 @@ namespace StudyBuddy.App.Api
             };
 
             var rh = new WebRequestHelper(api.Authentication.Token);
-            var content = await rh.Load<Request>(base_url + "Request", HttpMethod.Post, request);
+            var content = await rh.Load<RequestViewModel>(base_url + "Request", HttpMethod.Post, request);
             if (content == null)
                 return false;
 
-            var rvm = RequestViewModel.FromModel(content);
-            rvm.Sender = currentUser;
-            obj.FriendshipRequest = rvm;
-            api.RaiseRequestStateChanged(this, new RequestStateChangedEventArgs() { Request = rvm, Type = RequestStateChangedEventType.Created });
+            content.Sender = currentUser;
+            obj.FriendshipRequest = content;
+            api.RaiseRequestStateChanged(this, new RequestStateChangedEventArgs() { Request = content, Type = RequestStateChangedEventType.Created });
             return true;
         }
 
@@ -57,53 +57,38 @@ namespace StudyBuddy.App.Api
             };
 
             var rh = new WebRequestHelper(api.Authentication.Token);
-            var content = await rh.Load<Request>(base_url + "Request", HttpMethod.Post, request);
+            var content = await rh.Load<RequestViewModel>(base_url + "Request", HttpMethod.Post, request);
             if (content == null)
                 return false;
 
-            var rvm = RequestViewModel.FromModel(request);
-            api.RaiseRequestStateChanged(this, new RequestStateChangedEventArgs() { Request = rvm, Type = RequestStateChangedEventType.Created });
+            api.RaiseRequestStateChanged(this, new RequestStateChangedEventArgs() { Request = content, Type = RequestStateChangedEventType.Created });
             return true;
         }
 
         public async Task<IEnumerable<RequestViewModel>> ForMe()
         {
-            var currentUser = api.Authentication.CurrentUser;
+            var filter = new RequestFilter()
+            {
+                OnlyForRecipient = api.Authentication.CurrentUser.ID,
+                WithChallenge = true,
+                WithSender = true
+            };
+
             var rh = new WebRequestHelper(api.Authentication.Token);
-            var content = await rh.Load<IEnumerable<Request>>(base_url + "Request/ForRecipient/" + currentUser.ID, HttpMethod.Get);
-            if (content == null)
-                return null;
-
-            var result = new List<RequestViewModel>();
-            foreach (var obj in content)
-                result.Add(RequestViewModel.FromModel(obj));
-
-            return result;
+            return await rh.Get<IEnumerable<RequestViewModel>>(base_url + "Request/", filter);
         }
 
         public async Task<IEnumerable<RequestViewModel>> FromMe()
         {
-            var currentUser = api.Authentication.CurrentUser;
+            var filter = new RequestFilter()
+            {
+                OnlyForSender = api.Authentication.CurrentUser.ID,
+                WithChallenge = true,
+                WithSender = true
+            };
+
             var rh = new WebRequestHelper(api.Authentication.Token);
-            var content = await rh.Load<IEnumerable<Request>>(base_url + "Request/OfSender/" + currentUser.ID, HttpMethod.Get);
-            if (content == null)
-                return null;
-
-            var result = new List<RequestViewModel>();
-            foreach (var obj in content)
-                result.Add(RequestViewModel.FromModel(obj));
-
-            return result;
-        }
-
-        public async void AddFriendshipRequests(IEnumerable<UserViewModel> users)
-        {
-            var requests = await FromMe();
-
-            foreach (var user in users)
-                foreach (var req in requests)
-                    if (user.ID == req.RecipientID)
-                        user.FriendshipRequest = req;
+            return await rh.Get<IEnumerable<RequestViewModel>>(base_url + "Request/", filter);
         }
 
         public async Task<bool> Accept(RequestViewModel request)

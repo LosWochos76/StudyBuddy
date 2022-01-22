@@ -1,8 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using StudyBuddy.App.ViewModels;
 using TinyIoC;
 using Xamarin.Forms;
@@ -20,6 +15,13 @@ namespace StudyBuddy.App.Views
             On<Xamarin.Forms.PlatformConfiguration.iOS> ().SetUseSafeArea(true);
             BindingContext = TinyIoCContainer.Current.Resolve<NotificationsViewModel>();
         }
-        
+
+        protected override void OnAppearing()
+        {
+            base.OnAppearing();
+
+            if (BindingContext is NotificationsViewModel vm)
+                vm.RefreshCommand.Execute(null);
+        }
     }
 }

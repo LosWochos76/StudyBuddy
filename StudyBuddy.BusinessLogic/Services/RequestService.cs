@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using StudyBuddy.Model;
+using StudyBuddy.Model.Filter;
 
 namespace StudyBuddy.BusinessLogic
 {
@@ -13,28 +14,33 @@ namespace StudyBuddy.BusinessLogic
             this.backend = backend;
         }
 
-        public IEnumerable<Request> All()
+        public IEnumerable<Request> All(RequestFilter filter)
         {
-            if (backend.CurrentUser == null || !backend.CurrentUser.IsAdmin)
+            if (backend.CurrentUser == null)
                 throw new Exception("Unauthorized!");
 
-            return backend.Repository.Requests.All();
-        }
-
-        public IEnumerable<Request> ForRecipient(int user_id)
-        {
-            if (backend.CurrentUser == null || !backend.CurrentUser.IsAdmin && backend.CurrentUser.ID != user_id)
+            if ((!filter.OnlyForRecipient.HasValue || !filter.OnlyForRecipient.HasValue) && !backend.CurrentUser.IsAdmin)
                 throw new Exception("Unauthorized!");
 
-            return backend.Repository.Requests.ForRecipient(user_id);
-        }
+            if (filter == null)
+                filter = new RequestFilter();
 
-        public IEnumerable<Request> OfSender(int user_id)
-        {
-            if (backend.CurrentUser == null || !backend.CurrentUser.IsAdmin && backend.CurrentUser.ID != user_id)
-                throw new Exception("Unauthorized!");
+            var result = backend.Repository.Requests.All(filter);
 
-            return backend.Repository.Requests.OfSender(user_id);
+            // ToDo: Muss man beobachten, ob das hier performant genug ist, oder man besser direkt im SQL umsetzt
+            foreach (var request in result)
+            {
+                if (filter.WithSender)
+                    request.Sender = backend.Repository.Users.ById(request.SenderID);
+
+                if (filter.WithRecipient)
+                    request.Recipient = backend.Repository.Users.ById(request.RecipientID);
+
+                if (filter.WithChallenge && request.Type == RequestType.ChallengeAcceptance && request.ChallengeID.HasValue)
+                    request.Challenge = backend.Repository.Challenges.ById(request.ChallengeID.Value);
+            }
+
+            return result;
         }
 
         public Request GetById(int id)

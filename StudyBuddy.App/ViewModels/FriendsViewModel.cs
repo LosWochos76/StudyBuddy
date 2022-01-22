@@ -142,7 +142,7 @@ namespace StudyBuddy.App.ViewModels
                 return;
 
             var userStatistics = await api.Statistics.GetUserStatisticsForUser(SelectedUser.ID);
-            await navigation.Push(new FriendPage(SelectedUser, userStatistics));
+            await Navigation.Push(new FriendPage(SelectedUser, userStatistics));
             SelectedUser = null;
             NotifyPropertyChanged(nameof(SelectedUser));
         }

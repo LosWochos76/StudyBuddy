@@ -105,7 +105,16 @@ namespace StudyBuddy.BusinessLogic
             if (backend.CurrentUser == null || !backend.CurrentUser.IsAdmin && backend.CurrentUser.ID != filter.UserId)
                 throw new Exception("Unauthorized!");
 
-            return backend.Repository.Users.GetNotFriends(filter);
+            var result = backend.Repository.Users.GetNotFriends(filter);
+
+            // ToDo: Evtl sehr inperformant!
+            if (filter.WithFriendshipRequest)
+            {
+                foreach (var user in result)
+                    user.FriendshipRequest = backend.Repository.Requests.FindFriendshipRequest(filter.UserId, user.ID);
+            }
+
+            return result;
         }
 
         public void AddFriend(int user_id, int friend_id)

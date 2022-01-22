@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using StudyBuddy.BusinessLogic;
 using StudyBuddy.Model;
+using StudyBuddy.Model.Filter;
 
 namespace StudyBuddy.Api
 {
@@ -15,23 +16,9 @@ namespace StudyBuddy.Api
 
         [Route("/Request/")]
         [HttpGet]
-        public IActionResult Get()
+        public IActionResult Get([FromQuery] RequestFilter filter)
         {
-            return Json(backend.RequestService.All());
-        }
-
-        [Route("/Request/ForRecipient/{user_id}")]
-        [HttpGet]
-        public IActionResult ForRecipient(int user_id)
-        {
-            return Json(backend.RequestService.ForRecipient(user_id));
-        }
-
-        [Route("/Request/OfSender/{user_id}")]
-        [HttpGet]
-        public IActionResult OfSender(int user_id)
-        {
-            return Json(backend.RequestService.OfSender(user_id));
+            return Json(backend.RequestService.All(filter));
         }
 
         [Route("/Request/{id}")]

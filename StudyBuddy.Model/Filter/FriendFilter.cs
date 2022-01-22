@@ -4,6 +4,6 @@
     {
         public int UserId { get; set; }
         public string SearchText { get; set; } = string.Empty;
-        public bool WithProfileImages { get; set; } = false;
+        public bool WithFriendshipRequest { get; set; }
     }
 }

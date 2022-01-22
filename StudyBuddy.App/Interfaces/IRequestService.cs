@@ -12,7 +12,6 @@ namespace StudyBuddy.App.Api
         Task<IEnumerable<RequestViewModel>> FromMe();
         Task<bool> Accept(RequestViewModel request);
         Task<bool> Deny(RequestViewModel request);
-        void AddFriendshipRequests(IEnumerable<UserViewModel> users);
         Task<bool> DeleteFriendshipRequest(UserViewModel obj);
     }
 }

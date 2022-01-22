@@ -30,7 +30,7 @@ namespace StudyBuddy.App.ViewModels
 
         private void ShowRanks()
         {
-            navigation.Push(new RankingPage(UserStatistics.FriendsRank));
+            Navigation.Push(new RankingPage(UserStatistics.FriendsRank));
         }
 
         private void Authentication_LoginStateChanged(object sender, LoginStateChangedArgs args)

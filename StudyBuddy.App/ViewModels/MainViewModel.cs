@@ -28,18 +28,18 @@ namespace StudyBuddy.App.ViewModels
 
         private void Friends(object obj)
         {
-            navigation.Push(new FriendsPage());
+            Navigation.Push(new FriendsPage());
         }
 
         private void Profile(object obj)
         {
-            navigation.Push(new ProfilePage());
+            Navigation.Push(new ProfilePage());
         }
 
         private void Logout(object obj)
         {
             api.Authentication.Logout();
-            navigation.GoTo("//LoginPage");
+            Navigation.GoTo("//LoginPage");
         }
     }
 }

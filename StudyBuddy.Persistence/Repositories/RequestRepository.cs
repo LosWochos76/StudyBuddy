@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
+using System.Text;
 using Npgsql;
 using StudyBuddy.Model;
+using StudyBuddy.Model.Filter;
 
 namespace StudyBuddy.Persistence
 {
@@ -16,12 +18,34 @@ namespace StudyBuddy.Persistence
             CreateTable();
         }
 
-        public IEnumerable<Request> All(int from = 0, int max = 1000)
+        public IEnumerable<Request> All(RequestFilter filter)
         {
-            var qh = new QueryHelper<Request>(connection_string, FromReader, new {from, max});
-            return qh.ExecuteQueryToObjectList(
-                "select id,created,sender_id,recipient_id,type,challenge_id " +
-                "from requests order by created desc limit :max offset :from");
+            var qh = new QueryHelper<Request>(connection_string, FromReader);
+            qh.AddParameter(":from", filter.Start);
+            qh.AddParameter(":max", filter.Count);
+
+            var sql = new StringBuilder("select id,created,sender_id,recipient_id,type,challenge_id from requests where true ");
+
+            if (filter.OnlyForSender.HasValue)
+            {
+                qh.AddParameter(":sender_id", filter.OnlyForSender.Value);
+                sql.Append(" and (sender_id=:sender_id)");
+            }
+
+            if (filter.OnlyForRecipient.HasValue)
+            {
+                qh.AddParameter(":recipient_id", filter.OnlyForRecipient.Value);
+                sql.Append(" and (recipient_id=:recipient_id)");
+            }
+
+            if (filter.OnlyForType.HasValue)
+            {
+                qh.AddParameter(":type", (int)filter.OnlyForType.Value);
+                sql.Append(" and (type=:type)");
+            }
+
+            sql.Append(" order by created desc limit :max offset :from");
+            return qh.ExecuteQueryToObjectList(sql.ToString());
         }
 
         public Request ById(int id)
@@ -36,22 +60,6 @@ namespace StudyBuddy.Persistence
         {
             var qh = new QueryHelper<Request>(connection_string);
             qh.Delete("requests", "id", id);
-        }
-
-        public IEnumerable<Request> OfSender(int sender_id)
-        {
-            var qh = new QueryHelper<Request>(connection_string, FromReader, new { sender_id });
-            return qh.ExecuteQueryToObjectList(
-                "select id,created,sender_id,recipient_id,type,challenge_id " +
-                "from requests where sender_id=:sender_id order by created desc");
-        }
-
-        public IEnumerable<Request> ForRecipient(int recipient_id)
-        {
-            var qh = new QueryHelper<Request>(connection_string, FromReader, new {recipient_id});
-            return qh.ExecuteQueryToObjectList(
-                "select id,created,sender_id,recipient_id,type,challenge_id " +
-                "from requests where recipient_id=:recipient_id order by created desc");
         }
 
         public void Insert(Request obj)
@@ -94,6 +102,18 @@ namespace StudyBuddy.Persistence
 
                 rh.SetRevision(2);
             }
+        }
+
+        public Request FindFriendshipRequest(int sender_id, int recipient_id)
+        {
+            var qh = new QueryHelper<Request>(connection_string, FromReader);
+            qh.AddParameter(":sender_id", sender_id);
+            qh.AddParameter(":recipient_id", recipient_id);
+            qh.AddParameter(":type", (int)RequestType.Friendship);
+
+            return qh.ExecuteQueryToSingleObject(
+                "select id,created,sender_id,recipient_id,type,challenge_id " +
+                "from requests where sender_id=:sender_id and recipient_id=:recipient_id and type=:type and challenge_id is null");
         }
 
         public Request FindSimilar(Request obj)

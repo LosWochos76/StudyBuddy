@@ -1,7 +1,6 @@
 ﻿using StudyBuddy.App.Api;
 using StudyBuddy.App.Misc;
 using StudyBuddy.App.Views;
-using StudyBuddy.Model;
 using System.Text.RegularExpressions;
 using Xamarin.Forms;
 
@@ -9,11 +8,8 @@ namespace StudyBuddy.App.ViewModels
 {
     public class EditProfileViewModel : ViewModelBase
     {
-        public User UpdatedUser { get; set; }
         public UserViewModel User { get; set; }
         public Command ConfirmCommand { get; }
-
-        
 
         public EditProfileViewModel(IApi api, IDialogService dialog, INavigationService navigation) : base(api, dialog, navigation)
         {
@@ -53,6 +49,7 @@ namespace StudyBuddy.App.ViewModels
                 NotifyPropertyChanged(nameof(Nickname));
             }
         }
+
         private string _password = string.Empty;
         public string Password
         {
@@ -63,6 +60,7 @@ namespace StudyBuddy.App.ViewModels
                 NotifyPropertyChanged(nameof(Password));
             }
         }
+
         private string _passwordConfirm = string.Empty;
         public string PasswordConfirm
         {
@@ -109,6 +107,7 @@ namespace StudyBuddy.App.ViewModels
                 ConfirmCommand.ChangeCanExecute();
             }
         }
+
         private bool _passwordNotValid;
         public bool PasswordNotValid
         {
@@ -120,6 +119,7 @@ namespace StudyBuddy.App.ViewModels
                 ConfirmCommand.ChangeCanExecute();
             }
         }
+
         private bool _passwordConfirmNotValid;
         public bool PasswordConfirmNotValid
         {
@@ -131,28 +131,29 @@ namespace StudyBuddy.App.ViewModels
                 ConfirmCommand.ChangeCanExecute();
             }
         }
+
         public string PasswordCriteria
         {
             get { return "Password muss enhalten:\n-Mindestens 1 Zahl\n-Mindestens 1 Kleinbuchstaben\n-Mindestens 1 Großbuchstaben\n-Mindestens 8 Zeichen"; }
         }
+
         public Regex PasswordPattern
         {
             get { return new Regex("(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z]).{8,}"); }
         }
-        public bool ConfirmAllowed() =>
-            !_firstnameNotValid && !_lastnameNotValid && !_nicknameNotValid;
+
+        public bool ConfirmAllowed() => !_firstnameNotValid && !_lastnameNotValid && !_nicknameNotValid;
 
         private async void Update()
         {
-            
             try
             {
-                User UpdatedUser = UserViewModel.ToModel(User);
-                UpdatedUser.Firstname = _firstname.Trim();
-                UpdatedUser.Lastname = _lastname.Trim();
-                UpdatedUser.Nickname = Nickname.Trim();
-                UpdatedUser.Password = Password.Trim();
-                await api.Users.Update(UpdatedUser);
+                User.Firstname = _firstname.Trim();
+                User.Firstname = _firstname.Trim();
+                User.Lastname = _lastname.Trim();
+                User.Nickname = Nickname.Trim();
+                User.Password = Password.Trim();
+                await api.Users.Update(User);
             }
             catch(ApiException e)
             {
@@ -164,6 +165,5 @@ namespace StudyBuddy.App.ViewModels
                 await Shell.Current.Navigation.PushAsync(new LoginPage());
             }
         }
-        
     }
 }

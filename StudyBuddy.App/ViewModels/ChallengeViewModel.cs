@@ -1,39 +1,25 @@
-﻿using System;
-using System.Windows.Input;
-using StudyBuddy.App.Api;
-using StudyBuddy.App.Misc;
-using StudyBuddy.Model;
+﻿using StudyBuddy.Model;
 using Xamarin.Forms;
 
 namespace StudyBuddy.App.ViewModels
 {
-    public class ChallengeViewModel 
+    public class ChallengeViewModel : Challenge
     {
-        public int ID { get; set; }
-        public string Name { get; set; }
-        public string Description { get; set; }
-        public int Points { get; set; } = 1;
-        public DateTime ValidityStart { get; set; } = DateTime.Now.Date;
-        public DateTime ValidityEnd { get; set; } = DateTime.Now.Date;
-        public ChallengeCategory Category { get; set; } = ChallengeCategory.Learning;
-        public int OwnerID { get; set; }
-        public DateTime Created { get; set; } = DateTime.Now.Date;
-        public ChallengeProve Prove { get; set; } = ChallengeProve.ByTrust;
-        public int? SeriesParentID { get; set; }
-        public string Tags { get; set; }
-        public string ProveAddendum { get; set; }
         public string PointsTextZero
         {
             get => Points.ToString("D3") + "/100";
         }
+
         public string ValidityEndText
         {
             get => ValidityEnd.ToString("dd.MM.yyyy");
         }
+
         public string ValidityStartText
         {
             get => ValidityStart.ToString("dd.MM.yyyy");
         }
+
         public string ValidityText
         {
             get
@@ -106,35 +92,6 @@ namespace StudyBuddy.App.ViewModels
                     default: return "";
                 }
             }
-        }
-
-        public static ChallengeViewModel FromModel(Challenge c)
-        {
-            return new ChallengeViewModel()
-            {
-                ID = c.ID,
-                Name = c.Name,
-                Description = c.Description,
-                Points = c.Points,
-                ValidityStart = c.ValidityStart,
-                ValidityEnd = c.ValidityEnd,
-                Category = c.Category,
-                OwnerID = c.OwnerID,
-                Created = c.Created,
-                Prove = c.Prove,
-                SeriesParentID = c.SeriesParentID,
-                Tags = c.Tags,
-                ProveAddendum = c.ProveAddendum
-            };
-        }
-
-        public bool ContainsAny(string search_text)
-        {
-            if (string.IsNullOrEmpty(search_text))
-                return true;
-
-            var keywords = Helper.SplitIntoKeywords(search_text);
-            return Helper.ContainsAny(Name + Description + Tags, keywords);
         }
     }
 }

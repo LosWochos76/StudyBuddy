@@ -11,11 +11,9 @@ namespace StudyBuddy.Model
 
         [JsonIgnore]
         public string PasswordHash { get; set; }
+
         public string Email { get; set; }
         public Role Role { get; set; }
-
-        // Is only loaded in certain contexts
-        public int CommonFriends { get; set; }
 
         [JsonIgnore]
         public bool IsAdmin => Role == Role.Admin;
@@ -25,5 +23,9 @@ namespace StudyBuddy.Model
 
         [JsonIgnore]
         public bool IsInstructor => Role == Role.Instructor;
+
+        // Is only loaded in certain contexts
+        public int CommonFriends { get; set; }
+        public Request FriendshipRequest { get; set; }
     }
 }

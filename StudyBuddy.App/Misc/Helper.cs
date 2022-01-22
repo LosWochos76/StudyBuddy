@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Http;
+﻿using System.Net.Http;
 using System.Net.Security;
 
 namespace StudyBuddy.App.Misc
@@ -20,16 +17,6 @@ namespace StudyBuddy.App.Misc
             };
 
             return handler;
-        }
-
-        public static IEnumerable<string> SplitIntoKeywords(string search_text)
-        {
-            return search_text.ToLower().Split(new[] { ' ', '\t' }, StringSplitOptions.RemoveEmptyEntries);
-        }
-
-        public static bool ContainsAny(string property, IEnumerable<string> keywords)
-        {
-            return property == null ? false : keywords.Any(kw => property.ToLower().Contains(kw));
         }
     }
 }

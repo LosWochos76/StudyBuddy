@@ -7,22 +7,24 @@ namespace StudyBuddy.App.ViewModels
 {
     public class ViewModelBase : INotifyPropertyChanged
     {
-        protected IApi api;
-        protected IDialogService dialog;
-        protected INavigationService navigation;
-
-        public ViewModelBase(IApi api, IDialogService dialog, INavigationService navigation)
-        {
-            this.api = api;
-            this.dialog = dialog;
-            this.navigation = navigation;
-        }
-
         public event PropertyChangedEventHandler PropertyChanged;
 
         protected void NotifyPropertyChanged([CallerMemberName] string propertyName = "")
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        protected IApi api;
+        protected IDialogService dialog;
+        private INavigationService navigation;
+
+        protected INavigationService Navigation { get => navigation; set => navigation = value; }
+
+        public ViewModelBase(IApi api, IDialogService dialog, INavigationService navigation)
+        {
+            this.api = api;
+            this.dialog = dialog;
+            this.Navigation = navigation;
         }
     }
 }

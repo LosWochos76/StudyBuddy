@@ -30,24 +30,12 @@ namespace StudyBuddy.App.ViewModels
             RefreshCommand = new Command(Refresh);
             AcceptRequestCommand = new Command<RequestViewModel>(AcceptRequest);
             DenyRequestCommand = new Command<RequestViewModel>(DenyRequest);
-            api.Authentication.LoginStateChanged += Authentication_LoginStateChanged;
-        }
-
-        private void Authentication_LoginStateChanged(object sender, LoginStateChangedArgs args)
-        {
-            if (args.IsLoggedIn)
-            {
-                LoadNews();
-                ReloadRequests();
-            }
         }
 
         private void Refresh()
         {
-            if (newsIsSelected)
-                LoadNews();
-            else
-                ReloadRequests();
+            LoadNews();
+            ReloadRequests();
 
             IsRefreshing = false;
             NotifyPropertyChanged("IsRefreshing");
@@ -61,8 +49,6 @@ namespace StudyBuddy.App.ViewModels
 
             Requests.Clear();
             Requests.AddRange(response);
-            await api.Users.AddSenders(Requests);
-            api.Challenges.AddChallenges(Requests);
             api.ImageService.GetProfileImages(Requests);
         }
 

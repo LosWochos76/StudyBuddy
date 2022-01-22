@@ -37,18 +37,8 @@ namespace StudyBuddy.App.Api
             };
 
             var currentUserId = api.Authentication.CurrentUser.ID;
-            
             var rh = new WebRequestHelper(api.Authentication.Token);
-            var objects = await rh.Get<IEnumerable<User>>(base_url + "User/" + currentUserId + "/Friends/", filter);
-
-            var result = new List<UserViewModel>();
-            if (objects == null)
-                return result;
-
-            foreach (var user in objects)
-                result.Add(UserViewModel.FromModel(user));
-
-            return result;
+            return await rh.Get<IEnumerable<UserViewModel>>(base_url + "User/" + currentUserId + "/Friends/", filter);
         }
 
         public async Task<IEnumerable<UserViewModel>> GetNotFriends(string search_string = "", int skip = 0)
@@ -57,19 +47,13 @@ namespace StudyBuddy.App.Api
             {
                 Count = 10,
                 Start = skip,
-                SearchText = search_string
+                SearchText = search_string,
+                WithFriendshipRequest = true
             };
 
             var currentUserId = api.Authentication.CurrentUser.ID;
             var rh = new WebRequestHelper(api.Authentication.Token);
-            var objects = await rh.Get<IEnumerable<User>>(base_url + "User/" + currentUserId + "/NotFriends/", filter);
-
-            var result = new List<UserViewModel>();
-            if (objects == null)
-                return result;
-
-            foreach (var user in objects)
-                result.Add(UserViewModel.FromModel(user));
+            var result = await rh.Get<IEnumerable<UserViewModel>>(base_url + "User/" + currentUserId + "/NotFriends/", filter);
 
             return result;
         }
@@ -90,27 +74,14 @@ namespace StudyBuddy.App.Api
         public async Task<UserViewModel> GetById(int user_id)
         {
             var rh = new WebRequestHelper(api.Authentication.Token);
-            var content = await rh.Load<User>(base_url + "User/" + user_id, HttpMethod.Get);
-            if (content == null)
-                return null;
-
-            return UserViewModel.FromModel(content);
-        }
-
-        public async Task AddSenders(IEnumerable<RequestViewModel> requests)
-        {
-            foreach (var request in requests)
-                request.Sender = await GetById(request.SenderID);
+            return await rh.Load<UserViewModel>(base_url + "User/" + user_id, HttpMethod.Get);
         }
 
         public async Task<bool> Update(User uvm)
         {
             var rh = new WebRequestHelper(api.Authentication.Token);
             var content = await rh.Put<User>(base_url + "User/" + uvm.ID, uvm);
-            if (content == null)
-                return false;
-            return true;
+            return content != null;
         }
-
     }
 }

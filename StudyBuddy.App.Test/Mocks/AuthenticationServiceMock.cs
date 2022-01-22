@@ -36,10 +36,15 @@ namespace StudyBuddy.Test.Mocks
             CurrentUser = null;
             Token = string.Empty;
         }
+
         public async Task<bool> IsTokenValid(string token)
         {
-            var rh = new WebRequestHelper();
-            return await rh.Put<bool>(base_url + "Login", token);
+            return true;
+        }
+
+        public async Task<bool> SendPasswortResetMail(string email)
+        {
+            return true;
         }
     }
 }

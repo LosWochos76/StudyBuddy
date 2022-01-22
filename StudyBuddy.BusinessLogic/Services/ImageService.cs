@@ -71,9 +71,6 @@ namespace StudyBuddy.BusinessLogic
             if (backend.CurrentUser == null)
                 throw new UnauthorizedAccessException("Unauthorized!");
 
-            if (!backend.CurrentUser.IsAdmin && backend.CurrentUser.ID != user_id)
-                throw new UnauthorizedAccessException("Unauthorized!");
-
             return backend.Repository.Images.OfUser(user_id);
         }
 

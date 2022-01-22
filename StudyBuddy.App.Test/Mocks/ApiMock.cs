@@ -11,7 +11,6 @@ namespace StudyBuddy.Test.Mocks
         public IChallengeService Challenges { get; }
         public IFcmTokenService FcmTokens { get; }
         public IUserService Users { get; }
-        public ITagService Tags { get; }
         public IBadgeService Badges { get; }
         public IRequestService Requests { get; }
         public ILoggingService Logging { get; }

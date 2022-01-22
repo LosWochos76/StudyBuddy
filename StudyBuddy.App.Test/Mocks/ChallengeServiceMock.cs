@@ -59,7 +59,7 @@ namespace StudyBuddy.Test.Mocks
             });
         }
 
-        public void AddChallenges(IEnumerable<RequestViewModel> requests)
+        public async Task AddChallenges(IEnumerable<RequestViewModel> requests)
         {
         }
 
@@ -67,7 +67,7 @@ namespace StudyBuddy.Test.Mocks
         {
             return Task.Run(() =>
             {
-                return challenges.Where(c => c.ContainsAny(search_string)).Skip(skip).Take(10);
+                return challenges.Where(c => (c.Name + c.Description + c.Tags).Contains(search_string)).Skip(skip).Take(10);
             });
         }
 

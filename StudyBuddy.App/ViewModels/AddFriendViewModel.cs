@@ -105,8 +105,8 @@ namespace StudyBuddy.App.ViewModels
                 }
 
                 Users.AddRange(friends);
-                await api.ImageService.GetProfileImages(friends);
-                api.Requests.AddFriendshipRequests(friends);
+                api.ImageService.GetProfileImages(friends);
+                
                 Skip += 10;
             }
             catch (ApiException e)

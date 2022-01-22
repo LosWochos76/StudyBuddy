@@ -2,7 +2,6 @@
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Windows.Input;
 using StudyBuddy.App.Api;
 using StudyBuddy.App.Misc;
 using StudyBuddy.App.Views;
@@ -76,14 +75,7 @@ namespace StudyBuddy.App.ViewModels
             ScanQrCodeCommand = new AsyncCommand(ScanQrCode);
             RefreshCommand = new AsyncCommand(Refresh);
 
-            api.Authentication.LoginStateChanged += Authentication_LoginStateChanged;
             api.ChallengeAccepted += async (sender, e) => { await LoadChallenges(); };
-        }
-
-        private void Authentication_LoginStateChanged(object sender, LoginStateChangedArgs args)
-        {
-            if (args.IsLoggedIn)
-              RefreshCommand.Execute(null);
         }
 
         private async Task Refresh()
@@ -130,7 +122,7 @@ namespace StudyBuddy.App.ViewModels
             if (SelectedChallenge == null)
                 return;
             
-            await navigation.Push(new ChallengeDetailsPage(SelectedChallenge));
+            await Navigation.Push(new ChallengeDetailsPage(SelectedChallenge));
             SelectedChallenge = null;
             NotifyPropertyChanged(nameof(SelectedChallenge));
         }

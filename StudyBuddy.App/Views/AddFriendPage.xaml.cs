@@ -1,5 +1,4 @@
-﻿using System.Threading.Tasks;
-using StudyBuddy.App.ViewModels;
+﻿using StudyBuddy.App.ViewModels;
 using TinyIoC;
 using Xamarin.Forms;
 
@@ -12,6 +11,14 @@ namespace StudyBuddy.App.Views
             InitializeComponent();
 
             BindingContext = TinyIoCContainer.Current.Resolve<AddFriendViewModel>();
+        }
+
+        protected override void OnAppearing()
+        {
+            base.OnAppearing();
+
+            if (BindingContext is AddFriendViewModel vm)
+                vm.RefreshCommand.Execute(null);
         }
     }
 }
