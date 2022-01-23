@@ -17,8 +17,8 @@ namespace StudyBuddy.BusinessLogic.Services
         public UserStatistics GetUserStatistics(int user_id)
         {
             // Wieso soll man Admin sein, um seine Statsitiken zu sehen?!?
-            if (backend.CurrentUser == null)
-                throw new Exception("Unauthorized!");
+            //if (backend.CurrentUser == null)
+            //    throw new Exception("Unauthorized!");
 
             return backend.Repository.StatisticsRepository.GetUserStatistics(user_id);
         }

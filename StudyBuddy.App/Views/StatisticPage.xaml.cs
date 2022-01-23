@@ -1,4 +1,5 @@
 ﻿using StudyBuddy.App.ViewModels;
+using System;
 using TinyIoC;
 using Xamarin.Forms;
 
@@ -20,6 +21,11 @@ namespace StudyBuddy.App.Views
         {
             base.OnAppearing();
             view_model.Refresh();
+
+            if(BindingContext is StatisticsViewModel vm)
+            {
+                vm.RefreshCommand.Execute(null);
+            }
         }
     }
 }

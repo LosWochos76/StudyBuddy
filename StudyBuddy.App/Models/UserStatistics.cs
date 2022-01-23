@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Xamarin.Forms;
 
 namespace StudyBuddy.App.Models
 {
@@ -24,5 +25,69 @@ namespace StudyBuddy.App.Models
         }
 
         public IEnumerable<RankEntry> FriendsRank { get; set; }
+
+        public int LastWeekChallengeCount { get; set; }
+        public int ThisWeekChallengeCount { get; set; }
+        public int LastMonthChallengeCount { get; set; }
+        public int ThisMonthChallengeCount { get; set; }
+
+
+        public string ThisMonthTrendGlyph
+        { 
+            get { return GetGlyph(LastMonthChallengeCount, ThisMonthChallengeCount); }
+        }
+
+        public Color ThisMonthTrendColor
+        {
+            get { return GetColor(LastMonthChallengeCount, ThisMonthChallengeCount); }
+        }
+
+        public string ThisWeekTrendGlyph
+        {
+            get { return GetGlyph(LastWeekChallengeCount, ThisWeekChallengeCount); }
+        }
+
+        public Color ThisWeekTrendColor
+        {
+            get { return GetColor(LastWeekChallengeCount, ThisWeekChallengeCount); }
+        }
+
+
+        private string GetGlyph(int lastPeriodCount, int thisPeriodCount)
+        {
+            if (lastPeriodCount < thisPeriodCount)
+            {
+                return "\uf106";
+            }
+            else if (lastPeriodCount > thisPeriodCount)
+            {
+                return "\uf107";
+            }
+            else if (lastPeriodCount == thisPeriodCount)
+            {
+                return "\uf52c";
+            }
+            else
+                return "\uf12a";
+        }
+
+        private Color GetColor(int lastPeriodCount, int thisPeriodCount)
+        {
+            if (lastPeriodCount < thisPeriodCount)
+            {
+                return Color.Green;
+            }
+            else if (lastPeriodCount > thisPeriodCount)
+            {
+                return Color.Orange;
+            }
+            else if (lastPeriodCount == thisPeriodCount)
+            {
+                return Color.Black;
+            }
+            else
+                return Color.Red;
+        }
     }
+
 }

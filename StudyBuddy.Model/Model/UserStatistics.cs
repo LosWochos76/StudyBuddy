@@ -23,5 +23,10 @@ namespace StudyBuddy.Model.Model
         }
 
         public IEnumerable<RankEntry> FriendsRank{ get; set; }
+
+        public int LastWeekChallengeCount { get; set; }
+        public int ThisWeekChallengeCount { get; set; }
+        public int LastMonthChallengeCount { get; set; }
+        public int ThisMonthChallengeCount { get; set; }
     }
 }
