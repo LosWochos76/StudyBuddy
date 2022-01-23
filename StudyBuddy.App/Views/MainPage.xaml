@@ -29,10 +29,178 @@
         </ResourceDictionary>
     </Shell.Resources>
 
+    <Shell.FlyoutHeader>
+        <local:FlyoutHeaderView />
+    </Shell.FlyoutHeader>
+    
     <ShellItem Route="LoginPage"
                FlyoutItemIsVisible="False">
         <ShellContent ContentTemplate="{DataTemplate local:LoginPage}" />
     </ShellItem>
+
+    <MenuItem>
+        <Shell.MenuItemTemplate>
+            <DataTemplate>
+                <StackLayout Spacing="4">
+                    <Label HeightRequest="1"
+                           BackgroundColor="{StaticResource SystemGray2}"></Label>
+                    <Label Text="Social"
+                           TextColor="{StaticResource SecondaryFont}"
+                           HorizontalTextAlignment="Center"
+                           FontAttributes="Bold"></Label>
+                    <Label HeightRequest="1"
+                           BackgroundColor="{StaticResource SystemGray2}"></Label>
+                </StackLayout>
+            </DataTemplate>
+        </Shell.MenuItemTemplate>
+    </MenuItem>
+    <MenuItem Command="{Binding FriendsCommand}">
+        <Shell.MenuItemTemplate>
+            <DataTemplate>
+                <Grid ColumnDefinitions="0.2*,0.8*"
+                      Padding="0,10,0,10">
+                    <Image>
+                        <Image.Source>
+                            <FontImageSource FontFamily="{StaticResource FontAwesomeSolid}"
+                                             Glyph="{x:Static fontAwesome:FontAwesomeIcons.UserFriends}"
+                                             Color="{StaticResource TextColor}" />
+                        </Image.Source>
+                    </Image>
+                    <Label Grid.Column="1"
+                           Text="Freunde"
+                           VerticalTextAlignment="Center" />
+                </Grid>
+            </DataTemplate>
+        </Shell.MenuItemTemplate>
+    </MenuItem>
+
+    <MenuItem Command="{Binding AddFriendsCommand}">
+        <Shell.MenuItemTemplate>
+            <DataTemplate>
+                <Grid ColumnDefinitions="0.2*,0.8*"
+                      Padding="0,10,0,10">
+                    <Image>
+                        <Image.Source>
+                            <FontImageSource FontFamily="{StaticResource FontAwesomeSolid}"
+                                             Glyph="{x:Static fontAwesome:FontAwesomeIcons.Plus}"
+                                             Color="{StaticResource TextColor}" />
+                        </Image.Source>
+                    </Image>
+                    <Label Grid.Column="1"
+                           Text="Freunde finden"
+                           VerticalTextAlignment="Center" />
+                </Grid>
+            </DataTemplate>
+        </Shell.MenuItemTemplate>
+    </MenuItem>
+
+    <MenuItem>
+        <Shell.MenuItemTemplate>
+            <DataTemplate>
+                <StackLayout Spacing="4">
+                    <Label HeightRequest="1"
+                           BackgroundColor="{StaticResource SystemGray2}"></Label>
+                    <Label Text="Optionen"
+                           TextColor="{StaticResource SecondaryFont}"
+                           HorizontalTextAlignment="Center"
+                           FontAttributes="Bold"></Label>
+                    <Label HeightRequest="1"
+                           BackgroundColor="{StaticResource SystemGray2}"></Label>
+                </StackLayout>
+            </DataTemplate>
+        </Shell.MenuItemTemplate>
+    </MenuItem>
+
+    <MenuItem Command="{Binding ProfileCommand}">
+        <Shell.MenuItemTemplate>
+            <DataTemplate>
+                <Grid ColumnDefinitions="0.2*,0.8*"
+                      Padding="0,10,0,10">
+                    <Image>
+                        <Image.Source>
+                            <FontImageSource FontFamily="{StaticResource FontAwesomeSolid}"
+                                             Glyph="{x:Static fontAwesome:FontAwesomeIcons.User}"
+                                             Color="{StaticResource TextColor}" />
+                        </Image.Source>
+                    </Image>
+                    <Label Grid.Column="1"
+                           Text="Profil"
+                           VerticalTextAlignment="Center" />
+                </Grid>
+            </DataTemplate>
+        </Shell.MenuItemTemplate>
+    </MenuItem>
+    <MenuItem Command="{Binding LogoutCommand}">
+        <Shell.MenuItemTemplate>
+            <DataTemplate>
+                <Grid ColumnDefinitions="0.2*,0.8*"
+                      Padding="0,10,0,30">
+                    <Image>
+                        <Image.Source>
+                            <FontImageSource FontFamily="{StaticResource FontAwesomeSolid}"
+                                             Glyph="{x:Static fontAwesome:FontAwesomeIcons.DoorClosed}"
+                                             Color="{StaticResource TextColor}" />
+                        </Image.Source>
+                    </Image>
+                    <Label Grid.Column="1"
+                           Text="Ausloggen"
+                           VerticalTextAlignment="Center" />
+                </Grid>
+            </DataTemplate>
+        </Shell.MenuItemTemplate>
+    </MenuItem>
+
+    <MenuItem>
+        <Shell.MenuItemTemplate>
+            <DataTemplate>
+                <Label HeightRequest="1"
+                       BackgroundColor="{StaticResource SystemGray2}" />
+            </DataTemplate>
+        </Shell.MenuItemTemplate>
+    </MenuItem>
+
+    <MenuItem Command="{Binding OpenBrowserCommand}"
+              CommandParameter="https://gameucation.eu/">
+        <Shell.MenuItemTemplate>
+            <DataTemplate>
+                <Grid ColumnDefinitions="0.2*,0.8*"
+                      Padding="0,30,0,10">
+                    <Image>
+                        <Image.Source>
+                            <FontImageSource FontFamily="{StaticResource FontAwesomeSolid}"
+                                             Glyph="{x:Static fontAwesome:FontAwesomeIcons.QuestionCircle}"
+                                             Color="{StaticResource TextColor}" />
+                        </Image.Source>
+                    </Image>
+                    <Label Grid.Column="1"
+                           Text="About"
+                           VerticalTextAlignment="Center" />
+                </Grid>
+            </DataTemplate>
+        </Shell.MenuItemTemplate>
+    </MenuItem>
+
+    <MenuItem Command="{Binding OpenBrowserCommand}"
+              CommandParameter="https://gameucation.eu/datenschutzerklaerung/">
+        <Shell.MenuItemTemplate>
+            <DataTemplate>
+                <Grid ColumnDefinitions="0.2*,0.8*"
+                      Padding="0,10,0,10">
+                    <Image>
+                        <Image.Source>
+                            <FontImageSource FontFamily="{StaticResource FontAwesomeSolid}"
+                                             Glyph="{x:Static fontAwesome:FontAwesomeIcons.UserLock}"
+                                             Color="{StaticResource TextColor}" />
+                        </Image.Source>
+                    </Image>
+                    <Label Grid.Column="1"
+                           Text="Datenschutz"
+                           VerticalTextAlignment="Center" />
+                </Grid>
+            </DataTemplate>
+        </Shell.MenuItemTemplate>
+    </MenuItem>
+
     <TabBar>
         <Tab>
             <ShellContent ContentTemplate="{DataTemplate local:ChallengesPage}" Route="ChallengesPage"/>
@@ -56,74 +224,24 @@
             </Tab.Icon>
         </Tab>
     </TabBar>
-
-
-    <MenuItem x:Name="this" Text="Profil" Command="{Binding ProfileCommand}">
-        <Shell.MenuItemTemplate>
-            <DataTemplate>
-                <Grid ColumnDefinitions="0.2*,0.8*" Padding="0,10,0,10">
-                    <Image>
-                        <Image.Source>
-                            <FontImageSource FontFamily="{StaticResource FontAwesomeSolid}"
-                             Glyph="{x:Static fontAwesome:FontAwesomeIcons.User}" 
-                             Color="{StaticResource TextColor}"/>
-                        </Image.Source>
-                    </Image>
-                    <Label Grid.Column="1" 
-                           Text="{Binding Text, Source={x:Reference this}}"
-                           VerticalTextAlignment="Center"/>
-                </Grid>
-            </DataTemplate>
-        </Shell.MenuItemTemplate>
-    </MenuItem>
-    <MenuItem x:Name="this1" Text="Freunde" Command="{Binding FriendsCommand}">
-        <Shell.MenuItemTemplate>
-            <DataTemplate>
-                <Grid ColumnDefinitions="0.2*,0.8*" Padding="0,10,0,10">
-                    <Image Grid.Column="0">
-                        <Image.Source>
-                            <FontImageSource FontFamily="{StaticResource FontAwesomeSolid}"
-                             Glyph="{x:Static fontAwesome:FontAwesomeIcons.UserFriends}" 
-                             Color="{StaticResource TextColor}"
-                             />
-                        </Image.Source>
-                    </Image>
-                    <Label Grid.Column="1" 
-                           Text="{Binding Text, Source={x:Reference this1}}"
-                           VerticalTextAlignment="Center"/>
-                </Grid>
-            </DataTemplate>
-        </Shell.MenuItemTemplate>
-    </MenuItem>
     
-    <MenuItem>
-        <Shell.MenuItemTemplate>
-            <DataTemplate>
-                <Label HeightRequest="1" BackgroundColor="{StaticResource TextColor}" />
-            </DataTemplate>
-        </Shell.MenuItemTemplate>
-    </MenuItem>
-    <MenuItem x:Name="this3" Text="Ausloggen" Command="{Binding LogoutCommand}">
-        <Shell.MenuItemTemplate>
-            <DataTemplate>
-                <Grid ColumnDefinitions="0.2*,0.8*" Padding="0,20,0,10">
-                    <Image Grid.Column="0">
-                        <Image.Source>
-                            <FontImageSource FontFamily="{StaticResource FontAwesomeSolid}"
-                             Glyph="{x:Static fontAwesome:FontAwesomeIcons.DoorClosed}" 
-                             Color="{StaticResource TextColor}"
-                             />
-                        </Image.Source>
-                    </Image>
-                    <Label Grid.Column="1" 
-                           Text="{Binding Text, Source={x:Reference this3}}"
-                           VerticalTextAlignment="Center"
-                           x:DataType="MenuItem"/>
-                </Grid>
-            </DataTemplate>
-        </Shell.MenuItemTemplate>
-    </MenuItem>
-    <Shell.FlyoutHeader>
-        <local:FlyoutHeaderView />
-    </Shell.FlyoutHeader>
+    <Shell.FlyoutFooterTemplate>
+        <DataTemplate>
+            <StackLayout Orientation="Horizontal">
+                <Image Margin="30,0,0,0"
+                       Source="TestLogo"
+                       HeightRequest="80">
+
+                </Image>
+                <Label Text="Gameucation"
+                       Padding="10,0,0,0"
+                       VerticalTextAlignment="Center"
+                       HorizontalTextAlignment="Center"
+                       FontAttributes="Bold"
+                       FontSize="26">
+                    
+                </Label>
+            </StackLayout>
+        </DataTemplate>
+    </Shell.FlyoutFooterTemplate>
 </Shell>

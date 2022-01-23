@@ -7,21 +7,27 @@
     x:Class="StudyBuddy.App.Views.FlyoutHeaderView"
     x:DataType="viewmodels:FlyoutHeaderViewModel">
     <ContentView.Content>
-        <StackLayout Margin="10">
-            <StackLayout Orientation="Horizontal" >
-                <xct:AvatarView Text="{Binding User.Initials}"
-                                Source="{Binding User.ProfileImage}"
-                                Size="50"
-                                HorizontalOptions="Start"
-                                TextColor="{StaticResource TextColor}" />
+        <Grid ColumnDefinitions="0.33*,0.66*"
+              Padding="10">
+            <xct:AvatarView Text="{Binding User.Initials}"
+                            Source="{Binding User.ProfileImage}"
+                            Size="100"
+                            HorizontalOptions="Start"
+                            TextColor="{StaticResource TextColor}">
+                <xct:AvatarView.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding ProfileCommand}" />
+                </xct:AvatarView.GestureRecognizers>
+            </xct:AvatarView>
+            <StackLayout Grid.Column="1"
+                         Padding="10">
                 <Label Text="{Binding User.Name}"
-                       FontSize="Large"
-                       FontAttributes="Bold" 
-                       VerticalTextAlignment="Center"
-                       Padding="10,0,0,0"/>
+                       FontSize="18"
+                       FontAttributes="Bold"
+                       VerticalTextAlignment="Center" />
+                <Label Text="{Binding User.Nickname}"
+                       TextColor="{StaticResource SecondaryFont}" />
+                <Label Text="{Binding FriendsCount, StringFormat='{0} Freunde'}" />
             </StackLayout>
-            <Label Text="{Binding User.Nickname}" TextColor="{StaticResource SecondaryFont}" FontSize="Medium" />
-            <Label Text="{Binding FriendsCount, StringFormat='{0} Freunde'}" />
-        </StackLayout>
+        </Grid>
     </ContentView.Content>
 </ContentView>

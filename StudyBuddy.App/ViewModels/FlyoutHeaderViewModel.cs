@@ -1,5 +1,7 @@
 ﻿using StudyBuddy.App.Api;
 using StudyBuddy.App.Misc;
+using StudyBuddy.App.Views;
+using Xamarin.Forms;
 
 namespace StudyBuddy.App.ViewModels
 {
@@ -7,11 +9,18 @@ namespace StudyBuddy.App.ViewModels
     {
         public UserViewModel User { get; set; }
         public int FriendsCount { get; set; }
+        public Command ProfileCommand { get; }
 
         public FlyoutHeaderViewModel(IApi api, IDialogService dialog, INavigationService navigation) : base(api, dialog, navigation)
         {
+            ProfileCommand = new Command(Profile);
             api.Authentication.LoginStateChanged += Authentication_LoginStateChanged;
             api.FriendshipStateChanged += Api_FriendshipStateChanged;
+        }
+
+        private void Profile()
+        {
+            Navigation.Push(new ProfilePage());
         }
 
         private async void Authentication_LoginStateChanged(object sender, LoginStateChangedArgs args)
