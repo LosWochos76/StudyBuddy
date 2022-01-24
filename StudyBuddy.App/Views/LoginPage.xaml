@@ -48,7 +48,7 @@
             <Entry x:Name="Entry" Placeholder="Passwort" IsPassword="True" Text="{Binding Password}" ReturnCommand="{Binding LoginCommand}"
                    BackgroundColor="{StaticResource WindowBackgroundColor}">
                 <Entry.Behaviors>
-                    <xct:TextValidationBehavior Flags="ValidateOnValueChanging,ValidateOnAttaching" MinimumLength="3" MaximumLength="12" IsValid="{Binding IsPasswordValid}" />
+                    <xct:TextValidationBehavior Flags="ValidateOnValueChanging,ValidateOnAttaching" MinimumLength="3" IsValid="{Binding IsPasswordValid}" />
                 </Entry.Behaviors>
             </Entry>
             <Button Text="Anmelden" Command="{Binding LoginCommand}" BackgroundColor="{StaticResource ConfirmButton}"/>
