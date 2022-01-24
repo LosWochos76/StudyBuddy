@@ -8,6 +8,8 @@ namespace StudyBuddy.Persistence
     internal class StatisticsRepository : IStatisticsRepository
     {
         private readonly string connection_string;
+
+        public UserStatistics Statistics { get; set; }
         public StatisticsRepository(string connection_string)
         {
             this.connection_string = connection_string;
@@ -23,12 +25,38 @@ namespace StudyBuddy.Persistence
                 "inner join challenges on challenge_id = id where user_id = :user_id group by category";
 
             var challengeStatisticsDtoList = qh.ExecuteQueryToObjectList(sql);
-            var userStatistic = TransformDto(challengeStatisticsDtoList);
+            Statistics = TransformDto(challengeStatisticsDtoList);
+            Statistics.UserId = user_id;
+            Statistics.FriendsRank = GetRankingWithFriends(user_id);
+            AddChallengeHistory(user_id);
 
-            userStatistic.UserId = user_id;
-            userStatistic.FriendsRank = GetRankingWithFriends(user_id);
+            return Statistics;
+        }
 
-            return userStatistic;
+        public void AddChallengeHistory(int user_id)
+        {
+            var qh = new QueryHelper<UserStatistics>(connection_string, ChallengeHistoryReader);
+
+            qh.AddParameter(":user_id", user_id);
+
+            var sql = "Select " +
+                    "count(case when created > NOW() - interval '2 week' and created < NOW() - interval '1 week' then 1 end) as count_last_week, " +
+                    "count(case when created > NOW() - interval '1 week' and created < NOW() then 1 end) as count_current_week, " +
+                    "count(case when created > NOW() - interval '2 month' and created < NOW() - interval '1 month' then 1 end) as count_last_month, " +
+                    "count(case when created > NOW() - interval '1 month' and created < NOW() then 1 end) as count_this_month " +
+                    "from challenge_acceptance where user_id = :user_id";
+
+            var result = qh.ExecuteQueryToSingleObject(sql);
+        }
+
+        public UserStatistics ChallengeHistoryReader(NpgsqlDataReader reader)
+        { 
+            Statistics.LastWeekChallengeCount = reader.GetInt32(0);
+            Statistics.ThisWeekChallengeCount = reader.GetInt32(1);
+            Statistics.LastMonthChallengeCount = reader.GetInt32(2);
+            Statistics.ThisMonthChallengeCount = reader.GetInt32(3);
+
+            return Statistics;
         }
 
         public IEnumerable<RankEntry> GetRankingWithFriends(int user_id)

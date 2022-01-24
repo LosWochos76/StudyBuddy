@@ -12,18 +12,24 @@ namespace StudyBuddy.App.ViewModels
         public ICommand FriendsCommand { get; set; }
         public ICommand ThemeCommand { get; set; }
         public ICommand LogoutCommand { get; set; }
+        public Command AddFriendsCommand { get; }
+        public Command OpenBrowserCommand { get; }
 
         public MainViewModel(IApi api, IDialogService dialog, INavigationService navigation) : base(api, dialog, navigation)
         {
             ProfileCommand = new Command(Profile);
             FriendsCommand = new Command(Friends);
-            ThemeCommand = new Command(Theme);
             LogoutCommand = new Command(Logout);
+            OpenBrowserCommand = new Command<string>((x) => OpenBrowser(x));
+            AddFriendsCommand = new Command(AddFriends);
         }
-
-        private void Theme(object obj)
+        public void OpenBrowser(string str)
         {
-            // navigation.Push(new ThemePage());
+            dialog.OpenBrowser(str);
+        }
+        private void AddFriends()
+        {
+            Navigation.Push(new AddFriendPage());
         }
 
         private void Friends(object obj)
