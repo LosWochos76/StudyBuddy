@@ -8,7 +8,7 @@ namespace StudyBuddy.App.ViewModels
 {
     public class UserViewModel : User, INotifyPropertyChanged
     {
-        public int CountOfCommonFriends { get; set; }
+        public int CountOfCommonFriends => CommonFriends;
 
         private RequestViewModel request;
         public RequestViewModel FriendshipRequest
