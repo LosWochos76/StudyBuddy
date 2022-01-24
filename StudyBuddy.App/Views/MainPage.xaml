@@ -153,8 +153,12 @@
     <MenuItem>
         <Shell.MenuItemTemplate>
             <DataTemplate>
-                <Label HeightRequest="1"
-                       BackgroundColor="{StaticResource SystemGray2}" />
+                <StackLayout>
+                    <Label HeightRequest="1"
+                           BackgroundColor="{StaticResource SystemGray2}" />
+                    <Label HeightRequest="1"
+                           BackgroundColor="{StaticResource SystemGray2}" />
+                </StackLayout>
             </DataTemplate>
         </Shell.MenuItemTemplate>
     </MenuItem>

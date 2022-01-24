@@ -7,11 +7,12 @@
     x:Class="StudyBuddy.App.Views.FlyoutHeaderView"
     x:DataType="viewmodels:FlyoutHeaderViewModel">
     <ContentView.Content>
-        <Grid ColumnDefinitions="0.33*,0.66*"
-              Padding="10">
+        <Grid ColumnDefinitions="0.4*,0.6*"
+              RowDefinitions="90"
+              Padding="10,10,0,10">
             <xct:AvatarView Text="{Binding User.Initials}"
                             Source="{Binding User.ProfileImage}"
-                            Size="100"
+                            Size="90"
                             HorizontalOptions="Start"
                             TextColor="{StaticResource TextColor}">
                 <xct:AvatarView.GestureRecognizers>
@@ -19,7 +20,7 @@
                 </xct:AvatarView.GestureRecognizers>
             </xct:AvatarView>
             <StackLayout Grid.Column="1"
-                         Padding="10">
+                         Padding="0,10,10,10">
                 <Label Text="{Binding User.Name}"
                        FontSize="18"
                        FontAttributes="Bold"
