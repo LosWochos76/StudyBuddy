@@ -2,6 +2,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { EventEmitter, Injectable, Output } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import { Tag } from '../model/tag';
+import { TagList } from '../model/taglist';
 import { AuthorizationService } from './authorization.service';
 import { LoggingService } from './loging.service';
 
@@ -17,16 +18,12 @@ export class TagService {
     private http: HttpClient,
     private auth: AuthorizationService) { }
 
-  async getAll(): Promise<Tag[]> {
-    let objects: Tag[] = [];
+  async getAll(): Promise<TagList> {
     let result = await this.http.get(this.url + "Tag", {
       headers: new HttpHeaders({ Authorization: this.auth.getToken() })
     }).toPromise();
 
-    for (let obj in result)
-      objects.push(Tag.fromApi(result[obj]));
-
-    return objects;
+    return new TagList(result);
   }
 
   async remove(id: number) {
@@ -85,33 +82,17 @@ export class TagService {
     this.changed.emit();
   }
 
-  async CreateOrFind(tags: string): Promise<Tag[]> {
+  async CreateOrFind(tags: string): Promise<TagList> {
     if (!this.auth.isLoggedIn())
       return null;
 
     this.logger.debug("Creating or finding tags");
     let result = await this.http.post(this.url + "Tag/CreateOrFind/", tags,
-      {
-        headers: new HttpHeaders({ Authorization: this.auth.getToken() })
-      }).toPromise();
-
-    let objects: Tag[] = [];
-    for (let obj in result)
-      objects.push(Tag.fromApi(result[obj]));
-
-    return objects;
-  }
-
-  async ofChallenge(challenge_id: number): Promise<Tag[]> {
-    let objects: Tag[] = [];
-    let result = await this.http.get(this.url + "Tag/Challenge/" + challenge_id, {
+    {
       headers: new HttpHeaders({ Authorization: this.auth.getToken() })
     }).toPromise();
 
-    for (let obj in result)
-      objects.push(Tag.fromApi(result[obj]));
-
-    return objects;
+    return new TagList(result);
   }
 
   async setForChallenge(challenge_id: number, tag_string: string) {
@@ -125,18 +106,6 @@ export class TagService {
     }).toPromise();
 
     this.changed.emit();
-  }
-
-  async ofBadge(badge_id: number): Promise<Tag[]> {
-    let objects: Tag[] = [];
-    let result = await this.http.get(this.url + "Tag/Badge/" + badge_id, {
-      headers: new HttpHeaders({ Authorization: this.auth.getToken() })
-    }).toPromise();
-
-    for (let obj in result)
-      objects.push(Tag.fromApi(result[obj]));
-
-    return objects;
   }
 
   async setForBadge(badge_id: number, tag_string: string) {

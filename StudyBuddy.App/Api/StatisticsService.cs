@@ -29,7 +29,6 @@ namespace StudyBuddy.App.Api
                 return null;
 
             return obj;
-
         }
     }
 }

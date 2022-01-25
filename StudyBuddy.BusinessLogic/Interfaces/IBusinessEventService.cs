@@ -1,18 +1,18 @@
-﻿using System.Collections.Generic;
-using StudyBuddy.Model;
+﻿using StudyBuddy.Model;
 
 namespace StudyBuddy.BusinessLogic
 {
     public interface IBusinessEventService
     {
-        void TriggerEvent(object sender, BusinessEventArgs args);
-        void Execute(int id);
-
         // CRUD:
-        IEnumerable<BusinessEvent> All(BusinessEventFilter filter);
+        BusinessEventList All(BusinessEventFilter filter);
         void Delete(int id);
         BusinessEvent GetById(int id);
         BusinessEvent Insert(BusinessEvent obj);
         BusinessEvent Update(BusinessEvent obj);
+
+        // Misc
+        void TriggerEvent(object sender, BusinessEventArgs args);
+        void Execute(int id);
     }
 }

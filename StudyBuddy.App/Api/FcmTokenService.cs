@@ -30,7 +30,6 @@ namespace StudyBuddy.App.Api
                     {
                         this.Save(eventArgs.Token);
                     };
-
                 }
             };
         }
@@ -44,7 +43,6 @@ namespace StudyBuddy.App.Api
             if (string.IsNullOrEmpty(token))
                 throw new Exception("You must login first");
 
-
             var payload = new
             {
                 Token = fcmToken
@@ -55,9 +53,7 @@ namespace StudyBuddy.App.Api
             requestMessage.Content =
                 new StringContent(JsonSerializer.Serialize(payload), Encoding.UTF8, "application/json");
 
-            var response = await client.SendAsync(requestMessage);
-
-            return response;
+            return await client.SendAsync(requestMessage);
         }
 
         async void UpdateToken()
@@ -65,8 +61,6 @@ namespace StudyBuddy.App.Api
       
                 var token = await CrossFirebasePushNotification.Current.GetTokenAsync();
                 this.Save(token);
-            
-     
         }
     }
 }

@@ -2,7 +2,6 @@ using StudyBuddy.App.Misc;
 using StudyBuddy.App.ViewModels;
 using StudyBuddy.Model;
 using System;
-using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
 
@@ -21,7 +20,7 @@ namespace StudyBuddy.App.Api
             client = new HttpClient(Helper.GetInsecureHandler());
         }
 
-        public async Task<IEnumerable<ChallengeViewModel>> ForToday(string search_string = "", int skip = 0)
+        public async Task<ChallengeListViewModel> ForToday(string search_string = "", int skip = 0)
         {
             var filter = new ChallengeFilter()
             {
@@ -33,10 +32,10 @@ namespace StudyBuddy.App.Api
             };
 
             var rh = new WebRequestHelper(api.Authentication.Token);
-            return await rh.Get<IEnumerable<ChallengeViewModel>>(base_url + "Challenge", filter);
+            return await rh.Get<ChallengeListViewModel>(base_url + "Challenge", filter);
         }
         
-        public async Task<IEnumerable<ChallengeViewModel>> GetAcceptedChallenges()
+        public async Task<ChallengeListViewModel> GetAcceptedChallenges()
         {
             var filter = new ChallengeFilter()
             {
@@ -45,7 +44,7 @@ namespace StudyBuddy.App.Api
 
             var rh = new WebRequestHelper(api.Authentication.Token);
             var currentUserId = api.Authentication.CurrentUser.ID;
-            return await rh.Get<IEnumerable<ChallengeViewModel>>(base_url + "Challenge/Accepted/" + currentUserId , filter);
+            return await rh.Get<ChallengeListViewModel>(base_url + "Challenge/Accepted/" + currentUserId , filter);
         }
         
         public async Task<ChallengeViewModel> AcceptFromQrCode(string code)

@@ -19,9 +19,9 @@ export class TagListComponent implements OnInit {
     private router: Router) { }
 
   async ngOnInit() {
-    this.objects = await this.service.getAll();
+    this.objects = (await this.service.getAll()).objects;
     this.service.changed.subscribe(async () => {
-      this.objects = await this.service.getAll();
+      this.objects = (await this.service.getAll()).objects;
     });
   }
 

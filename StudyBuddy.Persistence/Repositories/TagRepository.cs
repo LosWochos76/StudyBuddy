@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using Npgsql;
 using StudyBuddy.Model;
+using StudyBuddy.Model.Filter;
 
 namespace StudyBuddy.Persistence
 {
@@ -33,16 +34,18 @@ namespace StudyBuddy.Persistence
                 "SELECT id,name FROM tags where name=:name");
         }
 
-        public int Count()
+        public int GetCount(TagFilter filter)
         {
             var qh = new QueryHelper<Tag>(connection_string);
             return qh.GetCount("tags");
         }
 
-        public IEnumerable<Tag> All(int from = 0, int max = 1000)
+        public IEnumerable<Tag> All(TagFilter filter)
         {
             var qh = new QueryHelper<Tag>(connection_string, FromReader);
-            qh.AddParameters(new {from, max});
+            qh.AddParameter(":max", filter.Count);
+            qh.AddParameter(":from", filter.Start);
+
             return qh.ExecuteQueryToObjectList(
                 "SELECT id,name FROM tags order by name limit :max offset :from");
         }

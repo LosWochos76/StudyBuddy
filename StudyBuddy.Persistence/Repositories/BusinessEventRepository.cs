@@ -46,6 +46,13 @@ namespace StudyBuddy.Persistence
             return qh.ExecuteQueryToObjectList(sql);
         }
 
+        public int GetCount(BusinessEventFilter filter)
+        {
+            var qh = new QueryHelper<BusinessEvent>(connection_string, FromReader);
+            var sql = "select count(*) from business_events";
+            return qh.ExecuteQueryToSingleInt(sql);
+        }
+
         public BusinessEvent Insert(BusinessEvent obj)
         {
             var qh = new QueryHelper<BusinessEvent>(connection_string, FromReader);

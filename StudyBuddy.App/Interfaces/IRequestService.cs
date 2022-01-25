@@ -8,8 +8,8 @@ namespace StudyBuddy.App.Api
     {
         Task<bool> AskForFriendship(UserViewModel obj);
         Task<bool> AskForChallengeAcceptance(int other_user_id, int challenge_id);
-        Task<IEnumerable<RequestViewModel>> ForMe();
-        Task<IEnumerable<RequestViewModel>> FromMe();
+        Task<RequestListViewModel> ForMe();
+        Task<RequestListViewModel> FromMe();
         Task<bool> Accept(RequestViewModel request);
         Task<bool> Deny(RequestViewModel request);
         Task<bool> DeleteFriendshipRequest(UserViewModel obj);

@@ -8,7 +8,7 @@ namespace StudyBuddy.Persistence
         // Basic CRUD-methods
         User ById(int id);
         IEnumerable<User> All(UserFilter filter);
-        int Count();
+        int GetCount(UserFilter filter);
         User ByEmail(string email);
         User ByNickname(string nickname);
         void Save(User obj);
@@ -18,8 +18,9 @@ namespace StudyBuddy.Persistence
 
         // Friendship
         IEnumerable<User> GetFriends(FriendFilter filter);
-        int GetFriendsCount(int user_id);
+        int GetFriendsCount(FriendFilter filter);
         IEnumerable<User> GetNotFriends(FriendFilter filter);
+        int GetNotFriendsCount(FriendFilter filter);
         void AddFriend(int user_id, int friend_id);
         void RemoveFriend(int user_id, int friend_id);
         void RemoveFriends(int user_id);

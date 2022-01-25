@@ -7,6 +7,7 @@ namespace StudyBuddy.Persistence
     {
         BusinessEvent GetById(int id);
         IEnumerable<BusinessEvent> All(BusinessEventFilter filter);
+        int GetCount(BusinessEventFilter filter);
         BusinessEvent Insert(BusinessEvent obj);
         BusinessEvent Update(BusinessEvent obj);
         BusinessEvent Save(BusinessEvent obj);

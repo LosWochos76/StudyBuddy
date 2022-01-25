@@ -87,7 +87,7 @@ namespace StudyBuddy.App.ViewModels
         {
             var friends = new RangeObservableCollection<UserViewModel>();
             var recipients = await api.Users.GetFriends();
-            friends.AddRange(recipients);
+            friends.AddRange(recipients.Objects);
 
             if (!friends.Any())
             {
@@ -117,6 +117,7 @@ namespace StudyBuddy.App.ViewModels
 
             dialog.ShowMessageBox("Sobald dein Freund die Anfrage bestätigt, " +
                 "bekommtst du die Punkte gutgeschrieben.", "Anfrage wurde verschickt!");
+
             navigation.Pop();
         }
 

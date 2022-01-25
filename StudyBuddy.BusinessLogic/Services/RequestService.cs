@@ -14,7 +14,7 @@ namespace StudyBuddy.BusinessLogic
             this.backend = backend;
         }
 
-        public IEnumerable<Request> All(RequestFilter filter)
+        public RequestList All(RequestFilter filter)
         {
             if (backend.CurrentUser == null)
                 throw new Exception("Unauthorized!");
@@ -25,10 +25,11 @@ namespace StudyBuddy.BusinessLogic
             if (filter == null)
                 filter = new RequestFilter();
 
-            var result = backend.Repository.Requests.All(filter);
+            var objects = backend.Repository.Requests.All(filter);
+            var count = backend.Repository.Requests.GetCount(filter);
 
             // ToDo: Muss man beobachten, ob das hier performant genug ist, oder man besser direkt im SQL umsetzt
-            foreach (var request in result)
+            foreach (var request in objects)
             {
                 if (filter.WithSender)
                     request.Sender = backend.Repository.Users.ById(request.SenderID);
@@ -40,7 +41,7 @@ namespace StudyBuddy.BusinessLogic
                     request.Challenge = backend.Repository.Challenges.ById(request.ChallengeID.Value);
             }
 
-            return result;
+            return new RequestList() { Count = count, Objects = objects };
         }
 
         public Request GetById(int id)

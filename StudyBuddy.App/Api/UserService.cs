@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Net.Http;
+﻿using System.Net.Http;
 using System.Threading.Tasks;
 using StudyBuddy.App.Misc;
 using StudyBuddy.App.ViewModels;
@@ -22,12 +21,14 @@ namespace StudyBuddy.App.Api
 
         public async Task<int> GetFriendsCount()
         {
+            var filter = new FriendFilter() { };
             var currentUserId = api.Authentication.CurrentUser.ID;
             var rh = new WebRequestHelper(api.Authentication.Token);
-            return await rh.Load<int>(base_url + "User/" + currentUserId + "/Friends/Count", HttpMethod.Get);
+            var result = await rh.Get<UserListViewModel>(base_url + "User/" + currentUserId + "/Friends/", filter);
+            return result.Count;
         }
 
-        public async Task<IEnumerable<UserViewModel>> GetFriends(string search_string = "", int skip = 0)
+        public async Task<UserListViewModel> GetFriends(string search_string = "", int skip = 0)
         {
             var filter = new FriendFilter()
             {
@@ -38,10 +39,10 @@ namespace StudyBuddy.App.Api
 
             var currentUserId = api.Authentication.CurrentUser.ID;
             var rh = new WebRequestHelper(api.Authentication.Token);
-            return await rh.Get<IEnumerable<UserViewModel>>(base_url + "User/" + currentUserId + "/Friends/", filter);
+            return await rh.Get<UserListViewModel>(base_url + "User/" + currentUserId + "/Friends/", filter);
         }
 
-        public async Task<IEnumerable<UserViewModel>> GetNotFriends(string search_string = "", int skip = 0)
+        public async Task<UserListViewModel> GetNotFriends(string search_string = "", int skip = 0)
         {
             var filter = new FriendFilter()
             {
@@ -53,9 +54,7 @@ namespace StudyBuddy.App.Api
 
             var currentUserId = api.Authentication.CurrentUser.ID;
             var rh = new WebRequestHelper(api.Authentication.Token);
-            var result = await rh.Get<IEnumerable<UserViewModel>>(base_url + "User/" + currentUserId + "/NotFriends/", filter);
-
-            return result;
+            return await rh.Get<UserListViewModel>(base_url + "User/" + currentUserId + "/NotFriends/", filter);
         }
 
         public async Task<bool> RemoveFriend(UserViewModel uvm)

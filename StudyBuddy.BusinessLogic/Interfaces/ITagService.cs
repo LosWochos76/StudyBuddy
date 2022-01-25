@@ -1,17 +1,16 @@
-﻿using System.Collections.Generic;
-using StudyBuddy.Model;
+﻿using StudyBuddy.Model;
+using StudyBuddy.Model.Filter;
 
 namespace StudyBuddy.BusinessLogic
 {
     public interface ITagService
     {
-        IEnumerable<Tag> GetAll();
+        TagList GetAll(TagFilter filter);
         Tag GetById(int id);
-        int GetCount();
         Tag Insert(Tag obj);
         Tag Update(Tag obj);
         void Delete(int id);
 
-        IEnumerable<Tag> CreateOrFindMultiple(string tags);
+        TagList CreateOrFindMultiple(string tags);
     }
 }

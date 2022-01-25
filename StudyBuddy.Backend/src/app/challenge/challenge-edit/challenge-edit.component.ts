@@ -60,7 +60,7 @@ export class ChallengeEditComponent implements OnInit {
     }
 
     if (this.user.isAdmin())
-      this.all_users = await this.user_service.getAll();
+      this.all_users = (await this.user_service.getAll()).objects;
     
     let keyword = "";
     let latitude = 51.682730;

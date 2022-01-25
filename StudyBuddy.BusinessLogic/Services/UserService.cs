@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
 using StudyBuddy.Model;
 
 namespace StudyBuddy.BusinessLogic
@@ -14,7 +15,7 @@ namespace StudyBuddy.BusinessLogic
             this.backend = backend;
         }
 
-        public IEnumerable<User> GetAll(UserFilter filter)
+        public UserList GetAll(UserFilter filter)
         {
             if (backend.CurrentUser == null)
                 throw new Exception("Unauthorized!");
@@ -22,15 +23,11 @@ namespace StudyBuddy.BusinessLogic
             if (filter == null)
                 filter = new UserFilter();
 
-            return backend.Repository.Users.All(filter);
-        }
-
-        public int GetCount()
-        {
-            if (backend.CurrentUser == null)
-                throw new Exception("Unauthorized!");
-
-            return backend.Repository.Users.Count();
+            return new UserList()
+            {
+                Count = backend.Repository.Users.GetCount(filter),
+                Objects = backend.Repository.Users.All(filter)
+            };
         }
 
         public User GetById(int user_id)
@@ -84,37 +81,38 @@ namespace StudyBuddy.BusinessLogic
             return obj.ID;
         }
 
-        public IEnumerable<User> GetAllFriends(FriendFilter filter)
+        public UserList GetAllFriends(FriendFilter filter)
         {
             if (backend.CurrentUser == null || !backend.CurrentUser.IsAdmin && backend.CurrentUser.ID != filter.UserId)
                 throw new Exception("Unauthorized!");
 
-            return backend.Repository.Users.GetFriends(filter);
+            return new UserList()
+            {
+                Count = backend.Repository.Users.GetFriendsCount(filter),
+                Objects = backend.Repository.Users.GetFriends(filter)
+            };
         }
 
-        public int GetAllFriendsCount(int user_id)
-        {
-            if (backend.CurrentUser == null || !backend.CurrentUser.IsAdmin && backend.CurrentUser.ID != user_id)
-                throw new Exception("Unauthorized!");
-
-            return backend.Repository.Users.GetFriendsCount(user_id);
-        }
-
-        public IEnumerable<User> GetAllNotFriends(FriendFilter filter)
+        public UserList GetAllNotFriends(FriendFilter filter)
         {
             if (backend.CurrentUser == null || !backend.CurrentUser.IsAdmin && backend.CurrentUser.ID != filter.UserId)
                 throw new Exception("Unauthorized!");
 
-            var result = backend.Repository.Users.GetNotFriends(filter);
+            var objects = backend.Repository.Users.GetNotFriends(filter);
+            var count = backend.Repository.Users.GetNotFriendsCount(filter);
 
             // ToDo: Evtl sehr inperformant!
             if (filter.WithFriendshipRequest)
             {
-                foreach (var user in result)
+                foreach (var user in objects)
                     user.FriendshipRequest = backend.Repository.Requests.FindFriendshipRequest(filter.UserId, user.ID);
             }
 
-            return result;
+            return new UserList()
+            {
+                Count = count,
+                Objects = objects
+            };
         }
 
         public void AddFriend(int user_id, int friend_id)
@@ -157,7 +155,7 @@ namespace StudyBuddy.BusinessLogic
             backend.Repository.Users.AddFriends(parameter.UserID, parameter.Friends);
         }
 
-        public IEnumerable<User> GetAllUsersThatAcceptedChallenge(int challenge_id)
+        public UserList GetAllUsersThatAcceptedChallenge(int challenge_id)
         {
             if (backend.CurrentUser == null)
                 throw new UnauthorizedAccessException("Unauthorized!");
@@ -169,7 +167,12 @@ namespace StudyBuddy.BusinessLogic
             if (!backend.CurrentUser.IsAdmin && challenge.OwnerID != backend.CurrentUser.ID)
                 throw new UnauthorizedAccessException("Unauthorized!");
 
-            return backend.Repository.Users.GetAllUsersThatAcceptedChallenge(challenge_id);
+            var objects = backend.Repository.Users.GetAllUsersThatAcceptedChallenge(challenge_id);
+            return new UserList()
+            {
+                Count = objects.Count(),
+                Objects = objects
+            };  
         }
 
         public int GetCountOfCommonFriends(int user_a_id, int user_b_id)
@@ -180,7 +183,7 @@ namespace StudyBuddy.BusinessLogic
             return backend.Repository.Users.GetCountOfCommonFriends(user_a_id, user_b_id);
         }
 
-        public IEnumerable<User> GetAllUsersHavingBadge(int badge_id)
+        public UserList GetAllUsersHavingBadge(int badge_id)
         {
             if (backend.CurrentUser == null)
                 throw new UnauthorizedAccessException("Unauthorized!");
@@ -192,7 +195,12 @@ namespace StudyBuddy.BusinessLogic
             if (!backend.CurrentUser.IsAdmin && badge.OwnerID != backend.CurrentUser.ID)
                 throw new UnauthorizedAccessException("Unauthorized!");
 
-            return backend.Repository.Users.GetAllUsersHavingBadge(badge_id);
+            var objects = backend.Repository.Users.GetAllUsersHavingBadge(badge_id);
+            return new UserList()
+            {
+                Count = objects.Count(),
+                Objects = objects
+            };
         }
     }
 }

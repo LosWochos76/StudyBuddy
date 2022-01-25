@@ -1,8 +1,8 @@
-import { query } from '@angular/animations';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { EventEmitter, Injectable, Output } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import { GameBadge } from '../model/gamebadge';
+import { GameBadgeList } from '../model/gamebadgelist';
 import { AuthorizationService } from './authorization.service';
 import { LoggingService } from './loging.service';
 
@@ -18,21 +18,7 @@ export class GameBadgeService {
     private http:HttpClient,
     private auth:AuthorizationService) { }
 
-  async getCount():Promise<number> {
-    if (!this.auth.isLoggedIn())
-      return null;
-
-    let path = this.url + "GameBadge/Count";
-    this.logger.debug("Getting count of GameBadge");
-    let result = await this.http.get(path, 
-    {
-      headers: new HttpHeaders({ Authorization: this.auth.getToken() })
-    }).toPromise();
-    
-    return +result;
-  }
-
-  async getAll():Promise<GameBadge[]> {
+  async getAll():Promise<GameBadgeList> {
     if (!this.auth.isLoggedIn())
       return null;
 
@@ -48,10 +34,7 @@ export class GameBadgeService {
       headers: new HttpHeaders({ Authorization: this.auth.getToken() })
     }).toPromise();
 
-    for (let obj in result)
-      objects.push(GameBadge.fromApi(result[obj]));
-
-    return objects;
+    return new GameBadgeList(result);
   }
 
   async remove(id:number) {

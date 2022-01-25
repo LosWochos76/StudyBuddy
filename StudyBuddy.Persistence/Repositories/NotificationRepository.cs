@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using Npgsql;
 using StudyBuddy.Model;
-using StudyBuddy.Model.Model;
 
 namespace StudyBuddy.Persistence
 {
@@ -67,7 +66,6 @@ namespace StudyBuddy.Persistence
             qh.AddParameter(":from", filter.Start);
             qh.AddParameter(":max", filter.Count);
             
-            
             return qh.ExecuteQueryToObjectList(
                 "select notifications.id, notifications.owner_id, notifications.title, notifications.body, notifications.created, notifications.updated, " +
                 "users.firstname, users.lastname, users.nickname " +
@@ -96,7 +94,5 @@ namespace StudyBuddy.Persistence
             
             return obj;
         }
-
-  
     }
 }

@@ -24,12 +24,15 @@ export class UserListComponent implements OnInit {
 
   async ngOnInit() {
     this.current_user = this.auth.getUser();
-    this.objects = await this.service.getAll();
-    this.count = await this.service.getCount();
+
+    var result = await this.service.getAll();
+    this.objects = result.objects;
+    this.count = result.count;
 
     this.service.changed.subscribe(async () => {
-      this.count = await this.service.getCount();
-      this.objects = await this.service.getAll();
+      var result = await this.service.getAll();
+      this.objects = result.objects;
+      this.count = result.count;
     });
   }
 

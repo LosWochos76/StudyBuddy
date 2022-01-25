@@ -48,6 +48,32 @@ namespace StudyBuddy.Persistence
             return qh.ExecuteQueryToObjectList(sql.ToString());
         }
 
+        public int GetCount(RequestFilter filter)
+        {
+            var qh = new QueryHelper<Request>(connection_string, FromReader);
+            var sql = new StringBuilder("select count(*) from requests where true ");
+
+            if (filter.OnlyForSender.HasValue)
+            {
+                qh.AddParameter(":sender_id", filter.OnlyForSender.Value);
+                sql.Append(" and (sender_id=:sender_id)");
+            }
+
+            if (filter.OnlyForRecipient.HasValue)
+            {
+                qh.AddParameter(":recipient_id", filter.OnlyForRecipient.Value);
+                sql.Append(" and (recipient_id=:recipient_id)");
+            }
+
+            if (filter.OnlyForType.HasValue)
+            {
+                qh.AddParameter(":type", (int)filter.OnlyForType.Value);
+                sql.Append(" and (type=:type)");
+            }
+
+            return qh.ExecuteQueryToSingleInt(sql.ToString());
+        }
+
         public Request ById(int id)
         {
             var qh = new QueryHelper<Request>(connection_string, FromReader, new {id});

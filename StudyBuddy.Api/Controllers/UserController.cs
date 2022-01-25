@@ -1,8 +1,4 @@
-﻿using System.Drawing.Imaging;
-using System.IO;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using StudyBuddy.BusinessLogic;
 using StudyBuddy.Model;
 
@@ -22,13 +18,6 @@ namespace StudyBuddy.Api
         public IActionResult GetAll([FromQuery] UserFilter filter)
         {
             return Json(backend.UserService.GetAll(filter));
-        }
-
-        [Route("/User/Count")]
-        [HttpGet]
-        public IActionResult GetCount()
-        {
-            return Json(backend.UserService.GetCount());
         }
 
         [Route("/User/{user_id}")]
@@ -84,13 +73,6 @@ namespace StudyBuddy.Api
                 filter.UserId = user_id;
 
             return Json(backend.UserService.GetAllFriends(filter));
-        }
-
-        [Route("/User/{user_id}/Friends/Count")]
-        [HttpGet]
-        public IActionResult GetAllFriendsCount(int user_id)
-        {
-            return Json(backend.UserService.GetAllFriendsCount(user_id));
         }
 
         [Route("/User/{user_id}/NotFriends")]

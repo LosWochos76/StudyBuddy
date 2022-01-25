@@ -4,6 +4,7 @@ import { environment } from 'src/environments/environment';
 import { AuthorizationService } from './authorization.service';
 import { LoggingService } from './loging.service';
 import { Request } from '../model/request';
+import { RequestList } from '../model/requestlist';
 
 @Injectable({
   providedIn: 'root'
@@ -17,22 +18,14 @@ export class RequestService {
     private http: HttpClient,
     private auth: AuthorizationService) { }
 
-  async getAll(): Promise<Request[]> {
+  async getAll(): Promise<RequestList> {
     let objects: Request[] = [];
     let result = await this.http.get(this.url + "Request",
-      {
-        headers: new HttpHeaders({ Authorization: this.auth.getToken() })
-      }).toPromise();
+    {
+      headers: new HttpHeaders({ Authorization: this.auth.getToken() })
+    }).toPromise();
 
-    if ('error' in result) {
-      this.logger.error("Error: " + result['error']);
-      return objects;
-    }
-
-    for (let obj in result)
-      objects.push(Request.fromApi(result[obj]));
-
-    return objects;
+    return new RequestList(result);
   }
 
   async remove(id: number) {

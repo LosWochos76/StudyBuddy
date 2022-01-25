@@ -63,6 +63,38 @@ namespace StudyBuddy.Persistence
             return qh.ExecuteQueryToObjectList(sql);
         }
 
+        public int GetCount(ChallengeFilter filter)
+        {
+            var qh = new QueryHelper<Challenge>(connection_string, FromReader);
+            var sql = "select count(*) from challenges where true ";
+
+            if (!string.IsNullOrEmpty(filter.SearchText))
+            {
+                qh.AddParameter(":search_text", "%" + filter.SearchText + "%");
+                sql += " and (name ilike :search_text or description ilike :search_text or tags_of_challenge(id) ilike :search_text)";
+            }
+
+            if (filter.OwnerId.HasValue)
+            {
+                qh.AddParameter(":owner_id", filter.OwnerId.Value);
+                sql += " and (owner_id=:owner_id)";
+            }
+
+            if (filter.ValidAt.HasValue)
+            {
+                qh.AddParameter(":valid_at", filter.ValidAt.Value);
+                sql += " and (validity_start<=:valid_at and validity_end>=:valid_at)";
+            }
+
+            if (filter.OnlyUnacceped)
+            {
+                qh.AddParameter(":user_id", filter.CurrentUserId);
+                sql += " and not challenge_accepted(:user_id, id)";
+            }
+
+            return qh.ExecuteQueryToSingleInt(sql);
+        }
+
         public void Insert(Challenge obj)
         {
             var qh = new QueryHelper<Challenge>(connection_string, FromReader);

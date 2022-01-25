@@ -13,6 +13,7 @@ import { UserService } from 'src/app/services/user.service';
   styleUrls: ['./game-badge-list.component.css']
 })
 export class GameBadgeListComponent implements OnInit {
+  count: number;
   objects: GameBadge[] = [];
   selected: GameBadge = null;
   user: User = null;
@@ -28,9 +29,14 @@ export class GameBadgeListComponent implements OnInit {
   }
 
   async ngOnInit() {
-    this.objects = await this.service.getAll();
+    var result = await this.service.getAll();
+    this.objects = result.objects;
+    this.count = result.count;
+
     this.service.changed.subscribe(async () => {
-      this.objects = await this.service.getAll();
+      var result = await this.service.getAll();
+      this.objects = result.objects;
+      this.count = result.count;
     });
 
     if (this.user.isAdmin())

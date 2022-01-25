@@ -38,7 +38,8 @@ export class GameBadgeSuccessComponent implements OnInit {
   }
 
   async loadObjects() {
-    this.objects = await this.user_service.getUsersHavingBadge(this.id);
+    var result = await this.user_service.getUsersHavingBadge(this.id);
+    this.objects = result.objects;
 
     if (!this.current_user.isAdmin())
       return;
@@ -46,7 +47,7 @@ export class GameBadgeSuccessComponent implements OnInit {
     this.all_users = [];
     var users = await this.user_service.getAll();
     
-    for (var user of users) {
+    for (var user of users.objects) {
       if (!this.hasBadge(user.id))
         this.all_users.push(user);
     }

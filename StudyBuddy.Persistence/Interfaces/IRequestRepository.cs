@@ -8,6 +8,7 @@ namespace StudyBuddy.Persistence
     {
         Request ById(int id);
         IEnumerable<Request> All(RequestFilter filter);
+        int GetCount(RequestFilter filter);
         void Insert(Request obj);
         void Delete(int id);
 

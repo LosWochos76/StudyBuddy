@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
 using StudyBuddy.App.Misc;
@@ -65,7 +64,7 @@ namespace StudyBuddy.App.Api
             return true;
         }
 
-        public async Task<IEnumerable<RequestViewModel>> ForMe()
+        public async Task<RequestListViewModel> ForMe()
         {
             var filter = new RequestFilter()
             {
@@ -75,10 +74,10 @@ namespace StudyBuddy.App.Api
             };
 
             var rh = new WebRequestHelper(api.Authentication.Token);
-            return await rh.Get<IEnumerable<RequestViewModel>>(base_url + "Request/", filter);
+            return await rh.Get<RequestListViewModel>(base_url + "Request/", filter);
         }
 
-        public async Task<IEnumerable<RequestViewModel>> FromMe()
+        public async Task<RequestListViewModel> FromMe()
         {
             var filter = new RequestFilter()
             {
@@ -88,7 +87,7 @@ namespace StudyBuddy.App.Api
             };
 
             var rh = new WebRequestHelper(api.Authentication.Token);
-            return await rh.Get<IEnumerable<RequestViewModel>>(base_url + "Request/", filter);
+            return await rh.Get<RequestListViewModel>(base_url + "Request/", filter);
         }
 
         public async Task<bool> Accept(RequestViewModel request)

@@ -48,7 +48,7 @@ namespace StudyBuddy.App.ViewModels
                 return;
 
             Requests.Clear();
-            Requests.AddRange(response);
+            Requests.AddRange(response.Objects);
             api.ImageService.GetProfileImages(Requests);
         }
 

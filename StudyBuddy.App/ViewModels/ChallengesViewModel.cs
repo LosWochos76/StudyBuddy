@@ -98,13 +98,13 @@ namespace StudyBuddy.App.ViewModels
             {
                 ItemThreshold = 1;
                 var challenges = await api.Challenges.ForToday(SearchText, Skip);
-                if (challenges.Count() == 0)
+                if (challenges.Objects.Count() == 0)
                 {
                     ItemThreshold = -1;
                     return;
                 }
 
-                Challenges.AddRange(challenges);
+                Challenges.AddRange(challenges.Objects);
                 Skip += 10;
             }
             catch (ApiException e)

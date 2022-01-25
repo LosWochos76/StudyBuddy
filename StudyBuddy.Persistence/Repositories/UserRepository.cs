@@ -123,7 +123,7 @@ namespace StudyBuddy.Persistence
                 "FROM users order by lastname,firstname,nickname limit :max offset :from");
         }
 
-        public int Count()
+        public int GetCount(UserFilter filter)
         {
             var qh = new QueryHelper<User>(connection_string);
             return qh.GetCount("users");
@@ -223,11 +223,18 @@ namespace StudyBuddy.Persistence
             return qh.ExecuteQueryToObjectList(sql);
         }
 
-        public int GetFriendsCount(int user_id)
+        public int GetFriendsCount(FriendFilter filter)
         {
             var qh = new QueryHelper<User>(connection_string, FromReaderWithCommonFriends);
-            qh.AddParameter(":user_id", user_id);
+            qh.AddParameter(":user_id", filter.UserId);
             var sql = "select count(*) from friends inner join users on user_b=id where user_a=:user_id";
+
+            if (!string.IsNullOrEmpty(filter.SearchText))
+            {
+                qh.AddParameter(":search_text", "%" + filter.SearchText + "%");
+                sql += " and (firstname ilike :search_text or lastname ilike :search_text or email ilike :search_text) ";
+            }
+
             return qh.ExecuteQueryToSingleInt(sql);
         }
 
@@ -249,6 +256,22 @@ namespace StudyBuddy.Persistence
 
             sql += " order by lastname,firstname,nickname limit :max offset :from";
             return qh.ExecuteQueryToObjectList(sql);
+        }
+
+        public int GetNotFriendsCount(FriendFilter filter)
+        {
+            var qh = new QueryHelper<User>(connection_string, FromReaderWithCommonFriends);
+            qh.AddParameter(":user_id", filter.UserId);
+
+            var sql = "select count(*) from users where id not in (select user_b from friends where user_a=:user_id) and id!=:user_id ";
+
+            if (!string.IsNullOrEmpty(filter.SearchText))
+            {
+                qh.AddParameter(":search_text", "%" + filter.SearchText + "%");
+                sql += " and (firstname ilike :search_text or lastname ilike :search_text or email ilike :search_text)";
+            }
+
+            return qh.ExecuteQueryToSingleInt(sql);
         }
 
         public void AddFriend(int user_id, int friend_id)

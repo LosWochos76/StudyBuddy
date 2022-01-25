@@ -52,6 +52,26 @@ namespace StudyBuddy.Persistence
             return qh.ExecuteQueryToObjectList(sql);
         }
 
+        public int GetCount(GameBadgeFilter filter)
+        {
+            var qh = new QueryHelper<GameBadge>(connection_string, FromReader);
+            var sql = "select count(*) FROM game_badges where true";
+
+            if (filter.OwnerId.HasValue)
+            {
+                qh.AddParameter(":owner_id", filter.OwnerId);
+                sql += " and owner_id=:owner_id";
+            }
+
+            if (!string.IsNullOrEmpty(filter.SearchText))
+            {
+                qh.AddParameter(":search_text", "%" + filter.SearchText + "%");
+                sql += " and (name ilike :search_text or description ilike :search_text or tags_list ilike :search_text)";
+            }
+
+            return qh.ExecuteQueryToSingleInt(sql);
+        }
+
         public void Insert(GameBadge obj)
         {
             var qh = new QueryHelper<GameBadge>(connection_string, FromReader);

@@ -52,7 +52,7 @@ export class GameBadgeEditComponent implements OnInit {
     }
 
     if (this.user.isAdmin())
-      this.all_users = await this.user_service.getAll();
+      this.all_users = (await this.user_service.getAll()).objects;
 
     if (this.user.isAdmin()) {
       this.form.setValue({

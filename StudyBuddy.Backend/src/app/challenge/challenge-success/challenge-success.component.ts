@@ -37,13 +37,13 @@ export class ChallengeSuccessComponent implements OnInit {
   }
 
   async loadObjects() {
-    this.objects = await this.user_service.getUsersThatAcceptedChallenge(this.id);
+    this.objects = (await this.user_service.getUsersThatAcceptedChallenge(this.id)).objects;
 
     if (!this.current_user.isAdmin())
       return;
 
     this.all_users = [];
-    var users = await this.user_service.getAll();
+    var users = (await this.user_service.getAll()).objects;
     
     for (var user of users) {
       if (!this.hasChallenge(user.id))

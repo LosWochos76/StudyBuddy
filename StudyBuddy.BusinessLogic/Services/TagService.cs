@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using StudyBuddy.Model;
+using StudyBuddy.Model.Filter;
 
 namespace StudyBuddy.BusinessLogic
 {
@@ -13,20 +14,19 @@ namespace StudyBuddy.BusinessLogic
             this.backend = backend;
         }
 
-        public IEnumerable<Tag> GetAll()
+        public TagList GetAll(TagFilter filter)
         {
             if (backend.CurrentUser == null || !backend.CurrentUser.IsAdmin)
                 throw new Exception("Unauthorized!");
 
-            return backend.Repository.Tags.All();
-        }
+            if (filter == null)
+                filter = new TagFilter();
 
-        public int GetCount()
-        {
-            if (backend.CurrentUser == null || !backend.CurrentUser.IsAdmin)
-                throw new Exception("Unauthorized!");
-
-            return backend.Repository.Tags.Count();
+            return new TagList()
+            {
+                Count = backend.Repository.Tags.GetCount(filter),
+                Objects = backend.Repository.Tags.All(filter)
+            };
         }
 
         public Tag GetById(int id)
@@ -84,7 +84,7 @@ namespace StudyBuddy.BusinessLogic
             return obj;
         }
 
-        public IEnumerable<Tag> CreateOrFindMultiple(string tags)
+        public TagList CreateOrFindMultiple(string tags)
         {
             if (backend.CurrentUser == null || backend.CurrentUser.IsStudent)
                 throw new Exception("Unauthorized!");
@@ -95,7 +95,11 @@ namespace StudyBuddy.BusinessLogic
             foreach (var tag in tag_list)
                 object_list.Add(CreateOrFindSingle(tag));
 
-            return object_list;
+            return new TagList()
+            {
+                Count = object_list.Count,
+                Objects = object_list
+            };
         }
     }
 }

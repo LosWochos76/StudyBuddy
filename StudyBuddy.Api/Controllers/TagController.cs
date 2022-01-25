@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using StudyBuddy.BusinessLogic;
 using StudyBuddy.Model;
+using StudyBuddy.Model.Filter;
 
 namespace StudyBuddy.Api
 {
@@ -15,9 +16,9 @@ namespace StudyBuddy.Api
 
         [Route("/Tag/")]
         [HttpGet]
-        public IActionResult GetAll()
+        public IActionResult GetAll([FromQuery] TagFilter filter)
         {
-            return Json(backend.TagService.GetAll());
+            return Json(backend.TagService.GetAll(filter));
         }
 
         [Route("/Tag/{id}")]

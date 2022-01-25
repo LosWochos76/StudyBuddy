@@ -31,9 +31,9 @@ export class ChallengeListComponent implements OnInit {
   }
 
   async ngOnInit() {
-    this.objects = await this.service.getAll();
+    this.objects = (await this.service.getAll()).objects;
     this.service.changed.subscribe(async () => {
-      this.objects = await this.service.getAll();
+      this.objects = (await this.service.getAll()).objects;
     });
 
     if (this.user.isAdmin())
@@ -97,9 +97,9 @@ export class ChallengeListComponent implements OnInit {
 
   private async onSearch(value: string) {
     if (value == "")
-      this.objects = await this.service.getAll();
+      this.objects = (await this.service.getAll()).objects;
     else
-      this.objects = await this.service.byText(value);
+      this.objects = (await this.service.byText(value)).objects;
   }
 
   private async loadOwners() {

@@ -2,6 +2,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { EventEmitter, Injectable, Output } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import { Challenge } from '../model/challenge';
+import { ChallengeList } from '../model/challengelist';
 import { AuthorizationService } from './authorization.service';
 import { LoggingService } from './loging.service';
 
@@ -17,7 +18,7 @@ export class ChallengeService {
     private auth:AuthorizationService,
     private http:HttpClient) { }
 
-  async getAll():Promise<Challenge[]> {
+  async getAll():Promise<ChallengeList> {
     if (!this.auth.isLoggedIn())
       return null;
 
@@ -25,17 +26,13 @@ export class ChallengeService {
     if (this.auth.getUser().isTeacher())
       query['OwnerId'] = this.auth.getUser().id;
 
-    let objects:Challenge[] = [];
     let result = await this.http.get(this.url + "Challenge", 
     {
       params: query,
       headers: new HttpHeaders({ Authorization: this.auth.getToken() })
     }).toPromise();
 
-    for (let obj in result)
-      objects.push(Challenge.fromApi(result[obj]));
-
-    return objects;
+    return new ChallengeList(result);
   }
 
   async getCount() {
@@ -85,7 +82,7 @@ export class ChallengeService {
     this.changed.emit();
   }
 
-  async byText(text:string):Promise<Challenge[]> {
+  async byText(text:string):Promise<ChallengeList> {
     if (!this.auth.isLoggedIn())
       return null;
 
@@ -93,17 +90,13 @@ export class ChallengeService {
     if (this.auth.getUser().isTeacher())
       query['OwnerId'] = this.auth.getUser().id;
 
-    let objects:Challenge[] = [];
     let result = await this.http.get(this.url + "Challenge", 
     {
       params: query,
       headers: new HttpHeaders({ Authorization: this.auth.getToken() })
     }).toPromise();
 
-    for (let obj in result)
-      objects.push(Challenge.fromApi(result[obj]));
-
-    return objects;
+    return new ChallengeList(result);
   }
 
   async save(obj:Challenge) {

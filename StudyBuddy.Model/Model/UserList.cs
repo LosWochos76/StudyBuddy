@@ -2,9 +2,9 @@
 
 namespace StudyBuddy.Model
 {
-    public class ChallengeList
+    public class UserList
     {
         public int Count { get; set; }
-        public IEnumerable<Challenge> Objects { get; set; }
+        public IEnumerable<User> Objects { get; set; }
     }
 }

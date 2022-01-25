@@ -8,6 +8,7 @@ namespace StudyBuddy.Persistence
     {
         Challenge ById(int id);
         IEnumerable<Challenge> All(ChallengeFilter filter);
+        int GetCount(ChallengeFilter filter);
         void Save(Challenge obj);
         void Insert(Challenge obj);
         void Update(Challenge obj);

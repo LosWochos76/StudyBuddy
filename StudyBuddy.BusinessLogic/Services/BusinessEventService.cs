@@ -30,7 +30,7 @@ namespace StudyBuddy.BusinessLogic
             return backend.Repository.BusinessEvents.GetById(id);
         }
 
-        public IEnumerable<BusinessEvent> All(BusinessEventFilter filter)
+        public BusinessEventList All(BusinessEventFilter filter)
         {
             if (backend.CurrentUser == null || !backend.CurrentUser.IsAdmin)
                 throw new UnauthorizedAccessException("Unauthorized!");
@@ -38,7 +38,11 @@ namespace StudyBuddy.BusinessLogic
             if (filter == null)
                 filter = new BusinessEventFilter();
 
-            return backend.Repository.BusinessEvents.All(filter);
+            return new BusinessEventList()
+            {
+                Count = backend.Repository.BusinessEvents.GetCount(filter),
+                Objects = backend.Repository.BusinessEvents.All(filter)
+            };  
         }
 
         public void Delete(int id)

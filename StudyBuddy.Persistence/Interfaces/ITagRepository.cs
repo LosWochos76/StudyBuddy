@@ -1,14 +1,15 @@
 using System.Collections.Generic;
 using StudyBuddy.Model;
+using StudyBuddy.Model.Filter;
 
 namespace StudyBuddy.Persistence
 {
     public interface ITagRepository
     {
+        IEnumerable<Tag> All(TagFilter filter);
+        int GetCount(TagFilter filter);
         Tag ById(int id);
         Tag ByName(string name);
-        int Count();
-        IEnumerable<Tag> All(int from = 0, int max = 1000);
         void Insert(Tag obj);
         void Update(Tag obj);
         void Save(Tag obj);

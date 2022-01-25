@@ -98,14 +98,14 @@ namespace StudyBuddy.App.ViewModels
             {
                 ItemThreshold = 1;
                 var friends = await api.Users.GetNotFriends(SearchText, Skip);
-                if (friends.Count() == 0)
+                if (friends.Objects.Count() == 0)
                 {
                     ItemThreshold = -1;
                     return;
                 }
 
-                Users.AddRange(friends);
-                api.ImageService.GetProfileImages(friends);
+                Users.AddRange(friends.Objects);
+                api.ImageService.GetProfileImages(friends.Objects);
                 
                 Skip += 10;
             }

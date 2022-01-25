@@ -2,6 +2,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { EventEmitter, Injectable, Output } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import { User } from '../model/user';
+import { UserList } from '../model/userlist';
 import { AuthorizationService } from './authorization.service';
 import { LoggingService } from './loging.service';
 
@@ -11,31 +12,14 @@ import { LoggingService } from './loging.service';
 export class UserService {
   @Output() changed = new EventEmitter();
   private url = environment.api_url;
-  private users_cache: User[] = null;
+  private users_cache: UserList = null;
 
   constructor(
     private logger: LoggingService,
     private http: HttpClient,
     private auth: AuthorizationService) { }
 
-  async getCount(): Promise<number> {
-    if (!this.auth.isLoggedIn())
-      return null;
-    
-    if (this.users_cache != null)
-      return this.users_cache.length;
-
-    let path = this.url + "User/Count";
-    this.logger.debug("Getting count of Users");
-    let result = await this.http.get(path,
-      {
-        headers: new HttpHeaders({ Authorization: this.auth.getToken() })
-      }).toPromise();
-
-    return result as number;
-  }
-
-  async getAll(): Promise<User[]> {
+  async getAll(): Promise<UserList> {
     if (!this.auth.isLoggedIn())
       return null;
     
@@ -45,15 +29,12 @@ export class UserService {
     let objects: User[] = [];
     this.logger.debug("Getting all Users");
     let result = await this.http.get(this.url + "User",
-      {
-        headers: new HttpHeaders({ Authorization: this.auth.getToken() })
-      }).toPromise();
+    {
+      headers: new HttpHeaders({ Authorization: this.auth.getToken() })
+    }).toPromise();
 
-    for (let index in result)
-      objects.push(User.fromApi(result[index]));
-
-    this.users_cache = objects.slice();
-    return objects;
+    this.users_cache = new UserList(result);
+    return this.users_cache;
   }
 
   async remove(id: number) {
@@ -80,9 +61,9 @@ export class UserService {
       await this.getAll();
 
     if (this.users_cache != null) {
-      for(let i=0; i<this.users_cache.length; i++)
-        if (this.users_cache[i].id == id)
-          return this.users_cache[i];
+      for (let i=0; i<this.users_cache.objects.length; i++)
+        if (this.users_cache.objects[i].id == id)
+          return this.users_cache.objects[i];
     }
 
     let path = this.url + "User/" + id;
@@ -110,9 +91,9 @@ export class UserService {
       obj.id = result['id'];
     } else {
       result = await this.http.put(this.url + "User/" + obj.id, data,
-        {
-          headers: new HttpHeaders({ Authorization: this.auth.getToken() })
-        }).toPromise();
+      {
+        headers: new HttpHeaders({ Authorization: this.auth.getToken() })
+      }).toPromise();
     }
 
     this.users_cache = null;
@@ -133,19 +114,20 @@ export class UserService {
     return result['id'];
   }
 
-  async getFriends(id: number): Promise<User[]> {
+  async getFriends(id: number): Promise<object> {
     if (!this.auth.isLoggedIn())
       return null;
 
     let objects: User[] = [];
     this.logger.debug("Getting friends of " + id);
     let result = await this.http.get(this.url + "User/" + id + "/Friends",
-      {
-        headers: new HttpHeaders({ Authorization: this.auth.getToken() })
-      }).toPromise();
+    {
+      headers: new HttpHeaders({ Authorization: this.auth.getToken() })
+    }).toPromise();
 
-    for (let index in result)
-      objects.push(result[index].id);
+    for (let index in result['objects']) {
+      objects.push(result['objects'][index].id);
+    }
 
     return objects;
   }
@@ -160,43 +142,35 @@ export class UserService {
     };
 
     let result = await this.http.post(this.url + "User/Friends/", data,
-      {
-        headers: new HttpHeaders({ Authorization: this.auth.getToken() })
-      }).toPromise();
+    {
+      headers: new HttpHeaders({ Authorization: this.auth.getToken() })
+    }).toPromise();
   }
 
-  async getUsersThatAcceptedChallenge(challenge_id: number): Promise<User[]> {
+  async getUsersThatAcceptedChallenge(challenge_id: number): Promise<UserList> {
     if (!this.auth.isLoggedIn())
       return null;
 
-    let objects: User[] = [];
     this.logger.debug("Getting all Users that accepted challenge " + challenge_id);
     let result = await this.http.get(this.url + "Challenge/" + challenge_id + "/User",
-      {
-        headers: new HttpHeaders({ Authorization: this.auth.getToken() })
-      }).toPromise();
+    {
+      headers: new HttpHeaders({ Authorization: this.auth.getToken() })
+    }).toPromise();
 
-    for (let index in result)
-      objects.push(User.fromApi(result[index]));
-
-    return objects;
+    return new UserList(result);
   }
 
-  async getUsersHavingBadge(badge_id: number): Promise<User[]> {
+  async getUsersHavingBadge(badge_id: number): Promise<UserList> {
     if (!this.auth.isLoggedIn())
       return null;
 
-    let objects: User[] = [];
     this.logger.debug("Getting all Users having gamebadge " + badge_id);
     let result = await this.http.get(this.url + "GameBadge/" + badge_id + "/User",
-      {
-        headers: new HttpHeaders({ Authorization: this.auth.getToken() })
-      }).toPromise();
+    {
+      headers: new HttpHeaders({ Authorization: this.auth.getToken() })
+    }).toPromise();
 
-    for (let index in result)
-      objects.push(User.fromApi(result[index]));
-
-    return objects;
+    return new UserList(result);
   }
 
   async addBadgeToUser(user_id:number, badge_id:number) {

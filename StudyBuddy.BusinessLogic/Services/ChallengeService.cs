@@ -17,7 +17,7 @@ namespace StudyBuddy.BusinessLogic
             this.backend = backend;
         }
 
-        public IEnumerable<Challenge> All(ChallengeFilter filter)
+        public ChallengeList All(ChallengeFilter filter)
         {
             if (backend.CurrentUser == null)
                 throw new UnauthorizedAccessException("Unauthorized!");
@@ -26,15 +26,25 @@ namespace StudyBuddy.BusinessLogic
                 filter = new ChallengeFilter();
 
             filter.CurrentUserId = backend.CurrentUser.ID;
-            return backend.Repository.Challenges.All(filter);
+
+            return new ChallengeList()
+            {
+                Count = backend.Repository.Challenges.GetCount(filter),
+                Objects = backend.Repository.Challenges.All(filter)
+            };
         }
 
-        public IEnumerable<Challenge> GetAcceptedChallenges()
+        public ChallengeList GetAcceptedChallenges()
         {
             if (backend.CurrentUser == null)
                 throw new UnauthorizedAccessException("Unauthorized!");
 
-            return backend.Repository.Challenges.Accepted(backend.CurrentUser.ID);
+            var objects = backend.Repository.Challenges.Accepted(backend.CurrentUser.ID);
+            return new ChallengeList()
+            {
+                Count = objects.Count(),
+                Objects = objects
+            };
         }
 
         public Challenge GetById(int id)
@@ -58,18 +68,23 @@ namespace StudyBuddy.BusinessLogic
 
             backend.Repository.Challenges.Update(obj);
             backend.Repository.Tags.RemoveAllTagsFromChallenge(obj.ID);
-            foreach (var tag in backend.TagService.CreateOrFindMultiple(obj.Tags))
+            foreach (var tag in backend.TagService.CreateOrFindMultiple(obj.Tags).Objects)
                 backend.Repository.Tags.AddTagForChallenge(tag.ID, obj.ID);
             
             return obj;
         }
 
-        public IEnumerable<Challenge> GetChallengesOfBadge(int id)
+        public ChallengeList GetChallengesOfBadge(int id)
         {
             if (backend.CurrentUser == null)
                 throw new UnauthorizedAccessException("Unauthorized!");
 
-            return backend.Repository.Challenges.GetChallengesOfBadge(id);
+            var objects = backend.Repository.Challenges.GetChallengesOfBadge(id);
+            return new ChallengeList()
+            {
+                Count = objects.Count(),
+                Objects = objects
+            };  
         }
 
         public Challenge Insert(Challenge obj)
@@ -81,7 +96,7 @@ namespace StudyBuddy.BusinessLogic
                 throw new UnauthorizedAccessException("Unauthorized!");
 
             backend.Repository.Challenges.Insert(obj);
-            foreach (var tag in backend.TagService.CreateOrFindMultiple(obj.Tags))
+            foreach (var tag in backend.TagService.CreateOrFindMultiple(obj.Tags).Objects)
                 backend.Repository.Tags.AddTagForChallenge(tag.ID, obj.ID);
 
             return obj;
@@ -264,7 +279,7 @@ namespace StudyBuddy.BusinessLogic
 
             foreach (var badge in badges)
             {
-                if (!IsInList(badges_of_user, badge))
+                if (!IsInList(badges_of_user.Objects, badge))
                 {
                     var success_rate = backend.GameBadgeService.GetSuccessRate(badge.ID, current_user.ID);
                     if (success_rate.Success >= badge.RequiredCoverage)
