@@ -33,7 +33,7 @@ export class ChallengeSelectComponent implements OnInit, ControlValueAccessor{
     }
 
   async ngOnInit() {
-    this.all = (await this.service.getAll()).objects;
+    this.all = (await this.service.getAll(0)).objects;
     this.all_copy = this.all.slice();
   }
 

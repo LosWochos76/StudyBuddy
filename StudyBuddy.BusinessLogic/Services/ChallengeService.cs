@@ -27,11 +27,14 @@ namespace StudyBuddy.BusinessLogic
 
             filter.CurrentUserId = backend.CurrentUser.ID;
 
-            return new ChallengeList()
+            var list = new ChallengeList()
             {
                 Count = backend.Repository.Challenges.GetCount(filter),
                 Objects = backend.Repository.Challenges.All(filter)
             };
+            var message = "Loading " + list.Objects.ToList().Count + " Objects with Skip = " + filter.Start;
+            backend.Logging.LogInfo(message);
+            return list;
         }
 
         public ChallengeList GetAcceptedChallenges()

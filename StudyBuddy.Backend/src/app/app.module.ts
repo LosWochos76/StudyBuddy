@@ -39,6 +39,7 @@ import { LoggingListComponent } from './logging/logging-list/logging-list.compon
 import { GameBadgeSuccessComponent } from './gamebadge/game-badge-success/game-badge-success.component';
 import { BusinessEventListComponent } from './businessevent/businessevent-list/businessevent-list.component';
 import { BusinessEventEditComponent } from './businessevent/businessevent-edit/businessevent-edit.component';
+import { NgxPaginationModule } from 'ngx-pagination';
 
 @NgModule({
   declarations: [
@@ -78,7 +79,8 @@ import { BusinessEventEditComponent } from './businessevent/businessevent-edit/b
     HttpClientModule,
     AppRoutingModule,
     ReactiveFormsModule,
-    FontAwesomeModule
+      FontAwesomeModule,
+      NgxPaginationModule
   ],
   providers: [
     AuthorizationService,

@@ -2,7 +2,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { EventEmitter, Injectable, Output } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import { Challenge } from '../model/challenge';
-import { ChallengeList } from '../model/challengelist';
+import { ChallengeList} from '../model/challengelist';
 import { AuthorizationService } from './authorization.service';
 import { LoggingService } from './loging.service';
 
@@ -18,13 +18,15 @@ export class ChallengeService {
     private auth:AuthorizationService,
     private http:HttpClient) { }
 
-  async getAll():Promise<ChallengeList> {
+    async getAll(page:number):Promise<ChallengeList> {
     if (!this.auth.isLoggedIn())
       return null;
 
-    var query = { };
+        var query = {};
+        query['start'] = (page-1)*10;
+        query['count'] = 10;
     if (this.auth.getUser().isTeacher())
-      query['OwnerId'] = this.auth.getUser().id;
+          query['OwnerId'] = this.auth.getUser().id;
 
     let result = await this.http.get(this.url + "Challenge", 
     {
@@ -33,21 +35,7 @@ export class ChallengeService {
     }).toPromise();
 
     return new ChallengeList(result);
-  }
-
-  async getCount() {
-    if (!this.auth.isLoggedIn())
-      return null;
-
-    let path = this.url + "Challenge";
-    this.logger.debug("Getting count of Challenges");
-    let result = await this.http.head(path, 
-    {
-      headers: new HttpHeaders({ Authorization: this.auth.getToken() })
-    }).toPromise();
-
-    return result;
-  }
+    }
 
   async byId(id:number):Promise<Challenge> {
     if (!this.auth.isLoggedIn())
@@ -171,3 +159,4 @@ export class ChallengeService {
     }).toPromise();
   }
 }
+

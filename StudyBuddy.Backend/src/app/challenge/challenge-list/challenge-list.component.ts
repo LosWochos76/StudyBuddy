@@ -7,6 +7,7 @@ import { ChallengeService } from 'src/app/services/challenge.service';
 import { LoggingService } from 'src/app/services/loging.service';
 import { UserService } from 'src/app/services/user.service';
 import { faGraduationCap, faPeopleArrows, faTasks } from '@fortawesome/free-solid-svg-icons';
+import { ChallengeList } from '../../model/challengelist';
 
 @Component({
   selector: 'app-challenge-list',
@@ -14,6 +15,9 @@ import { faGraduationCap, faPeopleArrows, faTasks } from '@fortawesome/free-soli
   styleUrls: ['./challenge-list.component.css']
 })
 export class ChallengeListComponent implements OnInit {
+    page = 1;
+    total = 0;
+    fullList:ChallengeList;
   objects: Challenge[] = [];
   selected: Challenge = null;
   timeout: any = null;
@@ -30,15 +34,23 @@ export class ChallengeListComponent implements OnInit {
     this.user = this.auth.getUser();
   }
 
-  async ngOnInit() {
-    this.objects = (await this.service.getAll()).objects;
+    async ngOnInit() {
+        this.fullList = await this.service.getAll(this.page);
+        this.objects = this.fullList.objects;
+        this.total = this.fullList.count;
     this.service.changed.subscribe(async () => {
-      this.objects = (await this.service.getAll()).objects;
+        this.objects = (await this.service.getAll(this.page)).objects;
     });
 
     if (this.user.isAdmin())
       this.loadOwners();
-  }
+    }
+
+    async onTableDataChange(event) {
+        this.page = event;
+        this.fullList = await this.service.getAll(event);
+        this.objects = this.fullList.objects;
+    }
 
   onSelect(obj: Challenge) {
     this.selected = obj;
@@ -96,8 +108,8 @@ export class ChallengeListComponent implements OnInit {
   }
 
   private async onSearch(value: string) {
-    if (value == "")
-      this.objects = (await this.service.getAll()).objects;
+      if (value == "")
+          this.objects = (await this.service.getAll(this.page)).objects;
     else
       this.objects = (await this.service.byText(value)).objects;
   }
