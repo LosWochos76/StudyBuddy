@@ -10,6 +10,8 @@ import { TagService } from 'src/app/services/tag.service';
   styleUrls: ['./tag-list.component.css']
 })
 export class TagListComponent implements OnInit {
+    page = 1;
+    total = 0;
   objects: Tag[] = [];
   selected: Tag = null;
 
@@ -19,11 +21,21 @@ export class TagListComponent implements OnInit {
     private router: Router) { }
 
   async ngOnInit() {
-    this.objects = (await this.service.getAll()).objects;
-    this.service.changed.subscribe(async () => {
-      this.objects = (await this.service.getAll()).objects;
+      var fullList = await this.service.getAll(this.page);
+      this.objects = fullList.objects;
+      this.total = fullList.count;
+      this.service.changed.subscribe(async () => {
+          var result = await this.service.getAll(this.page)
+          this.objects = result.objects;
+          this.total = result.count;
+
     });
-  }
+    }
+    async onTableDataChange(event) {
+        this.page = event;
+        var fullList = await this.service.getAll(event);
+        this.objects = fullList.objects;
+    }
 
   onSelect(obj: Tag) {
     this.selected = obj;

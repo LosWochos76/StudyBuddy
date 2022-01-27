@@ -12,7 +12,8 @@ import { UserService } from 'src/app/services/user.service';
   styleUrls: ['./request-list.component.css']
 })
 export class RequestListComponent implements OnInit {
-  count:number = 0;
+    page = 1;
+    total = 0;
   objects:Request[] = [];
   selected:Request = null;
   user_cache = new Map();
@@ -24,17 +25,22 @@ export class RequestListComponent implements OnInit {
     private user_service:UserService) { }
 
   async ngOnInit() {
-    var result = await this.service.getAll();
-    this.objects = result.objects;
-    this.count = result.count;
+      var fullList = await this.service.getAll(this.page);
+      this.objects = fullList.objects;
+      this.total = fullList.count;
+      this.service.changed.subscribe(async () => {
+          var result = await this.service.getAll(this.page)
+          this.objects = result.objects;
+          this.total = result.count;
 
-    this.service.changed.subscribe(async () => {
-      var result = await this.service.getAll();
-      this.objects = result.objects;
-      this.count = result.count;
-    });
+      });
 
     this.loadUserCache();
+    }
+  async onTableDataChange(event) {
+        this.page = event;
+        var fullList = await this.service.getAll(event);
+        this.objects = fullList.objects;
   }
 
   private loadUserCache() {

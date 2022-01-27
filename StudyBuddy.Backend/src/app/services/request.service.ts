@@ -18,11 +18,14 @@ export class RequestService {
     private http: HttpClient,
     private auth: AuthorizationService) { }
 
-  async getAll(): Promise<RequestList> {
-    let objects: Request[] = [];
+    async getAll(page:number): Promise<RequestList> {
+        var query = {};
+        query['start'] = (page - 1) * 10;
+        query['count'] = 10;
     let result = await this.http.get(this.url + "Request",
-    {
-      headers: new HttpHeaders({ Authorization: this.auth.getToken() })
+        {
+            params: query,
+            headers: new HttpHeaders({ Authorization: this.auth.getToken() })
     }).toPromise();
 
     return new RequestList(result);

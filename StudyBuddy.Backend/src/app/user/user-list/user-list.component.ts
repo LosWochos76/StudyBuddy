@@ -11,6 +11,8 @@ import { UserService } from 'src/app/services/user.service';
   styleUrls: ['./user-list.component.css']
 })
 export class UserListComponent implements OnInit {
+    page = 1;
+    total = 0;
   objects: User[] = [];
   count: number = 0;
   selected: User = null;
@@ -24,18 +26,21 @@ export class UserListComponent implements OnInit {
 
   async ngOnInit() {
     this.current_user = this.auth.getUser();
+      var fullList = await this.service.getAll(this.page);
+      this.objects = fullList.objects;
+      this.total = fullList.count;
+      this.service.changed.subscribe(async () => {
+          var result = await this.service.getAll(this.page)
+          this.objects = result.objects;
+          this.total = result.count;
 
-    var result = await this.service.getAll();
-    this.objects = result.objects;
-    this.count = result.count;
-
-    this.service.changed.subscribe(async () => {
-      var result = await this.service.getAll();
-      this.objects = result.objects;
-      this.count = result.count;
     });
   }
-
+    async onTableDataChange(event) {
+        this.page = event;
+        var fullList = await this.service.getAll(event);
+        this.objects = fullList.objects;
+    }
   onSelect(obj: User) {
     this.selected = obj;
   }

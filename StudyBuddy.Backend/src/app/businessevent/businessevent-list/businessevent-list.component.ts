@@ -13,6 +13,8 @@ import { UserService } from 'src/app/services/user.service';
   styleUrls: ['./businessevent-list.component.css']
 })
 export class BusinessEventListComponent implements OnInit {
+    page = 1;
+    total = 0;
   objects: BusinessEvent[] = [];
   selected: BusinessEvent = null;
   timeout: any = null;
@@ -29,12 +31,22 @@ export class BusinessEventListComponent implements OnInit {
     this.user = this.auth.getUser();
   }
 
-  async ngOnInit() {
-    this.objects = await this.service.getAll();
-    this.service.changed.subscribe(async () => {
-      this.objects = await this.service.getAll();
-    });
-  }
+    async ngOnInit() {
+        var fullList = await this.service.getAll(this.page);
+        this.objects = fullList.objects;
+        this.total = fullList.count;
+        this.service.changed.subscribe(async () => {
+            var result = await this.service.getAll(this.page)
+            this.objects = result.objects;
+            this.total = result.count;
+
+        });
+    }
+    async onTableDataChange(event) {
+        this.page = event;
+        var fullList = await this.service.getAll(event);
+        this.objects = fullList.objects;
+    }
 
   onSelect(obj: BusinessEvent) {
     this.selected = obj;

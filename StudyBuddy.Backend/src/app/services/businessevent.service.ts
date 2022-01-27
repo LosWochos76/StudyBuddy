@@ -2,6 +2,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { EventEmitter, Injectable, Output } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import { BusinessEvent } from '../model/businessevent';
+import { BusinessEventList } from '../model/businesseventlist';
 import { AuthorizationService } from './authorization.service';
 import { LoggingService } from './loging.service';
 
@@ -17,25 +18,23 @@ export class BusinessEventService {
     private auth:AuthorizationService,
     private http:HttpClient) { }
 
-  async getAll():Promise<BusinessEvent[]> {
+    async getAll(page: number): Promise<BusinessEventList> {
     if (!this.auth.isLoggedIn())
       return null;
 
-    var query = { };
+      var query = {};
+      query['start'] = (page - 1) * 10;
+      query['count'] = 10;
     if (this.auth.getUser().isTeacher())
       query['OwnerId'] = this.auth.getUser().id;
 
-    let objects:BusinessEvent[] = [];
     let result = await this.http.get(this.url + "BusinessEvent", 
     {
       params: query,
       headers: new HttpHeaders({ Authorization: this.auth.getToken() })
     }).toPromise();
 
-    for (let obj in result)
-      objects.push(BusinessEvent.fromApi(result[obj]));
-
-    return objects;
+    return new BusinessEventList(result);
   }
 
   async byId(id:number):Promise<BusinessEvent> {

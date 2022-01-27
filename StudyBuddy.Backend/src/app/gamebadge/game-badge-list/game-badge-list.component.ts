@@ -6,6 +6,7 @@ import { AuthorizationService } from 'src/app/services/authorization.service';
 import { GameBadgeService } from 'src/app/services/gamebadge.service';
 import { LoggingService } from 'src/app/services/loging.service';
 import { UserService } from 'src/app/services/user.service';
+import { GameBadgeList } from '../../model/gamebadgelist';
 
 @Component({
   selector: 'app-game-badge-list',
@@ -13,7 +14,8 @@ import { UserService } from 'src/app/services/user.service';
   styleUrls: ['./game-badge-list.component.css']
 })
 export class GameBadgeListComponent implements OnInit {
-  count: number;
+    page = 1;
+    total = 0;
   objects: GameBadge[] = [];
   selected: GameBadge = null;
   user: User = null;
@@ -28,20 +30,25 @@ export class GameBadgeListComponent implements OnInit {
     this.user = this.auth.getUser();
   }
 
-  async ngOnInit() {
-    var result = await this.service.getAll();
-    this.objects = result.objects;
-    this.count = result.count;
+    async ngOnInit() {
+        var fullList = await this.service.getAll(this.page);
+        this.objects = fullList.objects;
+        this.total = fullList.count;
 
-    this.service.changed.subscribe(async () => {
-      var result = await this.service.getAll();
-      this.objects = result.objects;
-      this.count = result.count;
+      this.service.changed.subscribe(async () => {
+          var result = await this.service.getAll(this.page);
+          this.objects = result.objects;
+          this.total = result.count;
     });
 
     if (this.user.isAdmin())
       this.loadOwners();
-  }
+    }
+    async onTableDataChange(event) {
+        this.page = event;
+        var fullList = await this.service.getAll(event);
+        this.objects = fullList.objects;
+    }
 
   onSelect(obj: GameBadge) {
     this.selected = obj;

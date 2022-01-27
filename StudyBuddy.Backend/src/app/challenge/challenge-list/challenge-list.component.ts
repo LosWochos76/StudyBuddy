@@ -17,7 +17,6 @@ import { ChallengeList } from '../../model/challengelist';
 export class ChallengeListComponent implements OnInit {
     page = 1;
     total = 0;
-    fullList:ChallengeList;
   objects: Challenge[] = [];
   selected: Challenge = null;
   timeout: any = null;
@@ -35,11 +34,14 @@ export class ChallengeListComponent implements OnInit {
   }
 
     async ngOnInit() {
-        this.fullList = await this.service.getAll(this.page);
-        this.objects = this.fullList.objects;
-        this.total = this.fullList.count;
-    this.service.changed.subscribe(async () => {
-        this.objects = (await this.service.getAll(this.page)).objects;
+        var fullList = await this.service.getAll(this.page);
+        this.objects = fullList.objects;
+        this.total = fullList.count;
+        this.service.changed.subscribe(async () => {
+            var result = await this.service.getAll(this.page)
+            this.objects = result.objects;
+            this.total = result.count;
+
     });
 
     if (this.user.isAdmin())
@@ -48,8 +50,8 @@ export class ChallengeListComponent implements OnInit {
 
     async onTableDataChange(event) {
         this.page = event;
-        this.fullList = await this.service.getAll(event);
-        this.objects = this.fullList.objects;
+        var fullList = await this.service.getAll(event);
+        this.objects = fullList.objects;
     }
 
   onSelect(obj: Challenge) {

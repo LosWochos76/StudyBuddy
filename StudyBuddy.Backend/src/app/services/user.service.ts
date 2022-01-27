@@ -12,29 +12,30 @@ import { LoggingService } from './loging.service';
 export class UserService {
   @Output() changed = new EventEmitter();
   private url = environment.api_url;
-  private users_cache: UserList = null;
+  users_cache: UserList = null;
 
   constructor(
     private logger: LoggingService,
     private http: HttpClient,
-    private auth: AuthorizationService) { }
+      private auth: AuthorizationService) { }
 
-  async getAll(): Promise<UserList> {
+  async getAll(page:number): Promise<UserList> {
     if (!this.auth.isLoggedIn())
       return null;
     
-    if (this.users_cache != null)
-      return this.users_cache;
 
-    let objects: User[] = [];
-    this.logger.debug("Getting all Users");
+      this.logger.debug("Getting all Users");
+      var query = {};
+      query['start'] = (page - 1) * 10;
+      query['count'] = 10;
     let result = await this.http.get(this.url + "User",
-    {
-      headers: new HttpHeaders({ Authorization: this.auth.getToken() })
+        {
+        params: query,
+        headers: new HttpHeaders({ Authorization: this.auth.getToken() })
     }).toPromise();
 
     this.users_cache = new UserList(result);
-    return this.users_cache;
+      return new UserList(result);
   }
 
   async remove(id: number) {
@@ -58,7 +59,7 @@ export class UserService {
       return null;
     
     if (this.users_cache == null)
-      await this.getAll();
+      await this.getAll(1);
 
     if (this.users_cache != null) {
       for (let i=0; i<this.users_cache.objects.length; i++)

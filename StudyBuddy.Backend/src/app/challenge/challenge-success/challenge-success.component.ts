@@ -43,7 +43,7 @@ export class ChallengeSuccessComponent implements OnInit {
       return;
 
     this.all_users = [];
-    var users = (await this.user_service.getAll()).objects;
+    var users = (await this.user_service.getAll(1)).objects;
     
     for (var user of users) {
       if (!this.hasChallenge(user.id))

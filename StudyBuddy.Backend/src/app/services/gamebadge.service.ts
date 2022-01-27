@@ -18,15 +18,16 @@ export class GameBadgeService {
     private http:HttpClient,
     private auth:AuthorizationService) { }
 
-  async getAll():Promise<GameBadgeList> {
+  async getAll(page:number):Promise<GameBadgeList> {
     if (!this.auth.isLoggedIn())
       return null;
 
-    var query = { };
+      var query = {};
+      query['start'] = (page - 1) * 10;
+      query['count'] = 10;
     if (this.auth.getUser().isTeacher)
-      query['OwnerId'] = this.auth.getUser().id;
+          query['OwnerId'] = this.auth.getUser().id;
 
-    let objects:GameBadge[] = [];
     this.logger.debug("Getting all GameBadge");
     let result = await this.http.get(this.url + "GameBadge", 
     {
