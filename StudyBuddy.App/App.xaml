@@ -73,6 +73,8 @@
                         Value="{StaticResource SystemGray2Dark}" />
                 <Setter Property="TextColor"
                         Value="{StaticResource TextColor}" />
+                <Setter Property="BackgroundColor"
+                        Value="{StaticResource WindowBackgroundColor}" />
             </Style>
 
             <Style TargetType="StackLayout" ApplyToDerivedTypes="True">
