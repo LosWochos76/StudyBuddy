@@ -19,7 +19,6 @@ namespace App.Droid
     {
         protected override void OnCreate(Bundle savedInstanceState)
         {
-            AppCompatDelegate.DefaultNightMode = AppCompatDelegate.ModeNightNo;
             base.OnCreate(savedInstanceState);
             Platform.Init(this, savedInstanceState);
             Forms.Init(this, savedInstanceState);

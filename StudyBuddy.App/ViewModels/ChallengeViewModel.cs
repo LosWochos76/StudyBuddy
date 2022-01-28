@@ -69,9 +69,9 @@ namespace StudyBuddy.App.ViewModels
             {
                 switch (Category)
                 {
-                    case ChallengeCategory.Learning: return Application.Current.UserAppTheme == OSAppTheme.Light ? Color.FromHex("#007AFF") : Color.FromHex("#0A84FF");
-                    case ChallengeCategory.Networking: return Application.Current.UserAppTheme == OSAppTheme.Light ? Color.FromHex("#5856D6") : Color.FromHex("#5E5CE6");
-                    case ChallengeCategory.Organizing: return Application.Current.UserAppTheme == OSAppTheme.Light ? Color.FromHex("#5AC8FA") : Color.FromHex("#64D2FF");
+                    case ChallengeCategory.Learning: return Application.Current.UserAppTheme == OSAppTheme.Light ? Color.FromHex("#007AFF") : Color.FromHex("#800000");
+                    case ChallengeCategory.Networking: return Application.Current.UserAppTheme == OSAppTheme.Light ? Color.FromHex("#5856D6") : Color.FromHex("#f9dc4a");
+                    case ChallengeCategory.Organizing: return Application.Current.UserAppTheme == OSAppTheme.Light ? Color.FromHex("#5AC8FA") : Color.FromHex("#69a420");
                     default: return Color.Black;
                 }
             }

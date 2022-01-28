@@ -1,0 +1,153 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:fontAwesome="clr-namespace:StudyBuddy.App"
+             xmlns:viewmodels="clr-namespace:StudyBuddy.App.ViewModels"
+             x:DataType="viewmodels:ThemeViewModel"
+             x:Class="StudyBuddy.App.Views.ThemePage"
+             Title="Theme">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <Color x:Key="LightRadioButtonColor">#F3F2F1</Color>
+            <Color x:Key="DarkRadioButtonColor">#9B9A99</Color>
+            <ControlTemplate x:Key="ThemeRadioTemplate">
+                <Frame Padding="0"
+                       CornerRadius="8"
+                       HasShadow="True"
+                       HeightRequest="80"
+                       HorizontalOptions="Start"
+                       VerticalOptions="Start"
+                       WidthRequest="80">
+                    <Grid Margin="4"
+                          WidthRequest="80">
+                        <Grid HeightRequest="20"
+                              HorizontalOptions="End"
+                              VerticalOptions="Start"
+                              WidthRequest="20">
+                            <Ellipse x:Name="FillUncheck"
+                                     Fill="White"
+                                     HeightRequest="18"
+                                     HorizontalOptions="Center"
+                                     Stroke="#2E2545"
+                                     StrokeThickness="2"
+                                     VerticalOptions="Center"
+                                     WidthRequest="18" />
+                            <Ellipse x:Name="FillCheck"
+                                     Fill="White"
+                                     HeightRequest="18"
+                                     HorizontalOptions="Center"
+                                     Stroke="#2E2545"
+                                     StrokeThickness="2"
+                                     VerticalOptions="Center"
+                                     WidthRequest="18" />
+                            <Ellipse x:Name="Check"
+                                     BackgroundColor="Transparent"
+                                     Fill="#0A84FF"
+                                     HeightRequest="10"
+                                     HorizontalOptions="Center"
+                                     Stroke="#2E2545"
+                                     StrokeThickness="0"
+                                     VerticalOptions="Center"
+                                     WidthRequest="10" />
+                        </Grid>
+                        <ContentPresenter />
+                    </Grid>
+                    <VisualStateManager.VisualStateGroups>
+                        <VisualStateGroupList>
+                            <VisualStateGroup x:Name="CheckedStates">
+                                <VisualState x:Name="Checked">
+                                    <VisualState.Setters>
+                                        <Setter Property="BorderColor"
+                                                Value="#0A84FF" />
+                                        <Setter TargetName="Check"
+                                                Property="Opacity"
+                                                Value="1" />
+                                        <Setter TargetName="FillCheck"
+                                                Property="Opacity"
+                                                Value="1" />
+                                        <Setter TargetName="FillUncheck"
+                                                Property="Opacity"
+                                                Value="0" />
+                                    </VisualState.Setters>
+                                </VisualState>
+                                <VisualState x:Name="Unchecked">
+                                    <VisualState.Setters>
+                                        <Setter Property="BorderColor"
+                                                Value="#F3F2F1" />
+                                        <Setter TargetName="Check"
+                                                Property="Opacity"
+                                                Value="0" />
+                                        <Setter TargetName="FillCheck"
+                                                Property="Opacity"
+                                                Value="0" />
+                                        <Setter TargetName="FillUncheck"
+                                                Property="Opacity"
+                                                Value="1" />
+                                    </VisualState.Setters>
+                                </VisualState>
+                            </VisualStateGroup>
+                        </VisualStateGroupList>
+                    </VisualStateManager.VisualStateGroups>
+                </Frame>
+            </ControlTemplate>
+
+            <Style TargetType="RadioButton">
+                <Setter Property="ControlTemplate"
+                        Value="{StaticResource ThemeRadioTemplate}" />
+            </Style>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+    <ContentPage.Content>
+        <StackLayout Orientation="Horizontal">
+            <RadioButton IsChecked="{Binding IsSystemTheme}">
+                <RadioButton.Content>
+                    <StackLayout HorizontalOptions="Center"
+                                 VerticalOptions="Center"
+                                 BackgroundColor="Transparent">
+                        <Image Scale="0.75">
+                            <Image.Source>
+                                <FontImageSource FontFamily="{StaticResource FontAwesomeSolid}"
+                                                 Glyph="{x:Static fontAwesome:FontAwesomeIcons.UserCog}"
+                                                 Color="{AppThemeBinding Dark={StaticResource TextColorDark}, Light={StaticResource TextColor}}" />
+                            </Image.Source>
+                        </Image>
+                        <Label FontSize="Small"
+                               Text="System" />
+                    </StackLayout>
+                </RadioButton.Content>
+            </RadioButton>
+            <RadioButton IsChecked="{Binding IsLightTheme}">
+                <RadioButton.Content>
+                    <StackLayout HorizontalOptions="Center"
+                                 VerticalOptions="Center">
+                        <Image Scale="0.75">
+                            <Image.Source>
+                                <FontImageSource FontFamily="{StaticResource FontAwesomeSolid}"
+                                                 Glyph="{x:Static fontAwesome:FontAwesomeIcons.Sun}"
+                                                 Color="{AppThemeBinding Dark={StaticResource TextColorDark}, Light={StaticResource TextColor}}" />
+                            </Image.Source>
+                        </Image>
+                        <Label FontSize="Small"
+                               Text="Light" />
+                    </StackLayout>
+                </RadioButton.Content>
+            </RadioButton>
+            <RadioButton IsChecked="{Binding IsDarkTheme}">
+                <RadioButton.Content>
+                    <StackLayout HorizontalOptions="Center"
+                                 VerticalOptions="Center">
+                        <Image Scale="0.75">
+                            <Image.Source>
+                                <FontImageSource FontFamily="{StaticResource FontAwesomeSolid}"
+                                                 Glyph="{x:Static fontAwesome:FontAwesomeIcons.Moon}"
+                                                 Color="{AppThemeBinding Dark={StaticResource TextColorDark}, Light={StaticResource TextColor}}" />
+                            </Image.Source>
+                        </Image>
+                        <Label FontSize="Small"
+                               Text="Dark" />
+                    </StackLayout>
+                </RadioButton.Content>
+            </RadioButton>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage> 

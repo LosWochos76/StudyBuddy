@@ -23,13 +23,7 @@
                    Margin="0"
                    BorderColor="{Binding CategoryColor}"
                    BackgroundColor="{Binding CategoryColor}"
-                   CornerRadius="10"
-                   HasShadow="False"
-                   xct:ShadowEffect.Color="Black"
-                   xct:ShadowEffect.Opacity="1"
-                   xct:ShadowEffect.Radius="8"
-                   xct:ShadowEffect.OffsetX="-3"
-                   xct:ShadowEffect.OffsetY="-3">
+                   CornerRadius="10">
                 <Grid BackgroundColor="Transparent">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="*" />

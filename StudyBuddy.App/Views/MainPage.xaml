@@ -12,19 +12,19 @@
         <ResourceDictionary>
             <Style ApplyToDerivedTypes="True" TargetType="Shell">
                 <Setter Property="Shell.TitleColor"
-                        Value="{StaticResource TextColor}" />
+                        Value="{AppThemeBinding Dark={StaticResource TextColorDark}, Light={StaticResource TextColor}}" />
                 <Setter Property="Shell.TabBarUnselectedColor"
-                        Value="{StaticResource TextColor}" />
+                        Value="{AppThemeBinding Dark={StaticResource TextColorDark}, Light={StaticResource TextColor}}" />
                 <Setter Property="Shell.TabBarTitleColor"
                         Value="{StaticResource PrimaryAccent}" />
                 <Setter Property="Shell.ForegroundColor"
-                        Value="{StaticResource TextColor}" />
+                        Value="{AppThemeBinding Dark={StaticResource TextColorDark}, Light={StaticResource TextColor}}" />
                 <Setter Property="Shell.BackgroundColor"
-                        Value="{StaticResource WindowBackgroundColor}" />
+                        Value="{AppThemeBinding Dark={StaticResource WindowBackgroundColorDark}, Light={StaticResource WindowBackgroundColor}}" />
                 <Setter Property="Shell.FlyoutBackgroundColor"
-                        Value="{StaticResource WindowBackgroundColor}" />
+                        Value="{AppThemeBinding Dark={StaticResource WindowBackgroundColorDark}, Light={StaticResource WindowBackgroundColor}}" />
                 <Setter Property="Shell.NavBarHasShadow"
-                        Value="False" />
+                        Value="True" />
             </Style>
         </ResourceDictionary>
     </Shell.Resources>
@@ -41,11 +41,11 @@
     <MenuItem>
         <Shell.MenuItemTemplate>
             <DataTemplate>
-                <StackLayout Spacing="4">
+                <StackLayout Spacing="4" BackgroundColor="{StaticResource PrimaryAccent}">
                     <Label HeightRequest="1"
                            BackgroundColor="{StaticResource SystemGray2}"></Label>
                     <Label Text="Social"
-                           TextColor="{StaticResource SecondaryFont}"
+                           TextColor="White"
                            HorizontalTextAlignment="Center"
                            FontAttributes="Bold"></Label>
                     <Label HeightRequest="1"
@@ -97,11 +97,12 @@
     <MenuItem>
         <Shell.MenuItemTemplate>
             <DataTemplate>
-                <StackLayout Spacing="4">
+                <StackLayout Spacing="4"
+                             BackgroundColor="{StaticResource PrimaryAccent}">
                     <Label HeightRequest="1"
                            BackgroundColor="{StaticResource SystemGray2}"></Label>
                     <Label Text="Optionen"
-                           TextColor="{StaticResource SecondaryFont}"
+                           TextColor="White"
                            HorizontalTextAlignment="Center"
                            FontAttributes="Bold"></Label>
                     <Label HeightRequest="1"
@@ -130,6 +131,25 @@
             </DataTemplate>
         </Shell.MenuItemTemplate>
     </MenuItem>
+    <MenuItem Command="{Binding ThemeCommand}">
+        <Shell.MenuItemTemplate>
+            <DataTemplate>
+                <Grid ColumnDefinitions="0.2*,0.8*"
+                      Padding="0,10,0,10">
+                    <Image>
+                        <Image.Source>
+                            <FontImageSource FontFamily="{StaticResource FontAwesomeSolid}"
+                                             Glyph="{x:Static fontAwesome:FontAwesomeIcons.Palette}"
+                                             Color="{StaticResource TextColor}" />
+                        </Image.Source>
+                    </Image>
+                    <Label Grid.Column="1"
+                           Text="Apptheme"
+                           VerticalTextAlignment="Center" />
+                </Grid>
+            </DataTemplate>
+        </Shell.MenuItemTemplate>
+    </MenuItem>
     <MenuItem Command="{Binding LogoutCommand}">
         <Shell.MenuItemTemplate>
             <DataTemplate>
@@ -153,7 +173,7 @@
     <MenuItem>
         <Shell.MenuItemTemplate>
             <DataTemplate>
-                <StackLayout>
+                <StackLayout BackgroundColor="{StaticResource PrimaryAccent}">
                     <Label HeightRequest="1"
                            BackgroundColor="{StaticResource SystemGray2}" />
                     <Label HeightRequest="1"
@@ -231,7 +251,7 @@
     
     <Shell.FlyoutFooterTemplate>
         <DataTemplate>
-            <StackLayout Orientation="Horizontal">
+            <StackLayout Orientation="Horizontal" >
                 <Image Margin="30,0,0,0"
                        Source="TestLogo"
                        HeightRequest="80">
