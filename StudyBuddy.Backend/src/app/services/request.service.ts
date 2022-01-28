@@ -18,15 +18,19 @@ export class RequestService {
     private http: HttpClient,
     private auth: AuthorizationService) { }
 
-    async getAll(page:number): Promise<RequestList> {
-        var query = {};
-        query['start'] = (page - 1) * 10;
-        query['count'] = 10;
+  async getAll(page: number = -1): Promise<RequestList> {
+    var query = {};
+
+    if (page != -1) {
+      query['start'] = (page - 1) * 10;
+      query['count'] = 10;
+    }
+
     let result = await this.http.get(this.url + "Request",
-        {
-            params: query,
-            headers: new HttpHeaders({ Authorization: this.auth.getToken() })
-    }).toPromise();
+      {
+        params: query,
+        headers: new HttpHeaders({ Authorization: this.auth.getToken() })
+      }).toPromise();
 
     return new RequestList(result);
   }
@@ -81,7 +85,7 @@ export class RequestService {
       return null;
 
     this.logger.debug("Accepting Request " + id);
-    let result = await this.http.post(this.url + "Request/Accept/" + id, {}, 
+    let result = await this.http.post(this.url + "Request/Accept/" + id, {},
       {
         headers: new HttpHeaders({ Authorization: this.auth.getToken() })
       }).toPromise();

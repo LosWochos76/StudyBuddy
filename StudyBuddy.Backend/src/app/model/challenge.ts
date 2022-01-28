@@ -1,4 +1,5 @@
 import { Helper } from "../services/helper";
+import { User } from "./user";
 
 export class Challenge {
     id:number = 0;
@@ -8,12 +9,13 @@ export class Challenge {
     validity_start:string;
     validity_end:string;
     category:number = 1;
-    owner:number = 0;
+    owner_id:number = 0;
     created:string;
     prove:number = 1;
     parent:number = 0;
     tags:string = "";
     prove_addendum:string = "";
+    owner:User = null;
 
     constructor() { 
         let today = (new Date()).toISOString().split('T')[0];
@@ -32,8 +34,8 @@ export class Challenge {
         this.prove = +values.prove;
         this.tags = values.tags;
 
-        if (values.hasOwnProperty('owner')) 
-            this.owner = +values.owner;
+        if (values.hasOwnProperty('owner_id')) 
+            this.owner_id = +values.owner_id;
         
         if (values.prove == 4) {
             this.prove_addendum = 
@@ -72,12 +74,16 @@ export class Challenge {
         obj.validity_start = result["validityStart"].split('T')[0];
         obj.validity_end = result["validityEnd"].split('T')[0];
         obj.category = result["category"];
-        obj.owner = result["ownerID"];
+        obj.owner_id = result["ownerID"];
         obj.created = result["created"].split('T')[0];
         obj.prove = result["prove"];
         obj.parent = result["seriesParentID"];
         obj.tags = result["tags"];
         obj.prove_addendum = result["proveAddendum"];
+
+        if (result['owner'] != null)
+            obj.owner = User.fromApi(result['owner']);
+
         return obj;
     }
 
@@ -90,7 +96,7 @@ export class Challenge {
             "ValidityStart": this.validity_start,
             "ValidityEnd": this.validity_end,
             "category": this.category,
-            "OwnerID": this.owner,
+            "ownerID": this.owner_id,
             "created": this.created,
             "prove": this.prove,
             "SeriesParentID": this.parent,

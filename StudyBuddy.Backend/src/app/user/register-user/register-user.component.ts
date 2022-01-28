@@ -3,7 +3,6 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { User } from 'src/app/model/user';
 import { LoggingService } from 'src/app/services/loging.service';
-import { passwordMatchValidator } from 'src/app/services/passwordMatchValidator';
 import { UserService } from 'src/app/services/user.service';
 
 @Component({
@@ -25,10 +24,8 @@ export class RegisterUserComponent implements OnInit {
       nickname: new FormControl("", [Validators.required, Validators.minLength(3)]),
       email: new FormControl("", [Validators.required, Validators.email]),
       password: new FormControl("", [Validators.required, Validators.minLength(6)]),
-      password_confirm: new FormControl("", [Validators.required, Validators.minLength(6)])
-    }, {
-      validators: passwordMatchValidator,
-      updateOn: 'blur'
+      password_confirm: new FormControl("", [Validators.required, Validators.minLength(6)]),
+      privacy_policy: new FormControl(false)
     });
   };
 
@@ -53,6 +50,11 @@ export class RegisterUserComponent implements OnInit {
     result = await this.service.userIdByEmail(obj.email);
     if (result != 0 && result != obj.id) {
       this.form.setErrors({ 'emailalreadyinuse': true });
+      return;
+    }
+
+    if (this.form.controls.password.value != this.form.controls.password_confirm.value) {
+      this.form.setErrors({ 'mismatch': true });
       return;
     }
 

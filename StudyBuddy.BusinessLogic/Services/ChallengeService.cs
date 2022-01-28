@@ -27,14 +27,21 @@ namespace StudyBuddy.BusinessLogic
 
             filter.CurrentUserId = backend.CurrentUser.ID;
 
-            var list = new ChallengeList()
+            var count = backend.Repository.Challenges.GetCount(filter);
+            var objects = backend.Repository.Challenges.All(filter);
+
+            if (filter.WithOwner)
             {
-                Count = backend.Repository.Challenges.GetCount(filter),
-                Objects = backend.Repository.Challenges.All(filter)
-            };
-            var message = "Loading " + list.Objects.ToList().Count + " Objects with Skip = " + filter.Start;
+                foreach (var obj in objects)
+                {
+                    obj.Owner = backend.Repository.Users.ById(obj.OwnerID);
+                }
+            }
+
+            var message = "Loading " + objects.Count() + " Objects with Skip = " + filter.Start;
             backend.Logging.LogInfo(message);
-            return list;
+
+            return new ChallengeList() { Count = count, Objects = objects };
         }
 
         public ChallengeList GetAcceptedChallenges()

@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text;
+using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Scripting;
 using Microsoft.CodeAnalysis.Scripting;
 using StudyBuddy.Model;
@@ -107,10 +109,40 @@ namespace StudyBuddy.BusinessLogic
             Execute(obj, args);
         }
 
+        public IEnumerable<string> Compile(BusinessEvent obj)
+        {
+            if (backend.CurrentUser == null || !backend.CurrentUser.IsAdmin)
+                throw new UnauthorizedAccessException("Unauthorized!");
+
+            var args = new BusinessEventArgs(obj.Type, null) { CurrentUser = backend.CurrentUser };
+            var script = BuildScript(obj, args);
+
+            var messages = new List<string>();
+            foreach (var msg in script.Compile())
+                messages.Add(msg.ToString());
+
+            return messages;
+        }
+
         private async void Execute(BusinessEvent bi, BusinessEventArgs args)
         {
             backend.Logging.LogDebug("Executing code of BusinessEvent " + bi.ID);
 
+            try
+            {
+                var script = BuildScript(bi, args);
+                if (script != null)
+                    await script.RunAsync();
+            }
+            catch (Exception e)
+            {
+                backend.Logging.LogError("Error executing code of BusinessEvent "
+                    + bi.ID + ": " + e.ToString()); ;
+            }
+        }
+
+        private Script BuildScript(BusinessEvent bi, BusinessEventArgs args)
+        {
             try
             {
                 var options = ScriptOptions.Default;
@@ -122,39 +154,39 @@ namespace StudyBuddy.BusinessLogic
                 options = options.AddImports("StudyBuddy.Persistence");
                 options = options.AddImports("StudyBuddy.BusinessLogic");
 
-                var code = "var backend = new Backend();\n" +
+                var code = new StringBuilder("var backend = new Backend();\n" +
                     "backend.CurrentUser = backend.Repository.Users.ById(" + bi.OwnerID + ");\n" +
                     "var args = new BusinessEventArgs(BusinessEventType." + args.Type.ToString() + ");\n" +
-                    "args.CurrentUser = backend.Repository.Users.ById(" + args.CurrentUser.ID + ");\n";
+                    "args.CurrentUser = backend.Repository.Users.ById(" + args.CurrentUser.ID + ");\n");
 
                 if (args.Payload is User)
                 {
                     var user = args.Payload as User;
-                    code += "args.Payload = backend.Repository.Users.ById(" + user.ID + ");\n";
+                    code.Append("args.Payload = backend.Repository.Users.ById(" + user.ID + ");\n");
                 }
 
                 if (args.Payload is Challenge)
                 {
                     var challenge = args.Payload as Challenge;
-                    code += "args.Payload = backend.Repository.Challenges.ById(" + challenge.ID + ");\n";
+                    code.Append("args.Payload = backend.Repository.Challenges.ById(" + challenge.ID + ");\n");
                 }
 
                 if (args.Payload is GameBadge)
                 {
                     var badge = args.Payload as GameBadge;
-                    code += "args.Payload = backend.Repository.GameBadges.ById(" + badge.ID + ");\n";
+                    code.Append("args.Payload = backend.Repository.GameBadges.ById(" + badge.ID + ");\n");
                 }
 
-                code += bi.Code;
-
-                var script = CSharpScript.Create(code, options);
-                await script.RunAsync();
+                code.Append(bi.Code);
+                return CSharpScript.Create(code.ToString(), options);
             }
             catch (Exception e)
             {
-                backend.Logging.LogError("Error executing code of BusinessEvent "
+                backend.Logging.LogError("Error compiling code of BusinessEvent "
                     + bi.ID + ": " + e.ToString()); ;
             }
+
+            return null;
         }
     }
 }

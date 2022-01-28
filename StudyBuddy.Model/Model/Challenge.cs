@@ -33,5 +33,8 @@ namespace StudyBuddy.Model
             clone.SeriesParentID = SeriesParentID;
             return clone;
         }
+
+        // Only filled in certain situations
+        public User Owner { get; set; }
     }
 }

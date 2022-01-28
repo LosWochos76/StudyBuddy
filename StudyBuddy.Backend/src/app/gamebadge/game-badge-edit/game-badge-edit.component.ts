@@ -37,7 +37,7 @@ export class GameBadgeEditComponent implements OnInit {
     });
 
     if (this.user.isAdmin())
-      this.form.addControl("owner", new FormControl(0));
+      this.form.addControl("owner_id", new FormControl(0));
   }
 
   async ngOnInit() {
@@ -48,11 +48,11 @@ export class GameBadgeEditComponent implements OnInit {
       this.obj = await this.service.byId(this.id);
     } else {
       this.obj = new GameBadge();
-      this.obj.owner = this.auth.getUser().id;
+      this.obj.owner_id = this.auth.getUser().id;
     }
 
     if (this.user.isAdmin())
-      this.all_users = (await this.user_service.getAll(1)).objects;
+      this.all_users = (await this.user_service.getAll()).objects;
 
     if (this.user.isAdmin()) {
       this.form.setValue({
@@ -60,7 +60,7 @@ export class GameBadgeEditComponent implements OnInit {
         description: this.obj.description,
         required_coverage: this.obj.required_coverage,
         tags: this.obj.tags,
-        owner: this.obj.owner
+        owner_id: this.obj.owner_id
       });
     } else {
       this.form.setValue({

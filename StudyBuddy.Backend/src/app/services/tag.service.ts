@@ -18,13 +18,17 @@ export class TagService {
     private http: HttpClient,
     private auth: AuthorizationService) { }
 
-    async getAll(page:number): Promise<TagList> {
-        var query = {};
-        query['start'] = (page - 1) * 10;
-        query['count'] = 10;
-        let result = await this.http.get(this.url + "Tag", {
-            params: query,
-            headers: new HttpHeaders({ Authorization: this.auth.getToken() })
+  async getAll(page: number = -1): Promise<TagList> {
+    var query = {};
+
+    if (page != -1) {
+      query['start'] = (page - 1) * 10;
+      query['count'] = 10;
+    }
+
+    let result = await this.http.get(this.url + "Tag", {
+      params: query,
+      headers: new HttpHeaders({ Authorization: this.auth.getToken() })
     }).toPromise();
 
     return new TagList(result);
@@ -92,9 +96,9 @@ export class TagService {
 
     this.logger.debug("Creating or finding tags");
     let result = await this.http.post(this.url + "Tag/CreateOrFind/", tags,
-    {
-      headers: new HttpHeaders({ Authorization: this.auth.getToken() })
-    }).toPromise();
+      {
+        headers: new HttpHeaders({ Authorization: this.auth.getToken() })
+      }).toPromise();
 
     return new TagList(result);
   }

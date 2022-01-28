@@ -14,12 +14,11 @@ import { GameBadgeList } from '../../model/gamebadgelist';
   styleUrls: ['./game-badge-list.component.css']
 })
 export class GameBadgeListComponent implements OnInit {
-    page = 1;
-    total = 0;
+  page = 1;
+  total = 0;
   objects: GameBadge[] = [];
   selected: GameBadge = null;
   user: User = null;
-  owners_cache = new Map();
 
   constructor(
     private logger: LoggingService,
@@ -30,25 +29,23 @@ export class GameBadgeListComponent implements OnInit {
     this.user = this.auth.getUser();
   }
 
-    async ngOnInit() {
-        var fullList = await this.service.getAll(this.page);
-        this.objects = fullList.objects;
-        this.total = fullList.count;
+  async ngOnInit() {
+    var fullList = await this.service.getAll(this.page);
+    this.objects = fullList.objects;
+    this.total = fullList.count;
 
-      this.service.changed.subscribe(async () => {
-          var result = await this.service.getAll(this.page);
-          this.objects = result.objects;
-          this.total = result.count;
+    this.service.changed.subscribe(async () => {
+      var result = await this.service.getAll(this.page);
+      this.objects = result.objects;
+      this.total = result.count;
     });
 
-    if (this.user.isAdmin())
-      this.loadOwners();
-    }
-    async onTableDataChange(event) {
-        this.page = event;
-        var fullList = await this.service.getAll(event);
-        this.objects = fullList.objects;
-    }
+  }
+  async onTableDataChange(event) {
+    this.page = event;
+    var fullList = await this.service.getAll(event);
+    this.objects = fullList.objects;
+  }
 
   onSelect(obj: GameBadge) {
     this.selected = obj;
@@ -81,22 +78,6 @@ export class GameBadgeListComponent implements OnInit {
   onAdd() {
     this.logger.debug("User wants to add a GameBadge");
     this.router.navigate(['/gamebadge/0']);
-  }
-
-  private async loadOwners() {
-    for (let obj of this.objects) {
-      this.owners_cache.set(obj.owner, await this.user_service.byId(obj.owner));
-    }
-  }
-
-  getOwnerName(id: number) {
-    if (this.owners_cache.has(id)) {
-      let owner = this.owners_cache.get(id);
-      if (owner != null)
-        return owner.fullName();
-    }
-
-    return "";
   }
 
   onSuccess() {

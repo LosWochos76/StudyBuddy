@@ -33,7 +33,7 @@ export class UserSelectComponent implements OnInit, ControlValueAccessor {
     }
 
   async ngOnInit() {
-    var result = await this.service.getAll(1);
+    var result = await this.service.getAll();
     this.all = result.objects;
     this.all_copy = this.all.slice();
   }

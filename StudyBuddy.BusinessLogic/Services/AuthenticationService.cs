@@ -55,10 +55,7 @@ namespace StudyBuddy.BusinessLogic
 
             // ToDo: Hier muss noch mehr gemacht werden!
 
-            var options = MailKitHelper.GetMailKitOptions();
-            var provider = new MailKitProvider(options);
-            var mail = new EmailService(provider);
-            mail.Send(email, "Passwort zurücksetzen", "Bla", true);
+            MailKitHelper.SendMail(email, "Passwort zurücksetzen", "Bla");
         }
 
         public bool CheckToken(string token)

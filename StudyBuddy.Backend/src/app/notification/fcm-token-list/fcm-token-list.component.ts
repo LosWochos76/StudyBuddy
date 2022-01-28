@@ -7,12 +7,10 @@ import { FcmTokenService } from 'src/app/services/fcm-token.service';
   styleUrls: ['./fcm-token-list.component.css']
 })
 export class FcmTokenListComponent implements OnInit {
-  
-  $tokens = this.fcmTokenService.GetAll();
+  $tokens = this.fcmTokenService.getAll();
 
   constructor(private fcmTokenService: FcmTokenService ) { }
 
   ngOnInit(): void {
   }
-
 }

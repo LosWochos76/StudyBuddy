@@ -36,7 +36,7 @@
     </div>
     <div class="mb-3" *ngIf="user.isAdmin()">
         <label class="form-label" for="category">Besitzer:</label>
-        <select class="form-select" formControlName="owner">
+        <select class="form-select" formControlName="owner_id">
             <option *ngFor="let u of all_users" [value]="u.id">{{u.fullName()}}</option>
         </select>
     </div>

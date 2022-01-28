@@ -62,5 +62,12 @@
         </div>
     </div>
     <br>
-    <button type="submit" class="btn btn-primary" [disabled]="!form.valid">Registrieren</button>
+    <div class="form-check">
+        <input class="form-check-input" type="checkbox" id="privacy_policy" formControlName="privacy_policy" #privacy_policy>
+        <label class="form-check-label" for="privacy_policy">
+          Ich stimme der <a href="https://gameucation.eu/datenschutzerklaerung/" target="_blank">Datenschutzerklärung</a> zu.
+        </label>
+      </div>
+    <br>
+    <button type="submit" class="btn btn-primary" [disabled]="!this.form.valid || !privacy_policy.checked">Registrieren</button>
 </form>

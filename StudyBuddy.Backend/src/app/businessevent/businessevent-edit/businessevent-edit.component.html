@@ -24,4 +24,11 @@
     </div>
     <button type="submit" class="btn btn-primary">Ok</button>&nbsp;
     <button type="button" class="btn btn-success" (click)="onCancel()">Abbrechen</button>
+    <div *ngIf="form.hasError('compilationErrors')">
+        <br>
+        <p class="text-danger">Achtung: Beim Übersetzen des Programmcodes wurden Fehler entdeckt:</p>
+        <ul *ngFor="let error of this.form.getError('compilationErrors')">
+            <li class="text-danger">{{error}}</li>
+        </ul>
+    </div>
 </form>

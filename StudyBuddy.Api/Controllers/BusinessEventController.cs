@@ -49,12 +49,19 @@ namespace StudyBuddy.Api.Controllers
             return Json(new { Status = "ok" });
         }
 
-        [Route("/BusinessEvent/{id}")]
-        [HttpHead]
+        [Route("/BusinessEvent/Execute/{id}")]
+        [HttpPost]
         public IActionResult Execute(int id)
         {
             backend.BusinessEventService.Execute(id);
             return Json(new { Status = "ok" });
+        }
+
+        [Route("/BusinessEvent/Compile/")]
+        [HttpPost]
+        public IActionResult Compile([FromBody] BusinessEvent obj)
+        {
+            return Json(backend.BusinessEventService.Compile(obj));
         }
     }
 }

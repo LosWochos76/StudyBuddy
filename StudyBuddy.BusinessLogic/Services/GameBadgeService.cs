@@ -21,11 +21,18 @@ namespace StudyBuddy.BusinessLogic
             if (filter == null)
                 filter = new GameBadgeFilter();
 
-            return new GameBadgeList()
+            var count = backend.Repository.GameBadges.GetCount(filter);
+            var objects = backend.Repository.GameBadges.All(filter);
+
+            if (filter.WithOwner)
             {
-                Count = backend.Repository.GameBadges.GetCount(filter),
-                Objects = backend.Repository.GameBadges.All(filter)
-            };
+                foreach (var obj in objects)
+                {
+                    obj.Owner = backend.Repository.Users.ById(obj.OwnerID);
+                }
+            }
+
+            return new GameBadgeList() { Count = count, Objects = objects };
         }
 
         public GameBadge GetById(int id)

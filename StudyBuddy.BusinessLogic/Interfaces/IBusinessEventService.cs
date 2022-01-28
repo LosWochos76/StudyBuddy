@@ -1,4 +1,6 @@
-﻿using StudyBuddy.Model;
+﻿using System.Collections.Generic;
+using Microsoft.CodeAnalysis;
+using StudyBuddy.Model;
 
 namespace StudyBuddy.BusinessLogic
 {
@@ -14,5 +16,6 @@ namespace StudyBuddy.BusinessLogic
         // Misc
         void TriggerEvent(object sender, BusinessEventArgs args);
         void Execute(int id);
+        public IEnumerable<string> Compile(BusinessEvent obj);
     }
 }

@@ -8,7 +8,7 @@
       [disabled]="!isQrCodeable()" (click)="getQrCodeImage()">
       QR-Code
     </button>&nbsp;
-    <button class="btn btn-info"  [disabled]="!isSelected()" (click)="onSuccess()">Erfolg</button>&nbsp;
+    <button class="btn btn-info" [disabled]="!isSelected()" (click)="onSuccess()">Erfolg</button>&nbsp;
     <button class="btn btn-danger" [disabled]="!isSelected()" (click)="onDelete()">Löschen</button>
   </div>
   <div class="col-2">
@@ -28,14 +28,16 @@
     </tr>
   </thead>
   <tbody>
-    <tr *ngFor="let obj of objects | paginate: { itemsPerPage: 10, currentPage: page, totalItems: total }; index as i" (click)="onSelect(obj)" (dblclick)="onEdit(obj)"
-      [class.table-info]="obj == selected">
-        <th scope="row">{{(page-1) * 10 + i + 1}}</th>
-      <td><fa-icon [icon]="getCategorgyIcon(obj)"></fa-icon>&nbsp;{{obj.name}}</td>
+    <tr *ngFor="let obj of objects | paginate: { itemsPerPage: 10, currentPage: page, totalItems: total }; index as i"
+      (click)="onSelect(obj)" (dblclick)="onEdit(obj)" [class.table-info]="obj == selected">
+      <th scope="row">{{(page-1) * 10 + i + 1}}</th>
+      <td>
+        <fa-icon [icon]="getCategorgyIcon(obj)"></fa-icon>&nbsp;{{obj.name}}
+      </td>
       <td>{{obj.points}}</td>
       <td>{{obj.validity_start}}</td>
       <td>{{obj.validity_end}}</td>
-      <td *ngIf="user.isAdmin()">{{getOwnerName(obj.owner)}}</td>
+      <td *ngIf="user.isAdmin()">{{obj.owner.fullName()}}</td>
     </tr>
   </tbody>
 </table>

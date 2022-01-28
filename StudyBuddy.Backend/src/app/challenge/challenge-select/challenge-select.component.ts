@@ -9,35 +9,36 @@ import { ChallengeService } from 'src/app/services/challenge.service';
   styleUrls: ['./challenge-select.component.css'],
   providers: [
     {
-       provide: NG_VALUE_ACCESSOR,
-       useExisting: forwardRef(() => ChallengeSelectComponent),
-       multi: true
+      provide: NG_VALUE_ACCESSOR,
+      useExisting: forwardRef(() => ChallengeSelectComponent),
+      multi: true
     }
- ]
+  ]
 })
-export class ChallengeSelectComponent implements OnInit, ControlValueAccessor{
-  @Input() selected:number[] = [];
+export class ChallengeSelectComponent implements OnInit, ControlValueAccessor {
+  @Input() selected: number[] = [];
   @Input() mode = 'multiple';
-  all:Challenge[] = [];
-  all_copy:Challenge[] = [];
-  selected_objects:Challenge[] = [];
+  all: Challenge[] = [];
+  all_copy: Challenge[] = [];
+  selected_objects: Challenge[] = [];
   timeout: any = null;
   onChanged: any = () => { };
   onTouched: any = () => { };
   disabled = false;
   name = "";
-  
+
   constructor(
-    private service:ChallengeService) { 
-      this.name = "select_challenge_" + Math.floor(Math.random() * 10000);
-    }
+    private service: ChallengeService) {
+    this.name = "select_challenge_" + Math.floor(Math.random() * 10000);
+  }
 
   async ngOnInit() {
-    this.all = (await this.service.getAll(0)).objects;
+    var result = await this.service.getAll();
+    this.all = result.objects;
     this.all_copy = this.all.slice();
   }
 
-  writeValue(ids:number[]) {
+  writeValue(ids: number[]) {
     this.selected = [];
     for (let id of ids)
       this.onChange(id);
@@ -55,11 +56,11 @@ export class ChallengeSelectComponent implements OnInit, ControlValueAccessor{
     this.disabled = isDisabled;
   }
 
-  isSingleMode():boolean {
+  isSingleMode(): boolean {
     return this.mode == "single";
   }
 
-  onChange(id:number) {
+  onChange(id: number) {
     if (this.isSingleMode()) {
       let index = this.all.findIndex(obj => obj.id == id);
       if (index > -1) {
@@ -96,8 +97,8 @@ export class ChallengeSelectComponent implements OnInit, ControlValueAccessor{
     }, 1000);
   }
 
-  private findByText(value:string) {
-    let result:Challenge[] = [];
+  private findByText(value: string) {
+    let result: Challenge[] = [];
 
     for (let obj of this.all_copy)
       if (JSON.stringify(obj).search(value) > -1)
@@ -106,7 +107,7 @@ export class ChallengeSelectComponent implements OnInit, ControlValueAccessor{
     return result;
   }
 
-  isChecked(id:number) {
+  isChecked(id: number) {
     return this.selected_objects.findIndex(obj => obj.id == id) > -1;
   }
 
@@ -120,7 +121,7 @@ export class ChallengeSelectComponent implements OnInit, ControlValueAccessor{
   selectAll() {
     this.selected = [];
     this.selected_objects = [];
-    
+
     for (let obj of this.all) {
       this.selected.push(obj.id);
       this.selected_objects.push(obj);

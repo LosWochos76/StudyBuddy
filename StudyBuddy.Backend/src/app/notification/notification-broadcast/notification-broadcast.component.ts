@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import {FormBuilder, Validators} from "@angular/forms";
-import {NotificationService} from "../../services/notification.service";
+import { FormBuilder, Validators } from "@angular/forms";
+import { NotificationService } from "../../services/notification.service";
 
 @Component({
   selector: 'app-notification-broadcast',
@@ -12,8 +12,8 @@ export class NotificationBroadcastComponent implements OnInit {
   form: ReturnType<typeof NotificationBroadcastComponent.prototype.createForm>
 
   constructor(
-      private formBuilder: FormBuilder,
-      private notificationService: NotificationService
+    private formBuilder: FormBuilder,
+    private notificationService: NotificationService
   ) {
     this.form = this.createForm()
   }
@@ -29,9 +29,8 @@ export class NotificationBroadcastComponent implements OnInit {
   }
 
   async handleSubmit() {
-    const {title, body} = this.form.value
-
-    const result  = await this.notificationService.broadcastNotification(title, body)
+    const { title, body } = this.form.value
+    const result = await this.notificationService.broadcastNotification(title, body)
     console.log('broadcasted Notification', result)
   }
 }

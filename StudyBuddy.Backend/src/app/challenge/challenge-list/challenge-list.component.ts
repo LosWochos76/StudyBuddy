@@ -15,13 +15,12 @@ import { ChallengeList } from '../../model/challengelist';
   styleUrls: ['./challenge-list.component.css']
 })
 export class ChallengeListComponent implements OnInit {
-    page = 1;
-    total = 0;
+  page = 1;
+  total = 0;
   objects: Challenge[] = [];
   selected: Challenge = null;
   timeout: any = null;
   user: User = null;
-  owners_cache = new Map();
   image;
 
   constructor(
@@ -33,26 +32,23 @@ export class ChallengeListComponent implements OnInit {
     this.user = this.auth.getUser();
   }
 
-    async ngOnInit() {
-        var fullList = await this.service.getAll(this.page);
-        this.objects = fullList.objects;
-        this.total = fullList.count;
-        this.service.changed.subscribe(async () => {
-            var result = await this.service.getAll(this.page)
-            this.objects = result.objects;
-            this.total = result.count;
+  async ngOnInit() {
+    var result = await this.service.getAll(this.page);
+    this.objects = result.objects;
+    this.total = result.count;
 
+    this.service.changed.subscribe(async () => {
+      var result = await this.service.getAll(this.page);
+      this.objects = result.objects;
+      this.total = result.count;
     });
+  }
 
-    if (this.user.isAdmin())
-      this.loadOwners();
-    }
-
-    async onTableDataChange(event) {
-        this.page = event;
-        var fullList = await this.service.getAll(event);
-        this.objects = fullList.objects;
-    }
+  async onTableDataChange(event) {
+    this.page = event;
+    var fullList = await this.service.getAll(event);
+    this.objects = fullList.objects;
+  }
 
   onSelect(obj: Challenge) {
     this.selected = obj;
@@ -109,25 +105,10 @@ export class ChallengeListComponent implements OnInit {
     }, 1000);
   }
 
-  private async onSearch(value: string) {
-      if (value == "")
-          this.objects = (await this.service.getAll(this.page)).objects;
-    else
-      this.objects = (await this.service.byText(value)).objects;
-  }
-
-  private async loadOwners() {
-    for (let obj of this.objects)
-      this.owners_cache.set(obj.owner, await this.user_service.byId(obj.owner));
-  }
-
-  getOwnerName(id: number) {
-    if (this.owners_cache.has(id)) {
-      let owner = this.owners_cache.get(id);
-      return owner.fullName();
-    }
-
-    return "";
+  private async onSearch(text: string) {
+    var result = await this.service.getAll(this.page, text);
+    this.objects = result.objects;
+    this.total = result.count;
   }
 
   isQrCodeable() {

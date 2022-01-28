@@ -8,18 +8,14 @@ import { User } from '../model/user';
 })
 export class AuthorizationService {
   private url = environment.api_url;
-  private user:User = null;
-  private token:string = null;
-  changed:EventEmitter<boolean> = new EventEmitter<boolean>();
+  private user: User = null;
+  private token: string = null;
+  changed: EventEmitter<boolean> = new EventEmitter<boolean>();
 
   constructor(
-    private http:HttpClient) {
+    private http: HttpClient) { }
 
-
-
-  }
-
-  async login(email:string, password:string):Promise<boolean> {
+  async login(email: string, password: string): Promise<boolean> {
     const response = await this.http.post(this.url + 'Login', {
       'email': email,
       'password': password
@@ -53,12 +49,12 @@ export class AuthorizationService {
     this.token = null;
     this.changed.emit(false);
   }
-  
+
   isLoggedIn() {
     return this.user != null;
   }
 
-  sendPassworResetMail(email:string) {
+  sendPassworResetMail(email: string) {
     // ToDo: Implement!
   }
 }

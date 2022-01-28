@@ -59,8 +59,13 @@ export class BusinessEventEditComponent implements OnInit {
       return;
     }
 
-    await this.service.save(this.obj);
-    this.router.navigate(["businessevent"]);
+    var result = await this.service.compile(this.obj);
+    if (result.length > 0) {
+      this.form.setErrors({ 'compilationErrors' : result });
+    } else {
+      await this.service.save(this.obj);
+      this.router.navigate(["businessevent"]);
+    }
   }
 
   onCancel() {

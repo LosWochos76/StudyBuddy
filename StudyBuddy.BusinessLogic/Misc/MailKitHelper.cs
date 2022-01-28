@@ -1,4 +1,6 @@
 ﻿using System;
+using NETCore.MailKit;
+using NETCore.MailKit.Core;
 using NETCore.MailKit.Infrastructure.Internal;
 using Environment = StudyBuddy.Model.Environment;
 
@@ -17,6 +19,14 @@ namespace StudyBuddy.BusinessLogic
             options.Password = Environment.GetOrDefault("SMTP_PASSWORD", "secret");
             options.Security = Convert.ToBoolean(Environment.GetOrDefault("SMTP_SECURITY", "True"));
             return options;
+        }
+
+        public static void SendMail(string mailTo, string subject, string message)
+        {
+            var options = GetMailKitOptions();
+            var provider = new MailKitProvider(options);
+            var mail = new EmailService(provider);
+            mail.Send(mailTo, subject, message, true);
         }
     }
 }
