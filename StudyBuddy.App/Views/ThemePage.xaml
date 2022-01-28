@@ -5,11 +5,14 @@
              xmlns:viewmodels="clr-namespace:StudyBuddy.App.ViewModels"
              x:DataType="viewmodels:ThemeViewModel"
              x:Class="StudyBuddy.App.Views.ThemePage"
-             Title="Theme">
+             Title="Theme"
+             Shell.TabBarIsVisible="False">
     <ContentPage.Resources>
         <ResourceDictionary>
             <Color x:Key="LightRadioButtonColor">#F3F2F1</Color>
             <Color x:Key="DarkRadioButtonColor">#9B9A99</Color>
+            <Color x:Key="RadioBorderColorDark">#F2F2F7</Color>
+            <Color x:Key="RadioBorderColor">#1C1C1E</Color>
             <ControlTemplate x:Key="ThemeRadioTemplate">
                 <Frame Padding="0"
                        CornerRadius="8"
@@ -42,7 +45,7 @@
                                      WidthRequest="18" />
                             <Ellipse x:Name="Check"
                                      BackgroundColor="Transparent"
-                                     Fill="#0A84FF"
+                                     Fill="#3700B3"
                                      HeightRequest="10"
                                      HorizontalOptions="Center"
                                      Stroke="#2E2545"
@@ -58,7 +61,7 @@
                                 <VisualState x:Name="Checked">
                                     <VisualState.Setters>
                                         <Setter Property="BorderColor"
-                                                Value="#0A84FF" />
+                                                Value="#3700B3" />
                                         <Setter TargetName="Check"
                                                 Property="Opacity"
                                                 Value="1" />
@@ -73,7 +76,7 @@
                                 <VisualState x:Name="Unchecked">
                                     <VisualState.Setters>
                                         <Setter Property="BorderColor"
-                                                Value="#F3F2F1" />
+                                                Value="{AppThemeBinding Dark={StaticResource RadioBorderColorDark}, Light={StaticResource RadioBorderColor}}" />
                                         <Setter TargetName="Check"
                                                 Property="Opacity"
                                                 Value="0" />
@@ -98,7 +101,7 @@
         </ResourceDictionary>
     </ContentPage.Resources>
     <ContentPage.Content>
-        <StackLayout Orientation="Horizontal">
+        <StackLayout Orientation="Horizontal" Padding="30" Spacing="50">
             <RadioButton IsChecked="{Binding IsSystemTheme}">
                 <RadioButton.Content>
                     <StackLayout HorizontalOptions="Center"

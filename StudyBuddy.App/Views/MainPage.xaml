@@ -41,15 +41,13 @@
     <MenuItem>
         <Shell.MenuItemTemplate>
             <DataTemplate>
-                <StackLayout Spacing="4" BackgroundColor="{StaticResource PrimaryAccent}">
-                    <Label HeightRequest="1"
-                           BackgroundColor="{StaticResource SystemGray2}"></Label>
+                <StackLayout Spacing="4"
+                             BackgroundColor="{StaticResource PrimaryAccent}" Padding="5">
                     <Label Text="Social"
                            TextColor="White"
                            HorizontalTextAlignment="Center"
-                           FontAttributes="Bold"></Label>
-                    <Label HeightRequest="1"
-                           BackgroundColor="{StaticResource SystemGray2}"></Label>
+                           FontAttributes="Bold"
+                           CharacterSpacing="2"></Label>
                 </StackLayout>
             </DataTemplate>
         </Shell.MenuItemTemplate>
@@ -63,7 +61,7 @@
                         <Image.Source>
                             <FontImageSource FontFamily="{StaticResource FontAwesomeSolid}"
                                              Glyph="{x:Static fontAwesome:FontAwesomeIcons.UserFriends}"
-                                             Color="{StaticResource TextColor}" />
+                                             Color="{AppThemeBinding Dark={StaticResource TextColorDark}, Light={StaticResource TextColor}}" />
                         </Image.Source>
                     </Image>
                     <Label Grid.Column="1"
@@ -83,7 +81,7 @@
                         <Image.Source>
                             <FontImageSource FontFamily="{StaticResource FontAwesomeSolid}"
                                              Glyph="{x:Static fontAwesome:FontAwesomeIcons.Plus}"
-                                             Color="{StaticResource TextColor}" />
+                                             Color="{AppThemeBinding Dark={StaticResource TextColorDark}, Light={StaticResource TextColor}}" />
                         </Image.Source>
                     </Image>
                     <Label Grid.Column="1"
@@ -98,15 +96,12 @@
         <Shell.MenuItemTemplate>
             <DataTemplate>
                 <StackLayout Spacing="4"
-                             BackgroundColor="{StaticResource PrimaryAccent}">
-                    <Label HeightRequest="1"
-                           BackgroundColor="{StaticResource SystemGray2}"></Label>
+                             BackgroundColor="{StaticResource PrimaryAccent}" Padding="5">
                     <Label Text="Optionen"
                            TextColor="White"
                            HorizontalTextAlignment="Center"
-                           FontAttributes="Bold"></Label>
-                    <Label HeightRequest="1"
-                           BackgroundColor="{StaticResource SystemGray2}"></Label>
+                           FontAttributes="Bold"
+                           CharacterSpacing="2"></Label>
                 </StackLayout>
             </DataTemplate>
         </Shell.MenuItemTemplate>
@@ -121,7 +116,7 @@
                         <Image.Source>
                             <FontImageSource FontFamily="{StaticResource FontAwesomeSolid}"
                                              Glyph="{x:Static fontAwesome:FontAwesomeIcons.User}"
-                                             Color="{StaticResource TextColor}" />
+                                             Color="{AppThemeBinding Dark={StaticResource TextColorDark}, Light={StaticResource TextColor}}" />
                         </Image.Source>
                     </Image>
                     <Label Grid.Column="1"
@@ -140,7 +135,7 @@
                         <Image.Source>
                             <FontImageSource FontFamily="{StaticResource FontAwesomeSolid}"
                                              Glyph="{x:Static fontAwesome:FontAwesomeIcons.Palette}"
-                                             Color="{StaticResource TextColor}" />
+                                             Color="{AppThemeBinding Dark={StaticResource TextColorDark}, Light={StaticResource TextColor}}" />
                         </Image.Source>
                     </Image>
                     <Label Grid.Column="1"
@@ -154,12 +149,12 @@
         <Shell.MenuItemTemplate>
             <DataTemplate>
                 <Grid ColumnDefinitions="0.2*,0.8*"
-                      Padding="0,10,0,30">
+                      Padding="0,10,0,10">
                     <Image>
                         <Image.Source>
                             <FontImageSource FontFamily="{StaticResource FontAwesomeSolid}"
                                              Glyph="{x:Static fontAwesome:FontAwesomeIcons.DoorClosed}"
-                                             Color="{StaticResource TextColor}" />
+                                             Color="{AppThemeBinding Dark={StaticResource TextColorDark}, Light={StaticResource TextColor}}" />
                         </Image.Source>
                     </Image>
                     <Label Grid.Column="1"
@@ -173,11 +168,12 @@
     <MenuItem>
         <Shell.MenuItemTemplate>
             <DataTemplate>
-                <StackLayout BackgroundColor="{StaticResource PrimaryAccent}">
-                    <Label HeightRequest="1"
-                           BackgroundColor="{StaticResource SystemGray2}" />
-                    <Label HeightRequest="1"
-                           BackgroundColor="{StaticResource SystemGray2}" />
+                <StackLayout BackgroundColor="{StaticResource PrimaryAccent}" Padding="5">
+                    <Label Text="über Gameucation"
+                           TextColor="White"
+                           HorizontalTextAlignment="Center"
+                           FontAttributes="Bold"
+                           CharacterSpacing="1"></Label>
                 </StackLayout>
             </DataTemplate>
         </Shell.MenuItemTemplate>
@@ -188,12 +184,12 @@
         <Shell.MenuItemTemplate>
             <DataTemplate>
                 <Grid ColumnDefinitions="0.2*,0.8*"
-                      Padding="0,30,0,10">
+                      Padding="0,10,0,10">
                     <Image>
                         <Image.Source>
                             <FontImageSource FontFamily="{StaticResource FontAwesomeSolid}"
                                              Glyph="{x:Static fontAwesome:FontAwesomeIcons.QuestionCircle}"
-                                             Color="{StaticResource TextColor}" />
+                                             Color="{AppThemeBinding Dark={StaticResource TextColorDark}, Light={StaticResource TextColor}}" />
                         </Image.Source>
                     </Image>
                     <Label Grid.Column="1"
@@ -214,7 +210,7 @@
                         <Image.Source>
                             <FontImageSource FontFamily="{StaticResource FontAwesomeSolid}"
                                              Glyph="{x:Static fontAwesome:FontAwesomeIcons.UserLock}"
-                                             Color="{StaticResource TextColor}" />
+                                             Color="{AppThemeBinding Dark={StaticResource TextColorDark}, Light={StaticResource TextColor}}" />
                         </Image.Source>
                     </Image>
                     <Label Grid.Column="1"

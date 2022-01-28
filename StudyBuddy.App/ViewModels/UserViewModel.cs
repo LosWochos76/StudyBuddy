@@ -70,5 +70,17 @@ namespace StudyBuddy.App.ViewModels
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
+        public static UserViewModel FromModel(User u)
+        {
+            return new UserViewModel()
+            {
+                ID = u.ID,
+                Firstname = u.Firstname,
+                Lastname = u.Lastname,
+                Nickname = u.Nickname,
+                Email = u.Email,
+                Role = u.Role
+            };
+        }
     }
 }

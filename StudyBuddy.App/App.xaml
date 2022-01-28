@@ -66,7 +66,7 @@
                 <Setter Property="TextColor"
                         Value="{StaticResource TextColor}" />
                 <Setter Property="BackgroundColor"
-                        Value="Transparent" />
+                        Value="{AppThemeBinding Dark={StaticResource TextColorDark}, Light={StaticResource WindowBackgroundColor}}" />
             </Style>
 
             <Style TargetType="Entry">
@@ -97,9 +97,11 @@
                         Value="True" />
             </Style>
 
-            <Style TargetType="Label">
+            <Style TargetType="Label" ApplyToDerivedTypes="True">
                 <Setter Property="TextColor"
                         Value="{AppThemeBinding Dark={StaticResource TextColorDark}, Light={StaticResource TextColor}}" />
+                <Setter Property="BackgroundColor"
+                        Value="Transparent" />
             </Style>
 
             <Style x:Key="TagLabel"

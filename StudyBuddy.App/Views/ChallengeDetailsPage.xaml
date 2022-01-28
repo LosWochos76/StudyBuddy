@@ -50,6 +50,7 @@
                         </Image>
                         <Label VerticalTextAlignment="Center"
                                Text="{Binding Name}"
+                               TextColor="{StaticResource TextColor}"
                                FontAttributes="Bold"
                                FontSize="20"
                                Padding="20,0,0,0"></Label>
@@ -98,6 +99,19 @@
                                             <Span Text=" Punkte"></Span>
                                             <Span Text="  "></Span>
                                             <Span Text="{Binding CategoryText}"></Span>
+                                        </FormattedString>
+                                    </Label.FormattedText>
+                                </Label>
+                                <Label HorizontalOptions="StartAndExpand"
+                                       VerticalOptions="Center"
+                                       FontSize="18">
+                                    <Label.FormattedText>
+                                        <FormattedString>
+                                            <Span CharacterSpacing="16"
+                                                  FontSize="17"
+                                                  FontFamily="{StaticResource FontAwesomeSolid}"
+                                                  Text="{x:Static fontAwesome:FontAwesomeIcons.Hashtag}"></Span>
+                                            <Span Text="{Binding Tags}"></Span>
                                         </FormattedString>
                                     </Label.FormattedText>
                                 </Label>

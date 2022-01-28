@@ -42,10 +42,14 @@
                 <Setter Property="TextColor" Value="#5AC8FA" />
             </Style>
 
-            <Style x:Key="LearningPointsLabelStyle" TargetType="Label">
-                <Setter Property="FontSize" Value="20"/>
-                <Setter Property="FontAttributes" Value="Bold" />
-                <Setter Property="TextColor" Value="#007AFF" />
+            <Style x:Key="LearningPointsLabelStyle"
+                   TargetType="Label">
+                <Setter Property="FontSize"
+                        Value="20" />
+                <Setter Property="FontAttributes"
+                        Value="Bold" />
+                <Setter Property="TextColor"
+                        Value="#007AFF" />
             </Style>
 
             <Style x:Key="FrameStyle" TargetType="Frame">
@@ -69,6 +73,12 @@
                 <Setter Property="HeightRequest" Value="60" />
                 <Setter Property="Aspect" Value="AspectFit" />
             </Style>
+
+            <Style x:Key="InvertedTextColor"
+                   TargetType="Label">
+                <Setter Property="TextColor"
+                        Value="{StaticResource TextColor}" />
+            </Style>
         </ResourceDictionary>
     </ContentPage.Resources>
 
@@ -76,8 +86,9 @@
                      Command="{Binding RefreshCommand}">            
         <ScrollView>
 
-        <StackLayout Margin="15" Orientation="Vertical" BackgroundColor="White">
-                <Frame Style="{StaticResource FrameStyle}">
+        <StackLayout Orientation="Vertical">
+                <Frame Style="{StaticResource FrameStyle}"
+                       BackgroundColor="{StaticResource WindowBackgroundColor}">
                 <StackLayout Orientation="Vertical">
                         <StackLayout Orientation="Horizontal" HorizontalOptions="Center">
                             <Label Style="{StaticResource TotalPointsLabelStyle}" HorizontalOptions="CenterAndExpand" HorizontalTextAlignment="Center" Text="{Binding UserStatistics.TotalPoints}"></Label>
@@ -89,7 +100,7 @@
                                 </Image.Source>
                             </Image>
                         </StackLayout>
-                        <Label HorizontalOptions="CenterAndExpand" HorizontalTextAlignment="Center" Text="Punkte Gesamt"></Label>
+                        <Label Style="{StaticResource InvertedTextColor}" HorizontalOptions="CenterAndExpand" HorizontalTextAlignment="Center" Text="Punkte Gesamt"></Label>
                     <StackLayout Margin="0,15,15,0" HorizontalOptions="FillAndExpand" Orientation="Horizontal">
                             <StackLayout HorizontalOptions="CenterAndExpand" Orientation="Vertical">
                                 <StackLayout HorizontalOptions="Center" Orientation="Horizontal">
@@ -102,7 +113,8 @@
                                         </Image.Source>
                                     </Image>
                                 </StackLayout>
-                            <Label HorizontalTextAlignment="Center" Text="Networking"></Label>
+                                <Label Style="{StaticResource InvertedTextColor}"
+                                       HorizontalTextAlignment="Center" Text="Networking"></Label>
                         </StackLayout>
                         <StackLayout HorizontalOptions="CenterAndExpand" Orientation="Vertical">
                                 <StackLayout HorizontalOptions="Center" Orientation="Horizontal">
@@ -115,7 +127,8 @@
                                         </Image.Source>
                                     </Image>
                                 </StackLayout>
-                            <Label HorizontalTextAlignment="Center"  Text="Organizing"></Label>
+                                <Label Style="{StaticResource InvertedTextColor}"
+                                       HorizontalTextAlignment="Center"  Text="Organizing"></Label>
                         </StackLayout>
                         <StackLayout HorizontalOptions="CenterAndExpand" Orientation="Vertical">
                                 <StackLayout HorizontalOptions="Center" Orientation="Horizontal">
@@ -128,13 +141,14 @@
                                     </Image.Source>
                                     </Image>
                                 </StackLayout>
-                                <Label HorizontalTextAlignment="Center" Text="Learning"></Label>
+                                <Label Style="{StaticResource InvertedTextColor}" HorizontalTextAlignment="Center" Text="Learning"></Label>
                         </StackLayout>
                     </StackLayout>
                 </StackLayout>
             </Frame>
             <StackLayout HorizontalOptions="StartAndExpand" Orientation="Horizontal" BackgroundColor="Transparent">
-                <Frame Style="{StaticResource FrameStyle}" WidthRequest="200">
+                <Frame Style="{StaticResource FrameStyle}" WidthRequest="200"
+                           BackgroundColor="{StaticResource WindowBackgroundColor}">
                     <StackLayout HorizontalOptions="CenterAndExpand" Orientation="Vertical">
                             <StackLayout Orientation="Horizontal" HorizontalOptions="Center">
                                 <Label HorizontalTextAlignment="Center" Style="{StaticResource TotalPointsLabelStyle}" Text="{Binding UserStatistics.TotalAcceptedChallenges}"></Label>
@@ -146,10 +160,12 @@
                                     </Image.Source>
                                 </Image>
                             </StackLayout>
-                        <Label HorizontalTextAlignment="Center" Text="Abgschlossene Herausforderungen"></Label>
+                            <Label Style="{StaticResource InvertedTextColor}"
+                                   HorizontalTextAlignment="Center" Text="Abgschlossene Herausforderungen"></Label>
                     </StackLayout>
                 </Frame>
-                <Frame Style="{StaticResource FrameStyle}" WidthRequest="200">
+                <Frame Style="{StaticResource FrameStyle}" WidthRequest="200"
+                           BackgroundColor="{StaticResource WindowBackgroundColor}">
                     <StackLayout HorizontalOptions="CenterAndExpand" Orientation="Vertical">
                             <StackLayout Orientation="Horizontal" HorizontalOptions="Center">
                                 <Label HorizontalTextAlignment="Center" Style="{StaticResource TotalPointsLabelStyle}" Text="#5"></Label>
@@ -161,20 +177,22 @@
                                     </Image.Source>
                                 </Image>
                             </StackLayout>
-                        <Label HorizontalTextAlignment="Center" Text="Beste Platzierung"></Label>
+                            <Label Style="{StaticResource InvertedTextColor}"
+                                   HorizontalTextAlignment="Center" Text="Beste Platzierung"></Label>
                     </StackLayout>
                     <Frame.GestureRecognizers>
                         <TapGestureRecognizer Command="{Binding RanksCommand}"/>
                     </Frame.GestureRecognizers>
                 </Frame>
             </StackLayout>
-                <Frame Style="{StaticResource FrameStyle}">
+                <Frame Style="{StaticResource FrameStyle}"
+                       BackgroundColor="{StaticResource WindowBackgroundColor}">
                     <StackLayout HorizontalOptions="FillAndExpand" Orientation="Vertical">
-                        <Label HorizontalTextAlignment="Center" Text="Challenge Performance"></Label>
+                        <Label Style="{StaticResource InvertedTextColor}" HorizontalTextAlignment="Center" Text="Challenge Performance"></Label>
                         <StackLayout Orientation="Horizontal">
                             <StackLayout HorizontalOptions="FillAndExpand" Orientation="Vertical">
                                 <Label x:Name="LastMonthChallenge"  HorizontalTextAlignment="Center" Style="{StaticResource TotalPointsLabelStyle}" Text="{Binding UserStatistics.LastMonthChallengeCount}"></Label>
-                                <Label HorizontalTextAlignment="Center" Text="letzter Monat"></Label>
+                                <Label Style="{StaticResource InvertedTextColor}" HorizontalTextAlignment="Center" Text="letzter Monat"></Label>
                             </StackLayout>
                             <StackLayout HorizontalOptions="FillAndExpand" Orientation="Vertical">
                                 <StackLayout Orientation="Horizontal" HorizontalOptions="Center">
@@ -187,11 +205,11 @@
                                         </Image.Source>
                                     </Image>
                                 </StackLayout>
-                                <Label x:Name="thisMonthLabel" HorizontalTextAlignment="Center" Text="dieser Monat"></Label>
+                                <Label Style="{StaticResource InvertedTextColor}" x:Name="thisMonthLabel" HorizontalTextAlignment="Center" Text="dieser Monat"></Label>
                             </StackLayout>
                             <StackLayout HorizontalOptions="FillAndExpand" Orientation="Vertical">
                                 <Label x:Name="LastWeekChallenge" HorizontalTextAlignment="Center" Style="{StaticResource TotalPointsLabelStyle}" Text="{Binding UserStatistics.LastWeekChallengeCount}"></Label>
-                                <Label HorizontalTextAlignment="Center" Text="letzte Woche"></Label>
+                                <Label Style="{StaticResource InvertedTextColor}" HorizontalTextAlignment="Center" Text="letzte Woche"></Label>
                             </StackLayout>
                             <StackLayout HorizontalOptions="FillAndExpand" Orientation="Vertical">
                                 <StackLayout Orientation="Horizontal" HorizontalOptions="Center">
@@ -204,7 +222,7 @@
                                         </Image.Source>
                                     </Image>
                                 </StackLayout>
-                                <Label HorizontalTextAlignment="Center" Text="diese Woche"></Label>
+                                <Label Style="{StaticResource InvertedTextColor}" HorizontalTextAlignment="Center" Text="diese Woche"></Label>
                             </StackLayout>
                         </StackLayout>
                     </StackLayout>

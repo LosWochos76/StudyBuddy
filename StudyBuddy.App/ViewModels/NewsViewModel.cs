@@ -20,7 +20,8 @@ namespace StudyBuddy.App.ViewModels
                 Updated = notification.Updated,
             };
         }
-
+        public string FormattedBody { get => Body + " am " + Created.ToShortDateString(); }
+        public UserViewModel NotificationOwner { get => UserViewModel.FromModel(Owner); }
         public event PropertyChangedEventHandler PropertyChanged;
 
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)

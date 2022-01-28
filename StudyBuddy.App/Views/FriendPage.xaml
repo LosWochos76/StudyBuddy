@@ -81,27 +81,23 @@
                         </StackLayout>
                         <StackLayout Margin="0" Orientation="Vertical">
                             <Frame Style="{StaticResource FrameStyle}"
-                                   HasShadow="False"
-                                   xct:ShadowEffect.Color="Black"
-                                   xct:ShadowEffect.Opacity="1"
-                                   xct:ShadowEffect.Radius="5"
-                                   xct:ShadowEffect.OffsetY="-2"
-                                   xct:ShadowEffect.OffsetX="-2">
+                                   HasShadow="true"
+                                   BackgroundColor="{StaticResource WindowBackgroundColor}">
                                 <StackLayout Orientation="Vertical">
                                     <Label Style="{StaticResource TotalPointsLabelStyle}" HorizontalOptions="CenterAndExpand" HorizontalTextAlignment="Center" Text="{Binding UserStatistics.TotalPoints}"></Label>
-                                    <Label HorizontalOptions="CenterAndExpand" HorizontalTextAlignment="Center" Text="Punkte Gesamt"></Label>
+                                    <Label TextColor="{StaticResource TextColor}" HorizontalOptions="CenterAndExpand" HorizontalTextAlignment="Center" Text="Punkte Gesamt"></Label>
                                     <StackLayout Margin="0,15,15,0" HorizontalOptions="FillAndExpand" Orientation="Horizontal">
                                         <StackLayout HorizontalOptions="CenterAndExpand" Orientation="Vertical">
                                             <Label Style="{StaticResource NetworkPointsLabelStyle}" HorizontalTextAlignment="Center" Text="{Binding UserStatistics.TotalNetworkChallengesPoints}" ></Label>
-                                            <Label HorizontalTextAlignment="Center"  Text="Networking"></Label>
+                                            <Label TextColor="{StaticResource TextColor}" HorizontalTextAlignment="Center"  Text="Networking"></Label>
                                         </StackLayout>
                                         <StackLayout HorizontalOptions="CenterAndExpand" Orientation="Vertical">
                                             <Label Style="{StaticResource OrganizingPointsLabelStyle}" HorizontalTextAlignment="Center" Text="{Binding UserStatistics.TotalOrganizingChallengesPoints}"></Label>
-                                            <Label HorizontalTextAlignment="Center"  Text="Organizing"></Label>
+                                            <Label TextColor="{StaticResource TextColor}" HorizontalTextAlignment="Center"  Text="Organizing"></Label>
                                         </StackLayout>
                                         <StackLayout HorizontalOptions="CenterAndExpand" Orientation="Vertical">
                                             <Label Style="{StaticResource LearningPointsLabelStyle}" HorizontalTextAlignment="Center" Text="{Binding UserStatistics.TotalLearningChallengesPoints}"></Label>
-                                            <Label HorizontalTextAlignment="Center"  Text="Learning"></Label>
+                                            <Label TextColor="{StaticResource TextColor}" HorizontalTextAlignment="Center"  Text="Learning"></Label>
                                         </StackLayout>
                                     </StackLayout>
                                 </StackLayout>

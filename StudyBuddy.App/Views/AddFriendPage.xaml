@@ -35,17 +35,11 @@
                                     <ColumnDefinition Width="*" />
                                 </Grid.ColumnDefinitions>
                                 <Frame CornerRadius="10"
-                                           HasShadow="False"
                                            Margin="0"
                                            Padding="0"
-                                           HeightRequest="100"
-                                           BorderColor="{StaticResource WindowBackgroundColor}"
-                                           BackgroundColor="{StaticResource WindowBackgroundColor}"
-                                           xct:ShadowEffect.Color="Black"
-                                           xct:ShadowEffect.Opacity="1"
-                                           xct:ShadowEffect.Radius="5"
-                                           xct:ShadowEffect.OffsetY="-2"
-                                           xct:ShadowEffect.OffsetX="-2">
+                                       HeightRequest="100"
+                                       BackgroundColor="{AppThemeBinding Dark={StaticResource SystemGray3}, Light={StaticResource SystemGray4}}"
+                                       BorderColor="{AppThemeBinding Dark={StaticResource SystemGray3}, Light={StaticResource SystemGray4}}">
                                     <Grid BackgroundColor="Transparent">
 
                                         <Grid.RowDefinitions>
@@ -75,10 +69,7 @@
                                                Grid.ColumnSpan="2"
                                                HasShadow="False"
                                                CornerRadius="10"
-                                               Padding="0,0,0,0"
-                                               xct:ShadowEffect.Color="Black"
-                                               xct:ShadowEffect.Opacity="1"
-                                               xct:ShadowEffect.Radius="6">
+                                               Padding="0,0,0,0">
 
                                             <StackLayout BackgroundColor="Transparent" Padding="0">
                                                 <Label Text="{Binding FullName}"

@@ -12,43 +12,78 @@
     <xct:TabView TabStripPlacement="Top"
                  TabStripHeight="55"
                  TabIndicatorColor="{StaticResource PrimaryAccent}"
-                 TabStripBackgroundColor="{StaticResource WindowBackgroundColor}"
+                 TabStripBackgroundColor="{AppThemeBinding Dark={StaticResource WindowBackgroundColorDark}, Light={StaticResource WindowBackgroundColor}}"
                  TabIndicatorPlacement="Bottom"
                  TabIndicatorHeight="5"
                  SelectedIndex="0"
                  TabContentDataTemplate="{DataTemplate local:NotificationsPage}">
         <xct:TabViewItem Text="News" 
-                         IsSelected="{Binding NewsIsSelected, Mode=OneWayToSource}" 
-                         TextColor="{StaticResource SecondaryFont}" 
-                         TextColorSelected="{StaticResource TextColor}"
+                         IsSelected="{Binding NewsIsSelected, Mode=OneWayToSource}"
+                         TextColor="{AppThemeBinding Dark={StaticResource TextColorDark}, Light={StaticResource TextColor}}" 
+                         TextColorSelected="{StaticResource PrimaryAccent}"
                          FontAttributes="Bold"
                          Padding="0,0,0,5">
             <xct:TabViewItem.Content>
-                <StackLayout>
+                <StackLayout Padding="0,15,0,0">
                     <RefreshView IsRefreshing="{Binding IsRefreshing}"
                                  Command="{Binding RefreshCommand}">
                         <CollectionView ItemsSource="{Binding News}">
                             <CollectionView.ItemTemplate>
                                 <DataTemplate x:DataType="viewmodels:NewsViewModel">
-                                    
-                                    <ContentView>
-                                        <StackLayout>
-                                            <BoxView HeightRequest="1"
-                                                     Color="Black" />
-                                            <StackLayout Orientation="Horizontal">
-                                                <Label Text="{Binding Owner.Firstname}"></Label>
-                                                <Label Text="{Binding Owner.Lastname}"></Label>
-                                            </StackLayout>
-                                            <StackLayout>
-                                                <Label Text="{Binding Created}"></Label>
-                                            </StackLayout>
-                                            <StackLayout>
-                                                <Label Text="{Binding Title}"
-                                                       FontAttributes="Bold"></Label>
-                                                <Label Text="{Binding Body}"></Label>
-                                            </StackLayout>
-                                        </StackLayout>
-                                    </ContentView>
+                                    <Grid x:Name="requestItem"
+                                          Padding="5">
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="*" />
+                                        </Grid.RowDefinitions>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*" />
+                                        </Grid.ColumnDefinitions>
+                                        <Frame CornerRadius="10"
+                                               HasShadow="True"
+                                               BackgroundColor="{AppThemeBinding Dark={StaticResource SystemGray3}, Light={StaticResource SystemGray4}}"
+                                               BorderColor="{AppThemeBinding Dark={StaticResource SystemGray3}, Light={StaticResource SystemGray4}}"
+                                               Margin="0"
+                                               Padding="0"
+                                               HeightRequest="110">
+                                            <Grid Padding="0,1,2,2">
+                                                <Grid.RowDefinitions>
+                                                    <RowDefinition Height="*" />
+                                                    <RowDefinition Height="*" />
+                                                </Grid.RowDefinitions>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="80" />
+                                                    <ColumnDefinition Width="*" />
+                                                    <ColumnDefinition Width="*" />
+                                                </Grid.ColumnDefinitions>
+                                                <StackLayout Grid.RowSpan="2"
+                                                             VerticalOptions="Center">
+                                                    <xct:AvatarView Size="70"
+                                                                    VerticalOptions="Center"
+                                                                    Padding="8,0,2,0"
+                                                                    Grid.Column="0"
+                                                                    Grid.Row="0"
+                                                                    Text="{Binding NotificationOwner.Initials}"
+                                                                    Source="{Binding NotificationOwner.ProfileImage}" />
+                                                </StackLayout>
+                                                <Frame Grid.Row="0"
+                                                       Grid.RowSpan="2"
+                                                       Grid.Column="1"
+                                                       Grid.ColumnSpan="2"
+                                                       HasShadow="False"
+                                                       CornerRadius="10"
+                                                       Padding="0">
+                                                    <StackLayout Padding="15,5,5,5" BackgroundColor="Transparent">
+                                                        <Label Text="{Binding Title}"
+                                                               FontSize="18"
+                                                               VerticalOptions="StartAndExpand"
+                                                               FontAttributes="Bold" />
+                                                        <Label Text="{Binding FormattedBody}" VerticalOptions="EndAndExpand"></Label>
+
+                                                    </StackLayout>
+                                                </Frame>
+                                            </Grid>
+                                        </Frame>
+                                    </Grid>
                                 </DataTemplate>
                             </CollectionView.ItemTemplate>
                         </CollectionView>
@@ -59,8 +94,8 @@
         <xct:TabViewItem Text="Anfragen"
                          IsSelected="{Binding RequestsIsSelected, Mode=OneWayToSource}"
                          BadgeText="{Binding Requests.Count}"
-                         TextColor="{StaticResource SecondaryFont}" 
-                         TextColorSelected="{StaticResource TextColor}"
+                         TextColor="{AppThemeBinding Dark={StaticResource TextColorDark}, Light={StaticResource TextColor}}"
+                         TextColorSelected="{StaticResource PrimaryAccent}"
                          FontAttributes="Bold"
                          BadgeTextColor="White"
                          BadgeBackgroundColor="{StaticResource ConfirmButton}"
@@ -72,7 +107,7 @@
                     <CollectionView ItemsSource="{Binding Requests}">
                             <CollectionView.ItemTemplate>
                                 <DataTemplate x:DataType="viewmodels:RequestViewModel">
-                                    <Grid x:Name="requestItem" Padding="8,8,8,8">
+                                    <Grid x:Name="requestItem" Padding="5">
                                         <Grid.RowDefinitions>
                                             <RowDefinition Height="*" />
                                         </Grid.RowDefinitions>
@@ -81,16 +116,12 @@
                                         </Grid.ColumnDefinitions>
                                         <Frame CornerRadius="10"
                                                HasShadow="True"
-                                               BackgroundColor="{StaticResource WindowBackgroundColor}"
+                                               BackgroundColor="{AppThemeBinding Dark={StaticResource SystemGray3}, Light={StaticResource SystemGray4}}"
+                                               BorderColor="{AppThemeBinding Dark={StaticResource SystemGray3}, Light={StaticResource SystemGray4}}"
                                                Margin="0"
                                                Padding="0"
-                                               HeightRequest="110"
-                                               xct:ShadowEffect.Color="Black"
-                                               xct:ShadowEffect.Opacity="1"
-                                               xct:ShadowEffect.Radius="5"
-                                               xct:ShadowEffect.OffsetY="-2"
-                                               xct:ShadowEffect.OffsetX="-2">
-                                            <Grid BackgroundColor="Transparent">
+                                               HeightRequest="110">
+                                            <Grid Padding="0,1,2,2">
                                                 <Grid.RowDefinitions>
                                                     <RowDefinition Height="*" />
                                                     <RowDefinition Height="*" />
@@ -101,8 +132,7 @@
                                                     <ColumnDefinition Width="*" />
                                                 </Grid.ColumnDefinitions>
                                                 <StackLayout Grid.RowSpan="2"
-                                                             VerticalOptions="Center"
-                                                             BackgroundColor="Transparent">
+                                                             VerticalOptions="Center">
                                                     <xct:AvatarView Size="70"
                                                                     VerticalOptions="Center"
                                                                     Padding="8,0,2,0"
@@ -117,12 +147,8 @@
                                                        Grid.ColumnSpan="2"
                                                        HasShadow="False"
                                                        CornerRadius="10"
-                                                       Padding="0,0,0,0"
-                                                       xct:ShadowEffect.Color="Black"
-                                                       xct:ShadowEffect.Opacity="1"
-                                                       xct:ShadowEffect.Radius="5">
-                                                    <StackLayout BackgroundColor="Transparent"
-                                                                 Padding="8,0,0,0">
+                                                       Padding="0">
+                                                    <StackLayout Padding="8,0,0,0">
                                                         <Label Text="{Binding Name}"
                                                                FontSize="14"
                                                                HeightRequest="60"

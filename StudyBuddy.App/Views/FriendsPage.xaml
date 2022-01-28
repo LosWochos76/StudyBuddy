@@ -49,18 +49,13 @@
                                 <ColumnDefinition Width="*" />
                             </Grid.ColumnDefinitions>
                             <Frame CornerRadius="10"
-                                   HasShadow="False"
                                    Margin="0"
                                    Padding="0"
                                    HeightRequest="85"
-                                   BorderColor="{StaticResource WindowBackgroundColor}"
-                                   BackgroundColor="{StaticResource WindowBackgroundColor}"
-                                   xct:ShadowEffect.Color="Black"
-                                   xct:ShadowEffect.Opacity="1"
-                                   xct:ShadowEffect.Radius="5"
-                                   xct:ShadowEffect.OffsetY="-2"
-                                   xct:ShadowEffect.OffsetX="-2">
-                                <Grid BackgroundColor="Transparent">
+                                   BackgroundColor="{AppThemeBinding Dark={StaticResource SystemGray3}, Light={StaticResource SystemGray4}}"
+                                   BorderColor="{AppThemeBinding Dark={StaticResource SystemGray3}, Light={StaticResource SystemGray4}}">
+                                <Grid BackgroundColor="Transparent"
+                                      Padding="0,1.5,2.5,2">
 
                                     <Grid.RowDefinitions>
                                         <RowDefinition Height="*" />
@@ -86,13 +81,8 @@
                                            Grid.RowSpan="2"
                                            Grid.Column="1"
                                            Grid.ColumnSpan="2"
-                                           HasShadow="False"
                                            CornerRadius="10"
-                                           Padding="0,0,0,0"
-                                           xct:ShadowEffect.Color="Black"
-                                           xct:ShadowEffect.Opacity="1"
-                                           xct:ShadowEffect.Radius="6">
-
+                                           Padding="0,0,0,0">
                                         <StackLayout BackgroundColor="Transparent">
                                             <Label Text="{Binding FullName}"
                                                    HeightRequest="60"
