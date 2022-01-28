@@ -6,7 +6,7 @@ using Environment = StudyBuddy.Model.Environment;
 
 namespace StudyBuddy.BusinessLogic
 {
-    internal class MailKitHelper
+    public class MailKitHelper
     {
         public static MailKitOptions GetMailKitOptions()
         {
