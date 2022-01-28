@@ -21,12 +21,21 @@ namespace StudyBuddy.BusinessLogic
             return options;
         }
 
-        public static void SendMail(string mailTo, string subject, string message)
+        public static bool SendMail(string mailTo, string subject, string message)
         {
-            var options = GetMailKitOptions();
-            var provider = new MailKitProvider(options);
-            var mail = new EmailService(provider);
-            mail.Send(mailTo, subject, message, true);
+            try
+            {
+                var options = GetMailKitOptions();
+                var provider = new MailKitProvider(options);
+                var mail = new EmailService(provider);
+                mail.Send(mailTo, subject, message, true);
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
+
+            return true;
         }
     }
 }

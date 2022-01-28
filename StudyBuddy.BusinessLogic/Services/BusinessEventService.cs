@@ -156,8 +156,12 @@ namespace StudyBuddy.BusinessLogic
 
                 var code = new StringBuilder("var backend = new Backend();\n" +
                     "backend.CurrentUser = backend.Repository.Users.ById(" + bi.OwnerID + ");\n" +
-                    "var args = new BusinessEventArgs(BusinessEventType." + args.Type.ToString() + ");\n" +
-                    "args.CurrentUser = backend.Repository.Users.ById(" + args.CurrentUser.ID + ");\n");
+                    "var args = new BusinessEventArgs(BusinessEventType." + args.Type.ToString() + ");\n");
+
+                if (args.CurrentUser != null)
+                {
+                    code.Append("args.CurrentUser = backend.Repository.Users.ById(" + args.CurrentUser.ID + ");\n");
+                }
 
                 if (args.Payload is User)
                 {
