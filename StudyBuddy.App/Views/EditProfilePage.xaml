@@ -7,12 +7,15 @@
              xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
              x:DataType="viewmodels:EditProfileViewModel"
              Title="Profil bearbeiten"
-             Shell.TabBarIsVisible="False">
+             Shell.TabBarIsVisible="False"
+             Visual="Material">
 
     <ScrollView>
         <ScrollView.Content>
             <StackLayout Padding="8">
-                <Label Text="Vorname:" FontAttributes="Bold" ></Label>
+                <Label Text="Vorname:"
+                       FontAttributes="Bold"
+                       FontSize="16"></Label>
                 <Entry Placeholder="{Binding User.Firstname}"
                        PlaceholderColor="{StaticResource SecondaryFont}"
                        Text="{Binding Firstname}"
@@ -24,17 +27,18 @@
                                                           Flags="ValidateOnValueChanging"
                                                           IsNotValid="{Binding FirstnameNotValid}"
                                                           MaximumCharacterCount="0"
-                                                          MinimumLength="1"
                                                           MaximumLength="100"
                                                           DecorationFlags="Trim">
 
                         </xct:CharactersValidationBehavior>
                     </Entry.Behaviors>
                 </Entry>
-                <Label Text="Vorname darf nicht leer sein oder Zahlen enthalten."
+                <Label Text="Vorname darf keine Zahlen enthalten."
                        TextColor="Red"
                        IsVisible="{Binding FirstnameNotValid}"></Label>
-                <Label Text="Nachname:"></Label>
+                <Label Text="Nachname:"
+                       FontAttributes="Bold"
+                       FontSize="16"></Label>
                 <Entry Placeholder="{Binding User.Lastname}"
                        PlaceholderColor="{StaticResource SecondaryFont}"
                        Text="{Binding Lastname}"
@@ -46,17 +50,18 @@
                                                           Flags="ValidateOnValueChanging"
                                                           IsNotValid="{Binding LastnameNotValid}"
                                                           MaximumCharacterCount="0"
-                                                          MinimumLength="1"
                                                           MaximumLength="100"
                                                           DecorationFlags="Trim">
 
                         </xct:CharactersValidationBehavior>
                     </Entry.Behaviors>
                 </Entry>
-                <Label Text="Nachname darf nicht leer sein oder Zahlen enthalten."
+                <Label Text="Nachname darf keine Zahlen enthalten."
                        TextColor="Red"
                        IsVisible="{Binding LastnameNotValid}"></Label>
-                <Label Text="Nickname:"></Label>
+                <Label Text="Nickname:"
+                       FontAttributes="Bold"
+                       FontSize="16"></Label>
                 <Entry Placeholder="{Binding User.Nickname}"
                        PlaceholderColor="{StaticResource SecondaryFont}"
                        Text="{Binding Nickname}"
@@ -66,17 +71,18 @@
                     <Entry.Behaviors>
                         <xct:TextValidationBehavior Flags="ValidateOnValueChanging"
                                                     IsNotValid="{Binding NicknameNotValid}"
-                                                    MinimumLength="1"
                                                     MaximumLength="100"
                                                     DecorationFlags="Trim">
 
                         </xct:TextValidationBehavior>
                     </Entry.Behaviors>
                 </Entry>
-                <Label Text="Nickname darf nicht leer sein."
+                <Label Text="Nickname darf nicht länger als 100 Zeichen sein."
                        TextColor="Red"
                        IsVisible="{Binding NicknameNotValid}"></Label>
-                <Label Text="Passwort:"></Label>
+                <Label Text="Passwort:"
+                       FontAttributes="Bold"
+                       FontSize="16"></Label>
                 <Entry Placeholder="Passwort"
                        PlaceholderColor="{StaticResource SecondaryFont}"
                        Text="{Binding Password}"
@@ -84,10 +90,9 @@
                        ClearButtonVisibility="WhileEditing"
                        ReturnType="Next">
                     <Entry.Behaviors>
-                        <xct:TextValidationBehavior Flags="ValidateOnValueChanging"
+                        <xct:TextValidationBehavior Flags="ValidateOnUnfocusing"
                                                     IsNotValid="{Binding PasswordNotValid}"
-                                                    RegexPattern="{Binding PasswordPattern}"
-                                                    MinimumLength="1">
+                                                    RegexPattern="{Binding PasswordPattern}">
                             
                         </xct:TextValidationBehavior>
                     </Entry.Behaviors>
@@ -96,7 +101,9 @@
                        IsVisible="{Binding PasswordNotValid}"
                        TextColor="Red">
                 </Label>
-                <Label Text="Passwort bestätigen:"></Label>
+                <Label Text="Passwort bestätigen:"
+                       FontAttributes="Bold"
+                       FontSize="16"></Label>
                 <Entry Placeholder="Passwort bestätigen"
                        PlaceholderColor="{StaticResource SecondaryFont}"
                        Text="{Binding PasswordConfirm}"
@@ -104,7 +111,7 @@
                        ClearButtonVisibility="WhileEditing"
                        ReturnType="Done">
                     <Entry.Behaviors>
-                        <xct:RequiredStringValidationBehavior Flags="ValidateOnValueChanging"
+                        <xct:RequiredStringValidationBehavior Flags="ValidateOnUnfocusing"
                                                               RequiredString="{Binding Password}" 
                                                               IsNotValid="{Binding PasswordConfirmNotValid}">
                         </xct:RequiredStringValidationBehavior>

@@ -153,7 +153,7 @@
                     <Image>
                         <Image.Source>
                             <FontImageSource FontFamily="{StaticResource FontAwesomeSolid}"
-                                             Glyph="{x:Static fontAwesome:FontAwesomeIcons.DoorClosed}"
+                                             Glyph="{x:Static fontAwesome:FontAwesomeIcons.DoorOpen}"
                                              Color="{AppThemeBinding Dark={StaticResource TextColorDark}, Light={StaticResource TextColor}}" />
                         </Image.Source>
                     </Image>

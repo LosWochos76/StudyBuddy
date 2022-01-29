@@ -24,6 +24,7 @@ namespace App.iOS
         {
             FirebasePushNotificationManager.Initialize(options, true);
             global::Xamarin.Forms.Forms.Init();
+            global::Xamarin.Forms.FormsMaterial.Init();
             ZXing.Net.Mobile.Forms.iOS.Platform.Init();
             LoadApplication(new StudyBuddy.App.App());
             

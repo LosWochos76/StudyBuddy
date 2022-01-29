@@ -12,11 +12,11 @@ namespace StudyBuddy.App.ViewModels
     public class AddFriendViewModel: ViewModelBase
     {
         public RangeObservableCollection<UserViewModel> Users { get; private set; }
+        public UserViewModel SelectedUser { get; set; }
         public IAsyncCommand RefreshCommand { get; }
         public IAsyncCommand SearchCommand { get; }
         public IAsyncCommand LoadMoreCommand { get; }
-        public ICommand SendFriendshipRequestCommand { get; set; }
-        public ICommand RemoveFriendshipRequestCommand { get; set; }
+        public IAsyncCommand FriendshipRequestCommand { get; set; }
         public bool IsRefreshing { get; set; }
         public int Skip { get; set; }
 
@@ -68,8 +68,7 @@ namespace StudyBuddy.App.ViewModels
             LoadMoreCommand = new AsyncCommand(LoadNotFriends);
             SearchCommand = new AsyncCommand(LoadNotFriends);
             RefreshCommand = new AsyncCommand(Refresh);
-            SendFriendshipRequestCommand = new Command<UserViewModel>(SendFriendshipRequest);
-            RemoveFriendshipRequestCommand = new Command<UserViewModel>(RemoveFriendshipRequest);
+            FriendshipRequestCommand = new AsyncCommand(FriendshipRequest);
 
         }
         private void Authentication_LoginStateChanged(object sender, LoginStateChangedArgs args)
@@ -119,42 +118,62 @@ namespace StudyBuddy.App.ViewModels
             }
         }
 
-        public async void SendFriendshipRequest(UserViewModel obj)
+        public async Task FriendshipRequest()
         {
-            var answer = false;
-            await dialog.ShowMessage(
-                "Wollen Sie eine Anfrage stellen, um "  + obj.Name + " als Freund hinzuzufügen?",
-                "Freund hinzufügen?",
-                "Ja", "Nein", a => { answer = a; });
-
-            if (!answer)
+            if (SelectedUser == null)
                 return;
 
-            var result = await api.Requests.AskForFriendship(obj);
-            if (!result)
+            if(!SelectedUser.RequestedForFriendship)
             {
-                dialog.ShowError("Ein Fehler ist aufgetreten!", "Fehler!", "Ok", null);
-                return;
+                var answer = false;
+                await dialog.ShowMessage(
+                    "Wollen Sie eine Anfrage stellen, um " + SelectedUser.Name + " als Freund hinzuzufügen?",
+                    "Freund hinzufügen?",
+                    "Ja", "Nein", a => { answer = a; });
+
+                if (!answer)
+                {
+                    SelectedUser = null;
+                    NotifyPropertyChanged(nameof(SelectedUser));
+                    return;
+                }
+
+                var result = await api.Requests.AskForFriendship(SelectedUser);
+                SelectedUser = null;
+                NotifyPropertyChanged(nameof(SelectedUser));
+                if (!result)
+                {
+                    dialog.ShowError("Ein Fehler ist aufgetreten!", "Fehler!", "Ok", null);
+                    return;
+                }
             }
+            else if (SelectedUser.RequestedForFriendship)
+            {
+                var answer = false;
+                await dialog.ShowMessage(
+                    "Wollen Sie die Anfrage and " + SelectedUser.Name + " löschen?",
+                    "Freundschaftsanfrage löschen?",
+                    "Ja", "Nein", a => { answer = a; });
+
+                if (!answer)
+                {
+                    SelectedUser = null;
+                    NotifyPropertyChanged(nameof(SelectedUser));
+                    return;
+                }
+
+                var result = await api.Requests.DeleteFriendshipRequest(SelectedUser);
+
+                SelectedUser = null;
+                NotifyPropertyChanged(nameof(SelectedUser));
+                if (!result)
+                {
+                    dialog.ShowError("Ein Fehler ist aufgetreten!", "Fehler!", "Ok", null);
+                    return;
+                }
+            }
+            else dialog.ShowError("Ein Fehler ist aufgetreten.", "Fehler", "Ok", null);
         }
 
-        public async void RemoveFriendshipRequest(UserViewModel obj)
-        {
-            var answer = false;
-            await dialog.ShowMessage(
-                "Wollen Sie die Anfrage and " + obj.Name + " löschen?",
-                "Freundschaftsanfrage löschen?",
-                "Ja", "Nein", a => { answer = a; });
-
-            if (!answer)
-                return;
-
-            var result = await api.Requests.DeleteFriendshipRequest(obj);
-            if (!result)
-            {
-                dialog.ShowError("Ein Fehler ist aufgetreten!", "Fehler!", "Ok", null);
-                return;
-            }
-        }
     }
 }

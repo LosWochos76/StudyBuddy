@@ -5,6 +5,7 @@
              x:Class="StudyBuddy.App.App">
     <Application.Resources>
         <ResourceDictionary>
+            <Color x:Key="Transparent">#0000ffff</Color>
             <Color x:Key="Primary">#000000</Color>
             <Color x:Key="PrimaryAccent">#3700B3</Color>
             <Color x:Key="TextColor">#1C1C1E</Color>
@@ -14,7 +15,9 @@
             <Color x:Key="WindowBackgroundColorDark">#1C1C1E</Color>
             <Color x:Key="ButtonBackground">#45A5D9</Color>
             <Color x:Key="ConfirmButton">#81C784</Color>
+            <Color x:Key="ConfirmButtonDark">#327135</Color>
             <Color x:Key="DeclineButton">#E57373</Color>
+            <Color x:Key="DeclineButtonDark">#911a1a</Color>
             <Color x:Key="Learning">#007AFF</Color>
             <Color x:Key="Networking">#5856D6</Color>
             <Color x:Key="Organizing">#5AC8FA</Color>
@@ -92,7 +95,7 @@
                 <Setter Property="BackgroundColor"
                         Value="{AppThemeBinding Dark={StaticResource WindowBackgroundColorDark}, Light={StaticResource WindowBackgroundColor}}" />
                 <Setter Property="BorderColor"
-                        Value="{AppThemeBinding Dark={StaticResource WindowBackgroundColorDark}, Light={StaticResource WindowBackgroundColor}}" />
+                        Value="{OnPlatform Android={StaticResource SystemGray4}, iOS={StaticResource Transparent}}" />
                 <Setter Property="HasShadow"
                         Value="True" />
             </Style>

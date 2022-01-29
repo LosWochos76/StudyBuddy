@@ -11,7 +11,6 @@ namespace StudyBuddy.App.Views
         public ChallengesPage()
         {
             InitializeComponent();
-
             BindingContext = TinyIoCContainer.Current.Resolve<ChallengesViewModel>();
             
         }

@@ -9,17 +9,24 @@
              x:Name="page"
              Shell.TabBarIsVisible="False"
              Title="Freunde">
-    <ContentPage.ToolbarItems>
-        <ToolbarItem Text="Freund hinzufügen"
-            Order="Primary"
-            Priority="0"
-            Command="{Binding AddFriendCommand}">
-            <ToolbarItem.IconImageSource>
-                <FontImageSource FontFamily="{StaticResource FontAwesomeSolid}"
-                    Glyph="{x:Static fontAwesome:FontAwesomeIcons.Plus}" />
-            </ToolbarItem.IconImageSource>
-        </ToolbarItem>
-    </ContentPage.ToolbarItems>
+    <ContentPage.Resources>
+        <Style TargetType="Grid">
+            <Setter Property="VisualStateManager.VisualStateGroups">
+                <VisualStateGroupList>
+                    <VisualStateGroup x:Name="CommonStates">
+                        <VisualState x:Name="Normal" />
+                        <VisualState x:Name="Selected">
+                            <VisualState.Setters>
+                                <Setter Property="BackgroundColor"
+                                        Value="{StaticResource PrimaryAccent}" />
+                            </VisualState.Setters>
+                        </VisualState>
+                    </VisualStateGroup>
+                </VisualStateGroupList>
+            </Setter>
+        </Style>
+    </ContentPage.Resources>
+    <ContentPage.Content>
     <StackLayout>
         <SearchBar SearchCommand="{Binding SearchCommand}" Text="{Binding SearchText}" />
         <ActivityIndicator IsVisible="{Binding IsBusy}" IsRunning="{Binding IsBusy}" />
@@ -51,11 +58,11 @@
                             <Frame CornerRadius="10"
                                    Margin="0"
                                    Padding="0"
-                                   HeightRequest="85"
-                                   BackgroundColor="{AppThemeBinding Dark={StaticResource SystemGray3}, Light={StaticResource SystemGray4}}"
-                                   BorderColor="{AppThemeBinding Dark={StaticResource SystemGray3}, Light={StaticResource SystemGray4}}">
+                                   HeightRequest="95"
+                                   BackgroundColor="{AppThemeBinding Dark={StaticResource WindowBackgroundColorDark},Light={StaticResource WindowBackgroundColor}}"
+                                   BorderColor="{OnPlatform Android={StaticResource SystemGray4}, iOS={StaticResource Transparent}}">
                                 <Grid BackgroundColor="Transparent"
-                                      Padding="0,1.5,2.5,2">
+                                      Padding="0">
 
                                     <Grid.RowDefinitions>
                                         <RowDefinition Height="*" />
@@ -104,4 +111,5 @@
             </CollectionView>
         </RefreshView>
     </StackLayout>
+    </ContentPage.Content>
 </ContentPage>

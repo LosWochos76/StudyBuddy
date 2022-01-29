@@ -5,7 +5,25 @@
              xmlns:viewmodels="clr-namespace:StudyBuddy.App.ViewModels"
              xmlns:fontAwesome="clr-namespace:StudyBuddy.App"
              x:DataType="viewmodels:ChallengesViewModel"
-             x:Name="page">
+             x:Name="page"
+             Visual="Default">
+    <ContentPage.Resources>
+        <Style TargetType="Grid">
+            <Setter Property="VisualStateManager.VisualStateGroups">
+                <VisualStateGroupList>
+                    <VisualStateGroup x:Name="CommonStates">
+                        <VisualState x:Name="Normal" />
+                        <VisualState x:Name="Selected">
+                            <VisualState.Setters>
+                                <Setter Property="BackgroundColor"
+                                        Value="{StaticResource PrimaryAccent}" />
+                            </VisualState.Setters>
+                        </VisualState>
+                    </VisualStateGroup>
+                </VisualStateGroupList>
+            </Setter>
+        </Style>
+    </ContentPage.Resources>
     <Shell.TitleView>
         <Label Text="{Binding Header}"
                VerticalTextAlignment="Center"
@@ -28,7 +46,7 @@
         </ToolbarItem>
     </ContentPage.ToolbarItems>
     <StackLayout>
-        <SearchBar SearchCommand="{Binding SearchCommand}" Text="{Binding SearchText}"/>
+        <SearchBar SearchCommand="{Binding SearchCommand}" Text="{Binding SearchText}" Visual="Material"/>
         <ActivityIndicator IsVisible="{Binding IsBusy}" IsRunning="{Binding IsBusy}" />
         <RefreshView IsRefreshing="{Binding IsRefreshing}" 
                      Command="{Binding RefreshCommand}">
@@ -42,7 +60,7 @@
                 <CollectionView.ItemTemplate>
                     <DataTemplate x:DataType="viewmodels:ChallengeViewModel">
                         <Grid x:Name="Item"
-                              Padding="5,5,5,5">
+                              Padding="5,0,5,0">
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="*" />
                             </Grid.RowDefinitions>
@@ -50,13 +68,16 @@
                                 <ColumnDefinition Width="*" />
                             </Grid.ColumnDefinitions>
                             <Frame CornerRadius="10"
-                                   Margin="0"
+                                   Margin="5"
                                    Padding="0"
                                    HeightRequest="100"
-                                   BorderColor="{Binding CategoryColor}"
-                                   BackgroundColor="{Binding CategoryColor}">
+                                   HasShadow="True"
+                                   HorizontalOptions="FillAndExpand"
+                                   VerticalOptions="FillAndExpand"
+                                   BorderColor="{OnPlatform Android={StaticResource SystemGray4}, iOS={StaticResource Transparent}}"
+                                   BackgroundColor="{Binding CategoryColor}" >
                                 <Grid BackgroundColor="Transparent"
-                                      Padding="0,1,1.5,1.5">
+                                      Padding="0">
 
                                     <Grid.RowDefinitions>
                                         <RowDefinition Height="*" />
@@ -84,7 +105,7 @@
                                            Grid.RowSpan="2"
                                            Grid.Column="1"
                                            Grid.ColumnSpan="2"
-                                           HasShadow="False"
+                                           HasShadow="True"
                                            CornerRadius="10"
                                            Padding="0,0,0,0">
 

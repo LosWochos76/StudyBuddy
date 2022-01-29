@@ -40,12 +40,12 @@
                                         </Grid.ColumnDefinitions>
                                         <Frame CornerRadius="10"
                                                HasShadow="True"
-                                               BackgroundColor="{AppThemeBinding Dark={StaticResource SystemGray3}, Light={StaticResource SystemGray4}}"
-                                               BorderColor="{AppThemeBinding Dark={StaticResource SystemGray3}, Light={StaticResource SystemGray4}}"
+                                               BackgroundColor="{AppThemeBinding Dark={StaticResource WindowBackgroundColorDark},Light={StaticResource WindowBackgroundColor}}"
+                                               BorderColor="{OnPlatform Android={StaticResource SystemGray4}, iOS={StaticResource Transparent}}"
                                                Margin="0"
                                                Padding="0"
                                                HeightRequest="110">
-                                            <Grid Padding="0,1,2,2">
+                                            <Grid Padding="0">
                                                 <Grid.RowDefinitions>
                                                     <RowDefinition Height="*" />
                                                     <RowDefinition Height="*" />
@@ -116,12 +116,12 @@
                                         </Grid.ColumnDefinitions>
                                         <Frame CornerRadius="10"
                                                HasShadow="True"
-                                               BackgroundColor="{AppThemeBinding Dark={StaticResource SystemGray3}, Light={StaticResource SystemGray4}}"
-                                               BorderColor="{AppThemeBinding Dark={StaticResource SystemGray3}, Light={StaticResource SystemGray4}}"
+                                               BackgroundColor="{AppThemeBinding Dark={StaticResource WindowBackgroundColorDark},Light={StaticResource WindowBackgroundColor}}"
+                                               BorderColor="{OnPlatform Android={StaticResource SystemGray4}, iOS={StaticResource Transparent}}"
                                                Margin="0"
                                                Padding="0"
                                                HeightRequest="110">
-                                            <Grid Padding="0,1,2,2">
+                                            <Grid Padding="0">
                                                 <Grid.RowDefinitions>
                                                     <RowDefinition Height="*" />
                                                     <RowDefinition Height="*" />
@@ -147,13 +147,14 @@
                                                        Grid.ColumnSpan="2"
                                                        HasShadow="False"
                                                        CornerRadius="10"
-                                                       Padding="0">
+                                                       Padding="0"
+                                                       BorderColor="{StaticResource SystemGray4}">
                                                     <StackLayout Padding="8,0,0,0">
                                                         <Label Text="{Binding Name}"
                                                                FontSize="14"
                                                                HeightRequest="60"
                                                                VerticalTextAlignment="Center"
-                                                               FontAttributes="Bold"/>
+                                                               FontAttributes="Bold" />
                                                         <StackLayout Orientation="Horizontal"
                                                                      Padding="0,0,8,8">
                                                             <Button Text="Annehmen"
@@ -165,7 +166,7 @@
                                                                     BackgroundColor="{StaticResource ConfirmButton}"
                                                                     Command="{Binding BindingContext.AcceptRequestCommand, Source={x:Reference Name=page}}"
                                                                     CommandParameter="{Binding Source={x:Reference requestItem}, Path=BindingContext}">
-                                                                
+
                                                             </Button>
                                                             <Button Text="Ablehnen"
                                                                     FontAttributes="Bold"

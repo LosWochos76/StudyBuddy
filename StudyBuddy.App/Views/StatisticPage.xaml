@@ -6,7 +6,8 @@
     xmlns:viewmodels="clr-namespace:StudyBuddy.App.ViewModels"
     xmlns:fontAwesome="clr-namespace:StudyBuddy.App"
     x:DataType="viewmodels:StatisticsViewModel"
-    Title="Statistiken">
+    Title="Statistiken"
+    Visual="Material">
     <ContentPage.Resources>
         <ResourceDictionary>
             <Style x:Key="TitleLabelStyle" TargetType="Label">
@@ -88,7 +89,8 @@
 
         <StackLayout Orientation="Vertical">
                 <Frame Style="{StaticResource FrameStyle}"
-                       BackgroundColor="{StaticResource WindowBackgroundColor}">
+                       BackgroundColor="{StaticResource WindowBackgroundColor}"
+                       Margin="4">
                 <StackLayout Orientation="Vertical">
                         <StackLayout Orientation="Horizontal" HorizontalOptions="Center">
                             <Label Style="{StaticResource TotalPointsLabelStyle}" HorizontalOptions="CenterAndExpand" HorizontalTextAlignment="Center" Text="{Binding UserStatistics.TotalPoints}"></Label>

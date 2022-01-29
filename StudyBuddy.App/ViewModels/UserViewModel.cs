@@ -1,7 +1,6 @@
-﻿using System.ComponentModel;
+﻿using StudyBuddy.Model;
+using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using StudyBuddy.App.Misc;
-using StudyBuddy.Model;
 using Xamarin.Forms;
 
 namespace StudyBuddy.App.ViewModels
@@ -20,11 +19,12 @@ namespace StudyBuddy.App.ViewModels
                 NotifyPropertyChanged("FriendshipRequest");
                 NotifyPropertyChanged("RequestedForFriendship");
                 NotifyPropertyChanged("NotRequestedForFriendship");
+                NotifyPropertyChanged("StatusColor");
+                NotifyPropertyChanged("StatusText");
             }
         }
 
         public bool RequestedForFriendship { get { return FriendshipRequest != null; } }
-        public bool NotRequestedForFriendship { get { return FriendshipRequest == null; } }
 
         public string Name
         {
@@ -81,6 +81,25 @@ namespace StudyBuddy.App.ViewModels
                 Email = u.Email,
                 Role = u.Role
             };
+        }
+        public Color StatusColor
+        {
+            get
+            {
+                if (RequestedForFriendship)
+                    return Application.Current.UserAppTheme == OSAppTheme.Light ? Color.FromHex("#E57373") : Color.FromHex("#911a1a");
+                else
+                    return Application.Current.UserAppTheme == OSAppTheme.Light ? Color.FromHex("#81C784") : Color.FromHex("#327135");
+            }
+        }
+        public string StatusText
+        {
+            get
+            {
+                if (RequestedForFriendship)
+                    return "Abbrechen";
+                else return "Hinzufügen";
+            }
         }
     }
 }

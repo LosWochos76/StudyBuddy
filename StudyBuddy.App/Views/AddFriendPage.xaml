@@ -5,9 +5,26 @@
              xmlns:viewmodels="clr-namespace:StudyBuddy.App.ViewModels"
              xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
              x:DataType="viewmodels:AddFriendViewModel"
-             Title="Freund hinzufügen"
+             Title="Freunde finden"
              x:Name="page"
              Shell.TabBarIsVisible="False">
+    <ContentPage.Resources>
+        <Style TargetType="Grid">
+            <Setter Property="VisualStateManager.VisualStateGroups">
+                <VisualStateGroupList>
+                    <VisualStateGroup x:Name="CommonStates">
+                        <VisualState x:Name="Normal" />
+                        <VisualState x:Name="Selected">
+                            <VisualState.Setters>
+                                <Setter Property="BackgroundColor"
+                                        Value="{StaticResource PrimaryAccent}" />
+                            </VisualState.Setters>
+                        </VisualState>
+                    </VisualStateGroup>
+                </VisualStateGroupList>
+            </Setter>
+        </Style>
+    </ContentPage.Resources>
     <ContentPage.Content>
         <StackLayout>
             <SearchBar SearchCommand="{Binding SearchCommand}" Text="{Binding SearchText}" />
@@ -15,6 +32,9 @@
             <RefreshView IsRefreshing="{Binding IsRefreshing}"
                          Command="{Binding RefreshCommand}">
                 <CollectionView ItemsSource="{Binding Users}"
+                                SelectedItem="{Binding SelectedUser}"
+                                SelectionMode="Single"
+                                SelectionChangedCommand="{Binding FriendshipRequestCommand}"
                                 RemainingItemsThreshold="{Binding ItemThreshold}"
                                 RemainingItemsThresholdReachedCommand="{Binding LoadMoreCommand}"
                                 ItemsUpdatingScrollMode="KeepItemsInView">
@@ -27,7 +47,7 @@
                     <CollectionView.ItemTemplate>
                         <DataTemplate x:DataType="viewmodels:UserViewModel">
                             <Grid x:Name="Item"
-                                  Padding="8,8,8,8">
+                                  Padding="8">
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="*" />
                                 </Grid.RowDefinitions>
@@ -38,8 +58,8 @@
                                            Margin="0"
                                            Padding="0"
                                        HeightRequest="100"
-                                       BackgroundColor="{AppThemeBinding Dark={StaticResource SystemGray3}, Light={StaticResource SystemGray4}}"
-                                       BorderColor="{AppThemeBinding Dark={StaticResource SystemGray3}, Light={StaticResource SystemGray4}}">
+                                       BackgroundColor="{AppThemeBinding Dark={StaticResource WindowBackgroundColorDark},Light={StaticResource WindowBackgroundColor}}"
+                                       BorderColor="{OnPlatform Android={StaticResource SystemGray4}, iOS={StaticResource Transparent}}">
                                     <Grid BackgroundColor="Transparent">
 
                                         <Grid.RowDefinitions>
@@ -83,34 +103,21 @@
                                                        HeightRequest="30"
                                                        Padding="20,0,0,0"
                                                        FontSize="12" />
-
-                                                <StackLayout Padding="0">
-
-                                                    <Button Padding="20,0,0,10"
-                                                            Text="Freundschaft anfragen"
-                                                            IsVisible="{Binding NotRequestedForFriendship}"
-                                                            BackgroundColor="{StaticResource ConfirmButton}"
-                                                            Command="{Binding BindingContext.SendFriendshipRequestCommand, Source={x:Reference Name=page}}"
-                                                            CommandParameter="{Binding Source={x:Reference Item}, Path=BindingContext}">
-                                                        <Button.CornerRadius>
-                                                            <OnPlatform x:TypeArguments="x:Int32">
-                                                                <On Platform="Android">0</On>
-                                                            </OnPlatform>
-                                                        </Button.CornerRadius>
-                                                    </Button>
-                                                    <Button Padding="20,0,0,10"
-                                                            Text="Freundschaftsanfrage löschen"
-                                                            IsVisible="{Binding RequestedForFriendship}"
-                                                            BackgroundColor="{StaticResource DeclineButton}"
-                                                            Command="{Binding BindingContext.RemoveFriendshipRequestCommand, Source={x:Reference Name=page}}"
-                                                            CommandParameter="{Binding Source={x:Reference Item}, Path=BindingContext}">
-                                                        <Button.CornerRadius>
-                                                            <OnPlatform x:TypeArguments="x:Int32">
-                                                                <On Platform="Android">0</On>
-                                                            </OnPlatform>
-                                                        </Button.CornerRadius>
-                                                    </Button>
-                                                </StackLayout>
+                                            </StackLayout>
+                                        </Frame>
+                                        <Frame Grid.Row="2"
+                                               Grid.RowSpan="1"
+                                               Grid.Column="1"
+                                               Grid.ColumnSpan="2"
+                                               BackgroundColor="{Binding StatusColor}"
+                                               CornerRadius="10"
+                                               Padding="0"
+                                               Margin="0">
+                                            <StackLayout BackgroundColor="Transparent"
+                                                         Padding="0"
+                                                         VerticalOptions="Center">
+                                                <Label Text="{Binding StatusText}"
+                                                       HorizontalTextAlignment="Center" />
                                             </StackLayout>
                                         </Frame>
                                     </Grid>

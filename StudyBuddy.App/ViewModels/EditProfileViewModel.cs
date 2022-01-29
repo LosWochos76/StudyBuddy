@@ -142,17 +142,17 @@ namespace StudyBuddy.App.ViewModels
             get { return new Regex("(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z]).{8,}"); }
         }
 
-        public bool ConfirmAllowed() => !_firstnameNotValid && !_lastnameNotValid && !_nicknameNotValid;
+        public bool ConfirmAllowed() => !_firstnameNotValid && !_lastnameNotValid && !_nicknameNotValid && !_passwordNotValid;
 
         private async void Update()
         {
             try
             {
                 User.Firstname = _firstname.Trim();
-                User.Firstname = _firstname.Trim();
                 User.Lastname = _lastname.Trim();
-                User.Nickname = Nickname.Trim();
-                User.Password = Password.Trim();
+                User.Nickname = _nickname.Trim();
+                if(!string.IsNullOrEmpty(_password) && _password == _passwordConfirm)
+                    User.Password = _password.Trim();
                 await api.Users.Update(User);
             }
             catch(ApiException e)
