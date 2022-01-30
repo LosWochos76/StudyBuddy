@@ -18,7 +18,7 @@ export class BusinessEventService {
     private auth: AuthorizationService,
     private http: HttpClient) { }
 
-  async getAll(page: number = -1): Promise<BusinessEventList> {
+    async getAll(page: number = -1, text: string = ""): Promise<BusinessEventList> {
     if (!this.auth.getUser().isAdmin())
       return null;
 
@@ -29,7 +29,9 @@ export class BusinessEventService {
     }
 
     if (this.auth.getUser().isTeacher())
-      query['OwnerId'] = this.auth.getUser().id;
+          query['OwnerId'] = this.auth.getUser().id;
+    if (text != "")
+          query['SearchText'] = text;
 
     let result = await this.http.get(this.url + "BusinessEvent",
       {

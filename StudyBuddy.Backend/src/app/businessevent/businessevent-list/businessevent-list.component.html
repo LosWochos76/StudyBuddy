@@ -1,11 +1,14 @@
 <br>
 <div class="row">
-  <div class="col-10">
-    <button class="btn btn-primary" (click)="onAdd()">Neu</button>&nbsp;
-    <button class="btn btn-success" [disabled]="!isSelected()" (click)="onEdit()">Bearbeiten</button>&nbsp;
-    <button class="btn btn-success" [disabled]="!isSelected()" (click)="onExecute()">Ausführen</button>&nbsp;
-    <button class="btn btn-danger" [disabled]="!isSelected()" (click)="onDelete()">Löschen</button>
-  </div>
+    <div class="col-10">
+        <button class="btn btn-primary" (click)="onAdd()">Neu</button>&nbsp;
+        <button class="btn btn-success" [disabled]="!isSelected()" (click)="onEdit()">Bearbeiten</button>&nbsp;
+        <button class="btn btn-success" [disabled]="!isSelected()" (click)="onExecute()">Ausführen</button>&nbsp;
+        <button class="btn btn-danger" [disabled]="!isSelected()" (click)="onDelete()">Löschen</button>
+    </div>
+    <div class="col-2">
+        <input type="text" class="form-control" (keyup)="onKeySearch($event)">
+    </div>
 </div>
 <br>
 <table class="table table-bordered">

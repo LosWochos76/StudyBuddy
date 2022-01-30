@@ -47,6 +47,21 @@ export class BusinessEventListComponent implements OnInit {
         var fullList = await this.service.getAll(event);
         this.objects = fullList.objects;
     }
+    onKeySearch(event: any) {
+        clearTimeout(this.timeout);
+        var $this = this;
+        this.timeout = setTimeout(function () {
+            if (event.keyCode != 13) {
+                $this.onSearch(event.target.value);
+            }
+        }, 1000);
+    }
+
+    private async onSearch(text: string) {
+        var result = await this.service.getAll(this.page, text);
+        this.objects = result.objects;
+        this.total = result.count;
+    }
 
   onSelect(obj: BusinessEvent) {
     this.selected = obj;

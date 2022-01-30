@@ -42,14 +42,25 @@ namespace StudyBuddy.Persistence
             var qh = new QueryHelper<BusinessEvent>(connection_string, FromReader);
             qh.AddParameter(":max", filter.Count);
             qh.AddParameter(":from", filter.Start);
-            var sql = "select id,name,owner_id,type,code from business_events limit :max offset :from";
+            var sql = "select id,name,owner_id,type,code from business_events ";
+            if (!string.IsNullOrEmpty(filter.SearchText))
+            {
+                qh.AddParameter(":search_text", "%" + filter.SearchText + "%");
+                sql += "where name ilike :search_text ";
+            }
+            sql += "order by id,name limit :max offset :from";
             return qh.ExecuteQueryToObjectList(sql);
         }
 
         public int GetCount(BusinessEventFilter filter)
         {
             var qh = new QueryHelper<BusinessEvent>(connection_string, FromReader);
-            var sql = "select count(*) from business_events";
+            var sql = "select count(*) from business_events ";
+            if (!string.IsNullOrEmpty(filter.SearchText))
+            {
+                qh.AddParameter(":search_text", "%" + filter.SearchText + "%");
+                sql += "where name ilike :search_text";
+            }
             return qh.ExecuteQueryToSingleInt(sql);
         }
 
