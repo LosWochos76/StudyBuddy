@@ -31,7 +31,7 @@
                 'is-invalid': form.controls.validity_end.invalid && form.controls.validity_end.dirty,
                 'is-valid': form.controls.validity_end.valid && form.controls.validity_end.dirty}">
             <div *ngIf="form.controls.validity_end.hasError('invalidperiod')">
-                <small class="text-danger">Der Zeitraum ist nicht gültig!</small>
+                <small class="text-danger">Das Ende der Herausforderung darf nicht vor dem Anfang liegen!</small>
             </div>
         </div>
     </div>
