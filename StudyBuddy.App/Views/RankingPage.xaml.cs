@@ -1,5 +1,5 @@
-﻿using StudyBuddy.App.Models;
-using StudyBuddy.App.ViewModels;
+﻿using StudyBuddy.App.ViewModels;
+using StudyBuddy.Model.Model;
 using System.Collections.Generic;
 using Xamarin.Forms;
 

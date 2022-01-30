@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using StudyBuddy.Model.Misc;
+using System.Collections.Generic;
 
 namespace StudyBuddy.Model.Model
 {
@@ -28,5 +29,23 @@ namespace StudyBuddy.Model.Model
         public int ThisWeekChallengeCount { get; set; }
         public int LastMonthChallengeCount { get; set; }
         public int ThisMonthChallengeCount { get; set; }
+
+
+        public StatisticsTrend WeeklyStatisticsTrend { get; set; }
+        public StatisticsTrend MonthlyStatisticsTrend { get; set; }
+
+        public void AddStatisticTrends()
+        {
+            try
+            {
+                WeeklyStatisticsTrend = new StatisticsTrend(LastWeekChallengeCount, ThisWeekChallengeCount);
+                MonthlyStatisticsTrend = new StatisticsTrend(LastMonthChallengeCount, ThisMonthChallengeCount);
+            }
+            catch (System.Exception e)
+            {
+                System.Console.WriteLine($"StatisticTrend could not be calculated. Maybe missing Statistics? {e}");
+            }
+
+        }
     }
 }

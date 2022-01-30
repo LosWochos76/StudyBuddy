@@ -1,8 +1,7 @@
 ﻿using StudyBuddy.App.Api;
 using StudyBuddy.App.Misc;
-using StudyBuddy.App.Models;
 using StudyBuddy.App.Views;
-using System;
+using StudyBuddy.Model.Model;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Xamarin.CommunityToolkit.ObjectModel;
@@ -64,7 +63,6 @@ namespace StudyBuddy.App.ViewModels
             try
             {
                 UserStatistics = await api.Statistics.GetUserStatistics();
-                //SetTrends();
             }
             catch (System.Exception)
             {

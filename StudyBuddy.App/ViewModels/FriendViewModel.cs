@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
 using StudyBuddy.App.Api;
 using StudyBuddy.App.Misc;
-using StudyBuddy.App.Models;
+using StudyBuddy.Model.Model;
 using Xamarin.CommunityToolkit.ObjectModel;
 
 namespace StudyBuddy.App.ViewModels

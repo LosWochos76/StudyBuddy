@@ -30,8 +30,10 @@ namespace StudyBuddy.Persistence
             Statistics.FriendsRank = GetRankingWithFriends(user_id);
             AddChallengeHistory(user_id);
 
+            Statistics.AddStatisticTrends();
             return Statistics;
         }
+
 
         public void AddChallengeHistory(int user_id)
         {

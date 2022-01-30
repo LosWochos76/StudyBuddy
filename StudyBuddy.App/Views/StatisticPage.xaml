@@ -139,7 +139,7 @@
                                         <Image.Source>
                                         <FontImageSource Size="Small" FontFamily="{StaticResource FontAwesomeSolid}"
                                                 Glyph="{x:Static fontAwesome:FontAwesomeIcons.AngleDown}" 
-                                                Color="Red"/>
+                                                Color="#00ff00"/>
                                     </Image.Source>
                                     </Image>
                                 </StackLayout>
@@ -202,8 +202,8 @@
                                     <Image>
                                         <Image.Source >
                                             <FontImageSource Size="Small" FontFamily="{StaticResource FontAwesomeSolid}"
-                                                Glyph="{Binding UserStatistics.ThisMonthTrendGlyph}"
-                                                Color="{Binding UserStatistics.ThisMonthTrendColor}"/>
+                                                Glyph="{Binding UserStatistics.MonthlyStatisticsTrend.Glyph}"
+                                                Color="{Binding UserStatistics.MonthlyStatisticsTrend.Color}"/>
                                         </Image.Source>
                                     </Image>
                                 </StackLayout>
@@ -219,8 +219,8 @@
                                     <Image>
                                         <Image.Source>
                                             <FontImageSource Size="Small" FontFamily="{StaticResource FontAwesomeSolid}"
-                                                Glyph="{Binding UserStatistics.ThisWeekTrendGlyph}" 
-                                                Color="{Binding UserStatistics.ThisWeekTrendColor}"/>
+                                                Glyph="{Binding UserStatistics.WeeklyStatisticsTrend.Glyph}" 
+                                                Color="{Binding UserStatistics.WeeklyStatisticsTrend.Color}"/>
                                         </Image.Source>
                                     </Image>
                                 </StackLayout>

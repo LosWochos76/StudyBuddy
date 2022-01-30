@@ -3,14 +3,16 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="StudyBuddy.App.Views.RankingPage"
              xmlns:viewmodels="clr-namespace:StudyBuddy.App.ViewModels"
-             xmlns:models="clr-namespace:StudyBuddy.App.Models"
+             
              x:DataType="viewmodels:RankingViewModel"
              Title="Ranking (Freunde)">
     <ContentPage.Content>
         <StackLayout>
+            <!-- 
             <CollectionView ItemsSource="{Binding Ranks}">
                 <CollectionView.ItemTemplate>
-                    <DataTemplate x:DataType="models:RankEntry">
+                    
+                    <DataTemplate x:DataType="model:RankEntry">
                         <ContentView>
                             <StackLayout Orientation="Horizontal">
                                 <Label Text="{Binding Rank}"></Label>
@@ -19,8 +21,10 @@
                             </StackLayout>
                         </ContentView>
                     </DataTemplate>
+                   
                 </CollectionView.ItemTemplate>
             </CollectionView>
+            -->
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

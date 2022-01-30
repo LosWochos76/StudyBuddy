@@ -1,4 +1,4 @@
-﻿using StudyBuddy.App.Models;
+﻿using StudyBuddy.Model.Model;
 using System.Threading.Tasks;
 
 namespace StudyBuddy.App.Interfaces

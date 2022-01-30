@@ -83,5 +83,15 @@ namespace StudyBuddy.Test.Mocks
                 return challenges[0];
             });
         }
+
+        Task<ChallengeListViewModel> IChallengeService.ForToday(string search_string, int skip)
+        {
+            throw new NotImplementedException();
+        }
+
+        Task<ChallengeListViewModel> IChallengeService.GetAcceptedChallenges()
+        {
+            throw new NotImplementedException();
+        }
     }
 }
