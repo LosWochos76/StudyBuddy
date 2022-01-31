@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Text;
 using Npgsql;
 using StudyBuddy.Model;
 
@@ -32,67 +33,52 @@ namespace StudyBuddy.Persistence
             qh.AddParameter(":max", filter.Count);
             qh.AddParameter(":from", filter.Start);
             
-            var sql = "select id,name,description,points,validity_start,validity_end,category," +
-                "owner_id,created,prove,series_parent_id,tags_of_challenge(id),prove_addendum from challenges where true ";
+            var sql = new StringBuilder("select id,name,description,points,validity_start,validity_end,category," +
+                "owner_id,created,prove,series_parent_id,tags_of_challenge(id),prove_addendum from challenges where true ");
 
-            if (!string.IsNullOrEmpty(filter.SearchText))
-            {
-                qh.AddParameter(":search_text", "%" + filter.SearchText + "%");
-                sql += " and (name ilike :search_text or description ilike :search_text or tags_of_challenge(id) ilike :search_text)";
-            }
-
-            if (filter.OwnerId.HasValue)
-            {
-                qh.AddParameter(":owner_id", filter.OwnerId.Value);
-                sql += " and (owner_id=:owner_id and prove!=6)";
-            }
-
-            if (filter.ValidAt.HasValue)
-            {
-                qh.AddParameter(":valid_at", filter.ValidAt.Value);
-                sql += " and (validity_start<=:valid_at and validity_end>=:valid_at)";
-            }
-
-            if (filter.OnlyUnacceped)
-            {
-                qh.AddParameter(":user_id", filter.CurrentUserId);
-                sql += " and not challenge_accepted(:user_id, id)";
-            }
-            
-            sql += " order by validity_start,validity_end,created,name limit :max offset :from";
-            return qh.ExecuteQueryToObjectList(sql);
+            ApplyFilter(qh, sql, filter);
+            sql.Append(" order by validity_start,validity_end,created,name limit :max offset :from");
+            return qh.ExecuteQueryToObjectList(sql.ToString());
         }
 
         public int GetCount(ChallengeFilter filter)
         {
             var qh = new QueryHelper<Challenge>(connection_string, FromReader);
-            var sql = "select count(*) from challenges where true ";
+            var sql = new StringBuilder("select count(*) from challenges where true ");
+            ApplyFilter(qh, sql, filter);
+            return qh.ExecuteQueryToSingleInt(sql.ToString());
+        }
 
+        private void ApplyFilter(QueryHelper<Challenge> qh, StringBuilder sql, ChallengeFilter filter)
+        {
             if (!string.IsNullOrEmpty(filter.SearchText))
             {
                 qh.AddParameter(":search_text", "%" + filter.SearchText + "%");
-                sql += " and (name ilike :search_text or description ilike :search_text or tags_of_challenge(id) ilike :search_text)";
+                sql.Append(" and (name ilike :search_text or description ilike :search_text or tags_of_challenge(id) ilike :search_text)");
             }
 
             if (filter.OwnerId.HasValue)
             {
                 qh.AddParameter(":owner_id", filter.OwnerId.Value);
-                sql += " and (owner_id=:owner_id)";
+                sql.Append(" and (owner_id=:owner_id)");
+            }
+
+            if (!filter.includeSystemProve)
+            {
+                sql.Append(" and (prove!=6)");
             }
 
             if (filter.ValidAt.HasValue)
             {
                 qh.AddParameter(":valid_at", filter.ValidAt.Value);
-                sql += " and (validity_start<=:valid_at and validity_end>=:valid_at)";
+                sql.Append(" and (validity_start<=:valid_at and validity_end>=:valid_at)");
             }
 
             if (filter.OnlyUnacceped)
             {
                 qh.AddParameter(":user_id", filter.CurrentUserId);
-                sql += " and not challenge_accepted(:user_id, id)";
+                sql.Append(" and not challenge_accepted(:user_id, id)");
             }
-
-            return qh.ExecuteQueryToSingleInt(sql);
         }
 
         public void Insert(Challenge obj)

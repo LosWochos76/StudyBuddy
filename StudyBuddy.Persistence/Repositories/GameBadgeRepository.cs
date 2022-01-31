@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Text;
 using Npgsql;
 using StudyBuddy.Model;
 
@@ -31,45 +32,33 @@ namespace StudyBuddy.Persistence
             var qh = new QueryHelper<GameBadge>(connection_string, FromReader);
             qh.AddParameter(":from", filter.Start);
             qh.AddParameter(":max", filter.Count);
-
-            var sql = "select id,name,owner_id,created,required_coverage,description,tags_of_badge(id) " +
-                "FROM game_badges where true";
-
-            if (filter.OwnerId.HasValue)
-            {
-                qh.AddParameter(":owner_id", filter.OwnerId);
-                sql += " and owner_id=:owner_id";
-            }
-
-            if (!string.IsNullOrEmpty(filter.SearchText))
-            {
-                qh.AddParameter(":search_text", "%" + filter.SearchText + "%");
-                sql += " and (name ilike :search_text or description ilike :search_text or tags_list ilike :search_text)";
-            }
-
-            sql += " order by created, name limit :max offset :from";
-
-            return qh.ExecuteQueryToObjectList(sql);
+            var sql = new StringBuilder("select id,name,owner_id,created,required_coverage,description,tags_of_badge(id) FROM game_badges where true");
+            ApplyFilter(qh, sql, filter);
+            sql.Append(" order by created, name limit :max offset :from");
+            return qh.ExecuteQueryToObjectList(sql.ToString());
         }
 
         public int GetCount(GameBadgeFilter filter)
         {
             var qh = new QueryHelper<GameBadge>(connection_string, FromReader);
-            var sql = "select count(*) FROM game_badges where true";
+            var sql = new StringBuilder("select count(*) FROM game_badges where true");
+            ApplyFilter(qh, sql, filter);
+            return qh.ExecuteQueryToSingleInt(sql.ToString());
+        }
 
+        private void ApplyFilter(QueryHelper<GameBadge> qh, StringBuilder sql, GameBadgeFilter filter)
+        {
             if (filter.OwnerId.HasValue)
             {
                 qh.AddParameter(":owner_id", filter.OwnerId);
-                sql += " and owner_id=:owner_id";
+                sql.Append(" and owner_id=:owner_id");
             }
 
             if (!string.IsNullOrEmpty(filter.SearchText))
             {
                 qh.AddParameter(":search_text", "%" + filter.SearchText + "%");
-                sql += " and (name ilike :search_text or description ilike :search_text or tags_list ilike :search_text)";
+                sql.Append(" and (name ilike :search_text or description ilike :search_text or tags_of_badge(id) ilike :search_text)");
             }
-
-            return qh.ExecuteQueryToSingleInt(sql);
         }
 
         public void Insert(GameBadge obj)

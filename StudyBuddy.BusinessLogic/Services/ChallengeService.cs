@@ -26,6 +26,8 @@ namespace StudyBuddy.BusinessLogic
                 filter = new ChallengeFilter();
 
             filter.CurrentUserId = backend.CurrentUser.ID;
+            if (!backend.CurrentUser.IsAdmin)
+                filter.includeSystemProve = false;
 
             var count = backend.Repository.Challenges.GetCount(filter);
             var objects = backend.Repository.Challenges.All(filter);

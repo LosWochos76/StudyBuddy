@@ -67,7 +67,7 @@ namespace StudyBuddy.BusinessLogic
         {
             return tags
                 .Replace("#", "")
-                .Split(new[] { ' ', '\t', ',' }, StringSplitOptions.RemoveEmptyEntries);
+                .Split(new[] { ' ', '\t', ',', ';' }, StringSplitOptions.RemoveEmptyEntries);
         }
 
         private Tag CreateOrFindSingle(string tag_name)
@@ -88,6 +88,9 @@ namespace StudyBuddy.BusinessLogic
         {
             if (backend.CurrentUser == null || backend.CurrentUser.IsStudent)
                 throw new Exception("Unauthorized!");
+
+            if (string.IsNullOrWhiteSpace(tags))
+                return new TagList() { Count = 0, Objects = new List<Tag>() };
 
             var tag_list = SplitTags(tags);
             var object_list = new List<Tag>();

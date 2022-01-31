@@ -53,7 +53,7 @@
                 <option value="3">Durch Bestätigung eines/einer Freundes/Freundin</option>
                 <option value="4">Durch Standort</option>
                 <option value="5">Durch ein Schlüsselwort</option>
-                <option value="6">Durch Systembeweis</option>
+                <option *ngIf="user.isAdmin()" value="6">Durch Systembeweis</option>
             </select>
         </div>
     </div>
