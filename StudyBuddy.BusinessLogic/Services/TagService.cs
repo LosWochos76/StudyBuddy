@@ -67,7 +67,7 @@ namespace StudyBuddy.BusinessLogic
         {
             return tags
                 .Replace("#", "")
-                .Split(new[] { ' ', '\t' }, StringSplitOptions.RemoveEmptyEntries);
+                .Split(new[] { ' ', '\t', ',' }, StringSplitOptions.RemoveEmptyEntries);
         }
 
         private Tag CreateOrFindSingle(string tag_name)

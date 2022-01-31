@@ -44,7 +44,7 @@ namespace StudyBuddy.Persistence
             if (filter.OwnerId.HasValue)
             {
                 qh.AddParameter(":owner_id", filter.OwnerId.Value);
-                sql += " and (owner_id=:owner_id)";
+                sql += " and (owner_id=:owner_id and prove!=6)";
             }
 
             if (filter.ValidAt.HasValue)
