@@ -1,6 +1,6 @@
 <br>
 <h1>Erfolg von Herausforderung</h1>
-<p>Bislang haben {{objects.length}} Nutzer die Herausforderung '{{challenge.name}}' angenommen.</p>
+<p>Die Herausforderung '{{challenge.name}}' wurde bislang von {{objects.length}} Nutzer(n) angenommen.</p>
 <button class="btn btn-primary" (click)="goBack()">Zurück</button>&nbsp;
 <button class="btn btn-danger" [disabled]="!isSelected()" (click)="onRemove()" *ngIf="current_user.isAdmin()">Entfernen</button>
 <br>
@@ -12,7 +12,7 @@
             <th scope="col">Vorname</th>
             <th scope="col">Nachname</th>
             <th scope="col">Nickname</th>
-            <th scope="col">EMail</th>
+            <th scope="col">E-Mail</th>
         </tr>
     </thead>
     <tbody>
@@ -28,7 +28,7 @@
 </table>
 <br>
 <div class="mb-3" *ngIf="current_user.isAdmin() && all_users.length > 0">
-    <label for="select" class="form-label">Email address</label>
+    <label for="select" class="form-label">Nutzer:</label>
     <select id="select" class="form-select" aria-label="Default select example" #select>
         <option *ngFor="let obj of all_users; index as i" value="{{obj.id}}">{{obj.fullName()}}</option>
     </select>
