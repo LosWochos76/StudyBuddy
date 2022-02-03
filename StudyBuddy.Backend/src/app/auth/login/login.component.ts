@@ -1,9 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ComponentRef, OnInit, ViewContainerRef } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthorizationService } from 'src/app/services/authorization.service';
 import { LoggingService } from 'src/app/services/loging.service';
-import { UserService } from 'src/app/services/user.service';
 
 @Component({
   selector: 'app-login',
@@ -44,8 +43,9 @@ export class LoginComponent implements OnInit {
     }
   }
 
-  onPasswordReset() {
+  async onPasswordReset() {
     let email = this.form.controls.email.value;
-    this.auth.sendPassworResetMail(email);
+    let result = await this.auth.sendPassworResetMail(email);
+    alert("Sollten Sie einen Account bei uns haben, haben wir eine E-Mail zur Wiederherstellug ihres Passworts an Ihre E-Mail-Adresse verschickt.");
   }
 }

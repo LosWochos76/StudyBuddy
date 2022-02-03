@@ -79,8 +79,8 @@ import { NgxPaginationModule } from 'ngx-pagination';
     HttpClientModule,
     AppRoutingModule,
     ReactiveFormsModule,
-      FontAwesomeModule,
-      NgxPaginationModule
+    FontAwesomeModule,
+    NgxPaginationModule
   ],
   providers: [
     AuthorizationService,

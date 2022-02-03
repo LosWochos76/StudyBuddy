@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable, EventEmitter } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import { User } from '../model/user';
@@ -54,7 +54,12 @@ export class AuthorizationService {
     return this.user != null;
   }
 
-  sendPassworResetMail(email: string) {
-    // ToDo: Implement!
+  async sendPassworResetMail(email: string):Promise<boolean> {
+    var result = await this.http.post(this.url + 'Login/SendPasswortResetMail', "\"" + email + "\"",
+    {
+      headers: new HttpHeaders({ 'Content-Type': 'application/json' })
+    }).toPromise();
+    
+    return 'status' in result && result['status'] == 'ok';
   }
 }

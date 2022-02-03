@@ -7,7 +7,6 @@ import { ChallengeService } from 'src/app/services/challenge.service';
 import { LoggingService } from 'src/app/services/loging.service';
 import { UserService } from 'src/app/services/user.service';
 import { faGraduationCap, faPeopleArrows, faTasks } from '@fortawesome/free-solid-svg-icons';
-import { ChallengeList } from '../../model/challengelist';
 
 @Component({
   selector: 'app-challenge-list',
