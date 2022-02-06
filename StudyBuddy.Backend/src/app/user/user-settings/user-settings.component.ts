@@ -51,10 +51,6 @@ export class UserSettingsComponent implements OnInit {
     this.logger.debug("Trying to save settings of current user!");
     this.obj.copyValues(this.form.value);
 
-    if (!this.obj.email.endsWith("@hshl.de") && !this.obj.email.endsWith("@stud.hshl.de")) {
-      this.form.setErrors({ 'emailnotfromhshl': true });
-      return;
-    }
 
     let result = await this.service.userIdByNickname(this.form.controls.nickname.value);
     if (result != 0 && result != this.obj.id) {

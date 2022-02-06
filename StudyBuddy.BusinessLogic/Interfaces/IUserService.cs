@@ -9,6 +9,7 @@ namespace StudyBuddy.BusinessLogic
         UserList GetAll(UserFilter filter);
         User Insert(User obj);
         User Update(User obj);
+        User ResetPassword(User obj);
         void Delete(int user_id);
 
         // Find specific users

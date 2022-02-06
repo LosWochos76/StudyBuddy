@@ -46,6 +46,11 @@ namespace StudyBuddy.BusinessLogic
             backend.Repository.Users.Update(obj);
             return obj;
         }
+        public User ResetPassword(User obj)
+        {
+            backend.Repository.Users.Update(obj);
+            return obj;
+        }
 
         public User Insert(User obj)
         {

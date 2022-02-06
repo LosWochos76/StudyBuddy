@@ -74,7 +74,8 @@ export class UserService {
   }
 
   async save(obj: User) {
-    let data = obj.toApi();
+      let data = obj.toApi();
+      console.log(data);
     let result = null;
     this.logger.debug("Saving User");
 

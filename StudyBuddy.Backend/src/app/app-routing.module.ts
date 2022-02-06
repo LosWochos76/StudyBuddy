@@ -26,6 +26,8 @@ import { LoggingListComponent } from './logging/logging-list/logging-list.compon
 import { GameBadgeSuccessComponent } from './gamebadge/game-badge-success/game-badge-success.component';
 import { BusinessEventListComponent } from './businessevent/businessevent-list/businessevent-list.component';
 import { BusinessEventEditComponent } from './businessevent/businessevent-edit/businessevent-edit.component';
+import { ForgotpasswordComponent } from './auth/forgotpassword/forgotpassword.component';
+import { ResetpasswordComponent } from './auth/resetpassword/resetpassword.component';
 
 const routes: Routes = [
   { path: 'register', component: RegisterUserComponent },
@@ -51,6 +53,8 @@ const routes: Routes = [
   { path: 'tag', component: TagListComponent, canActivate: [RouteGuardService] },
   { path: 'tag/:id', component: TagEditComponent, canActivate: [RouteGuardService] },
   { path: 'login', component: LoginComponent },
+  { path: 'login/forgotpassword', component: ForgotpasswordComponent },
+  { path: 'login/resetpassword', component: ResetpasswordComponent },
   { path: 'logout', component: LogoutComponent },
   { path: 'logging', component: LoggingListComponent, canActivate: [RouteGuardService] },
   { path: 'businessevent', component: BusinessEventListComponent, canActivate: [RouteGuardService] },

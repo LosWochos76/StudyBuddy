@@ -1,6 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable, EventEmitter } from '@angular/core';
 import { environment } from 'src/environments/environment';
+import { ResetPasswordData } from '../model/resetpassworddata';
 import { User } from '../model/user';
 
 @Injectable({
@@ -61,5 +62,17 @@ export class AuthorizationService {
     }).toPromise();
     
     return 'status' in result && result['status'] == 'ok';
-  }
+    }
+
+    async resetPassword(obj: ResetPasswordData) {
+        var data = {
+            "token": obj.token,
+            "email": obj.email,
+            "password": obj.password
+        }
+        console.log(data)
+        var result = await this.http.post(this.url + 'Login/ResetPassword', data).toPromise();
+        return result;
+
+    }
 }

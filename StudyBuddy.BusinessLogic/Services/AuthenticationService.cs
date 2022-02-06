@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using Microsoft.AspNetCore.WebUtilities;
 using NETCore.MailKit;
 using NETCore.MailKit.Core;
 using SimpleHashing.Net;
@@ -52,16 +54,29 @@ namespace StudyBuddy.BusinessLogic
             var obj = backend.Repository.Users.ByEmail(email);
             if (obj == null)
                 throw new Exception("User not found!");
+            var key = obj.PasswordHash;
+            var baseurl = "https://backend.gameucation.eu/login/resetpassword";
+            var jwt = new JwtToken();
+            var token = jwt.PasswordResetToken(obj.ID, key);
+            var param = new Dictionary<string, string>
+            {
+                {"token", token },
+                {"email", email }
+            };
+            var link = new Uri(QueryHelpers.AddQueryString(baseurl, param));
 
-            // ToDo: Hier muss noch mehr gemacht werden!
-
-            MailKitHelper.SendMail(email, "Passwort zurücksetzen", "Bla");
+            MailKitHelper.SendMail(email, "Passwort zurücksetzen", link.ToString());
         }
 
         public bool CheckToken(string token)
         {
             var jwt = new JwtToken();
             return jwt.FromToken(token) != 0;
+        }
+        public bool CheckPasswordResetToken(string token, string email)
+        {
+            var jwt = new JwtToken();
+            return jwt.CheckPasswordResetToken(token, email);
         }
     }
 }

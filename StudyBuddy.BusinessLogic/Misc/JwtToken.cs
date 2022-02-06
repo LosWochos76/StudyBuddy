@@ -58,5 +58,40 @@ namespace StudyBuddy.BusinessLogic
                 return 0;
             }
         }
+        public string PasswordResetToken(int user_id, string passwordhash)
+        {
+            var encoding = Encoding.ASCII.GetBytes(passwordhash);
+            var tokenDescriptor = new SecurityTokenDescriptor()
+            {
+                Subject = new ClaimsIdentity(new[] { new Claim("id", user_id.ToString()) }),
+                Expires = DateTime.UtcNow.AddDays(1),
+                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(encoding), SecurityAlgorithms.HmacSha256Signature),
+                Issuer = domain_name
+            };
+
+            var token = tokenHandler.CreateToken(tokenDescriptor);
+            return tokenHandler.WriteToken(token);
+        }
+        public bool CheckPasswordResetToken(string token, string key)
+        {
+            var encoding = Encoding.ASCII.GetBytes(key);
+            try
+            {
+                tokenHandler.ValidateToken(token, new TokenValidationParameters
+                {
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(encoding),
+                    ValidateIssuer = false,
+                    ValidateAudience = false,
+                    ClockSkew = TimeSpan.Zero,
+                    ValidIssuer = domain_name
+                }, out SecurityToken validatedToken);
+            }
+            catch
+            {
+                return false;
+            }
+            return true;
+        }
     }
 }

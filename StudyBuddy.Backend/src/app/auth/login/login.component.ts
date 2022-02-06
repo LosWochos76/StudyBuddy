@@ -43,9 +43,7 @@ export class LoginComponent implements OnInit {
     }
   }
 
-  async onPasswordReset() {
-    let email = this.form.controls.email.value;
-    let result = await this.auth.sendPassworResetMail(email);
-    alert("Sollten Sie einen Account bei uns haben, haben wir eine E-Mail zur Wiederherstellug ihres Passworts an Ihre E-Mail-Adresse verschickt.");
+    async onPasswordReset() {
+        this.router.navigate(['login/forgotpassword']);
   }
 }

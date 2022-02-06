@@ -40,6 +40,8 @@ import { GameBadgeSuccessComponent } from './gamebadge/game-badge-success/game-b
 import { BusinessEventListComponent } from './businessevent/businessevent-list/businessevent-list.component';
 import { BusinessEventEditComponent } from './businessevent/businessevent-edit/businessevent-edit.component';
 import { NgxPaginationModule } from 'ngx-pagination';
+import { ForgotpasswordComponent } from './auth/forgotpassword/forgotpassword.component';
+import { ResetpasswordComponent } from './auth/resetpassword/resetpassword.component';
 
 @NgModule({
   declarations: [
@@ -72,7 +74,10 @@ import { NgxPaginationModule } from 'ngx-pagination';
     LoggingListComponent,
     GameBadgeSuccessComponent,
     BusinessEventListComponent,
-    BusinessEventEditComponent
+        BusinessEventEditComponent,
+        ForgotpasswordComponent,
+        ResetpasswordComponent
+        
   ],
   imports: [
     BrowserModule,

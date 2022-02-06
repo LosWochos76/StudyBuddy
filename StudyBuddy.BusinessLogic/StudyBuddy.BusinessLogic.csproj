@@ -24,11 +24,11 @@
         <None Remove="Geolocation.NetStandard" />
     </ItemGroup>
     <ItemGroup>
-        <Folder Include="Parameters\" />
         <Folder Include="Misc\" />
     </ItemGroup>
     <ItemGroup>
         <PackageReference Include="FirebaseAdmin" Version="2.2.0" />
+        <PackageReference Include="Microsoft.AspNetCore.WebUtilities" Version="2.2.0" />
         <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.15.1" />
         <PackageReference Include="NETCore.MailKit" Version="2.0.3" />
         <PackageReference Include="QRCoder" Version="1.4.3" />
