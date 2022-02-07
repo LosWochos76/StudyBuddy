@@ -13,7 +13,7 @@
              Visual="Material">
     <StackLayout>
         <StackLayout VerticalOptions="StartAndExpand">
-            <Frame CornerRadius="0" Padding="0,10,0,10">
+            <Frame CornerRadius="0" Padding="0,10,0,10" BorderColor="Transparent">
                 <Label Text="Willkommen bei Gameucation!"
                        HorizontalTextAlignment="Center"
                        FontSize="36" />
@@ -49,7 +49,7 @@
                     <xct:TextValidationBehavior Flags="ValidateOnValueChanging,ValidateOnAttaching" MinimumLength="3" IsValid="{Binding IsPasswordValid}" />
                 </Entry.Behaviors>
             </Entry>
-            <Button Text="Anmelden" Command="{Binding LoginCommand}" BackgroundColor="{StaticResource ConfirmButton}"/>
+            <Button Text="Anmelden" Command="{Binding LoginCommand}" BackgroundColor="{AppThemeBinding Dark={StaticResource ConfirmButtonDark}, Light={StaticResource ConfirmButton}}" TextColor="{StaticResource WindowBackgroundColor}"/>
             <Label HorizontalTextAlignment="Center">
                 <Label.FormattedText>
                     <FormattedString>
@@ -83,6 +83,29 @@
                     </FormattedString>
                 </Label.FormattedText>
             </Label>
+            <StackLayout Orientation="Horizontal">
+                <Label HorizontalOptions="Start">
+                    <Label.FormattedText>
+                        <FormattedString>
+                            <FormattedString.Spans>
+                                <Span Text="App Version: "></Span>
+                                <Span Text="{Binding AppVersion}"></Span>
+                            </FormattedString.Spans>
+                        </FormattedString>
+                    </Label.FormattedText>
+                </Label>
+                <Label HorizontalOptions="EndAndExpand">
+                    <Label.FormattedText>
+                        <FormattedString>
+                            <FormattedString.Spans>
+                                <Span Text="API Version: "></Span>
+                                <Span Text="{Binding ApiVersion}"></Span>
+                            </FormattedString.Spans>
+                        </FormattedString>
+                    </Label.FormattedText>
+                </Label>
+            </StackLayout>
+            
         </StackLayout>
     </StackLayout>
 </ContentPage>

@@ -25,5 +25,7 @@ namespace StudyBuddy.App.Api
 
         event EventHandler<FriendshipStateChangedEventArgs> FriendshipStateChanged;
         void RaiseFriendsChanged(object sender, FriendshipStateChangedEventArgs args);
+        Version App_Version { get; }
+        Version Api_Version { get; }
     }
 }

@@ -69,14 +69,15 @@
                 <Setter Property="TextColor"
                         Value="{StaticResource TextColor}" />
                 <Setter Property="BackgroundColor"
-                        Value="{AppThemeBinding Dark={StaticResource TextColorDark}, Light={StaticResource WindowBackgroundColor}}" />
+                        Value="{OnPlatform Android={AppThemeBinding Dark={StaticResource TextColorDark}, 
+                                Light={StaticResource WindowBackgroundColor}}, iOS={StaticResource Transparent}}" />
             </Style>
 
             <Style TargetType="Entry">
                 <Setter Property="PlaceholderColor"
                         Value="{StaticResource SystemGray2Dark}" />
                 <Setter Property="TextColor"
-                        Value="{AppThemeBinding Dark={StaticResource TextColorDark}, Light={StaticResource TextColor}}" />
+                        Value="{StaticResource TextColor}" />
                 <Setter Property="BackgroundColor"
                         Value="Transparent" />
             </Style>
@@ -96,8 +97,6 @@
                         Value="{AppThemeBinding Dark={StaticResource WindowBackgroundColorDark}, Light={StaticResource WindowBackgroundColor}}" />
                 <Setter Property="BorderColor"
                         Value="{OnPlatform Android={StaticResource SystemGray4}, iOS={StaticResource Transparent}}" />
-                <Setter Property="HasShadow"
-                        Value="True" />
             </Style>
 
             <Style TargetType="Label" ApplyToDerivedTypes="True">

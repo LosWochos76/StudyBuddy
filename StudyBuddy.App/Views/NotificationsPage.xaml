@@ -24,7 +24,7 @@
                          FontAttributes="Bold"
                          Padding="0,0,0,5">
             <xct:TabViewItem.Content>
-                <StackLayout Padding="0,15,0,0">
+                <StackLayout Padding="5,15,5,0">
                     <RefreshView IsRefreshing="{Binding IsRefreshing}"
                                  Command="{Binding RefreshCommand}">
                         <CollectionView ItemsSource="{Binding News}">
@@ -41,7 +41,6 @@
                                         <Frame CornerRadius="10"
                                                HasShadow="True"
                                                BackgroundColor="{AppThemeBinding Dark={StaticResource WindowBackgroundColorDark},Light={StaticResource WindowBackgroundColor}}"
-                                               BorderColor="{OnPlatform Android={StaticResource SystemGray4}, iOS={StaticResource Transparent}}"
                                                Margin="0"
                                                Padding="0"
                                                HeightRequest="110">
@@ -98,7 +97,7 @@
                          TextColorSelected="{StaticResource PrimaryAccent}"
                          FontAttributes="Bold"
                          BadgeTextColor="White"
-                         BadgeBackgroundColor="{StaticResource ConfirmButton}"
+                         BadgeBackgroundColor="{AppThemeBinding Dark={StaticResource ConfirmButtonDark}, Light={StaticResource ConfirmButton}}"
                          Padding="0,0,0,5">
             <xct:TabViewItem.Content>
                 <StackLayout Padding="0,15,0,0">
@@ -117,7 +116,6 @@
                                         <Frame CornerRadius="10"
                                                HasShadow="True"
                                                BackgroundColor="{AppThemeBinding Dark={StaticResource WindowBackgroundColorDark},Light={StaticResource WindowBackgroundColor}}"
-                                               BorderColor="{OnPlatform Android={StaticResource SystemGray4}, iOS={StaticResource Transparent}}"
                                                Margin="0"
                                                Padding="0"
                                                HeightRequest="110">
@@ -147,8 +145,7 @@
                                                        Grid.ColumnSpan="2"
                                                        HasShadow="False"
                                                        CornerRadius="10"
-                                                       Padding="0"
-                                                       BorderColor="{StaticResource SystemGray4}">
+                                                       Padding="0">
                                                     <StackLayout Padding="8,0,0,0">
                                                         <Label Text="{Binding Name}"
                                                                FontSize="14"
@@ -163,7 +160,7 @@
                                                                     HeightRequest="35"
                                                                     WidthRequest="120"
                                                                     HorizontalOptions="Start"
-                                                                    BackgroundColor="{StaticResource ConfirmButton}"
+                                                                    BackgroundColor="{AppThemeBinding Dark={StaticResource ConfirmButtonDark}, Light={StaticResource ConfirmButton}}"
                                                                     Command="{Binding BindingContext.AcceptRequestCommand, Source={x:Reference Name=page}}"
                                                                     CommandParameter="{Binding Source={x:Reference requestItem}, Path=BindingContext}">
 
@@ -174,7 +171,7 @@
                                                                     HeightRequest="35"
                                                                     WidthRequest="120"
                                                                     HorizontalOptions="EndAndExpand"
-                                                                    BackgroundColor="{StaticResource DeclineButton}"
+                                                                    BackgroundColor="{AppThemeBinding Dark={StaticResource DeclineButtonDark}, Light={StaticResource DeclineButton}}"
                                                                     Command="{Binding BindingContext.DenyRequestCommand, Source={x:Reference Name=page}}"
                                                                     CommandParameter="{Binding Source={x:Reference requestItem}, Path=BindingContext}">
 

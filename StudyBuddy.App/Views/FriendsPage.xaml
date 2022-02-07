@@ -59,6 +59,7 @@
                                    Margin="0"
                                    Padding="0"
                                    HeightRequest="95"
+                                   HasShadow="True"
                                    BackgroundColor="{AppThemeBinding Dark={StaticResource WindowBackgroundColorDark},Light={StaticResource WindowBackgroundColor}}"
                                    BorderColor="{OnPlatform Android={StaticResource SystemGray4}, iOS={StaticResource Transparent}}">
                                 <Grid BackgroundColor="Transparent"
@@ -89,7 +90,8 @@
                                            Grid.Column="1"
                                            Grid.ColumnSpan="2"
                                            CornerRadius="10"
-                                           Padding="0,0,0,0">
+                                           Padding="0,0,0,0"
+                                           HasShadow="False">
                                         <StackLayout BackgroundColor="Transparent">
                                             <Label Text="{Binding FullName}"
                                                    HeightRequest="60"

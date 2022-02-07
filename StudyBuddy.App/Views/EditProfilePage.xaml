@@ -16,9 +16,8 @@
                 <Label Text="Vorname:"
                        FontAttributes="Bold"
                        FontSize="16"></Label>
-                <Entry Placeholder="{Binding User.Firstname}"
-                       PlaceholderColor="{StaticResource SecondaryFont}"
-                       Text="{Binding Firstname}"
+                <Entry Text="{Binding Firstname}"
+                       TextColor="{StaticResource TextColor}"
                        MaxLength="100"
                        ClearButtonVisibility="WhileEditing"
                        ReturnType="Next">
@@ -39,9 +38,8 @@
                 <Label Text="Nachname:"
                        FontAttributes="Bold"
                        FontSize="16"></Label>
-                <Entry Placeholder="{Binding User.Lastname}"
-                       PlaceholderColor="{StaticResource SecondaryFont}"
-                       Text="{Binding Lastname}"
+                <Entry Text="{Binding Lastname}"
+                       TextColor="{StaticResource TextColor}"
                        MaxLength="100"
                        ClearButtonVisibility="WhileEditing"
                        ReturnType="Next">
@@ -62,9 +60,8 @@
                 <Label Text="Nickname:"
                        FontAttributes="Bold"
                        FontSize="16"></Label>
-                <Entry Placeholder="{Binding User.Nickname}"
-                       PlaceholderColor="{StaticResource SecondaryFont}"
-                       Text="{Binding Nickname}"
+                <Entry Text="{Binding Nickname}"
+                       TextColor="{StaticResource TextColor}"
                        MaxLength="100"
                        ClearButtonVisibility="WhileEditing"
                        ReturnType="Next">

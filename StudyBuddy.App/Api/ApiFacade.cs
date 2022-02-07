@@ -16,6 +16,9 @@ namespace StudyBuddy.App.Api
         //private readonly string base_url = "http://192.168.0.199:58947/";
 
         private Version app_version = new Version(0, 0, 21, 0);
+        public Version App_Version { get => app_version; }
+        private Version api_version;
+        public Version Api_Version { get => api_version; }
 
         public IAuthenticationService Authentication { get; }
         public IChallengeService Challenges { get; }
@@ -47,11 +50,12 @@ namespace StudyBuddy.App.Api
         private async void CheckVersion()
         {
             var rh = new WebRequestHelper();
-            var api_version = await rh.Get<Version>(base_url + "ApiVersion", HttpMethod.Get);
-            if (api_version == null)
+            var result = await rh.Get<Version>(base_url + "ApiVersion", HttpMethod.Get);
+            if (result == null)
                 return;
-
-            if (api_version > app_version)
+            api_version = result;
+            Console.WriteLine(api_version);
+            if (result > app_version)
             {
                 var dialog = TinyIoCContainer.Current.Resolve<IDialogService>();
                 await Logging.LogError("App too old!");

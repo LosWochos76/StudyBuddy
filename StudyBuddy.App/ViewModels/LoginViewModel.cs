@@ -1,4 +1,6 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Net.Http;
+using System.Threading.Tasks;
 using System.Windows.Input;
 using StudyBuddy.App.Api;
 using StudyBuddy.App.Misc;
@@ -16,7 +18,9 @@ namespace StudyBuddy.App.ViewModels
             PasswordForgottenCommand = new AsyncCommand(PasswordForgotten, () => { return IsEMailValid; });
             ImprintCommand = new Command(Imprint);
             InfoCommand = new Command(Info);
+            GetApiVersion();
         }
+        private readonly string base_url = "https://api.gameucation.eu/";
 
         public IAsyncCommand LoginCommand { get; }
         public ICommand RegisterCommand { get; }
@@ -86,13 +90,26 @@ namespace StudyBuddy.App.ViewModels
 
         private async Task Login()
         {
-            var uc = new UserCredentials {EMail = EMail, Password = Password};
+            var uc = new UserCredentials { EMail = EMail, Password = Password };
             var result = await api.Authentication.Login(uc);
 
             if (result)
                 Navigation.GoTo("//ChallengesPage");
             else
                 dialog.ShowMessageBox("Anmeldung nicht erfolgreich! Zugangsdaten korrekt?", "Achtung!");
+        }
+
+        public string AppVersion { get => api.App_Version.ToString(); }
+        private Version _apiVersion = new Version(0,0,0,0);
+        public string ApiVersion { get => _apiVersion.ToString(); }
+        public async void GetApiVersion()
+        {
+            var rh = new WebRequestHelper();
+            var result = await rh.Get<Version>(base_url + "ApiVersion", HttpMethod.Get);
+            if (result == null)
+                return;
+            _apiVersion = result;
+            NotifyPropertyChanged(nameof(_apiVersion));
         }
     }
 }

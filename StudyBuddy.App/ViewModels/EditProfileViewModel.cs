@@ -14,6 +14,9 @@ namespace StudyBuddy.App.ViewModels
         public EditProfileViewModel(IApi api, IDialogService dialog, INavigationService navigation) : base(api, dialog, navigation)
         {
             User = api.Authentication.CurrentUser;
+            _firstname = User.Firstname;
+            _lastname = User.Lastname;
+            _nickname = User.Nickname;
             ConfirmCommand = new Command(Update, ConfirmAllowed);
         }
 

@@ -105,7 +105,7 @@
                                            Grid.RowSpan="2"
                                            Grid.Column="1"
                                            Grid.ColumnSpan="2"
-                                           HasShadow="True"
+                                           HasShadow="False"
                                            CornerRadius="10"
                                            Padding="0,0,0,0">
 

@@ -58,6 +58,7 @@
                                            Margin="0"
                                            Padding="0"
                                        HeightRequest="100"
+                                       HasShadow="True"
                                        BackgroundColor="{AppThemeBinding Dark={StaticResource WindowBackgroundColorDark},Light={StaticResource WindowBackgroundColor}}"
                                        BorderColor="{OnPlatform Android={StaticResource SystemGray4}, iOS={StaticResource Transparent}}">
                                     <Grid BackgroundColor="Transparent">
@@ -112,7 +113,8 @@
                                                BackgroundColor="{Binding StatusColor}"
                                                CornerRadius="10"
                                                Padding="0"
-                                               Margin="0">
+                                               Margin="0"
+                                               HasShadow="False">
                                             <StackLayout BackgroundColor="Transparent"
                                                          Padding="0"
                                                          VerticalOptions="Center">
