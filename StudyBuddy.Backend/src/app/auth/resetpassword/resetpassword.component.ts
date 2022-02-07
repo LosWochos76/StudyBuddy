@@ -17,7 +17,6 @@ export class ResetpasswordComponent implements OnInit {
     resetPasswordForm: FormGroup;
     showSuccess: boolean;
     showError: boolean;
-    errorMessage: string;
 
     private _token: string;
     private _email: string;
@@ -58,11 +57,10 @@ export class ResetpasswordComponent implements OnInit {
             }
         }
         let result = this.service.resetPassword(resetPassData);
-        if (result)
+        if ('status' in result && result['status'] == 'ok')
             this.showSuccess = true;
         else {
             this.showError = true;
-            this.errorMessage = 'Passwort konnte nicht zurückgesetzt werden, bitte neuen Link anfordern';
         }
     }   
 }
