@@ -65,6 +65,13 @@ export class Challenge {
         return d >= this.validityStartAsDate() && d <= this.validityEndAsDate();
     }
 
+    hasName():boolean {
+        if(this.name === "")
+            return false;
+        else
+            return true;
+    }
+
     static fromApi(result):Challenge {
         let obj = new Challenge();
         obj.id = result["id"];

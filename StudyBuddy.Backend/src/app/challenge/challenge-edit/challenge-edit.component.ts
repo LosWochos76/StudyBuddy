@@ -115,6 +115,11 @@ export class ChallengeEditComponent implements OnInit {
   async onSubmit() {
     this.logger.debug("Trying to save a Challenge!");
     this.obj.copyValues(this.form.value);
+    
+    if(!this.obj.hasName())
+      this.form.controls.name.setErrors({ 'invalidname': true });
+    else
+      this.form.controls.name.setErrors(null);
 
     if (!this.obj.isPeriodValid())
       this.form.controls.validity_end.setErrors({ 'invalidperiod': true });

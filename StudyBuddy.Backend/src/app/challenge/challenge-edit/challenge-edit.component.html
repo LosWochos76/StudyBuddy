@@ -6,6 +6,9 @@
         <input type="text" class="form-control" id="name" formControlName="name" [ngClass]="{
             'is-invalid': form.controls.name.invalid && form.controls.name.dirty,
             'is-valid': form.controls.name.valid && form.controls.name.dirty}">
+        <div *ngIf="form.controls.name.hasError('invalidname')">
+            <small class="text-danger">Der Name darf nicht leer sein!</small>
+        </div>
     </div>
     <div class="mb-3">
         <label class="form-label" for="name">Beschreibung:</label>
