@@ -126,6 +126,16 @@ export class ChallengeEditComponent implements OnInit {
     else
       this.form.controls.validity_end.setErrors(null);
 
+    if(this.obj.prove == 5 && !this.obj.hasKeyword())
+      this.form.controls.keyword.setErrors({ 'invalidkeyword': true });
+    else
+      this.form.controls.keyword.setErrors(null);
+
+    if(!this.obj.validDescription())
+      this.form.controls.description.setErrors({ 'invaliddescription': true });
+    else
+      this.form.controls.description.setErrors(null);
+
     if (this.form.invalid) {
       this.logger.debug("Data is invalid!");
       return;

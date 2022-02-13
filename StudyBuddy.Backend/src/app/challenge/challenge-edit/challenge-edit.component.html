@@ -14,6 +14,9 @@
         <label class="form-label" for="name">Beschreibung:</label>
         <textarea class="form-control" id="description" formControlName="description" rows="3">
         </textarea>
+        <div *ngIf="form.controls.description.hasError('invaliddescription')">
+            <small class="text-danger">Die Beschreibung muss mindestens 80 Zeichen lang sein!</small>
+        </div>
     </div>
     <div class="mb-3">
         <label class="form-label" for="name">Punkte:</label>
@@ -87,6 +90,9 @@
             <input type="text" class="form-control" id="keyword" formControlName="keyword" [ngClass]="{
                 'is-invalid': form.controls.keyword.invalid && form.controls.keyword.dirty,
                 'is-valid': form.controls.keyword.valid && form.controls.keyword.dirty}">
+            <div *ngIf="form.controls.keyword.hasError('invalidkeyword')">
+                <small class="text-danger">Das Schlüsselwort darf nicht leer sein!</small>
+            </div>
         </div>
     </div>
     <br *ngIf="form.controls.prove.value == 4 || form.controls.prove.value == 5">

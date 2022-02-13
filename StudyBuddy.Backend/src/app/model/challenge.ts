@@ -72,6 +72,20 @@ export class Challenge {
             return true;
     }
 
+    hasKeyword():boolean {
+        if(this.prove_addendum === "")
+            return false;
+        else
+            return true;
+    }
+
+    validDescription():boolean {
+        if(this.description.length < 80)
+            return false;
+        else
+            return true;
+    }
+
     static fromApi(result):Challenge {
         let obj = new Challenge();
         obj.id = result["id"];
