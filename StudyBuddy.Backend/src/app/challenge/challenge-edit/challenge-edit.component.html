@@ -15,7 +15,7 @@
         <textarea class="form-control" id="description" formControlName="description" rows="3">
         </textarea>
         <div *ngIf="form.controls.description.hasError('invaliddescription')">
-            <small class="text-danger">Die Beschreibung muss mindestens 80 Zeichen lang sein!</small>
+            <small class="text-danger">Die Beschreibung darf nicht leer sein!</small>
         </div>
     </div>
     <div class="mb-3">

@@ -80,7 +80,7 @@ export class Challenge {
     }
 
     validDescription():boolean {
-        if(this.description.length < 80)
+        if(this.description === "")
             return false;
         else
             return true;
