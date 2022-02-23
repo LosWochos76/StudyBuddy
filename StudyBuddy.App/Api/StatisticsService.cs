@@ -1,6 +1,7 @@
 ﻿using System.Net.Http;
 using System.Threading.Tasks;
 using StudyBuddy.App.Interfaces;
+using StudyBuddy.App.ViewModels;
 using StudyBuddy.Model.Model;
 
 namespace StudyBuddy.App.Api
@@ -15,7 +16,7 @@ namespace StudyBuddy.App.Api
             this.api = api;
             this.base_url = base_url;
         }
-
+                
         public async Task<UserStatistics> GetUserStatistics()
         {
             return await GetUserStatisticsForUser(api.Authentication.CurrentUser.ID);

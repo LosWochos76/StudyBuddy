@@ -178,6 +178,9 @@
     <Reference Include="Xamarin.iOS" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="Microcharts.Forms">
+      <Version>0.9.5.9</Version>
+    </PackageReference>
     <PackageReference Include="Plugin.FirebasePushNotification" Version="3.4.1" />
     <PackageReference Include="Xam.Plugin.Media">
       <Version>5.0.1</Version>

@@ -1,4 +1,5 @@
-﻿using StudyBuddy.Model.Model;
+﻿using StudyBuddy.App.ViewModels;
+using StudyBuddy.Model.Model;
 using System.Threading.Tasks;
 
 namespace StudyBuddy.App.Interfaces

@@ -1,0 +1,118 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewmodels="clr-namespace:StudyBuddy.App.ViewModels"
+             x:Class="StudyBuddy.App.Views.AcceptedChallengesPage"           
+             x:DataType="viewmodels:AcceptedChallengesViewModel"
+             xmlns:fontAwesome="clr-namespace:StudyBuddy.App">
+    <StackLayout>
+        
+        <RefreshView IsRefreshing="{Binding IsRefreshing}" 
+                     Command="{Binding RefreshCommand}">
+            <CollectionView ItemsSource="{Binding Challenges}"
+                            
+                            SelectionMode="Single"
+                            ItemsUpdatingScrollMode="KeepItemsInView">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="viewmodels:ChallengeViewModel">
+                        <Grid x:Name="Item"
+                              Padding="5,0,5,0">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*" />
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <Frame CornerRadius="10"
+                                   Margin="5"
+                                   Padding="0"
+                                   HeightRequest="100"
+                                   HasShadow="True"
+                                   HorizontalOptions="FillAndExpand"
+                                   VerticalOptions="FillAndExpand"
+                                   BorderColor="{OnPlatform Android={StaticResource SystemGray4}, iOS={StaticResource Transparent}}"
+                                   >
+                                <Grid BackgroundColor="Transparent"
+                                      Padding="0">
+
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="*" />
+                                        <RowDefinition Height="*" />
+                                    </Grid.RowDefinitions>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="70" />
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <StackLayout Grid.RowSpan="2"
+                                                 VerticalOptions="Center"
+                                                 Padding="8,0,2,0">
+                                        <Image WidthRequest="45"
+                                               HeightRequest="45"
+                                               VerticalOptions="Center">
+                                            <Image.Source>
+                                                <FontImageSource FontFamily="{StaticResource FontAwesomeSolid}"
+                                                                 Color="{StaticResource TextColor}" />
+                                            </Image.Source>
+                                        </Image>
+                                    </StackLayout>
+                                    <Frame Grid.Row="0"
+                                           Grid.RowSpan="2"
+                                           Grid.Column="1"
+                                           Grid.ColumnSpan="2"
+                                           HasShadow="False"
+                                           CornerRadius="10"
+                                           Padding="0,0,0,0">
+
+                                        <StackLayout>
+                                            <Label Text="{Binding Name}"
+                                                   HeightRequest="65"
+                                                   FontSize="16"
+                                                   FontAttributes="Bold"
+                                                   VerticalOptions="Center"
+                                                   Padding="12,5,12,0" />
+
+                                            <StackLayout Orientation="Horizontal"
+                                                         Padding="12,0,12,5">
+                                                <Label HorizontalOptions="StartAndExpand"
+                                                       VerticalOptions="Start">
+                                                    <Label.FormattedText>
+                                                        <FormattedString>
+                                                            <Span FontFamily="{StaticResource FontAwesomeSolid}"
+                                                                  FontSize="14"
+                                                                  CharacterSpacing="13"></Span>
+                                                            <Span Text="{Binding ValidityEndText}"
+                                                                  FontSize="15"></Span>
+                                                        </FormattedString>
+                                                    </Label.FormattedText>
+                                                </Label>
+                                                <Label HorizontalOptions="End">
+                                                    <Label.FormattedText>
+                                                        <FormattedString>
+                                                            <Span   FontFamily="{StaticResource FontAwesomeSolid}"
+                                                                    Text="{x:Static fontAwesome:FontAwesomeIcons.Star}"
+                                                                    FontSize="15"
+                                                                    CharacterSpacing="12"></Span>
+                                                            <Span   Text="{Binding PointsTextZero}"
+                                                                    FontSize="15"></Span>
+                                                        </FormattedString>
+                                                    </Label.FormattedText>
+                                                </Label>
+                                            </StackLayout>
+                                        </StackLayout>
+                                    </Frame>
+                                </Grid>
+                            </Frame>
+                        </Grid>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+                <CollectionView.EmptyView>
+                    <StackLayout Padding="12">
+                        <Label HorizontalOptions="Center" 
+                               Text="Keine Challenges" />
+                    </StackLayout>
+                </CollectionView.EmptyView>
+            </CollectionView>
+        </RefreshView>
+    </StackLayout>
+</ContentPage>

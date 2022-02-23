@@ -32,18 +32,33 @@ namespace StudyBuddy.App.ViewModels
         public bool IsRefreshing { get; set; } = false;
 
         public ICommand RanksCommand { get; set; }
+        public ICommand AcceptedChallengesDetailsCommand { get; set; }
+        public ICommand ShowHistoryCommand { get; set; }
 
 
         public StatisticsViewModel(IApi api, IDialogService dialog, INavigationService navigation) : base(api, dialog, navigation)
         {
             this.RanksCommand = new Command(ShowRanks);
+            this.AcceptedChallengesDetailsCommand = new Command(ShowAcceptedChallengeHistory);
+            this.ShowHistoryCommand = new Command(ShowChallengeHistory);
             api.Authentication.LoginStateChanged += Authentication_LoginStateChanged;
             RefreshCommand = new AsyncCommand(RefreshView);
         }
 
+        public void ShowAcceptedChallengeHistory()
+        {
+            Navigation.Push(new AcceptedChallengesPage());
+        }
+
+        public void ShowChallengeHistory()
+        {
+            Navigation.Push(new ChallengeHistoryStatisticsPage());
+        }
+
         private void ShowRanks()
         {
-            Navigation.Push(new RankingPage(UserStatistics.FriendsRank));
+            Navigation.Push(new ChallengeHistoryStatisticsPage());
+            //Navigation.Push(new RankingPage(UserStatistics.FriendsRank));
         }
 
         private void Authentication_LoginStateChanged(object sender, LoginStateChangedArgs args)
@@ -69,6 +84,12 @@ namespace StudyBuddy.App.ViewModels
                 await App.Current.MainPage.DisplayAlert("Fehler", "Fehler beim Laden der Statistiken. API Endpunkt nicht erreichbar", "Ok");
             }
         }
-        
+
+        private Command showHistoryCommad;
+        public ICommand ShowHistoryCommad => showHistoryCommad ??= new Command(PerformShowHistoryCommad);
+
+        private void PerformShowHistoryCommad()
+        {
+        }
     }
 }

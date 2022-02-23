@@ -11,6 +11,7 @@
       <None Remove="Misc\" />
     </ItemGroup>
     <ItemGroup>
+      <PackageReference Include="Microcharts.Forms" Version="0.9.5.9" />
       <PackageReference Include="System.Net.Http.Json" Version="6.0.0" />
     </ItemGroup>
     <ItemGroup>

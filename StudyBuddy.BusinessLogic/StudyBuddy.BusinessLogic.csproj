@@ -28,6 +28,7 @@
     </ItemGroup>
     <ItemGroup>
         <PackageReference Include="FirebaseAdmin" Version="2.2.0" />
+        <PackageReference Include="Microcharts.Forms" Version="0.9.5.9" />
         <PackageReference Include="Microsoft.AspNetCore.WebUtilities" Version="2.2.0" />
         <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.15.1" />
         <PackageReference Include="NETCore.MailKit" Version="2.0.3" />

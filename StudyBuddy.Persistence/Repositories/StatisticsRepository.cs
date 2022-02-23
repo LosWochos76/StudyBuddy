@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Npgsql;
 using StudyBuddy.Model;
+using System;
 
 namespace StudyBuddy.Persistence
 {
@@ -77,6 +78,20 @@ namespace StudyBuddy.Persistence
             return ranking;
         }
 
+        public IEnumerable<ChallengeHistoryEntry> GetChallengeHistoryWeekly(int user_id)
+        {
+            var qh = new QueryHelper<ChallengeHistoryEntry>(connection_string, ChallengeHistoryDetailReader);
+
+            qh.AddParameter(":user_id", user_id);
+
+            var sql = "SELECT DATE_trunc('week',ca.created) as week, points, category" +
+                    "FROM public.challenge_acceptance as ca inner join challenges on id = challenge_id where user_id = :user_id";
+
+            var challengeHistory = qh.ExecuteQueryToObjectList(sql);
+            
+            return challengeHistory;
+        }
+
         private UserStatistics TransformDto(IEnumerable<ChallengeStatisticsDto> csDtoList)
         {
             var userStatistic = new UserStatistics();
@@ -123,6 +138,15 @@ namespace StudyBuddy.Persistence
             return rankEntry;
         }
 
+        public ChallengeHistoryEntry ChallengeHistoryDetailReader(NpgsqlDataReader reader)
+        {
+            var history = new ChallengeHistoryEntry();
+            history.Week = reader.GetDateTime(0);
+            history.Points = reader.GetInt32(1);
+            history.ChallengeCategory = reader.GetInt32(2);
+            return history;
+        }
+                
         public class ChallengeStatisticsDto
         {
             public int ChallengeCategoryId  { get; set; }
@@ -130,6 +154,16 @@ namespace StudyBuddy.Persistence
             public int Points { get; set; }
 
             public int ChallengeCount { get; set; }
+        }
+
+        public class ChallengeHistoryEntry
+        {
+            public DateTime Week { get; set; }
+
+            public int Points { get; set; }
+
+            public int ChallengeCategory { get; set; }
+
         }
     }
 }

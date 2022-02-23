@@ -1,0 +1,38 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:forms="clr-namespace:Microcharts.Forms;assembly=Microcharts.Forms"
+             x:Class="StudyBuddy.App.Views.ChallengeHistoryStatisticsPage"
+             Title="Challenge History Statistik">
+    <ContentPage.Content>
+         <StackLayout Orientation="Vertical" WidthRequest="500">
+            <StackLayout Orientation="Horizontal">
+                <StackLayout Orientation="Horizontal" HorizontalOptions="StartAndExpand" >
+                    <forms:ChartView x:Name="GeneralChart1" HeightRequest="100" WidthRequest="200"/>
+                    <Label Text="Overall Challenges"></Label>
+                </StackLayout>
+            </StackLayout>
+                
+                          
+             <Label Text=" andere designideen"></Label>
+            <StackLayout Orientation="Horizontal" HorizontalOptions="CenterAndExpand" >
+                <forms:ChartView x:Name="exampleChart1" HeightRequest="100" WidthRequest="200"/>
+                <forms:ChartView x:Name="exampleChart2" HeightRequest="100" WidthRequest="200"/>
+            </StackLayout>
+            <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand" MinimumWidthRequest="500">
+                <forms:ChartView x:Name="exampleChart3" HeightRequest="100" WidthRequest="200"/>
+                <forms:ChartView x:Name="exampleChart4" HeightRequest="100" WidthRequest="200"/>
+            </StackLayout>
+            <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand">
+                <forms:ChartView x:Name="exampleChart5" HeightRequest="100" WidthRequest="200"/>
+                <forms:ChartView x:Name="exampleChart6" HeightRequest="100" WidthRequest="200"/>
+            </StackLayout>
+            <StackLayout Orientation="Horizontal" WidthRequest="350" HorizontalOptions="FillAndExpand">
+                <forms:ChartView x:Name="exampleChart7" WidthRequest="350" HeightRequest="100"/>
+                <forms:ChartView x:Name="exampleChart8" HeightRequest="100"/>
+            </StackLayout>
+                        
+        </StackLayout>
+    </ContentPage.Content>
+
+</ContentPage>

@@ -147,6 +147,9 @@
                         </StackLayout>
                     </StackLayout>
                 </StackLayout>
+                    <Frame.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding ShowHistoryCommad}"/>
+                    </Frame.GestureRecognizers>
             </Frame>
             <StackLayout HorizontalOptions="StartAndExpand" Orientation="Horizontal" BackgroundColor="Transparent">
                 <Frame Style="{StaticResource FrameStyle}" WidthRequest="200"
@@ -165,7 +168,10 @@
                             <Label Style="{StaticResource InvertedTextColor}"
                                    HorizontalTextAlignment="Center" Text="Abgschlossene Herausforderungen"></Label>
                     </StackLayout>
-                </Frame>
+                        <Frame.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding AcceptedChallengesDetailsCommand}"/>
+                        </Frame.GestureRecognizers>
+                    </Frame>
                 <Frame Style="{StaticResource FrameStyle}" WidthRequest="200"
                            BackgroundColor="{StaticResource WindowBackgroundColor}">
                     <StackLayout HorizontalOptions="CenterAndExpand" Orientation="Vertical">
