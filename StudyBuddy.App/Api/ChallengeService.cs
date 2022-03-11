@@ -35,18 +35,6 @@ namespace StudyBuddy.App.Api
             return await rh.Get<ChallengeListViewModel>(base_url + "Challenge", filter);
         }
         
-        public async Task<ChallengeListViewModel> GetAcceptedChallenges()
-        {
-            var filter = new ChallengeFilter()
-            {
-                OnlyUnacceped = false
-            };
-
-            var rh = new WebRequestHelper(api.Authentication.Token);
-            var currentUserId = api.Authentication.CurrentUser.ID;
-            return await rh.Get<ChallengeListViewModel>(base_url + "Challenge/Accepted/" + currentUserId , filter);
-        }
-        
         public async Task<ChallengeViewModel> AcceptFromQrCode(string code)
         {
             var rh = new WebRequestHelper(api.Authentication.Token);
@@ -70,6 +58,19 @@ namespace StudyBuddy.App.Api
             return status.IsOk;
         }
 
+        public async Task<ChallengeListViewModel> GetAcceptedChallenges()
+        {
+            var currentUserId = api.Authentication.CurrentUser.ID;
+            var filter = new ChallengeFilter
+            {
+                OnlyUnacceped = false,
+                CurrentUserId = currentUserId,
+            };
+
+            var rh = new WebRequestHelper(api.Authentication.Token);
+            return await rh.Get<ChallengeListViewModel>(base_url + "Challenge/Accepted/", filter);
+        }
+        
         public async Task<bool> AcceptWithAddendum(ChallengeViewModel cvm, string prove_addendum)
         {
             var rh = new WebRequestHelper(api.Authentication.Token);
