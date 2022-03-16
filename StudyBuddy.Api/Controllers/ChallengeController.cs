@@ -22,6 +22,31 @@ namespace StudyBuddy.Api
             return Json(backend.ChallengeService.All(filter));
         }
 
+
+        [Route("/User/{user_id}/AcceptedChallenges/")]
+        [HttpGet]
+        public IActionResult AcceptedChallenged(int user_id, [FromQuery] ChallengeFilter filter)
+        {
+            if (filter == null)
+                filter = new ChallengeFilter();
+
+            filter.CurrentUserId = user_id;
+            filter.OnlyAccepted = true;
+            return Json(backend.ChallengeService.All(filter));
+        }
+
+        [Route("/User/{user_id}/UnacceptedChallenges/")]
+        [HttpGet]
+        public IActionResult UnacepptedChallenges(int user_id, [FromQuery] ChallengeFilter filter)
+        {
+            if (filter == null)
+                filter = new ChallengeFilter();
+
+            filter.CurrentUserId = user_id;
+            filter.OnlyAccepted = true;
+            return Json(backend.ChallengeService.All(filter));
+        }
+
         [Route("/Challenge/{id}")]
         [HttpGet]
         public IActionResult GetById(int id)
@@ -107,29 +132,6 @@ namespace StudyBuddy.Api
         {
             backend.ChallengeService.AddAcceptance(challenge_id, user_id);
             return Json(new { Status = "ok" });
-        }
-
-        [Route("/Challenge/{challenge_id}/Badge")]
-        [HttpGet]
-        public IActionResult GetBadgesForChallenge(int challenge_id)
-        {
-            return Json(backend.GameBadgeService.GetBadgesForChallenge(challenge_id));
-        }
-
-        [Route("/Challenge/{challenge_id}/User")]
-        [HttpGet]
-        public IActionResult GetAllUsersThatAcceptedChallenge(int challenge_id)
-        {
-            var result = backend.UserService.GetAllUsersThatAcceptedChallenge(challenge_id);
-            return Json(result);
-        }
-
-        [Route("/Challenge/Accepted/{user_id}")]
-        [HttpGet]
-        public IActionResult GetAllAcceptedChallengesForUser(int user_id)
-        {
-            var result = backend.Repository.Challenges.Accepted(user_id);
-            return Json(result);
         }
     }
 }

@@ -18,6 +18,7 @@ namespace StudyBuddy.Persistence
 
         void AddBadgeToUser(int user_id, int badge_id);
         void RemoveBadgeFromUser(int user_id, int badge_id);
+        void RemoveAllBadgesFromUser(int user_id);
         IEnumerable<GameBadge> GetBadgesOfUser(int user_id);
     }
 }

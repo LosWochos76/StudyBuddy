@@ -25,8 +25,10 @@ namespace StudyBuddy.BusinessLogic
             if (filter == null)
                 filter = new ChallengeFilter();
 
-            filter.CurrentUserId = backend.CurrentUser.ID;
-            if (!backend.CurrentUser.IsAdmin)
+            if (!backend.CurrentUser.IsAdmin || filter.CurrentUserId == 0)
+                filter.CurrentUserId = backend.CurrentUser.ID;
+
+            if (!backend.CurrentUser.IsAdmin) 
                 filter.includeSystemProve = false;
 
             var count = backend.Repository.Challenges.GetCount(filter);
@@ -44,19 +46,6 @@ namespace StudyBuddy.BusinessLogic
             backend.Logging.LogInfo(message);
 
             return new ChallengeList() { Count = count, Objects = objects };
-        }
-
-        public ChallengeList GetAcceptedChallenges()
-        {
-            if (backend.CurrentUser == null)
-                throw new UnauthorizedAccessException("Unauthorized!");
-
-            var objects = backend.Repository.Challenges.Accepted(backend.CurrentUser.ID);
-            return new ChallengeList()
-            {
-                Count = objects.Count(),
-                Objects = objects
-            };
         }
 
         public Challenge GetById(int id)

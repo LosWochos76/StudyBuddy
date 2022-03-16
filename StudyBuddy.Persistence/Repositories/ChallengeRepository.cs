@@ -79,6 +79,12 @@ namespace StudyBuddy.Persistence
                 qh.AddParameter(":user_id", filter.CurrentUserId);
                 sql.Append(" and not challenge_accepted(:user_id, id)");
             }
+
+            if (filter.OnlyAccepted)
+            {
+                qh.AddParameter(":user_id", filter.CurrentUserId);
+                sql.Append(" and challenge_accepted(:user_id, id)");
+            }
         }
 
         public void Insert(Challenge obj)
@@ -168,16 +174,11 @@ namespace StudyBuddy.Persistence
                 "delete from challenge_acceptance where challenge_id=:challenge_id and user_id=:user_id");
         }
 
-        public IEnumerable<Challenge> Accepted(int user_id)
+        public void RemoveAllAcceptances(int user_id)
         {
-            var qh = new QueryHelper<Challenge>(connection_string, FromReader);
-            qh.AddParameter(":user_id", user_id);
-            var sql = "select id,name,description,points,validity_start,validity_end," +
-                      "category,owner_id,ch.created,prove,series_parent_id,tags,prove_addendum from challenge_acceptance " +
-                      "inner join challenges as ch on challenge_id=id where user_id=:user_id " +
-                      "order by challenge_acceptance.created desc";
-
-            return qh.ExecuteQueryToObjectList(sql);
+            var qh = new QueryHelper<Tag>(connection_string);
+            qh.AddParameter(":user_id", user_id );
+            qh.ExecuteNonQuery("delete from challenge_acceptance where user_id=:user_id");
         }
 
         private void CreateChallengesTable()

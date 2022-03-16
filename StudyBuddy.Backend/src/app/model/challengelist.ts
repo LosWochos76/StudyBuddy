@@ -4,11 +4,14 @@ export class ChallengeList {
     count: number = 0;
     objects: Challenge[] = [];
 
-    constructor(result) {
-        this.count = result['count'];
+    static fromResult(result) {
+        let obj = new ChallengeList();
+        obj.count = result['count'];
 
         for (let index in result['objects']) {
-            this.objects.push(Challenge.fromApi(result['objects'][index]));
+            obj.objects.push(Challenge.fromApi(result['objects'][index]));
         }
+
+        return obj;
     }
 }

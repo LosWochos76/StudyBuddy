@@ -1,5 +1,8 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Net.Http;
+using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
 using StudyBuddy.App.Interfaces;
 using StudyBuddy.App.Misc;
 using StudyBuddy.App.ViewModels;
@@ -7,7 +10,7 @@ using TinyIoC;
 
 namespace StudyBuddy.App.Api
 {
-    public class ApiFacade : IApi
+    public class ApiFacade : IApi, INotifyPropertyChanged
     {
         private readonly string base_url = "https://api.gameucation.eu/";
         //private readonly string base_url = "https://studybuddy.hshl.de/";
@@ -15,10 +18,15 @@ namespace StudyBuddy.App.Api
         //private readonly string base_url = "https://10.0.2.2:5001/";
         //private readonly string base_url = "http://192.168.0.199:58947/";
 
-        private Version app_version = new Version(0, 0, 21, 0);
-        public Version App_Version { get => app_version; }
-        private Version api_version;
-        public Version Api_Version { get => api_version; }
+        public Version AppVersion { get; private set; } = new Version(0, 0, 21, 0);
+        public Version ApiVersion { get; private set; } = new Version(0, 0, 0, 0);
+
+        public async Task LoadApiVersion()
+        {
+            var rh = new WebRequestHelper();
+            ApiVersion = await rh.Get<Version>(base_url + "ApiVersion", HttpMethod.Get);
+            NotifyPropertyChanged("ApiVersion");
+        }
 
         public IAuthenticationService Authentication { get; }
         public IChallengeService Challenges { get; }
@@ -33,6 +41,8 @@ namespace StudyBuddy.App.Api
 
         public ApiFacade()
         {
+            CheckVersion();
+
             Authentication = new AuthenticationService(this, base_url);
             Challenges = new ChallengeService(this, base_url);
             FcmTokens = new FcmTokenService(this, base_url);
@@ -43,19 +53,12 @@ namespace StudyBuddy.App.Api
             Notifications = new NotificationService(this, base_url);
             Statistics = new StatisticsService(this, base_url);
             ImageService = new ImageService(this, base_url);
-
-            CheckVersion();
         }
 
         private async void CheckVersion()
         {
-            var rh = new WebRequestHelper();
-            var result = await rh.Get<Version>(base_url + "ApiVersion", HttpMethod.Get);
-            if (result == null)
-                return;
-            api_version = result;
-            Console.WriteLine(api_version);
-            if (result > app_version)
+            await LoadApiVersion();
+            if (ApiVersion > AppVersion)
             {
                 var dialog = TinyIoCContainer.Current.Resolve<IDialogService>();
                 await Logging.LogError("App too old!");
@@ -79,10 +82,17 @@ namespace StudyBuddy.App.Api
         }
 
         public event EventHandler<FriendshipStateChangedEventArgs> FriendshipStateChanged;
+        public event PropertyChangedEventHandler PropertyChanged;
+
         public void RaiseFriendsChanged(object sender, FriendshipStateChangedEventArgs args)
         {
             if (FriendshipStateChanged != null)
                 FriendshipStateChanged(sender, args);
+        }
+
+        private void NotifyPropertyChanged([CallerMemberName] string propertyName = "")
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }

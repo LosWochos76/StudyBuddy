@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using StudyBuddy.App.Api;
 using StudyBuddy.App.Interfaces;
 using StudyBuddy.App.ViewModels;
@@ -17,6 +18,9 @@ namespace StudyBuddy.Test.Mocks
         public INotificationService Notifications { get; }
         public IStatisticsService Statistics { get; }
         public IImageService ImageService { get; set; }
+
+        public Version AppVersion { get; private set; } = new Version(0, 0, 0, 0);
+        public Version ApiVersion { get; private set; } = new Version(0, 0, 0, 0);
 
         public ApiMock()
         {
@@ -39,6 +43,8 @@ namespace StudyBuddy.Test.Mocks
         }
 
         public event EventHandler<FriendshipStateChangedEventArgs> FriendshipStateChanged;
+        public event PropertyChangedEventHandler PropertyChanged;
+
         public void RaiseFriendsChanged(object sender, FriendshipStateChangedEventArgs args)
         {
             if (FriendshipStateChanged != null)

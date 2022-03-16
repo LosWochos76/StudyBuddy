@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { User } from 'src/app/model/user';
 import { AuthorizationService } from 'src/app/services/authorization.service';
 import { LoggingService } from 'src/app/services/loging.service';
+import { NavigationService } from 'src/app/services/navigation.service';
 import { UserService } from 'src/app/services/user.service';
 
 @Component({
@@ -18,10 +19,11 @@ export class UserEditComponent implements OnInit {
 
   constructor(
     private logger: LoggingService,
+    private navigation: NavigationService,
     private route: ActivatedRoute,
-    private router: Router,
     private service: UserService,
     private auth: AuthorizationService) {
+    this.navigation.startSaveHistory();
 
     this.form = new FormGroup({
       firstname: new FormControl("", [Validators.required, Validators.minLength(3)]),
@@ -79,11 +81,11 @@ export class UserEditComponent implements OnInit {
       this.service.setFriends(this.obj.id, []);
     }
 
-    this.router.navigate(['user']);
+    this.navigation.goBack("/user");
   }
 
   onCancel() {
-    this.router.navigate(['user']);
+    this.navigation.goBack("/user");
   }
 
   onSendResetPasswortEmail() {

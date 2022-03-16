@@ -39,7 +39,7 @@ export class BusinessEventService {
         headers: new HttpHeaders({ Authorization: this.auth.getToken() })
       }).toPromise();
 
-    return new BusinessEventList(result);
+    return BusinessEventList.fromResult(result);
   }
 
   async byId(id: number): Promise<BusinessEvent> {

@@ -36,7 +36,7 @@ export class UserService {
         headers: new HttpHeaders({ Authorization: this.auth.getToken() })
       }).toPromise();
 
-    return new UserList(result);
+    return UserList.fromResult(result);
   }
 
   async remove(id: number) {
@@ -74,8 +74,8 @@ export class UserService {
   }
 
   async save(obj: User) {
-      let data = obj.toApi();
-      console.log(data);
+    let data = obj.toApi();
+    console.log(data);
     let result = null;
     this.logger.debug("Saving User");
 
@@ -149,7 +149,7 @@ export class UserService {
         headers: new HttpHeaders({ Authorization: this.auth.getToken() })
       }).toPromise();
 
-    return new UserList(result);
+    return UserList.fromResult(result);
   }
 
   async getUsersHavingBadge(badge_id: number): Promise<UserList> {
@@ -162,7 +162,7 @@ export class UserService {
         headers: new HttpHeaders({ Authorization: this.auth.getToken() })
       }).toPromise();
 
-    return new UserList(result);
+    return UserList.fromResult(result);
   }
 
   async addBadgeToUser(user_id: number, badge_id: number) {

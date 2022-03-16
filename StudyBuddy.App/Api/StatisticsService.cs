@@ -1,7 +1,7 @@
 ﻿using System.Net.Http;
 using System.Threading.Tasks;
 using StudyBuddy.App.Interfaces;
-using StudyBuddy.Model.Model;
+using StudyBuddy.Model;
 
 namespace StudyBuddy.App.Api
 {

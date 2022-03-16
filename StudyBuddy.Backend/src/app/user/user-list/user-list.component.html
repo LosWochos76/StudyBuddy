@@ -1,11 +1,15 @@
 <br>
 
-<button class="btn btn-success" 
+<button class="btn btn-info" 
   [disabled]="!isSelected()"
+  (click)="onInfo()">Info</button>&nbsp;
+
+<button class="btn btn-success" 
+  [disabled]="!isEditable()"
   (click)="onEdit()">Bearbeiten</button>&nbsp;
 
 <button class="btn btn-danger" 
-  [disabled]="!isSelected()"
+  [disabled]="!isDeletable()"
   (click)="onDelete()">Löschen</button>
 
 <br>

@@ -15,9 +15,23 @@ namespace StudyBuddy.Api
 
         [Route("/GameBadge/")]
         [HttpGet]
-        public IActionResult Get([FromQuery] GameBadgeFilter filter)
+        public IActionResult All([FromQuery] GameBadgeFilter filter)
         {
             return Json(backend.GameBadgeService.All(filter));
+        }
+
+        [Route("/User/{user_id}/GameBadge/")]
+        [HttpGet]
+        public IActionResult GetBadgesOfUser(int user_id, [FromQuery] GameBadgeFilter filter)
+        {
+            if (filter == null)
+                filter = new GameBadgeFilter();
+
+            filter.OnlyReceived = true;
+            filter.CurrentUserId = user_id;
+
+            var result = backend.GameBadgeService.All(filter);
+            return Json(result);
         }
 
         [Route("/GameBadge/{id}")]
@@ -41,7 +55,7 @@ namespace StudyBuddy.Api
             return Json(backend.GameBadgeService.Insert(obj));
         }
 
-        [Route("/GameBadge/{id}")]
+        [Route("/GameBadge/{id}")]                
         [HttpDelete]
         public IActionResult Delete(int id)
         {
@@ -56,18 +70,34 @@ namespace StudyBuddy.Api
             return Json(backend.GameBadgeService.GetSuccessRate(badge_id, user_id));
         }
 
-        [Route("/GameBadge/{badge_id}/User/")]
-        [HttpGet]
-        public IActionResult GetAllUsersHavingBadge(int badge_id)
-        {
-            return Json(backend.UserService.GetAllUsersHavingBadge(badge_id));
-        }
-
         [Route("/GameBadge/{badge_id}/Challenge")]
         [HttpGet]
         public IActionResult GetChallengesOfBadge(int badge_id)
         {
             return Json(backend.ChallengeService.GetChallengesOfBadge(badge_id));
+        }
+
+        [Route("/User/{user_id}/GameBadge/{badge_id}")]
+        [HttpPost]
+        public IActionResult AddBadgeToUser(int user_id, int badge_id)
+        {
+            backend.GameBadgeService.AddBadgeToUser(user_id, badge_id);
+            return Json(new { Status = "ok" });
+        }
+
+        [Route("/User/{user_id}/GameBadge/{badge_id}")]
+        [HttpDelete]
+        public IActionResult RemoveBadgeFromUser(int user_id, int badge_id)
+        {
+            backend.GameBadgeService.RemoveBadgeFromUser(user_id, badge_id);
+            return Json(new { Status = "ok" });
+        }
+
+        [Route("/Challenge/{challenge_id}/Badge")]
+        [HttpGet]
+        public IActionResult GetBadgesForChallenge(int challenge_id)
+        {
+            return Json(backend.GameBadgeService.GetBadgesForChallenge(challenge_id));
         }
     }
 }

@@ -102,6 +102,21 @@ namespace StudyBuddy.Persistence
                 "return has_accepted;\n" +
                 "end;$$;\n" +
                 "commit;");
+
+            qh.ExecuteNonQuery("begin;\n" +
+                "SELECT pg_advisory_xact_lock(8446020628481340546);\n" +
+                "create or replace function badge_received(user_id_param int, badge_id_param int)\n" +
+                "returns boolean\n" +
+                "language plpgsql\n" +
+                "as $$\n" +
+                "declare\n" +
+                "has_received boolean;\n" +
+                "begin\n" +
+                "select case When(select count(*) as count from users_badges\n" +
+                "where user_id = user_id_param and badge_id = badge_id_param) > 0 Then True else False end into has_received;\n" +
+                "return has_received;\n" +
+                "end;$$;\n" +
+                "commit;");
         }
 
         public User ById(int id)
@@ -190,7 +205,6 @@ namespace StudyBuddy.Persistence
         {
             var qh = new QueryHelper<User>(connection_string);
             qh.Delete("users", "id", id);
-            qh.Delete("challenge_acceptance", "user_id", id);
         }
 
         public User ByNickname(string nickname)

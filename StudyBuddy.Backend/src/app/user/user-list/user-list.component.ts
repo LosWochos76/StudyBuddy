@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { User } from 'src/app/model/user';
 import { AuthorizationService } from 'src/app/services/authorization.service';
 import { LoggingService } from 'src/app/services/loging.service';
+import { NavigationService } from 'src/app/services/navigation.service';
 import { UserService } from 'src/app/services/user.service';
 
 @Component({
@@ -11,8 +12,8 @@ import { UserService } from 'src/app/services/user.service';
   styleUrls: ['./user-list.component.css']
 })
 export class UserListComponent implements OnInit {
-    page = 1;
-    total = 0;
+  page = 1;
+  total = 0;
   objects: User[] = [];
   count: number = 0;
   selected: User = null;
@@ -20,33 +21,42 @@ export class UserListComponent implements OnInit {
 
   constructor(
     private logger: LoggingService,
+    private navigation: NavigationService,
     private service: UserService,
     private router: Router,
     private auth: AuthorizationService) { }
 
   async ngOnInit() {
+    this.navigation.startSaveHistory();
     this.current_user = this.auth.getUser();
-      var fullList = await this.service.getAll(this.page);
-      this.objects = fullList.objects;
-      this.total = fullList.count;
-      this.service.changed.subscribe(async () => {
-          var result = await this.service.getAll(this.page)
-          this.objects = result.objects;
-          this.total = result.count;
-
+    var fullList = await this.service.getAll(this.page);
+    this.objects = fullList.objects;
+    this.total = fullList.count;
+    this.service.changed.subscribe(async () => {
+      var result = await this.service.getAll(this.page)
+      this.objects = result.objects;
+      this.total = result.count;
     });
   }
-    async onTableDataChange(event) {
-        this.page = event;
-        var fullList = await this.service.getAll(event);
-        this.objects = fullList.objects;
-    }
+  async onTableDataChange(event) {
+    this.page = event;
+    var fullList = await this.service.getAll(event);
+    this.objects = fullList.objects;
+  }
   onSelect(obj: User) {
     this.selected = obj;
   }
 
+  isEditable() {
+    return this.isSelected() && this.selected.id != this.current_user.id;
+  }
+
+  isDeletable() {
+    return this.isEditable();
+  }
+
   isSelected() {
-    return this.selected != null && this.selected.id != this.current_user.id;
+    return this.selected != null;
   }
 
   onDelete() {
@@ -72,5 +82,10 @@ export class UserListComponent implements OnInit {
   onAdd() {
     this.logger.debug("User wants to add a User");
     this.router.navigate(['/user/0']);
+  }
+
+  onInfo() {
+    this.logger.debug("User wants to see info of User");
+    this.router.navigate(['/userinfo', this.selected.id]);
   }
 }

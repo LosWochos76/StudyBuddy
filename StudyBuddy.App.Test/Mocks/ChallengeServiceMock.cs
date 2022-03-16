@@ -89,7 +89,7 @@ namespace StudyBuddy.Test.Mocks
             throw new NotImplementedException();
         }
 
-        Task<ChallengeListViewModel> IChallengeService.GetAcceptedChallenges()
+        public Task<ChallengeListViewModel> Accepted(string search_string = "", int skip = 0)
         {
             throw new NotImplementedException();
         }

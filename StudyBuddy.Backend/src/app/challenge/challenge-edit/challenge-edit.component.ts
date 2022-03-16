@@ -1,11 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { Challenge } from 'src/app/model/challenge';
 import { User } from 'src/app/model/user';
 import { AuthorizationService } from 'src/app/services/authorization.service';
 import { ChallengeService } from 'src/app/services/challenge.service';
 import { LoggingService } from 'src/app/services/loging.service';
+import { NavigationService } from 'src/app/services/navigation.service';
 import { UserService } from 'src/app/services/user.service';
 
 @Component({
@@ -23,10 +24,11 @@ export class ChallengeEditComponent implements OnInit {
   constructor(
     private logger: LoggingService,
     private route: ActivatedRoute,
-    private router: Router,
     private service: ChallengeService,
     private auth: AuthorizationService,
-    private user_service: UserService) {
+    private user_service: UserService,
+    private navigation: NavigationService) {
+    this.navigation.startSaveHistory();
     this.user = this.auth.getUser();
 
     this.form = new FormGroup({
@@ -61,7 +63,7 @@ export class ChallengeEditComponent implements OnInit {
 
     if (this.user.isAdmin())
       this.all_users = (await this.user_service.getAll()).objects;
-    
+
     let keyword = "";
     let latitude = 51.682730;
     let longitude = 7.840930;
@@ -115,8 +117,8 @@ export class ChallengeEditComponent implements OnInit {
   async onSubmit() {
     this.logger.debug("Trying to save a Challenge!");
     this.obj.copyValues(this.form.value);
-    
-    if(!this.obj.hasName())
+
+    if (!this.obj.hasName())
       this.form.controls.name.setErrors({ 'invalidname': true });
     else
       this.form.controls.name.setErrors(null);
@@ -126,12 +128,12 @@ export class ChallengeEditComponent implements OnInit {
     else
       this.form.controls.validity_end.setErrors(null);
 
-    if(this.obj.prove == 5 && !this.obj.hasKeyword())
+    if (this.obj.prove == 5 && !this.obj.hasKeyword())
       this.form.controls.keyword.setErrors({ 'invalidkeyword': true });
     else
       this.form.controls.keyword.setErrors(null);
 
-    if(!this.obj.validDescription())
+    if (!this.obj.validDescription())
       this.form.controls.description.setErrors({ 'invaliddescription': true });
     else
       this.form.controls.description.setErrors(null);
@@ -142,10 +144,10 @@ export class ChallengeEditComponent implements OnInit {
     }
 
     await this.service.save(this.obj);
-    this.router.navigate(["challenge"]);
+    this.navigation.goBack("/challenge");
   }
 
   onCancel() {
-    this.router.navigate(['challenge']);
+    this.navigation.goBack("/challenge");
   }
 }

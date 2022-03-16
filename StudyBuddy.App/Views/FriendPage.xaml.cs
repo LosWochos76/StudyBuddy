@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using StudyBuddy.Model.Model;
+using StudyBuddy.Model;
 using StudyBuddy.App.ViewModels;
 using TinyIoC;
 using Xamarin.Forms;

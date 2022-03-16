@@ -22,6 +22,8 @@ export class ChallengeService {
     if (!this.auth.isLoggedIn())
       return null;
 
+    this.logger.debug("Loading all challenges");
+
     var query = {};
     if (page != -1) {
       query['start'] = (page - 1) * 10;
@@ -43,7 +45,31 @@ export class ChallengeService {
         headers: new HttpHeaders({ Authorization: this.auth.getToken() })
       }).toPromise();
 
-    return new ChallengeList(result);
+    return ChallengeList.fromResult(result);
+  }
+
+  async getAccepted(user_id: number, page: number = -1): Promise<ChallengeList> {
+    if (!this.auth.isLoggedIn())
+      return null;
+
+    this.logger.debug("Loading accepted challenges for user " + user_id);
+
+    var query = {};
+    if (page != -1) {
+      query['start'] = (page - 1) * 10;
+      query['count'] = 10;
+    }
+
+    query["onlyAccepted"] = true;
+    query['currentUserId'] = user_id;
+
+    let result = await this.http.get(this.url + "User/" + user_id + "/AcceptedChallenges/",
+      {
+        params: query,
+        headers: new HttpHeaders({ Authorization: this.auth.getToken() })
+      }).toPromise();
+
+    return ChallengeList.fromResult(result);
   }
 
   async byId(id: number): Promise<Challenge> {

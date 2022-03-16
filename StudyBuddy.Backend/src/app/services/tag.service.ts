@@ -31,7 +31,7 @@ export class TagService {
       headers: new HttpHeaders({ Authorization: this.auth.getToken() })
     }).toPromise();
 
-    return new TagList(result);
+    return TagList.fromResult(result);
   }
 
   async remove(id: number) {
@@ -100,7 +100,7 @@ export class TagService {
         headers: new HttpHeaders({ Authorization: this.auth.getToken() })
       }).toPromise();
 
-    return new TagList(result);
+    return TagList.fromResult(result);
   }
 
   async setForChallenge(challenge_id: number, tag_string: string) {

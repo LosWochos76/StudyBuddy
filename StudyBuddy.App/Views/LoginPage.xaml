@@ -89,7 +89,7 @@
                         <FormattedString>
                             <FormattedString.Spans>
                                 <Span Text="App Version: "></Span>
-                                <Span Text="{Binding AppVersion}"></Span>
+                                <Span Text="{Binding AppVersionAsString}"></Span>
                             </FormattedString.Spans>
                         </FormattedString>
                     </Label.FormattedText>
@@ -99,7 +99,7 @@
                         <FormattedString>
                             <FormattedString.Spans>
                                 <Span Text="API Version: "></Span>
-                                <Span Text="{Binding ApiVersion}"></Span>
+                                <Span Text="{Binding ApiVersionAsString}"></Span>
                             </FormattedString.Spans>
                         </FormattedString>
                     </Label.FormattedText>

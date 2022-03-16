@@ -1,5 +1,5 @@
 ﻿using StudyBuddy.BusinessLogic.Interfaces;
-using StudyBuddy.Model.Model;
+using StudyBuddy.Model;
 using System;
 using System.Collections.Generic;
 

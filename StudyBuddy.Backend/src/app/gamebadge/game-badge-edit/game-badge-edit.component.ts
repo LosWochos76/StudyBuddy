@@ -1,11 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { GameBadge } from 'src/app/model/gamebadge';
 import { User } from 'src/app/model/user';
 import { AuthorizationService } from 'src/app/services/authorization.service';
 import { GameBadgeService } from 'src/app/services/gamebadge.service';
 import { LoggingService } from 'src/app/services/loging.service';
+import { NavigationService } from 'src/app/services/navigation.service';
 import { UserService } from 'src/app/services/user.service';
 
 @Component({
@@ -22,11 +23,12 @@ export class GameBadgeEditComponent implements OnInit {
 
   constructor(
     private logger: LoggingService,
+    private navigation: NavigationService,
     private route: ActivatedRoute,
-    private router: Router,
     private service: GameBadgeService,
     private auth: AuthorizationService,
     private user_service: UserService) {
+    this.navigation.startSaveHistory();
     this.user = this.auth.getUser();
 
     this.form = new FormGroup({
@@ -82,10 +84,10 @@ export class GameBadgeEditComponent implements OnInit {
     }
 
     await this.service.save(this.obj);
-    this.router.navigate(["gamebadge"]);
+    this.navigation.goBack("/gamebadge");
   }
 
   onCancel() {
-    this.router.navigate(['gamebadge']);
+    this.navigation.goBack("/gamebadge");
   }
 }

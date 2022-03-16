@@ -65,6 +65,8 @@ namespace StudyBuddy.BusinessLogic
                 throw new Exception("Unauthorized!");
 
             backend.Repository.Users.RemoveFriends(user_id);
+            backend.Repository.Challenges.RemoveAllAcceptances(user_id);
+            backend.Repository.GameBadges.RemoveAllBadgesFromUser(user_id);
             backend.Repository.Users.Delete(user_id);
         }
 

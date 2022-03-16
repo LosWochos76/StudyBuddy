@@ -32,7 +32,7 @@ export class RequestService {
         headers: new HttpHeaders({ Authorization: this.auth.getToken() })
       }).toPromise();
 
-    return new RequestList(result);
+    return RequestList.fromResult(result);
   }
 
   async remove(id: number) {

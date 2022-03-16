@@ -1,4 +1,4 @@
-﻿using StudyBuddy.Model.Model;
+﻿using StudyBuddy.Model;
 using System.Collections.Generic;
 
 namespace StudyBuddy.Persistence
@@ -6,8 +6,6 @@ namespace StudyBuddy.Persistence
     public interface IStatisticsRepository
     {
         UserStatistics GetUserStatistics(int user_id);
-
         IEnumerable<RankEntry> GetRankingWithFriends(int user_id);
-        
     }
 }

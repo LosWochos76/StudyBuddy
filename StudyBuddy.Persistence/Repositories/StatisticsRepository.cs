@@ -1,5 +1,4 @@
-﻿using StudyBuddy.Model.Model;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Npgsql;
 using StudyBuddy.Model;
 
@@ -119,7 +118,7 @@ namespace StudyBuddy.Persistence
             var rankEntry = new RankEntry();
             rankEntry.Rank = reader.GetInt32(0);
             rankEntry.Nickname = reader.GetString(1);
-            rankEntry.Total_points = reader.GetInt32(2);
+            rankEntry.TotalPoints = reader.GetInt32(2);
             return rankEntry;
         }
 

@@ -1,5 +1,5 @@
-﻿using StudyBuddy.Model.Model;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
+using StudyBuddy.Model;
 
 namespace StudyBuddy.App.Interfaces
 {

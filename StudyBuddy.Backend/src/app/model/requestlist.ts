@@ -4,11 +4,14 @@ export class RequestList {
     count: number = 0;
     objects: Request[] = [];
 
-    constructor(result) {
-        this.count = result['count'];
+    static fromResult(result) {
+        let obj = new RequestList();
+        obj.count = result['count'];
 
         for (let index in result['objects']) {
-            this.objects.push(Request.fromApi(result['objects'][index]));
+            obj.objects.push(Request.fromApi(result['objects'][index]));
         }
+        
+        return obj;
     }
 }

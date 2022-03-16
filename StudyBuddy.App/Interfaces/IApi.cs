@@ -1,10 +1,11 @@
 ﻿using System;
+using System.ComponentModel;
 using StudyBuddy.App.Interfaces;
 using StudyBuddy.App.ViewModels;
 
 namespace StudyBuddy.App.Api
 {
-    public interface IApi
+    public interface IApi : INotifyPropertyChanged
     {
         IAuthenticationService Authentication { get; }
         IChallengeService Challenges { get; }
@@ -25,7 +26,8 @@ namespace StudyBuddy.App.Api
 
         event EventHandler<FriendshipStateChangedEventArgs> FriendshipStateChanged;
         void RaiseFriendsChanged(object sender, FriendshipStateChangedEventArgs args);
-        Version App_Version { get; }
-        Version Api_Version { get; }
+
+        Version AppVersion { get; }
+        Version ApiVersion { get; }
     }
 }

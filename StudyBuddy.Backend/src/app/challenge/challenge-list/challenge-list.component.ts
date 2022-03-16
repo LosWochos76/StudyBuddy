@@ -5,8 +5,8 @@ import { User } from 'src/app/model/user';
 import { AuthorizationService } from 'src/app/services/authorization.service';
 import { ChallengeService } from 'src/app/services/challenge.service';
 import { LoggingService } from 'src/app/services/loging.service';
-import { UserService } from 'src/app/services/user.service';
 import { faGraduationCap, faPeopleArrows, faTasks } from '@fortawesome/free-solid-svg-icons';
+import { NavigationService } from 'src/app/services/navigation.service';
 
 @Component({
   selector: 'app-challenge-list',
@@ -24,10 +24,11 @@ export class ChallengeListComponent implements OnInit {
 
   constructor(
     private logger: LoggingService,
+    private navigation: NavigationService,
     private service: ChallengeService,
     private router: Router,
-    private auth: AuthorizationService,
-    private user_service: UserService) {
+    private auth: AuthorizationService) {
+    this.navigation.startSaveHistory();
     this.user = this.auth.getUser();
   }
 

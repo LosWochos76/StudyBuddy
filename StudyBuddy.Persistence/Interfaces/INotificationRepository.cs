@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using StudyBuddy.Model;
-using StudyBuddy.Model.Model;
 
 namespace StudyBuddy.Persistence
 {

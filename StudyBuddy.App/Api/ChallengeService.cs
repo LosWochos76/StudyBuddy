@@ -1,4 +1,3 @@
-using StudyBuddy.App.Misc;
 using StudyBuddy.App.ViewModels;
 using StudyBuddy.Model;
 using System;
@@ -11,13 +10,17 @@ namespace StudyBuddy.App.Api
     {
         private readonly IApi api;
         private readonly string base_url;
-        private readonly HttpClient client;
 
         public ChallengeService(IApi api, string base_url)
         {
             this.api = api;
             this.base_url = base_url;
-            client = new HttpClient(Helper.GetInsecureHandler());
+        }
+
+        private async Task<ChallengeListViewModel> All(ChallengeFilter filter)
+        {
+            var rh = new WebRequestHelper(api.Authentication.Token);
+            return await rh.Get<ChallengeListViewModel>(base_url + "Challenge", filter);
         }
 
         public async Task<ChallengeListViewModel> ForToday(string search_string = "", int skip = 0)
@@ -31,22 +34,23 @@ namespace StudyBuddy.App.Api
                 Start = skip
             };
 
-            var rh = new WebRequestHelper(api.Authentication.Token);
-            return await rh.Get<ChallengeListViewModel>(base_url + "Challenge", filter);
+            return await All(filter);
         }
-        
-        public async Task<ChallengeListViewModel> GetAcceptedChallenges()
+
+        public async Task<ChallengeListViewModel> Accepted(string search_string = "", int skip = 0)
         {
             var filter = new ChallengeFilter()
             {
-                OnlyUnacceped = false
+                OnlyAccepted = true,
+                SearchText = search_string,
+                ValidAt = DateTime.Now.Date,
+                Count = 10,
+                Start = skip
             };
 
-            var rh = new WebRequestHelper(api.Authentication.Token);
-            var currentUserId = api.Authentication.CurrentUser.ID;
-            return await rh.Get<ChallengeListViewModel>(base_url + "Challenge/Accepted/" + currentUserId , filter);
+            return await All(filter);
         }
-        
+
         public async Task<ChallengeViewModel> AcceptFromQrCode(string code)
         {
             var rh = new WebRequestHelper(api.Authentication.Token);

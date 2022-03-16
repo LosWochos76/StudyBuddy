@@ -59,6 +59,32 @@ namespace StudyBuddy.Persistence
                 qh.AddParameter(":search_text", "%" + filter.SearchText + "%");
                 sql.Append(" and (name ilike :search_text or description ilike :search_text or tags_of_badge(id) ilike :search_text)");
             }
+
+            if (filter.OnlyReceived)
+            {
+                qh.AddParameter(":user_id", filter.CurrentUserId);
+                sql.Append(" and badge_received(:user_id, id)");
+            }
+
+            if (filter.OnlyUnreceived)
+            {
+                qh.AddParameter(":user_id", filter.CurrentUserId);
+                sql.Append(" and not badge_received(:user_id, id)");
+            }
+        }
+
+        public IEnumerable<GameBadge> GetBadgesOfUser(int user_id)
+        {
+            var qh = new QueryHelper<GameBadge>(connection_string, FromReader);
+            qh.AddParameter(":user_id", user_id);
+
+            var sql = "select id,name,owner_id,game_badges.created,required_coverage,description,tags_of_badge(id) " +
+                "from game_badges " +
+                "inner join users_badges on id=badge_id " +
+                "where user_id=:user_id " +
+                "order by users_badges.created desc";
+
+            return qh.ExecuteQueryToObjectList(sql);
         }
 
         public void Insert(GameBadge obj)
@@ -164,18 +190,11 @@ namespace StudyBuddy.Persistence
             qh.ExecuteNonQuery("delete from users_badges where user_id=:user_id and badge_id=:badge_id");
         }
 
-        public IEnumerable<GameBadge> GetBadgesOfUser(int user_id)
+        public void RemoveAllBadgesFromUser(int user_id)
         {
-            var qh = new QueryHelper<GameBadge>(connection_string, FromReader);
+            var qh = new QueryHelper<Tag>(connection_string);
             qh.AddParameter(":user_id", user_id);
-
-            var sql = "select id,name,owner_id,game_badges.created,required_coverage,description,tags_of_badge(id) " +
-                "from game_badges " +
-                "inner join users_badges on id=badge_id " +
-                "where user_id=:user_id " +
-                "order by users_badges.created desc";
-
-            return qh.ExecuteQueryToObjectList(sql);
+            qh.ExecuteNonQuery("delete from users_badges where user_id=:user_id");
         }
 
         private void CreateBadgesTable()

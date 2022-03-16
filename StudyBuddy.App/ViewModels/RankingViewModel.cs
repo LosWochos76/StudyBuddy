@@ -1,8 +1,6 @@
-﻿using StudyBuddy.Model.Model;
-using System;
+﻿using StudyBuddy.Model;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Text;
 
 namespace StudyBuddy.App.ViewModels
 {

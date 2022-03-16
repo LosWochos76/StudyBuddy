@@ -5,8 +5,7 @@ import { User } from 'src/app/model/user';
 import { AuthorizationService } from 'src/app/services/authorization.service';
 import { GameBadgeService } from 'src/app/services/gamebadge.service';
 import { LoggingService } from 'src/app/services/loging.service';
-import { UserService } from 'src/app/services/user.service';
-import { GameBadgeList } from '../../model/gamebadgelist';
+import { NavigationService } from 'src/app/services/navigation.service';
 
 @Component({
   selector: 'app-game-badge-list',
@@ -22,10 +21,11 @@ export class GameBadgeListComponent implements OnInit {
 
   constructor(
     private logger: LoggingService,
+    private navigation: NavigationService,
     private service: GameBadgeService,
     private router: Router,
-    private auth: AuthorizationService,
-    private user_service: UserService) {
+    private auth: AuthorizationService) {
+    this.navigation.startSaveHistory();
     this.user = this.auth.getUser();
   }
 

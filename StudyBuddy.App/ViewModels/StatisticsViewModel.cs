@@ -1,7 +1,7 @@
 ﻿using StudyBuddy.App.Api;
 using StudyBuddy.App.Misc;
 using StudyBuddy.App.Views;
-using StudyBuddy.Model.Model;
+using StudyBuddy.Model;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Xamarin.CommunityToolkit.ObjectModel;

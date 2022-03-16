@@ -1,6 +1,4 @@
-﻿using System;
-using System.Net.Http;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using System.Windows.Input;
 using StudyBuddy.App.Api;
 using StudyBuddy.App.Misc;
@@ -18,9 +16,13 @@ namespace StudyBuddy.App.ViewModels
             PasswordForgottenCommand = new AsyncCommand(PasswordForgotten, () => { return IsEMailValid; });
             ImprintCommand = new Command(Imprint);
             InfoCommand = new Command(Info);
-            GetApiVersion();
+
+            api.PropertyChanged += (sender, e) =>
+            {
+                if (e.PropertyName.Equals("ApiVersion"))
+                    NotifyPropertyChanged("ApiVersionAsString");
+            };
         }
-        private readonly string base_url = "https://api.gameucation.eu/";
 
         public IAsyncCommand LoginCommand { get; }
         public ICommand RegisterCommand { get; }
@@ -29,6 +31,9 @@ namespace StudyBuddy.App.ViewModels
         public ICommand InfoCommand { get; }
         public string EMail { get; set; }
         public string Password { get; set; }
+
+        public string ApiVersionAsString { get => api.ApiVersion.ToString(); }
+        public string AppVersionAsString { get => api.AppVersion.ToString(); }
 
         private bool is_email_valid = false;
         public bool IsEMailValid
@@ -94,22 +99,9 @@ namespace StudyBuddy.App.ViewModels
             var result = await api.Authentication.Login(uc);
 
             if (result)
-                Navigation.GoTo("//ChallengesPage");
+                await Navigation.GoTo("//ChallengesPage");
             else
                 dialog.ShowMessageBox("Anmeldung nicht erfolgreich! Zugangsdaten korrekt?", "Achtung!");
-        }
-
-        public string AppVersion { get => api.App_Version.ToString(); }
-        private Version _apiVersion = new Version(0,0,0,0);
-        public string ApiVersion { get => _apiVersion.ToString(); }
-        public async void GetApiVersion()
-        {
-            var rh = new WebRequestHelper();
-            var result = await rh.Get<Version>(base_url + "ApiVersion", HttpMethod.Get);
-            if (result == null)
-                return;
-            _apiVersion = result;
-            NotifyPropertyChanged(nameof(_apiVersion));
         }
     }
 }

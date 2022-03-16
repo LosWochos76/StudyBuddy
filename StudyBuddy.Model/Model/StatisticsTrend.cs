@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace StudyBuddy.Model.Misc
+﻿namespace StudyBuddy.Model
 {
     public class StatisticsTrend
     {
-        
         private Trend Trend { get; }
 
         public string Glyph

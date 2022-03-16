@@ -42,6 +42,8 @@ import { BusinessEventEditComponent } from './businessevent/businessevent-edit/b
 import { NgxPaginationModule } from 'ngx-pagination';
 import { ForgotpasswordComponent } from './auth/forgotpassword/forgotpassword.component';
 import { ResetpasswordComponent } from './auth/resetpassword/resetpassword.component';
+import { UserInfoComponent } from './user/user-info/user-info.component';
+import { NavigationService } from './services/navigation.service';
 
 @NgModule({
   declarations: [
@@ -74,10 +76,10 @@ import { ResetpasswordComponent } from './auth/resetpassword/resetpassword.compo
     LoggingListComponent,
     GameBadgeSuccessComponent,
     BusinessEventListComponent,
-        BusinessEventEditComponent,
-        ForgotpasswordComponent,
-        ResetpasswordComponent
-        
+    BusinessEventEditComponent,
+    ForgotpasswordComponent,
+    ResetpasswordComponent,
+    UserInfoComponent
   ],
   imports: [
     BrowserModule,
@@ -92,7 +94,8 @@ import { ResetpasswordComponent } from './auth/resetpassword/resetpassword.compo
     UserService,
     ChallengeService,
     GameBadgeService,
-    RequestService
+    RequestService,
+    NavigationService
   ],
   bootstrap: [AppComponent]
 })
