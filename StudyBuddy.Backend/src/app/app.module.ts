@@ -4,9 +4,9 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { AuthorizationService } from './services/authorization.service';
 import { ReactiveFormsModule } from '@angular/forms';
-import { LoginComponent } from './auth/login/login.component';
-import { LogoutComponent } from './auth/logout/logout.component';
-import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
+import { LoginComponent } from './authentication/login/login.component';
+import { LogoutComponent } from './authentication/logout/logout.component';
+import { PageNotFoundComponent } from './misc/page-not-found/page-not-found.component';
 import { RegisterUserComponent } from './user/register-user/register-user.component';
 import { UserService } from './services/user.service';
 import { UserListComponent } from './user/user-list/user-list.component';
@@ -35,15 +35,17 @@ import { ChallengeSuccessComponent } from './challenge/challenge-success/challen
 import { NotificationPageComponent } from './notification/notification-page/notification-page.component';
 import { NotificationBroadcastComponent } from './notification/notification-broadcast/notification-broadcast.component';
 import { FcmTokenListComponent } from './notification/fcm-token-list/fcm-token-list.component';
-import { LoggingListComponent } from './logging/logging-list/logging-list.component';
+import { LoggingListComponent } from './misc/logging-list/logging-list.component';
 import { GameBadgeSuccessComponent } from './gamebadge/game-badge-success/game-badge-success.component';
 import { BusinessEventListComponent } from './businessevent/businessevent-list/businessevent-list.component';
 import { BusinessEventEditComponent } from './businessevent/businessevent-edit/businessevent-edit.component';
 import { NgxPaginationModule } from 'ngx-pagination';
-import { ForgotpasswordComponent } from './auth/forgotpassword/forgotpassword.component';
-import { ResetpasswordComponent } from './auth/resetpassword/resetpassword.component';
+import { ForgotpasswordComponent } from './authentication/forgotpassword/forgotpassword.component';
+import { ResetpasswordComponent } from './authentication/resetpassword/resetpassword.component';
 import { UserInfoComponent } from './user/user-info/user-info.component';
 import { NavigationService } from './services/navigation.service';
+import { UserStatisticsService } from './services/userstatistics.service';
+import { NgxEchartsModule } from 'ngx-echarts';
 
 @NgModule({
   declarations: [
@@ -87,7 +89,10 @@ import { NavigationService } from './services/navigation.service';
     AppRoutingModule,
     ReactiveFormsModule,
     FontAwesomeModule,
-    NgxPaginationModule
+    NgxPaginationModule,
+    NgxEchartsModule.forRoot({
+      echarts: () => import('echarts')
+    }),
   ],
   providers: [
     AuthorizationService,
@@ -95,6 +100,7 @@ import { NavigationService } from './services/navigation.service';
     ChallengeService,
     GameBadgeService,
     RequestService,
+    UserStatisticsService,
     NavigationService
   ],
   bootstrap: [AppComponent]

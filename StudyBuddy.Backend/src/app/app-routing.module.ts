@@ -1,14 +1,14 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { LoginComponent } from './auth/login/login.component';
-import { LogoutComponent } from './auth/logout/logout.component';
+import { LoginComponent } from './authentication/login/login.component';
+import { LogoutComponent } from './authentication/logout/logout.component';
 import { ChallengeEditComponent } from './challenge/challenge-edit/challenge-edit.component';
 import { ChallengeListComponent } from './challenge/challenge-list/challenge-list.component';
 import { CreateSeriesComponent } from './challenge/create-series/create-series.component';
 import { ChallengeSuccessComponent } from './challenge/challenge-success/challenge-success.component';
 import { GameBadgeEditComponent } from './gamebadge/game-badge-edit/game-badge-edit.component';
 import { GameBadgeListComponent } from './gamebadge/game-badge-list/game-badge-list.component';
-import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
+import { PageNotFoundComponent } from './misc/page-not-found/page-not-found.component';
 import { RequestEditComponent } from './request/request-edit/request-edit.component';
 import { RequestListComponent } from './request/request-list/request-list.component';
 import { RouteGuardService } from './route-guard';
@@ -22,12 +22,12 @@ import { UserSettingsComponent } from './user/user-settings/user-settings.compon
 import { NotificationPageComponent } from "./notification/notification-page/notification-page.component";
 import { NotificationBroadcastComponent } from "./notification/notification-broadcast/notification-broadcast.component";
 import { FcmTokenListComponent } from './notification/fcm-token-list/fcm-token-list.component';
-import { LoggingListComponent } from './logging/logging-list/logging-list.component';
+import { LoggingListComponent } from './misc/logging-list/logging-list.component';
 import { GameBadgeSuccessComponent } from './gamebadge/game-badge-success/game-badge-success.component';
 import { BusinessEventListComponent } from './businessevent/businessevent-list/businessevent-list.component';
 import { BusinessEventEditComponent } from './businessevent/businessevent-edit/businessevent-edit.component';
-import { ForgotpasswordComponent } from './auth/forgotpassword/forgotpassword.component';
-import { ResetpasswordComponent } from './auth/resetpassword/resetpassword.component';
+import { ForgotpasswordComponent } from './authentication/forgotpassword/forgotpassword.component';
+import { ResetpasswordComponent } from './authentication/resetpassword/resetpassword.component';
 import { UserInfoComponent } from './user/user-info/user-info.component';
 
 const routes: Routes = [

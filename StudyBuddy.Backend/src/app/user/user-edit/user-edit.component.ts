@@ -48,7 +48,7 @@ export class UserEditComponent implements OnInit {
       lastname: this.obj.lastname,
       nickname: this.obj.nickname,
       role: this.obj.role,
-      friends: await this.service.getFriends(this.id)
+      friends: await this.service.getFriendIds(this.id)
     });
   }
 

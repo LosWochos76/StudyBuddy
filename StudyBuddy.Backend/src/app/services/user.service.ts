@@ -106,7 +106,7 @@ export class UserService {
     return result['id'];
   }
 
-  async getFriends(id: number): Promise<object> {
+  async getFriendIds(id: number): Promise<object> {
     if (!this.auth.isLoggedIn())
       return null;
 
@@ -118,10 +118,24 @@ export class UserService {
       }).toPromise();
 
     for (let index in result['objects']) {
-      objects.push(result['objects'][index].id);
+        objects.push(result['objects'][index].id);
     }
 
     return objects;
+  }
+
+  async getFriends(id: number): Promise<UserList> {
+    if (!this.auth.isLoggedIn())
+      return null;
+
+    let objects: User[] = [];
+    this.logger.debug("Getting friends of " + id);
+    let result = await this.http.get(this.url + "User/" + id + "/Friends",
+      {
+        headers: new HttpHeaders({ Authorization: this.auth.getToken() })
+      }).toPromise();
+
+    return UserList.fromResult(result);
   }
 
   async setFriends(id: number, friends: number[]) {

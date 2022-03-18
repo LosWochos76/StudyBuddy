@@ -125,10 +125,28 @@ namespace StudyBuddy.Persistence
         public class ChallengeStatisticsDto
         {
             public int ChallengeCategoryId  { get; set; }
-
             public int Points { get; set; }
-
             public int ChallengeCount { get; set; }
+        }
+
+        public IEnumerable<Result> GetResult(int user_id)
+        {
+            var qh = new QueryHelper<Result>(connection_string, ResultReader);
+            qh.AddParameter(":user_id", user_id);
+
+            var sql = "select category,sum(points) as points, count(*) as challenge_count from challenge_acceptance " +
+                "join challenges on challenge_id = id where user_id = :user_id group by category order by category";
+
+            return qh.ExecuteQueryToObjectList(sql);
+        }
+
+        private Result ResultReader(NpgsqlDataReader reader)
+        {
+            var result = new Result();
+            result.Category = (ChallengeCategory)reader.GetInt32(0);
+            result.Points = reader.GetInt32(1);
+            result.Count = reader.GetInt32(2);
+            return result;
         }
     }
 }

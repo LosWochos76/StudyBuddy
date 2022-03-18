@@ -7,5 +7,6 @@ namespace StudyBuddy.BusinessLogic.Interfaces
     {
         UserStatistics GetUserStatistics(int user_id);
         IEnumerable<RankEntry> GetFriendsRanks(int user_id);
+        Score GetScore(int user_id);
     }
 }

@@ -29,5 +29,24 @@ namespace StudyBuddy.BusinessLogic.Services
             
             return backend.Repository.StatisticsRepository.GetRankingWithFriends(user_id);
         }
+
+        public Score GetScore(int user_id)
+        {
+            if (backend.CurrentUser == null)
+                throw new Exception("Unauthorized!");
+
+            var obj = new Score();
+            foreach (var result in backend.Repository.StatisticsRepository.GetResult(user_id))
+            {
+                switch (result.Category)
+                {
+                    case ChallengeCategory.Learning: obj.Learning = result; break;
+                    case ChallengeCategory.Networking: obj.Networking = result; break;
+                    case ChallengeCategory.Organizing: obj.Organizing = result; break;
+                }
+            }
+
+            return obj;
+        }
     }
 }

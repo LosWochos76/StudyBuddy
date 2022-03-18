@@ -4,7 +4,6 @@ import { Challenge } from 'src/app/model/challenge';
 import { ChallengeList } from 'src/app/model/challengelist';
 import { GameBadgeList } from 'src/app/model/gamebadgelist';
 import { User } from 'src/app/model/user';
-import { AuthorizationService } from 'src/app/services/authorization.service';
 import { ChallengeService } from 'src/app/services/challenge.service';
 import { GameBadgeService } from 'src/app/services/gamebadge.service';
 import { LoggingService } from 'src/app/services/loging.service';
@@ -12,6 +11,10 @@ import { UserService } from 'src/app/services/user.service';
 import { faGraduationCap, faPeopleArrows, faTasks } from '@fortawesome/free-solid-svg-icons';
 import { GameBadge } from 'src/app/model/gamebadge';
 import { NavigationService } from 'src/app/services/navigation.service';
+import { UserStatisticsService } from 'src/app/services/userstatistics.service';
+import { Score } from 'src/app/model/score';
+import { UserList } from 'src/app/model/userlist';
+import { EChartsOption } from 'echarts/types/dist/echarts';
 
 @Component({
   selector: 'app-user-info',
@@ -25,6 +28,65 @@ export class UserInfoComponent implements OnInit {
   accepted_challenges:ChallengeList = new ChallengeList();
   received_badges_page = 1;
   received_badges:GameBadgeList = new GameBadgeList();
+  score:Score = new Score();
+  friends:UserList = new UserList();
+  friends_page:number = 1;
+
+  chartOption: EChartsOption = {
+    tooltip: {
+      trigger: 'axis',
+      axisPointer: {
+        type: 'cross',
+        label: {
+          backgroundColor: '#6a7985'
+        }
+      }
+    },
+    xAxis: {
+      type: 'category',
+      boundaryGap: false,
+      data: ['06/2022','07/2022','08/2022','09/2022','10/2022','11/2022'],
+    },
+    yAxis: {
+      type: 'value',
+    },
+    legend: {},
+    series: [
+      {
+        name: 'Lernen',
+        type: 'line',
+        stack: 'Total',
+        data: [220, 182, 191, 234, 290, 330, 310],
+        areaStyle: {},
+        emphasis: {
+          focus: 'series'
+        },
+        smooth: true,
+      },
+      {
+        name: 'Netzwerken',
+        type: 'line',
+        stack: 'Total',
+        data: [220, 182, 191, 234, 290, 330, 310],
+        areaStyle: {},
+        emphasis: {
+          focus: 'series'
+        },
+        smooth: true,
+      },
+      {
+        name: 'Organisieren',
+        type: 'line',
+        stack: 'Total',
+        data: [220, 182, 191, 234, 290, 330, 310],
+        areaStyle: {},
+        emphasis: {
+          focus: 'series'
+        },
+        smooth: true,
+      },
+    ],
+  };
   
   constructor(
     private logger: LoggingService,
@@ -34,7 +96,7 @@ export class UserInfoComponent implements OnInit {
     private user_service: UserService,
     private challenge_service: ChallengeService,
     private badge_service: GameBadgeService,
-    private auth: AuthorizationService) { 
+    private user_statistics_service: UserStatisticsService) { 
       this.navigation.startSaveHistory();
     }
 
@@ -43,6 +105,8 @@ export class UserInfoComponent implements OnInit {
     this.obj = await this.user_service.byId(this.id);
     this.accepted_challenges = await this.challenge_service.getAccepted(this.id);
     this.received_badges = await this.badge_service.getReceivedBadgesOfUser(this.id);
+    this.score = await this.user_statistics_service.getScore(this.id);
+    this.friends = await this.user_service.getFriends(this.id);
   }
 
   async onAcceptedChallengesPaginate(event) {
@@ -53,6 +117,11 @@ export class UserInfoComponent implements OnInit {
   async onReceivedBadgesPaginate(event) {
     this.received_badges_page = event;
     this.received_badges = await this.badge_service.getReceivedBadgesOfUser(this.id, event);
+  }
+
+  async onFriendsPaginate(event) {
+    this.friends_page = event;
+    this.friends = await this.user_service.getFriends(this.id);
   }
 
   getCategorgyIcon(obj: Challenge) {
@@ -73,6 +142,11 @@ export class UserInfoComponent implements OnInit {
   onEditBadge(obj:GameBadge) {
     this.logger.debug("User wants to edit a GameBadge");
     this.router.navigate(['/gamebadge', obj.id]);
+  }
+
+  onEditUser(obj:User) {
+    this.logger.debug("User wants to edit a User");
+    this.router.navigate(['/user', obj.id]);
   }
 
   goBack() {

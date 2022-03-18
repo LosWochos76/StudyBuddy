@@ -14,7 +14,7 @@ namespace StudyBuddy.Api.Controllers
 
         [Route("/Statistics/{user_id}")]
         [HttpGet]
-        public IActionResult GetAcceptedChallenges(int user_id)
+        public IActionResult GetUserStatistics(int user_id)
         {
             return Json(backend.StatisticsService.GetUserStatistics(user_id));
         }
@@ -24,6 +24,13 @@ namespace StudyBuddy.Api.Controllers
         public IActionResult GetFriendsRanks(int user_id)
         {
             return Json(backend.StatisticsService.GetFriendsRanks(user_id));
+        }
+
+        [Route("/Score/{user_id}")]
+        [HttpGet]
+        public IActionResult GetScore(int user_id)
+        {
+            return Json(backend.StatisticsService.GetScore(user_id));
         }
     }
 }

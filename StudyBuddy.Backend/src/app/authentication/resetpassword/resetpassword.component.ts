@@ -20,6 +20,7 @@ export class ResetpasswordComponent implements OnInit {
 
     private _token: string;
     private _email: string;
+
     constructor(
         private route: ActivatedRoute,
         private logger: LoggingService,
@@ -40,11 +41,13 @@ export class ResetpasswordComponent implements OnInit {
     public onSubmit = (resetPasswordFormValue) => {
         this.showError = this.showSuccess = false;
         const resetPass = { ...resetPasswordFormValue };
+
         const resetPassData: ResetPasswordData = {
             password: resetPass.password,
             token: this._token,
             email: this._email
         }
+
         if (resetPass.password != "") {
             if (resetPass.password.length < 6) {
                 this.resetPasswordForm.setErrors({ 'passwordunsafe': true });
@@ -56,11 +59,12 @@ export class ResetpasswordComponent implements OnInit {
                 return;
             }
         }
+        
         let result = this.service.resetPassword(resetPassData);
         if ('status' in result && result['status'] == 'ok')
             this.showSuccess = true;
         else {
             this.showError = true;
         }
-    }   
+    }
 }
