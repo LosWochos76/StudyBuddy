@@ -18,7 +18,7 @@ namespace StudyBuddy.App.Api
         //private readonly string base_url = "https://10.0.2.2:5001/";
         //private readonly string base_url = "http://192.168.0.199:58947/";
 
-        public Version AppVersion { get; private set; } = new Version(0, 0, 21, 0);
+        public Version AppVersion { get; private set; } = new Version(0, 0, 22, 0);
         public Version ApiVersion { get; private set; } = new Version(0, 0, 0, 0);
 
         public async Task LoadApiVersion()

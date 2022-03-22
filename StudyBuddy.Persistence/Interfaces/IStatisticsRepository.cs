@@ -7,6 +7,6 @@ namespace StudyBuddy.Persistence
     {
         UserStatistics GetUserStatistics(int user_id);
         IEnumerable<RankEntry> GetRankingWithFriends(int user_id);
-        IEnumerable<Result> GetResult(int user_id);
+        Score GetScore(int user_id);
     }
 }

@@ -7,20 +7,20 @@
         <h2 class="accordion-header" id="headingZero">
             <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
                 data-bs-target="#collapseZero" aria-expanded="false" aria-controls="collapseZero">
-                {{score?.total?.points}} Punkte
+                {{score.getTotal().points}} Punkte
             </button>
         </h2>
         <div id="collapseZero" class="accordion-collapse collapse" aria-labelledby="headingZero">
             <ul class="list-group">
                 <li class="list-group-item d-flex justify-content-between align-items-start">
-                    <b>Lernen:</b> {{score?.learning?.points}} Punkte mit {{score?.learning?.count}} Herausforderungen
+                    <b>Lernen:</b> {{score.getLearning().points}} Punkte mit {{score.getLearning().count}} Herausforderungen
                 </li>
                 <li class="list-group-item d-flex justify-content-between align-items-start">
-                    <b>Organisieren:</b> {{score?.organizing?.points}} Punkte mit {{score?.organizing?.count}}
+                    <b>Organisieren:</b> {{score.getOrganizing().points}} Punkte mit {{score.getOrganizing().count}}
                     Herausforderungen
                 </li>
                 <li class="list-group-item d-flex justify-content-between align-items-start">
-                    <b>Netzwerken:</b> {{score?.networking?.points}} Punkte mit {{score?.networking?.count}}
+                    <b>Netzwerken:</b> {{score.getNetworking().points}} Punkte mit {{score.getNetworking().count}}
                     Herausforderungen
                 </li>
             </ul>

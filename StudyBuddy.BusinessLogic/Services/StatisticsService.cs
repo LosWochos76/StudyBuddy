@@ -35,18 +35,7 @@ namespace StudyBuddy.BusinessLogic.Services
             if (backend.CurrentUser == null)
                 throw new Exception("Unauthorized!");
 
-            var obj = new Score();
-            foreach (var result in backend.Repository.StatisticsRepository.GetResult(user_id))
-            {
-                switch (result.Category)
-                {
-                    case ChallengeCategory.Learning: obj.Learning = result; break;
-                    case ChallengeCategory.Networking: obj.Networking = result; break;
-                    case ChallengeCategory.Organizing: obj.Organizing = result; break;
-                }
-            }
-
-            return obj;
+            return backend.Repository.StatisticsRepository.GetScore(user_id);
         }
     }
 }

@@ -129,7 +129,7 @@ namespace StudyBuddy.Persistence
             public int ChallengeCount { get; set; }
         }
 
-        public IEnumerable<Result> GetResult(int user_id)
+        public Score GetScore(int user_id)
         {
             var qh = new QueryHelper<Result>(connection_string, ResultReader);
             qh.AddParameter(":user_id", user_id);
@@ -137,7 +137,7 @@ namespace StudyBuddy.Persistence
             var sql = "select category,sum(points) as points, count(*) as challenge_count from challenge_acceptance " +
                 "join challenges on challenge_id = id where user_id = :user_id group by category order by category";
 
-            return qh.ExecuteQueryToObjectList(sql);
+            return new Score(qh.ExecuteQueryToObjectList(sql));
         }
 
         private Result ResultReader(NpgsqlDataReader reader)

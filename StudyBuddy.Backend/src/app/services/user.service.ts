@@ -118,20 +118,27 @@ export class UserService {
       }).toPromise();
 
     for (let index in result['objects']) {
-        objects.push(result['objects'][index].id);
+      objects.push(result['objects'][index].id);
     }
 
     return objects;
   }
 
-  async getFriends(id: number): Promise<UserList> {
+  async getFriends(user_id: number, page: number = -1): Promise<UserList> {
     if (!this.auth.isLoggedIn())
       return null;
 
+    var query = {};
+    if (page != -1) {
+      query['start'] = (page - 1) * 10;
+      query['count'] = 10;
+    }
+
     let objects: User[] = [];
-    this.logger.debug("Getting friends of " + id);
-    let result = await this.http.get(this.url + "User/" + id + "/Friends",
+    this.logger.debug("Getting friends of " + user_id);
+    let result = await this.http.get(this.url + "User/" + user_id + "/Friends",
       {
+        params: query,
         headers: new HttpHeaders({ Authorization: this.auth.getToken() })
       }).toPromise();
 

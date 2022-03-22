@@ -1,5 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Collections.Generic;
+using Microsoft.AspNetCore.Mvc;
 using StudyBuddy.BusinessLogic;
+using StudyBuddy.Model;
 
 namespace StudyBuddy.Api.Controllers
 {
@@ -31,6 +33,14 @@ namespace StudyBuddy.Api.Controllers
         public IActionResult GetScore(int user_id)
         {
             return Json(backend.StatisticsService.GetScore(user_id));
+        }
+
+        [Route("/Trend/{user_id}")]
+        [HttpGet]
+        public IActionResult GetTrend(int user_id)
+        {
+            var result = ScoreTrend.TestData();
+            return Json(result);
         }
     }
 }

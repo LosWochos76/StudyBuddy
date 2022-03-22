@@ -1,21 +1,29 @@
-﻿namespace StudyBuddy.Model
+﻿using System.Collections.Generic;
+
+namespace StudyBuddy.Model
 {
     public class Score
     {
-        public Result Learning { get; set; } = new Result() { Category = ChallengeCategory.Learning };
-        public Result Organizing { get; set; } = new Result() { Category = ChallengeCategory.Organizing };
-        public Result Networking { get; set; } = new Result() { Category = ChallengeCategory.Networking };
+        public Dictionary<ChallengeCategory, Result> Values { get; private set; } = new Dictionary<ChallengeCategory, Result>();
 
-        public Result Total
+        public void Add(Result value)
         {
-            get
-            {
-                return new Result()
-                {
-                    Points = Learning.Points + Organizing.Points + Networking.Points,
-                    Count = Learning.Count + Organizing.Count + Networking.Count
-                };
-            }
+            Values.Add(value.Category, value);
+        }
+
+        public void Add(IEnumerable<Result> results)
+        {
+            foreach (var result in results)
+                Add(result);
+        }
+
+        public Score()
+        {
+        }
+
+        public Score(IEnumerable<Result> results)
+        {
+            Add(results);
         }
     }
 }

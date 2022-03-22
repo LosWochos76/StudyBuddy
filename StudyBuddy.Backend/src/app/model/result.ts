@@ -1,7 +1,7 @@
 export class Result {
-    category: number;
-    points: number;
-    count: number;
+    category: number = 0;
+    points: number = 0;
+    count: number = 0;
 
     static fromApi(obj): Result {
         let result = new Result();

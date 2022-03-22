@@ -31,62 +31,7 @@ export class UserInfoComponent implements OnInit {
   score:Score = new Score();
   friends:UserList = new UserList();
   friends_page:number = 1;
-
-  chartOption: EChartsOption = {
-    tooltip: {
-      trigger: 'axis',
-      axisPointer: {
-        type: 'cross',
-        label: {
-          backgroundColor: '#6a7985'
-        }
-      }
-    },
-    xAxis: {
-      type: 'category',
-      boundaryGap: false,
-      data: ['06/2022','07/2022','08/2022','09/2022','10/2022','11/2022'],
-    },
-    yAxis: {
-      type: 'value',
-    },
-    legend: {},
-    series: [
-      {
-        name: 'Lernen',
-        type: 'line',
-        stack: 'Total',
-        data: [220, 182, 191, 234, 290, 330, 310],
-        areaStyle: {},
-        emphasis: {
-          focus: 'series'
-        },
-        smooth: true,
-      },
-      {
-        name: 'Netzwerken',
-        type: 'line',
-        stack: 'Total',
-        data: [220, 182, 191, 234, 290, 330, 310],
-        areaStyle: {},
-        emphasis: {
-          focus: 'series'
-        },
-        smooth: true,
-      },
-      {
-        name: 'Organisieren',
-        type: 'line',
-        stack: 'Total',
-        data: [220, 182, 191, 234, 290, 330, 310],
-        areaStyle: {},
-        emphasis: {
-          focus: 'series'
-        },
-        smooth: true,
-      },
-    ],
-  };
+  chartOption: EChartsOption;
   
   constructor(
     private logger: LoggingService,
@@ -107,6 +52,68 @@ export class UserInfoComponent implements OnInit {
     this.received_badges = await this.badge_service.getReceivedBadgesOfUser(this.id);
     this.score = await this.user_statistics_service.getScore(this.id);
     this.friends = await this.user_service.getFriends(this.id);
+
+    await this.loadDataForChart();
+  }
+
+  async loadDataForChart() {
+    var trend = await this.user_statistics_service.getTrend(this.id);
+
+    this.chartOption = {
+      tooltip: {
+        trigger: 'axis',
+        axisPointer: {
+          type: 'cross',
+          label: {
+            backgroundColor: '#6a7985'
+          }
+        }
+      },
+      xAxis: {
+        type: 'category',
+        boundaryGap: false,
+        data: trend.getXAxis(),
+      },
+      yAxis: {
+        type: 'value',
+      },
+      legend: {},
+      series: [
+        {
+          name: 'Lernen',
+          type: 'line',
+          stack: 'Total',
+          data: trend.getLearningSeries(),
+          areaStyle: {},
+          emphasis: {
+            focus: 'series'
+          },
+          smooth: true,
+        },
+        {
+          name: 'Netzwerken',
+          type: 'line',
+          stack: 'Total',
+          data: trend.getNetworkingSeries(),
+          areaStyle: {},
+          emphasis: {
+            focus: 'series'
+          },
+          smooth: true,
+        },
+        {
+          name: 'Organisieren',
+          type: 'line',
+          stack: 'Total',
+          data: trend.getOrganizingSeries(),
+          areaStyle: {},
+          emphasis: {
+            focus: 'series'
+          },
+          smooth: true,
+        },
+      ],
+    };
   }
 
   async onAcceptedChallengesPaginate(event) {
@@ -121,7 +128,7 @@ export class UserInfoComponent implements OnInit {
 
   async onFriendsPaginate(event) {
     this.friends_page = event;
-    this.friends = await this.user_service.getFriends(this.id);
+    this.friends = await this.user_service.getFriends(this.id, event);
   }
 
   getCategorgyIcon(obj: Challenge) {
