@@ -95,8 +95,8 @@ namespace StudyBuddy.App.ViewModels
                     Color = SKColor.Parse("#007AFF")
                 },
             };
-            TotalPointsChart = new BarChart {Entries = pointsEntries, LabelTextSize = 0, ValueLabelOrientation = Orientation.Horizontal, ValueLabelTextSize = 40, BarAreaAlpha = 0};
-            TotalChallengesChart = new DonutChart {Entries = challengesEntries};
+            TotalPointsChart = new BarChart {Entries = pointsEntries, LabelTextSize = 0, BackgroundColor = SKColor.Parse("#F2F2F7") ,ValueLabelOrientation = Orientation.Horizontal, ValueLabelTextSize = 40, BarAreaAlpha = 0};
+            TotalChallengesChart = new DonutChart {Entries = challengesEntries, BackgroundColor = SKColor.Parse("#F2F2F7")};
         }
     }
 }

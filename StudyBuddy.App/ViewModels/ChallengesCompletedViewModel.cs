@@ -73,7 +73,7 @@ namespace StudyBuddy.App.ViewModels
             try
             {
                 ItemThreshold = 1;
-                var challenges = await api.Challenges.Accepted();
+                var challenges = await api.Challenges.Accepted(SearchText, Skip);
                 if (challenges.Objects.Count() == 0)
                 {
                     ItemThreshold = -1;
