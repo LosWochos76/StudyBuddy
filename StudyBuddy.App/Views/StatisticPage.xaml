@@ -1,235 +1,156 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
+﻿<?xml version="1.0" encoding="UTF-8" ?>
 <ContentPage
-    xmlns="http://xamarin.com/schemas/2014/forms"
-    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    x:Class="StudyBuddy.App.Views.StatisticPage"
-    xmlns:viewmodels="clr-namespace:StudyBuddy.App.ViewModels"
-    xmlns:fontAwesome="clr-namespace:StudyBuddy.App"
-    x:DataType="viewmodels:StatisticsViewModel"
     Title="Statistiken"
-    Visual="Material">
+    Visual="Material"
+    x:Class="StudyBuddy.App.Views.StatisticPage"
+    x:DataType="viewmodels:StatisticsViewModel"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:fontAwesome="clr-namespace:StudyBuddy.App"
+    xmlns:microcharts="clr-namespace:Microcharts.Forms;assembly=Microcharts.Forms"
+    xmlns:viewmodels="clr-namespace:StudyBuddy.App.ViewModels"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml">
     <ContentPage.Resources>
         <ResourceDictionary>
-            <Style x:Key="TitleLabelStyle" TargetType="Label">
-                <Setter Property="FontSize" Value="14" />
+            <Style TargetType="Label" x:Key="TitleLabelStyle">
+                <Setter Property="FontSize" Value="18" />
                 <Setter Property="FontAttributes" Value="Bold" />
                 <Setter Property="TextColor" Value="Black" />
             </Style>
 
-            <Style x:Key="DescriptionLabelStyle" TargetType="Label">
-                <Setter Property="FontSize" Value="12" />
-            </Style>
-
-            <Style x:Key="TotalPointsLabelStyle" TargetType="Label">
-                <Setter Property="FontSize" Value="30"/>
+            <Style TargetType="Label" x:Key="TotalPointsLabelStyle">
+                <Setter Property="FontSize" Value="38" />
                 <Setter Property="FontAttributes" Value="Bold" />
                 <Setter Property="TextColor" Value="Black" />
             </Style>
 
-            <Style x:Key="InfoLabelStyle" TargetType="Label">
-                <Setter Property="FontSize" Value="10"/>
-                <Setter Property="TextColor" Value="LightGray"></Setter>
-            </Style>
-
-            <Style x:Key="NetworkPointsLabelStyle" TargetType="Label">
-                <Setter Property="FontSize" Value="20"/>
+            <Style TargetType="Label" x:Key="PointsLabelStyle">
+                <Setter Property="FontSize" Value="30" />
                 <Setter Property="FontAttributes" Value="Bold" />
-                <Setter Property="TextColor" Value="#5856D6" />
+                <Setter Property="VerticalTextAlignment" Value="Start" />
             </Style>
 
-            <Style x:Key="OrganizingPointsLabelStyle" TargetType="Label">
-                <Setter Property="FontSize" Value="20"/>
-                <Setter Property="FontAttributes" Value="Bold" />
-                <Setter Property="TextColor" Value="#5AC8FA" />
-            </Style>
-
-            <Style x:Key="LearningPointsLabelStyle"
-                   TargetType="Label">
-                <Setter Property="FontSize"
-                        Value="20" />
-                <Setter Property="FontAttributes"
-                        Value="Bold" />
-                <Setter Property="TextColor"
-                        Value="#007AFF" />
-            </Style>
-
-            <Style x:Key="FrameStyle" TargetType="Frame">
-                <Setter Property="CornerRadius" Value="15"/>
-            </Style>
-
-            <Style x:Key="ItemViewStackLayoutStyle" TargetType="StackLayout">
-                <Setter Property="Margin" Value="5" />
-                <Setter Property="HorizontalOptions" Value="FillAndExpand" />
-                <Setter Property="Spacing" Value="8" />
-            </Style>
-
-            <Style x:Key="DetailsStackLayoutStyle" TargetType="StackLayout">
-                <Setter Property="HorizontalOptions" Value="FillAndExpand" />
-                <Setter Property="VerticalOptions" Value="FillAndExpand" />
-                <Setter Property="Spacing" Value="2" />
-            </Style>
-
-            <Style x:Key="BadgeImageStyle" TargetType="Image">
-                <Setter Property="WidthRequest" Value="80" />
-                <Setter Property="HeightRequest" Value="60" />
-                <Setter Property="Aspect" Value="AspectFit" />
-            </Style>
-
-            <Style x:Key="InvertedTextColor"
-                   TargetType="Label">
-                <Setter Property="TextColor"
-                        Value="{StaticResource TextColor}" />
+            <Style TargetType="Frame" x:Key="FrameStyle">
+                <Setter Property="CornerRadius" Value="15" />
             </Style>
         </ResourceDictionary>
     </ContentPage.Resources>
-
-    <RefreshView IsRefreshing="{Binding IsRefreshing}" 
-                     Command="{Binding RefreshCommand}">            
+    <RefreshView Command="{Binding RefreshCommand}" IsRefreshing="{Binding IsRefreshing}">
         <ScrollView>
-
-        <StackLayout Orientation="Vertical">
-                <Frame Style="{StaticResource FrameStyle}"
-                       BackgroundColor="{StaticResource WindowBackgroundColor}"
-                       Margin="4">
-                <StackLayout Orientation="Vertical">
-                        <StackLayout Orientation="Horizontal" HorizontalOptions="Center">
-                            <Label Style="{StaticResource TotalPointsLabelStyle}" HorizontalOptions="CenterAndExpand" HorizontalTextAlignment="Center" Text="{Binding UserStatistics.TotalPoints}"></Label>
-                            <Image>
-                                <Image.Source>
-                                    <FontImageSource Size="Medium" FontFamily="{StaticResource FontAwesomeSolid}"
-                                                Glyph="{x:Static fontAwesome:FontAwesomeIcons.AngleUp}" 
-                                                Color="Green"/>
-                                </Image.Source>
-                            </Image>
+            <StackLayout Margin="15,10,15,0" Orientation="Vertical">
+                <Label
+                    Style="{StaticResource TitleLabelStyle}"
+                    Text="Abgeschlossene Herausforderungen"
+                    VerticalTextAlignment="Start" />
+                <Frame BackgroundColor="{StaticResource WindowBackgroundColor}" Style="{StaticResource FrameStyle}">
+                    <Grid>
+                        <StackLayout HorizontalOptions="Start" Orientation="Vertical">
+                            <Label
+                                FontSize="18"
+                                Text="Netzwerken"
+                                TextColor="#5856D6" />
+                            <Label Style="{StaticResource PointsLabelStyle}" Text="{Binding UserStatistics.TotalNetworkChallengesCount}" />
+                            <Label
+                                FontSize="18"
+                                Text="Organisieren"
+                                TextColor="#5AC8FA" />
+                            <Label Style="{StaticResource PointsLabelStyle}" Text="{Binding UserStatistics.TotalOrganizingChallengesCount}" />
+                            <Label
+                                FontSize="18"
+                                Text="Lernen"
+                                TextColor="#007AFF" />
+                            <Label Style="{StaticResource PointsLabelStyle}" Text="{Binding UserStatistics.TotalLearningChallengesCount}" />
                         </StackLayout>
-                        <Label Style="{StaticResource InvertedTextColor}" HorizontalOptions="CenterAndExpand" HorizontalTextAlignment="Center" Text="Punkte Gesamt"></Label>
-                    <StackLayout Margin="0,15,15,0" HorizontalOptions="FillAndExpand" Orientation="Horizontal">
-                            <StackLayout HorizontalOptions="CenterAndExpand" Orientation="Vertical">
-                                <StackLayout HorizontalOptions="Center" Orientation="Horizontal">
-                                    <Label Style="{StaticResource NetworkPointsLabelStyle}" HorizontalTextAlignment="Center" Text="{Binding UserStatistics.TotalNetworkChallengesPoints}" ></Label>
-                                    <Image>
-                                        <Image.Source>
-                                            <FontImageSource Size="Small" FontFamily="{StaticResource FontAwesomeSolid}"
-                                                Glyph="{x:Static fontAwesome:FontAwesomeIcons.AngleUp}" 
-                                                Color="Green"/>
-                                        </Image.Source>
-                                    </Image>
-                                </StackLayout>
-                                <Label Style="{StaticResource InvertedTextColor}"
-                                       HorizontalTextAlignment="Center" Text="Networking"></Label>
+                        <StackLayout
+                            HorizontalOptions="End"
+                            Orientation="Vertical"
+                            VerticalOptions="Center">
+                            <microcharts:ChartView
+                                Chart="{Binding TotalChallengesChart}"
+                                HeightRequest="180"
+                                WidthRequest="180" />
                         </StackLayout>
-                        <StackLayout HorizontalOptions="CenterAndExpand" Orientation="Vertical">
-                                <StackLayout HorizontalOptions="Center" Orientation="Horizontal">
-                                    <Label Style="{StaticResource OrganizingPointsLabelStyle}" HorizontalTextAlignment="Center" Text="{Binding UserStatistics.TotalOrganizingChallengesPoints}"></Label>
-                                    <Image>
-                                        <Image.Source>
-                                            <FontImageSource Size="Small" FontFamily="{StaticResource FontAwesomeSolid}"
-                                                Glyph="{x:Static fontAwesome:FontAwesomeIcons.Equal}" 
-                                                Color="Black"/>
-                                        </Image.Source>
-                                    </Image>
-                                </StackLayout>
-                                <Label Style="{StaticResource InvertedTextColor}"
-                                       HorizontalTextAlignment="Center"  Text="Organizing"></Label>
+                        <StackLayout HorizontalOptions="Center" VerticalOptions="End">
+                            <Label
+                                FontSize="11"
+                                Text="Klicken Sie hier, um weitere Details anzuzeigen"
+                                TextColor="#828282" />
                         </StackLayout>
-                        <StackLayout HorizontalOptions="CenterAndExpand" Orientation="Vertical">
-                                <StackLayout HorizontalOptions="Center" Orientation="Horizontal">
-                                    <Label Style="{StaticResource LearningPointsLabelStyle}" HorizontalTextAlignment="Center" Text="{Binding UserStatistics.TotalLearningChallengesPoints}"></Label>
-                                    <Image>
-                                        <Image.Source>
-                                        <FontImageSource Size="Small" FontFamily="{StaticResource FontAwesomeSolid}"
-                                                Glyph="{x:Static fontAwesome:FontAwesomeIcons.AngleDown}" 
-                                                Color="#00ff00"/>
-                                    </Image.Source>
-                                    </Image>
-                                </StackLayout>
-                                <Label Style="{StaticResource InvertedTextColor}" HorizontalTextAlignment="Center" Text="Learning"></Label>
-                        </StackLayout>
-                    </StackLayout>
-                </StackLayout>
-            </Frame>
-            <StackLayout HorizontalOptions="StartAndExpand" Orientation="Horizontal" BackgroundColor="Transparent">
-                <Frame Style="{StaticResource FrameStyle}" WidthRequest="200"
-                           BackgroundColor="{StaticResource WindowBackgroundColor}">
-                    <StackLayout HorizontalOptions="CenterAndExpand" Orientation="Vertical">
-                            <StackLayout Orientation="Horizontal" HorizontalOptions="Center">
-                                <Label HorizontalTextAlignment="Center" Style="{StaticResource TotalPointsLabelStyle}" Text="{Binding UserStatistics.TotalAcceptedChallenges}"></Label>
-                                <Image>
-                                    <Image.Source>
-                                        <FontImageSource Size="Small" FontFamily="{StaticResource FontAwesomeSolid}"
-                                                Glyph="{x:Static fontAwesome:FontAwesomeIcons.AngleUp}" 
-                                                Color="Green"/>
-                                    </Image.Source>
-                                </Image>
-                            </StackLayout>
-                            <Label Style="{StaticResource InvertedTextColor}"
-                                   HorizontalTextAlignment="Center" Text="Abgschlossene Herausforderungen"></Label>
-                    </StackLayout>
-                </Frame>
-                <Frame Style="{StaticResource FrameStyle}" WidthRequest="200"
-                           BackgroundColor="{StaticResource WindowBackgroundColor}">
-                    <StackLayout HorizontalOptions="CenterAndExpand" Orientation="Vertical">
-                            <StackLayout Orientation="Horizontal" HorizontalOptions="Center">
-                                <Label HorizontalTextAlignment="Center" Style="{StaticResource TotalPointsLabelStyle}" Text="#5"></Label>
-                                <Image>
-                                    <Image.Source>
-                                        <FontImageSource Size="Small" FontFamily="{StaticResource FontAwesomeSolid}"
-                                                Glyph="{x:Static fontAwesome:FontAwesomeIcons.AngleDown}" 
-                                                Color="Red"/>
-                                    </Image.Source>
-                                </Image>
-                            </StackLayout>
-                            <Label Style="{StaticResource InvertedTextColor}"
-                                   HorizontalTextAlignment="Center" Text="Beste Platzierung"></Label>
-                    </StackLayout>
+                    </Grid>
                     <Frame.GestureRecognizers>
-                        <TapGestureRecognizer Command="{Binding RanksCommand}"/>
+                        <TapGestureRecognizer Command="{Binding TotalChallengesCommand}" />
                     </Frame.GestureRecognizers>
                 </Frame>
-            </StackLayout>
-                <Frame Style="{StaticResource FrameStyle}"
-                       BackgroundColor="{StaticResource WindowBackgroundColor}">
-                    <StackLayout HorizontalOptions="FillAndExpand" Orientation="Vertical">
-                        <Label Style="{StaticResource InvertedTextColor}" HorizontalTextAlignment="Center" Text="Challenge Performance"></Label>
-                        <StackLayout Orientation="Horizontal">
-                            <StackLayout HorizontalOptions="FillAndExpand" Orientation="Vertical">
-                                <Label x:Name="LastMonthChallenge"  HorizontalTextAlignment="Center" Style="{StaticResource TotalPointsLabelStyle}" Text="{Binding UserStatistics.LastMonthChallengeCount}"></Label>
-                                <Label Style="{StaticResource InvertedTextColor}" HorizontalTextAlignment="Center" Text="letzter Monat"></Label>
-                            </StackLayout>
-                            <StackLayout HorizontalOptions="FillAndExpand" Orientation="Vertical">
-                                <StackLayout Orientation="Horizontal" HorizontalOptions="Center">
-                                    <Label HorizontalTextAlignment="Center" Style="{StaticResource TotalPointsLabelStyle}" Text="{Binding UserStatistics.ThisMonthChallengeCount}"></Label>
-                                    <Image>
-                                        <Image.Source >
-                                            <FontImageSource Size="Small" FontFamily="{StaticResource FontAwesomeSolid}"
-                                                Glyph="{Binding UserStatistics.MonthlyStatisticsTrend.Glyph}"
-                                                Color="{Binding UserStatistics.MonthlyStatisticsTrend.Color}"/>
-                                        </Image.Source>
-                                    </Image>
-                                </StackLayout>
-                                <Label Style="{StaticResource InvertedTextColor}" x:Name="thisMonthLabel" HorizontalTextAlignment="Center" Text="dieser Monat"></Label>
-                            </StackLayout>
-                            <StackLayout HorizontalOptions="FillAndExpand" Orientation="Vertical">
-                                <Label x:Name="LastWeekChallenge" HorizontalTextAlignment="Center" Style="{StaticResource TotalPointsLabelStyle}" Text="{Binding UserStatistics.LastWeekChallengeCount}"></Label>
-                                <Label Style="{StaticResource InvertedTextColor}" HorizontalTextAlignment="Center" Text="letzte Woche"></Label>
-                            </StackLayout>
-                            <StackLayout HorizontalOptions="FillAndExpand" Orientation="Vertical">
-                                <StackLayout Orientation="Horizontal" HorizontalOptions="Center">
-                                    <Label x:Name="ThisWeekChallenge" HorizontalTextAlignment="Center" Style="{StaticResource TotalPointsLabelStyle}" Text="{Binding UserStatistics.ThisWeekChallengeCount}"></Label>
-                                    <Image>
-                                        <Image.Source>
-                                            <FontImageSource Size="Small" FontFamily="{StaticResource FontAwesomeSolid}"
-                                                Glyph="{Binding UserStatistics.WeeklyStatisticsTrend.Glyph}" 
-                                                Color="{Binding UserStatistics.WeeklyStatisticsTrend.Color}"/>
-                                        </Image.Source>
-                                    </Image>
-                                </StackLayout>
-                                <Label Style="{StaticResource InvertedTextColor}" HorizontalTextAlignment="Center" Text="diese Woche"></Label>
-                            </StackLayout>
+                <Label
+                    Margin="0,2,0,2"
+                    Style="{StaticResource TitleLabelStyle}"
+                    Text="Wöchentliche Herausforderungen"
+                    VerticalTextAlignment="Start" />
+                <Frame BackgroundColor="{StaticResource WindowBackgroundColor}" Style="{StaticResource FrameStyle}">
+                    <Grid>
+                        <StackLayout
+                            HorizontalOptions="Start"
+                            Orientation="Vertical"
+                            VerticalOptions="Center">
+                            <Label
+                                HorizontalTextAlignment="Start"
+                                Style="{StaticResource TotalPointsLabelStyle}"
+                                Text="{Binding UserStatistics.ThisWeekChallengeCount}" />
+                            <Label
+                                FontSize="11"
+                                HorizontalTextAlignment="Start"
+                                Text="Diese Woche"
+                                TextColor="#828282" />
                         </StackLayout>
-                    </StackLayout>
+                        <Image HorizontalOptions="Center" VerticalOptions="Center">
+                            <Image.Source>
+                                <FontImageSource
+                                    Color="#828282"
+                                    FontFamily="{StaticResource FontAwesomeSolid}"
+                                    Glyph="{x:Static fontAwesome:FontAwesomeIcons.LongArrowAltRight}"
+                                    Size="Large" />
+                            </Image.Source>
+                        </Image>
+                        <StackLayout
+                            HorizontalOptions="End"
+                            Orientation="Vertical"
+                            VerticalOptions="Center">
+                            <Label
+                                HorizontalTextAlignment="Start"
+                                Style="{StaticResource TotalPointsLabelStyle}"
+                                Text="{Binding UserStatistics.LastWeekChallengeCount}" />
+                            <Label
+                                FontSize="11"
+                                HorizontalTextAlignment="Start"
+                                Text="Letzte Woche"
+                                TextColor="#828282" />
+                        </StackLayout>
+                    </Grid>
                 </Frame>
-
-            </StackLayout></ScrollView>
+                <Label
+                    Margin="0,2,0,2"
+                    Style="{StaticResource TitleLabelStyle}"
+                    Text="Gesamtpunktzahl"
+                    VerticalTextAlignment="Start" />
+                <Frame
+                    BackgroundColor="{StaticResource WindowBackgroundColor}"
+                    HeightRequest="100"
+                    Style="{StaticResource FrameStyle}">
+                    <Grid>
+                        <Label
+                            HorizontalOptions="Start"
+                            HorizontalTextAlignment="Start"
+                            Style="{StaticResource TotalPointsLabelStyle}"
+                            Text="{Binding UserStatistics.TotalPoints}"
+                            VerticalTextAlignment="Center" />
+                        <StackLayout HorizontalOptions="End" VerticalOptions="End">
+                            <microcharts:ChartView
+                                Chart="{Binding TotalPointsChart}"
+                                HeightRequest="100"
+                                WidthRequest="220" />
+                        </StackLayout>
+                    </Grid>
+                </Frame>
+            </StackLayout>
+        </ScrollView>
     </RefreshView>
 </ContentPage>
