@@ -34,7 +34,7 @@ namespace StudyBuddy.App.Api
             var rh = new WebRequestHelper(api.Authentication.Token);
             return await rh.Get<ChallengeListViewModel>(base_url + "Challenge", filter);
         }
-        
+
         public async Task<ChallengeViewModel> AcceptFromQrCode(string code)
         {
             var rh = new WebRequestHelper(api.Authentication.Token);
@@ -63,14 +63,22 @@ namespace StudyBuddy.App.Api
             var currentUserId = api.Authentication.CurrentUser.ID;
             var filter = new ChallengeFilter
             {
+                Start = 0,
+                Count = 0,
+                SearchText = null,
+                OwnerId = null,
+                ValidAt = null,
+                includeSystemProve = false,
                 OnlyUnacceped = false,
-                CurrentUserId = currentUserId,
+                CurrentUserId = 0,
+                WithTags = false,
+                WithOwner = false
             };
 
             var rh = new WebRequestHelper(api.Authentication.Token);
             return await rh.Get<ChallengeListViewModel>(base_url + "Challenge/Accepted/", filter);
         }
-        
+
         public async Task<bool> AcceptWithAddendum(ChallengeViewModel cvm, string prove_addendum)
         {
             var rh = new WebRequestHelper(api.Authentication.Token);
