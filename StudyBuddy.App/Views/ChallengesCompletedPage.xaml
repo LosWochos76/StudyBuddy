@@ -1,0 +1,146 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    Title="Abgeschlossene Herausforderungen"
+    x:Class="StudyBuddy.App.Views.ChallengesCompletedPage"
+    x:DataType="viewmodels:ChallengesCompletedViewModel"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:fontAwesome="clr-namespace:StudyBuddy.App"
+    xmlns:viewmodels="clr-namespace:StudyBuddy.App.ViewModels"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml">
+    <ContentPage.Resources>
+        <Style TargetType="Grid">
+            <Setter Property="VisualStateManager.VisualStateGroups">
+                <VisualStateGroupList>
+                    <VisualStateGroup x:Name="CommonStates">
+                        <VisualState x:Name="Normal" />
+                        <VisualState x:Name="Selected">
+                            <VisualState.Setters>
+                                <Setter Property="BackgroundColor" Value="{StaticResource PrimaryAccent}" />
+                            </VisualState.Setters>
+                        </VisualState>
+                    </VisualStateGroup>
+                </VisualStateGroupList>
+            </Setter>
+        </Style>
+    </ContentPage.Resources>
+    <StackLayout>
+        <SearchBar
+            SearchCommand="{Binding SearchCommand}"
+            Text="{Binding SearchText}"
+            Visual="Material" />
+        <ActivityIndicator IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}" />
+        <RefreshView Command="{Binding RefreshCommand}" IsRefreshing="{Binding IsRefreshing}">
+            <CollectionView
+                ItemsSource="{Binding Challenges}"
+                ItemsUpdatingScrollMode="KeepItemsInView"
+                RemainingItemsThreshold="{Binding ItemThreshold}"
+                RemainingItemsThresholdReachedCommand="{Binding LoadMoreCommand}"
+                SelectedItem="{Binding SelectedChallenge}"
+                SelectionMode="Single">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="viewmodels:ChallengeViewModel">
+                        <Grid Padding="5,0,5,0" x:Name="Item">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*" />
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <Frame
+                                BackgroundColor="{Binding CategoryColor}"
+                                BorderColor="{OnPlatform Android={StaticResource SystemGray4},
+                                                         iOS={StaticResource Transparent}}"
+                                CornerRadius="10"
+                                HasShadow="True"
+                                HeightRequest="100"
+                                HorizontalOptions="FillAndExpand"
+                                Margin="5"
+                                Padding="0"
+                                VerticalOptions="FillAndExpand">
+                                <Grid BackgroundColor="Transparent" Padding="0">
+
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="*" />
+                                        <RowDefinition Height="*" />
+                                    </Grid.RowDefinitions>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="70" />
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <StackLayout
+                                        Grid.RowSpan="2"
+                                        Padding="8,0,2,0"
+                                        VerticalOptions="Center">
+                                        <Image
+                                            HeightRequest="45"
+                                            VerticalOptions="Center"
+                                            WidthRequest="45">
+                                            <Image.Source>
+                                                <FontImageSource
+                                                    Color="{StaticResource TextColor}"
+                                                    FontFamily="{StaticResource FontAwesomeSolid}"
+                                                    Glyph="{Binding CategorySymbol}" />
+                                            </Image.Source>
+                                        </Image>
+                                    </StackLayout>
+                                    <Frame
+                                        CornerRadius="10"
+                                        Grid.Column="1"
+                                        Grid.ColumnSpan="2"
+                                        Grid.Row="0"
+                                        Grid.RowSpan="2"
+                                        HasShadow="False"
+                                        Padding="0,0,0,0">
+
+                                        <StackLayout>
+                                            <Label
+                                                FontAttributes="Bold"
+                                                FontSize="16"
+                                                HeightRequest="65"
+                                                Padding="12,5,12,0"
+                                                Text="{Binding Name}"
+                                                VerticalOptions="Center" />
+
+                                            <StackLayout Orientation="Horizontal" Padding="12,0,12,5">
+                                                <Label HorizontalOptions="StartAndExpand" VerticalOptions="Start">
+                                                    <Label.FormattedText>
+                                                        <FormattedString>
+                                                            <Span
+                                                                CharacterSpacing="13"
+                                                                FontFamily="{StaticResource FontAwesomeSolid}"
+                                                                FontSize="14"
+                                                                Text="{x:Static fontAwesome:FontAwesomeIcons.HourglassEnd}" />
+                                                            <Span FontSize="15" Text="{Binding ValidityEndText}" />
+                                                        </FormattedString>
+                                                    </Label.FormattedText>
+                                                </Label>
+                                                <Label HorizontalOptions="End">
+                                                    <Label.FormattedText>
+                                                        <FormattedString>
+                                                            <Span
+                                                                CharacterSpacing="12"
+                                                                FontFamily="{StaticResource FontAwesomeSolid}"
+                                                                FontSize="15"
+                                                                Text="{x:Static fontAwesome:FontAwesomeIcons.Star}" />
+                                                            <Span FontSize="15" Text="{Binding PointsTextZero}" />
+                                                        </FormattedString>
+                                                    </Label.FormattedText>
+                                                </Label>
+                                            </StackLayout>
+                                        </StackLayout>
+                                    </Frame>
+                                </Grid>
+                            </Frame>
+                        </Grid>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+                <CollectionView.EmptyView>
+                    <StackLayout Padding="12">
+                        <Label HorizontalOptions="Center" Text="Du hast noch keine Challenges abgeschlossen" />
+                    </StackLayout>
+                </CollectionView.EmptyView>
+            </CollectionView>
+        </RefreshView>
+    </StackLayout>
+</ContentPage>

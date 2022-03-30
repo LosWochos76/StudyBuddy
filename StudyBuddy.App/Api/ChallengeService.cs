@@ -43,7 +43,6 @@ namespace StudyBuddy.App.Api
             {
                 OnlyAccepted = true,
                 SearchText = search_string,
-                ValidAt = DateTime.Now.Date,
                 Count = 10,
                 Start = skip
             };
