@@ -83,6 +83,30 @@
                 <Label
                     Margin="0,2,0,2"
                     Style="{StaticResource TitleLabelStyle}"
+                    Text="Gesamtpunktzahl"
+                    VerticalTextAlignment="Start" />
+                <Frame
+                    BackgroundColor="{StaticResource WindowBackgroundColor}"
+                    HeightRequest="100"
+                    Style="{StaticResource FrameStyle}">
+                    <Grid>
+                        <Label
+                            HorizontalOptions="Start"
+                            HorizontalTextAlignment="Start"
+                            Style="{StaticResource TotalPointsLabelStyle}"
+                            Text="{Binding UserStatistics.TotalPoints}"
+                            VerticalTextAlignment="Center" />
+                        <StackLayout HorizontalOptions="End" VerticalOptions="End">
+                            <microcharts:ChartView
+                                Chart="{Binding TotalPointsChart}"
+                                HeightRequest="100"
+                                WidthRequest="220" />
+                        </StackLayout>
+                    </Grid>
+                </Frame>
+                <Label
+                    Margin="0,2,0,2"
+                    Style="{StaticResource TitleLabelStyle}"
                     Text="Wöchentliche Herausforderungen"
                     VerticalTextAlignment="Start" />
                 <Frame BackgroundColor="{StaticResource WindowBackgroundColor}" Style="{StaticResource FrameStyle}">
@@ -123,30 +147,6 @@
                                 HorizontalTextAlignment="Start"
                                 Text="Letzte Woche"
                                 TextColor="#828282" />
-                        </StackLayout>
-                    </Grid>
-                </Frame>
-                <Label
-                    Margin="0,2,0,2"
-                    Style="{StaticResource TitleLabelStyle}"
-                    Text="Gesamtpunktzahl"
-                    VerticalTextAlignment="Start" />
-                <Frame
-                    BackgroundColor="{StaticResource WindowBackgroundColor}"
-                    HeightRequest="100"
-                    Style="{StaticResource FrameStyle}">
-                    <Grid>
-                        <Label
-                            HorizontalOptions="Start"
-                            HorizontalTextAlignment="Start"
-                            Style="{StaticResource TotalPointsLabelStyle}"
-                            Text="{Binding UserStatistics.TotalPoints}"
-                            VerticalTextAlignment="Center" />
-                        <StackLayout HorizontalOptions="End" VerticalOptions="End">
-                            <microcharts:ChartView
-                                Chart="{Binding TotalPointsChart}"
-                                HeightRequest="100"
-                                WidthRequest="220" />
                         </StackLayout>
                     </Grid>
                 </Frame>

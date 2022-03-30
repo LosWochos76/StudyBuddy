@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using StudyBuddy.App.Api;
 using StudyBuddy.App.Misc;
+using StudyBuddy.App.Views;
 using Xamarin.CommunityToolkit.ObjectModel;
 
 namespace StudyBuddy.App.ViewModels
@@ -14,6 +15,7 @@ namespace StudyBuddy.App.ViewModels
         public IAsyncCommand RefreshCommand { get; }
         public IAsyncCommand LoadMoreCommand { get; }
         public IAsyncCommand SearchCommand { get; }
+        public IAsyncCommand DetailsCommand { get; }
         public bool IsRefreshing { get; set; } = false;
         public int Skip { get; set; }
         
@@ -51,8 +53,18 @@ namespace StudyBuddy.App.ViewModels
             LoadMoreCommand = new AsyncCommand(LoadChallenges);
             SearchCommand = new AsyncCommand(Refresh);
             RefreshCommand = new AsyncCommand(Refresh);
+            DetailsCommand = new AsyncCommand(ShowDetails);
 
             api.ChallengeAccepted += async (sender, e) => { await LoadChallenges(); };
+        }
+        private async Task ShowDetails()
+        {
+            if (SelectedChallenge == null)
+                return;
+            
+            await Navigation.Push(new ChallengeCompletedDetailsPage(SelectedChallenge));
+            SelectedChallenge = null;
+            NotifyPropertyChanged(nameof(SelectedChallenge));
         }
 
         public async Task Refresh()

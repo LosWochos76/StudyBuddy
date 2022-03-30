@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<ContentPage
+    Shell.FlyoutBehavior="Disabled"
+    Shell.NavBarHasShadow="true"
+    Title="Herausforderungsdetails"
+    x:Class="StudyBuddy.App.Views.ChallengeCompletedDetailsPage"
+    x:DataType="viewmodels:ChallengeViewModel"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:fontAwesome="clr-namespace:StudyBuddy.App"
+    xmlns:viewmodels="clr-namespace:StudyBuddy.App.ViewModels"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml">
+    <ContentPage.Content>
+        <Grid Padding="20" x:Name="grid">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Frame
+                BackgroundColor="{Binding CategoryColor}"
+                BorderColor="{Binding CategoryColor}"
+                CornerRadius="10"
+                HasShadow="True"
+                Margin="0"
+                Padding="0">
+                <Grid BackgroundColor="Transparent">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <StackLayout
+                        BackgroundColor="Transparent"
+                        Grid.ColumnSpan="3"
+                        Grid.RowSpan="1"
+                        Orientation="Horizontal"
+                        Padding="30,10,10,10">
+                        <Image
+                            HeightRequest="80"
+                            VerticalOptions="Center"
+                            WidthRequest="80">
+                            <Image.Source>
+                                <FontImageSource
+                                    Color="{StaticResource TextColor}"
+                                    FontFamily="{StaticResource FontAwesomeSolid}"
+                                    Glyph="{Binding CategorySymbol}" />
+                            </Image.Source>
+                        </Image>
+                        <Label
+                            FontAttributes="Bold"
+                            FontSize="20"
+                            Padding="20,0,0,0"
+                            Text="{Binding Name}"
+                            TextColor="{StaticResource TextColor}"
+                            VerticalTextAlignment="Center" />
+                    </StackLayout>
+                    <Frame
+                        CornerRadius="10"
+                        Grid.Column="0"
+                        Grid.ColumnSpan="3"
+                        Grid.Row="1"
+                        Grid.RowSpan="3"
+                        HasShadow="False"
+                        Margin="2,2,2.5,2.5"
+                        Padding="0">
+                        <StackLayout Padding="12,10,12,10">
+                            <Label
+                                FontAttributes="Bold"
+                                FontSize="19"
+                                Text="Beschreibung:" />
+                            <Label
+                                FontSize="18"
+                                Margin="0,0,0,10"
+                                Text="{Binding Description}" />
+                            <StackLayout>
+                                <Label FontSize="18" HorizontalOptions="StartAndExpand">
+                                    <Label.FormattedText>
+                                        <FormattedString>
+                                            <Span
+                                                CharacterSpacing="13"
+                                                FontFamily="{StaticResource FontAwesomeSolid}"
+                                                FontSize="19"
+                                                Text="{x:Static fontAwesome:FontAwesomeIcons.Stopwatch}" />
+                                            <Span Text="{Binding ValidityText}" />
+                                        </FormattedString>
+                                    </Label.FormattedText>
+                                </Label>
+                                <Label
+                                    FontSize="18"
+                                    HorizontalOptions="StartAndExpand"
+                                    VerticalOptions="Center">
+                                    <Label.FormattedText>
+                                        <FormattedString>
+                                            <Span
+                                                CharacterSpacing="16"
+                                                FontFamily="{StaticResource FontAwesomeSolid}"
+                                                FontSize="17"
+                                                Text="{x:Static fontAwesome:FontAwesomeIcons.CheckCircle}" />
+                                            <Span Text="{Binding Points}" />
+                                            <Span Text=" Punkte" />
+                                            <Span Text="  " />
+                                            <Span Text="{Binding CategoryText}" />
+                                        </FormattedString>
+                                    </Label.FormattedText>
+                                </Label>
+                                <Label
+                                    FontSize="18"
+                                    HorizontalOptions="StartAndExpand"
+                                    VerticalOptions="Center">
+                                    <Label.FormattedText>
+                                        <FormattedString>
+                                            <Span
+                                                CharacterSpacing="16"
+                                                FontFamily="{StaticResource FontAwesomeSolid}"
+                                                FontSize="17"
+                                                Text="{x:Static fontAwesome:FontAwesomeIcons.Hashtag}" />
+                                            <Span Text="{Binding Tags}" />
+                                        </FormattedString>
+                                    </Label.FormattedText>
+                                </Label>
+                            </StackLayout>
+                            <Label
+                                FontAttributes="Bold"
+                                FontSize="19"
+                                Margin="0,30,0,0"
+                                Text="Herausforderung abgeschlossen am:" />
+                            <Label
+                                FontSize="18"
+                                Margin="0,0,0,10"
+                                Text="01.01.2022" />
+                        </StackLayout>
+                    </Frame>
+                </Grid>
+            </Frame>
+        </Grid>
+    </ContentPage.Content>
+</ContentPage>

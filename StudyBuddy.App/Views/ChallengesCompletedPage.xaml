@@ -36,6 +36,7 @@
                 RemainingItemsThreshold="{Binding ItemThreshold}"
                 RemainingItemsThresholdReachedCommand="{Binding LoadMoreCommand}"
                 SelectedItem="{Binding SelectedChallenge}"
+                SelectionChangedCommand="{Binding DetailsCommand}"
                 SelectionMode="Single">
                 <CollectionView.ItemTemplate>
                     <DataTemplate x:DataType="viewmodels:ChallengeViewModel">
