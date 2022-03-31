@@ -27,7 +27,14 @@
                 <StackLayout Padding="5,15,5,0">
                     <RefreshView IsRefreshing="{Binding IsRefreshing}"
                                  Command="{Binding RefreshCommand}">
-                        <CollectionView ItemsSource="{Binding News}">
+                        <CollectionView ItemsSource="{Binding News}" 
+                                        RemainingItemsThreshold="{Binding NewsRemainingItemsThreshold}"
+                                        RemainingItemsThresholdReachedCommand="{Binding NewsRemainingItemsThresholdReachedCommand}"
+                                        SelectedItem="{Binding NewsSelectedItem}"
+                                        SelectionMode="Single"
+                                        SelectionChangedCommand="{Binding NewsDetailCommand}"
+                                        ItemsUpdatingScrollMode="KeepItemsInView"
+                                        >
                             <CollectionView.ItemTemplate>
                                 <DataTemplate x:DataType="viewmodels:NewsViewModel">
                                     <Grid x:Name="requestItem"
