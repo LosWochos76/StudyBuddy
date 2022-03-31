@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using StudyBuddy.BusinessLogic;
+using StudyBuddy.Model;
 
 namespace StudyBuddy.Api.Controllers
 {
@@ -23,10 +24,10 @@ namespace StudyBuddy.Api.Controllers
         
         [Route("/Notification/Feed")]
         [HttpGet]
-        public IActionResult NotificationFeed()
+        public IActionResult NotificationFeed([FromQuery] NotificationFilter filter)
         {
             var userId = backend.CurrentUser.ID;
-            var notifications = backend.NotificationService.GetNotificationFeedForUser(userId);
+            var notifications = backend.NotificationService.GetNotificationFeedForUser(userId, filter);
             return Json(notifications);
         }
     }

@@ -22,6 +22,8 @@ namespace StudyBuddy.BusinessLogic
             });
         }
 
+  
+
         public IEnumerable<Notification> GetNotificationFromUser(int userId)
         {
             var response = backend.Repository.Notifications.All(new NotificationFilter()
@@ -32,11 +34,13 @@ namespace StudyBuddy.BusinessLogic
             return response;
         }
 
-        public IEnumerable<Notification> GetNotificationFeedForUser(int userId)
+        public IEnumerable<Notification> GetNotificationFeedForUser(int userId, NotificationFilter filter)
         {
             return backend.Repository.Notifications.GetUserNotificationsFeed(new NotificationFilter()
             {
-                OwnerId = userId
+                OwnerId = userId,
+                Start = filter.Start,
+                Count = filter.Count,
             });
         }
     }

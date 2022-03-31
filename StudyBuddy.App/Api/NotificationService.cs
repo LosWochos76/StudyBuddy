@@ -28,10 +28,10 @@ namespace StudyBuddy.App.Api
             return content;
         }
 
-        public async Task<IEnumerable<NewsViewModel>> GetMyNotificationFeed()
+        public async Task<IEnumerable<NewsViewModel>> GetMyNotificationFeed(NotificationFilter filter)
         {
             var rh = new WebRequestHelper(api.Authentication.Token);
-            var content = await rh.Load<IEnumerable<Notification>>(base_url + "Notification/Feed", HttpMethod.Get);
+            var content = await rh.Get<IEnumerable<Notification>>(base_url + "Notification/Feed", filter);
             if (content == null)
                 return null;
 

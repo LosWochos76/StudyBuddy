@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using Npgsql;
 using StudyBuddy.Model;
 
@@ -36,13 +37,18 @@ namespace StudyBuddy.Persistence
         {
             var qh = new QueryHelper<Notification>(connection_string, FromNotificationReader);
             var sql = "select id, owner_id, title, body, created, updated from notifications where true";
+            qh.AddParameter(":max", filter.Count);
+            qh.AddParameter(":from", filter.Start);
+            sql +="limit :max offset :from";
+
 
             if (filter.OwnerId.HasValue)
             {
                 qh.AddParameter(":owner_id", filter.OwnerId.Value);
                 sql += " and (owner_id=:owner_id)";
             }
-
+            
+    
             return qh.ExecuteQueryToObjectList(sql);
         }
 
@@ -63,15 +69,17 @@ namespace StudyBuddy.Persistence
         {
             var qh = new QueryHelper<Notification>(connection_string, FromNotificationReader);
             qh.AddParameter(":user_id", filter.OwnerId);
-            qh.AddParameter(":from", filter.Start);
+            qh.AddParameter(":from", filter.Start * filter.Count);
             qh.AddParameter(":max", filter.Count);
             
-            return qh.ExecuteQueryToObjectList(
-                "select notifications.id, notifications.owner_id, notifications.title, notifications.body, notifications.created, notifications.updated, " +
-                "users.firstname, users.lastname, users.nickname " +
-                "from friends " +
-                "inner join users on friends.user_b = :user_id " +
-                "inner join notifications on users.id = notifications.owner_id ");
+            var sql =
+                "select n.id, n.owner_id, n.title, n.body, n.created, n.updated, " +
+                "u.firstname, u.lastname, u.nickname " +
+                "from friends as f " +
+                "inner join users as u on f.user_b = :user_id " +
+                "inner join (select id, owner_id, title, body, created, updated from notifications limit :max offset :from) as n on u.id = n.owner_id ";
+            
+            return qh.ExecuteQueryToObjectList(sql);
         }
 
         private Notification FromNotificationReader(NpgsqlDataReader reader)

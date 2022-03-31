@@ -1,7 +1,10 @@
+using System;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Windows.Input;
 using StudyBuddy.App.Api;
 using StudyBuddy.App.Misc;
+using StudyBuddy.Model;
 using TinyIoC;
 using Xamarin.Forms;
 
@@ -19,17 +22,32 @@ namespace StudyBuddy.App.ViewModels
         public ICommand RefreshCommand { get; }
         public bool IsRefreshing { get; set; }
 
+        public int NewsCount { get; } = 10;
+        public int NewsStart { get; set; } = 0;
         public ICommand RefreshNewsCommand { get; }
         public bool NewsIsRefreshing { get; set; }
+        public int NewsRemainingItemsThreshold { get; set; } = 1;
+        public bool IsLoadingNews  { get; set; } = false;
+        
+        public ICommand NewsDetailCommand { get; set; }
+        public NewsViewModel NewsSelectedItem { get; set; }
+
+
 
         public ICommand AcceptRequestCommand { get; set; }
         public ICommand DenyRequestCommand { get; set; }
+        public ICommand NewsRemainingItemsThresholdReachedCommand { get; set; }
+        
+        
 
         public NotificationsViewModel(IApi api, IDialogService dialog, INavigationService navigation) : base(api, dialog, navigation)
         {
             RefreshCommand = new Command(Refresh);
             AcceptRequestCommand = new Command<RequestViewModel>(AcceptRequest);
             DenyRequestCommand = new Command<RequestViewModel>(DenyRequest);
+            NewsDetailCommand = new Command(() => { });
+            NewsRemainingItemsThresholdReachedCommand = new Command(LoadNews);
+
         }
 
         private void Refresh()
@@ -99,12 +117,37 @@ namespace StudyBuddy.App.ViewModels
         
         public async void LoadNews()
         {
-            var response = await this.api.Notifications.GetMyNotificationFeed();
+            if (IsLoadingNews)
+            {
+                return;
+            }
+
+            IsLoadingNews = true;
+
+            var filter = new NotificationFilter()
+            {
+                Start = NewsStart,
+                Count = NewsCount
+            };
+            
+            var response = await this.api.Notifications.GetMyNotificationFeed(filter);
+            if (response.Count() == 0)
+            {
+                NewsRemainingItemsThreshold = -1;
+                return;
+            }
+            
             if (response is null)
                 return;
-        
-            News.Clear();
+            
             News.AddRange(response);
+            IsLoadingNews = false;
+            NewsStart++;
+
+
         }
+
+
+      
     }
 }

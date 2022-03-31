@@ -1,8 +1,8 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="StartApplication" type="CompoundRunConfigurationType">
-    <toRun name="StudyBuddy.App.Android" type="XamarinAndroidProject" />
-    <toRun name="Angular" type="js.build_tools.npm" />
     <toRun name="StudyBuddy.Api: services" type="LaunchSettings" />
+    <toRun name="Angular" type="js.build_tools.npm" />
+    <toRun name="StudyBuddy.App.Android" type="XamarinAndroidProject" />
     <method v="2" />
   </configuration>
 </component>
