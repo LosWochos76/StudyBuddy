@@ -69,12 +69,12 @@
                                 HeightRequest="180"
                                 WidthRequest="180" />
                         </StackLayout>
-                        <StackLayout HorizontalOptions="Center" VerticalOptions="End">
-                            <Label
-                                FontSize="11"
-                                Text="Klicken Sie hier, um weitere Details anzuzeigen"
-                                TextColor="#828282" />
-                        </StackLayout>
+                        <Label
+                            FontSize="11"
+                            HorizontalOptions="Center"
+                            Text="Klicken Sie hier, um weitere Details anzuzeigen"
+                            TextColor="#828282"
+                            VerticalOptions="End" />
                     </Grid>
                     <Frame.GestureRecognizers>
                         <TapGestureRecognizer Command="{Binding TotalChallengesCommand}" />

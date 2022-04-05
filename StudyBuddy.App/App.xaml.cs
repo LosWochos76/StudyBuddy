@@ -13,9 +13,16 @@ namespace StudyBuddy.App
         public App()
         {
             InitializeComponent();
-            SetupServices();
 
-            MainPage = new MainPage();
+            if (App_HasConnection())
+            {
+                SetupServices();
+                MainPage = new MainPage();
+            }else 
+            {
+                MainPage = new NoConnectionPage();
+                Current.MainPage.DisplayAlert("Achtung!", $"Es wurde keine Internetverbindung gefunden!\nVerbindungstyp: {Connectivity.NetworkAccess.ToString()}", "Ok");
+            }
         }
 
         private void SetupServices()
@@ -34,51 +41,51 @@ namespace StudyBuddy.App
             TinyIoCContainer.Current.Register(TinyIoCContainer.Current.Resolve<FlyoutHeaderViewModel>());
         }
 
-        private void SetupFirebasePushNotificationsHandler()
-        {
-        }
-
         protected override async void OnStart()
         {
-            if (!Current.Properties.ContainsKey("Login"))
-                return;
+            if (App_HasConnection())
+            {
+                if (!Current.Properties.ContainsKey("Login"))
+                    return;
 
-            var content = Current.Properties["Login"].ToString();
-            var api = TinyIoCContainer.Current.Resolve<IApi>();
-            var result = await api.Authentication.LoginFromJson(content);
+                var content = Current.Properties["Login"].ToString();
+                var api = TinyIoCContainer.Current.Resolve<IApi>();
+                var result = await api.Authentication.LoginFromJson(content);
 
-            if (result)
-                await Shell.Current.GoToAsync("//ChallengesPage");
-            else
-                Current.Properties.Remove("Login");
+                if (result)
+                    await Shell.Current.GoToAsync("//ChallengesPage");
+                else
+                    Current.Properties.Remove("Login");
 
-            OnResume();
+                OnResume();
+            }
         }
-
         protected override void OnSleep()
         {
             Connectivity.ConnectivityChanged -= App_ConnectivityChanged;
             TinyIoCContainer.Current.Resolve<ThemeViewModel>().ApplyTheme();
             RequestedThemeChanged -= App_RequestedThemeChanged;
         }
-
-        protected override async void OnResume()
+        protected override void OnResume()
         {
             Connectivity.ConnectivityChanged += App_ConnectivityChanged;
             TinyIoCContainer.Current.Resolve<ThemeViewModel>().ApplyTheme();
             RequestedThemeChanged += App_RequestedThemeChanged;
         }
 
-
+        private bool App_HasConnection()
+        {
+            var internet = Connectivity.NetworkAccess;
+            if (internet == NetworkAccess.None || internet == NetworkAccess.Unknown || internet == NetworkAccess.Local || internet == NetworkAccess.ConstrainedInternet)
+                return false;
+            return true;
+        }
         private void App_ConnectivityChanged(object sender, ConnectivityChangedEventArgs e)
         {
-            MainThread.BeginInvokeOnMainThread(async () =>
+            MainThread.BeginInvokeOnMainThread(() => 
             {
-                if (e.NetworkAccess == NetworkAccess.None || e.NetworkAccess == NetworkAccess.Unknown ||
-                    e.NetworkAccess == NetworkAccess.Local || e.NetworkAccess == NetworkAccess.ConstrainedInternet)
-                {
-                    await Current.MainPage.DisplayAlert("Achtung!", $"Es wurde keine Internetverbindung gefunden!\nVerbindungstyp: {e.NetworkAccess.ToString()}", "Ok");
-                }
+                if (!App_HasConnection())
+                    Current.MainPage.DisplayAlert("Achtung!", $"Es wurde keine Internetverbindung gefunden!\nVerbindungstyp: {e.NetworkAccess.ToString()}", "Ok");
             });
         }
         private void App_RequestedThemeChanged(object sender, AppThemeChangedEventArgs e)
@@ -88,5 +95,6 @@ namespace StudyBuddy.App
                 TinyIoCContainer.Current.Resolve<ThemeViewModel>().ApplyTheme();
             });
         }
+        private void SetupFirebasePushNotificationsHandler() {}
     }
 }

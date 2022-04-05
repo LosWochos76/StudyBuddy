@@ -26,13 +26,7 @@ namespace StudyBuddy.App.ViewModels
         public StatisticsViewModel(IApi api, IDialogService dialog, INavigationService navigation) : base(api, dialog, navigation)
         {
             this.TotalChallengesCommand = new Command(ShowCompletedChallenges);
-            api.Authentication.LoginStateChanged += Authentication_LoginStateChanged;
             RefreshCommand = new AsyncCommand(RefreshView);
-        }
-
-        private void Authentication_LoginStateChanged(object sender, LoginStateChangedArgs args)
-        {
-            
         }
 
         private void ShowCompletedChallenges()
@@ -55,7 +49,7 @@ namespace StudyBuddy.App.ViewModels
             }
             catch (System.Exception)
             {
-                await App.Current.MainPage.DisplayAlert("Fehler", "Fehler beim Laden der Statistiken. API Endpunkt nicht erreichbar", "Ok");
+                await Application.Current.MainPage.DisplayAlert("Fehler", "Fehler beim Laden der Statistiken. API Endpunkt nicht erreichbar", "Ok");
             }
             LoadCharts();
         }

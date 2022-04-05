@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="StudyBuddy.App.Views.NoConnectionPage">
+    <ContentPage.Content>
+        <StackLayout>
+            <Label Text="Huch!"
+                   FontSize="28"
+                   VerticalOptions="Center"
+                   HorizontalOptions="Center"
+                   Margin="0,30,0,0"/>
+            <Label Text="Keine Internetverbindung gefunden. Überprüfen Sie Ihre Verbindung und versuchen Sie es erneut!"
+                   FontSize="20"
+                   Margin="24"/>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>
