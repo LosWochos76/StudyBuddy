@@ -12,7 +12,7 @@ using Platform = Xamarin.Essentials.Platform;
 
 namespace App.Droid
 {
-    [Activity(Label = "Gameucation", Theme = "@style/MainTheme", MainLauncher = true,
+    [Activity(Label = "Gameucation", Theme = "@style/MainTheme", 
         ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation | ConfigChanges.UiMode |
                                ConfigChanges.ScreenLayout | ConfigChanges.SmallestScreenSize)]
     public class MainActivity : FormsAppCompatActivity
