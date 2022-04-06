@@ -30,5 +30,8 @@ namespace StudyBuddy.Persistence
         // Challenges and badges
         IEnumerable<User> GetAllUsersThatAcceptedChallenge(int challenge_id);
         IEnumerable<User> GetAllUsersHavingBadge(int badge_id);
+
+        // Notificaions 
+        IEnumerable<User> GetAllLikersForNotification(int notification_id);
     }
 }

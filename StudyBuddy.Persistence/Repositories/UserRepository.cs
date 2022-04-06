@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using Npgsql;
 using SimpleHashing.Net;
@@ -9,114 +8,13 @@ namespace StudyBuddy.Persistence
     internal class UserRepository : IUserRepository
     {
         private readonly string connection_string;
-        private SimpleHash simpleHash = new SimpleHash();
+        private readonly SimpleHash simpleHash = new();
 
         public UserRepository(string connection_string)
         {
             this.connection_string = connection_string;
 
             CreateTable();
-        }
-
-        private void CreateTable()
-        {
-            var rh = new RevisionHelper(connection_string, "users");
-            var qh = new QueryHelper<User>(connection_string);
-
-            if (!qh.TableExists("users"))
-            {
-                qh.ExecuteNonQuery(
-                    "create table users (" +
-                    "id serial primary key, " +
-                    "firstname varchar(100) not null, " +
-                    "lastname varchar(100) not null, " +
-                    "nickname varchar(100) not null, " +
-                    "email varchar(100) not null, " +
-                    "password_hash varchar(100), " +
-                    "role int not null)");
-
-                Insert(new User
-                {
-                    Firstname = "Empty",
-                    Lastname = "Empty",
-                    Nickname = "Admin",
-                    Email = "admin@admin.de",
-                    Password = "secret",
-                    Role = Role.Admin
-                });
-
-                rh.SetRevision(2);
-            }
-
-            if (!qh.TableExists("friends"))
-                qh.ExecuteNonQuery(
-                    "create table friends (" +
-                    "user_a int not null, " +
-                    "user_b int not null)");
-
-            if (qh.TableExists("teams"))
-                qh.ExecuteNonQuery("drop table teams");
-
-            if (qh.TableExists("team_members"))
-                qh.ExecuteNonQuery("drop table team_members");
-
-            if (rh.GetRevision() == 1)
-            {
-                qh.ExecuteNonQuery("alter table users " +
-                    "drop column if exists program_id," +
-                    "drop column if exists enrolled_in_term_id");
-
-                rh.SetRevision(2);
-            }
-
-            qh.ExecuteNonQuery("begin;\n" +
-                "SELECT pg_advisory_xact_lock(2142616474639426746);\n" + 
-                "create or replace function common_friends(user_a_param int, user_b_param int)\n" +
-                "returns int\n" +
-                "language plpgsql\n" +
-                "as $$\n" +
-                "declare\n" +
-                "friend_count int;\n" +
-                "begin\n" +
-                "   if (user_a_param = user_b_param) then\n" +
-                "       return 0;\n" +
-                "   end if;\n\n" +
-                "select count(*) into friend_count from\n" +
-                "(select user_b from friends where user_a = user_a_param intersect\n" +
-                "select user_b from friends where user_a = user_b_param) as common_friends;\n" +
-                "return friend_count;\n" +
-                "end;$$;\n" +
-                "commit;");
-
-            qh.ExecuteNonQuery("begin;\n" +
-                "SELECT pg_advisory_xact_lock(5667323614921139925);\n" +
-                "create or replace function challenge_accepted(user_id_param int, challenge_id_param int)\n" +
-                "returns boolean\n" +
-                "language plpgsql\n" +
-                "as $$\n" +
-                "declare\n" +
-                "has_accepted boolean;\n" +
-                "begin\n" +
-                "select case When(select count(*) as count from challenge_acceptance\n" +
-                "where user_id = user_id_param and challenge_id = challenge_id_param) > 0 Then True else False end into has_accepted;\n" +
-                "return has_accepted;\n" +
-                "end;$$;\n" +
-                "commit;");
-
-            qh.ExecuteNonQuery("begin;\n" +
-                "SELECT pg_advisory_xact_lock(8446020628481340546);\n" +
-                "create or replace function badge_received(user_id_param int, badge_id_param int)\n" +
-                "returns boolean\n" +
-                "language plpgsql\n" +
-                "as $$\n" +
-                "declare\n" +
-                "has_received boolean;\n" +
-                "begin\n" +
-                "select case When(select count(*) as count from users_badges\n" +
-                "where user_id = user_id_param and badge_id = badge_id_param) > 0 Then True else False end into has_received;\n" +
-                "return has_received;\n" +
-                "end;$$;\n" +
-                "commit;");
         }
 
         public User ById(int id)
@@ -224,13 +122,15 @@ namespace StudyBuddy.Persistence
             qh.AddParameter(":from", filter.Start);
             qh.AddParameter(":max", filter.Count);
 
-            var sql = "select id,firstname,lastname,nickname,email,password_hash,role,common_friends(id, :user_id) from friends" +
+            var sql =
+                "select id,firstname,lastname,nickname,email,password_hash,role,common_friends(id, :user_id) from friends" +
                 " inner join users on user_b = id where user_a=:user_id ";
 
             if (!string.IsNullOrEmpty(filter.SearchText))
             {
                 qh.AddParameter(":search_text", "%" + filter.SearchText + "%");
-                sql += " and (firstname ilike :search_text or lastname ilike :search_text or email ilike :search_text) ";
+                sql +=
+                    " and (firstname ilike :search_text or lastname ilike :search_text or email ilike :search_text) ";
             }
 
             sql += "order by lastname,firstname,nickname limit :max offset :from";
@@ -246,7 +146,8 @@ namespace StudyBuddy.Persistence
             if (!string.IsNullOrEmpty(filter.SearchText))
             {
                 qh.AddParameter(":search_text", "%" + filter.SearchText + "%");
-                sql += " and (firstname ilike :search_text or lastname ilike :search_text or email ilike :search_text) ";
+                sql +=
+                    " and (firstname ilike :search_text or lastname ilike :search_text or email ilike :search_text) ";
             }
 
             return qh.ExecuteQueryToSingleInt(sql);
@@ -259,8 +160,9 @@ namespace StudyBuddy.Persistence
             qh.AddParameter(":from", filter.Start);
             qh.AddParameter(":max", filter.Count);
 
-            var sql = "select id,firstname,lastname,nickname,email,password_hash,role,common_friends(id,:user_id) from users " +
-                      "where id not in (select user_b from friends where user_a=:user_id) and id!=:user_id ";
+            var sql =
+                "select id,firstname,lastname,nickname,email,password_hash,role,common_friends(id,:user_id) from users " +
+                "where id not in (select user_b from friends where user_a=:user_id) and id!=:user_id ";
 
             if (!string.IsNullOrEmpty(filter.SearchText))
             {
@@ -277,7 +179,8 @@ namespace StudyBuddy.Persistence
             var qh = new QueryHelper<User>(connection_string, FromReaderWithCommonFriends);
             qh.AddParameter(":user_id", filter.UserId);
 
-            var sql = "select count(*) from users where id not in (select user_b from friends where user_a=:user_id) and id!=:user_id ";
+            var sql =
+                "select count(*) from users where id not in (select user_b from friends where user_a=:user_id) and id!=:user_id ";
 
             if (!string.IsNullOrEmpty(filter.SearchText))
             {
@@ -338,6 +241,130 @@ namespace StudyBuddy.Persistence
                 "order by lastname,firstname,nickname");
         }
 
+        public int GetCountOfCommonFriends(int user_a_id, int user_b_id)
+        {
+            var qh = new QueryHelper<User>(connection_string);
+            qh.AddParameters(new {user_a_id, user_b_id});
+            return qh.ExecuteQueryToSingleInt("select common_friends(:user_a_i, :user_b_id)");
+        }
+
+
+        public IEnumerable<User> GetAllLikersForNotification(int notificationId)
+        {
+            var qh = new QueryHelper<User>(connection_string, FromReader);
+            qh.AddParameter(":notification_id", notificationId);
+
+            var sql =
+                "select u.id,u.firstname,u.lastname,u.nickname,u.email,u.password_hash,u.role " +
+                "from users as u  " +
+                "inner join notification_user_metadata as md on u.id = md.owner_id  and liked = true and md.notification_id = :notification_id ";
+
+
+            var metadatas = qh.ExecuteQueryToObjectList(sql);
+            return metadatas;
+        }
+
+        private void CreateTable()
+        {
+            var rh = new RevisionHelper(connection_string, "users");
+            var qh = new QueryHelper<User>(connection_string);
+
+            if (!qh.TableExists("users"))
+            {
+                qh.ExecuteNonQuery(
+                    "create table users (" +
+                    "id serial primary key, " +
+                    "firstname varchar(100) not null, " +
+                    "lastname varchar(100) not null, " +
+                    "nickname varchar(100) not null, " +
+                    "email varchar(100) not null, " +
+                    "password_hash varchar(100), " +
+                    "role int not null)");
+
+                Insert(new User
+                {
+                    Firstname = "Empty",
+                    Lastname = "Empty",
+                    Nickname = "Admin",
+                    Email = "admin@admin.de",
+                    Password = "secret",
+                    Role = Role.Admin
+                });
+
+                rh.SetRevision(2);
+            }
+
+            if (!qh.TableExists("friends"))
+                qh.ExecuteNonQuery(
+                    "create table friends (" +
+                    "user_a int not null, " +
+                    "user_b int not null)");
+
+            if (qh.TableExists("teams"))
+                qh.ExecuteNonQuery("drop table teams");
+
+            if (qh.TableExists("team_members"))
+                qh.ExecuteNonQuery("drop table team_members");
+
+            if (rh.GetRevision() == 1)
+            {
+                qh.ExecuteNonQuery("alter table users " +
+                                   "drop column if exists program_id," +
+                                   "drop column if exists enrolled_in_term_id");
+
+                rh.SetRevision(2);
+            }
+
+            qh.ExecuteNonQuery("begin;\n" +
+                               "SELECT pg_advisory_xact_lock(2142616474639426746);\n" +
+                               "create or replace function common_friends(user_a_param int, user_b_param int)\n" +
+                               "returns int\n" +
+                               "language plpgsql\n" +
+                               "as $$\n" +
+                               "declare\n" +
+                               "friend_count int;\n" +
+                               "begin\n" +
+                               "   if (user_a_param = user_b_param) then\n" +
+                               "       return 0;\n" +
+                               "   end if;\n\n" +
+                               "select count(*) into friend_count from\n" +
+                               "(select user_b from friends where user_a = user_a_param intersect\n" +
+                               "select user_b from friends where user_a = user_b_param) as common_friends;\n" +
+                               "return friend_count;\n" +
+                               "end;$$;\n" +
+                               "commit;");
+
+            qh.ExecuteNonQuery("begin;\n" +
+                               "SELECT pg_advisory_xact_lock(5667323614921139925);\n" +
+                               "create or replace function challenge_accepted(user_id_param int, challenge_id_param int)\n" +
+                               "returns boolean\n" +
+                               "language plpgsql\n" +
+                               "as $$\n" +
+                               "declare\n" +
+                               "has_accepted boolean;\n" +
+                               "begin\n" +
+                               "select case When(select count(*) as count from challenge_acceptance\n" +
+                               "where user_id = user_id_param and challenge_id = challenge_id_param) > 0 Then True else False end into has_accepted;\n" +
+                               "return has_accepted;\n" +
+                               "end;$$;\n" +
+                               "commit;");
+
+            qh.ExecuteNonQuery("begin;\n" +
+                               "SELECT pg_advisory_xact_lock(8446020628481340546);\n" +
+                               "create or replace function badge_received(user_id_param int, badge_id_param int)\n" +
+                               "returns boolean\n" +
+                               "language plpgsql\n" +
+                               "as $$\n" +
+                               "declare\n" +
+                               "has_received boolean;\n" +
+                               "begin\n" +
+                               "select case When(select count(*) as count from users_badges\n" +
+                               "where user_id = user_id_param and badge_id = badge_id_param) > 0 Then True else False end into has_received;\n" +
+                               "return has_received;\n" +
+                               "end;$$;\n" +
+                               "commit;");
+        }
+
         private User FromReader(NpgsqlDataReader reader)
         {
             var obj = new User();
@@ -356,13 +383,6 @@ namespace StudyBuddy.Persistence
             var user = FromReader(reader);
             user.CommonFriends = reader.GetInt32(7);
             return user;
-        }
-
-        public int GetCountOfCommonFriends(int user_a_id, int user_b_id)
-        {
-            var qh = new QueryHelper<User>(connection_string);
-            qh.AddParameters(new { user_a_id, user_b_id });
-            return qh.ExecuteQueryToSingleInt("select common_friends(:user_a_i, :user_b_id)");
         }
     }
 }

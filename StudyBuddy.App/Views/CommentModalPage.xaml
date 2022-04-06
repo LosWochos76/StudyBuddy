@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewModels="clr-namespace:StudyBuddy.App.ViewModels;assembly=StudyBuddy.App"
+             xmlns:views="http://xamarin.com/schemas/2020/toolkit"
+             x:DataType="viewModels:CommentModalPageViewModel"
+
+             x:Class="StudyBuddy.App.Views.CommentModalPage">
+    <ContentPage.Content>
+        <StackLayout>
+            <Label FontSize="24" Padding="8, 16, 0, 0" Text="Kommentare" />
+            <BoxView
+                HeightRequest="1"
+                Color="LightGray"
+                Margin="2, 4, 2, 4" />
+            <CollectionView
+
+                ItemsSource="{Binding Comments}">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="viewModels:CommentViewModel">
+                        <StackLayout>
+                            <StackLayout>
+
+
+                                <StackLayout Orientation="Horizontal" Padding="0,0,4,4">
+
+                                    <views:AvatarView Size="32"
+
+                                                      VerticalOptions="Center"
+                                                      Padding="8,0,2,0"
+                                                      Text="{Binding Owner.Initials}"
+                                                      Source="{Binding Owner.ProfileImage}" />
+
+                                    <Label Margin="4,0,0,0" Text="{Binding Owner.FullName}" />
+
+
+                                </StackLayout>
+                                <Label Margin="52,0,16,0" Text="{Binding Text}" />
+
+                            </StackLayout>
+
+                            <BoxView
+                                HeightRequest="1"
+                                Color="LightGray"
+                                Margin="2, 4, 2, 4" />
+                        </StackLayout>
+                    </DataTemplate>
+
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+
+
+            <FlexLayout>
+
+                <Editor Placeholder="Comment..." FlexLayout.Grow="1" Text="{Binding CreateCommentText}" />
+                <Button HeightRequest="32" Background="Transparent" Padding="0"
+                        Command="{Binding CreateCommentCommand}" Text="Create" />
+
+            </FlexLayout>
+
+
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

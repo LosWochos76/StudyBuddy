@@ -7,23 +7,7 @@ namespace StudyBuddy.BusinessLogic
 {
     public class Backend : IBackend
     {
-        private JwtToken jwt = new JwtToken();
-
-        public IRepository Repository { get; private set; }
-        public User CurrentUser { get; set; }
-        public IAuthenticationService AuthenticationService { get; private set; }
-        public IChallengeService ChallengeService { get; private set; }
-        public IFcmTokenService FcmTokenService { get; private set; }
-        public IGameBadgeService GameBadgeService { get; private set; }
-        public IPushNotificationService PushNotificationService { get; private set; }
-        public IRequestService RequestService { get; set; }
-        public ITagService TagService { get; set; }
-        public IUserService UserService { get; set; }
-        public IBusinessEventService BusinessEventService { get; private set; }
-        public ILoggingService Logging { get; private set; }
-        public INotificationService NotificationService { get; }
-        public IStatisticsService StatisticsService { get; set; }
-        public IImageService ImageService { get; set; }
+        private readonly JwtToken jwt = new();
 
         public Backend()
         {
@@ -41,14 +25,34 @@ namespace StudyBuddy.BusinessLogic
             NotificationService = new NotificationService(this);
             StatisticsService = new StatisticsService(this);
             ImageService = new ImageService(this);
+            NotificationUserMetadataService = new NotificationUserMetadataService(this);
+            CommentService = new CommentService(this);
         }
+
+        public IRepository Repository { get; }
+        public User CurrentUser { get; set; }
+        public IAuthenticationService AuthenticationService { get; }
+        public IChallengeService ChallengeService { get; }
+        public IFcmTokenService FcmTokenService { get; }
+        public IGameBadgeService GameBadgeService { get; }
+        public IPushNotificationService PushNotificationService { get; }
+        public IRequestService RequestService { get; set; }
+        public ITagService TagService { get; set; }
+        public IUserService UserService { get; set; }
+        public IBusinessEventService BusinessEventService { get; }
+        public ILoggingService Logging { get; }
+        public INotificationService NotificationService { get; }
+        public IStatisticsService StatisticsService { get; set; }
+        public IImageService ImageService { get; set; }
+        public NotificationUserMetadataService NotificationUserMetadataService { get; }
+        public CommentService CommentService { get; }
 
         public void SetCurrentUserFromToken(string token)
         {
             if (string.IsNullOrEmpty(token))
                 return;
 
-            int user_id = jwt.FromToken(token);
+            var user_id = jwt.FromToken(token);
             CurrentUser = user_id != 0 ? Repository.Users.ById(user_id) : null;
         }
     }

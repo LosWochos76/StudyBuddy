@@ -37,7 +37,7 @@ namespace StudyBuddy.App.Api
 
             var result = new List<NewsViewModel>();
             foreach (var obj in content)
-                result.Add(NewsViewModel.FromNotification(obj));
+                result.Add(new NewsViewModel(obj));
 
             return result;
         }

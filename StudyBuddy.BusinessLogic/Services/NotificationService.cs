@@ -1,5 +1,7 @@
 using System.Collections.Generic;
+using System.Linq;
 using StudyBuddy.Model;
+using StudyBuddy.Model.Filter;
 
 namespace StudyBuddy.BusinessLogic
 {
@@ -14,7 +16,7 @@ namespace StudyBuddy.BusinessLogic
 
         public void CreateNotificationForUser(int userId, string title, string body)
         {
-            backend.Repository.Notifications.Insert(new Notification()
+            backend.Repository.Notifications.Insert(new Notification
             {
                 OwnerId = userId,
                 Title = title,
@@ -22,11 +24,10 @@ namespace StudyBuddy.BusinessLogic
             });
         }
 
-  
 
         public IEnumerable<Notification> GetNotificationFromUser(int userId)
         {
-            var response = backend.Repository.Notifications.All(new NotificationFilter()
+            var response = backend.Repository.Notifications.All(new NotificationFilter
             {
                 OwnerId = userId
             });
@@ -36,12 +37,26 @@ namespace StudyBuddy.BusinessLogic
 
         public IEnumerable<Notification> GetNotificationFeedForUser(int userId, NotificationFilter filter)
         {
-            return backend.Repository.Notifications.GetUserNotificationsFeed(new NotificationFilter()
+            var notifications = backend.Repository.Notifications.GetUserNotificationsFeed(new NotificationFilter
             {
                 OwnerId = userId,
                 Start = filter.Start,
-                Count = filter.Count,
+                Count = filter.Count
             });
+
+
+            foreach (var notification in notifications)
+            {
+                notification.LikedUsers =
+                    backend.Repository.Users.GetAllLikersForNotification(notification.Id).ToList();
+                notification.Comments = backend.Repository.CommentsRepository.All(new CommentFilter
+                {
+                    NotificationId = notification.Id
+                }).ToList();
+            }
+
+
+            return notifications;
         }
     }
 }

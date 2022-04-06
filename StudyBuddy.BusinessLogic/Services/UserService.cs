@@ -1,12 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
 using System.Linq;
 using StudyBuddy.Model;
 
 namespace StudyBuddy.BusinessLogic
 {
-    class UserService : IUserService
+    internal class UserService : IUserService
     {
         private readonly IBackend backend;
 
@@ -23,7 +21,7 @@ namespace StudyBuddy.BusinessLogic
             if (filter == null)
                 filter = new UserFilter();
 
-            return new UserList()
+            return new UserList
             {
                 Count = backend.Repository.Users.GetCount(filter),
                 Objects = backend.Repository.Users.All(filter)
@@ -46,6 +44,7 @@ namespace StudyBuddy.BusinessLogic
             backend.Repository.Users.Update(obj);
             return obj;
         }
+
         public User ResetPassword(User obj)
         {
             backend.Repository.Users.Update(obj);
@@ -55,7 +54,8 @@ namespace StudyBuddy.BusinessLogic
         public User Insert(User obj)
         {
             backend.Repository.Users.Insert(obj);
-            backend.BusinessEventService.TriggerEvent(this, new BusinessEventArgs(BusinessEventType.UserRegistered, obj));
+            backend.BusinessEventService.TriggerEvent(this,
+                new BusinessEventArgs(BusinessEventType.UserRegistered, obj));
             return obj;
         }
 
@@ -93,7 +93,7 @@ namespace StudyBuddy.BusinessLogic
             if (backend.CurrentUser == null || !backend.CurrentUser.IsAdmin && backend.CurrentUser.ID != filter.UserId)
                 throw new Exception("Unauthorized!");
 
-            return new UserList()
+            return new UserList
             {
                 Count = backend.Repository.Users.GetFriendsCount(filter),
                 Objects = backend.Repository.Users.GetFriends(filter)
@@ -110,12 +110,10 @@ namespace StudyBuddy.BusinessLogic
 
             // ToDo: Evtl sehr inperformant!
             if (filter.WithFriendshipRequest)
-            {
                 foreach (var user in objects)
                     user.FriendshipRequest = backend.Repository.Requests.FindFriendshipRequest(filter.UserId, user.ID);
-            }
 
-            return new UserList()
+            return new UserList
             {
                 Count = count,
                 Objects = objects
@@ -131,7 +129,8 @@ namespace StudyBuddy.BusinessLogic
 
             var user = backend.Repository.Users.ById(user_id);
             var friend = backend.Repository.Users.ById(friend_id);
-            backend.BusinessEventService.TriggerEvent(this, new BusinessEventArgs(BusinessEventType.FriendAdded, friend) { CurrentUser = user });
+            backend.BusinessEventService.TriggerEvent(this,
+                new BusinessEventArgs(BusinessEventType.FriendAdded, friend) {CurrentUser = user});
         }
 
         public void RemoveFriend(int user_id, int friend_id)
@@ -152,7 +151,8 @@ namespace StudyBuddy.BusinessLogic
 
         public void SetFriends(MultipleFriendsParameter parameter)
         {
-            if (backend.CurrentUser == null || !backend.CurrentUser.IsAdmin && backend.CurrentUser.ID != parameter.UserID)
+            if (backend.CurrentUser == null ||
+                !backend.CurrentUser.IsAdmin && backend.CurrentUser.ID != parameter.UserID)
                 throw new Exception("Unauthorized!");
 
             backend.Repository.Users.RemoveFriends(parameter.UserID);
@@ -175,11 +175,11 @@ namespace StudyBuddy.BusinessLogic
                 throw new UnauthorizedAccessException("Unauthorized!");
 
             var objects = backend.Repository.Users.GetAllUsersThatAcceptedChallenge(challenge_id);
-            return new UserList()
+            return new UserList
             {
                 Count = objects.Count(),
                 Objects = objects
-            };  
+            };
         }
 
         public int GetCountOfCommonFriends(int user_a_id, int user_b_id)
@@ -203,7 +203,7 @@ namespace StudyBuddy.BusinessLogic
                 throw new UnauthorizedAccessException("Unauthorized!");
 
             var objects = backend.Repository.Users.GetAllUsersHavingBadge(badge_id);
-            return new UserList()
+            return new UserList
             {
                 Count = objects.Count(),
                 Objects = objects
