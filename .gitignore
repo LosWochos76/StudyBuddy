@@ -219,3 +219,6 @@ project.lock.json
 #####
 
 StudyBuddy.Backend/deploy.sh
+
+**/node_modules/**
+**/env.ts

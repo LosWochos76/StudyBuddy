@@ -1,4 +1,5 @@
 ﻿using StudyBuddy.BusinessLogic.Interfaces;
+using StudyBuddy.BusinessLogic.Services;
 using StudyBuddy.Model;
 using StudyBuddy.Persistence;
 
@@ -21,6 +22,8 @@ namespace StudyBuddy.BusinessLogic
         ILoggingService Logging { get; }
         INotificationService NotificationService { get; }
         IImageService ImageService { get; }
+        NotificationUserMetadataService NotificationUserMetadataService { get; }
+        CommentService CommentService { get; }
 
         void SetCurrentUserFromToken(string token);
     }

@@ -19,14 +19,18 @@ namespace StudyBuddy.App.Misc
             }
 
             await Shell.Current.GoToAsync(path);
-            
         }
 
         public async Task Push(Page page)
         {
             Shell.Current.FlyoutIsPresented = false;
             await Shell.Current.Navigation.PushAsync(page);
-            
+        }
+
+        public async Task Modal(Page page)
+        {
+            Shell.Current.FlyoutIsPresented = false;
+            await Shell.Current.Navigation.PushModalAsync(page);
         }
 
         public async Task Pop()

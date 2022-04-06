@@ -24,6 +24,7 @@
     <None Remove="xunit.runner.console" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Integration" />
     <Folder Include="Mocks\" />
   </ItemGroup>
   <ItemGroup>

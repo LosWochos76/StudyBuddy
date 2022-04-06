@@ -17,6 +17,11 @@ namespace StudyBuddy.App.Api
         IStatisticsService Statistics { get; }
         IImageService ImageService { get; }
         INotificationService Notifications { get; }
+        NotificationUserMetadataService NotificationUserMetadataService { get; }
+        CommentService CommentService { get; }
+
+        Version AppVersion { get; }
+        Version ApiVersion { get; }
 
         event EventHandler<ChallengeViewModel> ChallengeAccepted;
         void RaiseChallengeAcceptedEvent(object sender, ChallengeViewModel challenge);
@@ -26,8 +31,5 @@ namespace StudyBuddy.App.Api
 
         event EventHandler<FriendshipStateChangedEventArgs> FriendshipStateChanged;
         void RaiseFriendsChanged(object sender, FriendshipStateChangedEventArgs args);
-
-        Version AppVersion { get; }
-        Version ApiVersion { get; }
     }
 }

@@ -2,14 +2,17 @@
 using Android.Content.PM;
 using Android.OS;
 using Android.Runtime;
+using Android.Views;
+using AndroidX.AppCompat.App;
 using Plugin.FirebasePushNotification;
+using Xamarin.Forms;
 using Xamarin.Forms.Platform.Android;
 using Xamarin.Forms.PlatformConfiguration.AndroidSpecific;
 using Platform = Xamarin.Essentials.Platform;
 
 namespace App.Droid
 {
-    [Activity(Label = "Gameucation", Theme = "@style/MainTheme", 
+    [Activity(Label = "Gameucation", Theme = "@style/MainTheme", MainLauncher = true,
         ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation | ConfigChanges.UiMode |
                                ConfigChanges.ScreenLayout | ConfigChanges.SmallestScreenSize)]
     public class MainActivity : FormsAppCompatActivity

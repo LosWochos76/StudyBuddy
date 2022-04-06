@@ -12,7 +12,7 @@ namespace StudyBuddy.App.Views
 
             BindingContext = TinyIoCContainer.Current.Resolve<AddFriendViewModel>();
         }
-
+        
         protected override void OnAppearing()
         {
             base.OnAppearing();
