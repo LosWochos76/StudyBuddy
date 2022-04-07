@@ -15,6 +15,8 @@ namespace StudyBuddy.App.ViewModels
             Notification = notification;
             Comments.AddRange(notification.Comments.Select(item => new CommentViewModel(item)));
             LikedUsers.AddRange(notification.LikedUsers.Select(item => UserViewModel.FromModel(item)));
+
+            Comments.CollectionChanged += (sender, args) => { OnPropertyChanged("NumberOfCommentsText"); };
         }
 
 

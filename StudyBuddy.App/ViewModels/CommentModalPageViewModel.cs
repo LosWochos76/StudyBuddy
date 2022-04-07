@@ -21,6 +21,7 @@ namespace StudyBuddy.App.ViewModels
             _newsViewModel = viewModel;
             _api = TinyIoCContainer.Current.Resolve<IApi>();
             Comments = viewModel.Comments;
+            CreateCommentCommand = new Command(CreateComment);
         }
 
         public Command CreateCommentCommand { get; set; }
@@ -49,7 +50,7 @@ namespace StudyBuddy.App.ViewModels
                 Text = CreateCommentText
             });
 
-            Comments.Add(new CommentViewModel(new Comment
+            Comments.Insert(0, new CommentViewModel(new Comment
             {
                 Owner = _api.Authentication.CurrentUser,
                 Text = CreateCommentText
