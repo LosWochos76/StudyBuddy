@@ -27,9 +27,9 @@
         <Folder Include="Misc\" />
     </ItemGroup>
     <ItemGroup>
-        <PackageReference Include="FirebaseAdmin" Version="2.2.0" />
+        <PackageReference Include="FirebaseAdmin" Version="2.3.0" />
         <PackageReference Include="Microsoft.AspNetCore.WebUtilities" Version="2.2.0" />
-        <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.16.0" />
+        <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.17.0" />
         <PackageReference Include="NETCore.MailKit" Version="2.0.3" />
         <PackageReference Include="QRCoder" Version="1.4.3" />
         <PackageReference Include="NETCore.Encrypt" Version="2.1.0" />
