@@ -11,9 +11,10 @@ namespace StudyBuddy.Model.Model
         public int TotalLearningChallengesCount { get; set; }
         public int TotalAcceptedChallenges
         {
-            get { return TotalNetworkChallengesCount + TotalOrganizingChallengesCount + TotalLearningChallengesCount; }
+            get { return TotalNetworkChallengesCount 
+                    + TotalOrganizingChallengesCount 
+                    + TotalLearningChallengesCount; }
         }
-
 
         public int TotalNetworkChallengesPoints { get; set; }
         public int TotalOrganizingChallengesPoints { get; set; }
@@ -34,7 +35,7 @@ namespace StudyBuddy.Model.Model
         public StatisticsTrend WeeklyStatisticsTrend { get; set; }
         public StatisticsTrend MonthlyStatisticsTrend { get; set; }
 
-        public void AddStatisticTrends()
+        public void CalculateStatisticTrends()
         {
             try
             {

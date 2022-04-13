@@ -46,12 +46,12 @@ namespace StudyBuddy.BusinessLogic
             return new ChallengeList() { Count = count, Objects = objects };
         }
 
-        public ChallengeList GetAcceptedChallenges()
+        public ChallengeList GetAcceptedChallenges(int user_id)
         {
-            if (backend.CurrentUser == null)
+            /*if (backend.CurrentUser == null)
                 throw new UnauthorizedAccessException("Unauthorized!");
-
-            var objects = backend.Repository.Challenges.Accepted(backend.CurrentUser.ID);
+            */
+            var objects = backend.Repository.Challenges.Accepted(user_id);
             return new ChallengeList()
             {
                 Count = objects.Count(),

@@ -16,10 +16,16 @@ namespace StudyBuddy.App.Api
             this.api = api;
             this.base_url = base_url;
         }
-                
-        public async Task<UserStatistics> GetUserStatistics()
+
+        
+        public async Task<UserStatistics> GetUserStatistics(int userId)
         {
-            return await GetUserStatisticsForUser(api.Authentication.CurrentUser.ID);
+            var rh = new WebRequestHelper(api.Authentication.Token);
+            var obj = await rh.Load<UserStatistics>(base_url + "Statistics/" + userId, HttpMethod.Get);
+            if (obj == null)
+                return null;
+
+            return obj;
         }
 
         public async Task<UserStatistics> GetUserStatisticsForUser(int userId)

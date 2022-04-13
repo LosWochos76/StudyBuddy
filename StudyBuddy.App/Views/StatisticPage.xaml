@@ -84,158 +84,97 @@
     </ContentPage.Resources>
 
     <RefreshView IsRefreshing="{Binding IsRefreshing}" 
-                     Command="{Binding RefreshCommand}">            
+                     Command="{Binding RefreshCommand}">
         <ScrollView>
 
-        <StackLayout Orientation="Vertical">
+            <StackLayout Orientation="Vertical">
+                <Label Margin="5" Text="Punkte"></Label>
                 <Frame Style="{StaticResource FrameStyle}"
                        BackgroundColor="{StaticResource WindowBackgroundColor}"
                        Margin="4">
-                <StackLayout Orientation="Vertical">
+                    <StackLayout Orientation="Vertical">
                         <StackLayout Orientation="Horizontal" HorizontalOptions="Center">
                             <Label Style="{StaticResource TotalPointsLabelStyle}" HorizontalOptions="CenterAndExpand" HorizontalTextAlignment="Center" Text="{Binding UserStatistics.TotalPoints}"></Label>
-                            <Image>
-                                <Image.Source>
-                                    <FontImageSource Size="Medium" FontFamily="{StaticResource FontAwesomeSolid}"
-                                                Glyph="{x:Static fontAwesome:FontAwesomeIcons.AngleUp}" 
-                                                Color="Green"/>
-                                </Image.Source>
-                            </Image>
                         </StackLayout>
                         <Label Style="{StaticResource InvertedTextColor}" HorizontalOptions="CenterAndExpand" HorizontalTextAlignment="Center" Text="Punkte Gesamt"></Label>
-                    <StackLayout Margin="0,15,15,0" HorizontalOptions="FillAndExpand" Orientation="Horizontal">
+                        <StackLayout Margin="0,15,15,0" HorizontalOptions="FillAndExpand" Orientation="Horizontal">
                             <StackLayout HorizontalOptions="CenterAndExpand" Orientation="Vertical">
                                 <StackLayout HorizontalOptions="Center" Orientation="Horizontal">
                                     <Label Style="{StaticResource NetworkPointsLabelStyle}" HorizontalTextAlignment="Center" Text="{Binding UserStatistics.TotalNetworkChallengesPoints}" ></Label>
-                                    <Image>
-                                        <Image.Source>
-                                            <FontImageSource Size="Small" FontFamily="{StaticResource FontAwesomeSolid}"
-                                                Glyph="{x:Static fontAwesome:FontAwesomeIcons.AngleUp}" 
-                                                Color="Green"/>
-                                        </Image.Source>
-                                    </Image>
                                 </StackLayout>
                                 <Label Style="{StaticResource InvertedTextColor}"
                                        HorizontalTextAlignment="Center" Text="Networking"></Label>
-                        </StackLayout>
-                        <StackLayout HorizontalOptions="CenterAndExpand" Orientation="Vertical">
+                            </StackLayout>
+                            <StackLayout HorizontalOptions="CenterAndExpand" Orientation="Vertical">
                                 <StackLayout HorizontalOptions="Center" Orientation="Horizontal">
                                     <Label Style="{StaticResource OrganizingPointsLabelStyle}" HorizontalTextAlignment="Center" Text="{Binding UserStatistics.TotalOrganizingChallengesPoints}"></Label>
-                                    <Image>
-                                        <Image.Source>
-                                            <FontImageSource Size="Small" FontFamily="{StaticResource FontAwesomeSolid}"
-                                                Glyph="{x:Static fontAwesome:FontAwesomeIcons.Equal}" 
-                                                Color="Black"/>
-                                        </Image.Source>
-                                    </Image>
                                 </StackLayout>
                                 <Label Style="{StaticResource InvertedTextColor}"
                                        HorizontalTextAlignment="Center"  Text="Organizing"></Label>
-                        </StackLayout>
-                        <StackLayout HorizontalOptions="CenterAndExpand" Orientation="Vertical">
+                            </StackLayout>
+                            <StackLayout HorizontalOptions="CenterAndExpand" Orientation="Vertical">
                                 <StackLayout HorizontalOptions="Center" Orientation="Horizontal">
                                     <Label Style="{StaticResource LearningPointsLabelStyle}" HorizontalTextAlignment="Center" Text="{Binding UserStatistics.TotalLearningChallengesPoints}"></Label>
-                                    <Image>
-                                        <Image.Source>
-                                        <FontImageSource Size="Small" FontFamily="{StaticResource FontAwesomeSolid}"
-                                                Glyph="{x:Static fontAwesome:FontAwesomeIcons.AngleDown}" 
-                                                Color="#00ff00"/>
-                                    </Image.Source>
-                                    </Image>
                                 </StackLayout>
                                 <Label Style="{StaticResource InvertedTextColor}" HorizontalTextAlignment="Center" Text="Learning"></Label>
+                            </StackLayout>
                         </StackLayout>
                     </StackLayout>
-                </StackLayout>
-                    <Frame.GestureRecognizers>
-                        <TapGestureRecognizer Command="{Binding ShowHistoryCommad}"/>
-                    </Frame.GestureRecognizers>
-            </Frame>
-            <StackLayout HorizontalOptions="StartAndExpand" Orientation="Horizontal" BackgroundColor="Transparent">
-                <Frame Style="{StaticResource FrameStyle}" WidthRequest="200"
-                           BackgroundColor="{StaticResource WindowBackgroundColor}">
-                    <StackLayout HorizontalOptions="CenterAndExpand" Orientation="Vertical">
-                            <StackLayout Orientation="Horizontal" HorizontalOptions="Center">
-                                <Label HorizontalTextAlignment="Center" Style="{StaticResource TotalPointsLabelStyle}" Text="{Binding UserStatistics.TotalAcceptedChallenges}"></Label>
-                                <Image>
-                                    <Image.Source>
-                                        <FontImageSource Size="Small" FontFamily="{StaticResource FontAwesomeSolid}"
-                                                Glyph="{x:Static fontAwesome:FontAwesomeIcons.AngleUp}" 
-                                                Color="Green"/>
-                                    </Image.Source>
-                                </Image>
-                            </StackLayout>
-                            <Label Style="{StaticResource InvertedTextColor}"
-                                   HorizontalTextAlignment="Center" Text="Abgschlossene Herausforderungen"></Label>
-                    </StackLayout>
-                        <Frame.GestureRecognizers>
-                            <TapGestureRecognizer Command="{Binding AcceptedChallengesDetailsCommand}"/>
-                        </Frame.GestureRecognizers>
-                    </Frame>
-                <Frame Style="{StaticResource FrameStyle}" WidthRequest="200"
-                           BackgroundColor="{StaticResource WindowBackgroundColor}">
-                    <StackLayout HorizontalOptions="CenterAndExpand" Orientation="Vertical">
-                            <StackLayout Orientation="Horizontal" HorizontalOptions="Center">
-                                <Label HorizontalTextAlignment="Center" Style="{StaticResource TotalPointsLabelStyle}" Text="#5"></Label>
-                                <Image>
-                                    <Image.Source>
-                                        <FontImageSource Size="Small" FontFamily="{StaticResource FontAwesomeSolid}"
-                                                Glyph="{x:Static fontAwesome:FontAwesomeIcons.AngleDown}" 
-                                                Color="Red"/>
-                                    </Image.Source>
-                                </Image>
-                            </StackLayout>
-                            <Label Style="{StaticResource InvertedTextColor}"
-                                   HorizontalTextAlignment="Center" Text="Beste Platzierung"></Label>
-                    </StackLayout>
-                    <Frame.GestureRecognizers>
-                        <TapGestureRecognizer Command="{Binding RanksCommand}"/>
-                    </Frame.GestureRecognizers>
+                    
                 </Frame>
-            </StackLayout>
+                <Label Margin="5,0" Text="Herausforderungen"></Label>
                 <Frame Style="{StaticResource FrameStyle}"
-                       BackgroundColor="{StaticResource WindowBackgroundColor}">
-                    <StackLayout HorizontalOptions="FillAndExpand" Orientation="Vertical">
-                        <Label Style="{StaticResource InvertedTextColor}" HorizontalTextAlignment="Center" Text="Challenge Performance"></Label>
-                        <StackLayout Orientation="Horizontal">
-                            <StackLayout HorizontalOptions="FillAndExpand" Orientation="Vertical">
-                                <Label x:Name="LastMonthChallenge"  HorizontalTextAlignment="Center" Style="{StaticResource TotalPointsLabelStyle}" Text="{Binding UserStatistics.LastMonthChallengeCount}"></Label>
-                                <Label Style="{StaticResource InvertedTextColor}" HorizontalTextAlignment="Center" Text="letzter Monat"></Label>
-                            </StackLayout>
-                            <StackLayout HorizontalOptions="FillAndExpand" Orientation="Vertical">
-                                <StackLayout Orientation="Horizontal" HorizontalOptions="Center">
-                                    <Label HorizontalTextAlignment="Center" Style="{StaticResource TotalPointsLabelStyle}" Text="{Binding UserStatistics.ThisMonthChallengeCount}"></Label>
-                                    <Image>
-                                        <Image.Source >
-                                            <FontImageSource Size="Small" FontFamily="{StaticResource FontAwesomeSolid}"
-                                                Glyph="{Binding UserStatistics.MonthlyStatisticsTrend.Glyph}"
-                                                Color="{Binding UserStatistics.MonthlyStatisticsTrend.Color}"/>
-                                        </Image.Source>
-                                    </Image>
-                                </StackLayout>
-                                <Label Style="{StaticResource InvertedTextColor}" x:Name="thisMonthLabel" HorizontalTextAlignment="Center" Text="dieser Monat"></Label>
-                            </StackLayout>
-                            <StackLayout HorizontalOptions="FillAndExpand" Orientation="Vertical">
-                                <Label x:Name="LastWeekChallenge" HorizontalTextAlignment="Center" Style="{StaticResource TotalPointsLabelStyle}" Text="{Binding UserStatistics.LastWeekChallengeCount}"></Label>
-                                <Label Style="{StaticResource InvertedTextColor}" HorizontalTextAlignment="Center" Text="letzte Woche"></Label>
-                            </StackLayout>
-                            <StackLayout HorizontalOptions="FillAndExpand" Orientation="Vertical">
-                                <StackLayout Orientation="Horizontal" HorizontalOptions="Center">
-                                    <Label x:Name="ThisWeekChallenge" HorizontalTextAlignment="Center" Style="{StaticResource TotalPointsLabelStyle}" Text="{Binding UserStatistics.ThisWeekChallengeCount}"></Label>
-                                    <Image>
-                                        <Image.Source>
-                                            <FontImageSource Size="Small" FontFamily="{StaticResource FontAwesomeSolid}"
+                       BackgroundColor="{StaticResource WindowBackgroundColor}"
+                       Margin="4">
+                    <StackLayout Orientation="Vertical">
+                        <StackLayout Orientation="Horizontal" HorizontalOptions="Center">
+                            <Label Style="{StaticResource TotalPointsLabelStyle}" HorizontalOptions="CenterAndExpand" 
+                                   HorizontalTextAlignment="Center" 
+                                   Text="{Binding UserStatistics.TotalAcceptedChallenges}"></Label>
+                            <Image>
+                                <Image.Source>
+                                    <FontImageSource Size="Small" FontFamily="{StaticResource FontAwesomeSolid}"
                                                 Glyph="{Binding UserStatistics.WeeklyStatisticsTrend.Glyph}" 
                                                 Color="{Binding UserStatistics.WeeklyStatisticsTrend.Color}"/>
-                                        </Image.Source>
-                                    </Image>
+                                </Image.Source>
+                            </Image>
+                        </StackLayout>
+                        <Label Style="{StaticResource InvertedTextColor}" HorizontalOptions="CenterAndExpand" 
+                               HorizontalTextAlignment="Center" Text="Abeschlossene Herausforderungen"></Label>
+                        <StackLayout Margin="0,15,15,0" HorizontalOptions="FillAndExpand" Orientation="Horizontal">
+                            <StackLayout HorizontalOptions="CenterAndExpand" Orientation="Vertical">
+                                <StackLayout HorizontalOptions="Center" Orientation="Horizontal">
+                                    <Label Style="{StaticResource NetworkPointsLabelStyle}" HorizontalTextAlignment="Center" 
+                                           Text="{Binding UserStatistics.TotalNetworkChallengesCount}" ></Label>
                                 </StackLayout>
-                                <Label Style="{StaticResource InvertedTextColor}" HorizontalTextAlignment="Center" Text="diese Woche"></Label>
+                                <Label Style="{StaticResource InvertedTextColor}"
+                                       HorizontalTextAlignment="Center" Text="Networking"></Label>
+                            </StackLayout>
+                            <StackLayout HorizontalOptions="CenterAndExpand" Orientation="Vertical">
+                                <StackLayout HorizontalOptions="Center" Orientation="Horizontal">
+                                    <Label Style="{StaticResource OrganizingPointsLabelStyle}" HorizontalTextAlignment="Center" 
+                                           Text="{Binding UserStatistics.TotalOrganizingChallengesCount}"></Label>
+                                </StackLayout>
+                                <Label Style="{StaticResource InvertedTextColor}"
+                                       HorizontalTextAlignment="Center"  Text="Organizing"></Label>
+                            </StackLayout>
+                            <StackLayout HorizontalOptions="CenterAndExpand" Orientation="Vertical">
+                                <StackLayout HorizontalOptions="Center" Orientation="Horizontal">
+                                    <Label Style="{StaticResource LearningPointsLabelStyle}" HorizontalTextAlignment="Center" 
+                                           Text="{Binding UserStatistics.TotalLearningChallengesCount}"></Label>
+                                </StackLayout>
+                                <Label Style="{StaticResource InvertedTextColor}" HorizontalTextAlignment="Center" 
+                                       Text="Learning"></Label>
                             </StackLayout>
                         </StackLayout>
                     </StackLayout>
+                    <Frame.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding AcceptedChallengesDetailsCommand}"/>
+                    </Frame.GestureRecognizers>
                 </Frame>
 
-            </StackLayout></ScrollView>
+            </StackLayout>
+            
+        </ScrollView>
     </RefreshView>
 </ContentPage>

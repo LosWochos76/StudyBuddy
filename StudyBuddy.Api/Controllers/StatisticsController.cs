@@ -14,7 +14,7 @@ namespace StudyBuddy.Api.Controllers
 
         [Route("/Statistics/{user_id}")]
         [HttpGet]
-        public IActionResult GetAcceptedChallenges(int user_id)
+        public IActionResult GetUserStatistics(int user_id)
         {
             return Json(backend.StatisticsService.GetUserStatistics(user_id));
         }

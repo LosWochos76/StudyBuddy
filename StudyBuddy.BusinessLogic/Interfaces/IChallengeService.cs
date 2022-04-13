@@ -21,6 +21,7 @@ namespace StudyBuddy.BusinessLogic
         void AddAcceptance(int challenge_id, int user_id);
         void Accept(int challenge_id);
         bool AcceptWithAddendum(int challenge_id, string prove_addendum);
+        ChallengeList GetAcceptedChallenges(int user_id);
 
         // Misc
         void CreateSeries(CreateSeriesParameter param);

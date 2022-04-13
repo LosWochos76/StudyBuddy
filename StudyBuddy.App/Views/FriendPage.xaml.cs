@@ -14,7 +14,8 @@ namespace StudyBuddy.App.Views
         {
             InitializeComponent();
 
-            var parms = NamedParameterOverloads.FromIDictionary(new Dictionary<string, object>() { { "obj", obj }, { "userStatistics", userStatistics } });
+            var parms = NamedParameterOverloads.FromIDictionary(new Dictionary<string, object>() 
+            { { "obj", obj }, { "userStatistics", userStatistics } });
             view_model = TinyIoCContainer.Current.Resolve<FriendViewModel>(parms);
             BindingContext = view_model;
         }

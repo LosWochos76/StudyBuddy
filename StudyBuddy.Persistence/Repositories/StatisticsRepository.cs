@@ -8,14 +8,39 @@ namespace StudyBuddy.Persistence
 {
     internal class StatisticsRepository : IStatisticsRepository
     {
-        private readonly string connection_string;
-
         public UserStatistics Statistics { get; set; }
+        
+        private readonly string connection_string;
+        
         public StatisticsRepository(string connection_string)
         {
             this.connection_string = connection_string;
         }
 
+        public UserStatistics GetUserStatistics(int user_id)
+        {
+            AddChallengeStatistics(user_id); 
+            
+            AddChallengeHistory(user_id);
+            Statistics.CalculateStatisticTrends();
+            return Statistics;
+        }
+
+        private void AddChallengeStatistics(int user_id)
+        {
+            var qh = new QueryHelper<ChallengeStatisticsDto>(connection_string, ChallengeStatisticsReader);
+
+            qh.AddParameter(":user_id", user_id);
+
+            var sql = "select category, sum(points), count(category) from challenge_acceptance " +
+                "inner join challenges on challenge_id = id where user_id = :user_id group by category";
+
+            var challengeStatisticsDtoList = qh.ExecuteQueryToObjectList(sql);
+            Statistics = TransformDto(challengeStatisticsDtoList);
+            
+        }
+
+        /*
         public UserStatistics GetUserStatistics(int user_id)
         {
             var qh = new QueryHelper<ChallengeStatisticsDto>(connection_string, ChallengeStatisticsReader);
@@ -34,7 +59,7 @@ namespace StudyBuddy.Persistence
             Statistics.AddStatisticTrends();
             return Statistics;
         }
-
+        */
 
         public void AddChallengeHistory(int user_id)
         {
@@ -44,20 +69,35 @@ namespace StudyBuddy.Persistence
 
             var sql = "Select " +
                     "count(case when created > NOW() - interval '2 week' and created < NOW() - interval '1 week' then 1 end) as count_last_week, " +
-                    "count(case when created > NOW() - interval '1 week' and created < NOW() then 1 end) as count_current_week, " +
-                    "count(case when created > NOW() - interval '2 month' and created < NOW() - interval '1 month' then 1 end) as count_last_month, " +
-                    "count(case when created > NOW() - interval '1 month' and created < NOW() then 1 end) as count_this_month " +
+                    "count(case when created > NOW() - interval '1 week' and created < NOW() then 1 end) as count_current_week " +
                     "from challenge_acceptance where user_id = :user_id";
 
             var result = qh.ExecuteQueryToSingleObject(sql);
         }
 
+
+        //public void AddChallengeHistory(int user_id)
+        //{
+        //    var qh = new QueryHelper<UserStatistics>(connection_string, ChallengeHistoryReader);
+
+        //    qh.AddParameter(":user_id", user_id);
+
+        //    var sql = "Select " +
+        //            "count(case when created > NOW() - interval '2 week' and created < NOW() - interval '1 week' then 1 end) as count_last_week, " +
+        //            "count(case when created > NOW() - interval '1 week' and created < NOW() then 1 end) as count_current_week, " +
+        //            "count(case when created > NOW() - interval '2 month' and created < NOW() - interval '1 month' then 1 end) as count_last_month, " +
+        //            "count(case when created > NOW() - interval '1 month' and created < NOW() then 1 end) as count_this_month " +
+        //            "from challenge_acceptance where user_id = :user_id";
+
+        //    var result = qh.ExecuteQueryToSingleObject(sql);
+        //}
+
         public UserStatistics ChallengeHistoryReader(NpgsqlDataReader reader)
         { 
             Statistics.LastWeekChallengeCount = reader.GetInt32(0);
             Statistics.ThisWeekChallengeCount = reader.GetInt32(1);
-            Statistics.LastMonthChallengeCount = reader.GetInt32(2);
-            Statistics.ThisMonthChallengeCount = reader.GetInt32(3);
+            //Statistics.LastMonthChallengeCount = reader.GetInt32(2);
+            //Statistics.ThisMonthChallengeCount = reader.GetInt32(3);
 
             return Statistics;
         }

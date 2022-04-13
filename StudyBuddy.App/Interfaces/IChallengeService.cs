@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using StudyBuddy.App.ViewModels;
+using StudyBuddy.Model;
 
 namespace StudyBuddy.App.Api
 {

@@ -37,14 +37,12 @@ namespace StudyBuddy.App.Api
         
         public async Task<ChallengeListViewModel> GetAcceptedChallenges()
         {
-            var filter = new ChallengeFilter()
-            {
-                OnlyUnacceped = false
-            };
-
             var rh = new WebRequestHelper(api.Authentication.Token);
             var currentUserId = api.Authentication.CurrentUser.ID;
-            return await rh.Get<ChallengeListViewModel>(base_url + "Challenge/Accepted/" + currentUserId , filter);
+            //var t = await rh.Get<ChallengeListViewModel>(base_url + "Challenge/Accepted/" + currentUserId, filter);
+            var t = await rh.Load<ChallengeListViewModel>(base_url + "Challenge/Accepted/" + currentUserId, HttpMethod.Get);
+                        
+            return t;
         }
         
         public async Task<ChallengeViewModel> AcceptFromQrCode(string code)
@@ -80,5 +78,6 @@ namespace StudyBuddy.App.Api
 
             return status;
         }
+
     }
 }

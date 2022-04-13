@@ -128,7 +128,7 @@ namespace StudyBuddy.Api
         [HttpGet]
         public IActionResult GetAllAcceptedChallengesForUser(int user_id)
         {
-            var result = backend.Repository.Challenges.Accepted(user_id);
+            var result = backend.ChallengeService.GetAcceptedChallenges(user_id);
             return Json(result);
         }
     }

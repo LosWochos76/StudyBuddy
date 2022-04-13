@@ -18,6 +18,10 @@ namespace StudyBuddy.Test.Mocks
         public IStatisticsService Statistics { get; }
         public IImageService ImageService { get; set; }
 
+        public Version App_Version => throw new NotImplementedException();
+
+        public Version Api_Version => throw new NotImplementedException();
+
         public ApiMock()
         {
             Authentication = new AuthenticationServiceMock();

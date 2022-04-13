@@ -77,7 +77,8 @@ namespace StudyBuddy.App.ViewModels
         {
             try
             {
-                UserStatistics = await api.Statistics.GetUserStatistics();
+                UserStatistics = await api.Statistics.GetUserStatistics(api.Authentication.CurrentUser.ID);
+                UserStatistics.CalculateStatisticTrends();
             }
             catch (System.Exception)
             {

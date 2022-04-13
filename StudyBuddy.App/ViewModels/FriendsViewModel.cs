@@ -141,7 +141,7 @@ namespace StudyBuddy.App.ViewModels
             if (SelectedUser == null)
                 return;
 
-            var userStatistics = await api.Statistics.GetUserStatisticsForUser(SelectedUser.ID);
+            var userStatistics = await api.Statistics.GetUserStatistics(SelectedUser.ID);
             await Navigation.Push(new FriendPage(SelectedUser, userStatistics));
             SelectedUser = null;
             NotifyPropertyChanged(nameof(SelectedUser));

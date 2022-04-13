@@ -34,7 +34,7 @@ namespace StudyBuddy.Persistence
             qh.AddParameter(":from", filter.Start);
             
             var sql = new StringBuilder("select id,name,description,points,validity_start,validity_end,category," +
-                "owner_id,created,prove,series_parent_id,tags_of_challenge(id),prove_addendum from challenges where true ");
+                "owner_id,created,prove,series_parent_id,tags_of_challenge(id),prove_addendum from challenges where true");
 
             ApplyFilter(qh, sql, filter);
             sql.Append(" order by validity_start,validity_end,created,name limit :max offset :from");
@@ -179,7 +179,7 @@ namespace StudyBuddy.Persistence
 
             return qh.ExecuteQueryToObjectList(sql);
         }
-
+        
         private void CreateChallengesTable()
         {
             var rh = new RevisionHelper(connection_string, "challenges");
@@ -245,7 +245,7 @@ namespace StudyBuddy.Persistence
                 qh.ExecuteNonQuery(
                     "create table challenge_acceptance (" +
                     "user_id int not null," +
-                    "challenge_id int not null, " +
+                    "challenge_id int not null, " + 
                     "created date not null," +
                     "unique (user_id, challenge_id))");
         }

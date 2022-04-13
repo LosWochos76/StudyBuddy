@@ -12,7 +12,8 @@ namespace StudyBuddy.App.ViewModels
         public IAsyncCommand RemoveFriendCommand { get; set; }
         public UserStatistics UserStatistics { get; set; }
 
-        public FriendViewModel(IApi api, IDialogService dialog, INavigationService navigation, UserViewModel obj, UserStatistics userStatistics) : base(api, dialog, navigation)
+        public FriendViewModel(IApi api, IDialogService dialog, INavigationService navigation, 
+            UserViewModel obj, UserStatistics userStatistics) : base(api, dialog, navigation)
         {
             User = obj;
             UserStatistics = userStatistics;

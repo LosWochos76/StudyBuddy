@@ -20,7 +20,6 @@ namespace StudyBuddy.App.Views
         protected override void OnAppearing()
         {
             base.OnAppearing();
-            view_model.Refresh();
 
             if(BindingContext is StatisticsViewModel vm)
             {

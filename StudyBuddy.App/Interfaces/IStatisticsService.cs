@@ -6,7 +6,7 @@ namespace StudyBuddy.App.Interfaces
 {
     public interface IStatisticsService
     {
-        Task<UserStatistics> GetUserStatistics();
+        Task<UserStatistics> GetUserStatistics(int userId);
         Task<UserStatistics> GetUserStatisticsForUser(int userId);
     }
 }
