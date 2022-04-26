@@ -4,15 +4,23 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="StudyBuddy.App.Views.NoConnectionPage">
     <ContentPage.Content>
-        <StackLayout>
+        <StackLayout 
+            VerticalOptions="Center"
+            HorizontalOptions="Center">
             <Label Text="Huch!"
                    FontSize="28"
-                   VerticalOptions="Center"
-                   HorizontalOptions="Center"
-                   Margin="0,30,0,0"/>
+                   HorizontalOptions="Center"/>
             <Label Text="Keine Internetverbindung gefunden. Überprüfen Sie Ihre Verbindung und versuchen Sie es erneut!"
                    FontSize="20"
-                   Margin="24"/>
+                   Margin="24,24,24,54"/>
+            <Button Text="App schließen"
+                    Clicked="ButtonRestart_OnClicked"
+                    Margin="24,0,24,0"
+                    FontAttributes="Bold"
+                    FontSize="17"
+                    HeightRequest="45"
+                    BackgroundColor="{StaticResource PrimaryAccent}"
+                    TextColor="{StaticResource WindowBackgroundColor}"/>
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>
