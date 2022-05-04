@@ -5,7 +5,7 @@
              xmlns:viewmodels="clr-namespace:StudyBuddy.App.ViewModels"
              xmlns:fontAwesome="clr-namespace:StudyBuddy.App"
              x:DataType="viewmodels:TotalBadgeViewModel"
-             x:Name="Page"
+             x:Name="page"
              Visual="Default">
     <ContentPage.Resources>
         <Style TargetType="Grid">

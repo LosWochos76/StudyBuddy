@@ -1,6 +1,7 @@
 ﻿using System.Threading.Tasks;
 using StudyBuddy.App.ViewModels;
-namespace StudyBuddy.App.Api
+
+namespace StudyBuddy.App.Interfaces
 {
     public interface IBadgeService
     {

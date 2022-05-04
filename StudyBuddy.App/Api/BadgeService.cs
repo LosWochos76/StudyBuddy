@@ -1,5 +1,7 @@
 ﻿using System.Net.Http;
 using System.Threading.Tasks;
+using StudyBuddy.App.Interfaces;
+using StudyBuddy.App.Misc;
 using StudyBuddy.App.ViewModels;
 using StudyBuddy.Model;
 
@@ -9,11 +11,13 @@ namespace StudyBuddy.App.Api
     {
         private readonly IApi api;
         private readonly string base_url;
+        private readonly HttpClient client;
 
         public BadgeService(IApi api, string base_url)
         {
             this.api = api;
             this.base_url = base_url;
+            client = new HttpClient(Helper.GetInsecureHandler());
         }
         private async Task<GameBadgeListViewModel> All(GameBadgeFilter filter)
         {
@@ -27,14 +31,14 @@ namespace StudyBuddy.App.Api
         }
         public async Task<GameBadgeListViewModel> Accepted(string search_string = "", int skip = 0)
         {
-            var current_user = api.Authentication.CurrentUser;
+            var currentUser = api.Authentication.CurrentUser;
             var filter = new GameBadgeFilter()
             {
                 OnlyReceived = true,
                 SearchText = search_string,
                 Count = 10,
                 Start = skip,
-                CurrentUserId = current_user == null ? 0 : current_user.ID
+                CurrentUserId = currentUser == null ? 0 : currentUser.ID
             };
 
             return await All(filter);
