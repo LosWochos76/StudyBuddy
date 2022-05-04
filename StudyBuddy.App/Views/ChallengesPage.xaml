@@ -31,7 +31,6 @@
                HeightRequest="50"
                FontSize="18"
                FontAttributes="Bold" />
-
     </Shell.TitleView>
 
     <ContentPage.ToolbarItems>

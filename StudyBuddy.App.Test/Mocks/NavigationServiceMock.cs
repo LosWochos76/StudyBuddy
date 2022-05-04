@@ -32,5 +32,10 @@ namespace StudyBuddy.Test.Mocks
         {
             return last_page;
         }
+
+        public Task Modal(Page page)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }
