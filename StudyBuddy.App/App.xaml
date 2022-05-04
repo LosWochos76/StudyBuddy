@@ -51,6 +51,7 @@
             <Color x:Key="SystemGray4Dark">#3A3A3C</Color>
             <Color x:Key="SystemGray5Dark">#2C2C2E</Color>
             <Color x:Key="SystemGray6Dark">#1C1C1E</Color>
+            <Color x:Key="TransparentTest">#00FFFFFF</Color>
 
             <Style TargetType="ContentPage" ApplyToDerivedTypes="True">
                 <Setter Property="BackgroundColor"

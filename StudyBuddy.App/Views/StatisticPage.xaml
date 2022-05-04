@@ -32,7 +32,7 @@
 
             <Style TargetType="Frame" x:Key="FrameStyle">
                 <Setter Property="CornerRadius" Value="15"/>
-                <Setter Property="BorderColor" Value="{OnPlatform Android={StaticResource SystemGray4}, iOS={StaticResource Transparent}}"/>
+                <Setter Property="BorderColor" Value="{OnPlatform Android={StaticResource SystemGray4}, iOS={StaticResource TransparentTest}}"/>
                 <Setter Property="BackgroundColor" Value="{Binding ThemeColor}"/>
             </Style>
         </ResourceDictionary>
