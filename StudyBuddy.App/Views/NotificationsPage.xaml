@@ -44,7 +44,7 @@
                                            Padding="4, 8, 4, 8"
                                            HeightRequest="400">
 
-                                        <FlexLayout Direction="Column">
+                                        <FlexLayout Direction="Column" HeightRequest="400">
                                             <StackLayout Orientation="Horizontal">
                                                 <xct:AvatarView Size="48"
                                                                 VerticalOptions="Center"
@@ -65,12 +65,16 @@
                                                 </StackLayout>
                                             </StackLayout>
 
+                                            <FlexLayout />
+
+
                                             <FlexLayout
                                                 JustifyContent="Center"
                                                 AlignItems="Center"
                                                 FlexLayout.Grow="1">
-                                                <Label Text="Badge?" />
+                                                <Label IsVisible="{Binding ShowText}" Text="{Binding Body}" />
                                             </FlexLayout>
+
 
                                             <FlexLayout Direction="Row" HeightRequest="24"
                                                         JustifyContent="SpaceBetween">
@@ -118,6 +122,8 @@
                                                     Padding="0"
                                                     FontSize="12"
                                                     Background="Transparent"
+                                                    Command="{Binding ShareNotificationCommand}"
+
                                                     Text="➡️ Share" />
 
 

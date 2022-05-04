@@ -1,3 +1,4 @@
+using System;
 using Xamarin.Forms.Xaml;
 
 namespace StudyBuddy.App.Views
@@ -8,6 +9,11 @@ namespace StudyBuddy.App.Views
         public NoConnectionPage()
         {
             InitializeComponent();
+        }
+
+        private void ButtonRestart_OnClicked(object sender, EventArgs e)
+        {
+            System.Diagnostics.Process.GetCurrentProcess().CloseMainWindow();
         }
     }
 }

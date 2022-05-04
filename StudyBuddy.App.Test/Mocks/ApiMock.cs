@@ -25,6 +25,7 @@ namespace StudyBuddy.Test.Mocks
         public NotificationUserMetadataService NotificationUserMetadataService { get; }
         public IStatisticsService Statistics { get; }
         public IImageService ImageService { get; set; }
+        public CommentService CommentService { get; set; }
 
         public Version AppVersion { get; } = new Version(0, 0, 0, 0);
         public Version ApiVersion { get; } = new Version(0, 0, 0, 0);
