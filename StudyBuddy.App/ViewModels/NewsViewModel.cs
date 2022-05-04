@@ -4,6 +4,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using StudyBuddy.App.Annotations;
 using StudyBuddy.Model;
+using Xamarin.Essentials;
 using Xamarin.Forms;
 
 namespace StudyBuddy.App.ViewModels
@@ -17,7 +18,11 @@ namespace StudyBuddy.App.ViewModels
             LikedUsers.AddRange(notification.LikedUsers.Select(item => UserViewModel.FromModel(item)));
 
             Comments.CollectionChanged += (sender, args) => { OnPropertyChanged("NumberOfCommentsText"); };
+
+            ShareNotificationCommand = new Command(ShareNotification);
         }
+
+        public Command ShareNotificationCommand { get; set; }
 
 
         public RangeObservableCollection<CommentViewModel> Comments { get; set; } = new();
@@ -78,6 +83,10 @@ namespace StudyBuddy.App.ViewModels
             }
         }
 
+        public string Body => Notification.Body;
+
+        public bool ShowText => string.IsNullOrEmpty(Notification.Body);
+
         public string LikeButtonText
         {
             get
@@ -89,6 +98,15 @@ namespace StudyBuddy.App.ViewModels
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
+
+        public void ShareNotification()
+        {
+            Share.RequestAsync(new ShareTextRequest
+            {
+                Title = Notification.Title,
+                Text = Notification.Body
+            });
+        }
 
 
         public Notification ToNotification()
