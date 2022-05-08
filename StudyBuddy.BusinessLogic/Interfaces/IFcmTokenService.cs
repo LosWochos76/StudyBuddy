@@ -5,7 +5,8 @@ namespace StudyBuddy.BusinessLogic
 {
     public interface IFcmTokenService
     {
-        IEnumerable<FcmToken> All();
+        IEnumerable<FcmToken> GetAll();
+        IEnumerable<FcmToken> GetForUser(int userId);
         FcmToken Save(FcmTokenSaveDto fcmToken);
     }
 }

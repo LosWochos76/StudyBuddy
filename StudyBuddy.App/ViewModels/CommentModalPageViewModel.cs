@@ -15,14 +15,16 @@ namespace StudyBuddy.App.ViewModels
         private readonly NewsViewModel _newsViewModel;
         private string _createCommentText = "";
 
-
-        public CommentModalPageViewModel(NewsViewModel viewModel)
+        public CommentModalPageViewModel(NewsViewModel viewModel, CollectionView commentCollectionView)
         {
+            CommentCollectionView = commentCollectionView;
             _newsViewModel = viewModel;
             _api = TinyIoCContainer.Current.Resolve<IApi>();
-            Comments = viewModel.Comments;
             CreateCommentCommand = new Command(CreateComment);
         }
+
+        public CollectionView CommentCollectionView { get; set; }
+
 
         public Command CreateCommentCommand { get; set; }
 
@@ -37,7 +39,7 @@ namespace StudyBuddy.App.ViewModels
         }
 
 
-        public RangeObservableCollection<CommentViewModel> Comments { get; set; }
+        public RangeObservableCollection<CommentViewModel> Comments => _newsViewModel.Comments;
 
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -50,11 +52,15 @@ namespace StudyBuddy.App.ViewModels
                 Text = CreateCommentText
             });
 
-            Comments.Insert(0, new CommentViewModel(new Comment
+            Comments.Add(new CommentViewModel(new Comment
             {
                 Owner = _api.Authentication.CurrentUser,
-                Text = CreateCommentText
+                Text = CreateCommentText,
+                NotificationId = _newsViewModel.Id
             }));
+
+            CommentCollectionView.ScrollTo(Comments.Count - 1);
+            CreateCommentText = "";
         }
 
         [NotifyPropertyChangedInvocator]

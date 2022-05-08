@@ -7,7 +7,6 @@ namespace StudyBuddy.App.Misc
     {
         Task GoTo(string path);
         Task Push(Page page);
-        Task Modal(Page page);
         Task Pop();
     }
 }

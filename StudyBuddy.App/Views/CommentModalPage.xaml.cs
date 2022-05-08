@@ -10,7 +10,8 @@ namespace StudyBuddy.App.Views
         public CommentModalPage(NewsViewModel viewModel)
         {
             InitializeComponent();
-            BindingContext = new CommentModalPageViewModel(viewModel);
+            Title = "Kommentare"; 
+            BindingContext = new CommentModalPageViewModel(viewModel, CommentCollectionView);
         }
     }
 }

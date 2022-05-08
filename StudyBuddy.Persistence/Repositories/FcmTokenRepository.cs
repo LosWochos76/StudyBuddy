@@ -16,7 +16,7 @@ namespace StudyBuddy.Persistence
             CreateTable();
         }
 
-        public IEnumerable<FcmToken> OfUser(int user_id, int from = 0, int max = 1000)
+        public IEnumerable<FcmToken> ForUser(int user_id, int from = 0, int max = 1000)
         {
             var qh = new QueryHelper<FcmToken>(connection_string, FromReader);
             qh.AddParameter(":from", from);
@@ -27,7 +27,7 @@ namespace StudyBuddy.Persistence
                 "FROM fcm_tokens where user_id=:user_id order by created limit :max offset :from");
         }
 
-        public IEnumerable<FcmToken> All(int from = 0, int max = 1000)
+        public IEnumerable<FcmToken> GetAll(int from = 0, int max = 1000)
         {
             var qh = new QueryHelper<FcmToken>(connection_string, FromReader, new {from, max});
             return qh.ExecuteQueryToObjectList(
@@ -39,14 +39,10 @@ namespace StudyBuddy.Persistence
         {
             var existingToken = GetByToken(obj.Token);
 
-            if (existingToken is null) 
-            {
+            if (existingToken is null)
                 Insert(obj);
-            }
             else
-            {
                 Update(existingToken);
-            }
 
             return obj;
         }
@@ -77,6 +73,13 @@ namespace StudyBuddy.Persistence
                 "insert into fcm_tokens (user_id,token,created,last_seen) values (:user_id,:token,:created,:last_seen) RETURNING id");
         }
 
+        public void DeleteOldTokens()
+        {
+            var qh = new QueryHelper<FcmToken>(connection_string, FromReader);
+            qh.ExecuteScalar(
+                "delete from fcm_tokens WHERE last_seen < NOW() - INTERVAL '60 days'");
+        }
+
         public void Update(FcmToken obj)
         {
             var qh = new QueryHelper<FcmToken>(connection_string, FromReader);
@@ -90,13 +93,12 @@ namespace StudyBuddy.Persistence
             qh.ExecuteNonQuery("update fcm_tokens set token=:token,created=:created,last_seen=:last_seen where id=:id");
         }
 
-        public FcmToken GetByToken(String token)
+        public FcmToken GetByToken(string token)
         {
             var qh = new QueryHelper<FcmToken>(connection_string, FromReader);
             qh.AddParameter(":token", token);
 
             return qh.ExecuteQueryToSingleObject("select * from fcm_tokens where token=:token");
-
         }
 
         private FcmToken FromReader(NpgsqlDataReader reader)

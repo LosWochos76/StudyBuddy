@@ -289,7 +289,8 @@ namespace StudyBuddy.BusinessLogic
                     {
                         backend.Repository.GameBadges.AddBadgeToUser(current_user.ID, badge.ID);
                         // ToDo: Neuigkeit erzeugen! 
-                        backend.NotificationService.CreateNotificationForUser(current_user.ID, "ChallengeAccepted",  current_user.Nickname + "hat die Challenge accepted.");
+                        
+                        backend.NotificationService.CreateNotificationForUser(current_user.ID, "ChallengeAccepted",  $"{current_user.Firstname} {current_user.Lastname} hat die Challenge {obj.Name} abgeschlossen.", badge.ID);
 
                     }
                 }

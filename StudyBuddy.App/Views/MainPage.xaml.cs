@@ -1,5 +1,8 @@
-﻿using StudyBuddy.App.ViewModels;
+﻿using System.Diagnostics;
+using Plugin.FirebasePushNotification;
+using StudyBuddy.App.ViewModels;
 using TinyIoC;
+using Xamarin.Essentials;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -16,6 +19,10 @@ namespace StudyBuddy.App.Views
             Routing.RegisterRoute(nameof(AddFriendPage), typeof(AddFriendPage));
             Routing.RegisterRoute(nameof(QrCodePage), typeof(QrCodePage));
             BindingContext = TinyIoCContainer.Current.Resolve<MainViewModel>();
+         
+             
+      
+    
         }
     }
 }

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using StudyBuddy.Model;
 using StudyBuddy.Model.Filter;
 
@@ -20,6 +21,11 @@ namespace StudyBuddy.BusinessLogic.Services
 
         public void CreateComment(CommentInsert insert)
         {
+
+
+            var notification = backend.NotificationService.GetNotificationById(insert.NotificationId);
+            backend.PushNotificationService.SendUserCommentNotification(notification.OwnerId);
+
             backend.Repository.CommentsRepository.Insert(new CommentInsert
             {
                 OwnerId = backend.CurrentUser.ID,
@@ -27,5 +33,7 @@ namespace StudyBuddy.BusinessLogic.Services
                 Text = insert.Text
             });
         }
+
+
     }
 }

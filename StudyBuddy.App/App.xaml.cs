@@ -18,15 +18,19 @@ namespace StudyBuddy.App
             {
                 SetupServices();
                 MainPage = new MainPage();
-            }else 
+            }
+            else
             {
                 MainPage = new NoConnectionPage();
-                Current.MainPage.DisplayAlert("Achtung!", $"Es wurde keine Internetverbindung gefunden!\nVerbindungstyp: {Connectivity.NetworkAccess.ToString()}", "Ok");
+                Current.MainPage.DisplayAlert("Achtung!",
+                    $"Es wurde keine Internetverbindung gefunden!\nVerbindungstyp: {Connectivity.NetworkAccess.ToString()}",
+                    "Ok");
             }
         }
 
         private void SetupServices()
         {
+            TinyIoCContainer.Current.Register<INavigationService>(new NagigationService());
             TinyIoCContainer.Current.Register<IApi>(new ApiFacade());
             TinyIoCContainer.Current.Register<IDialogService>(new DialogService());
             TinyIoCContainer.Current.Register<INavigationService>(new NagigationService());
@@ -60,12 +64,14 @@ namespace StudyBuddy.App
                 OnResume();
             }
         }
+
         protected override void OnSleep()
         {
             Connectivity.ConnectivityChanged -= App_ConnectivityChanged;
             TinyIoCContainer.Current.Resolve<ThemeViewModel>().ApplyTheme();
             RequestedThemeChanged -= App_RequestedThemeChanged;
         }
+
         protected override void OnResume()
         {
             Connectivity.ConnectivityChanged += App_ConnectivityChanged;
@@ -76,18 +82,23 @@ namespace StudyBuddy.App
         private bool App_HasConnection()
         {
             var internet = Connectivity.NetworkAccess;
-            if (internet == NetworkAccess.None || internet == NetworkAccess.Unknown || internet == NetworkAccess.Local || internet == NetworkAccess.ConstrainedInternet)
+            if (internet == NetworkAccess.None || internet == NetworkAccess.Unknown ||
+                internet == NetworkAccess.Local || internet == NetworkAccess.ConstrainedInternet)
                 return false;
             return true;
         }
+
         private void App_ConnectivityChanged(object sender, ConnectivityChangedEventArgs e)
         {
-            MainThread.BeginInvokeOnMainThread(() => 
+            MainThread.BeginInvokeOnMainThread(() =>
             {
                 if (!App_HasConnection())
-                    Current.MainPage.DisplayAlert("Achtung!", $"Es wurde keine Internetverbindung gefunden!\nVerbindungstyp: {e.NetworkAccess.ToString()}", "Ok");
+                    Current.MainPage.DisplayAlert("Achtung!",
+                        $"Es wurde keine Internetverbindung gefunden!\nVerbindungstyp: {e.NetworkAccess.ToString()}",
+                        "Ok");
             });
         }
+
         private void App_RequestedThemeChanged(object sender, AppThemeChangedEventArgs e)
         {
             MainThread.BeginInvokeOnMainThread(() =>
@@ -95,6 +106,9 @@ namespace StudyBuddy.App
                 TinyIoCContainer.Current.Resolve<ThemeViewModel>().ApplyTheme();
             });
         }
-        private void SetupFirebasePushNotificationsHandler() {}
+
+        private void SetupFirebasePushNotificationsHandler()
+        {
+        }
     }
 }

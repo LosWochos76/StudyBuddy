@@ -288,8 +288,15 @@ namespace StudyBuddy.Persistence
             obj.RequiredCoverage = reader.GetDouble(4);
             obj.Description = reader.IsDBNull(5) ? "" : reader.GetString(5);
             obj.IconKey = reader.IsDBNull(6) ? "" : reader.GetString(6);
-            obj.Tags = reader.IsDBNull(7) ? "" : reader.GetString(7);
-            obj.Received = reader.GetDateTime(8);
+            // TODO Find more elegant way
+            if (reader.FieldCount == 8)
+            {
+                obj.Tags = reader.IsDBNull(7) ? "" : reader.GetString(7);
+            }
+            if (reader.FieldCount == 9)
+            {
+                obj.Received = reader.GetDateTime(8);
+            }
             
             return obj;
         }

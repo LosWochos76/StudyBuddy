@@ -1,4 +1,5 @@
 ﻿using Android.App;
+using Android.Content;
 using Android.Content.PM;
 using Android.OS;
 using Android.Runtime;
@@ -9,13 +10,20 @@ using Platform = Xamarin.Essentials.Platform;
 
 namespace App.Droid
 {
-    [Activity(Label = "Gameucation", Theme = "@style/MainTheme", 
+    [Activity(Label = "Gameucation", Theme = "@style/MainTheme", LaunchMode = LaunchMode.SingleTop,
         ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation | ConfigChanges.UiMode |
                                ConfigChanges.ScreenLayout | ConfigChanges.SmallestScreenSize)]
     public class MainActivity : FormsAppCompatActivity
     {
+        protected override void OnNewIntent(Intent intent)
+        {
+            base.OnNewIntent(intent);
+            FirebasePushNotificationManager.ProcessIntent(this,intent);
+        }
+        
         protected override void OnCreate(Bundle savedInstanceState)
         {
+      
             base.OnCreate(savedInstanceState);
             Platform.Init(this, savedInstanceState);
             global::Xamarin.Forms.Forms.Init(this, savedInstanceState);
@@ -35,5 +43,7 @@ namespace App.Droid
 
             base.OnRequestPermissionsResult(requestCode, permissions, grantResults);
         }
+        
+        
     }
 }

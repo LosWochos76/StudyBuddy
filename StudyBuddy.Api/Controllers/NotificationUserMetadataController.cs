@@ -1,7 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using StudyBuddy.BusinessLogic;
 using StudyBuddy.Model;
-using StudyBuddy.Model.Filter;
 
 namespace StudyBuddy.Api.Controllers
 {
@@ -23,9 +22,9 @@ namespace StudyBuddy.Api.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetAllLikes([FromQuery] NotificationUserMetadataFilter filter)
+        public IActionResult GetAllLikes()
         {
-            var likes = backend.NotificationUserMetadataService.GetAll(filter);
+            var likes = backend.NotificationUserMetadataService.GetAll();
             return Ok(likes);
         }
     }

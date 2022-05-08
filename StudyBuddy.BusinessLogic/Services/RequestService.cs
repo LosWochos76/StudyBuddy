@@ -112,7 +112,7 @@ namespace StudyBuddy.BusinessLogic
 
             backend.Repository.Requests.Delete(id);
 
-            // ToDo: Erzeugen einer Neuigkeit!
+            // ToDo: Erzeugen einer Neuigkeit! Push Benachrichtigung
 
         }
 
