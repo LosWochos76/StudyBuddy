@@ -7,7 +7,6 @@ using StudyBuddy.App.Misc;
 using StudyBuddy.App.Views;
 using StudyBuddy.Model;
 using Xamarin.CommunityToolkit.ObjectModel;
-using Xamarin.Forms;
 
 namespace StudyBuddy.App.ViewModels
 {
@@ -75,14 +74,14 @@ namespace StudyBuddy.App.ViewModels
         }
         private async Task ShowDetails()
         {
-            /*
+            
             if (SelectedBadge == null)
                 return;
 
-            await Navigation.Push(new BadgeCompletedDetailsPage(SelectedBadge));
+            await Navigation.Push(new BadgeDetailsPage(await api.Badges.GetById(SelectedBadge.ID)));
             SelectedBadge = null;
             NotifyPropertyChanged(nameof(SelectedBadge));
-            */
+            
         }
         public async Task Refresh()
         {

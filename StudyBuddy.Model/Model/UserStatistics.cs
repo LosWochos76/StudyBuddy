@@ -26,14 +26,13 @@ namespace StudyBuddy.Model
                     TotalOrganizingChallengesPoints +
                     TotalLearningChallengesPoints; }
         }
-
         public IEnumerable<RankEntry> FriendsRank { get; set; }
 
         public int LastWeekChallengeCount { get; set; }
         public int ThisWeekChallengeCount { get; set; }
         public int LastMonthChallengeCount { get; set; }
         public int ThisMonthChallengeCount { get; set; }
-
+        /*
         public StatisticsTrend WeeklyStatisticsTrend { get; set; }
         public StatisticsTrend MonthlyStatisticsTrend { get; set; }
 
@@ -49,5 +48,6 @@ namespace StudyBuddy.Model
                 System.Console.WriteLine($"StatisticTrend could not be calculated. Maybe missing Statistics? {e}");
             }
         }
+        */
     }
 }

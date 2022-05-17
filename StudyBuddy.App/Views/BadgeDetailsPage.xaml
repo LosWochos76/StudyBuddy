@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<ContentPage
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Class="StudyBuddy.App.Views.BadgeDetailsPage"
+    xmlns:viewmodels="clr-namespace:StudyBuddy.App.ViewModels"
+    xmlns:fontAwesome="clr-namespace:StudyBuddy.App"
+    Shell.FlyoutBehavior="Disabled"
+    Shell.NavBarHasShadow="true"
+    x:DataType="viewmodels:GameBadgeViewModel"
+    Title="Abzeichen Details">
+    
+    <ContentPage.Content>
+        <Grid x:Name="grid"
+              Padding="20">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Frame Padding="0"
+                   Margin="0"
+                   BorderColor="DarkGoldenrod"
+                   BackgroundColor="DarkGoldenrod"
+                   CornerRadius="10"
+                   HasShadow="True">
+                <Grid BackgroundColor="Transparent">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <StackLayout Grid.ColumnSpan="3"
+                                 Grid.RowSpan="1"
+                                 Orientation="Horizontal"
+                                 BackgroundColor="Transparent"
+                                 Padding="30,10,10,10">
+                        <Image  HeightRequest="80"
+                                WidthRequest="80"
+                                VerticalOptions="Center">
+                            <Image.Source>
+                                <FontImageSource
+                                    Color="Black"
+                                    FontFamily="{StaticResource FontAwesomeSolid}"
+                                    Glyph="{x:Static fontAwesome:FontAwesomeIcons.GraduationCap}" />
+                            </Image.Source>
+                        </Image>
+                        <Label VerticalTextAlignment="Center"
+                               Text="{Binding NameText}"
+                               TextColor="{StaticResource TextColor}"
+                               FontAttributes="Bold"
+                               FontSize="20"
+                               Padding="20,0,0,0"></Label>
+                    </StackLayout>
+                    <Frame Grid.Row="1"
+                           Grid.RowSpan="3"
+                           Grid.Column="0"
+                           Grid.ColumnSpan="3"
+                           HasShadow="False"
+                           CornerRadius="10"
+                           Padding="0"
+                           Margin="2,2,2.5,2.5">
+                        <StackLayout Padding="12,10,12,10">
+                            <Label Text="Beschreibung:"
+                                   FontAttributes="Bold"
+                                   FontSize="19"></Label>
+                            <Label  Margin="0,0,0,10"
+                                    Text="{Binding DescriptionText}"
+                                    FontSize="18"></Label>
+                            <StackLayout>
+                                <Label HorizontalOptions="StartAndExpand"
+                                       FontSize="18">
+                                    <Label.FormattedText>
+                                        <FormattedString>
+                                            <Span CharacterSpacing="13"
+                                                  FontSize="19"
+                                                  FontFamily="{StaticResource FontAwesomeSolid}"
+                                                  Text="{x:Static fontAwesome:FontAwesomeIcons.Stopwatch}"></Span>
+                                            <Span Text="{Binding CreatedText}"></Span>
+                                        </FormattedString>
+                                    </Label.FormattedText>
+                                </Label>
+                                <Label HorizontalOptions="StartAndExpand"
+                                       VerticalOptions="Center"
+                                       FontSize="18">
+                                    <Label.FormattedText>
+                                        <FormattedString>
+                                            <Span CharacterSpacing="16"
+                                                  FontSize="17"
+                                                  FontFamily="{StaticResource FontAwesomeSolid}"
+                                                  Text="{x:Static fontAwesome:FontAwesomeIcons.CheckCircle}"></Span>
+                                            <Span Text="{Binding RequiredCoverageText}"></Span>
+                                            <Span Text=" Punkte"></Span>
+                                            <Span Text="  "></Span>
+                                        </FormattedString>
+                                    </Label.FormattedText>
+                                </Label>
+                                <Label HorizontalOptions="StartAndExpand"
+                                       VerticalOptions="Center"
+                                       FontSize="18">
+                                    <Label.FormattedText>
+                                        <FormattedString>
+                                            <Span CharacterSpacing="16"
+                                                  FontSize="17"
+                                                  FontFamily="{StaticResource FontAwesomeSolid}"
+                                                  Text="{x:Static fontAwesome:FontAwesomeIcons.Hashtag}"></Span>
+                                            <Span Text="{Binding TagsText}"></Span>
+                                        </FormattedString>
+                                    </Label.FormattedText>
+                                </Label>
+                            </StackLayout>
+                        </StackLayout>
+                    </Frame>
+                </Grid>
+            </Frame>
+        </Grid>
+    </ContentPage.Content>
+</ContentPage>

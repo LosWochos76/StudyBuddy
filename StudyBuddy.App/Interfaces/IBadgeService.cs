@@ -5,7 +5,7 @@ namespace StudyBuddy.App.Interfaces
 {
     public interface IBadgeService
     {
-        Task<GameBadgeViewModel> GetById(int challenge_id);
+        Task<GameBadgeViewModel> GetById(int badge_id);
         Task<GameBadgeListViewModel> Accepted(string search_string = "", int skip = 0);
     }
 }

@@ -24,6 +24,7 @@ namespace StudyBuddy.App.ViewModels
         public IAsyncCommand RefreshCommand { get; }
         public IAsyncCommand TotalChallengesCommand { get; set; }
         public IAsyncCommand TotalBadgeCommand { get; set; }
+        public IAsyncCommand BadgeDetailsCommand { get; set; }
         public Color ThemeColor 
         { 
             get 
@@ -42,6 +43,7 @@ namespace StudyBuddy.App.ViewModels
             TotalChallengesCommand = new AsyncCommand(ShowCompletedChallenges);
             TotalBadgeCommand = new AsyncCommand(ShowTotalBadge);
             RefreshCommand = new AsyncCommand(RefreshView);
+            BadgeDetailsCommand = new AsyncCommand(ShowBadgeDetails);
         }
 
         private async Task ShowCompletedChallenges()
@@ -52,6 +54,11 @@ namespace StudyBuddy.App.ViewModels
         private async Task ShowTotalBadge()
         {
             await Navigation.Push(new TotalBadgePage());
+        }
+        
+        private async Task ShowBadgeDetails()
+        {
+            await Navigation.Push(new BadgeDetailsPage(await api.Badges.GetById(1)));
         }
 
         private async Task RefreshView()
