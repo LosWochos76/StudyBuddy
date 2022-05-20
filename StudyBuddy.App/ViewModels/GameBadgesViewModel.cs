@@ -90,7 +90,7 @@ namespace StudyBuddy.App.ViewModels
             try
             {
                 ItemThreshold = 1;
-                var badges = await api.Badges.ForToday(SearchText, Skip);
+                var badges = await api.Badges.Accepted(SearchText, Skip);
                 if (badges.Objects.Count() == 0)
                 {
                     ItemThreshold = -1;

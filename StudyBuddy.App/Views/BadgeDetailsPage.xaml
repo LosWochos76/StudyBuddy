@@ -51,7 +51,7 @@
                             </Image.Source>
                         </Image>
                         <Label VerticalTextAlignment="Center"
-                               Text="{Binding NameText}"
+                               Text="{Binding Name}"
                                TextColor="{StaticResource TextColor}"
                                FontAttributes="Bold"
                                FontSize="20"
@@ -70,7 +70,7 @@
                                    FontAttributes="Bold"
                                    FontSize="19"></Label>
                             <Label  Margin="0,0,0,10"
-                                    Text="{Binding DescriptionText}"
+                                    Text="{Binding Description}"
                                     FontSize="18"></Label>
                             <StackLayout>
                                 <Label HorizontalOptions="StartAndExpand"
@@ -81,7 +81,7 @@
                                                   FontSize="19"
                                                   FontFamily="{StaticResource FontAwesomeSolid}"
                                                   Text="{x:Static fontAwesome:FontAwesomeIcons.Stopwatch}"></Span>
-                                            <Span Text="{Binding CreatedText}"></Span>
+                                            <Span Text="{Binding Created}"></Span>
                                         </FormattedString>
                                     </Label.FormattedText>
                                 </Label>
@@ -94,7 +94,7 @@
                                                   FontSize="17"
                                                   FontFamily="{StaticResource FontAwesomeSolid}"
                                                   Text="{x:Static fontAwesome:FontAwesomeIcons.CheckCircle}"></Span>
-                                            <Span Text="{Binding RequiredCoverageText}"></Span>
+                                            <Span Text="{Binding CoverageText}"></Span>
                                             <Span Text=" Punkte"></Span>
                                             <Span Text="  "></Span>
                                         </FormattedString>
@@ -109,7 +109,7 @@
                                                   FontSize="17"
                                                   FontFamily="{StaticResource FontAwesomeSolid}"
                                                   Text="{x:Static fontAwesome:FontAwesomeIcons.Hashtag}"></Span>
-                                            <Span Text="{Binding TagsText}"></Span>
+                                            <Span Text="{Binding Tags}"></Span>
                                         </FormattedString>
                                     </Label.FormattedText>
                                 </Label>

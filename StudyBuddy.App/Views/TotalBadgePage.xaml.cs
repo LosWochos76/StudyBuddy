@@ -1,6 +1,7 @@
 using StudyBuddy.App.ViewModels;
 using TinyIoC;
 using Xamarin.Forms;
+using Xamarin.Forms.Xaml;
 
 namespace StudyBuddy.App.Views
 {
