@@ -4,7 +4,8 @@ using Xamarin.Forms;
 
 namespace StudyBuddy.App.Views
 {
-    public partial class TotalBadgePage : ContentPage
+    [XamlCompilation(XamlCompilationOptions.Compile)]
+    public partial class TotalBadgePage
     {
         
         public TotalBadgePage()

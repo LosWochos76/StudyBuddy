@@ -1,5 +1,4 @@
 ﻿using System.Net.Http;
-using System.Threading.Tasks;
 using StudyBuddy.App.Misc;
 using StudyBuddy.App.ViewModels;
 using StudyBuddy.Model;
@@ -18,24 +17,28 @@ namespace StudyBuddy.App.Api
             this.base_url = base_url;
             client = new HttpClient(Helper.GetInsecureHandler());
         }
-
         private async Task<GameBadgeListViewModel> All(GameBadgeFilter filter)
         {
             var rh = new WebRequestHelper(api.Authentication.Token);
             return await rh.Get<GameBadgeListViewModel>(base_url + "GameBadge", filter);
         }
-
-        public async Task<GameBadgeListViewModel> ForToday(string search_string = "", int skip = 0)
+        public async Task<GameBadgeViewModel> GetById(int badge_id)
         {
-            //var current_user = api.Authentication.CurrentUser;
+            var rh = new WebRequestHelper(api.Authentication.Token);
+            return await rh.Load<GameBadgeViewModel>(base_url + "GameBadge/" + badge_id, HttpMethod.Get);
+        }
+        public async Task<GameBadgeListViewModel> Accepted(string search_string = "", int skip = 0)
+        {
+            var currentUser = api.Authentication.CurrentUser;
             var filter = new GameBadgeFilter()
             {
+                OnlyReceived = true,
                 SearchText = search_string,
-                //OnlyReceived = true,
-                //CurrentUserId = current_user.ID,
                 Count = 10,
-                Start = skip
+                Start = skip,
+                CurrentUserId = currentUser == null ? 0 : currentUser.ID
             };
+
             return await All(filter);
         }
     }

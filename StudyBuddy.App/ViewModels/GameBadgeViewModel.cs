@@ -15,7 +15,7 @@ namespace StudyBuddy.App.ViewModels
             {
                 string[] str = IconKey.Split(",");
                 return str[0];
-            }
+        }
         }
         
         public string Icon
@@ -29,13 +29,13 @@ namespace StudyBuddy.App.ViewModels
                     .ToArray();
                 string iconkey = new(chars);
                 return iconkey;
-            }
+        }
         }
 
         public Color IconColor
         {
             get
-            {
+        {
                 string[] str = IconKey.Split(",");
                 return Color.FromHex(str[2]);
             }
@@ -44,7 +44,7 @@ namespace StudyBuddy.App.ViewModels
         public string CoverageText
         {
             get
-            {
+        {
                 return (RequiredCoverage * 10).ToString() + "%";  
             }
         }
@@ -52,9 +52,9 @@ namespace StudyBuddy.App.ViewModels
         public string DateText
         {
             get
-            {
+        {
                 return Created.ToString("dd.MM.yyyy");
-            }
+        }
         }
     }
 }

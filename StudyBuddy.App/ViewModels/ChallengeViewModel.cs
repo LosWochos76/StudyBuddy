@@ -9,17 +9,14 @@ namespace StudyBuddy.App.ViewModels
         {
             get => Points.ToString("D3");
         }
-
         public string ValidityEndText
         {
             get => ValidityEnd.ToString("dd.MM.yyyy");
         }
-
         public string ValidityStartText
         {
             get => ValidityStart.ToString("dd.MM.yyyy");
         }
-
         public string ValidityText
         {
             get
@@ -36,7 +33,6 @@ namespace StudyBuddy.App.ViewModels
                 return result;
             }
         }
-
         public string PointsText
         {
             get
@@ -57,7 +53,6 @@ namespace StudyBuddy.App.ViewModels
                 };
             }
         }
-
         public string CategorySymbol
         {
             get
@@ -71,7 +66,6 @@ namespace StudyBuddy.App.ViewModels
                 return FontAwesomeIcons.Tasks;
             }
         }
-
         public Color CategoryColor
         {
             get
@@ -85,7 +79,6 @@ namespace StudyBuddy.App.ViewModels
                 }
             }
         }
-
         public string ProveText
         {
             get

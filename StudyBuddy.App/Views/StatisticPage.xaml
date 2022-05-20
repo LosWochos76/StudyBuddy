@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="UTF-8" ?>
 <ContentPage
     Title="Statistiken"
-    Visual="Material"
+    Visual="dafault"
     x:Class="StudyBuddy.App.Views.StatisticPage"
     x:DataType="viewmodels:StatisticsViewModel"
     xmlns="http://xamarin.com/schemas/2014/forms"
@@ -32,7 +32,7 @@
 
             <Style TargetType="Frame" x:Key="FrameStyle">
                 <Setter Property="CornerRadius" Value="15"/>
-                <Setter Property="BorderColor" Value="{OnPlatform Android={StaticResource SystemGray4}, iOS={StaticResource TransparentTest}}"/>
+                <Setter Property="BorderColor" Value="{OnPlatform Android={StaticResource SystemGray4}, iOS={StaticResource Transparent}}"/>
                 <Setter Property="BackgroundColor" Value="{Binding ThemeColor}"/>
             </Style>
         </ResourceDictionary>
@@ -109,6 +109,9 @@
                             </Image>
                             <Label Style="{StaticResource SmallLabelStyle}" Text="Name XY"/>
                         </StackLayout>
+                        <Frame.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding BadgeDetailsCommand}" />
+                        </Frame.GestureRecognizers>
                     </Frame>
                     <Frame
                         Grid.Column="1"
