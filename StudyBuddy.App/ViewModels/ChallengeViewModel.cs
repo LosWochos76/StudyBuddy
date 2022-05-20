@@ -7,7 +7,7 @@ namespace StudyBuddy.App.ViewModels
     {
         public string PointsTextZero
         {
-            get => Points.ToString("D3") + "/100";
+            get => Points.ToString("D3");
         }
 
         public string ValidityEndText
@@ -46,7 +46,16 @@ namespace StudyBuddy.App.ViewModels
         }
         public string CategoryText
         {
-            get => "(" + Category.ToString() + ")";
+            get
+            {
+                string cat = Category.ToString();
+                return cat switch
+                {
+                    "Learning" => "(Lernen)",
+                    "Networking" => "(Netzwerken)",
+                    _ => "(Organisieren)",
+                };
+            }
         }
 
         public string CategorySymbol

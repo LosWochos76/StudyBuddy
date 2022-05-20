@@ -9,6 +9,7 @@ using Microcharts;
 using SkiaSharp;
 using Xamarin.CommunityToolkit.ObjectModel;
 using Xamarin.Forms;
+using System;
 
 namespace StudyBuddy.App.ViewModels
 {
@@ -37,6 +38,8 @@ namespace StudyBuddy.App.ViewModels
             }
         }
 
+        public GameBadgeViewModel Test { get => test; set => test = value; }
+
         public StatisticsViewModel(IApi api, IDialogService dialog, INavigationService navigation) : base(api, dialog, navigation)
         {
             TotalChallengesCommand = new AsyncCommand(ShowCompletedChallenges);
@@ -48,7 +51,9 @@ namespace StudyBuddy.App.ViewModels
         {
             await Navigation.Push(new ChallengesCompletedPage());
         }
-        
+
+        private GameBadgeViewModel test = new();
+
         private async Task ShowTotalBadge()
         {
             await Navigation.Push(new TotalBadgePage());

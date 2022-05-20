@@ -24,7 +24,7 @@ namespace StudyBuddy.Persistence
             qh.AddParameter(":id", id);
 
             return qh.ExecuteQueryToSingleObject("select id,name,owner_id,created," +
-                "required_coverage,description,tags_of_badge(id) FROM game_badges where id=:id");
+                "required_coverage,description,iconkey,tags_of_badge(id) FROM game_badges where id=:id");
         }
 
         public IEnumerable<GameBadge> All(GameBadgeFilter filter)
@@ -32,7 +32,7 @@ namespace StudyBuddy.Persistence
             var qh = new QueryHelper<GameBadge>(connection_string, FromReader);
             qh.AddParameter(":from", filter.Start);
             qh.AddParameter(":max", filter.Count);
-            var sql = new StringBuilder("select id,name,owner_id,created,required_coverage,description,tags_of_badge(id) FROM game_badges where true");
+            var sql = new StringBuilder("select id,name,owner_id,created,required_coverage,description,iconkey,tags_of_badge(id) FROM game_badges where true");
             ApplyFilter(qh, sql, filter);
             sql.Append(" order by created, name limit :max offset :from");
             return qh.ExecuteQueryToObjectList(sql.ToString());
@@ -78,7 +78,7 @@ namespace StudyBuddy.Persistence
             var qh = new QueryHelper<GameBadge>(connection_string, FromReader);
             qh.AddParameter(":user_id", user_id);
 
-            var sql = "select id,name,owner_id,game_badges.created,required_coverage,description,tags_of_badge(id) " +
+            var sql = "select id,name,owner_id,game_badges.created,required_coverage,description,iconkey,tags_of_badge(id) " +
                 "from game_badges " +
                 "inner join users_badges on id=badge_id " +
                 "where user_id=:user_id " +
@@ -95,10 +95,11 @@ namespace StudyBuddy.Persistence
             qh.AddParameter(":created", obj.Created);
             qh.AddParameter(":required_coverage", obj.RequiredCoverage);
             qh.AddParameter(":description", obj.Description);
+            qh.AddParameter(":iconkey", obj.IconKey);
 
             obj.ID = qh.ExecuteScalar(
-                "insert into game_badges (name,owner_id,created,required_coverage,description) " +
-                "values (:name,:owner_id,:created,:required_coverage,:description) RETURNING id");
+                "insert into game_badges (name,owner_id,created,required_coverage,description,iconkey) " +
+                "values (:name,:owner_id,:created,:required_coverage,:description,:iconkey) RETURNING id");
         }
 
         public void Update(GameBadge obj)
@@ -110,10 +111,11 @@ namespace StudyBuddy.Persistence
             qh.AddParameter(":created", obj.Created);
             qh.AddParameter(":required_coverage", obj.RequiredCoverage);
             qh.AddParameter(":description", obj.Description);
+            qh.AddParameter(":iconkey", obj.IconKey);
 
             qh.ExecuteNonQuery(
                 "update game_badges set name=:name,owner_id=:owner_id,created=:created," +
-                "required_coverage=:required_coverage,description=:description where id=:id");
+                "required_coverage=:required_coverage,description=:description,iconkey=:iconkey where id=:id");
         }
 
         public void Save(GameBadge obj)
@@ -238,6 +240,14 @@ namespace StudyBuddy.Persistence
 
                 rh.SetRevision(3);
             }
+
+            if (rh.GetRevision() == 3)
+            {
+                qh.ExecuteNonQuery(
+                    "ALTER TABLE game_badges " +
+                    "ADD COLUMN iconkey varchar(30)");
+                rh.SetRevision(4);
+            }
         }
 
         private void CreateBadgesUserTable()
@@ -265,7 +275,9 @@ namespace StudyBuddy.Persistence
             obj.Created = reader.GetDateTime(3);
             obj.RequiredCoverage = reader.GetDouble(4);
             obj.Description = reader.IsDBNull(5) ? "" : reader.GetString(5);
-            obj.Tags = reader.IsDBNull(6) ? "" : reader.GetString(6);
+            obj.IconKey = reader.IsDBNull(6) ? "" : reader.GetString(6);
+            obj.Tags = reader.IsDBNull(7) ? "" : reader.GetString(7);
+            
             return obj;
         }
 

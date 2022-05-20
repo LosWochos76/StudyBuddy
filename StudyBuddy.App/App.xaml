@@ -78,9 +78,9 @@
                 <Setter Property="PlaceholderColor"
                         Value="{StaticResource SystemGray2Dark}" />
                 <Setter Property="TextColor"
-                        Value="{StaticResource TextColor}" />
+                        Value="{AppThemeBinding Dark={StaticResource TextColorDark}, Light={StaticResource TextColor}}" />
                 <Setter Property="BackgroundColor"
-                        Value="Transparent" />
+                        Value="{AppThemeBinding Dark={StaticResource WindowBackgroundColorDark}, Light={StaticResource WindowBackgroundColor}}" />
             </Style>
 
             <Style TargetType="StackLayout" ApplyToDerivedTypes="True">
