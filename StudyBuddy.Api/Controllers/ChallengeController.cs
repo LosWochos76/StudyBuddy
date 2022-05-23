@@ -88,10 +88,7 @@ namespace StudyBuddy.Api
         [HttpGet]
         public IActionResult GetQrCode(int id)
         {
-            var code = backend.ChallengeService.GetQrCode(id);
-
-            var ms = new MemoryStream();
-            code.Save(ms, ImageFormat.Png);
+            var ms = backend.ChallengeService.GetQrCode(id);
             ms.Position = 0;
             return File(ms, "image/png");
         }

@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>net5.0</TargetFramework>
+        <TargetFramework>net6.0</TargetFramework>
     </PropertyGroup>
 
     <ItemGroup>
@@ -22,6 +22,8 @@
         <None Remove="Microsoft.CSharp" />
         <None Remove="GeoCoordinate.NetCore" />
         <None Remove="Geolocation.NetStandard" />
+        <None Remove="SkiaSharp.QrCode" />
+        <None Remove="SkiaSharp.NativeAssets.Linux.NoDependencies" />
     </ItemGroup>
     <ItemGroup>
         <Folder Include="Misc\" />
@@ -29,11 +31,12 @@
     <ItemGroup>
         <PackageReference Include="FirebaseAdmin" Version="2.3.0" />
         <PackageReference Include="Microsoft.AspNetCore.WebUtilities" Version="2.2.0" />
-        <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.17.0" />
-        <PackageReference Include="NETCore.MailKit" Version="2.0.3" />
-        <PackageReference Include="QRCoder" Version="1.4.3" />
+        <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.18.0" />
+        <PackageReference Include="NETCore.MailKit" Version="2.1.0" />
         <PackageReference Include="NETCore.Encrypt" Version="2.1.0" />
-        <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Scripting" Version="4.1.0" />
+        <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Scripting" Version="4.2.0" />
         <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
+        <PackageReference Include="SkiaSharp.QrCode" Version="0.6.0" />
+        <PackageReference Include="SkiaSharp.NativeAssets.Linux.NoDependencies" Version="2.88.0" />
     </ItemGroup>
 </Project>
