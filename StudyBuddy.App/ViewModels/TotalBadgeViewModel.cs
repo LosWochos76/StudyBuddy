@@ -19,7 +19,7 @@ namespace StudyBuddy.App.ViewModels
         public IAsyncCommand LoadMoreCommand { get; }
         public IAsyncCommand SearchCommand { get; }
         public IAsyncCommand DetailsCommand { get; }
-        public bool IsRefreshing { get; set; } = false;
+        public bool IsRefreshing { get; set; }
         public int Skip { get; set; }
 
         public string SearchText
@@ -62,7 +62,7 @@ namespace StudyBuddy.App.ViewModels
                 NotifyPropertyChanged();
             }
         }
-        private bool _isBusy = false;
+        private bool _isBusy;
 
         public TotalBadgeViewModel(IApi api, IDialogService dialog, INavigationService navigation) : base(api, dialog, navigation)
         {
@@ -100,7 +100,7 @@ namespace StudyBuddy.App.ViewModels
             try
             {
                 ItemThreshold = 1;
-                var badges = await api.Badges.Accepted(SearchText, Skip);
+                var badges = await api.Badges.BadgeReceived(SearchText, Skip);
                 if (badges.Objects.Count() == 0)
                 {
                     ItemThreshold = -1;

@@ -124,7 +124,7 @@
                                 VerticalOptions="Start"
                                 FontSize="36"
                                 FontAttributes="Bold"
-                                Text="12" />
+                                Text="{Binding TotalBadges}" />
                             <Label Style="{StaticResource SmallLabelStyle}" Text="Gesamt" />
                         </StackLayout>
                         <Frame.GestureRecognizers>

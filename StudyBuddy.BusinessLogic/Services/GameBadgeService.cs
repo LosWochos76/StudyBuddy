@@ -34,6 +34,28 @@ namespace StudyBuddy.BusinessLogic
 
             return new GameBadgeList() { Count = count, Objects = objects };
         }
+        
+        public GameBadgeList AllWithDateReceived(GameBadgeFilter filter)
+        {
+            if (backend.CurrentUser == null)
+                throw new Exception("Unauthorized!");
+
+            if (filter == null)
+                filter = new GameBadgeFilter();
+
+            var count = backend.Repository.GameBadges.GetCount(filter);
+            var objects = backend.Repository.GameBadges.All(filter);
+
+            if (filter.WithOwner)
+            {
+                foreach (var obj in objects)
+                {
+                    obj.Owner = backend.Repository.Users.ById(obj.OwnerID);
+                }
+            }
+
+            return new GameBadgeList() { Count = count, Objects = objects };
+        }
 
         public GameBadge GetById(int id)
         {

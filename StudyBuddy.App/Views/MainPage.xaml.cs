@@ -1,10 +1,12 @@
 ﻿using StudyBuddy.App.ViewModels;
 using TinyIoC;
 using Xamarin.Forms;
+using Xamarin.Forms.Xaml;
 
 namespace StudyBuddy.App.Views
 {
-    public partial class MainPage : Shell
+    [XamlCompilation(XamlCompilationOptions.Compile)]
+    public partial class MainPage
     {
         private readonly MainViewModel view_model;
 
@@ -13,8 +15,7 @@ namespace StudyBuddy.App.Views
             InitializeComponent();
             Routing.RegisterRoute(nameof(AddFriendPage), typeof(AddFriendPage));
             Routing.RegisterRoute(nameof(QrCodePage), typeof(QrCodePage));
-            view_model = TinyIoCContainer.Current.Resolve<MainViewModel>();
-            BindingContext = view_model;
+            BindingContext = TinyIoCContainer.Current.Resolve<MainViewModel>();
         }
     }
 }

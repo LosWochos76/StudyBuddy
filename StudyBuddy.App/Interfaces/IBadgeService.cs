@@ -7,5 +7,6 @@ namespace StudyBuddy.App.Api
     {
         Task<GameBadgeViewModel> GetById(int badge_id);
         Task<GameBadgeListViewModel> Accepted(string search_string = "", int skip = 0);
+        Task<GameBadgeListViewModel> BadgeReceived(string search_string = "", int skip = 0);
     }
 }

@@ -37,6 +37,18 @@ namespace StudyBuddy.Persistence
             sql.Append(" order by created, name limit :max offset :from");
             return qh.ExecuteQueryToObjectList(sql.ToString());
         }
+        public IEnumerable<GameBadge> AllWithDateReceived(GameBadgeFilter filter)
+        {
+            var qh = new QueryHelper<GameBadge>(connection_string, FromReader);
+            qh.AddParameter(":from", filter.Start);
+            qh.AddParameter(":max", filter.Count);
+            var sql = new StringBuilder("select game_badges.*, tags_of_badge(game_badges.id), users_badges.created AS received " +
+                                        "from game_badges,users_badges " +
+                                        "where game_badges.id = users_badges.badge_id");
+            ApplyFilter(qh, sql, filter);
+            sql.Append(" order by users_badges.created desc");
+            return qh.ExecuteQueryToObjectList(sql.ToString());
+        }
 
         public int GetCount(GameBadgeFilter filter)
         {
@@ -277,6 +289,7 @@ namespace StudyBuddy.Persistence
             obj.Description = reader.IsDBNull(5) ? "" : reader.GetString(5);
             obj.IconKey = reader.IsDBNull(6) ? "" : reader.GetString(6);
             obj.Tags = reader.IsDBNull(7) ? "" : reader.GetString(7);
+            obj.Received = reader.GetDateTime(8);
             
             return obj;
         }

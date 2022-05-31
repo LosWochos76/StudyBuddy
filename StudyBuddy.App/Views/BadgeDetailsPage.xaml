@@ -81,7 +81,7 @@
                                                   FontSize="19"
                                                   FontFamily="{StaticResource FontAwesomeSolid}"
                                                   Text="{x:Static fontAwesome:FontAwesomeIcons.Stopwatch}"></Span>
-                                            <Span Text="{Binding Created}"></Span>
+                                            <Span Text="{Binding Received}"></Span>
                                         </FormattedString>
                                     </Label.FormattedText>
                                 </Label>
