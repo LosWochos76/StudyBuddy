@@ -1,30 +1,25 @@
 ﻿using StudyBuddy.App.ViewModels;
 using TinyIoC;
-using Xamarin.Forms;
+using Xamarin.Forms.Xaml;
 
 namespace StudyBuddy.App.Views
 {
-    public partial class StatisticPage : ContentPage
+    [XamlCompilation(XamlCompilationOptions.Compile)]
+    public partial class StatisticPage
     {
         private readonly StatisticsViewModel view_model;
 
         public StatisticPage()
         {
             InitializeComponent();
-            
-            view_model = TinyIoCContainer.Current.Resolve<StatisticsViewModel>();
-            BindingContext = view_model;
+            BindingContext = TinyIoCContainer.Current.Resolve<StatisticsViewModel>();
         }
 
         protected override void OnAppearing()
         {
             base.OnAppearing();
-            view_model.Refresh();
-
             if(BindingContext is StatisticsViewModel vm)
-            {
                 vm.RefreshCommand.Execute(null);
-            }
         }
     }
 }

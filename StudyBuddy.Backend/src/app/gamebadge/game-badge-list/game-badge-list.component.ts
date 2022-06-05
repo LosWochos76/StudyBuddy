@@ -72,7 +72,7 @@ export class GameBadgeListComponent implements OnInit {
       return;
 
     this.logger.debug("User wants to edit a GameBadge");
-    this.router.navigate(['/gamebadge', this.selected.id]);
+    this.router.navigate(['/gamebadge/', this.selected.id]);
   }
 
   onAdd() {

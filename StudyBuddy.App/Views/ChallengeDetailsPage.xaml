@@ -4,9 +4,8 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     x:Class="StudyBuddy.App.Views.ChallengeDetailsPage"
     xmlns:viewmodels="clr-namespace:StudyBuddy.App.ViewModels"
-             xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
-             xmlns:fontAwesome="clr-namespace:StudyBuddy.App"
-             Shell.FlyoutBehavior="Disabled"
+    xmlns:fontAwesome="clr-namespace:StudyBuddy.App"
+    Shell.FlyoutBehavior="Disabled"
     Shell.NavBarHasShadow="true"
     x:DataType="viewmodels:ChallengeViewModel"
     Title="Herausforderungsdetails">

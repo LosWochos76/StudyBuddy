@@ -5,7 +5,7 @@
              x:Class="StudyBuddy.App.App">
     <Application.Resources>
         <ResourceDictionary>
-            <Color x:Key="Transparent">#0000ffff</Color>
+            <Color x:Key="Transparent">#00FFFFFF</Color>
             <Color x:Key="Primary">#000000</Color>
             <Color x:Key="PrimaryAccent">#3700B3</Color>
             <Color x:Key="TextColor">#1C1C1E</Color>
@@ -77,9 +77,9 @@
                 <Setter Property="PlaceholderColor"
                         Value="{StaticResource SystemGray2Dark}" />
                 <Setter Property="TextColor"
-                        Value="{StaticResource TextColor}" />
+                        Value="{AppThemeBinding Dark={StaticResource TextColorDark}, Light={StaticResource TextColor}}" />
                 <Setter Property="BackgroundColor"
-                        Value="Transparent" />
+                        Value="{AppThemeBinding Dark={StaticResource WindowBackgroundColorDark}, Light={StaticResource WindowBackgroundColor}}" />
             </Style>
 
             <Style TargetType="StackLayout" ApplyToDerivedTypes="True">

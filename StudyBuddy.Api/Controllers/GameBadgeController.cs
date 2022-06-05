@@ -12,12 +12,19 @@ namespace StudyBuddy.Api
         {
             this.backend = backend;
         }
-
+        /*
         [Route("/GameBadge/")]
         [HttpGet]
         public IActionResult All([FromQuery] GameBadgeFilter filter)
         {
             return Json(backend.GameBadgeService.All(filter));
+        }
+        */
+        [Route("/GameBadge/")]
+        [HttpGet]
+        public IActionResult AllWithDateReceived([FromQuery] GameBadgeFilter filter)
+        {
+            return Json(backend.GameBadgeService.AllWithDateReceived(filter));
         }
 
         [Route("/User/{user_id}/GameBadge/")]

@@ -1,10 +1,11 @@
 ﻿using StudyBuddy.App.ViewModels;
 using TinyIoC;
-using Xamarin.Forms;
+using Xamarin.Forms.Xaml;
 
 namespace StudyBuddy.App.Views
 {
-    public partial class ChallengesPage : ContentPage
+    [XamlCompilation(XamlCompilationOptions.Compile)]
+    public partial class ChallengesPage
     {
         private readonly ChallengesViewModel view_model;
 
@@ -12,14 +13,12 @@ namespace StudyBuddy.App.Views
         {
             InitializeComponent();
             BindingContext = TinyIoCContainer.Current.Resolve<ChallengesViewModel>();
-            
         }
 
         protected override void OnAppearing()
         {
             base.OnAppearing();
-
-            if(BindingContext is ChallengesViewModel vm)
+            if(BindingContext is StatisticsViewModel vm)
                 vm.RefreshCommand.Execute(null);
         }
     }

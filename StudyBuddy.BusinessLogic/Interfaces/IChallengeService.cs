@@ -1,4 +1,4 @@
-﻿using System.Drawing;
+﻿using System.IO;
 using StudyBuddy.Model;
 
 namespace StudyBuddy.BusinessLogic
@@ -13,7 +13,7 @@ namespace StudyBuddy.BusinessLogic
         void Delete(int id);
 
         // QR-Code
-        Bitmap GetQrCode(int challenge_id);
+        MemoryStream GetQrCode(int challenge_id);
         Challenge AcceptFromQrCode(string payload);
 
         // Accept

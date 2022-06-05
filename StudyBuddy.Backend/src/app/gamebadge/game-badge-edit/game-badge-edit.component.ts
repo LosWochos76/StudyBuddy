@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
+import { faAward, faCrown } from '@fortawesome/free-solid-svg-icons';
 import { GameBadge } from 'src/app/model/gamebadge';
 import { User } from 'src/app/model/user';
 import { AuthorizationService } from 'src/app/services/authorization.service';
@@ -19,7 +20,7 @@ export class GameBadgeEditComponent implements OnInit {
   obj: GameBadge = null;
   form: FormGroup;
   user: User = null;
-  all_users: User[] = [];
+    all_users: User[] = [];
 
   constructor(
     private logger: LoggingService,
@@ -34,8 +35,9 @@ export class GameBadgeEditComponent implements OnInit {
     this.form = new FormGroup({
       name: new FormControl("", [Validators.required, Validators.minLength(3)]),
       description: new FormControl(""),
-      required_coverage: new FormControl(0.5, [Validators.required]),
-      tags: new FormControl("", [Validators.required])
+        required_coverage: new FormControl("", [Validators.required]),
+        icon_key: new FormControl("awardbronze", [Validators.required]),
+        tags: new FormControl("", [Validators.required])
     });
 
     if (this.user.isAdmin())
@@ -45,7 +47,6 @@ export class GameBadgeEditComponent implements OnInit {
   async ngOnInit() {
     this.id = this.route.snapshot.params['id'];
     let tags = "";
-
     if (this.id != 0) {
       this.obj = await this.service.byId(this.id);
     } else {
@@ -60,16 +61,18 @@ export class GameBadgeEditComponent implements OnInit {
       this.form.setValue({
         name: this.obj.name,
         description: this.obj.description,
-        required_coverage: this.obj.required_coverage,
+          required_coverage: this.obj.required_coverage,
+          icon_key: this.obj.iconkey,
         tags: this.obj.tags,
-        owner_id: this.obj.owner_id
+          owner_id: this.obj.owner_id
       });
     } else {
       this.form.setValue({
         name: this.obj.name,
         description: this.obj.description,
-        required_coverage: this.obj.required_coverage,
-        tags: this.obj.tags
+          required_coverage: this.obj.required_coverage,
+          icon_key: this.obj.iconkey,
+          tags: this.obj.tags
       });
     }
   }
@@ -81,13 +84,13 @@ export class GameBadgeEditComponent implements OnInit {
     if (this.form.invalid) {
       this.logger.debug("Data is invalid!");
       return;
-    }
-
+      }
     await this.service.save(this.obj);
     this.navigation.goBack("/gamebadge");
   }
 
   onCancel() {
     this.navigation.goBack("/gamebadge");
-  }
+    }
+
 }

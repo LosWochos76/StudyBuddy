@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Drawing;
+using System.IO;
 using System.Linq;
 using NETCore.Encrypt;
-using QRCoder;
+using SkiaSharp;
+using SkiaSharp.QrCode;
+using SkiaSharp.QrCode.Image;
 using StudyBuddy.Model;
 
 namespace StudyBuddy.BusinessLogic
@@ -138,7 +140,7 @@ namespace StudyBuddy.BusinessLogic
             }
         }
 
-        public Bitmap GetQrCode(int challenge_id)
+        public MemoryStream GetQrCode(int challenge_id)
         {
             if (backend.CurrentUser == null || backend.CurrentUser.IsStudent)
                 throw new UnauthorizedAccessException("Unauthorized!");
@@ -159,10 +161,10 @@ namespace StudyBuddy.BusinessLogic
             var payload = "qr:" + Base64.Encode(encrypted);
 
             // Generate QR-Code
-            var qrGenerator = new QRCodeGenerator();
-            var qrCodeData = qrGenerator.CreateQrCode(payload, QRCodeGenerator.ECCLevel.Q);
-            var qrCode = new QRCode(qrCodeData);
-            return qrCode.GetGraphic(20);
+            var output = new MemoryStream();
+            var qrCode = new QrCode(payload, new Vector2Slim(256, 256), SKEncodedImageFormat.Png);
+            qrCode.GenerateImage(output);
+            return output;
         }
 
         public Challenge AcceptFromQrCode(string payload)

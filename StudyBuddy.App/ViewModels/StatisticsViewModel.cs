@@ -1,18 +1,18 @@
-﻿using System.ComponentModel;
+﻿using System.Linq;
 using StudyBuddy.App.Api;
 using StudyBuddy.App.Misc;
 using StudyBuddy.App.Views;
 using StudyBuddy.Model;
 using System.Threading.Tasks;
-using System.Windows.Input;
 using Microcharts;
 using SkiaSharp;
 using Xamarin.CommunityToolkit.ObjectModel;
 using Xamarin.Forms;
+using System;
 
 namespace StudyBuddy.App.ViewModels
 {
-    public class StatisticsViewModel : ViewModelBase, INotifyPropertyChanged
+    public class StatisticsViewModel : ViewModelBase
     {
         public UserStatistics UserStatistics { get { return _userStatistic; } set { _userStatistic = value; NotifyPropertyChanged(); } }
         private UserStatistics _userStatistic;
@@ -20,10 +20,15 @@ namespace StudyBuddy.App.ViewModels
         private BarChart _totalPointsChart;
         public DonutChart TotalChallengesChart { get { return _totalChallengesChart; } set { _totalChallengesChart = value; NotifyPropertyChanged(); } }
         private DonutChart _totalChallengesChart;
+        public int TotalBadges { get { return _totalBadges; } set { _totalBadges = value; NotifyPropertyChanged(); } }
+        private int _totalBadges;
+
         public bool IsRefreshing { get; set; }
         public IAsyncCommand RefreshCommand { get; }
         public IAsyncCommand TotalChallengesCommand { get; set; }
         public IAsyncCommand TotalBadgeCommand { get; set; }
+        public IAsyncCommand BadgeDetailsCommand { get; set; }
+
         public Color ThemeColor 
         { 
             get 
@@ -37,21 +42,36 @@ namespace StudyBuddy.App.ViewModels
             }
         }
 
+        public GameBadgeViewModel Test { get => test; set => test = value; }
+
         public StatisticsViewModel(IApi api, IDialogService dialog, INavigationService navigation) : base(api, dialog, navigation)
         {
             TotalChallengesCommand = new AsyncCommand(ShowCompletedChallenges);
             TotalBadgeCommand = new AsyncCommand(ShowTotalBadge);
             RefreshCommand = new AsyncCommand(RefreshView);
+            BadgeDetailsCommand = new AsyncCommand(ShowBadgeDetails);
         }
 
         private async Task ShowCompletedChallenges()
         {
             await Navigation.Push(new ChallengesCompletedPage());
         }
-        
+
+        private GameBadgeViewModel test = new();
+
         private async Task ShowTotalBadge()
         {
             await Navigation.Push(new TotalBadgePage());
+        }
+        
+        private async Task ShowBadgeDetails()
+        {
+            await Navigation.Push(new BadgeDetailsPage(await api.Badges.GetById(1)));
+        }
+        private async Task BadgesCount()
+        {
+            var badges = await api.Badges.Accepted("", 0);
+            _totalBadges = badges.Objects.Count();
         }
 
         private async Task RefreshView()
@@ -72,6 +92,7 @@ namespace StudyBuddy.App.ViewModels
                 await Application.Current.MainPage.DisplayAlert("Fehler", "Fehler beim Laden der Statistiken. API Endpunkt nicht erreichbar", "Ok");
             }
             LoadCharts();
+            BadgesCount();
         }
 
         private void LoadCharts()

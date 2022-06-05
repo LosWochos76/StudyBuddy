@@ -15,6 +15,7 @@
     <div class="col-md">
         <label class="form-label" for="required_coverage">Benötigte Abdeckung der Herausforderungen:</label>
         <select class="form-select" formControlName="required_coverage">
+            <option value="" selected disabled hidden>Benötigte Abdeckung wählen</option>
             <option value="0.1">10%</option>
             <option value="0.2">20%</option>
             <option value="0.3">30%</option>
@@ -25,6 +26,28 @@
             <option value="0.8">80%</option>
             <option value="0.9">90%</option>
             <option value="1">100%</option>
+        </select>
+    </div>
+    <br>
+    <div class="col-md">
+        <label class="form-label" for="icon_key">Icon</label>
+        <select class="form-select" formControlName="icon_key">
+            <option value="" selected disabled hidden>Iconkey auswählen</option>
+            <option value="fa-solid,f559,#bf8970">awardbronze</option>
+            <option value="fa-solid,f559,#c0c0c0">awardsilver</option>
+            <option value="fa-solid,f559,#FFD700">awardgold</option>
+            <option value="fa-solid,f521,#bf8970">crownbronze</option>
+            <option value="fa-solid,f521,#c0c0c0">crownsilver</option>
+            <option value="fa-solid,f521,#FFD700">crowngold</option>
+            <option value="fa-solid,f5a2,#bf8970">medalbronze</option>
+            <option value="fa-solid,f5a2,#c0c0c0">medalsilver</option>
+            <option value="fa-solid,f5a2,#FFD700">medalgold</option>
+            <option value="fa-solid,f005,#bf8970">starbronze</option>
+            <option value="fa-solid,f005,#c0c0c0">starsilver</option>
+            <option value="fa-solid,f005,#FFD700">stargold</option>
+            <option value="fa-solid,f091,#bf8970">trophybronze</option>
+            <option value="fa-solid,f091,#c0c0c0">trophysilver</option>
+            <option value="fa-solid,f091,#FFD700">trophygold</option>
         </select>
     </div>
     <br>
