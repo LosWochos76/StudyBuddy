@@ -3,119 +3,55 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="StudyBuddy.App.Views.FriendPage"
              xmlns:viewmodels="clr-namespace:StudyBuddy.App.ViewModels"
-             xmlns:fontAwesome="clr-namespace:StudyBuddy.App"
              x:DataType="viewmodels:FriendViewModel"
              xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
+             xmlns:forms="clr-namespace:Microcharts.Forms;assembly=Microcharts.Forms"
              Shell.TabBarIsVisible="False"
              Title="{Binding User.FullName}">
-    <ContentPage.Resources>
-        <ResourceDictionary>
-            <Style x:Key="FrameStyle" TargetType="Frame">
-                <Setter Property="CornerRadius" Value="10"/>
-            </Style>
-            
-            <Style x:Key="TotalPointsLabelStyle" TargetType="Label">
-                <Setter Property="FontSize" Value="30"/>
-                <Setter Property="FontAttributes" Value="Bold" />
-                <Setter Property="TextColor" Value="Black" />
-            </Style>
-            
-            <Style x:Key="NetworkPointsLabelStyle" TargetType="Label">
-                <Setter Property="FontSize" Value="20"/>
-                <Setter Property="FontAttributes" Value="Bold" />
-                <Setter Property="TextColor" Value="#5856D6" />
-            </Style>
-            
-            <Style x:Key="OrganizingPointsLabelStyle" TargetType="Label">
-                <Setter Property="FontSize" Value="20"/>
-                <Setter Property="FontAttributes" Value="Bold" />
-                <Setter Property="TextColor" Value="#5AC8FA" />
-            </Style>
 
-            <Style x:Key="LearningPointsLabelStyle" TargetType="Label">
-                <Setter Property="FontSize" Value="20"/>
-                <Setter Property="FontAttributes" Value="Bold" />
-                <Setter Property="TextColor" Value="#007AFF" />
-            </Style>
-            
-        </ResourceDictionary>
-    </ContentPage.Resources>
     <ContentPage.Content>
-        <Grid>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="*" />
-            </Grid.RowDefinitions>
-            <StackLayout Padding="20">
-                <xct:AvatarView Size="120" HorizontalOptions="Center" VerticalOptions="Center"
-                    Text="{Binding User.Initials}"
-                    Source="{Binding User.ProfileImage}" />
-            </StackLayout>
-            <StackLayout Grid.Row="0"
-                         VerticalOptions="End" >
-                <Grid Padding="10,10,10,0" RowSpacing="0">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="*"/>
-                    </Grid.ColumnDefinitions>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                    </Grid.RowDefinitions>
-                    <!--Profile information-->
-                    <Label Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" Text="{Binding User.Name}" FontAttributes="Bold" FontSize="30" IsEnabled="False" />
-                    <Label Padding="0,10,0,0" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3" FontSize="20">
-                        <Label.FormattedText>
-                            <FormattedString>
-                                <Span Text="Nickname:  " FontAttributes="Bold" />
-                                <Span Text="{Binding User.Nickname}"  />
-                            </FormattedString>
-                        </Label.FormattedText>
-                    </Label>
-                    <StackLayout Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="3" Padding="0,0,0,0">
-                        <StackLayout Orientation="Horizontal">
-                            <Label Text="Statistiken für"></Label>
-                            <Label Text="{Binding User.Name}"></Label>
+        <StackLayout VerticalOptions="Fill" Orientation="Vertical" Padding="10,10,10,0">
+            <xct:AvatarView Size="250" 
+                            HorizontalOptions="Center" 
+                            VerticalOptions="Center"
+                            Source="{Binding User.ProfileImage}" />
+            <Label Text="{Binding User.Name}" FontAttributes="Bold" FontSize="36" HorizontalOptions="Center" />
+            <StackLayout Margin="0,40,0,0" Orientation="Vertical">
+                <Frame HeightRequest="160" CornerRadius="10">
+                    <Grid>
+                        <Label FontSize="24" 
+                               HorizontalOptions="Center"
+                               Text="Punktestatistiken:"
+                               FontAttributes="Bold" />
+                        <StackLayout Margin="0,45,0,0" Orientation="Vertical" VerticalOptions="Center">
+                            <Label FontSize="20" Text="Gesamt:" />
+                            <Label FontSize="30" Text="{Binding UserStatistics.TotalPoints}" />
                         </StackLayout>
-                        <StackLayout Margin="0" Orientation="Vertical">
-                            <Frame Style="{StaticResource FrameStyle}"
-                                   HasShadow="true"
-                                   BackgroundColor="{StaticResource WindowBackgroundColor}">
-                                <StackLayout Orientation="Vertical">
-                                    <Label Style="{StaticResource TotalPointsLabelStyle}" HorizontalOptions="CenterAndExpand" HorizontalTextAlignment="Center" Text="{Binding UserStatistics.TotalPoints}"></Label>
-                                    <Label TextColor="{StaticResource TextColor}" HorizontalOptions="CenterAndExpand" HorizontalTextAlignment="Center" Text="Punkte Gesamt"></Label>
-                                    <StackLayout Margin="0,15,15,0" HorizontalOptions="FillAndExpand" Orientation="Horizontal">
-                                        <StackLayout HorizontalOptions="CenterAndExpand" Orientation="Vertical">
-                                            <Label Style="{StaticResource NetworkPointsLabelStyle}" HorizontalTextAlignment="Center" Text="{Binding UserStatistics.TotalNetworkChallengesPoints}" ></Label>
-                                            <Label TextColor="{StaticResource TextColor}" HorizontalTextAlignment="Center"  Text="Networking"></Label>
-                                        </StackLayout>
-                                        <StackLayout HorizontalOptions="CenterAndExpand" Orientation="Vertical">
-                                            <Label Style="{StaticResource OrganizingPointsLabelStyle}" HorizontalTextAlignment="Center" Text="{Binding UserStatistics.TotalOrganizingChallengesPoints}"></Label>
-                                            <Label TextColor="{StaticResource TextColor}" HorizontalTextAlignment="Center"  Text="Organizing"></Label>
-                                        </StackLayout>
-                                        <StackLayout HorizontalOptions="CenterAndExpand" Orientation="Vertical">
-                                            <Label Style="{StaticResource LearningPointsLabelStyle}" HorizontalTextAlignment="Center" Text="{Binding UserStatistics.TotalLearningChallengesPoints}"></Label>
-                                            <Label TextColor="{StaticResource TextColor}" HorizontalTextAlignment="Center"  Text="Learning"></Label>
-                                        </StackLayout>
-                                    </StackLayout>
-                                </StackLayout>
-                            </Frame>
+                        <StackLayout Margin="0,0,0,10" HorizontalOptions="End" VerticalOptions="End">
+                            <forms:ChartView
+                                Chart="{Binding TotalPointsChart}"
+                                HeightRequest="100"
+                                WidthRequest="240" />
                         </StackLayout>
-                    </StackLayout>
-                    <Button Grid.Row="4" 
-                            Grid.Column="0" 
-                            Grid.ColumnSpan="3" 
-                            Text="Freund entfernen" 
-                            Command="{Binding RemoveFriendCommand}" 
-                            Margin="0,30,0,30" 
-                            FontAttributes="Bold" 
-                            FontSize="17" 
-                            HeightRequest="45"
-                            BackgroundColor="{StaticResource DeclineButton}"/>
-                </Grid>
+                        <Label HorizontalTextAlignment="Center"
+                               VerticalOptions="End"
+                               TextColor="#828282"
+                               FontSize="11"
+                               Text="Klicken Sie hier, um weitere Details anzuzeigen" />
+                    </Grid>
+                    <Frame.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding ShowFriendsStatisticCommand}" />
+                    </Frame.GestureRecognizers>
+                </Frame>
             </StackLayout>
-        </Grid>
+            <Button
+                Margin="0,70,0,0"
+                Text="Freund entfernen" 
+                Command="{Binding RemoveFriendCommand}" 
+                FontAttributes="Bold" 
+                FontSize="17" 
+                HeightRequest="45"
+                BackgroundColor="{StaticResource DeclineButton}" />
+        </StackLayout>
     </ContentPage.Content>
 </ContentPage>

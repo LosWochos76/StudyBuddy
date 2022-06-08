@@ -8,7 +8,6 @@ using Microcharts;
 using SkiaSharp;
 using Xamarin.CommunityToolkit.ObjectModel;
 using Xamarin.Forms;
-using System;
 
 namespace StudyBuddy.App.ViewModels
 {
@@ -22,13 +21,11 @@ namespace StudyBuddy.App.ViewModels
         private DonutChart _totalChallengesChart;
         public int TotalBadges { get { return _totalBadges; } set { _totalBadges = value; NotifyPropertyChanged(); } }
         private int _totalBadges;
-
         public bool IsRefreshing { get; set; }
         public IAsyncCommand RefreshCommand { get; }
         public IAsyncCommand TotalChallengesCommand { get; set; }
         public IAsyncCommand TotalBadgeCommand { get; set; }
         public IAsyncCommand BadgeDetailsCommand { get; set; }
-
         public Color ThemeColor 
         { 
             get 
@@ -41,8 +38,6 @@ namespace StudyBuddy.App.ViewModels
                 }
             }
         }
-
-        public GameBadgeViewModel Test { get => test; set => test = value; }
 
         public StatisticsViewModel(IApi api, IDialogService dialog, INavigationService navigation) : base(api, dialog, navigation)
         {
@@ -57,17 +52,16 @@ namespace StudyBuddy.App.ViewModels
             await Navigation.Push(new ChallengesCompletedPage());
         }
 
-        private GameBadgeViewModel test = new();
-
         private async Task ShowTotalBadge()
         {
             await Navigation.Push(new TotalBadgePage());
         }
-        
+
         private async Task ShowBadgeDetails()
         {
             await Navigation.Push(new BadgeDetailsPage(await api.Badges.GetById(1)));
         }
+
         private async Task BadgesCount()
         {
             var badges = await api.Badges.Accepted("", 0);
@@ -92,7 +86,7 @@ namespace StudyBuddy.App.ViewModels
                 await Application.Current.MainPage.DisplayAlert("Fehler", "Fehler beim Laden der Statistiken. API Endpunkt nicht erreichbar", "Ok");
             }
             LoadCharts();
-            BadgesCount();
+            await BadgesCount();
         }
 
         private void LoadCharts()
@@ -102,35 +96,37 @@ namespace StudyBuddy.App.ViewModels
                 new ChartEntry(UserStatistics.TotalNetworkChallengesPoints)
                 {
                     ValueLabel = UserStatistics.TotalNetworkChallengesPoints.ToString(),
-                    Color = SKColor.Parse("#5856D6")
+                    Color = SKColor.Parse("#5856D6"),
+                    ValueLabelColor = SKColor.Parse("#5856D6")
                 },
                 new ChartEntry(UserStatistics.TotalOrganizingChallengesPoints)
                 {
                     ValueLabel = UserStatistics.TotalOrganizingChallengesPoints.ToString(),
-                    Color = SKColor.Parse("#5AC8FA")
+                    Color = SKColor.Parse("#5AC8FA"),
+                    ValueLabelColor = SKColor.Parse("#5AC8FA")
                 },
                 new ChartEntry(UserStatistics.TotalLearningChallengesPoints)
                 {
                     ValueLabel = UserStatistics.TotalLearningChallengesPoints.ToString(),
-                    Color = SKColor.Parse("#007AFF")
-                },
+                    Color = SKColor.Parse("#007AFF"),
+                    ValueLabelColor = SKColor.Parse("#007AFF")
+                }
             };
             var challengesEntries = new[]
             {
-                new ChartEntry(UserStatistics.TotalNetworkChallengesCount)
-                {
-                    Color = SKColor.Parse("#5856D6")
-                },
-                new ChartEntry(UserStatistics.TotalOrganizingChallengesCount)
-                {
-                    Color = SKColor.Parse("#5AC8FA")
-                },
-                new ChartEntry(UserStatistics.TotalLearningChallengesCount)
-                {
-                    Color = SKColor.Parse("#007AFF")
-                },
+                new ChartEntry(UserStatistics.TotalNetworkChallengesCount) { Color = SKColor.Parse("#5856D6") },
+                new ChartEntry(UserStatistics.TotalOrganizingChallengesCount) { Color = SKColor.Parse("#5AC8FA") },
+                new ChartEntry(UserStatistics.TotalLearningChallengesCount) { Color = SKColor.Parse("#007AFF") }
             };
-            TotalPointsChart = new BarChart {Entries = pointsEntries, LabelTextSize = 0, BackgroundColor = new SKColor(0,0,0,0) ,ValueLabelOrientation = Orientation.Horizontal, ValueLabelTextSize = 40, BarAreaAlpha = 0};
+            TotalPointsChart = new BarChart
+            {
+                Entries = pointsEntries,
+                LabelTextSize = 0,
+                ValueLabelTextSize = 40,
+                ValueLabelOrientation = Orientation.Horizontal,
+                BarAreaAlpha = 0,
+                BackgroundColor = new SKColor(0,0,0,0)
+            };
             TotalChallengesChart = new DonutChart {Entries = challengesEntries, BackgroundColor = new SKColor(0,0,0,0)};
         }
     }
