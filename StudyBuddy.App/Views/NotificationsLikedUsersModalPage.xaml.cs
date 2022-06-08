@@ -7,11 +7,15 @@ namespace StudyBuddy.App.Views
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class NotificationsLikedUsersModalPage : ContentPage
     {
+
+
         public NotificationsLikedUsersModalPage(NewsViewModel viewModel)
         {
             InitializeComponent();
+            Title = "Likes";
             var viewmodel = new NotificationsLikedUsersModalPageViewModel(viewModel);
             BindingContext = viewmodel;
+
         }
     }
 }

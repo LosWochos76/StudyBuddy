@@ -3,7 +3,6 @@ using System.Linq;
 using System.Windows.Input;
 using StudyBuddy.App.Api;
 using StudyBuddy.App.Misc;
-using StudyBuddy.App.Views;
 using StudyBuddy.Model;
 using TinyIoC;
 using Xamarin.Forms;
@@ -12,6 +11,9 @@ namespace StudyBuddy.App.ViewModels
 {
     public class NotificationsPageViewModel : ViewModelBase
     {
+        public IApi Api;
+        public CollectionView NotificationCollectionView;
+
         public NotificationsPageViewModel(IApi api, IDialogService dialog, INavigationService navigation) : base(api,
             dialog, navigation)
         {
@@ -20,14 +22,10 @@ namespace StudyBuddy.App.ViewModels
             DenyRequestCommand = new Command<RequestViewModel>(DenyRequest);
             NewsDetailCommand = new Command(() => { });
             NewsRemainingItemsThresholdReachedCommand = new Command(LoadNews);
-            LikeNotificationCommand = new Command<NewsViewModel>(LikeNotification);
-            OpenLikesUsersModalCommand = new Command<NewsViewModel>(OpenLikedUsers);
-            OpenCommentsCommands = new Command<NewsViewModel>(OpenComments);
+            Api = api;
         }
 
         public Command<NewsViewModel> OpenCommentsCommands { get; set; }
-        public Command<NewsViewModel> OpenLikesUsersModalCommand { get; set; }
-        public ICommand LikeNotificationCommand { get; set; }
 
         public bool NewsIsSelected { get; set; } = true;
 
@@ -38,7 +36,6 @@ namespace StudyBuddy.App.ViewModels
         }
 
         public RangeObservableCollection<NewsViewModel> News { get; } = new();
-
         public RangeObservableCollection<RequestViewModel> Requests { get; } = new();
 
         public ICommand RefreshCommand { get; set; }
@@ -49,7 +46,7 @@ namespace StudyBuddy.App.ViewModels
         public int NewsStart { get; set; }
         public ICommand RefreshNewsCommand { get; }
         public bool NewsIsRefreshing { get; set; }
-        public int NewsRemainingItemsThreshold { get; set; } = 1;
+        public int NewsRemainingItemsThreshold { get; set; } = 20;
         public bool IsLoadingNews { get; set; }
 
         public ICommand NewsDetailCommand { get; set; }
@@ -59,24 +56,6 @@ namespace StudyBuddy.App.ViewModels
 
         public ICommand AcceptRequestCommand { get; set; }
         public ICommand DenyRequestCommand { get; set; }
-
-
-        private void OpenComments(NewsViewModel viewModel)
-        {
-            Navigation.Modal(new CommentModalPage(viewModel));
-        }
-
-
-        private void OpenLikedUsers(NewsViewModel viewModel)
-        {
-            Navigation.Modal(new NotificationsLikedUsersModalPage(viewModel));
-        }
-
-
-        public async void LikeNotification(NewsViewModel news)
-        {
-            await api.NotificationUserMetadataService.LikeNotification(news);
-        }
 
 
         private void Refresh()
@@ -144,29 +123,43 @@ namespace StudyBuddy.App.ViewModels
 
         public async void LoadNews()
         {
-            if (IsLoadingNews) return;
+            if (IsLoadingNews)
+            {
+                return;
+            }
 
             IsLoadingNews = true;
 
-            var filter = new NotificationFilter
+            var filter = new NotificationFilter()
             {
                 Start = NewsStart,
                 Count = NewsCount
             };
+            
+            var response = await this.api.Notifications.GetMyNotificationFeed(filter);
 
-            var response = await api.Notifications.GetMyNotificationFeed(filter);
             if (response.Count() == 0)
             {
                 NewsRemainingItemsThreshold = -1;
                 return;
             }
 
-            if (response is null)
-                return;
+            if (response.Count() < filter.Count)
+            {
+                NewsRemainingItemsThreshold = -1;
+            }
 
+            if (response is null)
+            {
+                IsLoadingNews = false;
+                return;
+            }
+           
             News.AddRange(response);
+            NewsStart += 10;
             IsLoadingNews = false;
-            NewsStart++;
+
+
         }
     }
 }

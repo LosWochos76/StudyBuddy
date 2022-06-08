@@ -13,15 +13,15 @@ namespace StudyBuddy.BusinessLogic
             this.backend = backend;
         }
 
-        public IEnumerable<FcmToken> All()
+        public IEnumerable<FcmToken> GetAll()
         {
             if (backend.CurrentUser == null)
                 throw new Exception("Unauthorized!");
 
             if (backend.CurrentUser.IsAdmin)
-                return backend.Repository.FcmTokens.All();
+                return backend.Repository.FcmTokens.GetAll();
 
-            return backend.Repository.FcmTokens.OfUser(backend.CurrentUser.ID);
+            return backend.Repository.FcmTokens.ForUser(backend.CurrentUser.ID);
         }
 
         public FcmToken Save(FcmTokenSaveDto obj)
@@ -36,6 +36,11 @@ namespace StudyBuddy.BusinessLogic
             token.UserID = backend.CurrentUser.ID;
             backend.Repository.FcmTokens.Save(token);
             return token;
+        }
+
+        public IEnumerable<FcmToken> GetForUser(int userId)
+        {
+            return backend.Repository.FcmTokens.ForUser(userId);
         }
     }
 }

@@ -14,7 +14,7 @@ namespace StudyBuddy.Persistence
 
             CreateTable();
         }
-
+        
         private void CreateTable()
         {
             var qh = new QueryHelper<NotificationUserMetadata>(connection_string, FromNotificationUserMetadataReader);
@@ -136,11 +136,20 @@ namespace StudyBuddy.Persistence
             return metadata;
         }
 
-        public IEnumerable<NotificationUserMetadata> All()
+        public IEnumerable<NotificationUserMetadata> GetAll()
         {
             var qh = new QueryHelper<NotificationUserMetadata>(connection_string, FromNotificationUserMetadataReader);
             var sql =
                 "select id, notification_id, owner_id, liked, seen, shared, created, updated from notification_user_metadata";
+            var metadatas = qh.ExecuteQueryToObjectList(sql);
+            return metadatas;
+        }
+
+        public IEnumerable<NotificationUserMetadata> GetAllUnseen()
+        {
+            var qh = new QueryHelper<NotificationUserMetadata>(connection_string, FromNotificationUserMetadataReader);
+            var sql =
+                "select id, notification_id, owner_id, liked, seen, shared, created, updated from notification_user_metadata where seen=false ";
             var metadatas = qh.ExecuteQueryToObjectList(sql);
             return metadatas;
         }

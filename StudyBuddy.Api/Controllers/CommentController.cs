@@ -19,6 +19,9 @@ namespace StudyBuddy.Api.Controllers
         public IActionResult CreateComment([FromBody] CommentInsert insert)
         {
             backend.CommentService.CreateComment(insert);
+
+            // backend.PushNotificationService.SendUserCommentNotification(insert.);
+
             return Ok();
         }
 

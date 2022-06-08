@@ -33,12 +33,27 @@ namespace StudyBuddy.App.Api
             NewsViewModel news)
         {
             var notification = news.ToNotification();
-            news.Liked = !notification.Liked;
 
             var upsert = new NotificationUserMetadataUpsert
             {
                 NotificationId = notification.Id,
                 Liked = notification.Liked
+            };
+
+            var response = await Upsert(upsert);
+            return response;
+        }
+
+
+        public async Task<NotificationUserMetadata> SetNotificationToSeen(
+            NewsViewModel news)
+        {
+            var notification = news.ToNotification();
+
+            var upsert = new NotificationUserMetadataUpsert
+            {
+                NotificationId = notification.Id,
+                Seen = true
             };
 
             var response = await Upsert(upsert);

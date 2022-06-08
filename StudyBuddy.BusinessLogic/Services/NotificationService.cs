@@ -14,13 +14,19 @@ namespace StudyBuddy.BusinessLogic
             this.backend = backend;
         }
 
-        public void CreateNotificationForUser(int userId, string title, string body)
+        public Notification GetNotificationById(int notificationId)
+        {
+            return backend.Repository.Notifications.GetNotificationById(notificationId);
+        }
+
+        public void CreateNotificationForUser(int userId, string title, string body, int? badgeId = null)
         {
             backend.Repository.Notifications.Insert(new Notification
             {
                 OwnerId = userId,
                 Title = title,
-                Body = body
+                Body = body,
+                BadgeId = badgeId
             });
         }
 

@@ -17,7 +17,7 @@ namespace StudyBuddy.Api
         [HttpGet]
         public IActionResult Get()
         {
-            return Json(backend.FcmTokenService.All());
+            return Json(backend.FcmTokenService.GetAll());
         }
 
         [Route("/FcmToken/")]

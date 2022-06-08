@@ -28,6 +28,7 @@
                     <RefreshView IsRefreshing="{Binding IsRefreshing}"
                                  Command="{Binding RefreshCommand}">
                         <CollectionView
+                            x:Name="NotificationCollectionView"
                             ItemsSource="{Binding News}"
                             RemainingItemsThreshold="{Binding NewsRemainingItemsThreshold}"
                             RemainingItemsThresholdReachedCommand="{Binding NewsRemainingItemsThresholdReachedCommand}"
@@ -37,14 +38,17 @@
                             ItemsUpdatingScrollMode="KeepItemsInView">
                             <CollectionView.ItemTemplate>
                                 <DataTemplate x:DataType="viewmodels:NewsViewModel">
+                                    
+                                    
 
                                     <Frame CornerRadius="0"
-                                           HasShadow="True"
+                                           HasShadow="False"
                                            BackgroundColor="{AppThemeBinding Dark={StaticResource WindowBackgroundColorDark},Light={StaticResource WindowBackgroundColor}}"
+                                           BorderColor="Transparent"
                                            Padding="4, 8, 4, 8"
-                                           HeightRequest="400">
+                                           >
 
-                                        <FlexLayout Direction="Column" HeightRequest="400">
+                                        <FlexLayout Direction="Column" >
                                             <StackLayout Orientation="Horizontal">
                                                 <xct:AvatarView Size="48"
                                                                 VerticalOptions="Center"
@@ -66,30 +70,58 @@
                                             </StackLayout>
 
                                             <FlexLayout />
+                                            
+                                            <FlexLayout
+                                                IsVisible="{Binding ShowImage}"
+                                                HeightRequest="128"
+                                                Margin="16" 
+                                                JustifyContent="Center"
+                                                AlignItems="Center"
+                                                >
+                                                
+                                                <Image WidthRequest="128"
+                                                       HeightRequest="128"
+                                                       VerticalOptions="Center">
+                                                    <Image.Source>
+                                                        <FontImageSource FontFamily="{StaticResource FontAwesomeSolid}"
+                                                                         Glyph="{Binding GameBadgeViewModel.Icon}"
+                                                                         Color="{Binding GameBadgeViewModel.IconColor}">
+                                                        </FontImageSource>
+                                                    </Image.Source>
+                                                </Image>
+
+                                                
+                                            </FlexLayout>
 
 
                                             <FlexLayout
-                                                JustifyContent="Center"
+                                                HeightRequest="16"
+                                                Margin="16" 
+                                                JustifyContent="Start"
                                                 AlignItems="Center"
                                                 FlexLayout.Grow="1">
-                                                <Label IsVisible="{Binding ShowText}" Text="{Binding Body}" />
+                                                
+                                      
+                                                
+                                                <Label TextColor="{AppThemeBinding Dark={StaticResource TextColorDark}, Light={StaticResource TextColor}}"  Text="{Binding Body}" />
                                             </FlexLayout>
 
 
                                             <FlexLayout Direction="Row" HeightRequest="24"
                                                         JustifyContent="SpaceBetween">
                                                 <Button
-
+                                                    TextColor="{AppThemeBinding Dark={StaticResource TextColorDark}, Light={StaticResource TextColor}}"
                                                     Background="Transparent"
-
                                                     Text="{Binding UsersWhoLikedText}"
                                                     FontSize="10"
                                                     Padding="4"
-                                                    Command="{Binding BindingContext.OpenLikesUsersModalCommand, Source={x:Reference Name=page}}"
+                                                    Command="{Binding OpenLikesUsersModalCommand}"
                                                     CommandParameter="{Binding .}" />
 
                                                 <Button Background="Transparent"
-                                                        Command="{Binding BindingContext.OpenCommentsCommands, Source={x:Reference Name=page}}"
+                                                        TextColor="{AppThemeBinding Dark={StaticResource TextColorDark}, Light={StaticResource TextColor}}"
+
+                                                        Command="{Binding OpenCommentsCommands}"
                                                         CommandParameter="{Binding .}"
                                                         Padding="0" FontSize="10" Text="{Binding NumberOfCommentsText}" />
                                             </FlexLayout>
@@ -103,20 +135,27 @@
 
 
                                                 <Button Text="{Binding LikeButtonText}"
+                                                        TextColor="{AppThemeBinding Dark={StaticResource TextColorDark}, Light={StaticResource TextColor}}"
+
                                                         Padding="0"
                                                         FontSize="12"
                                                         Background="Transparent"
-                                                        Command="{Binding BindingContext.LikeNotificationCommand, Source={x:Reference Name=page}}"
+                                                        Command="{Binding LikeNotificationCommand}"
                                                         CommandParameter="{Binding .}" />
 
                                                 <Button
+                                                    
+                                                    TextColor="{AppThemeBinding Dark={StaticResource TextColorDark}, Light={StaticResource TextColor}}"
+
                                                     Padding="0"
                                                     FontSize="12"
                                                     Background="Transparent"
-                                                    Command="{Binding BindingContext.OpenCommentsCommands, Source={x:Reference Name=page}}"
+                                                    Command="{Binding OpenCommentsCommands}"
                                                     CommandParameter="{Binding .}"
                                                     Text="💬 Comment" />
 
+
+                                                <!--
                                                 <Button
 
                                                     Padding="0"
@@ -125,7 +164,7 @@
                                                     Command="{Binding ShareNotificationCommand}"
 
                                                     Text="➡️ Share" />
-
+-->
 
                                             </FlexLayout>
 

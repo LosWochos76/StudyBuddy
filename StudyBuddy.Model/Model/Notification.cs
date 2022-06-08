@@ -10,6 +10,8 @@ namespace StudyBuddy.Model
         public User Owner { get; set; }
         public string Title { get; set; }
         public string Body { get; set; }
+        public int? BadgeId { get; set; } = null;
+        
         public DateTime Created { get; set; }
         public DateTime Updated { get; set; }
         public bool Liked { get; set; } = false;

@@ -26,7 +26,7 @@ namespace StudyBuddy.App.ViewModels
         public int NewsStart { get; set; } = 0;
         public ICommand RefreshNewsCommand { get; }
         public bool NewsIsRefreshing { get; set; }
-        public int NewsRemainingItemsThreshold { get; set; } = 1;
+        public int NewsRemainingItemsThreshold { get; set; } = 20;
         public bool IsLoadingNews  { get; set; } = false;
         
         public ICommand NewsDetailCommand { get; set; }
@@ -131,18 +131,27 @@ namespace StudyBuddy.App.ViewModels
             };
             
             var response = await this.api.Notifications.GetMyNotificationFeed(filter);
+
             if (response.Count() == 0)
             {
                 NewsRemainingItemsThreshold = -1;
                 return;
             }
-            
+
+            if (response.Count() < filter.Count)
+            {
+                NewsRemainingItemsThreshold = -1;
+            }
+
             if (response is null)
+            {
+                IsLoadingNews = false;
                 return;
-            
+            }
+           
             News.AddRange(response);
+            NewsStart += 10;
             IsLoadingNews = false;
-            NewsStart++;
 
 
         }

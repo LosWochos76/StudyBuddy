@@ -18,7 +18,7 @@ namespace StudyBuddy.Persistence
         public IEnumerable<Notification> All(NotificationFilter filter)
         {
             var qh = new QueryHelper<Notification>(connection_string, FromNotificationReader);
-            var sql = "select id, owner_id, title, body, created, updated from notifications where true";
+            var sql = "select id, badge_id, owner_id, title, body, created, updated from notifications where true";
             qh.AddParameter(":max", filter.Count);
             qh.AddParameter(":from", filter.Start);
             sql += "limit :max offset :from";
@@ -37,13 +37,32 @@ namespace StudyBuddy.Persistence
         {
             var qh = new QueryHelper<Notification>(connection_string, FromNotificationReader);
             qh.AddParameter(":owner_id", obj.OwnerId);
+            qh.AddParameter(":badge_id", obj.BadgeId);
             qh.AddParameter(":title", obj.Title);
             qh.AddParameter(":body", obj.Body);
             qh.AddParameter(":created", obj.Created);
             qh.AddParameter(":updated", obj.Updated);
 
             obj.Id = qh.ExecuteScalar(
-                "insert into notifications (owner_id, title, body, created , updated) values (:owner_id, :title, :body, :created , :updated) returning id");
+                "insert into notifications (owner_id, badge_id ,title, body, created , updated) values (:owner_id, :badge_id ,:title, :body, :created , :updated) returning id");
+        }
+
+        public Notification GetNotificationById(int notificationId)
+        {
+            var qh = new QueryHelper<Notification>(connection_string, (r) => new Notification()
+            {
+                Id = r.GetInt32(0),
+                BadgeId =  r.IsDBNull(1) ?  null : r.GetInt32(2),
+                OwnerId = r.GetInt32(2),
+                Title = r.GetString(3),
+                Body = r.GetString(4),
+                Created = r.GetDateTime(5),
+                Updated = r.GetDateTime(6),
+            });
+            qh.AddParameter(":notification_id", notificationId);
+
+            return qh.ExecuteQueryToSingleObject(
+                "select id, badge_id , owner_id, title, body, created , updated from  notifications where id = :notification_id");
         }
 
         public IEnumerable<Notification> GetUserNotificationsFeed(NotificationFilter filter)
@@ -54,31 +73,45 @@ namespace StudyBuddy.Persistence
             qh.AddParameter(":max", filter.Count);
 
             var sql =
-                "select n.id, n.owner_id, n.title, n.body, n.created, n.updated, " +
+                "select distinct on (n.id) n.id, n.badge_id ,n.owner_id, n.title, n.body, n.created, n.updated, " +
                 "u.firstname, u.lastname, u.nickname, " +
                 "md.liked, md.seen, md.shared " +
                 "from friends as f " +
-                "inner join users as u on f.user_b = :user_id " +
-                "inner join (select id, owner_id, title, body, created, updated from notifications limit :max offset :from) as n on u.id = n.owner_id " +
-                "left outer join notification_user_metadata  as md on md.owner_id = :user_id and md.notification_id = n.id ";
-
+                "inner join users as u on f.user_a = :user_id " +
+                "inner join (select distinct on (id) id, badge_id ,owner_id, title, body, created, updated from notifications order by id limit :max offset :from) as n on u.id = n.owner_id " +
+                "left outer join notification_user_metadata  as md on md.owner_id = :user_id and md.notification_id = n.id " +
+                "order by n.id, n.created desc";   
 
             return qh.ExecuteQueryToObjectList(sql);
         }
 
         private void CreateTable()
         {
+            var rh = new RevisionHelper(connection_string, "notifications");
             var qh = new QueryHelper<Notification>(connection_string, FromNotificationReader);
             if (!qh.TableExists("notifications"))
                 qh.ExecuteNonQuery(
                     "create table notifications (" +
                     "id serial primary key, " +
+                    "badge_id int , " +
                     "owner_id int not null, " +
                     "title text, " +
                     "body text, " +
                     "created timestamp default current_timestamp, " +
                     "updated timestamp default current_timestamp " +
                     ")");
+
+            if (rh.GetRevision() == 0)
+            {
+                qh.ExecuteNonQuery(
+                    "alter table notifications " +
+                    "add column badge_id int");
+                
+                rh.SetRevision(1);
+            }
+            
+            
+
         }
 
         private Notification FromNotificationReader(NpgsqlDataReader reader)
@@ -86,21 +119,25 @@ namespace StudyBuddy.Persistence
             var obj = new Notification();
 
             obj.Id = reader.GetInt32(0);
-            obj.OwnerId = reader.GetInt32(1);
-            obj.Title = reader.GetString(2);
-            obj.Body = reader.GetString(3);
-            obj.Created = reader.GetDateTime(4);
-            obj.Updated = reader.GetDateTime(5);
+            if (!reader.IsDBNull(1))
+            {
+                obj.BadgeId =  reader.GetInt32(1);
+            }
+            obj.OwnerId = reader.GetInt32(2);
+            obj.Title = reader.GetString(3);
+            obj.Body = reader.GetString(4);
+            obj.Created = reader.GetDateTime(5);
+            obj.Updated = reader.GetDateTime(6);
 
             var owner = new User();
-            owner.Firstname = reader.GetString(6);
-            owner.Lastname = reader.GetString(7);
-            owner.Nickname = reader.GetString(8);
+            owner.Firstname = reader.GetString(7);
+            owner.Lastname = reader.GetString(8);
+            owner.Nickname = reader.GetString(9);
             obj.Owner = owner;
 
-            obj.Liked = !reader.IsDBNull(9) && reader.GetBoolean(9);
-            obj.Shared = !reader.IsDBNull(10) && reader.GetBoolean(10);
-            obj.Seen = !reader.IsDBNull(11) && reader.GetBoolean(11);
+            obj.Liked = !reader.IsDBNull(10) && reader.GetBoolean(10);
+            obj.Shared = !reader.IsDBNull(11) && reader.GetBoolean(11);
+            obj.Seen = !reader.IsDBNull(12) && reader.GetBoolean(12);
 
             return obj;
         }

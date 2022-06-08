@@ -12,6 +12,7 @@ namespace StudyBuddy.App.Api
         private readonly IApi api;
         private readonly string base_url;
         private readonly HttpClient client;
+        private readonly INavigationService navigation = new NagigationService();
 
         public NotificationService(IApi api, string base_url)
         {
@@ -19,6 +20,7 @@ namespace StudyBuddy.App.Api
             this.base_url = base_url;
             client = new HttpClient(Helper.GetInsecureHandler());
         }
+
 
         public async Task<IEnumerable<Notification>> GetAllMyNotifications()
         {
@@ -37,7 +39,7 @@ namespace StudyBuddy.App.Api
 
             var result = new List<NewsViewModel>();
             foreach (var obj in content)
-                result.Add(new NewsViewModel(obj));
+                result.Add(new NewsViewModel(api, obj, navigation));
 
             return result;
         }

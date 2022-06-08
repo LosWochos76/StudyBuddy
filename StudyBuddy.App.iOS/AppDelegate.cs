@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Foundation;
+using KeyboardOverlap.Forms.Plugin.iOSUnified;
 using Plugin.FirebasePushNotification;
 using UIKit;
 
@@ -24,6 +25,7 @@ namespace App.iOS
         {
             FirebasePushNotificationManager.Initialize(options, true);
             global::Xamarin.Forms.Forms.Init();
+            KeyboardOverlapRenderer.Init ();
             global::Xamarin.Forms.FormsMaterial.Init();
             ZXing.Net.Mobile.Forms.iOS.Platform.Init();
             LoadApplication(new StudyBuddy.App.App());
