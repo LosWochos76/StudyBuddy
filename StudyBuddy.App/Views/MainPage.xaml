@@ -247,7 +247,7 @@
     
     <Shell.FlyoutFooterTemplate>
         <DataTemplate>
-            <StackLayout Orientation="Horizontal" >
+            <StackLayout Orientation="Horizontal" BackgroundColor="White">
                 <Image Margin="30,0,0,0"
                        Source="TestLogo"
                        HeightRequest="80">
@@ -258,7 +258,8 @@
                        VerticalTextAlignment="Center"
                        HorizontalTextAlignment="Center"
                        FontAttributes="Bold"
-                       FontSize="26">
+                       FontSize="26"
+                       TextColor="{StaticResource TextColor}">
                     
                 </Label>
             </StackLayout>

@@ -17,7 +17,7 @@
                        FontAttributes="Bold"
                        FontSize="16"></Label>
                 <Entry Text="{Binding Firstname}"
-                       TextColor="{StaticResource TextColor}"
+                       TextColor="{AppThemeBinding Dark={StaticResource TextColorDark}, Light={StaticResource TextColor}}"
                        MaxLength="100"
                        ClearButtonVisibility="WhileEditing"
                        ReturnType="Next">
@@ -39,7 +39,7 @@
                        FontAttributes="Bold"
                        FontSize="16"></Label>
                 <Entry Text="{Binding Lastname}"
-                       TextColor="{StaticResource TextColor}"
+                       TextColor="{AppThemeBinding Dark={StaticResource TextColorDark}, Light={StaticResource TextColor}}"
                        MaxLength="100"
                        ClearButtonVisibility="WhileEditing"
                        ReturnType="Next">
@@ -61,7 +61,7 @@
                        FontAttributes="Bold"
                        FontSize="16"></Label>
                 <Entry Text="{Binding Nickname}"
-                       TextColor="{StaticResource TextColor}"
+                       TextColor="{AppThemeBinding Dark={StaticResource TextColorDark}, Light={StaticResource TextColor}}"
                        MaxLength="100"
                        ClearButtonVisibility="WhileEditing"
                        ReturnType="Next">

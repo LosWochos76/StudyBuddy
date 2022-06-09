@@ -30,18 +30,12 @@ namespace StudyBuddy.App.Api
         {
             try
             {
-                var response = await client.PostAsJsonAsync(base_url + "Login2", credentials);
+                var response = await client.PostAsJsonAsync(base_url + "Login", credentials);
                 if (response == null || !response.IsSuccessStatusCode)
                 {
                     api.Logging.LogError("No valid response on Login");
                     return false;
                 }
-                if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
-                {
-                    api.Logging.LogError("Email not confirmed");
-                    return false;
-                }
-
 
                 var content = await response.Content.ReadAsStringAsync();
                 return await LoginFromJson(content);
