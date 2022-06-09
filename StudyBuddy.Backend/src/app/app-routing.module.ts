@@ -29,6 +29,8 @@ import { BusinessEventEditComponent } from './businessevent/businessevent-edit/b
 import { ForgotpasswordComponent } from './authentication/forgotpassword/forgotpassword.component';
 import { ResetpasswordComponent } from './authentication/resetpassword/resetpassword.component';
 import { UserInfoComponent } from './user/user-info/user-info.component';
+import { NotverifiedComponent } from './authentication/notverified/notverified.component';
+import { VerifyemailComponent } from './authentication/verifyemail/verifyemail.component';
 
 const routes: Routes = [
   { path: 'register', component: RegisterUserComponent },
@@ -59,6 +61,8 @@ const routes: Routes = [
   { path: 'login', component: LoginComponent },
   { path: 'login/forgotpassword', component: ForgotpasswordComponent },
   { path: 'login/resetpassword', component: ResetpasswordComponent },
+  { path: 'login/verificationrequired', component: NotverifiedComponent },
+  { path: 'login/verifyemail', component: VerifyemailComponent },
   { path: 'logout', component: LogoutComponent },
   { path: 'logging', component: LoggingListComponent, canActivate: [RouteGuardService] },
   { path: 'businessevent', component: BusinessEventListComponent, canActivate: [RouteGuardService] },

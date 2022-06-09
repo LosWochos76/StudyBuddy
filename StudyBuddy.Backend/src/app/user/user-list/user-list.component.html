@@ -24,6 +24,7 @@
       <th scope="col">Nickname</th>
       <th scope="col">Rolle</th>
       <th scope="col">EMail</th>
+      <th scope="col">Status</th>
     </tr>
   </thead>
   <tbody>
@@ -37,6 +38,7 @@
           <td>{{obj.nickname}}</td>
           <td>{{obj.getRoleName()}}</td>
           <td><a href="mailto:{{obj.email}}">{{obj.email}}</a></td>
+          <td>{{obj.getStatus()}}</td>
     </tr>
   </tbody>
   </table>

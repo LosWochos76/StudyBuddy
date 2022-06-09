@@ -1,0 +1,16 @@
+﻿<br>
+<h1>Email bestätigen</h1>
+<br>
+<form [formGroup]="form">
+    <div>
+        <label class="form-label">Wir haben Ihnen einen Bestätigungs-Link an die E-Mail-Adresse Ihres Gameucation Accounts gesendet.</label>
+    </div>
+    <div class="mb-3">
+        <label class="form-label" for="email" [hidden]="toggle">Email</label>
+        <input type="email" class="form-control" id="email" [(ngModel)]="_email" formControlName="email" [hidden]="toggle">
+    </div>
+    <div>
+        <button type="submit" class="btn btn-primary" (click)="onChangeEmail()">E-Mail-Adresse überprüfen</button>
+        <button type="submit" class="btn btn-primary" (click)="onSubmit()" style="float:right">Erneut senden</button>
+    </div>
+</form>

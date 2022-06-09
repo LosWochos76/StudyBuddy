@@ -22,7 +22,7 @@ namespace StudyBuddy.Persistence
             var qh = new QueryHelper<User>(connection_string, FromReader, new {id});
             return qh.ExecuteQueryToSingleObject(
                 "SELECT id,firstname,lastname,nickname," +
-                "email,password_hash,role FROM users where id=:id");
+                "email,password_hash,role,emailconfirmed FROM users where id=:id");
         }
 
         public IEnumerable<User> All(UserFilter filter)
@@ -32,7 +32,7 @@ namespace StudyBuddy.Persistence
             qh.AddParameter(":max", filter.Count);
 
             return qh.ExecuteQueryToObjectList(
-                "SELECT id,firstname,lastname,nickname,email,password_hash,role " +
+                "SELECT id,firstname,lastname,nickname,email,password_hash,role,emailconfirmed " +
                 "FROM users order by lastname,firstname,nickname limit :max offset :from");
         }
 
@@ -46,7 +46,7 @@ namespace StudyBuddy.Persistence
         {
             var qh = new QueryHelper<User>(connection_string, FromReader, new {email});
             return qh.ExecuteQueryToSingleObject(
-                "SELECT id,firstname,lastname,nickname,email,password_hash,role " +
+                "SELECT id,firstname,lastname,nickname,email,password_hash,role,emailconfirmed " +
                 "FROM users where lower(email)=lower(:email)");
         }
 
@@ -59,11 +59,12 @@ namespace StudyBuddy.Persistence
             qh.AddParameter(":email", obj.Email.ToLower());
             qh.AddParameter(":password_hash", simpleHash.Compute(obj.Password));
             qh.AddParameter(":role", (int) obj.Role);
+            qh.AddParameter(":emailconfirmed", false);
 
             obj.ID = qh.ExecuteScalar(
                 "insert into users " +
-                "(firstname,lastname,nickname,email,password_hash,role) values " +
-                "(:firstname,:lastname,:nickname,:email,:password_hash,:role) RETURNING id");
+                "(firstname,lastname,nickname,email,password_hash,role,emailconfirmed) values " +
+                "(:firstname,:lastname,:nickname,:email,:password_hash,:role,:emailconfirmed) RETURNING id");
         }
 
         public void Update(User obj)
@@ -83,6 +84,7 @@ namespace StudyBuddy.Persistence
             qh.AddParameter(":lastname", obj.Lastname);
             qh.AddParameter(":nickname", obj.Nickname.ToLower());
             qh.AddParameter(":email", obj.Email.ToLower());
+            qh.AddParameter(":emailconfirmed", obj.EmailConfirmed);
 
             if (!string.IsNullOrEmpty(obj.Password))
                 qh.AddParameter(":password_hash", simpleHash.Compute(obj.Password));
@@ -111,7 +113,7 @@ namespace StudyBuddy.Persistence
             qh.AddParameter(":nickname", nickname);
             return qh.ExecuteQueryToSingleObject(
                 "SELECT id,firstname,lastname,nickname," +
-                "email,password_hash,role FROM " +
+                "email,password_hash,role,emailconfirmed FROM " +
                 "users where lower(nickname)=lower(:nickname)");
         }
 
@@ -123,7 +125,7 @@ namespace StudyBuddy.Persistence
             qh.AddParameter(":max", filter.Count);
 
             var sql =
-                "select id,firstname,lastname,nickname,email,password_hash,role,common_friends(id, :user_id) from friends" +
+                "select id,firstname,lastname,nickname,email,password_hash,role,emailconfirmed,common_friends(id, :user_id) from friends" +
                 " inner join users on user_b = id where user_a=:user_id ";
 
             if (!string.IsNullOrEmpty(filter.SearchText))
@@ -161,7 +163,7 @@ namespace StudyBuddy.Persistence
             qh.AddParameter(":max", filter.Count);
 
             var sql =
-                "select id,firstname,lastname,nickname,email,password_hash,role,common_friends(id,:user_id) from users " +
+                "select id,firstname,lastname,nickname,email,password_hash,role,emailconfirmed,common_friends(id,:user_id) from users " +
                 "where id not in (select user_b from friends where user_a=:user_id) and id!=:user_id ";
 
             if (!string.IsNullOrEmpty(filter.SearchText))
@@ -224,7 +226,7 @@ namespace StudyBuddy.Persistence
             var qh = new QueryHelper<User>(connection_string, FromReader);
             qh.AddParameter(":challenge_id", challenge_id);
             return qh.ExecuteQueryToObjectList(
-                "SELECT id,firstname,lastname,nickname,email,password_hash,role FROM challenge_acceptance " +
+                "SELECT id,firstname,lastname,nickname,email,password_hash,role,emailconfirmed FROM challenge_acceptance " +
                 "inner join users on user_id=id " +
                 "where challenge_id=:challenge_id " +
                 "order by lastname,firstname,nickname");
@@ -235,7 +237,7 @@ namespace StudyBuddy.Persistence
             var qh = new QueryHelper<User>(connection_string, FromReader);
             qh.AddParameter(":badge_id", badge_id);
             return qh.ExecuteQueryToObjectList(
-                "SELECT id,firstname,lastname,nickname,email,password_hash,role FROM users_badges " +
+                "SELECT id,firstname,lastname,nickname,email,password_hash,role,emailconfirmed FROM users_badges " +
                 "inner join users on user_id=id " +
                 "where badge_id=:badge_id " +
                 "order by lastname,firstname,nickname");
@@ -255,7 +257,7 @@ namespace StudyBuddy.Persistence
             qh.AddParameter(":notification_id", notificationId);
 
             var sql =
-                "select u.id,u.firstname,u.lastname,u.nickname,u.email,u.password_hash,u.role " +
+                "select u.id,u.firstname,u.lastname,u.nickname,u.email,u.password_hash,u.role,u.emailconfirmed " +
                 "from users as u  " +
                 "inner join notification_user_metadata as md on u.id = md.owner_id  and liked = true and md.notification_id = :notification_id ";
 
@@ -288,7 +290,8 @@ namespace StudyBuddy.Persistence
                     Nickname = "Admin",
                     Email = "admin@admin.de",
                     Password = "secret",
-                    Role = Role.Admin
+                    Role = Role.Admin,
+                    EmailConfirmed = true
                 });
 
                 rh.SetRevision(2);
@@ -313,6 +316,14 @@ namespace StudyBuddy.Persistence
                                    "drop column if exists enrolled_in_term_id");
 
                 rh.SetRevision(2);
+            }
+            
+            if (rh.GetRevision() == 2)
+            {
+                qh.ExecuteNonQuery(
+                    "ALTER TABLE users ADD COLUMN emailconfirmed BOOLEAN DEFAULT false");
+
+                rh.SetRevision(3);
             }
 
             qh.ExecuteNonQuery("begin;\n" +
@@ -375,13 +386,14 @@ namespace StudyBuddy.Persistence
             obj.Email = reader.GetString(4);
             obj.PasswordHash = reader.GetString(5);
             obj.Role = (Role) reader.GetInt32(6);
+            obj.EmailConfirmed = reader.GetBoolean(7);
             return obj;
         }
 
         private User FromReaderWithCommonFriends(NpgsqlDataReader reader)
         {
             var user = FromReader(reader);
-            user.CommonFriends = reader.GetInt32(7);
+            user.CommonFriends = reader.GetInt32(8);
             return user;
         }
     }

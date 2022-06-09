@@ -3,6 +3,7 @@ import { Injectable, EventEmitter } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import { ResetPasswordData } from '../model/resetpassworddata';
 import { User } from '../model/user';
+import { VerifyEmailData } from '../model/verifyemaildata';
 
 @Injectable({
   providedIn: 'root'
@@ -72,6 +73,26 @@ export class AuthorizationService {
         }
         console.log(data)
         var result = await this.http.post(this.url + 'Login/ResetPassword', data).toPromise();
+        return result;
+
+    }
+
+    async sendVerificationMail(email: string): Promise<boolean> {
+        var result = await this.http.post(this.url + 'Login/SendVerificationMail', "\"" + email + "\"",
+            {
+                headers: new HttpHeaders({ 'Content-Type': 'application/json' })
+            }).toPromise();
+
+        return 'status' in result && result['status'] == 'ok';
+    }
+
+    async verifyEmail(obj: VerifyEmailData) {
+        var data = {
+            "token": obj.token,
+            "email": obj.email
+        }
+        console.log(data);
+        var result = await this.http.post(this.url + 'Login/VerifyEmail', data).toPromise();
         return result;
 
     }

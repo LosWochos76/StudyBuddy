@@ -51,9 +51,16 @@ namespace StudyBuddy.BusinessLogic
             return obj;
         }
 
+        public User VerifyEmail(User obj)
+        {
+            backend.Repository.Users.Update(obj);
+            return obj;
+        }
+
         public User Insert(User obj)
         {
             backend.Repository.Users.Insert(obj);
+            backend.AuthenticationService.SendMail(obj.Email, false);
             backend.BusinessEventService.TriggerEvent(this,
                 new BusinessEventArgs(BusinessEventType.UserRegistered, obj));
             return obj;

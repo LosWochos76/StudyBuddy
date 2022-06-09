@@ -39,14 +39,25 @@ namespace StudyBuddy.BusinessLogic
             user.PasswordHash = null;
             var jwt = new JwtToken();
 
-            return new
+            if (!user.EmailConfirmed)
             {
-                Token = jwt.FromUser(user.ID),
-                User = user
-            };
+                backend.Logging.LogDebug($"User with email {user.Email} is not verified.");
+                return new
+                {
+                    Verified = false
+                };
+            }
+            else
+            {
+                return new
+                {
+                    Token = jwt.FromUser(user.ID),
+                    User = user
+                };
+            }
         }
 
-        public void SendPasswortResetMail(string email)
+        public void SendMail(string email, bool forgotpassword)
         {
             if (string.IsNullOrEmpty(email))
                 throw new Exception("No email-adress given!");
@@ -55,7 +66,6 @@ namespace StudyBuddy.BusinessLogic
             if (obj == null)
                 throw new Exception("User not found!");
             var key = obj.PasswordHash;
-            var baseurl = "https://backend.gameucation.eu/login/resetpassword";
             var jwt = new JwtToken();
             var token = jwt.PasswordResetToken(obj.ID, key);
             var param = new Dictionary<string, string>
@@ -63,9 +73,23 @@ namespace StudyBuddy.BusinessLogic
                 {"token", token },
                 {"email", email }
             };
+            string baseurl;
+            string message;
+
+            if (forgotpassword)
+            {
+                baseurl = "https://backend.gameucation.eu/login/resetpassword";
+                message = "Passwort zurücksetzen";
+            }
+            else
+            {
+                baseurl = "https://backend.gameucation.eu/login/verifyemail";
+                message = "E-Mail Adresse bestätigen";
+            }
+
             var link = new Uri(QueryHelpers.AddQueryString(baseurl, param));
 
-            MailKitHelper.SendMail(email, "Passwort zurücksetzen", link.ToString());
+            MailKitHelper.SendMail(email, message, link.ToString());
         }
 
         public bool CheckToken(string token)

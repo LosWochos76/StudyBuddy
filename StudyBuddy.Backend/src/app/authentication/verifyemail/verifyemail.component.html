@@ -1,0 +1,13 @@
+﻿<br>
+<h1>Email bestätigen</h1>
+<br>
+<div *ngIf="showError" class="alert alert-danger" role="alert">
+    E-Mail-Adresse konnte nicht bestätigt werden. <a [routerLink]="['/login/verificationrequired', {email:_email}]"> Hier neuen Link anfordern. </a>
+</div>
+<div *ngIf="showSuccess" class="alert alert-success" role="alert">
+    E-Mail-Adresse wurde bestätigt. <a [routerLink]="['/login']"> Hier geht es zum Login. </a>
+</div>
+<br />
+<div>
+    <button type="submit" class="btn btn-primary" (click)="toLogin()">Zum Login</button>
+</div>

@@ -6,6 +6,7 @@ export class User {
     password: string;
     email: string;
     role: number = 1;
+    emailconfirmed: boolean;
 
     constructor() {
         this.id = 0;
@@ -32,6 +33,11 @@ export class User {
         }
     }
 
+    getStatus() {
+        if (this.emailconfirmed) return "verifiziert";
+        else return "nicht verifiziert";
+    }
+
     static fromApi(obj): User {
         let result = new User();
         result.id = obj['id'];
@@ -40,6 +46,7 @@ export class User {
         result.nickname = obj['nickname'];
         result.email = obj['email'];
         result.role = obj['role'];
+        result.emailconfirmed = obj['emailConfirmed'];
         return result;
     }
 
