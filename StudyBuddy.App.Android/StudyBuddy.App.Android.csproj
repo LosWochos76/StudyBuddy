@@ -91,6 +91,22 @@
   <ItemGroup>
     <AndroidResource Include="Resources\drawable\logo.jpg" />
     <AndroidResource Include="Resources\drawable\splash_screen.xml" />
+    <AndroidResource Include="Resources\mipmap-anydpi-v26\ic_launcher.xml" />
+    <AndroidResource Include="Resources\mipmap-hdpi\ic_launcher.png" />
+    <AndroidResource Include="Resources\mipmap-hdpi\ic_launcher_adaptive_back.png" />
+    <AndroidResource Include="Resources\mipmap-hdpi\ic_launcher_adaptive_fore.png" />
+    <AndroidResource Include="Resources\mipmap-mdpi\ic_launcher.png" />
+    <AndroidResource Include="Resources\mipmap-mdpi\ic_launcher_adaptive_back.png" />
+    <AndroidResource Include="Resources\mipmap-mdpi\ic_launcher_adaptive_fore.png" />
+    <AndroidResource Include="Resources\mipmap-xhdpi\ic_launcher.png" />
+    <AndroidResource Include="Resources\mipmap-xhdpi\ic_launcher_adaptive_back.png" />
+    <AndroidResource Include="Resources\mipmap-xhdpi\ic_launcher_adaptive_fore.png" />
+    <AndroidResource Include="Resources\mipmap-xxhdpi\ic_launcher.png" />
+    <AndroidResource Include="Resources\mipmap-xxhdpi\ic_launcher_adaptive_back.png" />
+    <AndroidResource Include="Resources\mipmap-xxhdpi\ic_launcher_adaptive_fore.png" />
+    <AndroidResource Include="Resources\mipmap-xxxhdpi\ic_launcher.png" />
+    <AndroidResource Include="Resources\mipmap-xxxhdpi\ic_launcher_adaptive_back.png" />
+    <AndroidResource Include="Resources\mipmap-xxxhdpi\ic_launcher_adaptive_fore.png" />
     <AndroidResource Include="Resources\values\styles.xml" />
     <AndroidResource Include="Resources\values\colors.xml" />
   </ItemGroup>
@@ -109,60 +125,6 @@
     <GoogleServicesJson Include="google-services.json" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\mipmap-anydpi-v26\ic_launcher.xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\mipmap-anydpi-v26\ic_launcher_round.xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\mipmap-hdpi\ic_launcher.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\mipmap-hdpi\ic_launcher_foreground.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\mipmap-hdpi\ic_launcher_round.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\mipmap-ldpi\ic_launcher.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\mipmap-mdpi\ic_launcher.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\mipmap-mdpi\ic_launcher_foreground.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\mipmap-mdpi\ic_launcher_round.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\mipmap-xhdpi\ic_launcher.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\mipmap-xhdpi\ic_launcher_foreground.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\mipmap-xhdpi\ic_launcher_round.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\mipmap-xxhdpi\ic_launcher.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\mipmap-xxhdpi\ic_launcher_foreground.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\mipmap-xxhdpi\ic_launcher_round.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\mipmap-xxxhdpi\ic_launcher.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\mipmap-xxxhdpi\ic_launcher_foreground.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\mipmap-xxxhdpi\ic_launcher_round.png" />
-  </ItemGroup>
-  <ItemGroup>
     <AndroidResource Include="Resources\values\ic_launcher_background.xml" />
   </ItemGroup>
   <ItemGroup>
@@ -170,6 +132,56 @@
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\drawable\TestLogo.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="..\..\..\..\Downloads\ic_launcher (2)\res\mipmap-anydpi-v26\ic_launcher.xml">
+      <Link>Resources\mipmap-anydpi-v26\ic_launcher.xml</Link>
+    </Content>
+    <Content Include="..\..\..\..\Downloads\ic_launcher (2)\res\mipmap-hdpi\ic_launcher.png">
+      <Link>Resources\mipmap-hdpi\ic_launcher.png</Link>
+    </Content>
+    <Content Include="..\..\..\..\Downloads\ic_launcher (2)\res\mipmap-hdpi\ic_launcher_adaptive_back.png">
+      <Link>Resources\mipmap-hdpi\ic_launcher_adaptive_back.png</Link>
+    </Content>
+    <Content Include="..\..\..\..\Downloads\ic_launcher (2)\res\mipmap-hdpi\ic_launcher_adaptive_fore.png">
+      <Link>Resources\mipmap-hdpi\ic_launcher_adaptive_fore.png</Link>
+    </Content>
+    <Content Include="..\..\..\..\Downloads\ic_launcher (2)\res\mipmap-mdpi\ic_launcher.png">
+      <Link>Resources\mipmap-mdpi\ic_launcher.png</Link>
+    </Content>
+    <Content Include="..\..\..\..\Downloads\ic_launcher (2)\res\mipmap-mdpi\ic_launcher_adaptive_back.png">
+      <Link>Resources\mipmap-mdpi\ic_launcher_adaptive_back.png</Link>
+    </Content>
+    <Content Include="..\..\..\..\Downloads\ic_launcher (2)\res\mipmap-mdpi\ic_launcher_adaptive_fore.png">
+      <Link>Resources\mipmap-mdpi\ic_launcher_adaptive_fore.png</Link>
+    </Content>
+    <Content Include="..\..\..\..\Downloads\ic_launcher (2)\res\mipmap-xhdpi\ic_launcher.png">
+      <Link>Resources\mipmap-xhdpi\ic_launcher.png</Link>
+    </Content>
+    <Content Include="..\..\..\..\Downloads\ic_launcher (2)\res\mipmap-xhdpi\ic_launcher_adaptive_back.png">
+      <Link>Resources\mipmap-xhdpi\ic_launcher_adaptive_back.png</Link>
+    </Content>
+    <Content Include="..\..\..\..\Downloads\ic_launcher (2)\res\mipmap-xhdpi\ic_launcher_adaptive_fore.png">
+      <Link>Resources\mipmap-xhdpi\ic_launcher_adaptive_fore.png</Link>
+    </Content>
+    <Content Include="..\..\..\..\Downloads\ic_launcher (2)\res\mipmap-xxhdpi\ic_launcher.png">
+      <Link>Resources\mipmap-xxhdpi\ic_launcher.png</Link>
+    </Content>
+    <Content Include="..\..\..\..\Downloads\ic_launcher (2)\res\mipmap-xxhdpi\ic_launcher_adaptive_back.png">
+      <Link>Resources\mipmap-xxhdpi\ic_launcher_adaptive_back.png</Link>
+    </Content>
+    <Content Include="..\..\..\..\Downloads\ic_launcher (2)\res\mipmap-xxhdpi\ic_launcher_adaptive_fore.png">
+      <Link>Resources\mipmap-xxhdpi\ic_launcher_adaptive_fore.png</Link>
+    </Content>
+    <Content Include="..\..\..\..\Downloads\ic_launcher (2)\res\mipmap-xxxhdpi\ic_launcher.png">
+      <Link>Resources\mipmap-xxxhdpi\ic_launcher.png</Link>
+    </Content>
+    <Content Include="..\..\..\..\Downloads\ic_launcher (2)\res\mipmap-xxxhdpi\ic_launcher_adaptive_back.png">
+      <Link>Resources\mipmap-xxxhdpi\ic_launcher_adaptive_back.png</Link>
+    </Content>
+    <Content Include="..\..\..\..\Downloads\ic_launcher (2)\res\mipmap-xxxhdpi\ic_launcher_adaptive_fore.png">
+      <Link>Resources\mipmap-xxxhdpi\ic_launcher_adaptive_fore.png</Link>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <ProjectExtensions>
