@@ -24,8 +24,17 @@ export class LoginComponent implements OnInit {
       });
 
       this.auth.changed.subscribe((result) => {
-        if (result)
-          this.router.navigate(['/challenge']);
+          if (result == 0)
+          {
+              this.router.navigate(['/challenge']);
+          }
+
+              
+          if (result == 1)
+          {
+              this.router.navigate(['/login/verificationrequired', { email: this.form.controls.email.value }])
+          }
+              
       });
     }
 
@@ -35,9 +44,8 @@ export class LoginComponent implements OnInit {
   async onSubmit() {
     let email = this.form.controls.email.value;
     let password = this.form.controls.password.value;
-    let result = await this.auth.login(email, password);
-
-    if (!result) {
+      let result = await this.auth.login(email, password);
+      if (result.status == 1) {
       this.logger.debug("Wrong credentials!");
       this.login_error = true;
     }

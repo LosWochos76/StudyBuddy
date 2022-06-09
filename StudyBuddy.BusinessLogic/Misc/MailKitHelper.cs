@@ -11,12 +11,12 @@ namespace StudyBuddy.BusinessLogic
         public static MailKitOptions GetMailKitOptions()
         {
             var options = new MailKitOptions();
-            options.Server = Environment.GetOrDefault("SMTP_SERVER", "localhost");
+            options.Server = Environment.GetOrDefault("SMTP_SERVER", "smtp.ethereal.email");
             options.Port = Convert.ToInt32(Environment.GetOrDefault("SMTP_PORT", "587"));
             options.SenderName = Environment.GetOrDefault("SMTP_SENDERNAME", "admin");
             options.SenderEmail = Environment.GetOrDefault("SMTP_SENDEREMAIL", "admin@admin.de");
-            options.Account = Environment.GetOrDefault("SMTP_ACCOUNT", "admin@admin.de");
-            options.Password = Environment.GetOrDefault("SMTP_PASSWORD", "secret");
+            options.Account = Environment.GetOrDefault("SMTP_ACCOUNT", "armand.okon36@ethereal.email");
+            options.Password = Environment.GetOrDefault("SMTP_PASSWORD", "2kMgT71gNB4dB5rzbP");
             options.Security = Convert.ToBoolean(Environment.GetOrDefault("SMTP_SECURITY", "True"));
             return options;
         }

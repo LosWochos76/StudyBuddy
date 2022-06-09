@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.WebUtilities;
-using NETCore.MailKit;
-using NETCore.MailKit.Core;
 using SimpleHashing.Net;
+using StudyBuddy.Model.Model;
 
 namespace StudyBuddy.BusinessLogic
 {
@@ -17,7 +16,7 @@ namespace StudyBuddy.BusinessLogic
             this.backend = backend;
         }
 
-        public object Login(UserCredentials uc)
+        public LoginResult Login(UserCredentials uc)
         {
             if (uc == null || string.IsNullOrEmpty(uc.EMail) || string.IsNullOrEmpty(uc.Password))
                 throw new Exception("Missing email and password!");
@@ -26,13 +25,19 @@ namespace StudyBuddy.BusinessLogic
             if (user == null)
             {
                 backend.Logging.LogDebug($"User with email {uc.EMail} not found!");
-                return null;
+                return new LoginResult 
+                {
+                    Status = 3,
+                };
             }
 
             if (!simpleHash.Verify(uc.Password, user.PasswordHash))
             {
                 backend.Logging.LogDebug($"Wrong password for {uc.EMail}!");
-                return null;
+                return new LoginResult 
+                { 
+                    Status = 2 
+                };
             }
 
             backend.Logging.LogDebug("Successfull login");
@@ -42,15 +47,16 @@ namespace StudyBuddy.BusinessLogic
             if (!user.EmailConfirmed)
             {
                 backend.Logging.LogDebug($"User with email {user.Email} is not verified.");
-                return new
+                return new LoginResult
                 {
-                    Verified = false
+                    Status = 1,
                 };
             }
             else
             {
-                return new
+                return new LoginResult
                 {
+                    Status = 0,
                     Token = jwt.FromUser(user.ID),
                     User = user
                 };

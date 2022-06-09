@@ -32,11 +32,10 @@ export class VerifyemailComponent implements OnInit {
             email: this._email
         }
         let result = this.service.verifyEmail(verifyEmailData);
-        if ('status' in result && result['status'] == 'ok')
+        if (result)
             this.showSuccess = true; //logik in service verlegen
         else {
             this.logger.debug(`Verification for ${this._email} failed.`)
-            console.log(result);
             this.showError = true;
         }
             

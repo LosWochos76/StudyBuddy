@@ -77,7 +77,7 @@ namespace StudyBuddy.Persistence
             if (!string.IsNullOrEmpty(obj.Password))
                 sql += ",password_hash=:password_hash";
 
-            sql += ",role=:role where id=:id";
+            sql += ",role=:role,emailconfirmed=:emailconfirmed where id=:id";
 
             qh.AddParameter(":id", obj.ID);
             qh.AddParameter(":firstname", obj.Firstname);

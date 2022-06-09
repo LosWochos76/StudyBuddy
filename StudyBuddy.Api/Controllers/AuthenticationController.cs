@@ -84,7 +84,7 @@ namespace StudyBuddy.Api
             {
                 user.EmailConfirmed = true;
                 backend.UserService.VerifyEmail(user);
-                return Ok();
+                return Ok(user);
             }
             return Json(new { status = "Invalid request" });
         }

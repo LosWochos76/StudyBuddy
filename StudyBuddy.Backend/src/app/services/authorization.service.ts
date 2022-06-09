@@ -1,6 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable, EventEmitter } from '@angular/core';
 import { environment } from 'src/environments/environment';
+import { LoginResult } from '../model/loginresult';
 import { ResetPasswordData } from '../model/resetpassworddata';
 import { User } from '../model/user';
 import { VerifyEmailData } from '../model/verifyemaildata';
@@ -11,32 +12,35 @@ import { VerifyEmailData } from '../model/verifyemaildata';
 export class AuthorizationService {
   private url = environment.api_url;
   private user: User = null;
-  private token: string = null;
-  changed: EventEmitter<boolean> = new EventEmitter<boolean>();
+    private token: string = null;
+    changed: EventEmitter<number> = new EventEmitter<number>();
 
   constructor(
     private http: HttpClient) { }
 
-  async login(email: string, password: string): Promise<boolean> {
+    async login(email: string, password: string): Promise<LoginResult> {
     const response = await this.http.post(this.url + 'Login', {
       'email': email,
       'password': password
     }).toPromise();
 
     if (response == null)
-      return false;
+          return null;
 
-    let user = User.fromApi(response['user']);
-
-    if (!user.isStudent()) {
-      this.user = user;
-      this.token = response['token'];
-      this.changed.emit(true);
-      return true;
+        let result = LoginResult.fromApi(response);
+        if (result.status == 0 && !result.user.isStudent)
+        {
+            this.user = User.fromApi(result.user);
+            this.token = response['token'];
+            this.changed.emit(0);
+            return result;
+        }
+        if (result.status == 1) {
+            this.changed.emit(1);
+            return result;
+        }
+    else return result;
     }
-
-    return false;
-  }
 
   getUser() {
     return this.user;
@@ -49,7 +53,7 @@ export class AuthorizationService {
   async logout() {
     this.user = null;
     this.token = null;
-    this.changed.emit(false);
+    this.changed.emit();
   }
 
   isLoggedIn() {
@@ -91,8 +95,8 @@ export class AuthorizationService {
             "token": obj.token,
             "email": obj.email
         }
-        console.log(data);
         var result = await this.http.post(this.url + 'Login/VerifyEmail', data).toPromise();
+        console.log(result);
         return result;
 
     }
