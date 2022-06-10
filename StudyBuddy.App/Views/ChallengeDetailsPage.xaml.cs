@@ -10,9 +10,14 @@ namespace StudyBuddy.App.Views
         public ChallengeDetailsPage(ChallengeViewModel challenge)
         {
             InitializeComponent();
+            var ccvm = new ChallengeConfirmViewModel(challenge);
             this.challenge = challenge;
             grid.BindingContext = challenge;
-            button1.BindingContext = new ChallengeConfirmViewModel(challenge);
+            button1.BindingContext = ccvm;
+            FriendsPicker.BindingContext = ccvm;
+            //FriendsPicker.SelectedItem 
+            if (challenge.ProveText != "Durch Bestätigung eines/einer Freundes/Freundin")
+                FriendsPicker.IsVisible = false;
         }
     }
 }

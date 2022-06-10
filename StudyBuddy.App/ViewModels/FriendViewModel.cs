@@ -26,10 +26,12 @@ namespace StudyBuddy.App.ViewModels
             ShowFriendsStatisticCommand = new AsyncCommand(ShowCompletedChallenges);
             LoadCharts();
         }
+
         private async Task ShowCompletedChallenges()
         {
             await Navigation.Push(new StatisticPage());
         }
+
         public async Task RemoveFriend()
         {
             var answer = await dialog.ShowMessage(

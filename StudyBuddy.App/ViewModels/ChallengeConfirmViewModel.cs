@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Threading.Tasks;
 using System.Windows.Input;
 using StudyBuddy.App.Api;
 using StudyBuddy.App.Misc;
@@ -11,6 +9,8 @@ using StudyBuddy.Model;
 using TinyIoC;
 using Xamarin.Essentials;
 using Xamarin.Forms;
+using System.Threading.Tasks;
+
 
 namespace StudyBuddy.App.ViewModels
 {
@@ -20,18 +20,25 @@ namespace StudyBuddy.App.ViewModels
         private IDialogService dialog;
         private INavigationService navigation;
         private IApi api;
+        public RangeObservableCollection<UserViewModel> Friends { get; set; }
+        public UserViewModel SelectedFriend { get; set; }
         public ICommand ConfirmChallenge { get; }
-
         public ChallengeConfirmViewModel(ChallengeViewModel challenge)
         {
             this.challenge = challenge;
-
             ConfirmChallenge = new Command(OnConfirm);
             dialog = TinyIoCContainer.Current.Resolve<IDialogService>();
             api = TinyIoCContainer.Current.Resolve<IApi>();
             navigation = TinyIoCContainer.Current.Resolve<INavigationService>();
+            LoadFriends();
         }
 
+        private async Task LoadFriends()
+        {
+            Friends = new RangeObservableCollection<UserViewModel>();
+            var recipients = await api.Users.GetFriends();
+            Friends.AddRange(recipients.Objects);
+        }
         private void OnConfirm()
         {
             if (challenge.Prove == ChallengeProve.ByTrust)
@@ -57,7 +64,6 @@ namespace StudyBuddy.App.ViewModels
         {
             // to be programmed
         }
-
         private async void AcceptByTrust()
         {
             var answer = await dialog.ShowMessage(
@@ -75,7 +81,7 @@ namespace StudyBuddy.App.ViewModels
                 return;
             }
 
-            navigation.GoTo("//StatisticsPage");
+            await navigation.GoTo("//StatisticsPage");
         }
 
         private void AcceptByQrCode()
@@ -85,30 +91,16 @@ namespace StudyBuddy.App.ViewModels
 
         private async void AcceptByRandomTeamMember()
         {
-            var friends = new RangeObservableCollection<UserViewModel>();
-            var recipients = await api.Users.GetFriends();
-            friends.AddRange(recipients.Objects);
-
-            if (!friends.Any())
+            if (!Friends.Any())
             {
                 dialog.ShowMessage("Offenbar hast du noch keine Freunde! Bitte vernetze mit deinen Mit-Studierenden!", "Keine Freunde gefunden!");
                 return;
             }
 
-            var list = new List<UserViewModel>(friends);
-            var random = new Random();
-            int index = random.Next(list.Count);
-            var user = list[index];
-
-            var answer = await dialog.ShowMessage(
-                "Willst du eine Bestätigungsanfrage an " + user.FullName + " schicken?",
-                "Anfrage verschicken?",
-                "Ja", "Nein", null);
-
-            if (!answer)
+            if (SelectedFriend == null)
                 return;
 
-            var result = await api.Requests.AskForChallengeAcceptance(user.ID, challenge.ID);
+            var result = await api.Requests.AskForChallengeAcceptance(SelectedFriend.ID, challenge.ID);
             if (!result)
             {
                 dialog.ShowError("Ein Fehler ist aufgetreten!", "Fehler!", "Ok", null);
@@ -117,8 +109,8 @@ namespace StudyBuddy.App.ViewModels
 
             dialog.ShowMessageBox("Sobald dein Freund die Anfrage bestätigt, " +
                 "bekommtst du die Punkte gutgeschrieben.", "Anfrage wurde verschickt!");
-
-            navigation.Pop();
+            SelectedFriend = null;
+            await navigation.Pop();
         }
 
         private async void AcceptByLocation()
@@ -156,7 +148,7 @@ namespace StudyBuddy.App.ViewModels
                 return;
             }
 
-            navigation.Pop();
+            await navigation.Pop();
         }
 
         private async void AcceptByKeyword()
@@ -173,7 +165,7 @@ namespace StudyBuddy.App.ViewModels
                 return;
             }
 
-            navigation.Pop();
+            await navigation.Pop();
         }
     }
 }
