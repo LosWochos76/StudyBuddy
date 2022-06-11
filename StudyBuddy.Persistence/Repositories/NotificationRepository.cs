@@ -101,13 +101,13 @@ namespace StudyBuddy.Persistence
                     "updated timestamp default current_timestamp " +
                     ")");
 
-            if (rh.GetRevision() == 0)
+            if (rh.GetRevision() == 1)
             {
                 qh.ExecuteNonQuery(
                     "alter table notifications " +
                     "add column badge_id int");
                 
-                rh.SetRevision(1);
+                rh.SetRevision(2);
             }
             
             
