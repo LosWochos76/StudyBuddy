@@ -35,7 +35,7 @@ namespace StudyBuddy.App.Api
             var rh = new WebRequestHelper(api.Authentication.Token);
             var content = await rh.Get<IEnumerable<Notification>>(base_url + "Notification/Feed", filter);
             if (content == null)
-                return null;
+                return new List<NewsViewModel>();
 
             var result = new List<NewsViewModel>();
             foreach (var obj in content)

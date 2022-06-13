@@ -113,12 +113,18 @@
                                     </Label.FormattedText>
                                 </Label>
                             </StackLayout>
-                            <Button x:Name="button1"
-                                    x:DataType="viewmodels:ChallengeConfirmViewModel"
-                                    VerticalOptions="EndAndExpand"
-                                    Text="Herausforderung Abschließen"
-                                    Command="{Binding ConfirmChallenge}"
-                                    BackgroundColor="{StaticResource ConfirmButton}"></Button>
+                            <StackLayout VerticalOptions="EndAndExpand" x:DataType="viewmodels:ChallengeConfirmViewModel">
+                                <Picker Title="Einen Freund auswählen"
+                                        x:Name="FriendsPicker"
+                                        ItemsSource="{Binding Friends}"
+                                        ItemDisplayBinding="{Binding Name}"
+                                        SelectedItem="{Binding SelectedFriend}"/>
+                                <Button x:Name="button1"
+                                        Text="Herausforderung Abschließen"
+                                        Command="{Binding ConfirmChallenge}"
+                                        BackgroundColor="{StaticResource ConfirmButton}"
+                                        Margin="0,20,0,0"/>
+                            </StackLayout>
                         </StackLayout>
                     </Frame>
                 </Grid>

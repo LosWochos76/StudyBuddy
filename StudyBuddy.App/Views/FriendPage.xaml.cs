@@ -2,11 +2,10 @@
 using StudyBuddy.Model;
 using StudyBuddy.App.ViewModels;
 using TinyIoC;
-using Xamarin.Forms;
 
 namespace StudyBuddy.App.Views
 {
-    public partial class FriendPage : ContentPage
+    public partial class FriendPage
     {
         private readonly FriendViewModel view_model;
 
