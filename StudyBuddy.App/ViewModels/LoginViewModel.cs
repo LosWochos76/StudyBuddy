@@ -103,7 +103,7 @@ namespace StudyBuddy.App.ViewModels
                     await Navigation.GoTo("//ChallengesPage");
                     break;
                 case 1:
-                    var url = "http://10.0.2.2:4200/login/verificationrequired;email=";
+                    var url = "https://backend.gameucation.eu/login/verificationrequired;email=";
                     var link = url + uc.EMail;
                     dialog.OpenBrowser(link);
                     break;
