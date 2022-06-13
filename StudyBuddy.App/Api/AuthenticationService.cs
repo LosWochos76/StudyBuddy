@@ -5,6 +5,7 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using StudyBuddy.App.Misc;
 using StudyBuddy.App.ViewModels;
+using StudyBuddy.Model.Model;
 using Xamarin.Forms;
 
 namespace StudyBuddy.App.Api
@@ -26,23 +27,28 @@ namespace StudyBuddy.App.Api
         public string Token { get; private set; } = string.Empty;
         public UserViewModel CurrentUser { get; private set; }
 
-        public async Task<bool> Login(UserCredentials credentials)
+        public async Task<int> Login(UserCredentials credentials)
         {
             try
             {
-                var response = await client.PostAsJsonAsync(base_url + "Login", credentials);
-                if (response == null || !response.IsSuccessStatusCode)
-                {
-                    api.Logging.LogError("No valid response on Login");
-                    return false;
-                }
-
-                var content = await response.Content.ReadAsStringAsync();
-                return await LoginFromJson(content);
+                var rh = new WebRequestHelper();
+                LoginResult response = await rh.Post<LoginResult>(base_url + "Login", credentials);
+                if (response == null)
+                    return 4;
+                if (response.Status != 0)
+                    return response.Status;
+                
+                string jsonstring = JsonSerializer.Serialize(response);
+                var result = await LoginFromJson(jsonstring);
+                if (!result)
+                    return 5;
+                else
+                    return response.Status;
+                 
             }
             catch (Exception exp)
             {
-                return false;
+                return 6;
             }
         }
 
@@ -51,8 +57,8 @@ namespace StudyBuddy.App.Api
             var obj = JsonDocument.Parse(content);
 
             JsonElement token_element, user_element;
-            if (!obj.RootElement.TryGetProperty("token", out token_element) ||
-                !obj.RootElement.TryGetProperty("user", out user_element))
+            if (!obj.RootElement.TryGetProperty("Token", out token_element) ||
+                !obj.RootElement.TryGetProperty("User", out user_element))
                 return false;
 
             var token = token_element.ToString();

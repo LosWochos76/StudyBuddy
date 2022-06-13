@@ -80,22 +80,25 @@ namespace StudyBuddy.BusinessLogic
                 {"email", email }
             };
             string baseurl;
+            string subject;
             string message;
 
             if (forgotpassword)
             {
-                baseurl = "https://backend.gameucation.eu/login/resetpassword";
-                message = "Passwort zurücksetzen";
+                baseurl = "http://localhost:4200/login/resetpassword";
+                subject = "Passwort zurücksetzen";
+                Uri link = new Uri(QueryHelpers.AddQueryString(baseurl, param));
+                message = "Guten Tag,<br> um das Passwort Ihres Gameucation Kontos zurückzusetzen <a href='" + link.ToString() + "'>hier</a> klicken.";
             }
             else
             {
-                baseurl = "https://backend.gameucation.eu/login/verifyemail";
-                message = "E-Mail Adresse bestätigen";
+                baseurl = "http://localhost:4200/login/verifyemail";
+                subject = "E-Mail Adresse bestätigen";
+                Uri link = new Uri(QueryHelpers.AddQueryString(baseurl, param));
+                message = "Guten Tag,<br> um die E-Mail-Adresse Ihres Gameucation Kontos zu bestätigen <a href='" + link.ToString() + "'>hier</a> klicken.";
             }
 
-            var link = new Uri(QueryHelpers.AddQueryString(baseurl, param));
-
-            MailKitHelper.SendMail(email, message, link.ToString());
+            MailKitHelper.SendMail(email, subject, message);
         }
 
         public bool CheckToken(string token)

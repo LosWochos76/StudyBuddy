@@ -27,7 +27,7 @@ namespace StudyBuddy.App.Api
         string Token { get; }
         UserViewModel CurrentUser { get; }
         bool IsLoggedIn { get; }
-        Task<bool> Login(UserCredentials credentials);
+        Task<int> Login(UserCredentials credentials);
         Task<bool> LoginFromJson(string content);
         void Logout();
         event LoginStateChangedHandler LoginStateChanged;

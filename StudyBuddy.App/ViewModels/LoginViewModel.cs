@@ -97,11 +97,35 @@ namespace StudyBuddy.App.ViewModels
         {
             var uc = new UserCredentials { EMail = EMail, Password = Password };
             var result = await api.Authentication.Login(uc);
-
-            if (result)
-                await Navigation.GoTo("//ChallengesPage");
-            else
-                dialog.ShowMessageBox("Anmeldung nicht erfolgreich! Zugangsdaten korrekt?", "Achtung!");
+            switch(result)
+            {
+                case 0:
+                    await Navigation.GoTo("//ChallengesPage");
+                    break;
+                case 1:
+                    var url = "http://10.0.2.2:4200/login/verificationrequired;email=";
+                    var link = url + uc.EMail;
+                    dialog.OpenBrowser(link);
+                    break;
+                case 2:
+                    dialog.ShowMessageBox("E-Mail-Aresse oder Passwort ist falsch!", "Achtung!");
+                    break;
+                case 3:
+                    dialog.ShowMessageBox("Es konnte kein Konto mit dieser E-Mail-Adresse gefunden werden.", "Achtung!");
+                    break;
+                case 4:
+                    dialog.ShowMessageBox("Anmeldung nicht erfolgreich! Zugangsdaten korrekt?", "Achtung!");
+                    await api.Logging.LogError("Invalid API response for login with " + uc.EMail);
+                    break;
+                case 5:
+                    dialog.ShowMessageBox("Anmeldung nicht erfolgreich! Zugangsdaten korrekt?", "Achtung!");
+                    await api.Logging.LogError("Issue in loginfromjson, no Token/User or Token invalid");
+                    break;
+                default:
+                    dialog.ShowMessageBox("Anmeldung nicht erfolgreich! Zugangsdaten korrekt?", "Achtung!");
+                    await api.Logging.LogError("Undocumented error");
+                    break;
+            }
         }
     }
 }
