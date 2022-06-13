@@ -44,7 +44,7 @@ namespace StudyBuddy.BusinessLogic
                 filter = new GameBadgeFilter();
 
             var count = backend.Repository.GameBadges.GetCount(filter);
-            var objects = backend.Repository.GameBadges.All(filter);
+            var objects = backend.Repository.GameBadges.AllWithDateReceived(filter);
 
             if (filter.WithOwner)
             {

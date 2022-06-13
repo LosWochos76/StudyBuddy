@@ -7,6 +7,7 @@ namespace StudyBuddy.Persistence
     {
         GameBadge ById(int id);
         IEnumerable<GameBadge> All(GameBadgeFilter filter);
+        IEnumerable<GameBadge> AllWithDateReceived(GameBadgeFilter filter);
         int GetCount(GameBadgeFilter filter);
         void Save(GameBadge obj);
         void Insert(GameBadge obj);
