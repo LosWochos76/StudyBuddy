@@ -1,24 +1,36 @@
-<br>
-<form [formGroup]="form" (ngSubmit)="onSubmit()">
-    <div class="mb-3">
-        <label class="form-label" for="email">Email</label>
-        <input type="email" class="form-control" id="email" placeholder="Enter email" formControlName="email">
-    </div>
-    <div class="mb-3">
-        <label class="form-label" for="password">Password</label>
-        <input type="password" class="form-control" id="password" placeholder="Password" formControlName="password">
-    </div>
-    <div>
-        <button type="submit" class="btn btn-primary" [disabled]="form.invalid">Login</button>
-        <button type="button" class="btn btn-danger" style="float:right" 
-            (click)="onPasswordReset()" [disabled]="form.controls.email.invalid">Passwort vergessen</button>
-    </div>
-</form>
-<br>
-<div *ngIf="login_error">
-    <div class="alert alert-danger" role="alert">
-        Es konnte kein Benutzer mit dieser E-Mail-Adresse oder mit diesem Passwort gefunden werden!
-    </div>
-    <br>
-    <button class="btn btn-warning" (click)="onPasswordReset()">Passwort vergessen</button>
-</div>
+
+        <br>
+        <form [formGroup]="form" (ngSubmit)="onSubmit()">
+            <div class="mb-3">
+                <label class="form-label" for="email">Email</label>
+                <input type="email" class="form-control" id="email" placeholder="Enter email" formControlName="email">
+            </div>
+            <div class="mb-3">
+                <label class="form-label" for="password">Password</label>
+                <input type="password" class="form-control" id="password" placeholder="Password" formControlName="password">
+            </div>
+            <div>
+                <button type="submit" class="btn btn-primary" [disabled]="form.invalid">Login</button>
+                <button type="button" class="btn btn-danger" style="float:right"
+                        (click)="onPasswordReset()" [disabled]="form.controls.email.invalid">
+                    Passwort vergessen
+                </button>
+            </div>
+        </form>
+        <br>
+        <div *ngIf="login_error">
+            <div class="alert alert-danger" role="alert">
+                Der von dir eingegebene Benutzername ist keinem Konto zugeordnet. Bitte &uuml;berpr&uuml;fe deinen Benutzernamen und versuche es noch einmal.
+            </div>
+            <br>
+            <button class="btn btn-warning" (click)="onPasswordReset()">Passwort vergessen</button>
+        </div>
+        <div *ngIf="login_error_2">
+            <div class="alert alert-danger" role="alert">
+                Das eingegebene Passwort ist falsch. Bitte &uuml;berpr&uuml;fe es noch einmal.
+            </div>
+            <br>
+            <button class="btn btn-warning" (click)="onPasswordReset()">Passwort vergessen</button>
+        </div>
+
+   

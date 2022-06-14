@@ -11,7 +11,8 @@ import { LoggingService } from 'src/app/services/loging.service';
 })
 export class LoginComponent implements OnInit {
   form:FormGroup;
-  login_error:boolean = false;
+    login_error: boolean = false;
+    login_error_2: boolean = false;
 
   constructor(
     private logger:LoggingService,
@@ -44,11 +45,15 @@ export class LoginComponent implements OnInit {
   async onSubmit() {
     let email = this.form.controls.email.value;
     let password = this.form.controls.password.value;
-      let result = await this.auth.login(email, password);
-      if (result.status == 1) {
-      this.logger.debug("Wrong credentials!");
-      this.login_error = true;
-    }
+    let result = await this.auth.login(email, password);
+      if (result.status == 3) {
+          this.logger.debug("No User found.");
+          this.login_error = true;
+      }
+      if (result.status == 2) {
+          this.logger.debug("Wrong credentials!")
+          this.login_error_2 = true;
+      }
   }
 
     async onPasswordReset() {

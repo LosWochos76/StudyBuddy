@@ -41,6 +41,7 @@
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
                 <!--Profile information-->
                 <Label Grid.Row="0"
@@ -99,7 +100,18 @@
                         HeightRequest="45"
                         Command="{Binding EditProfileCommand}"
                         BackgroundColor="{StaticResource PrimaryAccent}"
-                        TextColor="{StaticResource WindowBackgroundColor}"/>
+                        TextColor="{AppThemeBinding Dark={StaticResource TextColorDark}, Light={StaticResource TextColor}}"/>
+                <Button Grid.Row="5"
+                        Grid.Column="0"
+                        Grid.ColumnSpan="3"
+                        Text="Konto deaktivieren"
+                        Margin="0,0,0,20"
+                        FontAttributes="Bold"
+                        FontSize="17"
+                        HeightRequest="45"
+                        Command="{Binding DisableAccountCommand}"
+                        BackgroundColor="{AppThemeBinding Dark={StaticResource DeclineButtonDark}, Light={StaticResource DeclineButton}}"
+                        TextColor="{AppThemeBinding Dark={StaticResource TextColorDark}, Light={StaticResource TextColor}}"/>
             </Grid>
         </StackLayout>
 

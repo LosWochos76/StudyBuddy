@@ -15,6 +15,7 @@ namespace StudyBuddy.Model
         public string Email { get; set; }
         public Role Role { get; set; }
         public bool EmailConfirmed { get; set; }
+        public bool AccountActive { get; set; }
 
         [JsonIgnore]
         public bool IsAdmin => Role == Role.Admin;

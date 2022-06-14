@@ -10,6 +10,7 @@ namespace StudyBuddy.App.ViewModels
     {
         public UserViewModel User { get; set; }
         public Command EditProfileCommand { get; set; }
+        public Command DisableAccountCommand { get; set; }
         public bool IsEditing;
         public ProfileViewModel(IApi api, IDialogService dialog, INavigationService navigation) : base(api, dialog, navigation)
         {
@@ -25,6 +26,8 @@ namespace StudyBuddy.App.ViewModels
             {
                 return !IsEditing;
             });
+            DisableAccountCommand = new Command(DisableAccount);
+
 
         }
         public void RefreshCanExecute()
@@ -36,6 +39,28 @@ namespace StudyBuddy.App.ViewModels
             await Shell.Current.Navigation.PushAsync(new EditProfilePage());
             IsEditing = false;
             RefreshCanExecute();
+        }
+
+        public async void DisableAccount()
+        {
+            var answer = await dialog.ShowMessage(
+                "Möchtest du dein Konto wirklich deaktivieren?",
+                "Konto deaktivieren?",
+                "Ja", "Nein", null);
+
+            if (!answer)
+                return;
+            User.AccountActive = false;
+            var result = await api.Users.Update(User);
+
+            if (!result)
+                return;
+
+            dialog.ShowMessage(
+                "Ihr Konto wurde deaktiviert und Sie wurden ausgeloggt.",
+                "Achtung!");
+            api.Authentication.Logout();
+            await Navigation.GoTo("//LoginPage");
         }
     }
 }
