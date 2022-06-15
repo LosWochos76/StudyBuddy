@@ -118,7 +118,8 @@
                                         x:Name="FriendsPicker"
                                         ItemsSource="{Binding Friends}"
                                         ItemDisplayBinding="{Binding Name}"
-                                        SelectedItem="{Binding SelectedFriend}"/>
+                                        SelectedItem="{Binding SelectedFriend}"
+                                        TitleColor="{StaticResource WindowBackgroundColorDark}"/>
                                 <Button x:Name="button1"
                                         Text="Herausforderung Abschließen"
                                         Command="{Binding ConfirmChallenge}"

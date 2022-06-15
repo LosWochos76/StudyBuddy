@@ -44,7 +44,7 @@ namespace StudyBuddy.App.ViewModels
         public async void DisableAccount()
         {
             var answer = await dialog.ShowMessage(
-                "Möchtest du dein Konto wirklich deaktivieren?",
+                "Möchtest du dein Konto wirklich deaktivieren? Das Konto kann danach nicht mehr zur Anmeldung genutzt werden.",
                 "Konto deaktivieren?",
                 "Ja", "Nein", null);
 

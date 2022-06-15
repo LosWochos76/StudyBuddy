@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Microsoft.AspNetCore.WebUtilities;
 using SimpleHashing.Net;
-using StudyBuddy.Model.Model;
+using StudyBuddy.Model;
 
 namespace StudyBuddy.BusinessLogic
 {
@@ -21,22 +21,42 @@ namespace StudyBuddy.BusinessLogic
             if (uc == null || string.IsNullOrEmpty(uc.EMail) || string.IsNullOrEmpty(uc.Password))
                 throw new Exception("Missing email and password!");
 
-            var user = backend.Repository.Users.ByEmail(uc.EMail);
+            var user = backend.Repository.Users.ByEmailAllAccounts(uc.EMail);
             if (user == null)
             {
                 backend.Logging.LogDebug($"User with email {uc.EMail} not found!");
                 return new LoginResult 
                 {
-                    Status = 3,
+                    Status = 3
                 };
+            }
+
+            if (!user.AccountActive)
+            {
+                if (!simpleHash.Verify(uc.Password, user.PasswordHash))
+                {
+                    backend.Logging.LogDebug($"Wrong password for {uc.EMail}!");
+                    return new LoginResult
+                    {
+                        Status = 2
+                    };
+                }
+                else
+                {
+                    backend.Logging.LogDebug($"User with email {uc.EMail} is disabled.");
+                    return new LoginResult
+                    {
+                        Status = 7
+                    };
+                }
             }
 
             if (!simpleHash.Verify(uc.Password, user.PasswordHash))
             {
                 backend.Logging.LogDebug($"Wrong password for {uc.EMail}!");
-                return new LoginResult 
-                { 
-                    Status = 2 
+                return new LoginResult
+                {
+                    Status = 2
                 };
             }
 
@@ -49,7 +69,7 @@ namespace StudyBuddy.BusinessLogic
                 backend.Logging.LogDebug($"User with email {user.Email} is not verified.");
                 return new LoginResult
                 {
-                    Status = 1,
+                    Status = 1
                 };
             }
             else
@@ -68,7 +88,7 @@ namespace StudyBuddy.BusinessLogic
             if (string.IsNullOrEmpty(email))
                 throw new Exception("No email-adress given!");
 
-            var obj = backend.Repository.Users.ByEmail(email);
+            var obj = backend.Repository.Users.ByEmailActiveAccounts(email);
             if (obj == null)
                 throw new Exception("User not found!");
             var key = obj.PasswordHash;

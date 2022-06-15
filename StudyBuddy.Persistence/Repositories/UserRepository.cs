@@ -42,12 +42,20 @@ namespace StudyBuddy.Persistence
             return qh.GetCount("users");
         }
 
-        public User ByEmail(string email)
+        public User ByEmailActiveAccounts(string email)
         {
             var qh = new QueryHelper<User>(connection_string, FromReader, new {email});
             return qh.ExecuteQueryToSingleObject(
                 "SELECT id,firstname,lastname,nickname,email,password_hash,role,emailconfirmed,accountactive " +
                 "FROM users where accountactive = true and lower(email)=lower(:email)");
+        }
+
+        public User ByEmailAllAccounts(string email)
+        {
+            var qh = new QueryHelper<User>(connection_string, FromReader, new { email });
+            return qh.ExecuteQueryToSingleObject(
+                "SELECT id,firstname,lastname,nickname,email,password_hash,role,emailconfirmed,accountactive " +
+                "FROM users where lower(email)=lower(:email)");
         }
 
         public void Insert(User obj)

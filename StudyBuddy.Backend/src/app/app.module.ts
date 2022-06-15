@@ -48,6 +48,7 @@ import { UserStatisticsService } from './services/userstatistics.service';
 import { NgxEchartsModule } from 'ngx-echarts';
 import { NotverifiedComponent } from './authentication/notverified/notverified.component';
 import { VerifyemailComponent } from './authentication/verifyemail/verifyemail.component';
+import { RecoverComponent } from './authentication/recover/recover.component';
 
 @NgModule({
   declarations: [
@@ -85,7 +86,8 @@ import { VerifyemailComponent } from './authentication/verifyemail/verifyemail.c
     ResetpasswordComponent,
     UserInfoComponent,
     NotverifiedComponent,
-    VerifyemailComponent
+    VerifyemailComponent,
+    RecoverComponent
   ],
   imports: [
     BrowserModule,

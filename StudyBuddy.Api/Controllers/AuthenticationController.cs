@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using StudyBuddy.BusinessLogic;
 using StudyBuddy.BusinessLogic.Parameters;
+using StudyBuddy.Model;
 
 namespace StudyBuddy.Api
 {
@@ -25,7 +26,7 @@ namespace StudyBuddy.Api
         [HttpPost]
         public IActionResult Login2([FromBody] UserCredentials uc)
         {
-            var user = backend.Repository.Users.ByEmail(uc.EMail);
+            var user = backend.Repository.Users.ByEmailActiveAccounts(uc.EMail);
             if (user == null)
                 return NotFound("User not found!");
             if (!user.EmailConfirmed)
@@ -52,17 +53,17 @@ namespace StudyBuddy.Api
         [HttpPost]
         public IActionResult ResetPassword([FromBody] ResetPasswordData data)
         {
-            var user = backend.Repository.Users.ByEmail(data.Email);
+            var user = backend.Repository.Users.ByEmailActiveAccounts(data.Email);
             if (user == null)
-                return Json(new { Status = "User not found" });
+                return NotFound("User not found");
             if (backend.AuthenticationService.CheckPasswordResetToken(data.Token, user.PasswordHash))
             {
                 user.Password = data.Password;
-                backend.UserService.ResetPassword(user);
-                return Json(new { Status = "ok" });
+                User updatedUser = backend.UserService.ResetPassword(user);
+                return Ok(updatedUser);
             }
 
-            return Json(new { Status = "Invalid request" });
+            return BadRequest("Invalid request");
         }
 
         [Route("/Login/SendVerificationMail")]
@@ -77,7 +78,7 @@ namespace StudyBuddy.Api
         [HttpPost]
         public IActionResult VerifyEmail([FromBody] VerifyEmailData data)
         {
-            var user = backend.Repository.Users.ByEmail(data.Email);
+            var user = backend.Repository.Users.ByEmailActiveAccounts(data.Email);
             if (user == null)
                 return NotFound(new { Id = data.Email, error = "User not found." });
             if (backend.AuthenticationService.CheckPasswordResetToken(data.Token, user.PasswordHash))
@@ -87,6 +88,27 @@ namespace StudyBuddy.Api
                 return Ok(user);
             }
             return Json(new { status = "Invalid request" });
+        }
+
+        [Route("/Login/EnableAccount")]
+        [HttpPost]
+        public IActionResult EnableAccount([FromBody] UserCredentials uc)
+        {
+            User user = backend.Repository.Users.ByEmailAllAccounts(uc.EMail);
+            LoginResult response = backend.AuthenticationService.Login(uc);
+            if (response.Status != 7)
+                return Json(response);
+            user.AccountActive = true;
+            User updatedUser = backend.UserService.EnableAccount(user);
+            if (updatedUser == null)
+            {
+                response.User = null;
+                response.Token = null;
+                response.Status = 6;
+                return Json(response);
+            }
+            response.User = updatedUser;
+            return Json(response);
         }
     }
 }

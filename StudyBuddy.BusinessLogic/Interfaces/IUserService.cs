@@ -11,6 +11,7 @@ namespace StudyBuddy.BusinessLogic
         User Update(User obj);
         User ResetPassword(User obj);
         User VerifyEmail(User obj);
+        User EnableAccount(User obj);
         void Delete(int user_id);
 
         // Find specific users

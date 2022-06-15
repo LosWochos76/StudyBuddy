@@ -100,4 +100,19 @@ export class AuthorizationService {
         return result;
 
     }
+
+    async enableAccount(email: string, password: string): Promise<LoginResult> {
+        const response = await this.http.post(this.url + 'Login/EnableAccount', {
+            'email': email,
+            'password': password
+        }).toPromise();
+        if (response == null)
+            return null;
+        let result = LoginResult.fromApi(response);
+        if (result.status == 7) {
+            return result;
+        }
+        else
+            return null;
+    }
 }

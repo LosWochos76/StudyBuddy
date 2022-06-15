@@ -50,7 +50,7 @@
                 </Entry.Behaviors>
             </Entry>
             <Button Text="Anmelden" Command="{Binding LoginCommand}" BackgroundColor="{AppThemeBinding Dark={StaticResource ConfirmButtonDark}, Light={StaticResource ConfirmButton}}" TextColor="{StaticResource WindowBackgroundColor}"/>
-            <Label HorizontalTextAlignment="Center">
+            <Label HorizontalTextAlignment="Center" VerticalOptions="Start">
                 <Label.FormattedText>
                     <FormattedString>
                         <FormattedString.Spans>
@@ -59,6 +59,23 @@
                                 <Span.GestureRecognizers>
                                     <TapGestureRecognizer 
                                         Command="{Binding PasswordForgottenCommand}" />
+                                </Span.GestureRecognizers>
+                            </Span>
+                        </FormattedString.Spans>
+                    </FormattedString>
+                </Label.FormattedText>
+            </Label>
+        </StackLayout>
+        <StackLayout>
+            <Label HorizontalTextAlignment="Center" VerticalTextAlignment="End">
+                <Label.FormattedText>
+                    <FormattedString>
+                        <FormattedString.Spans>
+                            <Span Text="Account reaktivieren oder löschen?"
+                                    TextColor="#0A84FF" TextDecorations="Underline">
+                                <Span.GestureRecognizers>
+                                    <TapGestureRecognizer 
+                                        Command="{Binding RecoverCommand}" />
                                 </Span.GestureRecognizers>
                             </Span>
                         </FormattedString.Spans>

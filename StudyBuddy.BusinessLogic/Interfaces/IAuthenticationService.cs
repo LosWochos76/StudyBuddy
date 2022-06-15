@@ -1,4 +1,4 @@
-﻿using StudyBuddy.Model.Model;
+﻿using StudyBuddy.Model;
 
 namespace StudyBuddy.BusinessLogic
 {

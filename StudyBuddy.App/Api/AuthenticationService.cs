@@ -5,7 +5,7 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using StudyBuddy.App.Misc;
 using StudyBuddy.App.ViewModels;
-using StudyBuddy.Model.Model;
+using StudyBuddy.Model;
 using Xamarin.Forms;
 
 namespace StudyBuddy.App.Api

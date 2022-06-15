@@ -1,12 +1,11 @@
 ﻿
 using System.Text.Json.Serialization;
 
-namespace StudyBuddy.Model.Model
+namespace StudyBuddy.Model
 {
     public class LoginResult 
     {
         public User User { get; set; }
-        [JsonIgnore(Condition =JsonIgnoreCondition.WhenWritingDefault)]
         public int Status { get; set; }
         /*
             0 -> alles ok
@@ -16,6 +15,7 @@ namespace StudyBuddy.Model.Model
             4 -> invalid API response
             5 -> No Token or User in jsonstring passed to login from json/token passed to loginfromjson is invalid
             6 -> undocumented error
+            7 -> Account is disabled
         */
         public string Token { get; set; }
     }

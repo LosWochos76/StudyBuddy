@@ -57,6 +57,6 @@ export class LoginComponent implements OnInit {
   }
 
     async onPasswordReset() {
-        this.router.navigate(['login/forgotpassword']);
+        this.router.navigate(['/login/forgotpassword', { email: this.form.controls.email.value }]);
   }
 }

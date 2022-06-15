@@ -31,6 +31,7 @@ import { ResetpasswordComponent } from './authentication/resetpassword/resetpass
 import { UserInfoComponent } from './user/user-info/user-info.component';
 import { NotverifiedComponent } from './authentication/notverified/notverified.component';
 import { VerifyemailComponent } from './authentication/verifyemail/verifyemail.component';
+import { RecoverComponent } from './authentication/recover/recover.component';
 
 const routes: Routes = [
   { path: 'register', component: RegisterUserComponent },
@@ -63,6 +64,7 @@ const routes: Routes = [
   { path: 'login/resetpassword', component: ResetpasswordComponent },
   { path: 'login/verificationrequired', component: NotverifiedComponent },
   { path: 'login/verifyemail', component: VerifyemailComponent },
+  { path: 'recover', component: RecoverComponent },
   { path: 'logout', component: LogoutComponent },
   { path: 'logging', component: LoggingListComponent, canActivate: [RouteGuardService] },
   { path: 'businessevent', component: BusinessEventListComponent, canActivate: [RouteGuardService] },

@@ -11,17 +11,19 @@ import { LoggingService } from 'src/app/services/loging.service';
 })
 export class ForgotpasswordComponent implements OnInit {
     form: FormGroup;
+    _email: string;
     
     constructor(
+        private route: ActivatedRoute,
         private logger: LoggingService,
-        private auth: AuthorizationService,
-        private router: Router) {
+        private auth: AuthorizationService) {
         this.form = new FormGroup({
             email: new FormControl("", [Validators.required, Validators.email])
         });
 
     };
     ngOnInit(): void {
+        this._email = this.route.snapshot.paramMap.get('email');
     }
     async onPasswordReset() {
         let email = this.form.controls.email.value;

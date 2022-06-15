@@ -11,8 +11,8 @@
 
     <ContentPage.Content>
         <StackLayout VerticalOptions="Fill" Orientation="Vertical" Padding="10,10,10,0">
-            <xct:AvatarView Size="250" 
-                            HorizontalOptions="Center" 
+            <xct:AvatarView Size="160" 
+                            HorizontalOptions="Center"  
                             VerticalOptions="Center"
                             Source="{Binding User.ProfileImage}" />
             <Label Text="{Binding User.Name}" FontAttributes="Bold" FontSize="36" HorizontalOptions="Center" />

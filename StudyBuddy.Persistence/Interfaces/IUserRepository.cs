@@ -9,7 +9,8 @@ namespace StudyBuddy.Persistence
         User ById(int id);
         IEnumerable<User> All(UserFilter filter);
         int GetCount(UserFilter filter);
-        User ByEmail(string email);
+        User ByEmailActiveAccounts(string email);
+        User ByEmailAllAccounts(string email);
         User ByNickname(string nickname);
         void Save(User obj);
         void Insert(User obj);

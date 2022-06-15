@@ -57,6 +57,12 @@ namespace StudyBuddy.BusinessLogic
             return obj;
         }
 
+        public User EnableAccount(User obj)
+        {
+            backend.Repository.Users.Update(obj);
+            return obj;
+        }
+
         public User Insert(User obj)
         {
             backend.Repository.Users.Insert(obj);
@@ -88,7 +94,7 @@ namespace StudyBuddy.BusinessLogic
 
         public int GetUserIdByEmail(string email)
         {
-            var obj = backend.Repository.Users.ByEmail(email);
+            var obj = backend.Repository.Users.ByEmailActiveAccounts(email);
             if (obj == null)
                 return 0;
 
