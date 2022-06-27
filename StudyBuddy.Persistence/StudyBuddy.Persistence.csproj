@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <ItemGroup>
-        <PackageReference Include="Npgsql" Version="6.0.4" />
+        <PackageReference Include="Npgsql" Version="6.0.5" />
         <PackageReference Include="SimpleHashing.Net" Version="2.1.0" />
     </ItemGroup>
 
@@ -12,12 +12,15 @@
         <None Remove="Interfaces\" />
         <None Remove="Repositories\" />
         <None Remove="Misc\" />
+        <None Remove="Converters\" />
     </ItemGroup>
     <ItemGroup>
         <Folder Include="Misc\" />
+        <Folder Include="Converters\" />
     </ItemGroup>
     <PropertyGroup>
         <TargetFramework>net6.0</TargetFramework>
+        <Configurations>Release;Debug</Configurations>
     </PropertyGroup>
 
     <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">

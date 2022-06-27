@@ -19,19 +19,16 @@ namespace StudyBuddy.Api
         [HttpPost]
         public IActionResult Login([FromBody] UserCredentials uc)
         {
-            return Json(backend.AuthenticationService.Login(uc));
-        }
+            var result = backend.AuthenticationService.Login(uc);
 
-        [Route("/Login2/")]
-        [HttpPost]
-        public IActionResult Login2([FromBody] UserCredentials uc)
-        {
-            var user = backend.Repository.Users.ByEmailActiveAccounts(uc.EMail);
-            if (user == null)
+            if (result.Status == 3)
                 return NotFound("User not found!");
-            if (!user.EmailConfirmed)
+
+            if (result.Status == 1)
                 return Unauthorized("Email not confirmed");
-            return Json(backend.AuthenticationService.Login(uc));
+
+            return Json(result);
+
         }
 
         [Route("/Login/")]

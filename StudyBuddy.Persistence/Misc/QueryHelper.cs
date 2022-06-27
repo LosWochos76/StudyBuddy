@@ -98,6 +98,28 @@ namespace StudyBuddy.Persistence
             return result;
         }
 
+        public DataSet ExecuteQueryToDataSet(string sql)
+        {
+            DataSet set;
+            using (var connection = new NpgsqlConnection(connection_string))
+            {
+                connection.Open();
+                using (var cmd = new NpgsqlCommand(sql, connection))
+                {
+                    foreach (var param in parameters)
+                        cmd.Parameters.AddWithValue(param.Key, param.Value);
+
+                    using (var reader = cmd.ExecuteReader())
+                    {
+                        set = new DataSet(reader);
+                    }
+                }
+            }
+
+            parameters.Clear();
+            return set;
+        }
+
         public void ExecuteNonQuery(string sql)
         {
             using (var connection = new NpgsqlConnection(connection_string))

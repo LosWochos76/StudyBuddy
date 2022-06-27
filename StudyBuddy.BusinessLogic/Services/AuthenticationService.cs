@@ -22,6 +22,7 @@ namespace StudyBuddy.BusinessLogic
                 throw new Exception("Missing email and password!");
 
             var user = backend.Repository.Users.ByEmailAllAccounts(uc.EMail);
+
             if (user == null)
             {
                 backend.Logging.LogDebug($"User with email {uc.EMail} not found!");
@@ -33,22 +34,20 @@ namespace StudyBuddy.BusinessLogic
 
             if (!user.AccountActive)
             {
-                if (!simpleHash.Verify(uc.Password, user.PasswordHash))
+                backend.Logging.LogDebug($"User with email {uc.EMail} is disabled.");
+                return new LoginResult
                 {
-                    backend.Logging.LogDebug($"Wrong password for {uc.EMail}!");
-                    return new LoginResult
-                    {
-                        Status = 2
-                    };
-                }
-                else
+                    Status = 7
+                };
+            }
+
+            if (!user.EmailConfirmed)
+            {
+                backend.Logging.LogDebug($"User with email {user.Email} is not verified.");
+                return new LoginResult
                 {
-                    backend.Logging.LogDebug($"User with email {uc.EMail} is disabled.");
-                    return new LoginResult
-                    {
-                        Status = 7
-                    };
-                }
+                    Status = 1
+                };
             }
 
             if (!simpleHash.Verify(uc.Password, user.PasswordHash))
@@ -64,23 +63,12 @@ namespace StudyBuddy.BusinessLogic
             user.PasswordHash = null;
             var jwt = new JwtToken();
 
-            if (!user.EmailConfirmed)
+            return new LoginResult
             {
-                backend.Logging.LogDebug($"User with email {user.Email} is not verified.");
-                return new LoginResult
-                {
-                    Status = 1
-                };
-            }
-            else
-            {
-                return new LoginResult
-                {
-                    Status = 0,
-                    Token = jwt.FromUser(user.ID),
-                    User = user
-                };
-            }
+                Status = 0,
+                Token = jwt.FromUser(user.ID),
+                User = user
+            };
         }
 
         public void SendMail(string email, bool forgotpassword)
@@ -91,6 +79,7 @@ namespace StudyBuddy.BusinessLogic
             var obj = backend.Repository.Users.ByEmailActiveAccounts(email);
             if (obj == null)
                 throw new Exception("User not found!");
+
             var key = obj.PasswordHash;
             var jwt = new JwtToken();
             var token = jwt.PasswordResetToken(obj.ID, key);
@@ -99,6 +88,7 @@ namespace StudyBuddy.BusinessLogic
                 {"token", token },
                 {"email", email }
             };
+
             string baseurl;
             string subject;
             string message;
@@ -126,6 +116,7 @@ namespace StudyBuddy.BusinessLogic
             var jwt = new JwtToken();
             return jwt.FromToken(token) != 0;
         }
+
         public bool CheckPasswordResetToken(string token, string email)
         {
             var jwt = new JwtToken();
