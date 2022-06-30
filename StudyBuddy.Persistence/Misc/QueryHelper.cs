@@ -51,23 +51,29 @@ namespace StudyBuddy.Persistence
         {
             T result = null;
 
-            using (var connection = new NpgsqlConnection(connection_string))
+            try
             {
-                connection.Open();
-                using (var cmd = new NpgsqlCommand(sql, connection))
+                using (var connection = new NpgsqlConnection(connection_string))
                 {
-                    foreach (var param in parameters)
-                        cmd.Parameters.AddWithValue(param.Key, param.Value);
-
-                    using (var reader = cmd.ExecuteReader())
+                    connection.Open();
+                    using (var cmd = new NpgsqlCommand(sql, connection))
                     {
-                        if (reader.Read())
-                            result = object_reader(reader);
+                        foreach (var param in parameters)
+                            cmd.Parameters.AddWithValue(param.Key, param.Value);
+
+                        using (var reader = cmd.ExecuteReader())
+                        {
+                            if (reader.Read())
+                                result = object_reader(reader);
+                        }
                     }
                 }
             }
+            finally
+            {
+                parameters.Clear();
+            }
 
-            parameters.Clear();
             return result;
         }
 
@@ -75,89 +81,113 @@ namespace StudyBuddy.Persistence
         {
             var result = new List<T>();
 
-            using (var connection = new NpgsqlConnection(connection_string))
+            try
             {
-                connection.Open();
-                using (var cmd = new NpgsqlCommand(sql, connection))
+                using (var connection = new NpgsqlConnection(connection_string))
                 {
-                    foreach (var param in parameters)
-                        cmd.Parameters.AddWithValue(param.Key, param.Value);
-
-                    using (var reader = cmd.ExecuteReader())
+                    connection.Open();
+                    using (var cmd = new NpgsqlCommand(sql, connection))
                     {
-                        while (reader.Read())
+                        foreach (var param in parameters)
+                            cmd.Parameters.AddWithValue(param.Key, param.Value);
+
+                        using (var reader = cmd.ExecuteReader())
                         {
-                            var obj = object_reader(reader);
-                            result.Add(obj);
+                            while (reader.Read())
+                            {
+                                var obj = object_reader(reader);
+                                result.Add(obj);
+                            }
                         }
                     }
                 }
             }
+            finally
+            {
+                parameters.Clear();
+            }
 
-            parameters.Clear();
             return result;
         }
 
         public DataSet ExecuteQueryToDataSet(string sql)
         {
-            DataSet set;
-            using (var connection = new NpgsqlConnection(connection_string))
-            {
-                connection.Open();
-                using (var cmd = new NpgsqlCommand(sql, connection))
-                {
-                    foreach (var param in parameters)
-                        cmd.Parameters.AddWithValue(param.Key, param.Value);
+            DataSet set = new DataSet();
 
-                    using (var reader = cmd.ExecuteReader())
+            try
+            {
+                using (var connection = new NpgsqlConnection(connection_string))
+                {
+                    connection.Open();
+                    using (var cmd = new NpgsqlCommand(sql, connection))
                     {
-                        set = new DataSet(reader);
+                        foreach (var param in parameters)
+                            cmd.Parameters.AddWithValue(param.Key, param.Value);
+
+                        using (var reader = cmd.ExecuteReader())
+                        {
+                            set.FillFromReader(reader);
+                        }
                     }
                 }
             }
+            finally
+            {
+                parameters.Clear();
+            }
 
-            parameters.Clear();
             return set;
         }
 
         public void ExecuteNonQuery(string sql)
         {
-            using (var connection = new NpgsqlConnection(connection_string))
+            try
             {
-                connection.Open();
-                using (var cmd = new NpgsqlCommand(sql, connection))
+                using (var connection = new NpgsqlConnection(connection_string))
                 {
-                    foreach (var param in parameters)
-                        cmd.Parameters.AddWithValue(param.Key, param.Value);
+                    connection.Open();
+                    using (var cmd = new NpgsqlCommand(sql, connection))
+                    {
+                        foreach (var param in parameters)
+                            cmd.Parameters.AddWithValue(param.Key, param.Value);
 
-                    cmd.ExecuteNonQuery();
+                        cmd.ExecuteNonQuery();
+                    }
                 }
             }
-
-            parameters.Clear();
+            finally
+            {
+                parameters.Clear();
+            }
         }
 
         public int ExecuteQueryToSingleInt(string sql)
         {
             var result = 0;
 
-            using (var connection = new NpgsqlConnection(connection_string))
+            try
             {
-                connection.Open();
-                using (var cmd = new NpgsqlCommand(sql, connection))
+                using (var connection = new NpgsqlConnection(connection_string))
                 {
-                    foreach (var param in parameters)
-                        cmd.Parameters.AddWithValue(param.Key, param.Value);
-
-                    using (var reader = cmd.ExecuteReader())
+                    connection.Open();
+                    using (var cmd = new NpgsqlCommand(sql, connection))
                     {
-                        if (reader.Read())
-                            result = reader.GetInt32(0);
+                        foreach (var param in parameters)
+                            cmd.Parameters.AddWithValue(param.Key, param.Value);
+
+                        using (var reader = cmd.ExecuteReader())
+                        {
+                            if (reader.Read())
+                                result = reader.GetInt32(0);
+                        }
                     }
                 }
             }
-
-            parameters.Clear();
+            finally
+            {
+                parameters.Clear();
+            }
+            
             return result;
         }
 
@@ -165,19 +195,25 @@ namespace StudyBuddy.Persistence
         {
             var result = 0;
 
-            using (var connection = new NpgsqlConnection(connection_string))
+            try
             {
-                connection.Open();
-                using (var cmd = new NpgsqlCommand(sql, connection))
+                using (var connection = new NpgsqlConnection(connection_string))
                 {
-                    foreach (var param in parameters)
-                        cmd.Parameters.AddWithValue(param.Key, param.Value);
+                    connection.Open();
+                    using (var cmd = new NpgsqlCommand(sql, connection))
+                    {
+                        foreach (var param in parameters)
+                            cmd.Parameters.AddWithValue(param.Key, param.Value);
 
-                    result = Convert.ToInt32(cmd.ExecuteScalar());
+                        result = Convert.ToInt32(cmd.ExecuteScalar());
+                    }
                 }
             }
-
-            parameters.Clear();
+            finally
+            {
+                parameters.Clear();
+            }
+            
             return result;
         }
 
@@ -191,39 +227,52 @@ namespace StudyBuddy.Persistence
         {
             var result = 0;
 
-            using (var connection = new NpgsqlConnection(connection_string))
+            try
             {
-                connection.Open();
-                using (var cmd = new NpgsqlCommand("SELECT count(*) as count FROM " + table_name, connection))
+                using (var connection = new NpgsqlConnection(connection_string))
                 {
-                    using (var reader = cmd.ExecuteReader())
+                    connection.Open();
+                    using (var cmd = new NpgsqlCommand("SELECT count(*) as count FROM " + table_name, connection))
                     {
-                        if (reader.Read())
-                            result = reader.GetInt32(0);
+                        using (var reader = cmd.ExecuteReader())
+                        {
+                            if (reader.Read())
+                                result = reader.GetInt32(0);
+                        }
                     }
                 }
             }
-
-            parameters.Clear();
+            finally
+            {
+                parameters.Clear();
+            }
+            
             return result;
         }
 
         public bool TableExists(string table_name)
         {
             var result = false;
-            var sql = "SELECT EXISTS (SELECT FROM pg_tables WHERE tablename=:table_name)";
 
-            using (var connection = new NpgsqlConnection(connection_string))
+            try
             {
-                connection.Open();
-                using (var cmd = new NpgsqlCommand(sql, connection))
+                var sql = "SELECT EXISTS (SELECT FROM pg_tables WHERE tablename=:table_name)";
+
+                using (var connection = new NpgsqlConnection(connection_string))
                 {
-                    cmd.Parameters.AddWithValue(":table_name", table_name);
-                    result = Convert.ToBoolean(cmd.ExecuteScalar());
+                    connection.Open();
+                    using (var cmd = new NpgsqlCommand(sql, connection))
+                    {
+                        cmd.Parameters.AddWithValue(":table_name", table_name);
+                        result = Convert.ToBoolean(cmd.ExecuteScalar());
+                    }
                 }
             }
-
-            parameters.Clear();
+            finally
+            {
+                parameters.Clear();
+            }
+            
             return result;
         }
     }

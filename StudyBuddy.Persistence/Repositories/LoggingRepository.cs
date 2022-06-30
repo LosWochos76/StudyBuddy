@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using Npgsql;
 using StudyBuddy.Model;
 
 namespace StudyBuddy.Persistence
@@ -7,6 +6,7 @@ namespace StudyBuddy.Persistence
     internal class LoggingRepository : ILoggingRepository
     {
         private readonly string connection_string;
+        private readonly LogMessageConverter converter = new LogMessageConverter();
 
         public LoggingRepository(string connection_string)
         {
@@ -17,7 +17,7 @@ namespace StudyBuddy.Persistence
 
         private void CreateTable()
         {
-            var qh = new QueryHelper<LogMessage>(connection_string, FromReader);
+            var qh = new QueryHelper<LogMessage>(connection_string);
             if (!qh.TableExists("logging"))
             {
                 qh.ExecuteNonQuery(
@@ -45,13 +45,13 @@ namespace StudyBuddy.Persistence
 
         public void Flush()
         {
-            var qh = new QueryHelper<LogMessage>(connection_string, FromReader);
+            var qh = new QueryHelper<LogMessage>(connection_string);
             qh.ExecuteNonQuery("truncate logging");
         }
 
         public IEnumerable<LogMessage> All(LogMessageFilter filter)
         {
-            var qh = new QueryHelper<LogMessage>(connection_string, FromReader);
+            var qh = new QueryHelper<LogMessage>(connection_string);
             qh.AddParameter(":from", filter.Start);
             qh.AddParameter(":max", filter.Count);
             qh.AddParameter(":min_log_level", (int)filter.MinLogLevel);
@@ -67,18 +67,8 @@ namespace StudyBuddy.Persistence
 
             sql += " order by occurence desc limit :max offset :from";
 
-            return qh.ExecuteQueryToObjectList(sql);
-        }
-
-        private LogMessage FromReader(NpgsqlDataReader reader)
-        {
-            var obj = new LogMessage();
-            obj.Occurence = reader.GetDateTime(0);
-            obj.Level = (LogLevel)reader.GetInt16(1);
-            obj.Source = (Component)reader.GetInt16(2);
-            obj.UserId = reader.GetInt32(3);
-            obj.Message = reader.GetString(4);
-            return obj;
+            var set = qh.ExecuteQueryToDataSet(sql);
+            return converter.Multiple(set);
         }
     }
 }

@@ -9,7 +9,7 @@ namespace StudyBuddy.Persistence
         private Dictionary<string,int> column_names = new Dictionary<string,int>();
         private List<object[]> rows = new List<object[]>();
 
-        public DataSet(NpgsqlDataReader reader)
+        public void FillFromReader(NpgsqlDataReader reader)
         {
             ReadColumnNames(reader);
             ReadValues(reader);
@@ -17,12 +17,14 @@ namespace StudyBuddy.Persistence
 
         private void ReadColumnNames(NpgsqlDataReader reader)
         {
+            column_names.Clear();
             for (var i = 0; i < reader.FieldCount; i++)
                 column_names.Add(reader.GetName(i), i);
         }
 
         private void ReadValues(NpgsqlDataReader reader)
         {
+            rows.Clear();
             while (reader.Read())
             {
                 var row = new object[reader.FieldCount];
@@ -125,6 +127,35 @@ namespace StudyBuddy.Persistence
             catch
             {
                 return 0;
+            }
+        }
+
+        public long GetLong(int row, string column_name)
+        {
+            try
+            {
+                var value = GetValue(row, column_name);
+                return value == null ? 0 : Convert.ToInt64(value);
+            }
+            catch
+            {
+                return 0;
+            }
+        }
+
+        public byte[] GetByteArray(int row, string column_name)
+        {
+            try
+            {
+                var value = GetValue(row, column_name);
+                if (value == null)
+                    return new byte[0];
+
+                return (byte[])value;
+            }
+            catch
+            {
+                return new byte[0];
             }
         }
     }

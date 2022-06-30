@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using Npgsql;
 using StudyBuddy.Model;
 using StudyBuddy.Model.Filter;
 
@@ -8,6 +7,7 @@ namespace StudyBuddy.Persistence
     public class CommentsRepository
     {
         private readonly string connection_string;
+        private readonly CommentConverter converter = new CommentConverter();
 
         public CommentsRepository(string connection_string)
         {
@@ -15,10 +15,9 @@ namespace StudyBuddy.Persistence
             CreateTable();
         }
 
-
         private void CreateTable()
         {
-            var qh = new QueryHelper<Comment>(connection_string, FromNotificationReader);
+            var qh = new QueryHelper<Comment>(connection_string);
             if (!qh.TableExists("comments"))
                 qh.ExecuteNonQuery(
                     "create table comments (" +
@@ -31,35 +30,12 @@ namespace StudyBuddy.Persistence
                     ")");
         }
 
-        private Comment FromNotificationReader(NpgsqlDataReader reader)
-        {
-            return new Comment
-            {
-                Id = reader.GetInt32(0),
-                NotificationId = reader.GetInt32(1),
-                OwnerId = reader.GetInt32(2),
-                Text = reader.GetString(3),
-                Created = reader.GetDateTime(4),
-                Updated = reader.GetDateTime(5),
-                Owner = new User
-                {
-                    ID = reader.GetInt32(6),
-                    Firstname = reader.GetString(7),
-                    Lastname = reader.GetString(8),
-                    Nickname = reader.GetString(9),
-                    Email = reader.GetString(10),
-                    PasswordHash = reader.GetString(11),
-                    Role = (Role) reader.GetInt32(12)
-                }
-            };
-        }
-
         public IEnumerable<Comment> All(CommentFilter filter)
         {
-            var qh = new QueryHelper<Comment>(connection_string, FromNotificationReader);
+            var qh = new QueryHelper<Comment>(connection_string);
             var sql = "select c.id, c.notification_id, c.owner_id, c.text, c.created, c.updated, " +
-                      " u.id, u.firstname, u.lastname, u.nickname, u.email, u.password_hash, u.role " +
-                      " from comments as c left outer join users as u on u.id = c.owner_id  where true ";
+                      " u.id as user_id, u.firstname, u.lastname, u.nickname, u.email, u.role " +
+                      " from comments as c left outer join users as u on u.id = c.owner_id where true ";
 
             if (filter.NotificationId.HasValue)
             {
@@ -71,13 +47,13 @@ namespace StudyBuddy.Persistence
             qh.AddParameter(":from", filter.Start);
             sql += " limit :max offset :from ";
 
-
-            return qh.ExecuteQueryToObjectList(sql);
+            var set = qh.ExecuteQueryToDataSet(sql);
+            return converter.Multiple(set);
         }
 
         public void Insert(CommentInsert insert)
         {
-            var qh = new QueryHelper<Comment>(connection_string, FromNotificationReader);
+            var qh = new QueryHelper<Comment>(connection_string);
             qh.AddParameter(":owner_id", insert.OwnerId);
             qh.AddParameter(":notification_id", insert.NotificationId);
             qh.AddParameter(":text", insert.Text);

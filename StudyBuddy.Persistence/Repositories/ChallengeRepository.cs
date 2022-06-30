@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using Npgsql;
 using StudyBuddy.Model;
 
 namespace StudyBuddy.Persistence
@@ -9,6 +8,7 @@ namespace StudyBuddy.Persistence
     internal class ChallengeRepository : IChallengeRepository
     {
         private readonly string connection_string;
+        private readonly ChallengeConverter converter = new ChallengeConverter();
 
         public ChallengeRepository(string connection_string)
         {
@@ -20,16 +20,18 @@ namespace StudyBuddy.Persistence
 
         public Challenge ById(int id)
         {
-            var qh = new QueryHelper<Challenge>(connection_string, FromReader);
+            var qh = new QueryHelper<Challenge>(connection_string);
             qh.AddParameter(":id", id);
 
-            return qh.ExecuteQueryToSingleObject("select id,name,description,points,validity_start,validity_end,category," +
+            var set = qh.ExecuteQueryToDataSet("select id,name,description,points,validity_start,validity_end,category," +
                 "owner_id,created,prove,series_parent_id,tags_of_challenge(id),prove_addendum from challenges where id=:id");
+
+            return converter.Single(set);
         }
 
         public IEnumerable<Challenge> All(ChallengeFilter filter)
         {
-            var qh = new QueryHelper<Challenge>(connection_string, FromReader);
+            var qh = new QueryHelper<Challenge>(connection_string);
             qh.AddParameter(":max", filter.Count);
             qh.AddParameter(":from", filter.Start);
             
@@ -38,12 +40,13 @@ namespace StudyBuddy.Persistence
 
             ApplyFilter(qh, sql, filter);
             sql.Append(" order by validity_start,validity_end,created,name limit :max offset :from");
-            return qh.ExecuteQueryToObjectList(sql.ToString());
+            var set = qh.ExecuteQueryToDataSet(sql.ToString());
+            return converter.Multiple(set);
         }
 
         public int GetCount(ChallengeFilter filter)
         {
-            var qh = new QueryHelper<Challenge>(connection_string, FromReader);
+            var qh = new QueryHelper<Challenge>(connection_string);
             var sql = new StringBuilder("select count(*) from challenges where true ");
             ApplyFilter(qh, sql, filter);
             return qh.ExecuteQueryToSingleInt(sql.ToString());
@@ -89,7 +92,7 @@ namespace StudyBuddy.Persistence
 
         public void Insert(Challenge obj)
         {
-            var qh = new QueryHelper<Challenge>(connection_string, FromReader);
+            var qh = new QueryHelper<Challenge>(connection_string);
             qh.AddParameter(":name", obj.Name);
             qh.AddParameter(":description", string.IsNullOrEmpty(obj.Description) ? DBNull.Value : obj.Description);
             qh.AddParameter(":points", obj.Points);
@@ -99,7 +102,7 @@ namespace StudyBuddy.Persistence
             qh.AddParameter(":owner_id", obj.OwnerID);
             qh.AddParameter(":created", obj.Created);
             qh.AddParameter(":prove", (int) obj.Prove);
-            qh.AddParameter(":series_parent_id", obj.SeriesParentID.HasValue ? obj.SeriesParentID.Value : DBNull.Value);
+            qh.AddParameter(":series_parent_id", obj.SeriesParentID);
             qh.AddParameter(":prove_addendum", obj.ProveAddendum);
 
             obj.ID = qh.ExecuteScalar(
@@ -111,7 +114,7 @@ namespace StudyBuddy.Persistence
 
         public void Update(Challenge obj)
         {
-            var qh = new QueryHelper<Challenge>(connection_string, FromReader);
+            var qh = new QueryHelper<Challenge>(connection_string);
             qh.AddParameter(":id", obj.ID);
             qh.AddParameter(":name", obj.Name);
             qh.AddParameter(":description", string.IsNullOrEmpty(obj.Description) ? DBNull.Value : obj.Description);
@@ -122,7 +125,7 @@ namespace StudyBuddy.Persistence
             qh.AddParameter(":owner_id", obj.OwnerID);
             qh.AddParameter(":created", obj.Created);
             qh.AddParameter(":prove", (int) obj.Prove);
-            qh.AddParameter(":series_parent_id", obj.SeriesParentID.HasValue ? obj.SeriesParentID.Value : DBNull.Value);
+            qh.AddParameter(":series_parent_id", obj.SeriesParentID);
             qh.AddParameter(":prove_addendum", obj.ProveAddendum);
 
             qh.ExecuteNonQuery("update challenges set name=:name,description=:description,points=:points," +
@@ -141,20 +144,21 @@ namespace StudyBuddy.Persistence
 
         public void Delete(int id)
         {
-            var qh = new QueryHelper<Challenge>(connection_string, FromReader);
+            var qh = new QueryHelper<Challenge>(connection_string);
             qh.Delete("challenges", "id", id);
         }
 
         public IEnumerable<Challenge> GetChallengesOfBadge(int badge_id)
         {
-            var qh = new QueryHelper<Challenge>(connection_string, FromReader);
+            var qh = new QueryHelper<Challenge>(connection_string);
             qh.AddParameter(":badge_id", badge_id);
-            return qh.ExecuteQueryToObjectList(
+            var set = qh.ExecuteQueryToDataSet(
                 "select distinct id,name,description,points,validity_start,validity_end," +
                 "category,owner_id,created,prove,series_parent_id,prove_addendum from challenges " +
                 "inner join tags_challenges tc on id = tc.challenge_id " +
                 "inner join tags_badges tb on tc.tag_id = tb.tag_id " +
                 "where tb.badge_id=:badge_id order by created desc,name");
+            return converter.Multiple(set);
         }
 
         public void AddAcceptance(int challenge_id, int user_id)
@@ -184,7 +188,7 @@ namespace StudyBuddy.Persistence
         private void CreateChallengesTable()
         {
             var rh = new RevisionHelper(connection_string, "challenges");
-            var qh = new QueryHelper<Challenge>(connection_string, FromReader);
+            var qh = new QueryHelper<Challenge>(connection_string);
 
             if (!qh.TableExists("challenges"))
             {
@@ -240,7 +244,7 @@ namespace StudyBuddy.Persistence
         private void CreateChallengeAcceptanceTable()
         {
             var rh = new RevisionHelper(connection_string, "challenge_acceptance");
-            var qh = new QueryHelper<Challenge>(connection_string, FromReader);
+            var qh = new QueryHelper<Challenge>(connection_string);
 
             if (!qh.TableExists("challenge_acceptance"))
                 qh.ExecuteNonQuery(
@@ -249,25 +253,6 @@ namespace StudyBuddy.Persistence
                     "challenge_id int not null, " +
                     "created date not null," +
                     "unique (user_id, challenge_id))");
-        }
-
-        private Challenge FromReader(NpgsqlDataReader reader)
-        {
-            var obj = new Challenge();
-            obj.ID = reader.GetInt32(0);
-            obj.Name = reader.GetString(1);
-            obj.Description = reader.IsDBNull(2) ? null : reader.GetString(2);
-            obj.Points = reader.GetInt32(3);
-            obj.ValidityStart = reader.GetDateTime(4);
-            obj.ValidityEnd = reader.GetDateTime(5);
-            obj.Category = (ChallengeCategory) reader.GetInt32(6);
-            obj.OwnerID = reader.GetInt32(7);
-            obj.Created = reader.GetDateTime(8);
-            obj.Prove = (ChallengeProve) reader.GetInt32(9);
-            obj.SeriesParentID = reader.IsDBNull(10) ? null : reader.GetInt32(10);
-            obj.Tags = reader.IsDBNull(11) ? string.Empty : reader.GetString(11);
-            obj.ProveAddendum = reader.IsDBNull(12) ? string.Empty : reader.GetString(12);
-            return obj;
         }
     }
 }

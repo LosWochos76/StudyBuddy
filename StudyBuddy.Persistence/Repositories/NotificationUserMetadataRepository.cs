@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using Npgsql;
 using StudyBuddy.Model;
 
 namespace StudyBuddy.Persistence
@@ -7,6 +6,7 @@ namespace StudyBuddy.Persistence
     public class NotificationUserMetadataRepository
     {
         private readonly string connection_string;
+        private NotificationUserMetaDataConverter converter = new NotificationUserMetaDataConverter();
 
         public NotificationUserMetadataRepository(string connection_string)
         {
@@ -17,7 +17,7 @@ namespace StudyBuddy.Persistence
         
         private void CreateTable()
         {
-            var qh = new QueryHelper<NotificationUserMetadata>(connection_string, FromNotificationUserMetadataReader);
+            var qh = new QueryHelper<NotificationUserMetadata>(connection_string);
             if (!qh.TableExists("notification_user_metadata"))
                 qh.ExecuteNonQuery(
                     "create table notification_user_metadata (" +
@@ -30,22 +30,6 @@ namespace StudyBuddy.Persistence
                     "created timestamp default current_timestamp, " +
                     "updated timestamp default current_timestamp " +
                     ")");
-        }
-
-        private NotificationUserMetadata FromNotificationUserMetadataReader(NpgsqlDataReader reader)
-        {
-            var obj = new NotificationUserMetadata();
-
-            obj.Id = reader.GetInt32(0);
-            obj.NotificationId = reader.GetInt32(1);
-            obj.OwnerId = reader.GetInt32(2);
-            obj.Liked = reader.GetBoolean(3);
-            obj.Seen = reader.GetBoolean(4);
-            obj.Shared = reader.GetBoolean(5);
-            obj.Created = reader.GetDateTime(6);
-            obj.Updated = reader.GetDateTime(7);
-
-            return obj;
         }
 
         public void Upsert(NotificationUserMetadataUpsert upsert)
@@ -73,13 +57,12 @@ namespace StudyBuddy.Persistence
 
         public void Insert(NotificationUserMetadataInsert insert)
         {
-            var qh = new QueryHelper<NotificationUserMetadata>(connection_string, FromNotificationUserMetadataReader);
+            var qh = new QueryHelper<NotificationUserMetadata>(connection_string);
             qh.AddParameter(":notificationId", insert.NotificationId);
             qh.AddParameter(":ownerId", insert.OwnerId);
             qh.AddParameter(":liked", insert.Liked ?? false);
             qh.AddParameter(":seen", insert.Seen ?? false);
             qh.AddParameter(":shared", insert.Shared ?? false);
-
 
             qh.ExecuteNonQuery(
                 "insert into notification_user_metadata (notification_id, owner_id, liked, seen, shared) values (:notificationId, :ownerId, :liked, :seen, :shared) returning id");
@@ -87,8 +70,7 @@ namespace StudyBuddy.Persistence
 
         public void Update(NotificationUserMetadataUpdate update)
         {
-            var qh = new QueryHelper<NotificationUserMetadata>(connection_string, FromNotificationUserMetadataReader);
-
+            var qh = new QueryHelper<NotificationUserMetadata>(connection_string);
             var sql = "update notification_user_metadata set ";
 
             if (update.Liked is not null)
@@ -109,11 +91,8 @@ namespace StudyBuddy.Persistence
                 sql += "shared=:shared, ";
             }
 
-
             qh.AddParameter(":id", update.Id);
             sql += "id=:id where id=:id";
-
-
             qh.ExecuteNonQuery(sql);
         }
 
@@ -125,33 +104,33 @@ namespace StudyBuddy.Persistence
 
         public NotificationUserMetadata FindNotificationUserMetadata(int notificationId, int ownerId)
         {
-            var qh = new QueryHelper<NotificationUserMetadata>(connection_string, FromNotificationUserMetadataReader);
+            var qh = new QueryHelper<NotificationUserMetadata>(connection_string);
             qh.AddParameter(":notification_id", notificationId);
             qh.AddParameter(":owner_id", ownerId);
 
             var sql =
                 "select id, notification_id, owner_id, liked, seen, shared, created, updated from notification_user_metadata where notification_id=:notification_id and owner_id=:owner_id";
 
-            var metadata = qh.ExecuteQueryToSingleObject(sql);
-            return metadata;
+            var set = qh.ExecuteQueryToDataSet(sql);
+            return converter.Single(set);
         }
 
         public IEnumerable<NotificationUserMetadata> GetAll()
         {
-            var qh = new QueryHelper<NotificationUserMetadata>(connection_string, FromNotificationUserMetadataReader);
+            var qh = new QueryHelper<NotificationUserMetadata>(connection_string);
             var sql =
                 "select id, notification_id, owner_id, liked, seen, shared, created, updated from notification_user_metadata";
-            var metadatas = qh.ExecuteQueryToObjectList(sql);
-            return metadatas;
+            var set = qh.ExecuteQueryToDataSet(sql);
+            return converter.Multiple(set);
         }
 
         public IEnumerable<NotificationUserMetadata> GetAllUnseen()
         {
-            var qh = new QueryHelper<NotificationUserMetadata>(connection_string, FromNotificationUserMetadataReader);
+            var qh = new QueryHelper<NotificationUserMetadata>(connection_string);
             var sql =
                 "select id, notification_id, owner_id, liked, seen, shared, created, updated from notification_user_metadata where seen=false ";
-            var metadatas = qh.ExecuteQueryToObjectList(sql);
-            return metadatas;
+            var set = qh.ExecuteQueryToDataSet(sql);
+            return converter.Multiple(set);
         }
     }
 }

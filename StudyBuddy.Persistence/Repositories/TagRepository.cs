@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using Npgsql;
 using StudyBuddy.Model;
 using StudyBuddy.Model.Filter;
 
@@ -8,6 +7,7 @@ namespace StudyBuddy.Persistence
     internal class TagRepository : ITagRepository
     {
         private readonly string connection_string;
+        private readonly TagConverter converter = new TagConverter();
 
         public TagRepository(string connection_string)
         {
@@ -20,18 +20,22 @@ namespace StudyBuddy.Persistence
 
         public Tag ById(int id)
         {
-            var qh = new QueryHelper<Tag>(connection_string, FromReader);
+            var qh = new QueryHelper<Tag>(connection_string);
             qh.AddParameter(":id", id);
-            return qh.ExecuteQueryToSingleObject(
+            var set = qh.ExecuteQueryToDataSet(
                 "SELECT id,name FROM tags where id=:id");
+
+            return converter.Single(set);
         }
 
         public Tag ByName(string name)
         {
-            var qh = new QueryHelper<Tag>(connection_string, FromReader);
+            var qh = new QueryHelper<Tag>(connection_string);
             qh.AddParameter(":name", name.ToLower());
-            return qh.ExecuteQueryToSingleObject(
+            var set = qh.ExecuteQueryToDataSet(
                 "SELECT id,name FROM tags where name=:name");
+
+            return converter.Single(set);
         }
 
         public int GetCount(TagFilter filter)
@@ -42,12 +46,14 @@ namespace StudyBuddy.Persistence
 
         public IEnumerable<Tag> All(TagFilter filter)
         {
-            var qh = new QueryHelper<Tag>(connection_string, FromReader);
+            var qh = new QueryHelper<Tag>(connection_string);
             qh.AddParameter(":max", filter.Count);
             qh.AddParameter(":from", filter.Start);
 
-            return qh.ExecuteQueryToObjectList(
+            var set = qh.ExecuteQueryToDataSet(
                 "SELECT id,name FROM tags order by name limit :max offset :from");
+
+            return converter.Multiple(set);
         }
 
         public void Delete(int id)
@@ -115,7 +121,7 @@ namespace StudyBuddy.Persistence
 
         private void CreateTable()
         {
-            var qh = new QueryHelper<Tag>(connection_string, FromReader);
+            var qh = new QueryHelper<Tag>(connection_string);
 
             if (!qh.TableExists("tags"))
                 qh.ExecuteNonQuery(
@@ -180,14 +186,6 @@ namespace StudyBuddy.Persistence
                 "   return tag_list;\n" +
                 "end;$$;\n" +
                 "commit;");
-        }
-
-        private Tag FromReader(NpgsqlDataReader reader)
-        {
-            var obj = new Tag();
-            obj.ID = reader.GetInt32(0);
-            obj.Name = reader.GetString(1);
-            return obj;
         }
     }
 }

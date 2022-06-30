@@ -8,7 +8,7 @@ namespace StudyBuddy.Persistence
     {
         private readonly string connection_string;
         private readonly SimpleHash simpleHash = new SimpleHash();
-        private UserConverter converter = new UserConverter();
+        private readonly UserConverter converter = new UserConverter();
 
         public UserRepository(string connection_string)
         {

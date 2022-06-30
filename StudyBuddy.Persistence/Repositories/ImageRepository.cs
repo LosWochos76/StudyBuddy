@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using Npgsql;
+﻿using System.Collections.Generic;
 using StudyBuddy.Model;
 
 namespace StudyBuddy.Persistence
@@ -9,6 +6,7 @@ namespace StudyBuddy.Persistence
     internal class ImageRepository : IImageRepository
     {
         private readonly string connection_string;
+        private readonly PersistentImageConverter converter = new PersistentImageConverter();
 
         public ImageRepository(string connection_string)
         {
@@ -19,34 +17,29 @@ namespace StudyBuddy.Persistence
 
         public PersistentImage ById(int id)
         {
-            var qh = new QueryHelper<PersistentImage>(connection_string, FromReader);
+            var qh = new QueryHelper<PersistentImage>(connection_string);
             qh.AddParameter(":id", id);
-            return qh.ExecuteQueryToSingleObject("select id,user_id,badge_id,name,length,content from images where id=:id");
-        }
-
-        public IEnumerable<PersistentImage> All(ImageFilter filter)
-        {
-            throw new System.NotImplementedException();
+            var set = qh.ExecuteQueryToDataSet("select id,user_id,name,length,content from images where id=:id");
+            return converter.Single(set);
         }
 
         public void Delete(int id)
         {
-            var qh = new QueryHelper<PersistentImage>(connection_string, FromReader);
+            var qh = new QueryHelper<PersistentImage>(connection_string);
             qh.Delete("images", "id", id);
         }
 
         public PersistentImage Insert(PersistentImage obj)
         {
-            var qh = new QueryHelper<PersistentImage>(connection_string, FromReader);
-            qh.AddParameter(":user_id", obj.UserID.HasValue ? obj.UserID : DBNull.Value);
-            qh.AddParameter(":badge_id", obj.BadgeId.HasValue ? obj.BadgeId : DBNull.Value);
+            var qh = new QueryHelper<PersistentImage>(connection_string);
+            qh.AddParameter(":user_id", obj.UserID);
             qh.AddParameter(":name", obj.Name);
             qh.AddParameter(":length", obj.Length);
             qh.AddParameter(":content", obj.Content);
 
             obj.ID = qh.ExecuteScalar(
-                "insert into images (user_id,badge_id,name,length,content) values " +
-                "(:user_id,:badge_id,:name,:length,:content) RETURNING id");
+                "insert into images (user_id,name,length,content) values " +
+                "(:user_id,:name,:length,:content) RETURNING id");
 
             return obj;
         }
@@ -61,16 +54,15 @@ namespace StudyBuddy.Persistence
 
         public PersistentImage Update(PersistentImage obj)
         {
-            var qh = new QueryHelper<PersistentImage>(connection_string, FromReader);
+            var qh = new QueryHelper<PersistentImage>(connection_string);
             qh.AddParameter(":id", obj.ID);
-            qh.AddParameter(":user_id", obj.UserID.HasValue ? obj.UserID : DBNull.Value);
-            qh.AddParameter(":badge_id", obj.BadgeId.HasValue ? obj.BadgeId : DBNull.Value);
+            qh.AddParameter(":user_id", obj.UserID);
             qh.AddParameter(":name", obj.Name);
             qh.AddParameter(":length", obj.Length);
             qh.AddParameter(":content", obj.Content);
 
             qh.ExecuteScalar(
-                "update images set user_id=:user_id,badge_id=:badge_id," +
+                "update images set user_id=:user_id," +
                 "name=:name,length=:length,content=:content where id=:id");
 
             return obj;
@@ -78,14 +70,15 @@ namespace StudyBuddy.Persistence
 
         public PersistentImage OfUser(int user_id)
         {
-            var qh = new QueryHelper<PersistentImage>(connection_string, FromReader);
+            var qh = new QueryHelper<PersistentImage>(connection_string);
             qh.AddParameter(":user_id", user_id);
-            return qh.ExecuteQueryToSingleObject("select id,user_id,badge_id,name,length,content from images where user_id=:user_id");
+            var set = qh.ExecuteQueryToDataSet("select id,user_id,name,length,content from images where user_id=:user_id");
+            return converter.Single(set);
         }
 
         private void CreateTable()
         {
-            var qh = new QueryHelper<PersistentImage>(connection_string, FromReader);
+            var qh = new QueryHelper<PersistentImage>(connection_string);
             if (!qh.TableExists("images"))
             {
                 qh.ExecuteNonQuery(
@@ -97,25 +90,6 @@ namespace StudyBuddy.Persistence
                 "length int not null," +
                 "content bytea)");
             }
-        }
-
-        private PersistentImage FromReader(NpgsqlDataReader reader)
-        {
-            var obj = new PersistentImage();
-            obj.ID = reader.GetInt32(0);
-            obj.UserID = reader.IsDBNull(1) ? null : reader.GetInt32(1);
-            obj.BadgeId = reader.IsDBNull(2) ? null : reader.GetInt32(2);
-            obj.Name = reader.GetString(3);
-            obj.Length = reader.GetInt32(4);
-
-            using (var mem = new MemoryStream())
-            {
-                var s = reader.GetStream(5);
-                s.CopyTo(mem);
-                obj.Content = mem.ToArray();
-            }
-            
-            return obj;
         }
     }
 }

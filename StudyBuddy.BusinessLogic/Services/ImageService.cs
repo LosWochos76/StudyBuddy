@@ -79,10 +79,10 @@ namespace StudyBuddy.BusinessLogic
             if (backend.CurrentUser == null)
                 throw new UnauthorizedAccessException("Unauthorized!");
 
-            if (!backend.CurrentUser.IsAdmin && backend.CurrentUser.ID != image.UserID.Value)
+            if (!backend.CurrentUser.IsAdmin && backend.CurrentUser.ID != image.UserID)
                 throw new UnauthorizedAccessException("Unauthorized!");
 
-            var old_image = backend.Repository.Images.OfUser(image.UserID.Value);
+            var old_image = backend.Repository.Images.OfUser(image.UserID);
             if (old_image != null)
             {
                 old_image.Content = image.Content;

@@ -12,11 +12,11 @@ namespace StudyBuddy.App.Api
 {
     public class ApiFacade : IApi
     {
-
-        private readonly string base_url = "https://api.gameucation.eu/";
+        //private readonly string base_url = "https://api.gameucation.eu/";
         // private readonly string base_url = "https://studybuddy.hshl.de/";
-        // private readonly string base_url = "https://localhost:5001/";
+        private readonly string base_url = "https://localhost:5001/";
         //private readonly string base_url = "https://10.0.2.2:5001/";
+        //private readonly string base_url = "http://192.168.0.199:58947/";
 
         public ApiFacade()
         {
@@ -37,15 +37,10 @@ namespace StudyBuddy.App.Api
         }
 
         public CommentService CommentService { get; set; }
-
         public IStatisticsService Statistics { get; }
-
         public NotificationUserMetadataService NotificationUserMetadataService { get; set; }
-        //private readonly string base_url = "http://192.168.0.199:58947/";
-
         public Version AppVersion { get; } = new(0, 0, 22, 0);
         public Version ApiVersion { get; private set; } = new(0, 0, 0, 0);
-
         public IAuthenticationService Authentication { get; }
         public IChallengeService Challenges { get; }
         public IFcmTokenService FcmTokens { get; }
@@ -72,7 +67,6 @@ namespace StudyBuddy.App.Api
             if (FriendshipStateChanged != null)
                 FriendshipStateChanged(sender, args);
         }
-
 
         public event EventHandler<ChallengeViewModel> ChallengeAccepted;
 

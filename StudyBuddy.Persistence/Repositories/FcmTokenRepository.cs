@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using Npgsql;
 using StudyBuddy.Model;
 
 namespace StudyBuddy.Persistence
@@ -8,6 +7,7 @@ namespace StudyBuddy.Persistence
     public class FcmTokenRepository : IFcmTokenRepository
     {
         private readonly string connection_string;
+        private readonly FcmTokenConverter converter = new FcmTokenConverter();
 
         public FcmTokenRepository(string connection_string)
         {
@@ -18,21 +18,23 @@ namespace StudyBuddy.Persistence
 
         public IEnumerable<FcmToken> ForUser(int user_id, int from = 0, int max = 1000)
         {
-            var qh = new QueryHelper<FcmToken>(connection_string, FromReader);
+            var qh = new QueryHelper<FcmToken>(connection_string);
             qh.AddParameter(":from", from);
             qh.AddParameter(":max", max);
             qh.AddParameter(":user_id", user_id);
-            return qh.ExecuteQueryToObjectList(
+            var set = qh.ExecuteQueryToDataSet(
                 "SELECT id,token,user_id,created,last_seen " +
                 "FROM fcm_tokens where user_id=:user_id order by created limit :max offset :from");
+            return converter.Multiple(set);
         }
 
         public IEnumerable<FcmToken> GetAll(int from = 0, int max = 1000)
         {
-            var qh = new QueryHelper<FcmToken>(connection_string, FromReader, new {from, max});
-            return qh.ExecuteQueryToObjectList(
+            var qh = new QueryHelper<FcmToken>(connection_string, new {from, max});
+            var set = qh.ExecuteQueryToDataSet(
                 "SELECT id,token,user_id,created,last_seen " +
                 "FROM fcm_tokens order by created limit :max offset :from");
+            return converter.Multiple(set);
         }
 
         public FcmToken Save(FcmToken obj)
@@ -63,7 +65,7 @@ namespace StudyBuddy.Persistence
 
         public void Insert(FcmToken obj)
         {
-            var qh = new QueryHelper<FcmToken>(connection_string, FromReader);
+            var qh = new QueryHelper<FcmToken>(connection_string);
             qh.AddParameter(":user_id", obj.UserID);
             qh.AddParameter(":token", obj.Token);
             qh.AddParameter(":created", obj.Created);
@@ -75,14 +77,14 @@ namespace StudyBuddy.Persistence
 
         public void DeleteOldTokens()
         {
-            var qh = new QueryHelper<FcmToken>(connection_string, FromReader);
+            var qh = new QueryHelper<FcmToken>(connection_string);
             qh.ExecuteScalar(
                 "delete from fcm_tokens WHERE last_seen < NOW() - INTERVAL '60 days'");
         }
 
         public void Update(FcmToken obj)
         {
-            var qh = new QueryHelper<FcmToken>(connection_string, FromReader);
+            var qh = new QueryHelper<FcmToken>(connection_string);
             obj.LastSeen = DateTime.Now.Date;
 
             qh.AddParameter(":id", obj.ID);
@@ -95,22 +97,11 @@ namespace StudyBuddy.Persistence
 
         public FcmToken GetByToken(string token)
         {
-            var qh = new QueryHelper<FcmToken>(connection_string, FromReader);
+            var qh = new QueryHelper<FcmToken>(connection_string);
             qh.AddParameter(":token", token);
 
-            return qh.ExecuteQueryToSingleObject("select * from fcm_tokens where token=:token");
-        }
-
-        private FcmToken FromReader(NpgsqlDataReader reader)
-        {
-            var obj = new FcmToken();
-            obj.ID = reader.GetInt32(0);
-            obj.Token = reader.GetString(1);
-            obj.UserID = reader.GetInt32(2);
-            obj.Created = reader.GetDateTime(3);
-            obj.LastSeen = reader.GetDateTime(4);
-
-            return obj;
+            var set = qh.ExecuteQueryToDataSet("select * from fcm_tokens where token=:token");
+            return converter.Single(set);
         }
     }
 }

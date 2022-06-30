@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using Npgsql;
 using StudyBuddy.Model;
 
 namespace StudyBuddy.Persistence
@@ -7,6 +6,7 @@ namespace StudyBuddy.Persistence
     public class NotificationRepository : INotificationRepository
     {
         private readonly string connection_string;
+        private readonly NotificationConverter converter = new NotificationConverter();
 
         public NotificationRepository(string connection_string)
         {
@@ -17,7 +17,7 @@ namespace StudyBuddy.Persistence
 
         public IEnumerable<Notification> All(NotificationFilter filter)
         {
-            var qh = new QueryHelper<Notification>(connection_string, FromNotificationReader);
+            var qh = new QueryHelper<Notification>(connection_string);
             var sql = "select id, badge_id, owner_id, title, body, created, updated from notifications where true";
             qh.AddParameter(":max", filter.Count);
             qh.AddParameter(":from", filter.Start);
@@ -30,12 +30,13 @@ namespace StudyBuddy.Persistence
                 sql += " and (owner_id=:owner_id)";
             }
 
-            return qh.ExecuteQueryToObjectList(sql);
+            var set = qh.ExecuteQueryToDataSet(sql);
+            return converter.Multiple(set);
         }
 
         public void Insert(Notification obj)
         {
-            var qh = new QueryHelper<Notification>(connection_string, FromNotificationReader);
+            var qh = new QueryHelper<Notification>(connection_string);
             qh.AddParameter(":owner_id", obj.OwnerId);
             qh.AddParameter(":badge_id", obj.BadgeId);
             qh.AddParameter(":title", obj.Title);
@@ -49,25 +50,17 @@ namespace StudyBuddy.Persistence
 
         public Notification GetNotificationById(int notificationId)
         {
-            var qh = new QueryHelper<Notification>(connection_string, (r) => new Notification()
-            {
-                Id = r.GetInt32(0),
-                BadgeId =  r.IsDBNull(1) ?  null : r.GetInt32(2),
-                OwnerId = r.GetInt32(2),
-                Title = r.GetString(3),
-                Body = r.GetString(4),
-                Created = r.GetDateTime(5),
-                Updated = r.GetDateTime(6),
-            });
+            var qh = new QueryHelper<Notification>(connection_string);
             qh.AddParameter(":notification_id", notificationId);
 
-            return qh.ExecuteQueryToSingleObject(
-                "select id, badge_id , owner_id, title, body, created , updated from  notifications where id = :notification_id");
+            var set = qh.ExecuteQueryToDataSet(
+                "select id, badge_id , owner_id, title, body, created, updated from  notifications where id = :notification_id");
+            return converter.Single(set);
         }
 
         public IEnumerable<Notification> GetUserNotificationsFeed(NotificationFilter filter)
         {
-            var qh = new QueryHelper<Notification>(connection_string, FromNotificationReader);
+            var qh = new QueryHelper<Notification>(connection_string);
             qh.AddParameter(":user_id", filter.OwnerId);
             qh.AddParameter(":from", filter.Start);
             qh.AddParameter(":max", filter.Count);
@@ -82,13 +75,15 @@ namespace StudyBuddy.Persistence
                 "left outer join notification_user_metadata  as md on md.owner_id = :user_id and md.notification_id = n.id " +
                 "order by n.id, n.created desc";   
 
-            return qh.ExecuteQueryToObjectList(sql);
+            var set = qh.ExecuteQueryToDataSet(sql);
+            return converter.Multiple(set);
         }
 
         private void CreateTable()
         {
             var rh = new RevisionHelper(connection_string, "notifications");
-            var qh = new QueryHelper<Notification>(connection_string, FromNotificationReader);
+            var qh = new QueryHelper<Notification>(connection_string);
+
             if (!qh.TableExists("notifications"))
                 qh.ExecuteNonQuery(
                     "create table notifications (" +
@@ -110,45 +105,12 @@ namespace StudyBuddy.Persistence
                 rh.SetRevision(2);
             }
             
-            
             if (rh.GetRevision() == 2)
             {
                 qh.ExecuteNonQuery("ALTER TABLE notifications ALTER COLUMN created type date");
                 qh.ExecuteNonQuery("ALTER TABLE notifications ALTER COLUMN updated type date");
-
                 rh.SetRevision(3);
             }
-
-            
-
-        }
-
-        private Notification FromNotificationReader(NpgsqlDataReader reader)
-        {
-            var obj = new Notification();
-
-            obj.Id = reader.GetInt32(0);
-            if (!reader.IsDBNull(1))
-            {
-                obj.BadgeId =  reader.GetInt32(1);
-            }
-            obj.OwnerId = reader.GetInt32(2);
-            obj.Title = reader.GetString(3);
-            obj.Body = reader.GetString(4);
-            obj.Created = reader.GetDateTime(5);
-            obj.Updated = reader.GetDateTime(6);
-
-            var owner = new User();
-            owner.Firstname = reader.GetString(7);
-            owner.Lastname = reader.GetString(8);
-            owner.Nickname = reader.GetString(9);
-            obj.Owner = owner;
-
-            obj.Liked = !reader.IsDBNull(10) && reader.GetBoolean(10);
-            obj.Shared = !reader.IsDBNull(11) && reader.GetBoolean(11);
-            obj.Seen = !reader.IsDBNull(12) && reader.GetBoolean(12);
-
-            return obj;
         }
     }
 }

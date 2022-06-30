@@ -1,7 +1,5 @@
-using System;
 using System.Collections.Generic;
 using System.Text;
-using Npgsql;
 using StudyBuddy.Model;
 using StudyBuddy.Model.Filter;
 
@@ -10,6 +8,7 @@ namespace StudyBuddy.Persistence
     internal class RequestRepository : IRequestRepository
     {
         private readonly string connection_string;
+        private readonly RequestConverter converter = new RequestConverter();
 
         public RequestRepository(string connection_string)
         {
@@ -20,7 +19,7 @@ namespace StudyBuddy.Persistence
 
         public IEnumerable<Request> All(RequestFilter filter)
         {
-            var qh = new QueryHelper<Request>(connection_string, FromReader);
+            var qh = new QueryHelper<Request>(connection_string);
             qh.AddParameter(":from", filter.Start);
             qh.AddParameter(":max", filter.Count);
 
@@ -45,12 +44,13 @@ namespace StudyBuddy.Persistence
             }
 
             sql.Append(" order by created desc limit :max offset :from");
-            return qh.ExecuteQueryToObjectList(sql.ToString());
+            var set = qh.ExecuteQueryToDataSet(sql.ToString());
+            return converter.Multiple(set);
         }
 
         public int GetCount(RequestFilter filter)
         {
-            var qh = new QueryHelper<Request>(connection_string, FromReader);
+            var qh = new QueryHelper<Request>(connection_string);
             var sql = new StringBuilder("select count(*) from requests where true ");
 
             if (filter.OnlyForSender.HasValue)
@@ -76,10 +76,12 @@ namespace StudyBuddy.Persistence
 
         public Request ById(int id)
         {
-            var qh = new QueryHelper<Request>(connection_string, FromReader, new {id});
-            return qh.ExecuteQueryToSingleObject(
+            var qh = new QueryHelper<Request>(connection_string, new {id});
+            var set = qh.ExecuteQueryToDataSet(
                 "select id,created,sender_id,recipient_id,type,challenge_id " +
                 "from requests where id=:id");
+
+            return converter.Single(set);
         }
 
         public void Delete(int id)
@@ -95,7 +97,7 @@ namespace StudyBuddy.Persistence
             qh.AddParameter(":sender_id", obj.SenderID);
             qh.AddParameter(":recipient_id", obj.RecipientID);
             qh.AddParameter(":type", (int) obj.Type);
-            qh.AddParameter(":challenge_id", obj.ChallengeID.HasValue ? obj.ChallengeID.Value : DBNull.Value);
+            qh.AddParameter(":challenge_id", obj.ChallengeID);
             obj.ID = qh.ExecuteScalar(
                 "insert into requests (created,sender_id,recipient_id,type,challenge_id) values " +
                 "(:created,:sender_id,:recipient_id,:type,:challenge_id) returning id");
@@ -104,7 +106,7 @@ namespace StudyBuddy.Persistence
         private void CreateTable()
         {
             var rh = new RevisionHelper(connection_string, "requests");
-            var qh = new QueryHelper<Request>(connection_string, FromReader);
+            var qh = new QueryHelper<Request>(connection_string);
 
             if (!qh.TableExists("requests"))
             {
@@ -132,48 +134,38 @@ namespace StudyBuddy.Persistence
 
         public Request FindFriendshipRequest(int sender_id, int recipient_id)
         {
-            var qh = new QueryHelper<Request>(connection_string, FromReader);
+            var qh = new QueryHelper<Request>(connection_string);
             qh.AddParameter(":sender_id", sender_id);
             qh.AddParameter(":recipient_id", recipient_id);
             qh.AddParameter(":type", (int)RequestType.Friendship);
 
-            return qh.ExecuteQueryToSingleObject(
+            var set = qh.ExecuteQueryToDataSet(
                 "select id,created,sender_id,recipient_id,type,challenge_id " +
                 "from requests where sender_id=:sender_id and recipient_id=:recipient_id and type=:type and challenge_id is null");
+
+            return converter.Single(set);
         }
 
         public Request FindSimilar(Request obj)
         {
-            var qh = new QueryHelper<Request>(connection_string, FromReader);
+            var qh = new QueryHelper<Request>(connection_string);
             qh.AddParameter(":sender_id", obj.SenderID);
             qh.AddParameter(":recipient_id", obj.RecipientID);
             qh.AddParameter(":type", (int)obj.Type);
 
-            if (obj.ChallengeID == null)
+            if (obj.ChallengeID == 0)
             {
                 return qh.ExecuteQueryToSingleObject(
-                "select id,created,sender_id,recipient_id,type,challenge_id " +
-                "from requests where sender_id=:sender_id and recipient_id=:recipient_id and type=:type and challenge_id is null");
+                    "select id,created,sender_id,recipient_id,type,challenge_id " +
+                    "from requests where sender_id=:sender_id and recipient_id=:recipient_id and type=:type and challenge_id is null");
             }
             else
             {
-                qh.AddParameter(":challenge_id", obj.ChallengeID.HasValue ? obj.ChallengeID.Value : DBNull.Value);
+                qh.AddParameter(":challenge_id", obj.ChallengeID);
                 return qh.ExecuteQueryToSingleObject(
                     "select id,created,sender_id,recipient_id,type,challenge_id " +
                     "from requests where sender_id=:sender_id and recipient_id=:recipient_id and type=:type and challenge_id=:challenge_id");
             }
-        }
-
-        private Request FromReader(NpgsqlDataReader reader)
-        {
-            var obj = new Request();
-            obj.ID = reader.GetInt32(0);
-            obj.Created = reader.GetDateTime(1);
-            obj.SenderID = reader.GetInt32(2);
-            obj.RecipientID = reader.GetInt32(3);
-            obj.Type = (RequestType) reader.GetInt32(4);
-            obj.ChallengeID = reader.IsDBNull(5) ? null : reader.GetInt32(5);
-            return obj;
         }
     }
 }
