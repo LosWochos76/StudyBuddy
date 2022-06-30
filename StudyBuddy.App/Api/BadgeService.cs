@@ -12,51 +12,34 @@ namespace StudyBuddy.App.Api
 
         public BadgeService(IApi api, string base_url)
         {
-            this._api = api;
-            this._baseUrl = base_url;
+            _api = api;
+            _baseUrl = base_url;
         }
-        private async Task<GameBadgeListViewModel> All(GameBadgeFilter filter)
-        {
-            var rh = new WebRequestHelper(_api.Authentication.Token);
-            return await rh.Get<GameBadgeListViewModel>(_baseUrl + "GameBadge", filter);
-        }
-        private async Task<GameBadgeListViewModel> AllWithDateReceived(GameBadgeFilter filter)
-        {
-            var rh = new WebRequestHelper(_api.Authentication.Token);
-            return await rh.Get<GameBadgeListViewModel>(_baseUrl + "GameBadge", filter);
-        }
+
         public async Task<GameBadgeViewModel> GetById(int badge_id)
         {
             var rh = new WebRequestHelper(_api.Authentication.Token);
             return await rh.Load<GameBadgeViewModel>(_baseUrl + "GameBadge/" + badge_id, HttpMethod.Get);
         }
-        public async Task<GameBadgeListViewModel> Accepted(string search_string = "", int skip = 0)
-        {
-            var currentUser = _api.Authentication.CurrentUser;
-            var filter = new GameBadgeFilter()
-            {
-                OnlyReceived = true,
-                SearchText = search_string,
-                Count = 10,
-                Start = skip,
-                CurrentUserId = currentUser == null ? 0 : currentUser.ID
-            };
 
-            return await All(filter);
+        private async Task<GameBadgeListViewModel> All(GameBadgeFilter filter)
+        {
+            var rh = new WebRequestHelper(_api.Authentication.Token);
+            return await rh.Get<GameBadgeListViewModel>(_baseUrl + "GameBadge", filter);
         }
-        public async Task<GameBadgeListViewModel> BadgeReceived(string search_string = "", int skip = 0)
+
+        public async Task<GameBadgeListViewModel> BadgesReceived(string search_string = "", int skip = 0)
         {
             var currentUser = _api.Authentication.CurrentUser;
             var filter = new GameBadgeFilter()
             {
-                OnlyReceived = true,
                 SearchText = search_string,
                 Count = 10,
                 Start = skip,
-                CurrentUserId = currentUser == null ? 0 : currentUser.ID
             };
 
-            return await AllWithDateReceived(filter);
+            var rh = new WebRequestHelper(_api.Authentication.Token);
+            return await rh.Get<GameBadgeListViewModel>(_baseUrl + "User/" + currentUser + "/GameBadge", filter);
         }
     }
 }

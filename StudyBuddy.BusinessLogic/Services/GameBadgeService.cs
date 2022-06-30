@@ -34,28 +34,6 @@ namespace StudyBuddy.BusinessLogic
 
             return new GameBadgeList() { Count = count, Objects = objects };
         }
-        
-        public GameBadgeList AllWithDateReceived(GameBadgeFilter filter)
-        {
-            if (backend.CurrentUser == null)
-                throw new Exception("Unauthorized!");
-
-            if (filter == null)
-                filter = new GameBadgeFilter();
-
-            var count = backend.Repository.GameBadges.GetCount(filter);
-            var objects = backend.Repository.GameBadges.AllWithDateReceived(filter);
-
-            if (filter.WithOwner)
-            {
-                foreach (var obj in objects)
-                {
-                    obj.Owner = backend.Repository.Users.ById(obj.OwnerID);
-                }
-            }
-
-            return new GameBadgeList() { Count = count, Objects = objects };
-        }
 
         public GameBadge GetById(int id)
         {
@@ -150,12 +128,12 @@ namespace StudyBuddy.BusinessLogic
             backend.Repository.GameBadges.RemoveBadgeFromUser(user_id, badge_id);
         }
 
-        public GameBadgeList GetBadgesOfUser(int user_id)
+        public GameBadgeList GetReceivedBadgesOfUser(int user_id, GameBadgeFilter filter)
         {
             if (backend.CurrentUser == null || (!backend.CurrentUser.IsAdmin && backend.CurrentUser.ID != user_id))
                 throw new Exception("Unauthorized!");
 
-            var objects = backend.Repository.GameBadges.GetBadgesOfUser(user_id);
+            var objects = backend.Repository.GameBadges.GetReceivedBadgesOfUser(user_id, filter);
             return new GameBadgeList()
             {
                 Count = objects.Count(),

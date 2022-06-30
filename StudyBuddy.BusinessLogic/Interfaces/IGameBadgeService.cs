@@ -5,7 +5,6 @@ namespace StudyBuddy.BusinessLogic
     public interface IGameBadgeService
     {
         GameBadgeList All(GameBadgeFilter filter);
-        GameBadgeList AllWithDateReceived(GameBadgeFilter filter);
         GameBadge GetById(int id);
         GameBadge Insert(GameBadge obj);
         GameBadge Update(GameBadge obj);
@@ -16,6 +15,6 @@ namespace StudyBuddy.BusinessLogic
 
         void AddBadgeToUser(int user_id, int badge_id);
         void RemoveBadgeFromUser(int user_id, int badge_id);
-        GameBadgeList GetBadgesOfUser(int user_id);
+        GameBadgeList GetReceivedBadgesOfUser(int user_id, GameBadgeFilter filter);
     }
 }

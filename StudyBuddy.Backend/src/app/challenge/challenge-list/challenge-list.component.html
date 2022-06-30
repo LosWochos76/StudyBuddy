@@ -35,8 +35,8 @@
         <fa-icon [icon]="getCategorgyIcon(obj)"></fa-icon>&nbsp;{{obj.name}}
       </td>
       <td>{{obj.points}}</td>
-      <td>{{obj.validity_start}}</td>
-      <td>{{obj.validity_end}}</td>
+      <td>{{obj.validity_start | date:'dd.MM.yyyy'}}</td>
+      <td>{{obj.validity_end | date:'dd.MM.yyyy'}}</td>
       <td *ngIf="user.isAdmin()">{{obj.owner.fullName()}}</td>
     </tr>
   </tbody>

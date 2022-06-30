@@ -9,6 +9,7 @@ namespace StudyBuddy.Persistence
     internal class GameBadgeRepository : IGameBadgeRepository
     {
         private readonly string connection_string;
+        private readonly GameBadgeConverter converter = new GameBadgeConverter();
 
         public GameBadgeRepository(string connection_string)
         {
@@ -20,39 +21,28 @@ namespace StudyBuddy.Persistence
 
         public GameBadge ById(int id)
         {
-            var qh = new QueryHelper<GameBadge>(connection_string, FromReader);
+            var qh = new QueryHelper<GameBadge>(connection_string);
             qh.AddParameter(":id", id);
-
-            return qh.ExecuteQueryToSingleObject("select id,name,owner_id,created," +
+            var set = qh.ExecuteQueryToDataSet("select id,name,owner_id,created," +
                 "required_coverage,description,iconkey,tags_of_badge(id) FROM game_badges where id=:id");
+            return converter.Single(set);
         }
 
         public IEnumerable<GameBadge> All(GameBadgeFilter filter)
         {
-            var qh = new QueryHelper<GameBadge>(connection_string, FromReader);
+            var qh = new QueryHelper<GameBadge>(connection_string);
             qh.AddParameter(":from", filter.Start);
             qh.AddParameter(":max", filter.Count);
             var sql = new StringBuilder("select id,name,owner_id,created,required_coverage,description,iconkey,tags_of_badge(id) FROM game_badges where true");
             ApplyFilter(qh, sql, filter);
             sql.Append(" order by created, name limit :max offset :from");
-            return qh.ExecuteQueryToObjectList(sql.ToString());
-        }
-        public IEnumerable<GameBadge> AllWithDateReceived(GameBadgeFilter filter)
-        {
-            var qh = new QueryHelper<GameBadge>(connection_string, FromReader);
-            qh.AddParameter(":from", filter.Start);
-            qh.AddParameter(":max", filter.Count);
-            var sql = new StringBuilder("select game_badges.*, tags_of_badge(game_badges.id), users_badges.created AS received " +
-                                        "from game_badges,users_badges " +
-                                        "where game_badges.id = users_badges.badge_id");
-            ApplyFilter(qh, sql, filter);
-            sql.Append(" order by users_badges.created desc");
-            return qh.ExecuteQueryToObjectList(sql.ToString());
+            var set = qh.ExecuteQueryToDataSet(sql.ToString());
+            return converter.Multiple(set);
         }
 
         public int GetCount(GameBadgeFilter filter)
         {
-            var qh = new QueryHelper<GameBadge>(connection_string, FromReader);
+            var qh = new QueryHelper<GameBadge>(connection_string);
             var sql = new StringBuilder("select count(*) FROM game_badges where true");
             ApplyFilter(qh, sql, filter);
             return qh.ExecuteQueryToSingleInt(sql.ToString());
@@ -71,37 +61,30 @@ namespace StudyBuddy.Persistence
                 qh.AddParameter(":search_text", "%" + filter.SearchText + "%");
                 sql.Append(" and (name ilike :search_text or description ilike :search_text or tags_of_badge(id) ilike :search_text)");
             }
-
-            if (filter.OnlyReceived)
-            {
-                qh.AddParameter(":user_id", filter.CurrentUserId);
-                sql.Append(" and badge_received(:user_id, id)");
-            }
-
-            if (filter.OnlyUnreceived)
-            {
-                qh.AddParameter(":user_id", filter.CurrentUserId);
-                sql.Append(" and not badge_received(:user_id, id)");
-            }
         }
 
-        public IEnumerable<GameBadge> GetBadgesOfUser(int user_id)
+        public IEnumerable<GameBadge> GetReceivedBadgesOfUser(int user_id, GameBadgeFilter filter)
         {
-            var qh = new QueryHelper<GameBadge>(connection_string, FromReader);
+            var qh = new QueryHelper<GameBadge>(connection_string);
             qh.AddParameter(":user_id", user_id);
+            qh.AddParameter(":max", filter.Count);
+            qh.AddParameter(":from", filter.Start);
 
-            var sql = "select id,name,owner_id,game_badges.created,required_coverage,description,iconkey,tags_of_badge(id) " +
+            var sql = new StringBuilder("select id,name,owner_id,game_badges.created," +
+                "required_coverage,description,iconkey,tags_of_badge(id),users_badges.created as received " +
                 "from game_badges " +
                 "inner join users_badges on id=badge_id " +
-                "where user_id=:user_id " +
-                "order by users_badges.created desc";
+                "where user_id=:user_id");
 
-            return qh.ExecuteQueryToObjectList(sql);
+            ApplyFilter(qh, sql, filter);
+            sql.Append(" order by users_badges.created desc limit :max offset :from");
+            var set = qh.ExecuteQueryToDataSet(sql.ToString());
+            return converter.Multiple(set);
         }
 
         public void Insert(GameBadge obj)
         {
-            var qh = new QueryHelper<GameBadge>(connection_string, FromReader);
+            var qh = new QueryHelper<GameBadge>(connection_string);
             qh.AddParameter(":name", obj.Name);
             qh.AddParameter(":owner_id", obj.OwnerID);
             qh.AddParameter(":created", obj.Created);
@@ -116,7 +99,7 @@ namespace StudyBuddy.Persistence
 
         public void Update(GameBadge obj)
         {
-            var qh = new QueryHelper<GameBadge>(connection_string, FromReader);
+            var qh = new QueryHelper<GameBadge>(connection_string);
             qh.AddParameter(":id", obj.ID);
             qh.AddParameter(":name", obj.Name);
             qh.AddParameter(":owner_id", obj.OwnerID);
@@ -140,13 +123,13 @@ namespace StudyBuddy.Persistence
 
         public void Delete(int id)
         {
-            var qh = new QueryHelper<GameBadge>(connection_string, FromReader);
+            var qh = new QueryHelper<GameBadge>(connection_string);
             qh.Delete("game_badges", "id", id);
         }
 
         public IEnumerable<GameBadge> GetBadgesForChallenge(int challenge_id)
         {
-            var qh = new QueryHelper<GameBadge>(connection_string, FromReader);
+            var qh = new QueryHelper<GameBadge>(connection_string);
             qh.AddParameter(":challenge_id", challenge_id);
 
             var sql = "select distinct gb.id,gb.name,gb.owner_id,gb.created,gb.required_coverage,gb.description,tags_of_badge(gb.id) from game_badges gb " +
@@ -155,13 +138,14 @@ namespace StudyBuddy.Persistence
                 "where tc.challenge_id=:challenge_id " +
                 "order by created desc, name";
 
-            return qh.ExecuteQueryToObjectList(sql);
+            var set = qh.ExecuteQueryToDataSet(sql);
+            return converter.Multiple(set);
         }
 
         // Get the success rate of a specific user for a certain badge
         public BadgeSuccessRate GetSuccessRate(int badge_id, int user_id)
         {
-            var qh = new QueryHelper<BadgeSuccessRate>(connection_string, BadgeSuccessRateFromReader);
+            var qh = new QueryHelper<BadgeSuccessRate>(connection_string);
             qh.AddParameter(":badge_id", badge_id);
             qh.AddParameter(":user_id", user_id);
 
@@ -184,7 +168,9 @@ namespace StudyBuddy.Persistence
                 "   ) as b " +
                 "); ";
 
-            return qh.ExecuteQueryToSingleObject(sql);
+            var converter = new BadgeSuccessRateConverter();
+            var set = qh.ExecuteQueryToDataSet(sql);
+            return converter.Single(set);
         }
 
         public void AddBadgeToUser(int user_id, int badge_id)
@@ -214,7 +200,7 @@ namespace StudyBuddy.Persistence
         private void CreateBadgesTable()
         {
             var rh = new RevisionHelper(connection_string, "badges");
-            var qh = new QueryHelper<GameBadge>(connection_string, FromReader);
+            var qh = new QueryHelper<GameBadge>(connection_string);
 
             if (!qh.TableExists("game_badges"))
             {
@@ -265,7 +251,7 @@ namespace StudyBuddy.Persistence
         private void CreateBadgesUserTable()
         {
             var rh = new RevisionHelper(connection_string, "users_badges");
-            var qh = new QueryHelper<GameBadge>(connection_string, FromReader);
+            var qh = new QueryHelper<GameBadge>(connection_string);
 
             if (!qh.TableExists("users_badges"))
             {
@@ -276,31 +262,6 @@ namespace StudyBuddy.Persistence
                     "created date not null," +
                     "unique (user_id, badge_id))");
             }
-        }
-
-        private GameBadge FromReader(NpgsqlDataReader reader)
-        {
-            var obj = new GameBadge();
-            obj.ID = reader.GetInt32(0);
-            obj.Name = reader.GetString(1);
-            obj.OwnerID = reader.GetInt32(2);
-            obj.Created = reader.GetDateTime(3);
-            obj.RequiredCoverage = reader.GetDouble(4);
-            obj.Description = reader.IsDBNull(5) ? "" : reader.GetString(5);
-            obj.IconKey = reader.IsDBNull(6) ? "" : reader.GetString(6);
-            obj.Tags = reader.IsDBNull(7) ? "" : reader.GetString(7);
-            obj.Received = reader.GetDateTime(8);
-            return obj;
-        }
-
-        private BadgeSuccessRate BadgeSuccessRateFromReader(NpgsqlDataReader reader)
-        {
-            var obj = new BadgeSuccessRate();
-            obj.BadgeId = reader.GetInt32(0);
-            obj.UserId = reader.GetInt32(1);
-            obj.OverallChallengeCount = reader.GetInt32(2);
-            obj.AcceptedChallengeCount = reader.GetInt32(3);
-            return obj;
         }
     }
 }

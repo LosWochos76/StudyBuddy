@@ -64,7 +64,7 @@ namespace StudyBuddy.App.ViewModels
 
         private async Task BadgesCount()
         {
-            var badges = await api.Badges.Accepted("", 0);
+            var badges = await api.Badges.BadgesReceived("", 0);
             _totalBadges = badges.Objects.Count();
         }
 

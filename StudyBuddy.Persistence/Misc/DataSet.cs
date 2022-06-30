@@ -65,20 +65,67 @@ namespace StudyBuddy.Persistence
 
         public int GetInt(int row, string column_name)
         {
-            var value = GetValue(row, column_name);
-            return value == null ? 0 : Convert.ToInt32(value);
+            try
+            {
+                var value = GetValue(row, column_name);
+                return value == null ? 0 : Convert.ToInt32(value);
+            }
+            catch
+            {
+                return 0;
+            }
         }
 
         public string GetString(int row, string column_name)
         {
-            var value = GetValue(row, column_name);
-            return value == null ? string.Empty : value.ToString();
+            try
+            {
+                var value = GetValue(row, column_name);
+                return value == null ? string.Empty : value.ToString();
+            }
+            catch
+            {
+                return string.Empty;
+            }
         }
 
         public bool GetBool(int row, string column_name)
         {
-            var value = GetValue(row, column_name);
-            return value == null ? false : Convert.ToBoolean(value);
+            try
+            {
+                var value = GetValue(row, column_name);
+                return value == null ? false : Convert.ToBoolean(value);
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        public DateTime GetDateTime(int row, string column_name)
+        {
+            try
+            {
+                var value = GetValue(row, column_name);
+                return value == null ? default(DateTime) : Convert.ToDateTime(value);
+            }
+            catch
+            {
+                return default(DateTime);
+            }
+        }
+
+        public double GetDouble(int row, string column_name)
+        {
+            try
+            {
+                var value = GetValue(row, column_name);
+                return value == null ? 0 : Convert.ToDouble(value);
+            }
+            catch
+            {
+                return 0;
+            }
         }
     }
 }

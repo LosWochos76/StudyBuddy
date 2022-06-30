@@ -6,10 +6,11 @@ export class GameBadge {
     owner_id:number = 0;
     created:string;
     required_coverage:number;
-    description: string = "";
-    iconkey: string = "";
+    description:string = "";
+    iconkey:string = "";
     tags:string = "";
-    owner: User = null;
+    owner:User = null;
+    received:string;
     
     constructor() { 
         let today = (new Date()).toISOString().split('T')[0];
@@ -36,7 +37,9 @@ export class GameBadge {
         obj.description = result["description"];
         obj.tags = result["tags"];
         obj.iconkey = result["iconKey"];
-        
+
+        if (result["received"] != null)
+            obj.received = result["received"];
 
         if (result["owner"] != null)
             obj.owner = User.fromApi(result["owner"]);

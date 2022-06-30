@@ -277,7 +277,8 @@ namespace StudyBuddy.BusinessLogic
 
         private void OnChallengeAccepted(Challenge obj, User current_user)
         {
-            var badges_of_user = backend.GameBadgeService.GetBadgesOfUser(current_user.ID);
+            var filter = new GameBadgeFilter() { Count = int.MaxValue };
+            var badges_of_user = backend.GameBadgeService.GetReceivedBadgesOfUser(current_user.ID, filter);
             var badges = backend.Repository.GameBadges.GetBadgesForChallenge(obj.ID);
 
             foreach (var badge in badges)

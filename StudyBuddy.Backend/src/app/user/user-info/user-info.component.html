@@ -86,6 +86,7 @@
                     <tr>
                         <th scope="col">#</th>
                         <th scope="col">Name</th>
+                        <th scope="col">Erhalten am</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -94,6 +95,7 @@
                         (dblclick)="onEditBadge(obj)">
                         <th scope="row">{{(received_badges_page-1) * 10 + i + 1}}</th>
                         <td>{{obj.name}}</td>
+                        <td>{{obj.received | date:'dd.MM.yyyy'}}</td>
                     </tr>
                 </tbody>
             </table>
