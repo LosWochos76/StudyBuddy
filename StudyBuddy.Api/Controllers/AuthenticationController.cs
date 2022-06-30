@@ -22,19 +22,6 @@ namespace StudyBuddy.Api
             return Json(backend.AuthenticationService.Login(uc));
         }
 
-        }
-
-        }
-
-        }
-
-        }
-
-        }
-
-        }
-
-        }
 
         [Route("/Login/")]
         [HttpPut]
