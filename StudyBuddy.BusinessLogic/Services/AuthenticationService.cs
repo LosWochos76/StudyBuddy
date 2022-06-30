@@ -91,6 +91,7 @@ namespace StudyBuddy.BusinessLogic
             var obj = backend.Repository.Users.ByEmailActiveAccounts(email);
             if (obj == null)
                 throw new Exception("User not found!");
+
             var key = obj.PasswordHash;
             var jwt = new JwtToken();
             var token = jwt.PasswordResetToken(obj.ID, key);
@@ -99,6 +100,7 @@ namespace StudyBuddy.BusinessLogic
                 {"token", token },
                 {"email", email }
             };
+
             string baseurl;
             string subject;
             string message;

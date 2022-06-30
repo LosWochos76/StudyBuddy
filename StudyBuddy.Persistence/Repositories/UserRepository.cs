@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using Npgsql;
 using SimpleHashing.Net;
 using StudyBuddy.Model;
 
@@ -8,32 +7,36 @@ namespace StudyBuddy.Persistence
     internal class UserRepository : IUserRepository
     {
         private readonly string connection_string;
-        private readonly SimpleHash simpleHash = new();
+        private readonly SimpleHash simpleHash = new SimpleHash();
+        private UserConverter converter = new UserConverter();
 
         public UserRepository(string connection_string)
         {
             this.connection_string = connection_string;
-
             CreateTable();
         }
 
         public User ById(int id)
         {
-            var qh = new QueryHelper<User>(connection_string, FromReader, new {id});
-            return qh.ExecuteQueryToSingleObject(
+            var qh = new QueryHelper<User>(connection_string, new { id });
+            var set = qh.ExecuteQueryToDataSet(
                 "SELECT id,firstname,lastname,nickname," +
                 "email,password_hash,role,emailconfirmed,accountactive FROM users where id=:id");
+
+            return converter.Single(set);
         }
 
         public IEnumerable<User> All(UserFilter filter)
         {
-            var qh = new QueryHelper<User>(connection_string, FromReader);
+            var qh = new QueryHelper<User>(connection_string);
             qh.AddParameter(":from", filter.Start);
             qh.AddParameter(":max", filter.Count);
 
-            return qh.ExecuteQueryToObjectList(
+            var set = qh.ExecuteQueryToDataSet(
                 "SELECT id,firstname,lastname,nickname,email,password_hash,role,emailconfirmed,accountactive " +
                 "FROM users order by lastname,firstname,nickname limit :max offset :from");
+
+            return converter.Multiple(set);
         }
 
         public int GetCount(UserFilter filter)
@@ -44,23 +47,27 @@ namespace StudyBuddy.Persistence
 
         public User ByEmailActiveAccounts(string email)
         {
-            var qh = new QueryHelper<User>(connection_string, FromReader, new {email});
-            return qh.ExecuteQueryToSingleObject(
+            var qh = new QueryHelper<User>(connection_string, new {email});
+            var set = qh.ExecuteQueryToDataSet(
                 "SELECT id,firstname,lastname,nickname,email,password_hash,role,emailconfirmed,accountactive " +
                 "FROM users where accountactive = true and lower(email)=lower(:email)");
+
+            return converter.Single(set);
         }
 
         public User ByEmailAllAccounts(string email)
         {
-            var qh = new QueryHelper<User>(connection_string, FromReader, new { email });
-            return qh.ExecuteQueryToSingleObject(
+            var qh = new QueryHelper<User>(connection_string, new { email });
+            var set = qh.ExecuteQueryToDataSet(
                 "SELECT id,firstname,lastname,nickname,email,password_hash,role,emailconfirmed,accountactive " +
                 "FROM users where lower(email)=lower(:email)");
+
+            return converter.Single(set);
         }
 
         public void Insert(User obj)
         {
-            var qh = new QueryHelper<User>(connection_string, FromReader);
+            var qh = new QueryHelper<User>(connection_string);
             qh.AddParameter(":firstname", obj.Firstname);
             qh.AddParameter(":lastname", obj.Lastname);
             qh.AddParameter(":nickname", obj.Nickname.ToLower());
@@ -78,7 +85,7 @@ namespace StudyBuddy.Persistence
 
         public void Update(User obj)
         {
-            var qh = new QueryHelper<User>(connection_string, FromReader);
+            var qh = new QueryHelper<User>(connection_string);
 
             var sql = "update users set firstname=:firstname,lastname=:lastname," +
                       "nickname=:nickname,email=:email";
@@ -119,23 +126,25 @@ namespace StudyBuddy.Persistence
 
         public User ByNickname(string nickname)
         {
-            var qh = new QueryHelper<User>(connection_string, FromReader);
+            var qh = new QueryHelper<User>(connection_string);
             qh.AddParameter(":nickname", nickname);
-            return qh.ExecuteQueryToSingleObject(
+
+            var set = qh.ExecuteQueryToDataSet(
                 "SELECT id,firstname,lastname,nickname," +
                 "email,password_hash,role,emailconfirmed,accountactive FROM " +
                 "users where lower(nickname)=lower(:nickname)");
+
+            return converter.Single(set);
         }
 
         public IEnumerable<User> GetFriends(FriendFilter filter)
         {
-            var qh = new QueryHelper<User>(connection_string, FromReaderWithCommonFriends);
+            var qh = new QueryHelper<User>(connection_string);
             qh.AddParameter(":user_id", filter.UserId);
             qh.AddParameter(":from", filter.Start);
             qh.AddParameter(":max", filter.Count);
 
-            var sql =
-                "select id,firstname,lastname,nickname,email,password_hash,role,emailconfirmed,accountactive,common_friends(id, :user_id) from friends" +
+            var sql = "select id,firstname,lastname,nickname,email,password_hash,role,emailconfirmed,accountactive,common_friends(id, :user_id) from friends" +
                 " inner join users on user_b = id where accountactive = true and user_a=:user_id ";
 
             if (!string.IsNullOrEmpty(filter.SearchText))
@@ -146,12 +155,14 @@ namespace StudyBuddy.Persistence
             }
 
             sql += "order by lastname,firstname,nickname limit :max offset :from";
-            return qh.ExecuteQueryToObjectList(sql);
+
+            var set = qh.ExecuteQueryToDataSet(sql);
+            return converter.Multiple(set);
         }
 
         public int GetFriendsCount(FriendFilter filter)
         {
-            var qh = new QueryHelper<User>(connection_string, FromReaderWithCommonFriends);
+            var qh = new QueryHelper<User>(connection_string);
             qh.AddParameter(":user_id", filter.UserId);
             var sql = "select count(*) from friends inner join users on user_b=id where accountactive = true and user_a=:user_id";
 
@@ -167,7 +178,7 @@ namespace StudyBuddy.Persistence
 
         public IEnumerable<User> GetNotFriends(FriendFilter filter)
         {
-            var qh = new QueryHelper<User>(connection_string, FromReaderWithCommonFriends);
+            var qh = new QueryHelper<User>(connection_string);
             qh.AddParameter(":user_id", filter.UserId);
             qh.AddParameter(":from", filter.Start);
             qh.AddParameter(":max", filter.Count);
@@ -184,16 +195,17 @@ namespace StudyBuddy.Persistence
             }
 
             sql += " order by lastname,firstname,nickname limit :max offset :from";
-            return qh.ExecuteQueryToObjectList(sql);
+
+            var set = qh.ExecuteQueryToDataSet(sql);
+            return converter.Multiple(set);
         }
 
         public int GetNotFriendsCount(FriendFilter filter)
         {
-            var qh = new QueryHelper<User>(connection_string, FromReaderWithCommonFriends);
+            var qh = new QueryHelper<User>(connection_string);
             qh.AddParameter(":user_id", filter.UserId);
 
-            var sql =
-                "select count(*) from users where accountactive = true and id not in (select user_b from friends where user_a=:user_id) and id!=:user_id ";
+            var sql = "select count(*) from users where accountactive = true and id not in (select user_b from friends where user_a=:user_id) and id!=:user_id ";
 
             if (!string.IsNullOrEmpty(filter.SearchText))
             {
@@ -206,14 +218,14 @@ namespace StudyBuddy.Persistence
 
         public void AddFriend(int user_id, int friend_id)
         {
-            var qh = new QueryHelper<User>(connection_string, FromReader, new {user_id, friend_id});
+            var qh = new QueryHelper<User>(connection_string, new {user_id, friend_id});
             qh.ExecuteNonQuery(
                 "insert into friends (user_a, user_b) values (:user_id, :friend_id), (:friend_id, :user_id);");
         }
 
         public void RemoveFriend(int user_id, int friend_id)
         {
-            var qh = new QueryHelper<User>(connection_string, FromReader, new {user_id, friend_id});
+            var qh = new QueryHelper<User>(connection_string, new {user_id, friend_id});
             qh.ExecuteNonQuery(
                 "delete from friends where " +
                 "(user_a=:user_id and user_b=:friend_id) or " +
@@ -222,7 +234,7 @@ namespace StudyBuddy.Persistence
 
         public void RemoveFriends(int user_id)
         {
-            var qh = new QueryHelper<User>(connection_string, FromReader, new {user_id});
+            var qh = new QueryHelper<User>(connection_string, new {user_id});
             qh.ExecuteNonQuery("delete from friends where user_a=:user_id or user_b=:user_id;");
         }
 
@@ -234,24 +246,28 @@ namespace StudyBuddy.Persistence
 
         public IEnumerable<User> GetAllUsersThatAcceptedChallenge(int challenge_id)
         {
-            var qh = new QueryHelper<User>(connection_string, FromReader);
+            var qh = new QueryHelper<User>(connection_string);
             qh.AddParameter(":challenge_id", challenge_id);
-            return qh.ExecuteQueryToObjectList(
-                "SELECT id,firstname,lastname,nickname,email,password_hash,role,emailconfirmed,accountactive FROM challenge_acceptance " +
+            var sql = "SELECT id,firstname,lastname,nickname,email,password_hash,role,emailconfirmed,accountactive FROM challenge_acceptance " +
                 "inner join users on user_id=id " +
                 "where challenge_id=:challenge_id " +
-                "order by lastname,firstname,nickname");
+                "order by lastname,firstname,nickname";
+
+            var set = qh.ExecuteQueryToDataSet(sql);
+            return converter.Multiple(set);
         }
 
         public IEnumerable<User> GetAllUsersHavingBadge(int badge_id)
         {
-            var qh = new QueryHelper<User>(connection_string, FromReader);
+            var qh = new QueryHelper<User>(connection_string);
             qh.AddParameter(":badge_id", badge_id);
-            return qh.ExecuteQueryToObjectList(
-                "SELECT id,firstname,lastname,nickname,email,password_hash,role,emailconfirmed,accountactive FROM users_badges " +
+            var sql = "SELECT id,firstname,lastname,nickname,email,password_hash,role,emailconfirmed,accountactive FROM users_badges " +
                 "inner join users on user_id=id " +
                 "where badge_id=:badge_id " +
-                "order by lastname,firstname,nickname");
+                "order by lastname,firstname,nickname";
+
+            var set = qh.ExecuteQueryToDataSet(sql);
+            return converter.Multiple(set);
         }
 
         public int GetCountOfCommonFriends(int user_a_id, int user_b_id)
@@ -261,20 +277,17 @@ namespace StudyBuddy.Persistence
             return qh.ExecuteQueryToSingleInt("select common_friends(:user_a_i, :user_b_id)");
         }
 
-
         public IEnumerable<User> GetAllLikersForNotification(int notificationId)
         {
-            var qh = new QueryHelper<User>(connection_string, FromReader);
+            var qh = new QueryHelper<User>(connection_string);
             qh.AddParameter(":notification_id", notificationId);
 
-            var sql =
-                "select u.id,u.firstname,u.lastname,u.nickname,u.email,u.password_hash,u.role,u.emailconfirmed,u.accountactive " +
+            var sql = "select u.id,u.firstname,u.lastname,u.nickname,u.email,u.password_hash,u.role,u.emailconfirmed,u.accountactive " +
                 "from users as u  " +
-                "inner join notification_user_metadata as md on u.id = md.owner_id  and liked = true and md.notification_id = :notification_id ";
+                "inner join notification_user_metadata as md on u.id = md.owner_id and liked = true and md.notification_id = :notification_id ";
 
-
-            var metadatas = qh.ExecuteQueryToObjectList(sql);
-            return metadatas;
+            var set = qh.ExecuteQueryToDataSet(sql);
+            return converter.Multiple(set);
         }
 
         private void CreateTable()
@@ -392,28 +405,6 @@ namespace StudyBuddy.Persistence
                                "return has_received;\n" +
                                "end;$$;\n" +
                                "commit;");
-        }
-
-        private User FromReader(NpgsqlDataReader reader)
-        {
-            var obj = new User();
-            obj.ID = reader.GetInt32(0);
-            obj.Firstname = reader.GetString(1);
-            obj.Lastname = reader.GetString(2);
-            obj.Nickname = reader.GetString(3);
-            obj.Email = reader.GetString(4);
-            obj.PasswordHash = reader.GetString(5);
-            obj.Role = (Role) reader.GetInt32(6);
-            obj.EmailConfirmed = reader.GetBoolean(7);
-            obj.AccountActive = reader.GetBoolean(8);
-            return obj;
-        }
-
-        private User FromReaderWithCommonFriends(NpgsqlDataReader reader)
-        {
-            var user = FromReader(reader);
-            user.CommonFriends = reader.GetInt32(9);
-            return user;
         }
     }
 }
