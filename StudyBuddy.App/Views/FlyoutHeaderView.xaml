@@ -22,9 +22,10 @@
             <StackLayout Grid.Column="1"
                          Padding="0,10,10,10">
                 <Label Text="{Binding User.Name}"
-                       FontSize="18"
+                       FontSize="Small"
                        FontAttributes="Bold"
-                       VerticalTextAlignment="Center" />
+                       VerticalTextAlignment="Center" 
+                       MaxLines="1"/>
                 <Label Text="{Binding User.Nickname}"
                        TextColor="{StaticResource SecondaryFont}" />
                 <Label Text="{Binding FriendsCount, StringFormat='{0} Freunde'}" />
