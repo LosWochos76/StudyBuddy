@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using StudyBuddy.BusinessLogic.Parameters;
 using StudyBuddy.Model;
 
 namespace StudyBuddy.BusinessLogic
@@ -45,20 +46,77 @@ namespace StudyBuddy.BusinessLogic
             return obj;
         }
 
-        public User ResetPassword(User obj)
-        {
-            backend.Repository.Users.Update(obj);
-            return obj;
+        public LoginResult ResetPassword(ResetPasswordData data)
+        {  
+            if (data == null)
+            {
+                throw new Exception("No data passed to resetpassword function!");
+            }
+            User user = backend.Repository.Users.ByEmailAllAccounts(data.Email);
+            if (user == null)
+            {
+                backend.Logging.LogDebug($"User with email {data.Email} not found!");
+                return new LoginResult
+                {
+                    Status = 3
+                };
+            }
+            if (!backend.AuthenticationService.CheckPasswordResetToken(data.Token, user.PasswordHash))
+            {
+                backend.Logging.LogDebug($"Invalid password reset token for User with email {data.Email}!");
+                return new LoginResult
+                {
+                    Status = 8
+                };
+            }
+            else
+            {
+                user.Password = data.Password;
+                backend.Repository.Users.Update(user);
+                return new LoginResult
+                {
+                    Status = 0
+                };
+            }
         }
 
-        public User VerifyEmail(User obj)
+        public LoginResult VerifyEmail(VerifyEmailData data)
         {
-            backend.Repository.Users.Update(obj);
-            return obj;
+            if (data == null)
+            {
+                throw new Exception("No data passed to verifyemail function!");
+            }
+            User user = backend.Repository.Users.ByEmailAllAccounts(data.Email);
+            if (user == null)
+            {
+                backend.Logging.LogDebug($"User with email {data.Email} not found!");
+                return new LoginResult
+                {
+                    Status = 3
+                };
+            }
+            if (!backend.AuthenticationService.CheckPasswordResetToken(data.Token, user.PasswordHash))
+            {
+                backend.Logging.LogDebug($"Invalid verification token for user with email {data.Email}!");
+                return new LoginResult
+                {
+                    Status = 8
+                };
+            }
+            else
+            {
+                user.EmailConfirmed = true;
+                backend.Repository.Users.Update(user);
+                return new LoginResult
+                {
+                    Status = 0
+                };
+            }
         }
 
         public User EnableAccount(User obj)
         {
+            obj.AccountActive = true;
             backend.Repository.Users.Update(obj);
             return obj;
         }

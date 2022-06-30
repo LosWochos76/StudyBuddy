@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthorizationService } from 'src/app/services/authorization.service';
 import { LoggingService } from 'src/app/services/loging.service';
+import { User } from '../../model/user';
 
 @Component({
   selector: 'app-logout',
@@ -9,14 +10,18 @@ import { LoggingService } from 'src/app/services/loging.service';
   styleUrls: ['./logout.component.css']
 })
 export class LogoutComponent implements OnInit {
+    current_user: User = null;
 
   constructor(
     private logger:LoggingService,
     private auth:AuthorizationService,
     private router:Router) {
       this.auth.changed.subscribe((result) => {
-        if (!result)
-          this.router.navigate(['/login']);
+          if (result != 0) {
+              this.router.navigate(['/login']);
+          }
+          
+          
       });
       
       this.auth.logout();

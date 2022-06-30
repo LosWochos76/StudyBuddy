@@ -27,6 +27,8 @@ export class ForgotpasswordComponent implements OnInit {
     }
     async onPasswordReset() {
         let email = this.form.controls.email.value;
+        console.log(email)
+        console.log(this._email)
         let result = await this.auth.sendPassworResetMail(email);
         if (!result) {
             this.logger.debug("Password kann nicht zurückgesetzt werden.")

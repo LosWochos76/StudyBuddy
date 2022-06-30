@@ -53,7 +53,7 @@ export class AuthorizationService {
   async logout() {
     this.user = null;
     this.token = null;
-    this.changed.emit();
+    this.changed.emit(1);
   }
 
   isLoggedIn() {
@@ -75,9 +75,15 @@ export class AuthorizationService {
             "email": obj.email,
             "password": obj.password
         }
-        console.log(data)
-        var result = await this.http.post(this.url + 'Login/ResetPassword', data).toPromise();
-        return result;
+        var response = await this.http.post(this.url + 'Login/ResetPassword', data).toPromise();
+        if (response == null)
+            return null;
+        let result = LoginResult.fromApi(response);
+        if (result.status == 0) {
+            return result;
+        }
+        else
+            return null;
 
     }
 

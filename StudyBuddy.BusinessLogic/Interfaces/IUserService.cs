@@ -1,4 +1,5 @@
-﻿using StudyBuddy.Model;
+﻿using StudyBuddy.BusinessLogic.Parameters;
+using StudyBuddy.Model;
 
 namespace StudyBuddy.BusinessLogic
 {
@@ -9,8 +10,8 @@ namespace StudyBuddy.BusinessLogic
         UserList GetAll(UserFilter filter);
         User Insert(User obj);
         User Update(User obj);
-        User ResetPassword(User obj);
-        User VerifyEmail(User obj);
+        LoginResult ResetPassword(ResetPasswordData data);
+        LoginResult VerifyEmail(VerifyEmailData data);
         User EnableAccount(User obj);
         void Delete(int user_id);
 

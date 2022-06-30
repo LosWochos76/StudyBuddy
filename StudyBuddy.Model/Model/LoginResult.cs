@@ -16,6 +16,7 @@ namespace StudyBuddy.Model
             5 -> No Token or User in jsonstring passed to login from json/token passed to loginfromjson is invalid
             6 -> undocumented error
             7 -> Account is disabled
+            8 -> invalid passwordreset/verifyemail Token
         */
         public string Token { get; set; }
     }

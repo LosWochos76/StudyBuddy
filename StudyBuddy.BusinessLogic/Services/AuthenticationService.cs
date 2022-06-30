@@ -126,10 +126,10 @@ namespace StudyBuddy.BusinessLogic
             var jwt = new JwtToken();
             return jwt.FromToken(token) != 0;
         }
-        public bool CheckPasswordResetToken(string token, string email)
+        public bool CheckPasswordResetToken(string token, string hash)
         {
             var jwt = new JwtToken();
-            return jwt.CheckPasswordResetToken(token, email);
+            return jwt.CheckPasswordResetToken(token, hash);
         }
     }
 }

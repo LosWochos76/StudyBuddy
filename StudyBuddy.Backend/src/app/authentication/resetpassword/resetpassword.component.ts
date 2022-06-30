@@ -61,10 +61,9 @@ export class ResetpasswordComponent implements OnInit {
         }
         
         let result = this.service.resetPassword(resetPassData);
-        if ('status' in result && result['status'] == 'ok')
-            this.showSuccess = true;
-        else {
+        if (!result)
             this.showError = true;
-        }
+        else
+            this.showSuccess = true;
     }
 }

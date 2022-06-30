@@ -13,6 +13,7 @@ export class LoginComponent implements OnInit {
   form:FormGroup;
     login_error: boolean = false;
     login_error_2: boolean = false;
+    _email: string;
 
   constructor(
     private logger:LoggingService,
@@ -39,7 +40,8 @@ export class LoginComponent implements OnInit {
       });
     }
 
-  ngOnInit(): void {
+    ngOnInit(): void {
+        this._email = this.route.snapshot.paramMap.get('email');
   }
 
   async onSubmit() {
