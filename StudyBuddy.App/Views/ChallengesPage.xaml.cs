@@ -18,7 +18,9 @@ namespace StudyBuddy.App.Views
         protected override void OnAppearing()
         {
             base.OnAppearing();
-            if(BindingContext is StatisticsViewModel vm)
+            if (BindingContext is ChallengesViewModel cvm)
+                cvm.RefreshCommand.Execute(null);
+            if (BindingContext is StatisticsViewModel vm)
                 vm.RefreshCommand.Execute(null);
         }
     }
