@@ -51,7 +51,7 @@
                 FontAttributes="Bold" 
                 FontSize="17" 
                 HeightRequest="45"
-                BackgroundColor="{StaticResource DeclineButton}" />
+                BackgroundColor="{AppThemeBinding Dark={StaticResource DeclineButtonDark}, Light={StaticResource DeclineButton}}" />
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

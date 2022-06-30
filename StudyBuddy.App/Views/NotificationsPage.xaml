@@ -206,7 +206,7 @@
                                         </Grid.ColumnDefinitions>
                                         <Frame CornerRadius="10"
                                                HasShadow="True"
-                                               BackgroundColor="{AppThemeBinding Dark={StaticResource WindowBackgroundColorDark},Light={StaticResource WindowBackgroundColor}}"
+                                               BackgroundColor="{AppThemeBinding Dark={StaticResource SystemGray4Dark},Light={StaticResource SystemGray5}}"
                                                Margin="0"
                                                Padding="0"
                                                HeightRequest="110">

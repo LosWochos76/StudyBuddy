@@ -33,7 +33,8 @@
             <Style TargetType="Frame" x:Key="FrameStyle">
                 <Setter Property="CornerRadius" Value="15"/>
                 <Setter Property="BorderColor" Value="{OnPlatform Android={StaticResource SystemGray4}, iOS={StaticResource Transparent}}"/>
-                <Setter Property="BackgroundColor" Value="{Binding ThemeColor}"/>
+                <Setter Property="BackgroundColor" Value="{AppThemeBinding Dark={StaticResource SystemGray5Dark}, Light={StaticResource WindowBackgroundColor}}"/>
+                <Setter Property="HasShadow" Value="True"/>
             </Style>
         </ResourceDictionary>
     </ContentPage.Resources>

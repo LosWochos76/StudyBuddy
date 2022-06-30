@@ -60,7 +60,12 @@
                 <Setter Property="CornerRadius">
                     <OnPlatform x:TypeArguments="x:Int32">
                         <On Platform="Android">10</On>
+                        <On Platform="iOS">8</On>
                     </OnPlatform>
+                </Setter>
+                <Setter Property="TextColor"
+                        Value="{AppThemeBinding Dark={StaticResource TextColorDark}, Light={StaticResource TextColor}}">
+
                 </Setter>
             </Style>
 
@@ -93,7 +98,7 @@
             
             <Style TargetType="Frame">
                 <Setter Property="BackgroundColor"
-                        Value="{AppThemeBinding Dark={StaticResource WindowBackgroundColorDark}, Light={StaticResource WindowBackgroundColor}}" />
+                        Value="{AppThemeBinding Dark={StaticResource SystemGray5Dark}, Light={StaticResource WindowBackgroundColor}}" />
                 <Setter Property="BorderColor"
                         Value="{OnPlatform Android={StaticResource SystemGray4}, iOS={StaticResource Transparent}}" />
             </Style>

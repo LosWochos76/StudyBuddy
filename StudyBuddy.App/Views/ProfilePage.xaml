@@ -99,8 +99,7 @@
                         FontSize="17"
                         HeightRequest="45"
                         Command="{Binding EditProfileCommand}"
-                        BackgroundColor="{StaticResource PrimaryAccent}"
-                        TextColor="{AppThemeBinding Dark={StaticResource TextColorDark}, Light={StaticResource TextColor}}"/>
+                        BackgroundColor="{AppThemeBinding Dark={StaticResource ConfirmButtonDark}, Light={StaticResource ConfirmButton}}"/>
                 <Button Grid.Row="5"
                         Grid.Column="0"
                         Grid.ColumnSpan="3"
@@ -110,8 +109,7 @@
                         FontSize="17"
                         HeightRequest="45"
                         Command="{Binding DisableAccountCommand}"
-                        BackgroundColor="{AppThemeBinding Dark={StaticResource DeclineButtonDark}, Light={StaticResource DeclineButton}}"
-                        TextColor="{AppThemeBinding Dark={StaticResource TextColorDark}, Light={StaticResource TextColor}}"/>
+                        BackgroundColor="{AppThemeBinding Dark={StaticResource DeclineButtonDark}, Light={StaticResource DeclineButton}}"/>
             </Grid>
         </StackLayout>
 
