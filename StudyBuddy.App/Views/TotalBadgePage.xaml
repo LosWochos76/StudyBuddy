@@ -112,7 +112,12 @@
                     </Grid>
                 </DataTemplate>
             </CollectionView.ItemTemplate>
-        </CollectionView>
+                <CollectionView.EmptyView>
+                    <StackLayout Padding="12">
+                        <Label HorizontalOptions="Center" Text="Du hast noch keine Badges abgeschlossen" />
+                    </StackLayout>
+                </CollectionView.EmptyView>
+            </CollectionView>
         </RefreshView>
     </StackLayout>
 </ContentPage>
