@@ -19,7 +19,7 @@ namespace StudyBuddy.Persistence
 
         public IEnumerable<Request> All(RequestFilter filter)
         {
-            var qh = new QueryHelper<Request>(connection_string);
+            var qh = new QueryHelper(connection_string);
             qh.AddParameter(":from", filter.Start);
             qh.AddParameter(":max", filter.Count);
 
@@ -44,13 +44,13 @@ namespace StudyBuddy.Persistence
             }
 
             sql.Append(" order by created desc limit :max offset :from");
-            var set = qh.ExecuteQueryToDataSet(sql.ToString());
+            var set = qh.ExecuteQuery(sql.ToString());
             return converter.Multiple(set);
         }
 
         public int GetCount(RequestFilter filter)
         {
-            var qh = new QueryHelper<Request>(connection_string);
+            var qh = new QueryHelper(connection_string);
             var sql = new StringBuilder("select count(*) from requests where true ");
 
             if (filter.OnlyForSender.HasValue)
@@ -76,8 +76,8 @@ namespace StudyBuddy.Persistence
 
         public Request ById(int id)
         {
-            var qh = new QueryHelper<Request>(connection_string, new {id});
-            var set = qh.ExecuteQueryToDataSet(
+            var qh = new QueryHelper(connection_string, new {id});
+            var set = qh.ExecuteQuery(
                 "select id,created,sender_id,recipient_id,type,challenge_id " +
                 "from requests where id=:id");
 
@@ -86,13 +86,13 @@ namespace StudyBuddy.Persistence
 
         public void Delete(int id)
         {
-            var qh = new QueryHelper<Request>(connection_string);
+            var qh = new QueryHelper(connection_string);
             qh.Delete("requests", "id", id);
         }
 
         public void Insert(Request obj)
         {
-            var qh = new QueryHelper<Request>(connection_string);
+            var qh = new QueryHelper(connection_string);
             qh.AddParameter(":created", obj.Created);
             qh.AddParameter(":sender_id", obj.SenderID);
             qh.AddParameter(":recipient_id", obj.RecipientID);
@@ -106,7 +106,7 @@ namespace StudyBuddy.Persistence
         private void CreateTable()
         {
             var rh = new RevisionHelper(connection_string, "requests");
-            var qh = new QueryHelper<Request>(connection_string);
+            var qh = new QueryHelper(connection_string);
 
             if (!qh.TableExists("requests"))
             {
@@ -134,12 +134,12 @@ namespace StudyBuddy.Persistence
 
         public Request FindFriendshipRequest(int sender_id, int recipient_id)
         {
-            var qh = new QueryHelper<Request>(connection_string);
+            var qh = new QueryHelper(connection_string);
             qh.AddParameter(":sender_id", sender_id);
             qh.AddParameter(":recipient_id", recipient_id);
             qh.AddParameter(":type", (int)RequestType.Friendship);
 
-            var set = qh.ExecuteQueryToDataSet(
+            var set = qh.ExecuteQuery(
                 "select id,created,sender_id,recipient_id,type,challenge_id " +
                 "from requests where sender_id=:sender_id and recipient_id=:recipient_id and type=:type and challenge_id is null");
 
@@ -148,24 +148,22 @@ namespace StudyBuddy.Persistence
 
         public Request FindSimilar(Request obj)
         {
-            var qh = new QueryHelper<Request>(connection_string);
+            var qh = new QueryHelper(connection_string);
             qh.AddParameter(":sender_id", obj.SenderID);
             qh.AddParameter(":recipient_id", obj.RecipientID);
             qh.AddParameter(":type", (int)obj.Type);
 
-            if (obj.ChallengeID == 0)
-            {
-                return qh.ExecuteQueryToSingleObject(
-                    "select id,created,sender_id,recipient_id,type,challenge_id " +
-                    "from requests where sender_id=:sender_id and recipient_id=:recipient_id and type=:type and challenge_id is null");
-            }
-            else
+            var sql = new StringBuilder("select id,created,sender_id,recipient_id,type,challenge_id " +
+                    "from requests where sender_id=:sender_id and recipient_id=:recipient_id and type=:type");
+
+            if (obj.Type == RequestType.ChallengeAcceptance)
             {
                 qh.AddParameter(":challenge_id", obj.ChallengeID);
-                return qh.ExecuteQueryToSingleObject(
-                    "select id,created,sender_id,recipient_id,type,challenge_id " +
-                    "from requests where sender_id=:sender_id and recipient_id=:recipient_id and type=:type and challenge_id=:challenge_id");
+                sql.Append(" and challenge_id=:challenge_id");
             }
+
+            var set = qh.ExecuteQuery(sql.ToString());
+            return converter.Single(set);
         }
     }
 }

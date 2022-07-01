@@ -50,7 +50,7 @@ export class RequestEditComponent implements OnInit {
     if (this.obj.type == 2)
       this.obj.challenge = this.form.controls.challenge.value[0];
     else
-      this.obj.challenge = null;
+      this.obj.challenge = 0;
 
     if (this.obj.sender == this.obj.recipient) {
       this.form.setErrors({ 'senderequalsrecipient': true });

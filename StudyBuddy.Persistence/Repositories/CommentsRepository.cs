@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Text;
 using StudyBuddy.Model;
 using StudyBuddy.Model.Filter;
 
@@ -17,7 +18,7 @@ namespace StudyBuddy.Persistence
 
         private void CreateTable()
         {
-            var qh = new QueryHelper<Comment>(connection_string);
+            var qh = new QueryHelper(connection_string);
             if (!qh.TableExists("comments"))
                 qh.ExecuteNonQuery(
                     "create table comments (" +
@@ -32,28 +33,28 @@ namespace StudyBuddy.Persistence
 
         public IEnumerable<Comment> All(CommentFilter filter)
         {
-            var qh = new QueryHelper<Comment>(connection_string);
-            var sql = "select c.id, c.notification_id, c.owner_id, c.text, c.created, c.updated, " +
+            var qh = new QueryHelper(connection_string);
+            var sql = new StringBuilder("select c.id, c.notification_id, c.owner_id, c.text, c.created, c.updated, " +
                       " u.id as user_id, u.firstname, u.lastname, u.nickname, u.email, u.role " +
-                      " from comments as c left outer join users as u on u.id = c.owner_id where true ";
+                      " from comments as c left outer join users as u on u.id = c.owner_id where true ");
 
             if (filter.NotificationId.HasValue)
             {
                 qh.AddParameter(":notification_id", filter.NotificationId.Value);
-                sql += " and (notification_id=:notification_id) ";
+                sql.Append(" and (notification_id=:notification_id) ");
             }
 
             qh.AddParameter(":max", filter.Count);
             qh.AddParameter(":from", filter.Start);
-            sql += " limit :max offset :from ";
+            sql.Append(" limit :max offset :from ");
 
-            var set = qh.ExecuteQueryToDataSet(sql);
+            var set = qh.ExecuteQuery(sql.ToString());
             return converter.Multiple(set);
         }
 
         public void Insert(CommentInsert insert)
         {
-            var qh = new QueryHelper<Comment>(connection_string);
+            var qh = new QueryHelper(connection_string);
             qh.AddParameter(":owner_id", insert.OwnerId);
             qh.AddParameter(":notification_id", insert.NotificationId);
             qh.AddParameter(":text", insert.Text);

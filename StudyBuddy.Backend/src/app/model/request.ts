@@ -6,7 +6,7 @@ export class Request {
     public sender:number;
     public recipient:number;
     public type:number;
-    public challenge:number;
+    public challenge:number = 0;
 
     constructor() { 
         this.created = (new Date()).toISOString().split('T')[0];;
@@ -29,12 +29,12 @@ export class Request {
 
     toApi() {
         return { 
-            'ID': this.id, 
-            'Created': this.created,
-            'SenderID': this.sender,
-            'RecipientID': this.recipient,
-            'Type': this.type,
-            'ChallengeID': this.challenge
+            'id': this.id, 
+            'created': this.created,
+            'senderID': this.sender,
+            'recipientID': this.recipient,
+            'type': this.type,
+            'challengeID': this.challenge
           };
     }
 }

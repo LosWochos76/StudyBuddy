@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Text;
 using SimpleHashing.Net;
 using StudyBuddy.Model;
 
@@ -18,56 +19,48 @@ namespace StudyBuddy.Persistence
 
         public User ById(int id)
         {
-            var qh = new QueryHelper<User>(connection_string, new { id });
-            var set = qh.ExecuteQueryToDataSet(
-                "SELECT id,firstname,lastname,nickname," +
+            var qh = new QueryHelper(connection_string, new { id });
+            var set = qh.ExecuteQuery("SELECT id,firstname,lastname,nickname," +
                 "email,password_hash,role,emailconfirmed,accountactive FROM users where id=:id");
-
             return converter.Single(set);
         }
 
         public IEnumerable<User> All(UserFilter filter)
         {
-            var qh = new QueryHelper<User>(connection_string);
+            var qh = new QueryHelper(connection_string);
             qh.AddParameter(":from", filter.Start);
             qh.AddParameter(":max", filter.Count);
-
-            var set = qh.ExecuteQueryToDataSet(
-                "SELECT id,firstname,lastname,nickname,email,password_hash,role,emailconfirmed,accountactive " +
+            var set = qh.ExecuteQuery("SELECT id,firstname,lastname,nickname,email,password_hash,role,emailconfirmed,accountactive " +
                 "FROM users order by lastname,firstname,nickname limit :max offset :from");
-
             return converter.Multiple(set);
         }
 
         public int GetCount(UserFilter filter)
         {
-            var qh = new QueryHelper<User>(connection_string);
+            var qh = new QueryHelper(connection_string);
             return qh.GetCount("users");
         }
 
         public User ByEmailActiveAccounts(string email)
         {
-            var qh = new QueryHelper<User>(connection_string, new {email});
-            var set = qh.ExecuteQueryToDataSet(
-                "SELECT id,firstname,lastname,nickname,email,password_hash,role,emailconfirmed,accountactive " +
+            var qh = new QueryHelper(connection_string, new {email});
+            var set = qh.ExecuteQuery("SELECT id,firstname,lastname,nickname,email,password_hash,role,emailconfirmed,accountactive " +
                 "FROM users where accountactive = true and lower(email)=lower(:email)");
-
             return converter.Single(set);
         }
 
         public User ByEmailAllAccounts(string email)
         {
-            var qh = new QueryHelper<User>(connection_string, new { email });
-            var set = qh.ExecuteQueryToDataSet(
+            var qh = new QueryHelper(connection_string, new { email });
+            var set = qh.ExecuteQuery(
                 "SELECT id,firstname,lastname,nickname,email,password_hash,role,emailconfirmed,accountactive " +
                 "FROM users where lower(email)=lower(:email)");
-
             return converter.Single(set);
         }
 
         public void Insert(User obj)
         {
-            var qh = new QueryHelper<User>(connection_string);
+            var qh = new QueryHelper(connection_string);
             qh.AddParameter(":firstname", obj.Firstname);
             qh.AddParameter(":lastname", obj.Lastname);
             qh.AddParameter(":nickname", obj.Nickname.ToLower());
@@ -85,7 +78,7 @@ namespace StudyBuddy.Persistence
 
         public void Update(User obj)
         {
-            var qh = new QueryHelper<User>(connection_string);
+            var qh = new QueryHelper(connection_string);
 
             var sql = "update users set firstname=:firstname,lastname=:lastname," +
                       "nickname=:nickname,email=:email";
@@ -120,16 +113,16 @@ namespace StudyBuddy.Persistence
 
         public void Delete(int id)
         {
-            var qh = new QueryHelper<User>(connection_string);
+            var qh = new QueryHelper(connection_string);
             qh.Delete("users", "id", id);
         }
 
         public User ByNickname(string nickname)
         {
-            var qh = new QueryHelper<User>(connection_string);
+            var qh = new QueryHelper(connection_string);
             qh.AddParameter(":nickname", nickname);
 
-            var set = qh.ExecuteQueryToDataSet(
+            var set = qh.ExecuteQuery(
                 "SELECT id,firstname,lastname,nickname," +
                 "email,password_hash,role,emailconfirmed,accountactive FROM " +
                 "users where lower(nickname)=lower(:nickname)");
@@ -139,30 +132,29 @@ namespace StudyBuddy.Persistence
 
         public IEnumerable<User> GetFriends(FriendFilter filter)
         {
-            var qh = new QueryHelper<User>(connection_string);
+            var qh = new QueryHelper(connection_string);
             qh.AddParameter(":user_id", filter.UserId);
             qh.AddParameter(":from", filter.Start);
             qh.AddParameter(":max", filter.Count);
 
-            var sql = "select id,firstname,lastname,nickname,email,password_hash,role,emailconfirmed,accountactive,common_friends(id, :user_id) from friends" +
-                " inner join users on user_b = id where accountactive = true and user_a=:user_id ";
+            var sql = new StringBuilder("select id,firstname,lastname,nickname,email,password_hash,role," +
+                "emailconfirmed,accountactive,common_friends(id, :user_id) from friends " +
+                "inner join users on user_b = id where accountactive = true and user_a=:user_id ");
 
             if (!string.IsNullOrEmpty(filter.SearchText))
             {
                 qh.AddParameter(":search_text", "%" + filter.SearchText + "%");
-                sql +=
-                    " and (firstname ilike :search_text or lastname ilike :search_text or email ilike :search_text) ";
+                sql.Append(" and (firstname ilike :search_text or lastname ilike :search_text or email ilike :search_text) ");
             }
 
-            sql += "order by lastname,firstname,nickname limit :max offset :from";
-
-            var set = qh.ExecuteQueryToDataSet(sql);
+            sql.Append("order by lastname,firstname,nickname limit :max offset :from");
+            var set = qh.ExecuteQuery(sql.ToString());
             return converter.Multiple(set);
         }
 
         public int GetFriendsCount(FriendFilter filter)
         {
-            var qh = new QueryHelper<User>(connection_string);
+            var qh = new QueryHelper(connection_string);
             qh.AddParameter(":user_id", filter.UserId);
             var sql = "select count(*) from friends inner join users on user_b=id where accountactive = true and user_a=:user_id";
 
@@ -178,54 +170,54 @@ namespace StudyBuddy.Persistence
 
         public IEnumerable<User> GetNotFriends(FriendFilter filter)
         {
-            var qh = new QueryHelper<User>(connection_string);
+            var qh = new QueryHelper(connection_string);
             qh.AddParameter(":user_id", filter.UserId);
             qh.AddParameter(":from", filter.Start);
             qh.AddParameter(":max", filter.Count);
 
-            var sql =
-                "select id,firstname,lastname,nickname,email,password_hash,role,emailconfirmed,accountactive,common_friends(id,:user_id) from users " +
+            var sql = new StringBuilder("select id,firstname,lastname,nickname,email,password_hash,role," +
+                "emailconfirmed,accountactive,common_friends(id,:user_id) from users " +
                 "where accountactive = true and " +
-                "id not in (select user_b from friends where user_a=:user_id) and id!=:user_id ";
+                "id not in (select user_b from friends where user_a=:user_id) and id!=:user_id ");
 
             if (!string.IsNullOrEmpty(filter.SearchText))
             {
                 qh.AddParameter(":search_text", "%" + filter.SearchText + "%");
-                sql += " and (firstname ilike :search_text or lastname ilike :search_text or email ilike :search_text)";
+                sql.Append(" and (firstname ilike :search_text or lastname ilike :search_text or email ilike :search_text)");
             }
 
-            sql += " order by lastname,firstname,nickname limit :max offset :from";
-
-            var set = qh.ExecuteQueryToDataSet(sql);
+            sql.Append(" order by lastname,firstname,nickname limit :max offset :from");
+            var set = qh.ExecuteQuery(sql.ToString());
             return converter.Multiple(set);
         }
 
         public int GetNotFriendsCount(FriendFilter filter)
         {
-            var qh = new QueryHelper<User>(connection_string);
+            var qh = new QueryHelper(connection_string);
             qh.AddParameter(":user_id", filter.UserId);
 
-            var sql = "select count(*) from users where accountactive = true and id not in (select user_b from friends where user_a=:user_id) and id!=:user_id ";
+            var sql = new StringBuilder("select count(*) from users where accountactive = true and id " +
+                "not in (select user_b from friends where user_a=:user_id) and id!=:user_id ");
 
             if (!string.IsNullOrEmpty(filter.SearchText))
             {
                 qh.AddParameter(":search_text", "%" + filter.SearchText + "%");
-                sql += " and (firstname ilike :search_text or lastname ilike :search_text or email ilike :search_text)";
+                sql.Append(" and (firstname ilike :search_text or lastname ilike :search_text or email ilike :search_text)");
             }
 
-            return qh.ExecuteQueryToSingleInt(sql);
+            return qh.ExecuteQueryToSingleInt(sql.ToString());
         }
 
         public void AddFriend(int user_id, int friend_id)
         {
-            var qh = new QueryHelper<User>(connection_string, new {user_id, friend_id});
+            var qh = new QueryHelper(connection_string, new {user_id, friend_id});
             qh.ExecuteNonQuery(
                 "insert into friends (user_a, user_b) values (:user_id, :friend_id), (:friend_id, :user_id);");
         }
 
         public void RemoveFriend(int user_id, int friend_id)
         {
-            var qh = new QueryHelper<User>(connection_string, new {user_id, friend_id});
+            var qh = new QueryHelper(connection_string, new {user_id, friend_id});
             qh.ExecuteNonQuery(
                 "delete from friends where " +
                 "(user_a=:user_id and user_b=:friend_id) or " +
@@ -234,7 +226,7 @@ namespace StudyBuddy.Persistence
 
         public void RemoveFriends(int user_id)
         {
-            var qh = new QueryHelper<User>(connection_string, new {user_id});
+            var qh = new QueryHelper(connection_string, new {user_id});
             qh.ExecuteNonQuery("delete from friends where user_a=:user_id or user_b=:user_id;");
         }
 
@@ -246,54 +238,57 @@ namespace StudyBuddy.Persistence
 
         public IEnumerable<User> GetAllUsersThatAcceptedChallenge(int challenge_id)
         {
-            var qh = new QueryHelper<User>(connection_string);
+            var qh = new QueryHelper(connection_string);
             qh.AddParameter(":challenge_id", challenge_id);
-            var sql = "SELECT id,firstname,lastname,nickname,email,password_hash,role,emailconfirmed,accountactive FROM challenge_acceptance " +
+            var sql = "SELECT id,firstname,lastname,nickname,email,password_hash,role,emailconfirmed," +
+                "accountactive FROM challenge_acceptance " +
                 "inner join users on user_id=id " +
                 "where challenge_id=:challenge_id " +
                 "order by lastname,firstname,nickname";
 
-            var set = qh.ExecuteQueryToDataSet(sql);
+            var set = qh.ExecuteQuery(sql);
             return converter.Multiple(set);
         }
 
         public IEnumerable<User> GetAllUsersHavingBadge(int badge_id)
         {
-            var qh = new QueryHelper<User>(connection_string);
+            var qh = new QueryHelper(connection_string);
             qh.AddParameter(":badge_id", badge_id);
-            var sql = "SELECT id,firstname,lastname,nickname,email,password_hash,role,emailconfirmed,accountactive FROM users_badges " +
+            var sql = "SELECT id,firstname,lastname,nickname,email,password_hash,role," +
+                "emailconfirmed,accountactive FROM users_badges " +
                 "inner join users on user_id=id " +
                 "where badge_id=:badge_id " +
                 "order by lastname,firstname,nickname";
 
-            var set = qh.ExecuteQueryToDataSet(sql);
+            var set = qh.ExecuteQuery(sql);
             return converter.Multiple(set);
         }
 
         public int GetCountOfCommonFriends(int user_a_id, int user_b_id)
         {
-            var qh = new QueryHelper<User>(connection_string);
+            var qh = new QueryHelper(connection_string);
             qh.AddParameters(new {user_a_id, user_b_id});
             return qh.ExecuteQueryToSingleInt("select common_friends(:user_a_i, :user_b_id)");
         }
 
         public IEnumerable<User> GetAllLikersForNotification(int notificationId)
         {
-            var qh = new QueryHelper<User>(connection_string);
+            var qh = new QueryHelper(connection_string);
             qh.AddParameter(":notification_id", notificationId);
 
-            var sql = "select u.id,u.firstname,u.lastname,u.nickname,u.email,u.password_hash,u.role,u.emailconfirmed,u.accountactive " +
-                "from users as u  " +
-                "inner join notification_user_metadata as md on u.id = md.owner_id and liked = true and md.notification_id = :notification_id ";
+            var sql = "select u.id,u.firstname,u.lastname,u.nickname,u.email,u.password_hash," +
+                "u.role,u.emailconfirmed,u.accountactive from users as u  " +
+                "inner join notification_user_metadata as md on u.id = md.owner_id and liked = true " +
+                "and md.notification_id = :notification_id";
 
-            var set = qh.ExecuteQueryToDataSet(sql);
+            var set = qh.ExecuteQuery(sql);
             return converter.Multiple(set);
         }
 
         private void CreateTable()
         {
             var rh = new RevisionHelper(connection_string, "users");
-            var qh = new QueryHelper<User>(connection_string);
+            var qh = new QueryHelper(connection_string);
 
             if (!qh.TableExists("users"))
             {

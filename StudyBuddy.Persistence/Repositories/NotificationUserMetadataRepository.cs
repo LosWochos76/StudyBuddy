@@ -17,7 +17,7 @@ namespace StudyBuddy.Persistence
         
         private void CreateTable()
         {
-            var qh = new QueryHelper<NotificationUserMetadata>(connection_string);
+            var qh = new QueryHelper(connection_string);
             if (!qh.TableExists("notification_user_metadata"))
                 qh.ExecuteNonQuery(
                     "create table notification_user_metadata (" +
@@ -35,8 +35,8 @@ namespace StudyBuddy.Persistence
         public void Upsert(NotificationUserMetadataUpsert upsert)
         {
             var metadata = FindNotificationUserMetadata(upsert);
-
             if (metadata is null)
+            {
                 Insert(new NotificationUserMetadataInsert
                 {
                     NotificationId = upsert.NotificationId,
@@ -45,7 +45,9 @@ namespace StudyBuddy.Persistence
                     Seen = upsert.Seen,
                     Shared = upsert.Shared
                 });
+            }
             else
+            {
                 Update(new NotificationUserMetadataUpdate
                 {
                     Id = metadata.Id,
@@ -53,24 +55,24 @@ namespace StudyBuddy.Persistence
                     Seen = upsert.Seen,
                     Shared = upsert.Shared
                 });
+            }
         }
 
         public void Insert(NotificationUserMetadataInsert insert)
         {
-            var qh = new QueryHelper<NotificationUserMetadata>(connection_string);
+            var qh = new QueryHelper(connection_string);
             qh.AddParameter(":notificationId", insert.NotificationId);
             qh.AddParameter(":ownerId", insert.OwnerId);
             qh.AddParameter(":liked", insert.Liked ?? false);
             qh.AddParameter(":seen", insert.Seen ?? false);
             qh.AddParameter(":shared", insert.Shared ?? false);
-
-            qh.ExecuteNonQuery(
-                "insert into notification_user_metadata (notification_id, owner_id, liked, seen, shared) values (:notificationId, :ownerId, :liked, :seen, :shared) returning id");
+            qh.ExecuteNonQuery("insert into notification_user_metadata (notification_id, owner_id, " +
+                "liked, seen, shared) values (:notificationId, :ownerId, :liked, :seen, :shared) returning id");
         }
 
         public void Update(NotificationUserMetadataUpdate update)
         {
-            var qh = new QueryHelper<NotificationUserMetadata>(connection_string);
+            var qh = new QueryHelper(connection_string);
             var sql = "update notification_user_metadata set ";
 
             if (update.Liked is not null)
@@ -104,32 +106,32 @@ namespace StudyBuddy.Persistence
 
         public NotificationUserMetadata FindNotificationUserMetadata(int notificationId, int ownerId)
         {
-            var qh = new QueryHelper<NotificationUserMetadata>(connection_string);
+            var qh = new QueryHelper(connection_string);
             qh.AddParameter(":notification_id", notificationId);
             qh.AddParameter(":owner_id", ownerId);
 
-            var sql =
-                "select id, notification_id, owner_id, liked, seen, shared, created, updated from notification_user_metadata where notification_id=:notification_id and owner_id=:owner_id";
+            var sql = "select id, notification_id, owner_id, liked, seen, shared, created, " +
+                "updated from notification_user_metadata where notification_id=:notification_id and owner_id=:owner_id";
 
-            var set = qh.ExecuteQueryToDataSet(sql);
+            var set = qh.ExecuteQuery(sql);
             return converter.Single(set);
         }
 
         public IEnumerable<NotificationUserMetadata> GetAll()
         {
-            var qh = new QueryHelper<NotificationUserMetadata>(connection_string);
+            var qh = new QueryHelper(connection_string);
             var sql =
                 "select id, notification_id, owner_id, liked, seen, shared, created, updated from notification_user_metadata";
-            var set = qh.ExecuteQueryToDataSet(sql);
+            var set = qh.ExecuteQuery(sql);
             return converter.Multiple(set);
         }
 
         public IEnumerable<NotificationUserMetadata> GetAllUnseen()
         {
-            var qh = new QueryHelper<NotificationUserMetadata>(connection_string);
-            var sql =
-                "select id, notification_id, owner_id, liked, seen, shared, created, updated from notification_user_metadata where seen=false ";
-            var set = qh.ExecuteQueryToDataSet(sql);
+            var qh = new QueryHelper(connection_string);
+            var sql = "select id, notification_id, owner_id, liked, seen, shared, created, updated " +
+                "from notification_user_metadata where seen=false ";
+            var set = qh.ExecuteQuery(sql);
             return converter.Multiple(set);
         }
     }

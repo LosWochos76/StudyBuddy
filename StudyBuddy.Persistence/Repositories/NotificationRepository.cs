@@ -17,7 +17,7 @@ namespace StudyBuddy.Persistence
 
         public IEnumerable<Notification> All(NotificationFilter filter)
         {
-            var qh = new QueryHelper<Notification>(connection_string);
+            var qh = new QueryHelper(connection_string);
             var sql = "select id, badge_id, owner_id, title, body, created, updated from notifications where true";
             qh.AddParameter(":max", filter.Count);
             qh.AddParameter(":from", filter.Start);
@@ -30,13 +30,13 @@ namespace StudyBuddy.Persistence
                 sql += " and (owner_id=:owner_id)";
             }
 
-            var set = qh.ExecuteQueryToDataSet(sql);
+            var set = qh.ExecuteQuery(sql);
             return converter.Multiple(set);
         }
 
         public void Insert(Notification obj)
         {
-            var qh = new QueryHelper<Notification>(connection_string);
+            var qh = new QueryHelper(connection_string);
             qh.AddParameter(":owner_id", obj.OwnerId);
             qh.AddParameter(":badge_id", obj.BadgeId);
             qh.AddParameter(":title", obj.Title);
@@ -50,17 +50,17 @@ namespace StudyBuddy.Persistence
 
         public Notification GetNotificationById(int notificationId)
         {
-            var qh = new QueryHelper<Notification>(connection_string);
+            var qh = new QueryHelper(connection_string);
             qh.AddParameter(":notification_id", notificationId);
 
-            var set = qh.ExecuteQueryToDataSet(
+            var set = qh.ExecuteQuery(
                 "select id, badge_id , owner_id, title, body, created, updated from  notifications where id = :notification_id");
             return converter.Single(set);
         }
 
         public IEnumerable<Notification> GetUserNotificationsFeed(NotificationFilter filter)
         {
-            var qh = new QueryHelper<Notification>(connection_string);
+            var qh = new QueryHelper(connection_string);
             qh.AddParameter(":user_id", filter.OwnerId);
             qh.AddParameter(":from", filter.Start);
             qh.AddParameter(":max", filter.Count);
@@ -75,14 +75,14 @@ namespace StudyBuddy.Persistence
                 "left outer join notification_user_metadata  as md on md.owner_id = :user_id and md.notification_id = n.id " +
                 "order by n.id, n.created desc";   
 
-            var set = qh.ExecuteQueryToDataSet(sql);
+            var set = qh.ExecuteQuery(sql);
             return converter.Multiple(set);
         }
 
         private void CreateTable()
         {
             var rh = new RevisionHelper(connection_string, "notifications");
-            var qh = new QueryHelper<Notification>(connection_string);
+            var qh = new QueryHelper(connection_string);
 
             if (!qh.TableExists("notifications"))
                 qh.ExecuteNonQuery(

@@ -70,6 +70,7 @@ export class RequestService {
       return null;
 
     let data = obj.toApi();
+    console.log(data);
     this.logger.debug("Saving new Request");
     let result = await this.http.post(this.url + "Request", data,
       {

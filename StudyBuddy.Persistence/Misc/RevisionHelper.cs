@@ -16,7 +16,7 @@
 
         public void CreateTablesTable()
         {
-            var qh = new QueryHelper<RevisionHelper>(connection_string);
+            var qh = new QueryHelper(connection_string);
             if (!qh.TableExists("tables"))
                 qh.ExecuteNonQuery("create table tables (" +
                                    "table_name varchar(100) not null, " +
@@ -28,7 +28,7 @@
             if (GetRevision() != 0)
                 return;
 
-            var qh = new QueryHelper<RevisionHelper>(connection_string);
+            var qh = new QueryHelper(connection_string);
             qh.AddParameter(":table_name", table_name);
             qh.AddParameter(":revision", 1);
             qh.ExecuteNonQuery("insert into tables (table_name,revision) values (:table_name,:revision)");
@@ -36,14 +36,14 @@
 
         public int GetRevision()
         {
-            var qh = new QueryHelper<RevisionHelper>(connection_string);
+            var qh = new QueryHelper(connection_string);
             qh.AddParameter(":table_name", table_name);
             return qh.ExecuteQueryToSingleInt("SELECT revision FROM tables where table_name=:table_name");
         }
 
         public void SetRevision(int revision)
         {
-            var qh = new QueryHelper<RevisionHelper>(connection_string);
+            var qh = new QueryHelper(connection_string);
             qh.AddParameters(new {table_name, revision});
             qh.ExecuteNonQuery("update tables set revision=:revision where table_name=:table_name");
         }

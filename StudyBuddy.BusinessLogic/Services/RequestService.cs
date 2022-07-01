@@ -37,8 +37,8 @@ namespace StudyBuddy.BusinessLogic
                 if (filter.WithRecipient)
                     request.Recipient = backend.Repository.Users.ById(request.RecipientID);
 
-                if (filter.WithChallenge && request.Type == RequestType.ChallengeAcceptance && request.ChallengeID.HasValue)
-                    request.Challenge = backend.Repository.Challenges.ById(request.ChallengeID.Value);
+                if (filter.WithChallenge && request.Type == RequestType.ChallengeAcceptance)
+                    request.Challenge = backend.Repository.Challenges.ById(request.ChallengeID);
             }
 
             return new RequestList() { Count = count, Objects = objects };
@@ -105,8 +105,8 @@ namespace StudyBuddy.BusinessLogic
             }
             else if (obj.Type == RequestType.ChallengeAcceptance)
             {
-                backend.Repository.Challenges.AddAcceptance(obj.ChallengeID.Value, obj.SenderID);
-                var challenge = backend.Repository.Challenges.ById(obj.ChallengeID.Value);
+                backend.Repository.Challenges.AddAcceptance(obj.ChallengeID, obj.SenderID);
+                var challenge = backend.Repository.Challenges.ById(obj.ChallengeID);
                 backend.BusinessEventService.TriggerEvent(this, new BusinessEventArgs(BusinessEventType.ChallengeAccepted, challenge) { CurrentUser = user });
             }
 

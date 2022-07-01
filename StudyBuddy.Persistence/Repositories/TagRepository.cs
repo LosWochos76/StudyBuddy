@@ -20,9 +20,9 @@ namespace StudyBuddy.Persistence
 
         public Tag ById(int id)
         {
-            var qh = new QueryHelper<Tag>(connection_string);
+            var qh = new QueryHelper(connection_string);
             qh.AddParameter(":id", id);
-            var set = qh.ExecuteQueryToDataSet(
+            var set = qh.ExecuteQuery(
                 "SELECT id,name FROM tags where id=:id");
 
             return converter.Single(set);
@@ -30,9 +30,9 @@ namespace StudyBuddy.Persistence
 
         public Tag ByName(string name)
         {
-            var qh = new QueryHelper<Tag>(connection_string);
+            var qh = new QueryHelper(connection_string);
             qh.AddParameter(":name", name.ToLower());
-            var set = qh.ExecuteQueryToDataSet(
+            var set = qh.ExecuteQuery(
                 "SELECT id,name FROM tags where name=:name");
 
             return converter.Single(set);
@@ -40,17 +40,17 @@ namespace StudyBuddy.Persistence
 
         public int GetCount(TagFilter filter)
         {
-            var qh = new QueryHelper<Tag>(connection_string);
+            var qh = new QueryHelper(connection_string);
             return qh.GetCount("tags");
         }
 
         public IEnumerable<Tag> All(TagFilter filter)
         {
-            var qh = new QueryHelper<Tag>(connection_string);
+            var qh = new QueryHelper(connection_string);
             qh.AddParameter(":max", filter.Count);
             qh.AddParameter(":from", filter.Start);
 
-            var set = qh.ExecuteQueryToDataSet(
+            var set = qh.ExecuteQuery(
                 "SELECT id,name FROM tags order by name limit :max offset :from");
 
             return converter.Multiple(set);
@@ -58,14 +58,14 @@ namespace StudyBuddy.Persistence
 
         public void Delete(int id)
         {
-            var qh = new QueryHelper<Tag>(connection_string);
+            var qh = new QueryHelper(connection_string);
             qh.Delete("tags_challenges", "tag_id", id);
             qh.Delete("tags", "id", id);
         }
 
         public void Insert(Tag obj)
         {
-            var qh = new QueryHelper<Tag>(connection_string);
+            var qh = new QueryHelper(connection_string);
             qh.AddParameters(new {name = obj.Name.ToLower().Replace("#", "")});
             obj.ID = qh.ExecuteScalar(
                 "insert into tags (name) values (:name) RETURNING id");
@@ -73,7 +73,7 @@ namespace StudyBuddy.Persistence
 
         public void Update(Tag obj)
         {
-            var qh = new QueryHelper<Tag>(connection_string);
+            var qh = new QueryHelper(connection_string);
             qh.AddParameters(new {id = obj.ID, name = obj.Name.ToLower().Replace("#", "")});
             qh.ExecuteNonQuery("update tags set name=:name where id=:id");
         }
@@ -88,7 +88,7 @@ namespace StudyBuddy.Persistence
 
         public void RemoveAllTagsFromChallenge(int challenge_id)
         {
-            var qh = new QueryHelper<Tag>(connection_string);
+            var qh = new QueryHelper(connection_string);
             qh.AddParameters(new {challenge_id});
             qh.ExecuteNonQuery(
                 "delete from tags_challenges where challenge_id=:challenge_id");
@@ -96,7 +96,7 @@ namespace StudyBuddy.Persistence
 
         public void AddTagForChallenge(int tag_id, int challenge_id)
         {
-            var qh = new QueryHelper<Tag>(connection_string);
+            var qh = new QueryHelper(connection_string);
             qh.AddParameters(new {tag_id, challenge_id});
             qh.ExecuteNonQuery(
                 "insert into tags_challenges(challenge_id, tag_id) " +
@@ -105,14 +105,14 @@ namespace StudyBuddy.Persistence
 
         public void RemoveAllTagsFromBadge(int badge_id)
         {
-            var qh = new QueryHelper<Tag>(connection_string);
+            var qh = new QueryHelper(connection_string);
             qh.AddParameters(new { badge_id });
             qh.ExecuteNonQuery("delete from tags_badges where badge_id=:badge_id");
         }
 
         public void AddTagForBadge(int tag_id, int badge_id)
         {
-            var qh = new QueryHelper<Tag>(connection_string);
+            var qh = new QueryHelper(connection_string);
             qh.AddParameters(new { tag_id, badge_id });
             qh.ExecuteNonQuery(
                 "insert into tags_badges(badge_id, tag_id) " +
@@ -121,7 +121,7 @@ namespace StudyBuddy.Persistence
 
         private void CreateTable()
         {
-            var qh = new QueryHelper<Tag>(connection_string);
+            var qh = new QueryHelper(connection_string);
 
             if (!qh.TableExists("tags"))
                 qh.ExecuteNonQuery(
@@ -133,7 +133,7 @@ namespace StudyBuddy.Persistence
         private void CreateChallengeTagsTable()
         {
             var rh = new RevisionHelper(connection_string, "tags_challenges");
-            var qh = new QueryHelper<Tag>(connection_string);
+            var qh = new QueryHelper(connection_string);
 
             if (!qh.TableExists("tags_challenges"))
                 qh.ExecuteNonQuery(
@@ -162,7 +162,7 @@ namespace StudyBuddy.Persistence
         private void CreateBadgesTagsTable()
         {
             var rh = new RevisionHelper(connection_string, "tags_badges");
-            var qh = new QueryHelper<Tag>(connection_string);
+            var qh = new QueryHelper(connection_string);
 
             if (!qh.TableExists("tags_badges"))
                 qh.ExecuteNonQuery(

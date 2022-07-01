@@ -17,21 +17,21 @@ namespace StudyBuddy.Persistence
 
         public PersistentImage ById(int id)
         {
-            var qh = new QueryHelper<PersistentImage>(connection_string);
+            var qh = new QueryHelper(connection_string);
             qh.AddParameter(":id", id);
-            var set = qh.ExecuteQueryToDataSet("select id,user_id,name,length,content from images where id=:id");
+            var set = qh.ExecuteQuery("select id,user_id,name,length,content from images where id=:id");
             return converter.Single(set);
         }
 
         public void Delete(int id)
         {
-            var qh = new QueryHelper<PersistentImage>(connection_string);
+            var qh = new QueryHelper(connection_string);
             qh.Delete("images", "id", id);
         }
 
         public PersistentImage Insert(PersistentImage obj)
         {
-            var qh = new QueryHelper<PersistentImage>(connection_string);
+            var qh = new QueryHelper(connection_string);
             qh.AddParameter(":user_id", obj.UserID);
             qh.AddParameter(":name", obj.Name);
             qh.AddParameter(":length", obj.Length);
@@ -54,7 +54,7 @@ namespace StudyBuddy.Persistence
 
         public PersistentImage Update(PersistentImage obj)
         {
-            var qh = new QueryHelper<PersistentImage>(connection_string);
+            var qh = new QueryHelper(connection_string);
             qh.AddParameter(":id", obj.ID);
             qh.AddParameter(":user_id", obj.UserID);
             qh.AddParameter(":name", obj.Name);
@@ -70,15 +70,15 @@ namespace StudyBuddy.Persistence
 
         public PersistentImage OfUser(int user_id)
         {
-            var qh = new QueryHelper<PersistentImage>(connection_string);
+            var qh = new QueryHelper(connection_string);
             qh.AddParameter(":user_id", user_id);
-            var set = qh.ExecuteQueryToDataSet("select id,user_id,name,length,content from images where user_id=:user_id");
+            var set = qh.ExecuteQuery("select id,user_id,name,length,content from images where user_id=:user_id");
             return converter.Single(set);
         }
 
         private void CreateTable()
         {
-            var qh = new QueryHelper<PersistentImage>(connection_string);
+            var qh = new QueryHelper(connection_string);
             if (!qh.TableExists("images"))
             {
                 qh.ExecuteNonQuery(

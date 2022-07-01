@@ -12,9 +12,7 @@ import { faGraduationCap, faPeopleArrows, faTasks } from '@fortawesome/free-soli
 import { GameBadge } from 'src/app/model/gamebadge';
 import { NavigationService } from 'src/app/services/navigation.service';
 import { UserStatisticsService } from 'src/app/services/userstatistics.service';
-import { Score } from 'src/app/model/score';
 import { UserList } from 'src/app/model/userlist';
-import { EChartsOption } from 'echarts/types/dist/echarts';
 
 @Component({
   selector: 'app-user-info',
@@ -28,10 +26,8 @@ export class UserInfoComponent implements OnInit {
   accepted_challenges:ChallengeList = new ChallengeList();
   received_badges_page = 1;
   received_badges:GameBadgeList = new GameBadgeList();
-  score:Score = new Score();
   friends:UserList = new UserList();
   friends_page:number = 1;
-  chartOption: EChartsOption;
   
   constructor(
     private logger: LoggingService,
@@ -50,70 +46,7 @@ export class UserInfoComponent implements OnInit {
     this.obj = await this.user_service.byId(this.id);
     this.accepted_challenges = await this.challenge_service.getAccepted(this.id);
     this.received_badges = await this.badge_service.getReceivedBadgesOfUser(this.id);
-    this.score = await this.user_statistics_service.getScore(this.id);
     this.friends = await this.user_service.getFriends(this.id);
-
-    await this.loadDataForChart();
-  }
-
-  async loadDataForChart() {
-    var trend = await this.user_statistics_service.getTrend(this.id);
-
-    this.chartOption = {
-      tooltip: {
-        trigger: 'axis',
-        axisPointer: {
-          type: 'cross',
-          label: {
-            backgroundColor: '#6a7985'
-          }
-        }
-      },
-      xAxis: {
-        type: 'category',
-        boundaryGap: false,
-        data: trend.getXAxis(),
-      },
-      yAxis: {
-        type: 'value',
-      },
-      legend: {},
-      series: [
-        {
-          name: 'Lernen',
-          type: 'line',
-          stack: 'Total',
-          data: trend.getLearningSeries(),
-          areaStyle: {},
-          emphasis: {
-            focus: 'series'
-          },
-          smooth: true,
-        },
-        {
-          name: 'Netzwerken',
-          type: 'line',
-          stack: 'Total',
-          data: trend.getNetworkingSeries(),
-          areaStyle: {},
-          emphasis: {
-            focus: 'series'
-          },
-          smooth: true,
-        },
-        {
-          name: 'Organisieren',
-          type: 'line',
-          stack: 'Total',
-          data: trend.getOrganizingSeries(),
-          areaStyle: {},
-          emphasis: {
-            focus: 'series'
-          },
-          smooth: true,
-        },
-      ],
-    };
   }
 
   async onAcceptedChallengesPaginate(event) {

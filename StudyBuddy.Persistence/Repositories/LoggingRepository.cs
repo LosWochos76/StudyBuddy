@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Text;
 using StudyBuddy.Model;
 
 namespace StudyBuddy.Persistence
@@ -17,7 +18,7 @@ namespace StudyBuddy.Persistence
 
         private void CreateTable()
         {
-            var qh = new QueryHelper<LogMessage>(connection_string);
+            var qh = new QueryHelper(connection_string);
             if (!qh.TableExists("logging"))
             {
                 qh.ExecuteNonQuery(
@@ -32,7 +33,7 @@ namespace StudyBuddy.Persistence
 
         public void Log(LogMessage obj)
         {
-            var qh = new QueryHelper<LogMessage>(connection_string);
+            var qh = new QueryHelper(connection_string);
             qh.AddParameter(":occurence", obj.Occurence);
             qh.AddParameter(":level", (int)obj.Level);
             qh.AddParameter(":user_id", obj.UserId);
@@ -45,29 +46,29 @@ namespace StudyBuddy.Persistence
 
         public void Flush()
         {
-            var qh = new QueryHelper<LogMessage>(connection_string);
+            var qh = new QueryHelper(connection_string);
             qh.ExecuteNonQuery("truncate logging");
         }
 
         public IEnumerable<LogMessage> All(LogMessageFilter filter)
         {
-            var qh = new QueryHelper<LogMessage>(connection_string);
+            var qh = new QueryHelper(connection_string);
             qh.AddParameter(":from", filter.Start);
             qh.AddParameter(":max", filter.Count);
             qh.AddParameter(":min_log_level", (int)filter.MinLogLevel);
 
-            var sql = "select occurence,level,source,user_id,message from logging " +
-                "where level >= :min_log_level ";
+            var sql = new StringBuilder("select occurence,level,source,user_id,message from logging " +
+                "where level >= :min_log_level ");
 
             if (filter.UserId.HasValue)
             {
                 qh.AddParameter(":user_id", filter.UserId.Value);
-                sql += " AND user_id=:user_id";
+                sql.Append(" AND user_id=:user_id");
             }
 
-            sql += " order by occurence desc limit :max offset :from";
+            sql.Append(" order by occurence desc limit :max offset :from");
 
-            var set = qh.ExecuteQueryToDataSet(sql);
+            var set = qh.ExecuteQuery(sql.ToString());
             return converter.Multiple(set);
         }
     }

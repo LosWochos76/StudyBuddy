@@ -4,12 +4,9 @@ using Npgsql;
 
 namespace StudyBuddy.Persistence
 {
-    internal delegate T ObjectReader<T>(NpgsqlDataReader reader);
-
-    internal class QueryHelper<T> where T : class
+    internal class QueryHelper
     {
         private readonly string connection_string;
-        private readonly ObjectReader<T> object_reader;
         private readonly Dictionary<string, object> parameters = new Dictionary<string, object>();
 
         public QueryHelper(string connection_string)
@@ -17,22 +14,9 @@ namespace StudyBuddy.Persistence
             this.connection_string = connection_string;
         }
 
-        public QueryHelper(string connection_string, ObjectReader<T> object_reader)
-        {
-            this.connection_string = connection_string;
-            this.object_reader = object_reader;
-        }
-
         public QueryHelper(string connection_string, object parameters)
         {
             this.connection_string = connection_string;
-            AddParameters(parameters);
-        }
-
-        public QueryHelper(string connection_string, ObjectReader<T> object_reader, object parameters)
-        {
-            this.connection_string = connection_string;
-            this.object_reader = object_reader;
             AddParameters(parameters);
         }
 
@@ -47,70 +31,7 @@ namespace StudyBuddy.Persistence
                 parameters.Add(":" + p.Name, p.GetValue(obj, null));
         }
 
-        public T ExecuteQueryToSingleObject(string sql)
-        {
-            T result = null;
-
-            try
-            {
-                using (var connection = new NpgsqlConnection(connection_string))
-                {
-                    connection.Open();
-                    using (var cmd = new NpgsqlCommand(sql, connection))
-                    {
-                        foreach (var param in parameters)
-                            cmd.Parameters.AddWithValue(param.Key, param.Value);
-
-                        using (var reader = cmd.ExecuteReader())
-                        {
-                            if (reader.Read())
-                                result = object_reader(reader);
-                        }
-                    }
-                }
-            }
-            finally
-            {
-                parameters.Clear();
-            }
-
-            return result;
-        }
-
-        public IEnumerable<T> ExecuteQueryToObjectList(string sql)
-        {
-            var result = new List<T>();
-
-            try
-            {
-                using (var connection = new NpgsqlConnection(connection_string))
-                {
-                    connection.Open();
-                    using (var cmd = new NpgsqlCommand(sql, connection))
-                    {
-                        foreach (var param in parameters)
-                            cmd.Parameters.AddWithValue(param.Key, param.Value);
-
-                        using (var reader = cmd.ExecuteReader())
-                        {
-                            while (reader.Read())
-                            {
-                                var obj = object_reader(reader);
-                                result.Add(obj);
-                            }
-                        }
-                    }
-                }
-            }
-            finally
-            {
-                parameters.Clear();
-            }
-
-            return result;
-        }
-
-        public DataSet ExecuteQueryToDataSet(string sql)
+        public DataSet ExecuteQuery(string sql)
         {
             DataSet set = new DataSet();
 

@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using Npgsql;
 using StudyBuddy.Model;
 
 namespace StudyBuddy.Persistence
@@ -21,34 +20,34 @@ namespace StudyBuddy.Persistence
 
         public GameBadge ById(int id)
         {
-            var qh = new QueryHelper<GameBadge>(connection_string);
+            var qh = new QueryHelper(connection_string);
             qh.AddParameter(":id", id);
-            var set = qh.ExecuteQueryToDataSet("select id,name,owner_id,created," +
+            var set = qh.ExecuteQuery("select id,name,owner_id,created," +
                 "required_coverage,description,iconkey,tags_of_badge(id) FROM game_badges where id=:id");
             return converter.Single(set);
         }
 
         public IEnumerable<GameBadge> All(GameBadgeFilter filter)
         {
-            var qh = new QueryHelper<GameBadge>(connection_string);
+            var qh = new QueryHelper(connection_string);
             qh.AddParameter(":from", filter.Start);
             qh.AddParameter(":max", filter.Count);
             var sql = new StringBuilder("select id,name,owner_id,created,required_coverage,description,iconkey,tags_of_badge(id) FROM game_badges where true");
             ApplyFilter(qh, sql, filter);
             sql.Append(" order by created, name limit :max offset :from");
-            var set = qh.ExecuteQueryToDataSet(sql.ToString());
+            var set = qh.ExecuteQuery(sql.ToString());
             return converter.Multiple(set);
         }
 
         public int GetCount(GameBadgeFilter filter)
         {
-            var qh = new QueryHelper<GameBadge>(connection_string);
+            var qh = new QueryHelper(connection_string);
             var sql = new StringBuilder("select count(*) FROM game_badges where true");
             ApplyFilter(qh, sql, filter);
             return qh.ExecuteQueryToSingleInt(sql.ToString());
         }
 
-        private void ApplyFilter(QueryHelper<GameBadge> qh, StringBuilder sql, GameBadgeFilter filter)
+        private void ApplyFilter(QueryHelper qh, StringBuilder sql, GameBadgeFilter filter)
         {
             if (filter.OwnerId.HasValue)
             {
@@ -65,7 +64,7 @@ namespace StudyBuddy.Persistence
 
         public IEnumerable<GameBadge> GetReceivedBadgesOfUser(int user_id, GameBadgeFilter filter)
         {
-            var qh = new QueryHelper<GameBadge>(connection_string);
+            var qh = new QueryHelper(connection_string);
             qh.AddParameter(":user_id", user_id);
             qh.AddParameter(":max", filter.Count);
             qh.AddParameter(":from", filter.Start);
@@ -78,13 +77,13 @@ namespace StudyBuddy.Persistence
 
             ApplyFilter(qh, sql, filter);
             sql.Append(" order by users_badges.created desc limit :max offset :from");
-            var set = qh.ExecuteQueryToDataSet(sql.ToString());
+            var set = qh.ExecuteQuery(sql.ToString());
             return converter.Multiple(set);
         }
 
         public void Insert(GameBadge obj)
         {
-            var qh = new QueryHelper<GameBadge>(connection_string);
+            var qh = new QueryHelper(connection_string);
             qh.AddParameter(":name", obj.Name);
             qh.AddParameter(":owner_id", obj.OwnerID);
             qh.AddParameter(":created", obj.Created);
@@ -99,7 +98,7 @@ namespace StudyBuddy.Persistence
 
         public void Update(GameBadge obj)
         {
-            var qh = new QueryHelper<GameBadge>(connection_string);
+            var qh = new QueryHelper(connection_string);
             qh.AddParameter(":id", obj.ID);
             qh.AddParameter(":name", obj.Name);
             qh.AddParameter(":owner_id", obj.OwnerID);
@@ -123,13 +122,13 @@ namespace StudyBuddy.Persistence
 
         public void Delete(int id)
         {
-            var qh = new QueryHelper<GameBadge>(connection_string);
+            var qh = new QueryHelper(connection_string);
             qh.Delete("game_badges", "id", id);
         }
 
         public IEnumerable<GameBadge> GetBadgesForChallenge(int challenge_id)
         {
-            var qh = new QueryHelper<GameBadge>(connection_string);
+            var qh = new QueryHelper(connection_string);
             qh.AddParameter(":challenge_id", challenge_id);
 
             var sql = "select distinct gb.id,gb.name,gb.owner_id,gb.created,gb.required_coverage,gb.description,tags_of_badge(gb.id) from game_badges gb " +
@@ -138,14 +137,14 @@ namespace StudyBuddy.Persistence
                 "where tc.challenge_id=:challenge_id " +
                 "order by created desc, name";
 
-            var set = qh.ExecuteQueryToDataSet(sql);
+            var set = qh.ExecuteQuery(sql);
             return converter.Multiple(set);
         }
 
         // Get the success rate of a specific user for a certain badge
         public BadgeSuccessRate GetSuccessRate(int badge_id, int user_id)
         {
-            var qh = new QueryHelper<BadgeSuccessRate>(connection_string);
+            var qh = new QueryHelper(connection_string);
             qh.AddParameter(":badge_id", badge_id);
             qh.AddParameter(":user_id", user_id);
 
@@ -169,13 +168,13 @@ namespace StudyBuddy.Persistence
                 "); ";
 
             var converter = new BadgeSuccessRateConverter();
-            var set = qh.ExecuteQueryToDataSet(sql);
+            var set = qh.ExecuteQuery(sql);
             return converter.Single(set);
         }
 
         public void AddBadgeToUser(int user_id, int badge_id)
         {
-            var qh = new QueryHelper<Tag>(connection_string);
+            var qh = new QueryHelper(connection_string);
             qh.AddParameters(new { user_id, badge_id, created = DateTime.Now.Date });
             qh.ExecuteNonQuery(
                 "insert into users_badges(user_id, badge_id, created) " +
@@ -184,7 +183,7 @@ namespace StudyBuddy.Persistence
 
         public void RemoveBadgeFromUser(int user_id, int badge_id)
         {
-            var qh = new QueryHelper<Tag>(connection_string);
+            var qh = new QueryHelper(connection_string);
             qh.AddParameter(":user_id", user_id);
             qh.AddParameter(":badge_id", badge_id);
             qh.ExecuteNonQuery("delete from users_badges where user_id=:user_id and badge_id=:badge_id");
@@ -192,7 +191,7 @@ namespace StudyBuddy.Persistence
 
         public void RemoveAllBadgesFromUser(int user_id)
         {
-            var qh = new QueryHelper<Tag>(connection_string);
+            var qh = new QueryHelper(connection_string);
             qh.AddParameter(":user_id", user_id);
             qh.ExecuteNonQuery("delete from users_badges where user_id=:user_id");
         }
@@ -200,7 +199,7 @@ namespace StudyBuddy.Persistence
         private void CreateBadgesTable()
         {
             var rh = new RevisionHelper(connection_string, "badges");
-            var qh = new QueryHelper<GameBadge>(connection_string);
+            var qh = new QueryHelper(connection_string);
 
             if (!qh.TableExists("game_badges"))
             {
@@ -251,7 +250,7 @@ namespace StudyBuddy.Persistence
         private void CreateBadgesUserTable()
         {
             var rh = new RevisionHelper(connection_string, "users_badges");
-            var qh = new QueryHelper<GameBadge>(connection_string);
+            var qh = new QueryHelper(connection_string);
 
             if (!qh.TableExists("users_badges"))
             {

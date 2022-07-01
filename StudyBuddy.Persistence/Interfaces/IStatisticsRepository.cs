@@ -6,7 +6,5 @@ namespace StudyBuddy.Persistence
     public interface IStatisticsRepository
     {
         UserStatistics GetUserStatistics(int user_id);
-        IEnumerable<RankEntry> GetRankingWithFriends(int user_id);
-        Score GetScore(int user_id);
     }
 }

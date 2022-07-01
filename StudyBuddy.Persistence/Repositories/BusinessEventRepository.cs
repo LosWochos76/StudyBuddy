@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Text;
 using Npgsql;
 using StudyBuddy.Model;
 
@@ -7,6 +8,7 @@ namespace StudyBuddy.Persistence
     public class BusinessEventRepository : IBusinessEventRepository
     {
         private readonly string connection_string;
+        private readonly BusinessEventConverter converter = new BusinessEventConverter();
 
         public BusinessEventRepository(string connection_string)
         {
@@ -17,7 +19,7 @@ namespace StudyBuddy.Persistence
 
         private void CreateTable()
         {
-            var qh = new QueryHelper<BusinessEvent>(connection_string, FromReader);
+            var qh = new QueryHelper(connection_string);
             if (!qh.TableExists("business_events"))
             {
                 qh.ExecuteNonQuery(
@@ -32,41 +34,47 @@ namespace StudyBuddy.Persistence
 
         public BusinessEvent GetById(int id)
         {
-            var qh = new QueryHelper<BusinessEvent>(connection_string, FromReader);
+            var qh = new QueryHelper(connection_string);
             qh.AddParameter(":id", id);
-            return qh.ExecuteQueryToSingleObject("select id,name,owner_id,type,code from business_events where id=:id");
+            var set = qh.ExecuteQuery("select id,name,owner_id,type,code from business_events where id=:id");
+            return converter.Single(set);
         }
 
         public IEnumerable<BusinessEvent> All(BusinessEventFilter filter)
         {
-            var qh = new QueryHelper<BusinessEvent>(connection_string, FromReader);
+            var qh = new QueryHelper(connection_string);
             qh.AddParameter(":max", filter.Count);
             qh.AddParameter(":from", filter.Start);
-            var sql = "select id,name,owner_id,type,code from business_events ";
+            var sql = new StringBuilder("select id,name,owner_id,type,code from business_events ");
+
             if (!string.IsNullOrEmpty(filter.SearchText))
             {
                 qh.AddParameter(":search_text", "%" + filter.SearchText + "%");
-                sql += "where name ilike :search_text ";
+                sql.Append("where name ilike :search_text ");
             }
-            sql += "order by id,name limit :max offset :from";
-            return qh.ExecuteQueryToObjectList(sql);
+
+            sql.Append("order by id,name limit :max offset :from");
+            var set = qh.ExecuteQuery(sql.ToString());
+            return converter.Multiple(set);
         }
 
         public int GetCount(BusinessEventFilter filter)
         {
-            var qh = new QueryHelper<BusinessEvent>(connection_string, FromReader);
+            var qh = new QueryHelper(connection_string);
             var sql = "select count(*) from business_events ";
+
             if (!string.IsNullOrEmpty(filter.SearchText))
             {
                 qh.AddParameter(":search_text", "%" + filter.SearchText + "%");
                 sql += "where name ilike :search_text";
             }
+
             return qh.ExecuteQueryToSingleInt(sql);
         }
 
         public BusinessEvent Insert(BusinessEvent obj)
         {
-            var qh = new QueryHelper<BusinessEvent>(connection_string, FromReader);
+            var qh = new QueryHelper(connection_string);
             qh.AddParameter(":name", obj.Name);
             qh.AddParameter(":owner_id", obj.OwnerID);
             qh.AddParameter(":type", (int)obj.Type);
@@ -81,7 +89,7 @@ namespace StudyBuddy.Persistence
 
         public BusinessEvent Update(BusinessEvent obj)
         {
-            var qh = new QueryHelper<BusinessEvent>(connection_string, FromReader);
+            var qh = new QueryHelper(connection_string);
             qh.AddParameter(":id", obj.ID);
             qh.AddParameter(":name", obj.Name);
             qh.AddParameter(":owner_id", obj.OwnerID);
@@ -101,19 +109,8 @@ namespace StudyBuddy.Persistence
 
         public void Delete(int id)
         {
-            var qh = new QueryHelper<BusinessEvent>(connection_string, FromReader);
+            var qh = new QueryHelper(connection_string);
             qh.Delete("business_events", "id", id);
-        }
-
-        private BusinessEvent FromReader(NpgsqlDataReader reader)
-        {
-            var obj = new BusinessEvent();
-            obj.ID = reader.GetInt32(0);
-            obj.Name = reader.GetString(1);
-            obj.OwnerID = reader.GetInt32(2);
-            obj.Type = (BusinessEventType)reader.GetInt32(3);
-            obj.Code = reader.GetString(4);
-            return obj;
         }
     }
 }
