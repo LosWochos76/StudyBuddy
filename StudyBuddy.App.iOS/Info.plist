@@ -39,9 +39,9 @@
 		<string>fasolid.otf</string>
 	</array>
 	<key>NSCameraUsageDescription</key>
-	<string>StudyBuddy möchte QR-Codes scannen.</string>
+	<string>Manche Herausforderungen können nur durch das Scannen von QR-Codes abgeschlossen werden. Dafür benötigt Gameucation dann Zugriff auf die Kamera.</string>
 	<key>NSPhotoLibraryAddUsageDescription</key>
-	<string>Um ein Profilbild auszuwählen benötigt StudyBuddy Zugriff auf die Photos.</string>
+	<string>Um ein Profilbild in deinem Benutzerprofil einstellen zu können, benötigt Gameucation Zugriff auf deine Photos.</string>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>remote-notification</string>
@@ -49,11 +49,11 @@
 	<key>FirebaseAppDelegateProxyEnabled</key>
 	<string>No</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>Um manche Herausforderungen abzuschließen, benötigt der StudyBuddy den aktuellen Standort.</string>
+	<string>Manche Herausforderungen können nur durch die Übermittlung deines aktuellen Standorts erfolgreich abgeschlossen werden. Dafür musst du dann punktuell und nur in diesem Moment deinen Stanort teilen und freigeben.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Um ein Profilbild auszuwählen benötigt StudyBuddy Zugriff auf die Photos.</string>
 	<key>CFBundleShortVersionString</key>
-	<string>0.1.23</string>
+	<string>0.1.27</string>
 	<key>CFBundleIdentifier</key>
 	<string>de.gameucation</string>
 	<key>CFBundleDisplayName</key>
