@@ -33,7 +33,7 @@ namespace StudyBuddy.Persistence
             for (int row = 0; row < set.RowCount; row++)
             {
                 var category = set.GetInt(row, "category");
-                var points = set.GetInt(row, "category");
+                var points = set.GetInt(row, "points");
                 var count = set.GetInt(row, "challenge_count");
 
                 switch (category)
