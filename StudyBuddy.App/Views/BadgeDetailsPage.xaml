@@ -21,8 +21,8 @@
             </Grid.ColumnDefinitions>
             <Frame Padding="0"
                    Margin="0"
-                   BorderColor="DarkGoldenrod"
-                   BackgroundColor="DarkGoldenrod"
+                   BorderColor="{Binding IconColor}"
+                   BackgroundColor="{Binding IconColor}"
                    CornerRadius="10"
                    HasShadow="True">
                 <Grid BackgroundColor="Transparent">
@@ -47,7 +47,7 @@
                                 <FontImageSource
                                     Color="Black"
                                     FontFamily="{StaticResource FontAwesomeSolid}"
-                                    Glyph="{x:Static fontAwesome:FontAwesomeIcons.GraduationCap}" />
+                                    Glyph="{Binding Icon}" />
                             </Image.Source>
                         </Image>
                         <Label VerticalTextAlignment="Center"

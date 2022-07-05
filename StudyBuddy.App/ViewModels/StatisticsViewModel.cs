@@ -21,20 +21,15 @@ namespace StudyBuddy.App.ViewModels
 
         private DonutChart _totalChallengesChart;
         public DonutChart TotalChallengesChart { get { return _totalChallengesChart; } set { _totalChallengesChart = value; NotifyPropertyChanged(); } }
-
+        
+        private GameBadgeViewModel _lastBadge;
+        public GameBadgeViewModel LastBadge{ get { return _lastBadge; } set { _lastBadge = value; NotifyPropertyChanged(); } }
+        
+        private bool _hasValue = false;
+        public bool HasValue{ get { return _hasValue; } set { _hasValue = value; NotifyPropertyChanged(); } }
+        
         private int _totalBadges;
-        public int TotalBadges
-        {
-            get
-            {
-                return _totalBadges;
-            }
-            set
-            {
-                _totalBadges = value;
-                NotifyPropertyChanged();
-            }
-        }
+        public int TotalBadges { get { return _totalBadges; } set { _totalBadges = value; NotifyPropertyChanged(); } }
         
         public bool IsRefreshing { get; set; }
         public IAsyncCommand RefreshCommand { get; }
@@ -60,7 +55,17 @@ namespace StudyBuddy.App.ViewModels
             TotalChallengesCommand = new AsyncCommand(ShowCompletedChallenges);
             TotalBadgeCommand = new AsyncCommand(ShowTotalBadge);
             RefreshCommand = new AsyncCommand(RefreshView);
-            BadgeDetailsCommand = new AsyncCommand(ShowBadgeDetails);
+            BadgeDetailsCommand = new AsyncCommand(execute: async () =>
+            {
+                await ShowBadgeDetails();
+            },
+            canExecute: () =>
+            {
+                if (TotalBadges < 1)
+                    return false;
+                else
+                    return true;
+            });
         }
 
         private async Task ShowCompletedChallenges()
@@ -75,15 +80,9 @@ namespace StudyBuddy.App.ViewModels
 
         private async Task ShowBadgeDetails()
         {
-            await Navigation.Push(new BadgeDetailsPage(await api.Badges.GetById(1)));
+            await Navigation.Push(new BadgeDetailsPage(LastBadge));
         }
-
-        private async Task BadgesCount()
-        {
-            var badges = await api.Badges.BadgesReceived();
-            TotalBadges = badges.Objects.Count();
-        }
-
+        
         private async Task RefreshView()
         {
             await Refresh();
@@ -93,8 +92,22 @@ namespace StudyBuddy.App.ViewModels
 
         public async Task Refresh()
         {
+            GameBadgeViewModel emptybadge = new GameBadgeViewModel{ Name = "Verdiene Abzeichen", IconKey = "fa-solid,f70c,#3700B3" };
             try
             {
+                var badges = await api.Badges.BadgesReceived();
+                if (badges.Count < 1)
+                {
+                    LastBadge = emptybadge;
+                    TotalBadges = 0;
+                }
+                else
+                {
+                    var firstElement = badges.Objects.FirstOrDefault();
+                    LastBadge = firstElement;
+                    TotalBadges = badges.Count;
+                    BadgeDetailsCommand.CanExecute(true);
+                }
                 UserStatistics = await api.Statistics.GetUserStatistics();
             }
             catch (System.Exception)
@@ -103,8 +116,11 @@ namespace StudyBuddy.App.ViewModels
                     "Fehler beim Laden der Statistiken. API Endpunkt nicht erreichbar", "Ok");
             }
 
+            if (UserStatistics.ThisWeekChallengeCount != 0 || UserStatistics.LastWeekChallengeCount != 0)
+            {
+                HasValue = true;
+            }
             LoadCharts();
-            await BadgesCount();
         }
 
         private void LoadCharts()

@@ -9,13 +9,31 @@
     Title="Erhaltene Abzeichen"
     x:Name="page"
     Visual="Default">
+    <ContentPage.Resources>
+        <Style TargetType="Grid">
+            <Setter Property="VisualStateManager.VisualStateGroups">
+                <VisualStateGroupList>
+                    <VisualStateGroup x:Name="CommonStates">
+                        <VisualState x:Name="Normal" />
+                        <VisualState x:Name="Selected">
+                            <VisualState.Setters>
+                                <Setter Property="BackgroundColor"
+                                        Value="{StaticResource PrimaryAccent}" />
+                            </VisualState.Setters>
+                        </VisualState>
+                    </VisualStateGroup>
+                </VisualStateGroupList>
+            </Setter>
+        </Style>
+    </ContentPage.Resources>
     <StackLayout>
         <SearchBar SearchCommand="{Binding SearchCommand}" Text="{Binding SearchText}" Visual="Material"/>
         <ActivityIndicator IsVisible="{Binding IsBusy}" IsRunning="{Binding IsBusy}"></ActivityIndicator>
         <RefreshView IsRefreshing="{Binding IsRefreshing}" Command="{Binding RefreshCommand}">
         <CollectionView ItemsSource="{Binding Badges}"
                             SelectedItem="{Binding SelectedBadge}"
-                            SelectionMode="Single">
+                            SelectionMode="Single"
+                            SelectionChangedCommand="{Binding DetailsCommand}">
             <CollectionView.ItemTemplate>
                 <DataTemplate x:DataType="viewmodels:GameBadgeViewModel">
                     <Grid x:Name="Item"
@@ -34,7 +52,7 @@
                                    HorizontalOptions="FillAndExpand"
                                    VerticalOptions="FillAndExpand"
                                    BorderColor="{OnPlatform Android={StaticResource SystemGray4}, iOS={StaticResource Transparent}}"
-                                   BackgroundColor="{StaticResource WindowBackgroundColor}">
+                                   BackgroundColor="{Binding IconColor}">
                                 <Grid BackgroundColor="Transparent"
                                       Padding="0">
                                     <Grid.RowDefinitions>
@@ -55,7 +73,7 @@
                                             <Image.Source>
                                                 <FontImageSource FontFamily="{StaticResource FontAwesomeSolid}"
                                                                  Glyph="{Binding Icon}"
-                                                                 Color="{Binding IconColor}">
+                                                                 Color="Black">
                                                 </FontImageSource>
                                             </Image.Source>
                                         </Image>
@@ -75,6 +93,8 @@
                                                    VerticalOptions="Center"
                                                    Padding="12,5,12,0"/>
                                             <Label Text="{Binding Description}"
+                                                   MaxLines="2"
+                                                   LineBreakMode="TailTruncation"
                                                    Padding="12,0,12,0"
                                                    FontSize="12"/>
                                             <StackLayout Orientation="Horizontal"

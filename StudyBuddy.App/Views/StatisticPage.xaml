@@ -102,13 +102,13 @@
                                 VerticalOptions="Start"
                                 WidthRequest="60">
                                 <Image.Source>
-                                    <FontImageSource
-                                        Color="DarkGoldenrod"
-                                        FontFamily="{StaticResource FontAwesomeSolid}"
-                                        Glyph="{x:Static fontAwesome:FontAwesomeIcons.GraduationCap}" />
+                                    <FontImageSource FontFamily="{StaticResource FontAwesomeSolid}"
+                                                     Glyph="{Binding LastBadge.Icon}"
+                                                     Color="{Binding LastBadge.IconColor}">
+                                    </FontImageSource>
                                 </Image.Source>
                             </Image>
-                            <Label Style="{StaticResource SmallLabelStyle}" Text="Name XY"/>
+                            <Label MaxLines="2" LineBreakMode="TailTruncation" Style="{StaticResource SmallLabelStyle}" Text="{Binding LastBadge.Name}"/>
                         </StackLayout>
                         <Frame.GestureRecognizers>
                             <TapGestureRecognizer Command="{Binding BadgeDetailsCommand}" />
@@ -133,8 +133,8 @@
                         </Frame.GestureRecognizers>
                     </Frame>
                 </Grid>
-                <Label Style="{StaticResource TitleLabelStyle}" Text="Wöchentliche Herausforderungen" />
-                <Frame Style="{StaticResource FrameStyle}" Margin="0,0,0,20">
+                <Label Style="{StaticResource TitleLabelStyle}" IsVisible="{Binding HasValue}" Text="Wöchentliche Herausforderungen" />
+                <Frame Style="{StaticResource FrameStyle}" IsVisible="{Binding HasValue}" Margin="0,0,0,20">
                     <Grid>
                         <StackLayout
                             HorizontalOptions="Start"

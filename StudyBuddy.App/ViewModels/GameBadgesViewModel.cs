@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 using StudyBuddy.App.Api;
 using StudyBuddy.App.Misc;
 using StudyBuddy.App.Views;
 using Xamarin.CommunityToolkit.ObjectModel;
-using Xamarin.Forms;
 
 namespace StudyBuddy.App.ViewModels
 {
@@ -68,9 +66,19 @@ namespace StudyBuddy.App.ViewModels
             Badges = new RangeObservableCollection<GameBadgeViewModel>();
             SearchCommand = new AsyncCommand(Refresh);
             RefreshCommand = new AsyncCommand(Refresh);
-
+            DetailsCommand = new AsyncCommand(ShowDetails);
         }
+        private async Task ShowDetails()
+        {
+            
+            if (SelectedBadge == null)
+                return;
 
+            await Navigation.Push(new BadgeDetailsPage(await api.Badges.GetById(SelectedBadge.ID)));
+            SelectedBadge = null;
+            NotifyPropertyChanged(nameof(SelectedBadge));
+            
+        }
         private async Task Refresh()
         {
             Badges.Clear();
