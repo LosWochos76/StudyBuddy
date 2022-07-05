@@ -134,7 +134,7 @@
             </CollectionView.ItemTemplate>
                 <CollectionView.EmptyView>
                     <StackLayout Padding="12">
-                        <Label HorizontalOptions="Center" Text="Du hast noch keine Badges abgeschlossen" />
+                        <Label HorizontalOptions="Center" Text="Du hast noch keine Abzeichen erhalten" />
                     </StackLayout>
                 </CollectionView.EmptyView>
             </CollectionView>
