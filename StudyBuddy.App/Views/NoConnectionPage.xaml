@@ -10,7 +10,7 @@
             <Label Text="Huch!"
                    FontSize="28"
                    HorizontalOptions="Center"/>
-            <Label Text="Keine Internetverbindung gefunden. Überprüfen Sie Ihre Verbindung und versuchen Sie es erneut!"
+            <Label Text="Da ist etwas schief gelaufen.&#10;&#10;Keine Internetverbindung oder Verbindung zum Dienst gefunden.&#10;&#10;Überprüfen Sie Ihre Verbindung und versuchen Sie es erneut!"
                    FontSize="20"
                    Margin="24,24,24,54"/>
             <Button Text="App schließen"
