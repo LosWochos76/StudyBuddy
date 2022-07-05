@@ -24,14 +24,17 @@ namespace StudyBuddy.App.ViewModels
             OpenBrowserCommand = new Command<string>((x) => OpenBrowser(x));
             AddFriendsCommand = new Command(AddFriends);
         }
+
         private void Theme(object obj)
         {
             Navigation.Push(new ThemePage());
         }
-            public void OpenBrowser(string str)
+
+        public void OpenBrowser(string str)
         {
             dialog.OpenBrowser(str);
         }
+
         private void AddFriends()
         {
             Navigation.Push(new AddFriendPage());

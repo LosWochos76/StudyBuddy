@@ -43,6 +43,7 @@ namespace StudyBuddy.App
             TinyIoCContainer.Current.Register(TinyIoCContainer.Current.Resolve<FriendsViewModel>());
             TinyIoCContainer.Current.Register(TinyIoCContainer.Current.Resolve<NotificationsViewModel>());
             TinyIoCContainer.Current.Register(TinyIoCContainer.Current.Resolve<FlyoutHeaderViewModel>());
+            TinyIoCContainer.Current.Register(TinyIoCContainer.Current.Resolve<RegisterViewModel>());
         }
 
         protected override async void OnStart()

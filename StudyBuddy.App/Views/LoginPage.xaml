@@ -44,7 +44,7 @@
                     <xct:EmailValidationBehavior Flags="ValidateOnValueChanging,ValidateOnAttaching" MinimumLength="1" IsValid="{Binding IsEMailValid}"/>
                 </Entry.Behaviors>
             </Entry>
-            <Entry x:Name="Entry" Placeholder="Passwort" IsPassword="True" Text="{Binding Password}" ReturnCommand="{Binding LoginCommand}">
+            <Entry Placeholder="Passwort" IsPassword="True" Text="{Binding Password}" ReturnCommand="{Binding LoginCommand}">
                 <Entry.Behaviors>
                     <xct:TextValidationBehavior Flags="ValidateOnValueChanging,ValidateOnAttaching" MinimumLength="3" IsValid="{Binding IsPasswordValid}" />
                 </Entry.Behaviors>

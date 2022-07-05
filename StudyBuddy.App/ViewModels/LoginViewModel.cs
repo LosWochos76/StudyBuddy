@@ -2,6 +2,7 @@
 using System.Windows.Input;
 using StudyBuddy.App.Api;
 using StudyBuddy.App.Misc;
+using StudyBuddy.App.Views;
 using Xamarin.CommunityToolkit.ObjectModel;
 using Xamarin.Forms;
 
@@ -68,9 +69,9 @@ namespace StudyBuddy.App.ViewModels
             dialog.OpenBrowser("https://gameucation.eu/");
         }
 
-        private void Register()
+        private async void Register()
         {
-            dialog.OpenBrowser("https://backend.gameucation.eu/register/");
+            await Navigation.Push(new RegisterPage());
         }
 
         private void Recover()
