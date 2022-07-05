@@ -1,0 +1,92 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewmodels="clr-namespace:StudyBuddy.App.ViewModels"
+             x:Class="StudyBuddy.App.Views.RequestsPage"
+             x:DataType="viewmodels:RequestsViewModel"
+             x:Name="page"
+             xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
+             Title="Anfragen">
+    <StackLayout>
+        <RefreshView IsRefreshing="{Binding IsRefreshing}"
+                                 Command="{Binding RefreshCommand}">
+            <CollectionView ItemsSource="{Binding Requests}">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="viewmodels:RequestViewModel">
+                        <Grid x:Name="requestItem" Padding="5">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*" />
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <Frame CornerRadius="10"
+                                               HasShadow="True"
+                                               BackgroundColor="{AppThemeBinding Dark={StaticResource SystemGray4Dark},Light={StaticResource SystemGray5}}"
+                                               Margin="0"
+                                               Padding="0"
+                                               HeightRequest="110">
+                                <Grid Padding="0">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="*" />
+                                        <RowDefinition Height="*" />
+                                    </Grid.RowDefinitions>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="80" />
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <StackLayout Grid.RowSpan="2"
+                                                             VerticalOptions="Center">
+                                        <xct:AvatarView Size="70"
+                                                                    VerticalOptions="Center"
+                                                                    Padding="8,0,2,0"
+                                                                    Text="{Binding Sender.Initials}"
+                                                                    Source="{Binding Sender.ProfileImage}" />
+                                    </StackLayout>
+                                    <Frame Grid.Row="0"
+                                                       Grid.RowSpan="2"
+                                                       Grid.Column="1"
+                                                       Grid.ColumnSpan="2"
+                                                       HasShadow="False"
+                                                       CornerRadius="10"
+                                                       Padding="0">
+                                        <StackLayout Padding="8,0,0,0">
+                                            <Label Text="{Binding Name}"
+                                                               FontSize="14"
+                                                               HeightRequest="60"
+                                                               VerticalTextAlignment="Center"
+                                                               FontAttributes="Bold" />
+                                            <StackLayout Orientation="Horizontal"
+                                                                     Padding="0,0,8,8">
+                                                <Button Text="Annehmen"
+                                                                    FontAttributes="Bold"
+                                                                    FontSize="14"
+                                                                    HeightRequest="35"
+                                                                    WidthRequest="120"
+                                                                    HorizontalOptions="Start"
+                                                                    BackgroundColor="{AppThemeBinding Dark={StaticResource ConfirmButtonDark}, Light={StaticResource ConfirmButton}}"
+                                                                    Command="{Binding BindingContext.AcceptRequestCommand, Source={x:Reference Name=page}}"
+                                                                    CommandParameter="{Binding Source={x:Reference requestItem}, Path=BindingContext}" />
+                                                <Button Text="Ablehnen"
+                                                                    FontAttributes="Bold"
+                                                                    FontSize="14"
+                                                                    HeightRequest="35"
+                                                                    WidthRequest="120"
+                                                                    HorizontalOptions="EndAndExpand"
+                                                                    BackgroundColor="{AppThemeBinding Dark={StaticResource DeclineButtonDark}, Light={StaticResource DeclineButton}}"
+                                                                    Command="{Binding BindingContext.DenyRequestCommand, Source={x:Reference Name=page}}"
+                                                                    CommandParameter="{Binding Source={x:Reference requestItem}, Path=BindingContext}" />
+                                            </StackLayout>
+
+                                        </StackLayout>
+                                    </Frame>
+                                </Grid>
+                            </Frame>
+                        </Grid>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </RefreshView>
+    </StackLayout>
+</ContentPage>

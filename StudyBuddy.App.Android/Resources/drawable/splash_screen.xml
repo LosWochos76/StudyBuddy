@@ -4,9 +4,8 @@
         <color android:color="@color/splashscreen_background"/>
     </item>
     <item
-            android:width="300dp"
-            android:height="200dp"
-            android:drawable="@drawable/logo"
-            android:gravity="center" 
-            android:right="30dp" />
+            android:width="250dp"
+            android:height="250dp"
+            android:drawable="@drawable/AppIcon"
+            android:gravity="center"/>
 </layer-list>

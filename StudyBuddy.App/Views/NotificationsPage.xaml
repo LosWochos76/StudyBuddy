@@ -9,25 +9,10 @@
              xmlns:local="clr-namespace:StudyBuddy.App.Views"
              xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
              Title="Benachrichtigungen">
-    <xct:TabView TabStripPlacement="Top"
-                 TabStripHeight="55"
-                 TabIndicatorColor="{StaticResource PrimaryAccent}"
-                 TabStripBackgroundColor="{AppThemeBinding Dark={StaticResource WindowBackgroundColorDark}, Light={StaticResource WindowBackgroundColor}}"
-                 TabIndicatorPlacement="Bottom"
-                 TabIndicatorHeight="5"
-                 SelectedIndex="0"
-                 TabContentDataTemplate="{DataTemplate local:NotificationsPage}">
-        <xct:TabViewItem Text="News"
-                         IsSelected="{Binding NewsIsSelected, Mode=OneWayToSource}"
-                         TextColor="{AppThemeBinding Dark={StaticResource TextColorDark}, Light={StaticResource TextColor}}"
-                         TextColorSelected="{StaticResource PrimaryAccent}"
-                         FontAttributes="Bold"
-                         Padding="0,0,0,6">
-            <xct:TabViewItem.Content>
-                <FlexLayout>
-                    <RefreshView IsRefreshing="{Binding IsRefreshing}"
+    <FlexLayout>
+        <RefreshView IsRefreshing="{Binding IsRefreshing}"
                                  Command="{Binding RefreshCommand}">
-                        <CollectionView
+            <CollectionView
                             x:Name="NotificationCollectionView"
                             ItemsSource="{Binding News}"
                             RemainingItemsThreshold="{Binding NewsRemainingItemsThreshold}"
@@ -36,80 +21,80 @@
                             SelectionMode="Single"
                             SelectionChangedCommand="{Binding NewsDetailCommand}"
                             ItemsUpdatingScrollMode="KeepItemsInView">
-                            <CollectionView.ItemTemplate>
-                                <DataTemplate x:DataType="viewmodels:NewsViewModel">
-                                    
-                                    
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="viewmodels:NewsViewModel">
 
-                                    <Frame CornerRadius="0"
+
+
+                        <Frame CornerRadius="0"
                                            HasShadow="False"
                                            BackgroundColor="{AppThemeBinding Dark={StaticResource WindowBackgroundColorDark},Light={StaticResource WindowBackgroundColor}}"
                                            BorderColor="Transparent"
                                            Padding="4, 8, 4, 8"
                                            >
 
-                                        <FlexLayout Direction="Column" >
-                                            <StackLayout Orientation="Horizontal">
-                                                <xct:AvatarView Size="48"
+                            <FlexLayout Direction="Column" >
+                                <StackLayout Orientation="Horizontal">
+                                    <xct:AvatarView Size="48"
                                                                 VerticalOptions="Center"
                                                                 Padding="8,0,2,0"
                                                                 Text="{Binding NotificationOwner.Initials}"
                                                                 Source="{Binding NotificationOwner.ProfileImage}" />
 
 
-                                                <StackLayout Padding="4,8,8,8" BackgroundColor="Transparent">
-                                                    <Label Text="{Binding Name}"
+                                    <StackLayout Padding="4,8,8,8" BackgroundColor="Transparent">
+                                        <Label Text="{Binding Name}"
                                                            FontSize="18"
                                                            VerticalOptions="StartAndExpand"
                                                            FontAttributes="Bold" />
-                                                    <Label Text="{Binding NotificationCreated}"
+                                        <Label Text="{Binding NotificationCreated}"
                                                            VerticalOptions="EndAndExpand" />
 
 
-                                                </StackLayout>
-                                            </StackLayout>
+                                    </StackLayout>
+                                </StackLayout>
 
-                                            <FlexLayout />
-                                            
-                                            <FlexLayout
+                                <FlexLayout />
+
+                                <FlexLayout
                                                 IsVisible="{Binding ShowImage}"
                                                 HeightRequest="128"
                                                 Margin="16" 
                                                 JustifyContent="Center"
                                                 AlignItems="Center"
                                                 >
-                                                
-                                                <Image WidthRequest="128"
+
+                                    <Image WidthRequest="128"
                                                        HeightRequest="128"
                                                        VerticalOptions="Center">
-                                                    <Image.Source>
-                                                        <FontImageSource FontFamily="{StaticResource FontAwesomeSolid}"
+                                        <Image.Source>
+                                            <FontImageSource FontFamily="{StaticResource FontAwesomeSolid}"
                                                                          Glyph="{Binding GameBadgeViewModel.Icon}"
                                                                          Color="{Binding GameBadgeViewModel.IconColor}">
-                                                        </FontImageSource>
-                                                    </Image.Source>
-                                                </Image>
-
-                                                
-                                            </FlexLayout>
+                                            </FontImageSource>
+                                        </Image.Source>
+                                    </Image>
 
 
-                                            <FlexLayout
+                                </FlexLayout>
+
+
+                                <FlexLayout
                                                 HeightRequest="16"
                                                 Margin="16" 
                                                 JustifyContent="Start"
                                                 AlignItems="Center"
                                                 FlexLayout.Grow="1">
-                                                
-                                      
-                                                
-                                                <Label TextColor="{AppThemeBinding Dark={StaticResource TextColorDark}, Light={StaticResource TextColor}}"  Text="{Binding Body}" />
-                                            </FlexLayout>
 
 
-                                            <FlexLayout Direction="Row" HeightRequest="24"
+
+                                    <Label TextColor="{AppThemeBinding Dark={StaticResource TextColorDark}, Light={StaticResource TextColor}}"  Text="{Binding Body}" />
+                                </FlexLayout>
+
+
+                                <FlexLayout Direction="Row" HeightRequest="24"
                                                         JustifyContent="SpaceBetween">
-                                                <Button
+                                    <Button
                                                     TextColor="{AppThemeBinding Dark={StaticResource TextColorDark}, Light={StaticResource TextColor}}"
                                                     Background="Transparent"
                                                     Text="{Binding UsersWhoLikedText}"
@@ -118,23 +103,23 @@
                                                     Command="{Binding OpenLikesUsersModalCommand}"
                                                     CommandParameter="{Binding .}" />
 
-                                                <Button Background="Transparent"
+                                    <Button Background="Transparent"
                                                         TextColor="{AppThemeBinding Dark={StaticResource TextColorDark}, Light={StaticResource TextColor}}"
 
                                                         Command="{Binding OpenCommentsCommands}"
                                                         CommandParameter="{Binding .}"
                                                         Padding="0" FontSize="10" Text="{Binding NumberOfCommentsText}" />
-                                            </FlexLayout>
+                                </FlexLayout>
 
-                                            <BoxView
+                                <BoxView
                                                 HeightRequest="1"
                                                 Color="LightGray"
                                                 Margin="2, 4, 2, 4" />
 
-                                            <FlexLayout Direction="Row" JustifyContent="SpaceEvenly" HeightRequest="24">
+                                <FlexLayout Direction="Row" JustifyContent="SpaceEvenly" HeightRequest="24">
 
 
-                                                <Button Text="{Binding LikeButtonText}"
+                                    <Button Text="{Binding LikeButtonText}"
                                                         TextColor="{AppThemeBinding Dark={StaticResource TextColorDark}, Light={StaticResource TextColor}}"
 
                                                         Padding="0"
@@ -143,7 +128,7 @@
                                                         Command="{Binding LikeNotificationCommand}"
                                                         CommandParameter="{Binding .}" />
 
-                                                <Button
+                                    <Button
                                                     
                                                     TextColor="{AppThemeBinding Dark={StaticResource TextColorDark}, Light={StaticResource TextColor}}"
 
@@ -155,7 +140,7 @@
                                                     Text="💬 Comment" />
 
 
-                                                <!--
+                                    <!--
                                                 <Button
 
                                                     Padding="0"
@@ -166,114 +151,17 @@
                                                     Text="➡️ Share" />
 -->
 
-                                            </FlexLayout>
+                                </FlexLayout>
 
 
-                                        </FlexLayout>
+                            </FlexLayout>
 
 
-                                    </Frame>
+                        </Frame>
 
-                                </DataTemplate>
-                            </CollectionView.ItemTemplate>
-                        </CollectionView>
-                    </RefreshView>
-                </FlexLayout>
-            </xct:TabViewItem.Content>
-        </xct:TabViewItem>
-        <xct:TabViewItem Text="Anfragen"
-                         IsSelected="{Binding RequestsIsSelected, Mode=OneWayToSource}"
-                         BadgeText="{Binding Requests.Count}"
-                         TextColor="{AppThemeBinding Dark={StaticResource TextColorDark}, Light={StaticResource TextColor}}"
-                         TextColorSelected="{StaticResource PrimaryAccent}"
-                         FontAttributes="Bold"
-                         BadgeTextColor="White"
-                         BadgeBackgroundColor="{AppThemeBinding Dark={StaticResource ConfirmButtonDark}, Light={StaticResource ConfirmButton}}"
-                         Padding="0,0,0,5">
-            <xct:TabViewItem.Content>
-                <StackLayout Padding="0,15,0,0">
-                    <RefreshView IsRefreshing="{Binding IsRefreshing}"
-                                 Command="{Binding RefreshCommand}">
-                        <CollectionView ItemsSource="{Binding Requests}">
-                            <CollectionView.ItemTemplate>
-                                <DataTemplate x:DataType="viewmodels:RequestViewModel">
-                                    <Grid x:Name="requestItem" Padding="5">
-                                        <Grid.RowDefinitions>
-                                            <RowDefinition Height="*" />
-                                        </Grid.RowDefinitions>
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="*" />
-                                        </Grid.ColumnDefinitions>
-                                        <Frame CornerRadius="10"
-                                               HasShadow="True"
-                                               BackgroundColor="{AppThemeBinding Dark={StaticResource SystemGray4Dark},Light={StaticResource SystemGray5}}"
-                                               Margin="0"
-                                               Padding="0"
-                                               HeightRequest="110">
-                                            <Grid Padding="0">
-                                                <Grid.RowDefinitions>
-                                                    <RowDefinition Height="*" />
-                                                    <RowDefinition Height="*" />
-                                                </Grid.RowDefinitions>
-                                                <Grid.ColumnDefinitions>
-                                                    <ColumnDefinition Width="80" />
-                                                    <ColumnDefinition Width="*" />
-                                                    <ColumnDefinition Width="*" />
-                                                </Grid.ColumnDefinitions>
-                                                <StackLayout Grid.RowSpan="2"
-                                                             VerticalOptions="Center">
-                                                    <xct:AvatarView Size="70"
-                                                                    VerticalOptions="Center"
-                                                                    Padding="8,0,2,0"
-                                                                    Text="{Binding Sender.Initials}"
-                                                                    Source="{Binding Sender.ProfileImage}" />
-                                                </StackLayout>
-                                                <Frame Grid.Row="0"
-                                                       Grid.RowSpan="2"
-                                                       Grid.Column="1"
-                                                       Grid.ColumnSpan="2"
-                                                       HasShadow="False"
-                                                       CornerRadius="10"
-                                                       Padding="0">
-                                                    <StackLayout Padding="8,0,0,0">
-                                                        <Label Text="{Binding Name}"
-                                                               FontSize="14"
-                                                               HeightRequest="60"
-                                                               VerticalTextAlignment="Center"
-                                                               FontAttributes="Bold" />
-                                                        <StackLayout Orientation="Horizontal"
-                                                                     Padding="0,0,8,8">
-                                                            <Button Text="Annehmen"
-                                                                    FontAttributes="Bold"
-                                                                    FontSize="14"
-                                                                    HeightRequest="35"
-                                                                    WidthRequest="120"
-                                                                    HorizontalOptions="Start"
-                                                                    BackgroundColor="{AppThemeBinding Dark={StaticResource ConfirmButtonDark}, Light={StaticResource ConfirmButton}}"
-                                                                    Command="{Binding BindingContext.AcceptRequestCommand, Source={x:Reference Name=page}}"
-                                                                    CommandParameter="{Binding Source={x:Reference requestItem}, Path=BindingContext}" />
-                                                            <Button Text="Ablehnen"
-                                                                    FontAttributes="Bold"
-                                                                    FontSize="14"
-                                                                    HeightRequest="35"
-                                                                    WidthRequest="120"
-                                                                    HorizontalOptions="EndAndExpand"
-                                                                    BackgroundColor="{AppThemeBinding Dark={StaticResource DeclineButtonDark}, Light={StaticResource DeclineButton}}"
-                                                                    Command="{Binding BindingContext.DenyRequestCommand, Source={x:Reference Name=page}}"
-                                                                    CommandParameter="{Binding Source={x:Reference requestItem}, Path=BindingContext}" />
-                                                        </StackLayout>
-
-                                                    </StackLayout>
-                                                </Frame>
-                                            </Grid>
-                                        </Frame>
-                                    </Grid>
-                                </DataTemplate>
-                            </CollectionView.ItemTemplate>
-                        </CollectionView>
-                    </RefreshView>
-                </StackLayout>
-            </xct:TabViewItem.Content>
-        </xct:TabViewItem>
-    </xct:TabView>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </RefreshView>
+    </FlexLayout>
 </ContentPage>

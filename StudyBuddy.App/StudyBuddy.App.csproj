@@ -49,6 +49,9 @@
       <EmbeddedResource Update="Views\ChallengesCompletedPage.xaml">
         <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
       </EmbeddedResource>
+      <EmbeddedResource Update="Views\RequestsPage.xaml">
+        <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+      </EmbeddedResource>
       <EmbeddedResource Update="Views\ThemePage.xaml">
         <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
       </EmbeddedResource>

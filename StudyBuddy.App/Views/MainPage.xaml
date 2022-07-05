@@ -26,6 +26,8 @@
                 <Setter Property="Shell.NavBarHasShadow"
                         Value="True" />
             </Style>
+            <x:String x:Key="ImageDark">AppIconDark</x:String>
+            <x:String x:Key="ImageLight">AppIcon</x:String>
         </ResourceDictionary>
     </Shell.Resources>
 
@@ -243,13 +245,20 @@
                     Glyph="{x:Static fontAwesome:FontAwesomeIcons.Bell}" />
             </Tab.Icon>
         </Tab>
+        <Tab>
+            <ShellContent ContentTemplate="{DataTemplate local:RequestsPage}" Route="RequestsPage" />
+            <Tab.Icon>
+                <FontImageSource FontFamily="{StaticResource FontAwesomeSolid}"
+                                 Glyph="{x:Static fontAwesome:FontAwesomeIcons.QuestionCircle}" />
+            </Tab.Icon>
+        </Tab>
     </TabBar>
     
     <Shell.FlyoutFooterTemplate>
         <DataTemplate>
-            <StackLayout Orientation="Horizontal" BackgroundColor="White">
+            <StackLayout Orientation="Horizontal" BackgroundColor="{AppThemeBinding Dark={StaticResource WindowBackgroundColorDark}, Light={StaticResource WindowBackgroundColor}}">
                 <Image Margin="30,0,0,0"
-                       Source="TestLogo"
+                       Source="{AppThemeBinding Dark={StaticResource ImageDark}, Light={StaticResource ImageLight}}"
                        HeightRequest="80">
 
                 </Image>
@@ -259,7 +268,7 @@
                        HorizontalTextAlignment="Center"
                        FontAttributes="Bold"
                        FontSize="26"
-                       TextColor="{StaticResource TextColor}">
+                       TextColor="{AppThemeBinding Dark={StaticResource TextColorDark}, Light={StaticResource TextColor}}">
                     
                 </Label>
             </StackLayout>
