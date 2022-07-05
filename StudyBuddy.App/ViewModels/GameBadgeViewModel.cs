@@ -1,7 +1,6 @@
 ﻿using StudyBuddy.Model;
 using System;
 using System.Linq;
-using System.Text;
 using Xamarin.Forms;
 
 namespace StudyBuddy.App.ViewModels
@@ -45,7 +44,7 @@ namespace StudyBuddy.App.ViewModels
         {
             get
         {
-                return (RequiredCoverage * 10).ToString() + "%";  
+                return (RequiredCoverage * 100).ToString() + "%";  
             }
         }
 

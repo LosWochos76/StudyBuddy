@@ -1,4 +1,6 @@
-﻿using StudyBuddy.App.Api;
+﻿using System;
+using System.Net;
+using StudyBuddy.App.Api;
 using StudyBuddy.App.Misc;
 using StudyBuddy.App.ViewModels;
 using StudyBuddy.App.Views;
@@ -14,7 +16,7 @@ namespace StudyBuddy.App
         {
             InitializeComponent();
 
-            if (App_HasConnection())
+            if (App_HasConnection() && Api_Reachable())
             {
                 SetupServices();
                 MainPage = new MainPage();
@@ -22,9 +24,18 @@ namespace StudyBuddy.App
             else
             {
                 MainPage = new NoConnectionPage();
-                Current.MainPage.DisplayAlert("Achtung!",
-                    $"Es wurde keine Internetverbindung gefunden!\nVerbindungstyp: {Connectivity.NetworkAccess.ToString()}",
-                    "Ok");
+                if (Api_Reachable())
+                {
+                    Current.MainPage.DisplayAlert("Achtung!",
+                        $"Es wurde keine Internetverbindung gefunden!\nVerbindungstyp: {Connectivity.NetworkAccess.ToString()}",
+                        "Ok"); 
+                }
+                else
+                {
+                    Current.MainPage.DisplayAlert("Achtung!",
+                        $"Die API ist leider nicht erreichbar!",
+                        "Ok"); 
+                }
             }
         }
 
@@ -48,7 +59,7 @@ namespace StudyBuddy.App
 
         protected override async void OnStart()
         {
-            if (App_HasConnection())
+            if (App_HasConnection() && Api_Reachable())
             {
                 if (!Current.Properties.ContainsKey("Login"))
                     return;
@@ -79,6 +90,28 @@ namespace StudyBuddy.App
             TinyIoCContainer.Current.Resolve<ThemeViewModel>().ApplyTheme();
             RequestedThemeChanged += App_RequestedThemeChanged;
         }
+        private bool Api_Reachable()
+        {
+            var url = "https://api.gameucation.eu/";
+            var reachable = false;
+            try
+            {
+                HttpWebRequest myHttpWebRequest = (HttpWebRequest)WebRequest.Create(url);
+                HttpWebResponse myHttpWebResponse = (HttpWebResponse)myHttpWebRequest.GetResponse();
+                if (myHttpWebResponse.StatusCode == HttpStatusCode.OK)
+                    reachable = true;
+                myHttpWebResponse.Close();
+            }
+            catch(WebException e)
+            {
+                //Current.MainPage.DisplayAlert("Achtung!",$"\r\nWebException Raised. The following error occurred : {0},{e.Status}", "Ok");
+            }
+            catch(Exception e)
+            {
+                //Current.MainPage.DisplayAlert("Achtung!",$"\nThe following Exception was raised : {0} , {e.Message}", "Ok");
+            }
+            return reachable;
+        }
 
         private bool App_HasConnection()
         {
@@ -106,10 +139,6 @@ namespace StudyBuddy.App
             {
                 TinyIoCContainer.Current.Resolve<ThemeViewModel>().ApplyTheme();
             });
-        }
-
-        private void SetupFirebasePushNotificationsHandler()
-        {
         }
     }
 }
