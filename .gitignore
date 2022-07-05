@@ -218,7 +218,5 @@ project.lock.json
 # End of core ignore list, below put you custom 'per project' settings (patterns or path)
 #####
 
-StudyBuddy.Backend/deploy.sh
-
 **/node_modules/**
 **/env.ts

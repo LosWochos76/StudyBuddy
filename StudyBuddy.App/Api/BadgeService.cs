@@ -30,16 +30,10 @@ namespace StudyBuddy.App.Api
 
         public async Task<GameBadgeListViewModel> BadgesReceived(string search_string = "", int skip = 0)
         {
-            var currentUser = _api.Authentication.CurrentUser;
-            var filter = new GameBadgeFilter()
-            {
-                SearchText = search_string,
-                Count = 10,
-                Start = skip,
-            };
-
+            var user_id = _api.Authentication.CurrentUser.ID;
+            var filter = new GameBadgeFilter(search_string, skip);
             var rh = new WebRequestHelper(_api.Authentication.Token);
-            return await rh.Get<GameBadgeListViewModel>(_baseUrl + "User/" + currentUser + "/GameBadge", filter);
+            return await rh.Get<GameBadgeListViewModel>(_baseUrl + "User/" + user_id + "/GameBadge", filter);
         }
     }
 }

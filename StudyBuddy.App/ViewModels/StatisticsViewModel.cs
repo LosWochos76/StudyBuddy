@@ -13,19 +13,35 @@ namespace StudyBuddy.App.ViewModels
 {
     public class StatisticsViewModel : ViewModelBase
     {
-        public UserStatistics UserStatistics { get { return _userStatistic; } set { _userStatistic = value; NotifyPropertyChanged(); } }
         private UserStatistics _userStatistic;
-        public BarChart TotalPointsChart { get { return _totalPointsChart; } set { _totalPointsChart = value; NotifyPropertyChanged(); } }
+        public UserStatistics UserStatistics { get { return _userStatistic; } set { _userStatistic = value; NotifyPropertyChanged(); } }
+
         private BarChart _totalPointsChart;
-        public DonutChart TotalChallengesChart { get { return _totalChallengesChart; } set { _totalChallengesChart = value; NotifyPropertyChanged(); } }
+        public BarChart TotalPointsChart { get { return _totalPointsChart; } set { _totalPointsChart = value; NotifyPropertyChanged(); } }
+
         private DonutChart _totalChallengesChart;
-        public int TotalBadges { get { return _totalBadges; } set { _totalBadges = value; NotifyPropertyChanged(); } }
+        public DonutChart TotalChallengesChart { get { return _totalChallengesChart; } set { _totalChallengesChart = value; NotifyPropertyChanged(); } }
+
         private int _totalBadges;
+        public int TotalBadges
+        {
+            get
+            {
+                return _totalBadges;
+            }
+            set
+            {
+                _totalBadges = value;
+                NotifyPropertyChanged();
+            }
+        }
+        
         public bool IsRefreshing { get; set; }
         public IAsyncCommand RefreshCommand { get; }
         public IAsyncCommand TotalChallengesCommand { get; set; }
         public IAsyncCommand TotalBadgeCommand { get; set; }
         public IAsyncCommand BadgeDetailsCommand { get; set; }
+
         public Color ThemeColor 
         { 
             get 
@@ -64,8 +80,8 @@ namespace StudyBuddy.App.ViewModels
 
         private async Task BadgesCount()
         {
-            var badges = await api.Badges.BadgesReceived("", 0);
-            _totalBadges = badges.Objects.Count();
+            var badges = await api.Badges.BadgesReceived();
+            TotalBadges = badges.Objects.Count();
         }
 
         private async Task RefreshView()
@@ -83,8 +99,10 @@ namespace StudyBuddy.App.ViewModels
             }
             catch (System.Exception)
             {
-                await Application.Current.MainPage.DisplayAlert("Fehler", "Fehler beim Laden der Statistiken. API Endpunkt nicht erreichbar", "Ok");
+                await Application.Current.MainPage.DisplayAlert("Fehler",
+                    "Fehler beim Laden der Statistiken. API Endpunkt nicht erreichbar", "Ok");
             }
+
             LoadCharts();
             await BadgesCount();
         }
@@ -112,12 +130,14 @@ namespace StudyBuddy.App.ViewModels
                     ValueLabelColor = SKColor.Parse("#007AFF")
                 }
             };
+
             var challengesEntries = new[]
             {
                 new ChartEntry(UserStatistics.TotalNetworkChallengesCount) { Color = SKColor.Parse("#5856D6") },
                 new ChartEntry(UserStatistics.TotalOrganizingChallengesCount) { Color = SKColor.Parse("#5AC8FA") },
                 new ChartEntry(UserStatistics.TotalLearningChallengesCount) { Color = SKColor.Parse("#007AFF") }
             };
+
             TotalPointsChart = new BarChart
             {
                 Entries = pointsEntries,
@@ -127,6 +147,7 @@ namespace StudyBuddy.App.ViewModels
                 BarAreaAlpha = 0,
                 BackgroundColor = new SKColor(0,0,0,0)
             };
+
             TotalChallengesChart = new DonutChart {Entries = challengesEntries, BackgroundColor = new SKColor(0,0,0,0)};
         }
     }

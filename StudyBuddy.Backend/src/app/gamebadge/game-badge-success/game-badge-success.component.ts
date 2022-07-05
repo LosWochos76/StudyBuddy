@@ -45,7 +45,7 @@ export class GameBadgeSuccessComponent implements OnInit {
       return;
 
     this.all_users = [];
-    var users = await this.user_service.getAll(1);
+    var users = await this.user_service.getAll();
     
     for (var user of users.objects) {
       if (!this.hasBadge(user.id))
