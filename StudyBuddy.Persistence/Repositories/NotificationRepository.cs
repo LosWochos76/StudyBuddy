@@ -111,6 +111,24 @@ namespace StudyBuddy.Persistence
             }
             
             
+            if (rh.GetRevision() == 2)
+            {
+                qh.ExecuteNonQuery("ALTER TABLE notifications ALTER COLUMN created type date");
+                qh.ExecuteNonQuery("ALTER TABLE notifications ALTER COLUMN updated type date");
+
+                rh.SetRevision(3);
+            }
+
+            
+            if (rh.GetRevision() == 3)
+            {
+                qh.ExecuteNonQuery("ALTER TABLE notifications ADD FOREIGN KEY (owner_id) REFERENCES users(id);");
+                qh.ExecuteNonQuery("ALTER TABLE notifications ADD FOREIGN KEY (badge_id) REFERENCES game_badges(id);");
+
+                rh.SetRevision(4);
+            }
+
+            
 
         }
 
