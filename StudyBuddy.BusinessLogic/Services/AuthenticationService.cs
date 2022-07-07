@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using Microsoft.AspNetCore.WebUtilities;
+﻿using Microsoft.AspNetCore.WebUtilities;
 using SimpleHashing.Net;
 using StudyBuddy.Model;
 
@@ -128,6 +126,7 @@ namespace StudyBuddy.BusinessLogic
             var jwt = new JwtToken();
             return jwt.FromToken(token) != 0;
         }
+
         public bool CheckPasswordResetToken(string token, string hash)
         {
             var jwt = new JwtToken();

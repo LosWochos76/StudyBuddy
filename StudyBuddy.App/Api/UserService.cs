@@ -82,5 +82,23 @@ namespace StudyBuddy.App.Api
             var content = await rh.Put<User>(base_url + "User/" + uvm.ID, uvm);
             return content != null;
         }
+
+        public async Task<UserId> IdByEmail(string email)
+        {
+            var rh = new WebRequestHelper();
+            return await rh.Load<UserId>(base_url + "User/UserIdByEmail/" + email, HttpMethod.Get);
+        }
+
+        public async Task<UserId> IdByNickname(string nickname)
+        {
+            var rh = new WebRequestHelper();
+            return await rh.Load<UserId>(base_url + "User/UserIdByNickname/" + nickname, HttpMethod.Get);
+        }
+
+        public async Task<UserViewModel> Register(User new_user)
+        {
+            var rh = new WebRequestHelper();
+            return await rh.Post<UserViewModel>(base_url + "User/", new_user);
+        }
     }
 }

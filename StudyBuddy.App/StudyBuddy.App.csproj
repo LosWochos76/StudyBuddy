@@ -57,9 +57,6 @@
       </EmbeddedResource>
     </ItemGroup>
     <ItemGroup>
-      <Folder Include="Models\" />
-    </ItemGroup>
-    <ItemGroup>
       <Reference Include="Microcharts.Droid, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
         <HintPath>..\..\..\.nuget\packages\microcharts\0.9.5.9\lib\MonoAndroid10\Microcharts.Droid.dll</HintPath>
       </Reference>

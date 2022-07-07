@@ -12,5 +12,8 @@ namespace StudyBuddy.App.Api
         Task<UserViewModel> GetById(int user_id);
         Task<int> GetFriendsCount();
         Task<bool> Update(User uvm);
+        Task<UserId> IdByEmail(string email);
+        Task<UserId> IdByNickname(string nickname);
+        Task<UserViewModel> Register(User new_user);
     }
 }

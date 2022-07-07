@@ -90,6 +90,7 @@ namespace StudyBuddy.App
             TinyIoCContainer.Current.Resolve<ThemeViewModel>().ApplyTheme();
             RequestedThemeChanged += App_RequestedThemeChanged;
         }
+
         private bool Api_Reachable()
         {
             var url = "https://api.gameucation.eu/";
