@@ -10,56 +10,60 @@
              Shell.NavBarIsVisible="False"
              ios:Page.UseSafeArea="True"
              Visual="Material">
-    <StackLayout>
-        <StackLayout VerticalOptions="StartAndExpand">
-            <Frame CornerRadius="0" Padding="0,10,0,10" BorderColor="Transparent">
-                <Label Text="Neuen Nutzer bei Gameucation registrieren!"
+    <ScrollView>
+        <ScrollView.Content>
+            <StackLayout>
+                <StackLayout VerticalOptions="StartAndExpand">
+                    <Frame CornerRadius="0" Padding="0,10,0,10" BorderColor="Transparent">
+                        <Label Text="Neuen Nutzer bei Gameucation registrieren!"
                        HorizontalTextAlignment="Center" FontSize="36" />
-            </Frame>
-        </StackLayout>
-        <StackLayout Padding="10" VerticalOptions="CenterAndExpand">
-            <Entry Placeholder="Vorname" Text="{Binding Firstname}">
-                <Entry.Behaviors>
-                    <xct:TextValidationBehavior Flags="ValidateOnValueChanging,ValidateOnAttaching"
+                    </Frame>
+                </StackLayout>
+                <StackLayout Padding="10" VerticalOptions="CenterAndExpand">
+                    <Entry Placeholder="Vorname" Text="{Binding Firstname}">
+                        <Entry.Behaviors>
+                            <xct:TextValidationBehavior Flags="ValidateOnValueChanging,ValidateOnAttaching"
                         MinimumLength="3" IsValid="{Binding IsFirstnameValid}"/>
-                </Entry.Behaviors>
-            </Entry>
-            <Entry Placeholder="Nachname" Text="{Binding Lastname}">
-                <Entry.Behaviors>
-                    <xct:TextValidationBehavior Flags="ValidateOnValueChanging,ValidateOnAttaching"
+                        </Entry.Behaviors>
+                    </Entry>
+                    <Entry Placeholder="Nachname" Text="{Binding Lastname}">
+                        <Entry.Behaviors>
+                            <xct:TextValidationBehavior Flags="ValidateOnValueChanging,ValidateOnAttaching"
                         MinimumLength="3" IsValid="{Binding IsLastnameValid}"/>
-                </Entry.Behaviors>
-            </Entry>
-            <Entry Placeholder="Spitzname" Text="{Binding Nickname}">
-                <Entry.Behaviors>
-                    <xct:TextValidationBehavior Flags="ValidateOnValueChanging,ValidateOnAttaching"
+                        </Entry.Behaviors>
+                    </Entry>
+                    <Entry Placeholder="Spitzname" Text="{Binding Nickname}">
+                        <Entry.Behaviors>
+                            <xct:TextValidationBehavior Flags="ValidateOnValueChanging,ValidateOnAttaching"
                         MinimumLength="3" IsValid="{Binding IsNicknameValid}"/>
-                </Entry.Behaviors>
-            </Entry>
-            <Entry Placeholder="E-Mail-Adresse" Text="{Binding EMail}">
-                <Entry.Behaviors>
-                    <xct:EmailValidationBehavior Flags="ValidateOnValueChanging,ValidateOnAttaching"
+                        </Entry.Behaviors>
+                    </Entry>
+                    <Entry Placeholder="E-Mail-Adresse" Text="{Binding EMail}">
+                        <Entry.Behaviors>
+                            <xct:EmailValidationBehavior Flags="ValidateOnValueChanging,ValidateOnAttaching"
                         MinimumLength="1" IsValid="{Binding IsEMailValid}"/>
-                </Entry.Behaviors>
-            </Entry>
-            <Entry Placeholder="Passwort" IsPassword="True" Text="{Binding Password}">
-                <Entry.Behaviors>
-                    <xct:TextValidationBehavior Flags="ValidateOnValueChanging,ValidateOnAttaching"
+                        </Entry.Behaviors>
+                    </Entry>
+                    <Entry Placeholder="Passwort" IsPassword="True" Text="{Binding Password}">
+                        <Entry.Behaviors>
+                            <xct:TextValidationBehavior Flags="ValidateOnValueChanging,ValidateOnAttaching"
                         MinimumLength="6" IsValid="{Binding IsPasswordValid}" />
-                </Entry.Behaviors>
-            </Entry>
-            <Entry Placeholder="Passwort Wiederholung" IsPassword="True" Text="{Binding PasswordRepeat}">
-                <Entry.Behaviors>
-                    <xct:TextValidationBehavior Flags="ValidateOnValueChanging,ValidateOnAttaching"
+                        </Entry.Behaviors>
+                    </Entry>
+                    <Entry Placeholder="Passwort Wiederholung" IsPassword="True" Text="{Binding PasswordRepeat}">
+                        <Entry.Behaviors>
+                            <xct:TextValidationBehavior Flags="ValidateOnValueChanging,ValidateOnAttaching"
                         MinimumLength="6" IsValid="{Binding IsPasswordRepeatValid}" />
-                </Entry.Behaviors>
-            </Entry>
-            <Button Text="Neuen Benutzer Registrieren" Command="{Binding RegisterCommand}"
+                        </Entry.Behaviors>
+                    </Entry>
+                    <Button Text="Neuen Benutzer Registrieren" Command="{Binding RegisterCommand}"
                 BackgroundColor="{AppThemeBinding Dark={StaticResource ConfirmButtonDark}, Light={StaticResource ConfirmButton}}"
                 TextColor="{AppThemeBinding Dark={StaticResource TextColorDark}, Light={StaticResource TextColor}}"/>
-            <Button Text="Abbrechen" Command="{Binding DeclineCommand}"
+                    <Button Text="Abbrechen" Command="{Binding DeclineCommand}"
                 BackgroundColor="{AppThemeBinding Dark={StaticResource DeclineButtonDark}, Light={StaticResource DeclineButton}}"
                 TextColor="{AppThemeBinding Dark={StaticResource TextColorDark}, Light={StaticResource TextColor}}"/>
-        </StackLayout>
-    </StackLayout>
+                </StackLayout>
+            </StackLayout>
+        </ScrollView.Content>
+    </ScrollView>
 </ContentPage>

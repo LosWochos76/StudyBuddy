@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.WebUtilities;
 using SimpleHashing.Net;
 using StudyBuddy.Model;
+using System;
+using System.Collections.Generic;
 
 namespace StudyBuddy.BusinessLogic
 {
