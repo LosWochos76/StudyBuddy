@@ -1,27 +1,15 @@
 ﻿using System;
+using System.Threading.Tasks;
 using NETCore.MailKit;
 using NETCore.MailKit.Core;
 using NETCore.MailKit.Infrastructure.Internal;
 using Environment = StudyBuddy.Model.Environment;
-using Microsoft.Extensions.Logging;
-using System.Threading.Tasks;
 
 namespace StudyBuddy.BusinessLogic
 {
     public class MailKitHelper
     {
-        private MailKitOptions options;
-        private readonly ILogger logger;
-
-        public MailKitHelper(ILogger logger)
-        {
-            this.logger = logger;
-            this.options = GetOptionsFromEnvironment();
-
-            logger.LogInformation("Creating MailKitHelper");
-        }
-
-        private MailKitOptions GetOptionsFromEnvironment()
+        public static MailKitOptions GetMailKitOptions()
         {
             var options = new MailKitOptions();
             options.Server = Environment.GetOrDefault("SMTP_SERVER", "localhost");
@@ -34,29 +22,26 @@ namespace StudyBuddy.BusinessLogic
             return options;
         }
 
-        public bool SendMail(string mailTo, string subject, string message)
+        public static bool SendMail(string mailTo, string subject, string message)
         {
-            logger.LogInformation("MailKitHelper.SendMail");
-
             try
             {
+                var options = GetMailKitOptions();
                 var provider = new MailKitProvider(options);
                 var mail = new EmailService(provider);
                 mail.Send(mailTo, subject, message, true);
             }
             catch (Exception e)
             {
-                logger.LogError("Error sending mal!");
-                logger.LogError(e.ToString());
                 return false;
             }
 
             return true;
         }
 
-        public Task<bool> SendMailAsync(string mailTo, string subject, string message)
+        public static Task<bool> SendMailAsync(string mailTo, string subject, string message)
         {
-            return Task.Factory.StartNew(() =>
+            return Task.Run(() =>
             {
                 return SendMail(mailTo, subject, message);
             });

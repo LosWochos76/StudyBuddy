@@ -125,8 +125,7 @@ namespace StudyBuddy.BusinessLogic
                 message = "Guten Tag,<br> um die E-Mail-Adresse Ihres Gameucation Kontos zu bestätigen <a href='" + link.ToString() + "'>hier</a> klicken.";
             }
 
-            var mail_helper = new MailKitHelper(backend.Logger);
-            mail_helper.SendMailAsync(email, subject, message);             
+            MailKitHelper.SendMailAsync(email, subject, message);
         }
 
         public bool CheckToken(string token)
