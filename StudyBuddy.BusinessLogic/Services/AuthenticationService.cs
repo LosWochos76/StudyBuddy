@@ -3,6 +3,7 @@ using SimpleHashing.Net;
 using StudyBuddy.Model;
 using System;
 using System.Collections.Generic;
+using Microsoft.Extensions.Logging;
 
 namespace StudyBuddy.BusinessLogic
 {
@@ -18,6 +19,8 @@ namespace StudyBuddy.BusinessLogic
 
         public LoginResult Login(UserCredentials uc)
         {
+            backend.Logger.LogInformation("AuthenticationService.Login");
+
             if (uc == null || string.IsNullOrEmpty(uc.EMail) || string.IsNullOrEmpty(uc.Password))
                 throw new Exception("Missing email and password!");
 
@@ -85,6 +88,8 @@ namespace StudyBuddy.BusinessLogic
 
         public void SendMail(string email, bool forgotpassword)
         {
+            backend.Logger.LogInformation("AuthenticationService.SendMail");
+
             if (string.IsNullOrEmpty(email))
                 throw new Exception("No email-adress given!");
 
@@ -120,17 +125,20 @@ namespace StudyBuddy.BusinessLogic
                 message = "Guten Tag,<br> um die E-Mail-Adresse Ihres Gameucation Kontos zu bestätigen <a href='" + link.ToString() + "'>hier</a> klicken.";
             }
 
-            MailKitHelper.SendMail(email, subject, message);
+            var mail_helper = new MailKitHelper(backend.Logger);
+            mail_helper.SendMailAsync(email, subject, message);             
         }
 
         public bool CheckToken(string token)
         {
+            backend.Logger.LogInformation("AuthenticationService.CheckToken");
             var jwt = new JwtToken();
             return jwt.FromToken(token) != 0;
         }
 
         public bool CheckPasswordResetToken(string token, string hash)
         {
+            backend.Logger.LogInformation("AuthenticationService.CheckPasswordResetToken");
             var jwt = new JwtToken();
             return jwt.CheckPasswordResetToken(token, hash);
         }

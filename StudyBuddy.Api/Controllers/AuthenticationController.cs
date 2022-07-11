@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using StudyBuddy.BusinessLogic;
 using StudyBuddy.BusinessLogic.Parameters;
 using StudyBuddy.Model;
@@ -9,16 +10,20 @@ namespace StudyBuddy.Api
     public class AuthenticationController : Controller
     {
         private readonly IBackend backend;
+        private readonly ILogger logger;
 
-        public AuthenticationController(IBackend backend)
+        public AuthenticationController(IBackend backend, ILogger<AuthenticationController> logger)
         {
             this.backend = backend;
+            this.logger = logger;
+            logger.LogInformation("Creating AuthenticationController");
         }
 
         [Route("/Login/")]
         [HttpPost]
         public IActionResult Login([FromBody] UserCredentials uc)
         {
+            logger.LogInformation("AuthenticationController.Login");
             return Json(backend.AuthenticationService.Login(uc));
         }
 
@@ -27,6 +32,7 @@ namespace StudyBuddy.Api
         [HttpPut]
         public IActionResult CheckToken([FromBody] string token)
         {
+            logger.LogInformation("AuthenticationController.CheckToken");
             return Json(backend.AuthenticationService.CheckToken(token));
         }
 
@@ -34,6 +40,7 @@ namespace StudyBuddy.Api
         [HttpPost]
         public IActionResult SendPasswortResetMail([FromBody] string email)
         {
+            logger.LogInformation("AuthenticationController.SendPasswortResetMail");
             backend.AuthenticationService.SendMail(email, true);
             return Json(new LoginResult { Status = 0 });
         }
@@ -42,6 +49,7 @@ namespace StudyBuddy.Api
         [HttpPost]
         public IActionResult ResetPassword([FromBody] ResetPasswordData data)
         {
+            logger.LogInformation("AuthenticationController.ResetPassword");
             return Json(backend.UserService.ResetPassword(data));
         }
 
@@ -49,6 +57,7 @@ namespace StudyBuddy.Api
         [HttpPost]
         public IActionResult SendVerificationMail([FromBody] string email)
         {
+            logger.LogInformation("AuthenticationController.SendVerificationMail");
             backend.AuthenticationService.SendMail(email, false);
             return Json(new LoginResult { Status = 0 }); 
         }
@@ -57,6 +66,7 @@ namespace StudyBuddy.Api
         [HttpPost]
         public IActionResult VerifyEmail([FromBody] VerifyEmailData data)
         {
+            logger.LogInformation("AuthenticationController.VerifyEmail");
             return Json(backend.UserService.VerifyEmail(data));
         }
 
@@ -64,10 +74,13 @@ namespace StudyBuddy.Api
         [HttpPost]
         public IActionResult EnableAccount([FromBody] UserCredentials uc)
         {
+            logger.LogInformation("AuthenticationController.EnableAccount");
+
             User user = backend.Repository.Users.ByEmailAllAccounts(uc.EMail);
             LoginResult response = backend.AuthenticationService.Login(uc);
             if (response.Status != 7)
                 return Json(response);
+
             User updatedUser = backend.UserService.EnableAccount(user);
             if (updatedUser == null)
             {
@@ -76,6 +89,7 @@ namespace StudyBuddy.Api
                 response.Status = 6;
                 return Json(response);
             }
+
             response.User = updatedUser;
             return Json(response);
         }
