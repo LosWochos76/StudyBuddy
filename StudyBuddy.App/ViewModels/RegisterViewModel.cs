@@ -115,11 +115,11 @@ namespace StudyBuddy.App.ViewModels
                 return;
             }
 
-            /*if (!EMail.ToLower().EndsWith("@hshl.de") && !EMail.ToLower().EndsWith("@stud.hshl.de"))
+            if (!EMail.ToLower().EndsWith("@hshl.de") && !EMail.ToLower().EndsWith("@stud.hshl.de"))
             {
                 dialog.ShowError("Aktuell können nur E-Mail-Adressen der Hochschule Hamm-Lippstadt genutzt werden!", "Fehler!", "Ok", null);
                 return;
-            }*/
+            }
 
             var user_id = await api.Users.IdByEmail(EMail);
             if (user_id != null && user_id.ID != 0)
@@ -151,8 +151,8 @@ namespace StudyBuddy.App.ViewModels
                 return;
             }
 
-            dialog.ShowMessage("Deine Registrierung war erfolgreich! Bitte klicke auf den Link in der Bestätigungsmail, die du erhalten hast." +
-                "Danach kannst du dich in der App einloggen.!", "Herzlich willkommen bei Gameucation!");
+            dialog.ShowMessage("Deine Registrierung war erfolgreich! Bitte klicke auf den Link in der Bestätigungsmail, die du erhalten hast. " +
+                "Danach kannst du dich in der App einloggen!", "Herzlich willkommen bei Gameucation!");
 
             await Navigation.Pop();
         }

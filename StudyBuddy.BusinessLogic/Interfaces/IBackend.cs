@@ -1,5 +1,4 @@
-﻿using Microsoft.Extensions.Logging;
-using StudyBuddy.BusinessLogic.Interfaces;
+﻿using StudyBuddy.BusinessLogic.Interfaces;
 using StudyBuddy.BusinessLogic.Services;
 using StudyBuddy.Model;
 using StudyBuddy.Persistence;
@@ -9,7 +8,6 @@ namespace StudyBuddy.BusinessLogic
     public interface IBackend
     {
         User CurrentUser { get; set; }
-        ILogger Logger { get; }
         IRepository Repository { get; }
         IAuthenticationService AuthenticationService { get; }
         IChallengeService ChallengeService { get; }

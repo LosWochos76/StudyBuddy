@@ -2,19 +2,15 @@
 using StudyBuddy.BusinessLogic.Services;
 using StudyBuddy.Model;
 using StudyBuddy.Persistence;
-using Microsoft.Extensions.Logging;
 
 namespace StudyBuddy.BusinessLogic
 {
     public class Backend : IBackend
     {
         private readonly JwtToken jwt = new JwtToken();
-        private readonly ILogger logger;
 
-        public Backend(ILogger<Backend> logger)
+        public Backend()
         {
-            this.logger = logger;
-
             Repository = new Repository();
             AuthenticationService = new AuthenticationService(this);
             ChallengeService = new ChallengeService(this);
@@ -31,12 +27,9 @@ namespace StudyBuddy.BusinessLogic
             ImageService = new ImageService(this);
             NotificationUserMetadataService = new NotificationUserMetadataService(this);
             CommentService = new CommentService(this);
-
-            logger.LogInformation("Backend created");
         }
 
         public IRepository Repository { get; }
-        public ILogger Logger { get { return logger; } }
         public User CurrentUser { get; set; }
         public IAuthenticationService AuthenticationService { get; }
         public IChallengeService ChallengeService { get; }
