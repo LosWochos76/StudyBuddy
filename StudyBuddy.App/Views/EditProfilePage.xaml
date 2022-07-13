@@ -119,7 +119,10 @@
                        IsVisible="{Binding PasswordConfirmNotValid}"></Label>
                 <Button Text="Fertig"
                         Command="{Binding ConfirmCommand}"
-                        BackgroundColor="{StaticResource ConfirmButton}"></Button>
+                        BackgroundColor="{AppThemeBinding Dark={StaticResource ConfirmButtonDark}, Light={StaticResource ConfirmButton}}"></Button>
+                <Button Text="Abbrechen"
+                        Command="{Binding CancelCommand}"
+                        BackgroundColor="{AppThemeBinding Dark={StaticResource DeclineButtonDark}, Light={StaticResource DeclineButton}}"></Button>
             </StackLayout>
         </ScrollView.Content>
     </ScrollView>

@@ -123,7 +123,7 @@
                                 <Button x:Name="button1"
                                         Text="Herausforderung Abschließen"
                                         Command="{Binding ConfirmChallenge}"
-                                        BackgroundColor="{StaticResource ConfirmButton}"
+                                        BackgroundColor="{AppThemeBinding Dark={StaticResource ConfirmButtonDark}, Light={StaticResource ConfirmButton}}"
                                         Margin="0,20,0,0"/>
                             </StackLayout>
                         </StackLayout>

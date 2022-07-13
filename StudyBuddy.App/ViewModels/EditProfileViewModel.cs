@@ -2,6 +2,8 @@
 using StudyBuddy.App.Misc;
 using StudyBuddy.App.Views;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
+using Xamarin.CommunityToolkit.ObjectModel;
 using Xamarin.Forms;
 
 namespace StudyBuddy.App.ViewModels
@@ -10,6 +12,7 @@ namespace StudyBuddy.App.ViewModels
     {
         public UserViewModel User { get; set; }
         public Command ConfirmCommand { get; }
+        public AsyncCommand CancelCommand { get; }
 
         public EditProfileViewModel(IApi api, IDialogService dialog, INavigationService navigation) : base(api, dialog, navigation)
         {
@@ -18,6 +21,7 @@ namespace StudyBuddy.App.ViewModels
             _lastname = User.Lastname;
             _nickname = User.Nickname;
             ConfirmCommand = new Command(Update, ConfirmAllowed);
+            CancelCommand = new AsyncCommand(Decline);
         }
 
         private string _firstname = string.Empty;
@@ -167,6 +171,11 @@ namespace StudyBuddy.App.ViewModels
                 api.Authentication.Logout();
                 await Shell.Current.Navigation.PushAsync(new LoginPage());
             }
+        }
+
+        public async Task Decline()
+        {
+            await Navigation.Pop();
         }
     }
 }
