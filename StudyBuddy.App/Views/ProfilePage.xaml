@@ -77,19 +77,6 @@
                         </FormattedString>
                     </Label.FormattedText>
                 </Label>
-                <Label Grid.Row="3"
-                       Grid.Column="0"
-                       Grid.ColumnSpan="3"
-                       Padding="0,10,0,0"
-                       FontSize="20">
-                    <Label.FormattedText>
-                        <FormattedString>
-                            <Span Text="Rolle:  "
-                                  FontAttributes="Bold" />
-                            <Span Text="{Binding User.Role}" />
-                        </FormattedString>
-                    </Label.FormattedText>
-                </Label>
                 <Button Grid.Row="4"
                         Grid.Column="0"
                         Grid.ColumnSpan="3"
