@@ -123,6 +123,7 @@ namespace StudyBuddy.BusinessLogic
 
         public User Insert(User obj)
         {
+            obj.Role = Role.Student;
             backend.Repository.Users.Insert(obj);
             backend.AuthenticationService.SendMail(obj.Email, false);
             backend.BusinessEventService.TriggerEvent(this,
