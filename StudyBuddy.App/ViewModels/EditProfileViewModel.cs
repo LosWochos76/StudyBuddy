@@ -1,6 +1,7 @@
 ﻿using StudyBuddy.App.Api;
 using StudyBuddy.App.Misc;
 using StudyBuddy.App.Views;
+using StudyBuddy.Model;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Xamarin.CommunityToolkit.ObjectModel;
@@ -10,16 +11,15 @@ namespace StudyBuddy.App.ViewModels
 {
     public class EditProfileViewModel : ViewModelBase
     {
-        public UserViewModel User { get; set; }
         public Command ConfirmCommand { get; }
         public AsyncCommand CancelCommand { get; }
 
         public EditProfileViewModel(IApi api, IDialogService dialog, INavigationService navigation) : base(api, dialog, navigation)
         {
-            User = api.Authentication.CurrentUser;
-            _firstname = User.Firstname;
-            _lastname = User.Lastname;
-            _nickname = User.Nickname;
+            _firstname = api.Authentication.CurrentUser.Firstname;
+            _lastname = api.Authentication.CurrentUser.Lastname;
+            _nickname = api.Authentication.CurrentUser.Nickname;
+
             ConfirmCommand = new Command(Update, ConfirmAllowed);
             CancelCommand = new AsyncCommand(Decline);
         }
@@ -155,12 +155,35 @@ namespace StudyBuddy.App.ViewModels
         {
             try
             {
-                User.Firstname = _firstname.Trim();
-                User.Lastname = _lastname.Trim();
-                User.Nickname = _nickname.Trim();
-                if(!string.IsNullOrEmpty(_password) && _password == _passwordConfirm)
-                    User.Password = _password.Trim();
-                await api.Users.Update(User);
+                var user = new User();
+                user.ID = api.Authentication.CurrentUser.ID;
+                user.Email = api.Authentication.CurrentUser.Email;
+                user.EmailConfirmed = api.Authentication.CurrentUser.EmailConfirmed;
+                user.AccountActive = api.Authentication.CurrentUser.AccountActive;
+
+                user.Firstname = _firstname.Trim();
+                user.Lastname = _lastname.Trim();
+                user.Nickname = _nickname.Trim();
+
+                if (!string.IsNullOrEmpty(_password) && _password == _passwordConfirm)
+                    user.Password = _password.Trim();
+
+                var result = await api.Users.Update(user);
+                if (result)
+                {
+                    api.Authentication.CurrentUser.Firstname = user.Firstname;
+                    api.Authentication.CurrentUser.Lastname = user.Lastname;
+                    api.Authentication.CurrentUser.Nickname = user.Nickname;
+                }
+                else
+                {
+                    dialog.ShowError(
+                        "Die Änderungen konnten nicht gespeichert werden!",
+                        "Achtung!",
+                        "Ok",
+                        null);
+                }
+
             }
             catch(ApiException e)
             {
@@ -168,8 +191,7 @@ namespace StudyBuddy.App.ViewModels
             }
             finally
             {
-                api.Authentication.Logout();
-                await Shell.Current.Navigation.PushAsync(new LoginPage());
+                await Navigation.Pop();
             }
         }
 

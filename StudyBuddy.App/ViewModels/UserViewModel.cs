@@ -70,6 +70,7 @@ namespace StudyBuddy.App.ViewModels
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
+
         public static UserViewModel FromModel(User u)
         {
             return new UserViewModel()
@@ -82,6 +83,9 @@ namespace StudyBuddy.App.ViewModels
                 Role = u.Role
             };
         }
+
+
+
         public Color StatusColor
         {
             get
@@ -92,6 +96,7 @@ namespace StudyBuddy.App.ViewModels
                     return Application.Current.UserAppTheme == OSAppTheme.Light ? Color.FromHex("#81C784") : Color.FromHex("#327135");
             }
         }
+
         public string StatusText
         {
             get
