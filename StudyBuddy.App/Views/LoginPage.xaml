@@ -23,7 +23,7 @@
                     <Label.FormattedText>
                         <FormattedString>
                             <FormattedString.Spans>
-                                <Span Text="Wenn du herausfinden willst, was Gameucation &#10; für dich als Studierender tun kann, klicke " />
+                                <Span Text="Um herauszufinden, was Gameucation &#10; für dich tun kann, klicke " />
                                 <Span Text="hier"
                                       TextColor="#0A84FF"
                                       TextDecorations="Underline">
