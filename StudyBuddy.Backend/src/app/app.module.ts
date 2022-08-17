@@ -32,7 +32,6 @@ import { RequestListComponent } from './request/request-list/request-list.compon
 import { TagListComponent } from './tag/tag-list/tag-list.component';
 import { TagEditComponent } from './tag/tag-edit/tag-edit.component';
 import { ChallengeSuccessComponent } from './challenge/challenge-success/challenge-success.component';
-import { NotificationPageComponent } from './notification/notification-page/notification-page.component';
 import { NotificationBroadcastComponent } from './notification/notification-broadcast/notification-broadcast.component';
 import { FcmTokenListComponent } from './notification/fcm-token-list/fcm-token-list.component';
 import { LoggingListComponent } from './misc/logging-list/logging-list.component';
@@ -75,7 +74,6 @@ import { RecoverComponent } from './authentication/recover/recover.component';
     TagListComponent,
     TagEditComponent,
     ChallengeSuccessComponent,
-    NotificationPageComponent,
     NotificationBroadcastComponent,
     FcmTokenListComponent,
     LoggingListComponent,

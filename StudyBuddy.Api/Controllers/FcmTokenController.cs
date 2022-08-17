@@ -15,9 +15,12 @@ namespace StudyBuddy.Api
 
         [Route("/FcmToken/")]
         [HttpGet]
-        public IActionResult Get()
+        public IActionResult Get([FromQuery] FcmTokenFilter filter)
         {
-            return Json(backend.FcmTokenService.GetAll());
+            if (filter == null)
+                filter = new FcmTokenFilter();
+
+            return Json(backend.FcmTokenService.GetAll(filter));
         }
 
         [Route("/FcmToken/")]
@@ -25,6 +28,14 @@ namespace StudyBuddy.Api
         public IActionResult Insert([FromBody] FcmTokenSaveDto obj)
         {
             return Json(backend.FcmTokenService.Save(obj));
+        }
+
+        [Route("/FcmToken/")]
+        [HttpDelete]
+        public IActionResult DeleteOldTokens()
+        {
+            backend.FcmTokenService.DeleteOldTokens();
+            return Json(new { Status = "ok" });
         }
     }
 }

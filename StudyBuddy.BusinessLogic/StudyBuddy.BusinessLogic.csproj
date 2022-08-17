@@ -30,10 +30,9 @@
         <Folder Include="Misc\" />
     </ItemGroup>
     <ItemGroup>
-        <PackageReference Include="EasyCronJob.Core" Version="2.1.0" />
         <PackageReference Include="FirebaseAdmin" Version="2.3.0" />
         <PackageReference Include="Microsoft.AspNetCore.WebUtilities" Version="2.2.0" />
-        <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.21.0" />
+        <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.22.0" />
         <PackageReference Include="NETCore.MailKit" Version="2.1.0" />
         <PackageReference Include="NETCore.Encrypt" Version="2.1.0" />
         <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Scripting" Version="4.2.0" />

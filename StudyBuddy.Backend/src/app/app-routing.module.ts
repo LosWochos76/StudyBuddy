@@ -19,7 +19,6 @@ import { RegisterUserComponent } from './user/register-user/register-user.compon
 import { UserEditComponent } from './user/user-edit/user-edit.component';
 import { UserListComponent } from './user/user-list/user-list.component';
 import { UserSettingsComponent } from './user/user-settings/user-settings.component';
-import { NotificationPageComponent } from "./notification/notification-page/notification-page.component";
 import { NotificationBroadcastComponent } from "./notification/notification-broadcast/notification-broadcast.component";
 import { FcmTokenListComponent } from './notification/fcm-token-list/fcm-token-list.component';
 import { LoggingListComponent } from './misc/logging-list/logging-list.component';
@@ -48,14 +47,8 @@ const routes: Routes = [
   { path: 'userinfo/:id', component: UserInfoComponent, canActivate: [RouteGuardService] },
   { path: 'usersettings', component: UserSettingsComponent, canActivate: [RouteGuardService] },
   { path: 'request', component: RequestListComponent, canActivate: [RouteGuardService] },
-  {
-    path: 'notification', component: NotificationPageComponent, canActivate: [RouteGuardService],
-    children: [
-      { path: 'broadcast', component: NotificationBroadcastComponent },
-      { path: 'tokens', component: FcmTokenListComponent },
-      { path: '', redirectTo: 'broadcast', pathMatch: 'full' },
-    ]
-  },
+  { path: 'broadcast', component: NotificationBroadcastComponent, canActivate: [RouteGuardService] },
+  { path: 'tokens', component: FcmTokenListComponent, canActivate: [RouteGuardService] },
   { path: 'request/:id', component: RequestEditComponent, canActivate: [RouteGuardService] },
   { path: 'tag', component: TagListComponent, canActivate: [RouteGuardService] },
   { path: 'tag/:id', component: TagEditComponent, canActivate: [RouteGuardService] },

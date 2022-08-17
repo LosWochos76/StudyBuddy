@@ -18,19 +18,27 @@
             </div>
         </form>
         <br>
-        <div *ngIf="login_error">
+        <div *ngIf="login_error == 3">
             <div class="alert alert-danger" role="alert">
-                Der von dir eingegebene Benutzername ist keinem Konto zugeordnet. Bitte &uuml;berpr&uuml;fe deinen Benutzernamen und versuche es noch einmal.
+                Der von dir eingegebene Benutzername ist keinem Konto zugeordnet. 
+                Bitte &uuml;berpr&uuml;fe deinen Benutzernamen und versuche es noch einmal.
             </div>
             <br>
             <button class="btn btn-warning" (click)="onPasswordReset()">Passwort vergessen</button>
         </div>
-        <div *ngIf="login_error_2">
+        <div *ngIf="login_error == 2">
             <div class="alert alert-danger" role="alert">
-                Das eingegebene Passwort ist falsch. Bitte &uuml;berpr&uuml;fe es noch einmal.
+                Das eingegebene Passwort ist falsch. 
+                Bitte &uuml;berpr&uuml;fe es noch einmal.
             </div>
             <br>
             <button class="btn btn-warning" (click)="onPasswordReset()">Passwort vergessen</button>
+        </div>
+        <div *ngIf="login_error == 7">
+            <div class="alert alert-danger" role="alert">
+                Der Benutzer ist deaktiviert. 
+                Bitte wende dich an einen Administrator
+            </div>
         </div>
 
    

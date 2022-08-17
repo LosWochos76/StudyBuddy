@@ -1,26 +1,30 @@
-<table class="table">
+<br>
+<div class="row">
+  <div class="col-10">
+    <button class="btn btn-danger" (click)="onDeleteOld()">Alte Tokens löschen</button>&nbsp;
+  </div>
+</div>
+<br>
+<table  class="table table-bordered">
     <thead>
     <tr>
         <th scope="col">ID</th>
         <th scope="col">Token</th>
-        <th scope="col">User ID</th>
-        <th scope="col">Erstellt</th>
-        <th scope="col">Zuletzt</th>
+        <th scope="col">User</th>
+        <th scope="col">Erstellt am</th>
+        <th scope="col">Zuletzt gesehen am</th>
     </tr>
     </thead>
     <tbody>
-    
-    <ng-container *ngIf="$tokens | async as tokens">
-        <ng-container *ngFor="let token of tokens">
-            <tr>
-                <th scope="row">{{ token.id }}</th>
-                <td>{{ token.token }}</td>
-                <td>{{ token.userID }}</td>
-                <td>{{ token.created }}</td>
-                <td>{{ token.lastSeen }}</td>
-            </tr>
-        </ng-container>
+    <ng-container *ngIf="tokens != null">
+        <tr *ngFor="let obj of tokens.objects | paginate: { itemsPerPage: 10, currentPage: page, totalItems: tokens.count }; index as i">
+            <th scope="row">{{ obj.id }}</th>
+            <td>{{ ( obj.token | slice:0:6 ) + '...' }}</td>
+            <td>{{ getFullNamOfUser(obj.userID)}}</td>
+            <td>{{ obj.created | date:'dd.MM.yyyy' }}</td>
+            <td>{{ obj.lastSeen | date:'dd.MM.yyyy' }}</td>
+        </tr>
     </ng-container>
-    <ng-container  > </ng-container>
     </tbody>
 </table>
+<pagination-controls (pageChange)="onTableDataChange($event)"></pagination-controls>

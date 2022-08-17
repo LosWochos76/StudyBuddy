@@ -13,7 +13,7 @@ namespace StudyBuddy.Model
         public string PasswordHash { get; set; }
 
         public string Email { get; set; }
-        public Role Role { get; set; }
+        public Role Role { get; set; } = Role.Student;
         public bool EmailConfirmed { get; set; }
         public bool AccountActive { get; set; }
 

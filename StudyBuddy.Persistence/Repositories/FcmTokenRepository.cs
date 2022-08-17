@@ -16,24 +16,28 @@ namespace StudyBuddy.Persistence
             CreateTable();
         }
 
-        public IEnumerable<FcmToken> ForUser(int user_id, int from = 0, int max = 1000)
+        public IEnumerable<FcmToken> GetAll(FcmTokenFilter filter)
         {
             var qh = new QueryHelper(connection_string);
-            qh.AddParameter(":from", from);
-            qh.AddParameter(":max", max);
-            qh.AddParameter(":user_id", user_id);
-            var set = qh.ExecuteQuery(
-                "SELECT id,token,user_id,created,last_seen " +
-                "FROM fcm_tokens where user_id=:user_id order by created limit :max offset :from");
-            return converter.Multiple(set);
-        }
+            qh.AddParameter(":from", filter.Start);
+            qh.AddParameter(":max", filter.Count);
 
-        public IEnumerable<FcmToken> GetAll(int from = 0, int max = 1000)
-        {
-            var qh = new QueryHelper(connection_string, new {from, max});
             var set = qh.ExecuteQuery(
                 "SELECT id,token,user_id,created,last_seen " +
                 "FROM fcm_tokens order by created limit :max offset :from");
+
+            return converter.Multiple(set);
+        }
+
+        public IEnumerable<FcmToken> GetForUser(int user_id)
+        {
+            var qh = new QueryHelper(connection_string);
+            qh.AddParameter(":user_id", user_id);
+
+            var set = qh.ExecuteQuery(
+                "SELECT id,token,user_id,created,last_seen " +
+                "FROM fcm_tokens order by created where user_id=:user_id");
+
             return converter.Multiple(set);
         }
 
@@ -98,6 +102,12 @@ namespace StudyBuddy.Persistence
             qh.AddParameter(":token", token);
             var set = qh.ExecuteQuery("select * from fcm_tokens where token=:token");
             return converter.Single(set);
+        }
+
+        public int GetCount(FcmTokenFilter filter)
+        {
+            var qh = new QueryHelper(connection_string);
+            return qh.ExecuteQueryToSingleInt("select count(*) from fcm_tokens");
         }
     }
 }

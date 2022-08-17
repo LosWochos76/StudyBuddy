@@ -13,15 +13,19 @@ namespace StudyBuddy.BusinessLogic
             this.backend = backend;
         }
 
-        public IEnumerable<FcmToken> GetAll()
+        public FcmTokenList GetAll(FcmTokenFilter filter)
         {
             if (backend.CurrentUser == null)
                 throw new Exception("Unauthorized!");
 
-            if (backend.CurrentUser.IsAdmin)
-                return backend.Repository.FcmTokens.GetAll();
+            if (!backend.CurrentUser.IsAdmin)
+                throw new Exception("Unauthorized!");
 
-            return backend.Repository.FcmTokens.ForUser(backend.CurrentUser.ID);
+            return new FcmTokenList()
+            {
+                Objects = backend.Repository.FcmTokens.GetAll(filter),
+                Count = backend.Repository.FcmTokens.GetCount(filter)
+            };  
         }
 
         public FcmToken Save(FcmTokenSaveDto obj)
@@ -38,9 +42,12 @@ namespace StudyBuddy.BusinessLogic
             return token;
         }
 
-        public IEnumerable<FcmToken> GetForUser(int userId)
+        public void DeleteOldTokens()
         {
-            return backend.Repository.FcmTokens.ForUser(userId);
+            if (backend.CurrentUser == null || !backend.CurrentUser.IsAdmin)
+                throw new Exception("Unauthorized!");
+
+            backend.Repository.FcmTokens.DeleteOldTokens();
         }
     }
 }

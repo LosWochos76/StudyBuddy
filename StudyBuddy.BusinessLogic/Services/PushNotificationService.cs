@@ -19,11 +19,12 @@ namespace StudyBuddy.BusinessLogic
 
         public void BroadcastMessage(PushNotificationBroadcastDto obj)
         {
-            var fcmTokens = backend.Repository.FcmTokens.GetAll()
+            var filter = new FcmTokenFilter();
+            var fcmTokens = backend.Repository.FcmTokens.GetAll(filter)
                 .Select(token => token.Token)
                 .ToList();
 
-            FirebaseMessaging.DefaultInstance.SendMulticastAsync(new MulticastMessage
+            var message = new MulticastMessage
             {
                 Tokens = fcmTokens,
                 Notification =
@@ -31,30 +32,38 @@ namespace StudyBuddy.BusinessLogic
                     Title = obj.Title,
                     Body = obj.Body
                 }
-            });
-        }
+            };
 
-        public async void SendMessage(IEnumerable<string> tokens, string title, string body,
-            PushNotificationData pushNotificationData = null)
-        {
             try
             {
-                await FirebaseMessaging.DefaultInstance.SendMulticastAsync(new MulticastMessage
-                {
-                    Tokens = tokens.ToList(),
-                    Notification = new Notification
-                    {
-                        Title = title,
-                        Body = body
-                    },
-                    Data = pushNotificationData.toData()
-                });
+                FirebaseMessaging.DefaultInstance.SendMulticastAsync(message);
             }
-            catch (
-                FirebaseMessagingException e)
+            catch (Exception e)
             {
-                Console.WriteLine(e);
-                throw e;
+                backend.Logging.LogError("Error sending push message: " + e.ToString());
+            }
+        }
+
+        public async void SendMessage(IEnumerable<string> tokens, string title, string body, PushNotificationData pushNotificationData = null)
+        {
+            var message = new MulticastMessage
+            {
+                Tokens = tokens.ToList(),
+                Notification = new Notification
+                {
+                    Title = title,
+                    Body = body
+                },
+                Data = pushNotificationData.toData()
+            };
+
+            try
+            {
+                await FirebaseMessaging.DefaultInstance.SendMulticastAsync(message);
+            }
+            catch (Exception e)
+            {
+                backend.Logging.LogError("Error sending push message: " + e.ToString());
             }
         }
 
@@ -66,13 +75,12 @@ namespace StudyBuddy.BusinessLogic
             users.ForEach(user =>
             {
                 var userMetaDatas = metadatas.FindAll(userMetadata => userMetadata.OwnerId == user.ID);
-
-                if (userMetaDatas.Count == 0) return;
-
+                if (userMetaDatas.Count == 0)
+                    return;
 
                 var text = $"Sie haben {userMetaDatas.Count} neue Benachrichtigungen.";
+                var fcmTokens = backend.Repository.FcmTokens.GetForUser(user.ID).Select(token => token.Token).ToList();
 
-                var fcmTokens = backend.FcmTokenService.GetForUser(user.ID).Select(token => token.Token).ToList();
                 backend.PushNotificationService.SendMessage(fcmTokens, "Gameucation", text,  new PushNotificationData()
                 {
                     PushNotificationType = PushNotificationTypes.NewNotifications
@@ -85,9 +93,8 @@ namespace StudyBuddy.BusinessLogic
             if (backend.CurrentUser.ID == userId) return;
 
             var user = backend.Repository.Users.ById(userId);
-            var fcmTokens = backend.Repository.FcmTokens.ForUser(user.ID).Select(token => token.Token);
+            var fcmTokens = backend.Repository.FcmTokens.GetForUser(user.ID).Select(token => token.Token);
             
-
             backend.PushNotificationService.SendMessage(fcmTokens, "Gameucation", $"{this.backend.CurrentUser.Firstname} {this.backend.CurrentUser.Lastname} gefällt Ihr Beitrag.", new PushNotificationData()
             {
                 PushNotificationType = PushNotificationTypes.Liked
@@ -96,16 +103,17 @@ namespace StudyBuddy.BusinessLogic
 
         public void SendUserCommentNotification(int userId)
         {
-            if (backend.CurrentUser.ID == userId) return;
+            if (backend.CurrentUser.ID == userId)
+                return;
 
             var user = backend.Repository.Users.ById(userId);
-            var fcmTokens = backend.Repository.FcmTokens.ForUser(user.ID).Select(token => token.Token);
+            var fcmTokens = backend.Repository.FcmTokens.GetForUser(user.ID).Select(token => token.Token);
 
             backend.PushNotificationService.SendMessage(fcmTokens, "Gameucation",
-                $"{this.backend.CurrentUser.Firstname} {this.backend.CurrentUser.Lastname} hat ihren Beitrag kommentiert.", new PushNotificationData()
-                {
-                    PushNotificationType = PushNotificationTypes.Comment
-                });
+            $"{this.backend.CurrentUser.Firstname} {this.backend.CurrentUser.Lastname} hat ihren Beitrag kommentiert.", new PushNotificationData()
+            {
+                PushNotificationType = PushNotificationTypes.Comment
+            });
         }
     }
 }

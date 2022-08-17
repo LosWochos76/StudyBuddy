@@ -1,13 +1,9 @@
-using System;
-using Cronos;
-using EasyCronJob.Core;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
 using StudyBuddy.BusinessLogic;
-using StudyBuddy.BusinessLogic.Cron;
 
 namespace StudyBuddy.Api
 {
@@ -37,20 +33,6 @@ namespace StudyBuddy.Api
                     Description = "The RESful API of StudyBuddy",
                     Version = "v1"
                 });
-            });
-
-            services.ApplyResulation<UnseenNotificationsCron>(options =>
-            {
-                options.CronExpression = "0 7 * * MON";
-                options.TimeZoneInfo = TimeZoneInfo.Local;
-                options.CronFormat = CronFormat.Standard;
-            });
-
-            services.ApplyResulation<DeleteOldFCMTokensCron>(options =>
-            {
-                options.CronExpression = "0 4 * * *";
-                options.TimeZoneInfo = TimeZoneInfo.Local;
-                options.CronFormat = CronFormat.Standard;
             });
         }
 

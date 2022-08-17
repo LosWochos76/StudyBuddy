@@ -12,35 +12,35 @@ import { UserService } from 'src/app/services/user.service';
   styleUrls: ['./request-list.component.css']
 })
 export class RequestListComponent implements OnInit {
-    page = 1;
-    total = 0;
-  objects:Request[] = [];
-  selected:Request = null;
+  page = 1;
+  total = 0;
+  objects: Request[] = [];
+  selected: Request = null;
   user_cache = new Map();
 
   constructor(
-    private logger:LoggingService, 
-    private service:RequestService,
-    private router:Router,
-    private user_service:UserService) { }
+    private logger: LoggingService,
+    private service: RequestService,
+    private router: Router,
+    private user_service: UserService) { }
 
   async ngOnInit() {
-      var fullList = await this.service.getAll(this.page);
-      this.objects = fullList.objects;
-      this.total = fullList.count;
-      this.service.changed.subscribe(async () => {
-          var result = await this.service.getAll(this.page)
-          this.objects = result.objects;
-          this.total = result.count;
+    var fullList = await this.service.getAll(this.page);
+    this.objects = fullList.objects;
+    this.total = fullList.count;
+    this.service.changed.subscribe(async () => {
+      var result = await this.service.getAll(this.page)
+      this.objects = result.objects;
+      this.total = result.count;
 
-      });
+    });
 
     this.loadUserCache();
-    }
+  }
   async onTableDataChange(event) {
-        this.page = event;
-        var fullList = await this.service.getAll(event);
-        this.objects = fullList.objects;
+    this.page = event;
+    var fullList = await this.service.getAll(event);
+    this.objects = fullList.objects;
   }
 
   private loadUserCache() {
@@ -50,19 +50,19 @@ export class RequestListComponent implements OnInit {
     }
   }
 
-  private async addToUserCache(id:number) {
+  private async addToUserCache(id: number) {
     if (!this.user_cache.has(id))
       this.user_cache.set(id, await this.user_service.byId(id));
   }
 
-  getFullNamOfUser(id:number) {
+  getFullNamOfUser(id: number) {
     if (this.user_cache.has(id))
       return this.user_cache.get(id).fullName();
-    
+
     return "";
   }
-  
-  onSelect(obj:Request) {
+
+  onSelect(obj: Request) {
     this.selected = obj;
   }
 
@@ -73,7 +73,7 @@ export class RequestListComponent implements OnInit {
   onDelete() {
     if (!this.isSelected())
       return;
-    
+
     this.logger.debug("User wants to delete a Request");
     this.service.remove(this.selected.id);
     this.selected = null;
