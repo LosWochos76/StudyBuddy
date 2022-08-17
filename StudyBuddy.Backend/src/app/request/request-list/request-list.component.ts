@@ -37,6 +37,7 @@ export class RequestListComponent implements OnInit {
 
     this.loadUserCache();
   }
+
   async onTableDataChange(event) {
     this.page = event;
     var fullList = await this.service.getAll(event);
@@ -51,12 +52,16 @@ export class RequestListComponent implements OnInit {
   }
 
   private async addToUserCache(id: number) {
-    if (!this.user_cache.has(id))
-      this.user_cache.set(id, await this.user_service.byId(id));
+    if (id != 0 && !this.user_cache.has(id)) {
+      var obj = await this.user_service.byId(id);
+      
+      if (obj != null)
+        this.user_cache.set(id, obj);
+    }
   }
 
   getFullNamOfUser(id: number) {
-    if (this.user_cache.has(id))
+    if (id != 0 && this.user_cache.has(id))
       return this.user_cache.get(id).fullName();
 
     return "";
