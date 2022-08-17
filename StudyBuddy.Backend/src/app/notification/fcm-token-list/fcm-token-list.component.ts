@@ -20,12 +20,19 @@ export class FcmTokenListComponent implements OnInit {
 
   async ngOnInit() {
     this.loadData();
+    this.loadUsers();
   }
 
   async loadData() {
     this.tokens = await this.fcm_token_service.getAll();
+  }
+
+  async loadUsers() {
     for (let obj of this.tokens.objects) {
-      this.user_cache.set(obj.userID, await this.user_service.byId(obj.userID));
+      if (obj.userID != 0 && !this.user_cache.has(obj.userID)) {
+        let user = await this.user_service.byId(obj.userID)
+        this.user_cache.set(obj.userID, user);
+      }
     }
   }
 
