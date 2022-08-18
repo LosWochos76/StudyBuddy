@@ -31,5 +31,8 @@ namespace StudyBuddy.BusinessLogic
         // Challenges and Badges
         UserList GetAllUsersThatAcceptedChallenge(int challenge_id);
         UserList GetAllUsersHavingBadge(int badge_id);
+
+        // Misc
+        void SendMailToUser(MailDto mail);
     }
 }

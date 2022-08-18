@@ -1,14 +1,15 @@
+<br>
+<h1>Push-Nachricht an alle mobilen Endgeräte schicken</h1>
 <form [formGroup]="form">
-    <p class="text-justify mt-2">Sendet eine Nachricht an alle Benutzer.</p>
-
     <div class="mb-1">
-        <label  class="form-label">Titel</label>
+        <label class="form-label">Titel</label>
         <input formControlName="title" type="text" class="form-control">
     </div>
     <div class="mb-1">
-        <label  class="form-label">Body</label>
+        <label class="form-label">Body</label>
         <textarea formControlName="body" class="form-control"></textarea>
     </div>
 
-    <button (click)="handleSubmit()" type="submit" [disabled]="form.invalid" class="btn btn-primary mt-1">Senden</button>
+    <button (click)="handleSubmit()" type="submit" [disabled]="form.invalid"
+        class="btn btn-primary mt-1">Senden</button>
 </form>

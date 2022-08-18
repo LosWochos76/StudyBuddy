@@ -19,5 +19,17 @@ namespace StudyBuddy.Model
             8 -> invalid passwordreset/verifyemail Token
         */
         public string Token { get; set; }
+
+        public LoginResult(int status)
+        {
+            Status = status;
+        }
+
+        public LoginResult(int status, string token, User user)
+        {
+            Status = status;
+            Token = token;
+            User = user;
+        }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using FirebaseAdmin.Messaging;
 using StudyBuddy.BusinessLogic.Parameters;
 using StudyBuddy.Model;
 
@@ -49,69 +50,47 @@ namespace StudyBuddy.BusinessLogic
         public LoginResult ResetPassword(ResetPasswordData data)
         {  
             if (data == null)
-            {
                 throw new Exception("No data passed to resetpassword function!");
-            }
+
             User user = backend.Repository.Users.ByEmailAllAccounts(data.Email);
             if (user == null)
             {
                 backend.Logging.LogDebug($"User with email {data.Email} not found!");
-                return new LoginResult
-                {
-                    Status = 3
-                };
+                return new LoginResult(3);
             }
+
             if (!backend.AuthenticationService.CheckPasswordResetToken(data.Token, user.PasswordHash))
             {
                 backend.Logging.LogDebug($"Invalid password reset token for User with email {data.Email}!");
-                return new LoginResult
-                {
-                    Status = 8
-                };
+                return new LoginResult(8);
             }
-            else
-            {
-                user.Password = data.Password;
-                backend.Repository.Users.Update(user);
-                return new LoginResult
-                {
-                    Status = 0
-                };
-            }
+
+            user.Password = data.Password;
+            backend.Repository.Users.Update(user);
+            return new LoginResult(0);
         }
 
         public LoginResult VerifyEmail(VerifyEmailData data)
         {
             if (data == null)
-            {
                 throw new Exception("No data passed to verifyemail function!");
-            }
+
             User user = backend.Repository.Users.ByEmailAllAccounts(data.Email);
             if (user == null)
             {
                 backend.Logging.LogDebug($"User with email {data.Email} not found!");
-                return new LoginResult
-                {
-                    Status = 3
-                };
+                return new LoginResult(3);
             }
+
             if (!backend.AuthenticationService.CheckPasswordResetToken(data.Token, user.PasswordHash))
             {
                 backend.Logging.LogDebug($"Invalid verification token for user with email {data.Email}!");
-                return new LoginResult
-                {
-                    Status = 8
-                };
+                return new LoginResult(8);
             }
-            else
-            {
-                user.EmailConfirmed = true;
-                backend.Repository.Users.Update(user);
-                return new LoginResult
-                {
-                    Status = 0
-                };
-            }
+            
+            user.EmailConfirmed = true;
+            backend.Repository.Users.Update(user);
+            return new LoginResult(0);
         }
 
         public User EnableAccount(User obj)
@@ -123,11 +102,11 @@ namespace StudyBuddy.BusinessLogic
 
         public User Insert(User obj)
         {
-            obj.Role = Role.Student;
             backend.Repository.Users.Insert(obj);
             backend.AuthenticationService.SendMail(obj.Email, false);
             backend.BusinessEventService.TriggerEvent(this,
                 new BusinessEventArgs(BusinessEventType.UserRegistered, obj));
+
             return obj;
         }
 
@@ -280,6 +259,21 @@ namespace StudyBuddy.BusinessLogic
                 Count = objects.Count(),
                 Objects = objects
             };
+        }
+
+        public void SendMailToUser(MailDto mail)
+        {
+            if (backend.CurrentUser == null || !backend.CurrentUser.IsAdmin)
+                throw new UnauthorizedAccessException("Unauthorized!");
+
+            if (mail == null ||
+                mail.RecipientID == 0 ||
+                string.IsNullOrWhiteSpace(mail.Subject) ||
+                string.IsNullOrWhiteSpace(mail.Message))
+                throw new Exception("Data invalid!");
+
+            var user = backend.Repository.Users.ById(mail.RecipientID);
+            MailKitHelper.SendMailAsync(user.Email, mail.Subject, mail.Message);
         }
     }
 }

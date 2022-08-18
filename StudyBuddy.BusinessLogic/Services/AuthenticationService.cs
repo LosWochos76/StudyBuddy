@@ -25,62 +25,31 @@ namespace StudyBuddy.BusinessLogic
             if (user == null)
             {
                 backend.Logging.LogDebug($"User with email {uc.EMail} not found!");
-                return new LoginResult 
-                {
-                    Status = 3
-                };
+                return new LoginResult(3);
             }
 
             if (!user.AccountActive)
             {
-                if (!simpleHash.Verify(uc.Password, user.PasswordHash))
-                {
-                    backend.Logging.LogDebug($"Wrong password for {uc.EMail}!");
-                    return new LoginResult
-                    {
-                        Status = 2
-                    };
-                }
-                else
-                {
-                    backend.Logging.LogDebug($"User with email {uc.EMail} is disabled.");
-                    return new LoginResult
-                    {
-                        Status = 7
-                    };
-                }
+                backend.Logging.LogDebug($"User with email {uc.EMail} is disabled.");
+                return new LoginResult(7);
             }
 
             if (!simpleHash.Verify(uc.Password, user.PasswordHash))
             {
                 backend.Logging.LogDebug($"Wrong password for {uc.EMail}!");
-                return new LoginResult
-                {
-                    Status = 2
-                };
+                return new LoginResult(2);
+            }
+
+            if (!user.EmailConfirmed)
+            {
+                backend.Logging.LogDebug($"User with email {user.Email} is not verified.");
+                return new LoginResult(1);
             }
 
             backend.Logging.LogDebug("Successfull login");
             user.PasswordHash = null;
             var jwt = new JwtToken();
-
-            if (!user.EmailConfirmed)
-            {
-                backend.Logging.LogDebug($"User with email {user.Email} is not verified.");
-                return new LoginResult
-                {
-                    Status = 1
-                };
-            }
-            else
-            {
-                return new LoginResult
-                {
-                    Status = 0,
-                    Token = jwt.FromUser(user.ID),
-                    User = user
-                };
-            }
+            return new LoginResult(0, jwt.FromUser(user.ID), user);
         }
 
         public void SendMail(string email, bool forgotpassword)

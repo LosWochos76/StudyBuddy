@@ -10,7 +10,7 @@ import { UserService } from 'src/app/services/user.service';
 })
 export class FcmTokenListComponent implements OnInit {
   page = 1;
-  tokens:FcmTokenList = null;
+  tokens:FcmTokenList = new FcmTokenList();
   user_cache = new Map();
 
   constructor(
@@ -19,12 +19,12 @@ export class FcmTokenListComponent implements OnInit {
   ) { }
 
   async ngOnInit() {
-    this.loadData();
-    this.loadUsers();
+    await this.loadData();
   }
 
   async loadData() {
     this.tokens = await this.fcm_token_service.getAll();
+    await this.loadUsers();
   }
 
   async loadUsers() {

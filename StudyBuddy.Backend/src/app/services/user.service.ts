@@ -195,4 +195,27 @@ export class UserService {
         headers: new HttpHeaders({ Authorization: this.auth.getToken() })
       }).toPromise();
   }
+
+  async sendMail(user_id: number, subject: string, message: string) {
+    if (!this.auth.isLoggedIn() && !this.auth.getUser().isAdmin)
+      return false;
+
+    let data = {
+      "recipientID": user_id,
+      "subject": subject,
+      "message": message
+    };
+
+    let result = await this.http.post(this.url + "User/SendMail/" + user_id, data,
+      {
+        headers: new HttpHeaders({ Authorization: this.auth.getToken() })
+      }).toPromise().then(res => {
+        return res['status'] == 'ok';
+      }).catch(res => {
+        console.log(res);
+        return false;
+      });
+
+    return result;
+  }
 }

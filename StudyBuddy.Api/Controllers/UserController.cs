@@ -170,5 +170,14 @@ namespace StudyBuddy.Api
 
             return Json(backend.UserService.GetAllUsersHavingBadge(badge_id));
         }
+
+        [Route("/User/SendMail/{user_id}")]
+        [HttpPost]
+        public IActionResult SendMailToUser([FromBody] MailDto mail)
+        {
+            logger.LogInformation("UserController.SenMailToUser");
+            backend.UserService.SendMailToUser(mail);
+            return Json(new { Status = "ok" });
+        }
     }
 }

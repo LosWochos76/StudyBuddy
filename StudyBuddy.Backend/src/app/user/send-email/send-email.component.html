@@ -1,0 +1,42 @@
+<br>
+<h1>Email an einen Benutzer schicken</h1>
+<form [formGroup]="form" (ngSubmit)="onSubmit()">
+    <div class="row g-1">
+        <div class="col-md">
+            <label class="form-label" for="recipient">Empfänger:</label>
+            <select id="recipient" class="form-select" aria-label="Rolle" formControlName="recipient">
+                <option value="{{obj.id}}" *ngFor="let obj of users.objects">{{obj.fullName()}}</option>
+            </select>
+        </div>
+    </div>
+    <br>
+    <div class="row g-3">
+        <div class="col-md">
+            <label class="form-label" for="acronym">Betreff:</label>
+            <input type="text" class="form-control" id="subject" formControlName="subject" [ngClass]="{
+            'is-invalid': form.controls.subject.invalid && form.controls.subject.dirty,
+            'is-valid': form.controls.subject.valid && form.controls.subject.dirty}">
+        </div>
+    </div>
+    <br>
+    <div class="mb-3">
+        <label class="form-label" for="name">Nachricht:</label>
+        <textarea class="form-control" id="message" formControlName="message" rows="3">
+        </textarea>
+        <div *ngIf="form.controls.message.hasError('invaliddescription')">
+            <small class="text-danger">Die Nachrucht darf nicht leer sein!</small>
+        </div>
+    </div>
+    <div class="row g-1">
+        <div class="col">
+            <button type="submit" class="btn btn-primary" [disabled]="!form.valid">Absenden</button>&nbsp;
+        </div>
+    </div>
+</form>
+<br>
+<div *ngIf="status == 1" class="alert alert-success" role="alert">
+    Die Nachricht wurde erfolgreich verschickt!
+</div>
+<div *ngIf="status == 2" class="alert alert-danger" role="alert">
+    Die Nachricht konnte nicht verschickt werden!
+</div>

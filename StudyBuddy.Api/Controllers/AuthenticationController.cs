@@ -42,7 +42,7 @@ namespace StudyBuddy.Api
         {
             logger.LogInformation("AuthenticationController.SendPasswortResetMail");
             backend.AuthenticationService.SendMail(email, true);
-            return Json(new LoginResult { Status = 0 });
+            return Json(new LoginResult(0));
         }
 
         [Route("/Login/ResetPassword/")]
@@ -59,7 +59,7 @@ namespace StudyBuddy.Api
         {
             logger.LogInformation("AuthenticationController.SendVerificationMail");
             backend.AuthenticationService.SendMail(email, false);
-            return Json(new LoginResult { Status = 0 }); 
+            return Json(new LoginResult(0)); 
         }
 
         [Route("/Login/VerifyEmail")]

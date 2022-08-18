@@ -31,6 +31,7 @@ import { UserInfoComponent } from './user/user-info/user-info.component';
 import { NotverifiedComponent } from './authentication/notverified/notverified.component';
 import { VerifyemailComponent } from './authentication/verifyemail/verifyemail.component';
 import { RecoverComponent } from './authentication/recover/recover.component';
+import { SendEmailComponent } from './user/send-email/send-email.component';
 
 const routes: Routes = [
   { path: 'register', component: RegisterUserComponent },
@@ -62,6 +63,7 @@ const routes: Routes = [
   { path: 'logging', component: LoggingListComponent, canActivate: [RouteGuardService] },
   { path: 'businessevent', component: BusinessEventListComponent, canActivate: [RouteGuardService] },
   { path: 'businessevent/:id', component: BusinessEventEditComponent, canActivate: [RouteGuardService] },
+  { path: 'sendemail', component: SendEmailComponent, canActivate: [RouteGuardService] },
   { path: '', redirectTo: 'challenge', pathMatch: 'full' },
   { path: '**', component: PageNotFoundComponent }
 ];
