@@ -31,17 +31,18 @@ export class FcmTokenListComponent implements OnInit {
     for (let obj of this.tokens.objects) {
       if (obj.userID != 0 && !this.user_cache.has(obj.userID)) {
         let user = await this.user_service.byId(obj.userID)
-        if (user != null)
-          this.user_cache.set(obj.userID, user);
+        this.user_cache.set(obj.userID, user);
       }
     }
   }
 
   getFullNamOfUser(id:number) {
-    if (id != 0 && this.user_cache.has(id))
-      return this.user_cache.get(id).fullName();
-    else
+    if (id != 0 && this.user_cache.has(id)) {
+      let user = this.user_cache.get(id);
+      return user != null ? user.fullName() : "";
+    } else {
       return "";
+    }
   }
 
   async onTableDataChange(event) {
