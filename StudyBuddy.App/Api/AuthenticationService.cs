@@ -35,11 +35,13 @@ namespace StudyBuddy.App.Api
                 LoginResult response = await rh.Post<LoginResult>(base_url + "Login", credentials);
                 if (response == null)
                     return 4;
+
                 if (response.Status != 0)
                     return response.Status;
                 
                 string jsonstring = JsonSerializer.Serialize(response);
                 var result = await LoginFromJson(jsonstring);
+
                 if (!result)
                     return 5;
                 else

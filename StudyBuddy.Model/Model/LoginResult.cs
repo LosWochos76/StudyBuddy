@@ -1,7 +1,4 @@
-﻿
-using System.Text.Json.Serialization;
-
-namespace StudyBuddy.Model
+﻿namespace StudyBuddy.Model
 {
     public class LoginResult 
     {
@@ -19,6 +16,10 @@ namespace StudyBuddy.Model
             8 -> invalid passwordreset/verifyemail Token
         */
         public string Token { get; set; }
+
+        LoginResult()
+        {
+        }
 
         public LoginResult(int status)
         {

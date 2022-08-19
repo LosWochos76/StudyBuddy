@@ -68,7 +68,7 @@ namespace StudyBuddy.App.Api
                         var stream = await response.Content.ReadAsStreamAsync();
                         return await JsonSerializer.DeserializeAsync<T>(stream, options);
                     }
-                    catch
+                    catch (Exception ex)
                     {
                         return default(T);
                     }
