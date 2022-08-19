@@ -1,4 +1,6 @@
-﻿namespace StudyBuddy.Model
+﻿using System;
+
+namespace StudyBuddy.Model
 {
     public class LoginResult 
     {
@@ -17,7 +19,7 @@
         */
         public string Token { get; set; }
 
-        LoginResult()
+        public LoginResult()
         {
         }
 
