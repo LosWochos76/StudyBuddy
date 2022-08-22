@@ -12,7 +12,7 @@ namespace App.Droid
 {
     [Activity(Label = "Gameucation", Theme = "@style/MainTheme", LaunchMode = LaunchMode.SingleTop,
         ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation | ConfigChanges.UiMode |
-                               ConfigChanges.ScreenLayout | ConfigChanges.SmallestScreenSize)]
+                               ConfigChanges.ScreenLayout | ConfigChanges.SmallestScreenSize, Exported = true)]
     public class MainActivity : FormsAppCompatActivity
     {
         protected override void OnNewIntent(Intent intent)
