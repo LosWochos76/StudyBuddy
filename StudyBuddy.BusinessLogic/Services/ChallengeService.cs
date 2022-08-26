@@ -149,7 +149,7 @@ namespace StudyBuddy.BusinessLogic
             if (challenge == null)
                 throw new Exception("Challenge not found!");
 
-            if (!backend.CurrentUser.IsAdmin && backend.CurrentUser.ID != challenge.ID)
+            if (!backend.CurrentUser.IsAdmin && backend.CurrentUser.ID != challenge.OwnerID)
                 throw new UnauthorizedAccessException("Unauthorized!");
 
             // Encrypt the challenge_id

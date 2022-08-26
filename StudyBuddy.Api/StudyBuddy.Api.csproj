@@ -6,7 +6,6 @@
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
-  <PropertyGroup Condition=" '$(RunConfiguration)' == 'services' " />
   <ItemGroup>
     <ProjectReference Include="..\StudyBuddy.Model\StudyBuddy.Model.csproj">
       <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
