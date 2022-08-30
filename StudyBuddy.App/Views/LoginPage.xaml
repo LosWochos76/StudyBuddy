@@ -68,23 +68,7 @@
                 </Label.FormattedText>
             </Label>
         </StackLayout>
-        <StackLayout>
-            <Label HorizontalTextAlignment="Center" VerticalTextAlignment="End">
-                <Label.FormattedText>
-                    <FormattedString>
-                        <FormattedString.Spans>
-                            <Span Text="Account reaktivieren oder löschen?"
-                                    TextColor="#0A84FF" TextDecorations="Underline">
-                                <Span.GestureRecognizers>
-                                    <TapGestureRecognizer 
-                                        Command="{Binding RecoverCommand}" />
-                                </Span.GestureRecognizers>
-                            </Span>
-                        </FormattedString.Spans>
-                    </FormattedString>
-                </Label.FormattedText>
-            </Label>
-        </StackLayout>
+
         <StackLayout VerticalOptions="EndAndExpand" Padding="10,0,10,20">
             <Button Text="Neuen Account erstellen" Command="{Binding RegisterCommand}" 
                     BackgroundColor="{StaticResource PrimaryAccent}"

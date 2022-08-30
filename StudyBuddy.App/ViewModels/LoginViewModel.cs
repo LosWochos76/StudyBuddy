@@ -17,7 +17,6 @@ namespace StudyBuddy.App.ViewModels
             PasswordForgottenCommand = new AsyncCommand(PasswordForgotten, () => { return IsEMailValid; });
             ImprintCommand = new Command(Imprint);
             InfoCommand = new Command(Info);
-            RecoverCommand = new Command(Recover);
 
             api.PropertyChanged += (sender, e) =>
             {
@@ -72,11 +71,6 @@ namespace StudyBuddy.App.ViewModels
         private async void Register()
         {
             await Navigation.Push(new RegisterPage());
-        }
-
-        private void Recover()
-        {
-            dialog.OpenBrowser("https://gameucation.eu/recover");
         }
 
         private async Task PasswordForgotten()

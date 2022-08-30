@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android" android:versionName="1.1" package="de.gameucation" android:installLocation="auto" android:versionCode="3">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" android:versionName="1.4" package="de.gameucation" android:installLocation="auto" android:versionCode="4">
 	<uses-sdk android:minSdkVersion="31" android:targetSdkVersion="31" />
 	<application android:label="Gameucation" android:icon="@mipmap/ic_launcher" android:theme="@style/MainTheme">
 		<provider android:name="android.support.v4.content.FileProvider" android:authorities="${applicationId}.fileprovider" android:exported="false" android:grantUriPermissions="true">
