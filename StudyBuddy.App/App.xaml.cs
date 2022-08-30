@@ -64,14 +64,14 @@ namespace StudyBuddy.App
                 if (!Current.Properties.ContainsKey("Login"))
                     return;
 
-                var content = Current.Properties["Login"].ToString();
+                var content = Preferences.Get("Login", String.Empty);
                 var api = TinyIoCContainer.Current.Resolve<IApi>();
                 var result = await api.Authentication.LoginFromJson(content);
 
                 if (result)
                     await Shell.Current.GoToAsync("//ChallengesPage");
                 else
-                    Current.Properties.Remove("Login");
+                    Preferences.Remove("Login");
 
                 OnResume();
             }

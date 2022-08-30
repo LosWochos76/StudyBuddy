@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using StudyBuddy.App.Misc;
 using StudyBuddy.App.ViewModels;
 using StudyBuddy.Model;
+using Xamarin.Essentials;
 using Xamarin.Forms;
 
 namespace StudyBuddy.App.Api
@@ -56,8 +57,10 @@ namespace StudyBuddy.App.Api
 
         public async Task<bool> LoginFromJson(string content)
         {
-            var obj = JsonDocument.Parse(content);
+            if (content == String.Empty)
+                return false;
 
+            var obj = JsonDocument.Parse(content);
             JsonElement token_element, user_element;
             if (!obj.RootElement.TryGetProperty("Token", out token_element) ||
                 !obj.RootElement.TryGetProperty("User", out user_element))
@@ -73,10 +76,7 @@ namespace StudyBuddy.App.Api
             CurrentUser = JsonSerializer.Deserialize<UserViewModel>(user_element.GetRawText(), options);
             await api.ImageService.GetProfileImage(CurrentUser);
 
-            // Save the Login-Data to the context to be resumed
-            Application.Current.Properties["Login"] = content;
-            await Application.Current.SavePropertiesAsync();
-
+            Preferences.Set("Login", content);
             OnLoginStateChanged(true);
             return true;
         }
@@ -85,9 +85,7 @@ namespace StudyBuddy.App.Api
         {
             Token = string.Empty;
             CurrentUser = null;
-            Application.Current.Properties.Remove("Login");
-            await Application.Current.SavePropertiesAsync();
-
+            Preferences.Remove("Login");
             OnLoginStateChanged(false);
         }
 

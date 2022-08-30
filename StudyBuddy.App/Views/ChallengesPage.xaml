@@ -32,7 +32,6 @@
                FontSize="18"
                FontAttributes="Bold" />
     </Shell.TitleView>
-
     <ContentPage.ToolbarItems>
         <ToolbarItem Text="QR-Code scannen"
             Command="{Binding ScanQrCodeCommand}">
