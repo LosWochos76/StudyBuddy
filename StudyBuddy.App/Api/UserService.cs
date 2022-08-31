@@ -76,10 +76,10 @@ namespace StudyBuddy.App.Api
             return await rh.Load<UserViewModel>(base_url + "User/" + user_id, HttpMethod.Get);
         }
 
-        public async Task<bool> Update(User uvm)
+        public async Task<bool> Update(UserViewModel uvm)
         {
             var rh = new WebRequestHelper(api.Authentication.Token);
-            var content = await rh.Put<User>(base_url + "User/" + uvm.ID, uvm);
+            var content = await rh.Put<User>(base_url + "User/" + uvm.ID, UserViewModel.ToModel(uvm));
             return content != null;
         }
 
@@ -95,10 +95,10 @@ namespace StudyBuddy.App.Api
             return await rh.Load<UserId>(base_url + "User/UserIdByNickname/" + nickname, HttpMethod.Get);
         }
 
-        public async Task<UserViewModel> Register(User new_user)
+        public async Task<UserViewModel> Register(UserViewModel new_user)
         {
             var rh = new WebRequestHelper();
-            return await rh.Post<UserViewModel>(base_url + "User/", new_user);
+            return await rh.Post<UserViewModel>(base_url + "User/", UserViewModel.ToModel(new_user));
         }
     }
 }

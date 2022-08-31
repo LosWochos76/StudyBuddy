@@ -10,6 +10,7 @@ namespace StudyBuddy.App.Views
         public ChallengeDetailsPage(ChallengeViewModel challenge)
         {
             InitializeComponent();
+
             var ccvm = new ChallengeConfirmViewModel(challenge);
             this.challenge = challenge;
             grid.BindingContext = challenge;

@@ -80,11 +80,26 @@ namespace StudyBuddy.App.ViewModels
                 Lastname = u.Lastname,
                 Nickname = u.Nickname,
                 Email = u.Email,
-                Role = u.Role
+                Role = u.Role,
+                AccountActive = u.AccountActive,
+                EmailConfirmed = u.EmailConfirmed
             };
         }
 
-
+        public static User ToModel(UserViewModel u)
+        {
+            return new User()
+            {
+                ID = u.ID,
+                Firstname = u.Firstname,
+                Lastname = u.Lastname,
+                Nickname = u.Nickname,
+                Email = u.Email,
+                Role = u.Role,
+                AccountActive = u.AccountActive,
+                EmailConfirmed = u.EmailConfirmed
+            };
+        }
 
         public Color StatusColor
         {
@@ -103,7 +118,8 @@ namespace StudyBuddy.App.ViewModels
             {
                 if (RequestedForFriendship)
                     return "Abbrechen";
-                else return "Hinzufügen";
+                else
+                    return "Hinzufügen";
             }
         }
     }

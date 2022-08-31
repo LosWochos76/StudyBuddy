@@ -26,7 +26,7 @@ namespace StudyBuddy.BusinessLogic
 
             if (filter == null)
                 filter = new ChallengeFilter();
-
+             
             if (!backend.CurrentUser.IsAdmin || filter.CurrentUserId == 0)
                 filter.CurrentUserId = backend.CurrentUser.ID;
 

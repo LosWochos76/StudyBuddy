@@ -18,8 +18,8 @@
             <xct:AvatarView Size="160"
                             HorizontalOptions="Center"
                             VerticalOptions="Center"
-                            Text="{Binding User.Initials}"
-                            Source="{Binding User.ProfileImage}">
+                            Text="{Binding CurrentUser.Initials}"
+                            Source="{Binding CurrentUser.ProfileImage}">
                 <xct:AvatarView.GestureRecognizers>
                     <TapGestureRecognizer Tapped="ProfileImage_Tapped" />
                 </xct:AvatarView.GestureRecognizers>
@@ -47,7 +47,7 @@
                 <Label Grid.Row="0"
                        Grid.Column="0"
                        Grid.ColumnSpan="3"
-                       Text="{Binding User.Name}"
+                       Text="{Binding CurrentUser.Name}"
                        FontAttributes="Bold"
                        FontSize="30"
                        IsEnabled="False" />
@@ -60,7 +60,7 @@
                         <FormattedString>
                             <Span Text="Nickname:  "
                                   FontAttributes="Bold" />
-                            <Span Text="{Binding User.Nickname}" />
+                            <Span Text="{Binding CurrentUser.Nickname}" />
                         </FormattedString>
                     </Label.FormattedText>
                 </Label>
@@ -73,7 +73,7 @@
                         <FormattedString>
                             <Span Text="Email:  "
                                   FontAttributes="Bold" />
-                            <Span Text="{Binding User.Email}" />
+                            <Span Text="{Binding CurrentUser.Email}" />
                         </FormattedString>
                     </Label.FormattedText>
                 </Label>

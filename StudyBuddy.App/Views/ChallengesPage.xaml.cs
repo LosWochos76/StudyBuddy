@@ -1,4 +1,5 @@
-﻿using StudyBuddy.App.ViewModels;
+﻿using StudyBuddy.App.Api;
+using StudyBuddy.App.ViewModels;
 using TinyIoC;
 using Xamarin.Forms.Xaml;
 
@@ -8,20 +9,23 @@ namespace StudyBuddy.App.Views
     public partial class ChallengesPage
     {
         private readonly ChallengesViewModel view_model;
+        private readonly IApi api;
 
         public ChallengesPage()
         {
             InitializeComponent();
-            BindingContext = TinyIoCContainer.Current.Resolve<ChallengesViewModel>();
+
+            view_model = TinyIoCContainer.Current.Resolve<ChallengesViewModel>();
+            BindingContext = view_model;
+            api = TinyIoCContainer.Current.Resolve<IApi>();
         }
 
         protected override void OnAppearing()
         {
             base.OnAppearing();
-            if (BindingContext is ChallengesViewModel cvm)
-                cvm.RefreshCommand.Execute(null);
-            if (BindingContext is StatisticsViewModel vm)
-                vm.RefreshCommand.Execute(null);
+
+            if (api.Authentication.IsLoggedIn)
+                view_model.RefreshCommand.Execute(null);
         }
     }
 }

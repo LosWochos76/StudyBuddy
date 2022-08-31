@@ -1,6 +1,7 @@
 ﻿using StudyBuddy.App.Api;
 using StudyBuddy.App.Misc;
 using StudyBuddy.App.Views;
+using StudyBuddy.Model;
 using System.Windows.Input;
 using Xamarin.Forms;
 
@@ -8,14 +9,15 @@ namespace StudyBuddy.App.ViewModels
 {
     public class ProfileViewModel : ViewModelBase
     {
-        public UserViewModel User { get; set; }
+        public UserViewModel CurrentUser { get; set; }
         public Command EditProfileCommand { get; set; }
         public Command DisableAccountCommand { get; set; }
         public bool IsEditing;
+
         public ProfileViewModel(IApi api, IDialogService dialog, INavigationService navigation) : base(api, dialog, navigation)
         {
 
-            User = api.Authentication.CurrentUser;
+            CurrentUser = api.Authentication.CurrentUser;
             EditProfileCommand = new Command(execute: async () =>
             {
                 IsEditing = true;
@@ -26,14 +28,15 @@ namespace StudyBuddy.App.ViewModels
             {
                 return !IsEditing;
             });
+
             DisableAccountCommand = new Command(DisableAccount);
-
-
         }
+
         public void RefreshCanExecute()
         {
             EditProfileCommand.ChangeCanExecute();
         }
+
         public async void EditProfile()
         {
             await Shell.Current.Navigation.PushAsync(new EditProfilePage());
@@ -50,8 +53,9 @@ namespace StudyBuddy.App.ViewModels
 
             if (!answer)
                 return;
-            User.AccountActive = false;
-            var result = await api.Users.Update(User);
+
+            CurrentUser.AccountActive = false;
+            var result = await api.Users.Update(CurrentUser);
 
             if (!result)
                 return;
@@ -59,6 +63,7 @@ namespace StudyBuddy.App.ViewModels
             dialog.ShowMessage(
                 "Ihr Konto wurde deaktiviert und Sie wurden ausgeloggt.",
                 "Achtung!");
+
             api.Authentication.Logout();
             await Navigation.GoTo("//LoginPage");
         }

@@ -107,10 +107,10 @@ namespace StudyBuddy.App.Views
             if (file == null)
                 return;
 
-            ViewModel.User.ProfileImage = ImageSource.FromStream(() => file.GetStream());
+            ViewModel.CurrentUser.ProfileImage = ImageSource.FromStream(() => file.GetStream());
  
             var api = TinyIoCContainer.Current.Resolve<IApi>();
-            await api.ImageService.SaveProfileImage(ViewModel.User, file);
+            await api.ImageService.SaveProfileImage(ViewModel.CurrentUser, file);
         }
 
         private async void SelectProfileImageFromCamera(object sender, EventArgs e)
@@ -134,10 +134,10 @@ namespace StudyBuddy.App.Views
             if (file == null)
                 return;
 
-            ViewModel.User.ProfileImage = ImageSource.FromStream(() => file.GetStreamWithImageRotatedForExternalStorage());
+            ViewModel.CurrentUser.ProfileImage = ImageSource.FromStream(() => file.GetStreamWithImageRotatedForExternalStorage());
 
             var api = TinyIoCContainer.Current.Resolve<IApi>();
-            await api.ImageService.SaveProfileImage(ViewModel.User, file);
+            await api.ImageService.SaveProfileImage(ViewModel.CurrentUser, file);
         }
 
     }

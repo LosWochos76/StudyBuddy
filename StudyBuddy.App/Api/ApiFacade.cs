@@ -39,7 +39,7 @@ namespace StudyBuddy.App.Api
         public CommentService CommentService { get; set; }
         public IStatisticsService Statistics { get; }
         public NotificationUserMetadataService NotificationUserMetadataService { get; set; }
-        public Version AppVersion { get; } = new(0, 0, 22, 0);
+        public Version AppVersion { get; } = new(1, 5, 0, 0);
         public Version ApiVersion { get; private set; } = new(0, 0, 0, 0);
         public IAuthenticationService Authentication { get; }
         public IChallengeService Challenges { get; }

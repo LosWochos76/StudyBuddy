@@ -155,7 +155,7 @@ namespace StudyBuddy.App.ViewModels
         {
             try
             {
-                var user = new User();
+                var user = new UserViewModel();
                 user.ID = api.Authentication.CurrentUser.ID;
                 user.Email = api.Authentication.CurrentUser.Email;
                 user.EmailConfirmed = api.Authentication.CurrentUser.EmailConfirmed;

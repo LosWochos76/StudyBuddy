@@ -27,7 +27,6 @@ namespace StudyBuddy.Api
             return Json(backend.AuthenticationService.Login(uc));
         }
 
-
         [Route("/Login/")]
         [HttpPut]
         public IActionResult CheckToken([FromBody] string token)

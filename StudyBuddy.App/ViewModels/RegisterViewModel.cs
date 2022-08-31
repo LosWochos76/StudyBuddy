@@ -137,7 +137,7 @@ namespace StudyBuddy.App.ViewModels
                 return;
             }
 
-            var user = new User();
+            var user = new UserViewModel();
             user.Firstname = Firstname;
             user.Lastname = Lastname;
             user.Nickname = Nickname;
