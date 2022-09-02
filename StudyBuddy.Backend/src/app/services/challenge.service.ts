@@ -2,7 +2,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { EventEmitter, Injectable, Output } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import { Challenge } from '../model/challenge';
-import { ChallengeList } from '../model/challengelist';
+import { ChallengeList } from '../model/challenge.list';
 import { AuthorizationService } from './authorization.service';
 import { LoggingService } from './loging.service';
 

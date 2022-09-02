@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using StudyBuddy.Model;
 
@@ -15,14 +16,28 @@ namespace StudyBuddy.Persistence
             CreateTable();
         }
 
-        public IEnumerable<Notification> All(NotificationFilter filter)
+        public IEnumerable<Notification> GetAll(NotificationFilter filter)
         {
             var qh = new QueryHelper(connection_string);
-            var sql = "select id, badge_id, owner_id, title, body, created, updated from notifications where true";
+            var sql = "select id, badge_id, owner_id, title, body, created, updated from notifications where true ";
             qh.AddParameter(":max", filter.Count);
             qh.AddParameter(":from", filter.Start);
-            sql += "limit :max offset :from";
 
+            if (filter.OwnerId.HasValue)
+            {
+                qh.AddParameter(":owner_id", filter.OwnerId.Value);
+                sql += " and (owner_id=:owner_id) ";
+            }
+
+            sql += "limit :max offset :from";
+            var set = qh.ExecuteQuery(sql);
+            return converter.Multiple(set);
+        }
+
+        public int GetCount(NotificationFilter filter)
+        {
+            var qh = new QueryHelper(connection_string);
+            var sql = "select count(*) from notifications where true";
 
             if (filter.OwnerId.HasValue)
             {
@@ -30,15 +45,14 @@ namespace StudyBuddy.Persistence
                 sql += " and (owner_id=:owner_id)";
             }
 
-            var set = qh.ExecuteQuery(sql);
-            return converter.Multiple(set);
+            return qh.ExecuteQueryToSingleInt(sql);
         }
 
         public void Insert(Notification obj)
         {
             var qh = new QueryHelper(connection_string);
             qh.AddParameter(":owner_id", obj.OwnerId);
-            qh.AddParameter(":badge_id", obj.BadgeId);
+            qh.AddParameter(":badge_id", obj.BadgeId.HasValue ? obj.BadgeId : DBNull.Value);
             qh.AddParameter(":title", obj.Title);
             qh.AddParameter(":body", obj.Body);
             qh.AddParameter(":created", obj.Created);
@@ -48,13 +62,14 @@ namespace StudyBuddy.Persistence
                 "insert into notifications (owner_id, badge_id ,title, body, created , updated) values (:owner_id, :badge_id ,:title, :body, :created , :updated) returning id");
         }
 
-        public Notification GetNotificationById(int notificationId)
+        public Notification ById(int id)
         {
             var qh = new QueryHelper(connection_string);
-            qh.AddParameter(":notification_id", notificationId);
+            qh.AddParameter(":notification_id", id);
 
             var set = qh.ExecuteQuery(
                 "select id, badge_id , owner_id, title, body, created, updated from  notifications where id = :notification_id");
+
             return converter.Single(set);
         }
 
@@ -120,6 +135,12 @@ namespace StudyBuddy.Persistence
                 rh.SetRevision(4);
             }
             
+        }
+
+        public void Delete(int id)
+        {
+            var qh = new QueryHelper(connection_string);
+            qh.Delete("notifications", "id", id);
         }
     }
 }

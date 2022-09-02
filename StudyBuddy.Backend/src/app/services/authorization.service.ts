@@ -101,10 +101,8 @@ export class AuthorizationService {
             "token": obj.token,
             "email": obj.email
         }
-        var result = await this.http.post(this.url + 'Login/VerifyEmail', data).toPromise();
-        console.log(result);
-        return result;
 
+        return await this.http.post(this.url + 'Login/VerifyEmail', data).toPromise();
     }
 
     async enableAccount(email: string, password: string): Promise<LoginResult> {
@@ -112,13 +110,11 @@ export class AuthorizationService {
             'email': email,
             'password': password
         }).toPromise();
+
         if (response == null)
             return null;
+
         let result = LoginResult.fromApi(response);
-        if (result.status == 7) {
-            return result;
-        }
-        else
-            return null;
+        return result.status == 7 ? result : null;
     }
 }

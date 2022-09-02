@@ -16,17 +16,7 @@ namespace StudyBuddy.App.ViewModels
         public ICommand AcceptRequestCommand { get; set; }
         public ICommand DenyRequestCommand { get; set; }
         public bool IsRefreshing { get; set; } = false;
-
-        private bool is_busy = false;
-        public bool IsBusy
-        {
-            get { return is_busy; }
-            set
-            {
-                is_busy = value;
-                NotifyPropertyChanged();
-            }
-        }
+        public bool IsBusy { get; set; }
 
         public RequestsViewModel(IApi api, IDialogService dialog, INavigationService navigation) : base(api, dialog, navigation)
         {
@@ -48,12 +38,16 @@ namespace StudyBuddy.App.ViewModels
         {
             if (IsBusy)
                 return;
-            IsBusy = true;
+            else
+                IsBusy = true;
+
             try
             {
+                // ToDo: Pagination!
                 var requests = await api.Requests.ForMe();
                 if (requests.Count == 0)
                     return;
+
                 Requests.AddRange(requests.Objects);
                 await api.ImageService.GetProfileImages(Requests);
             }
@@ -112,6 +106,4 @@ namespace StudyBuddy.App.ViewModels
             }
         }
     }
-
-    
 }

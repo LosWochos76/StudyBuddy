@@ -13,7 +13,7 @@ namespace StudyBuddy.Persistence
         IStatisticsRepository StatisticsRepository { get; }
         IBusinessEventRepository BusinessEvents { get; }
         IImageRepository Images { get; }
-        NotificationUserMetadataRepository NotificationUserMetadataRepository { get; }
-        CommentsRepository CommentsRepository { get; }
+        INotificationUserMetadataRepository NotificationUserMetadataRepository { get; }
+        ICommentsRepository CommentsRepository { get; }
     }
 }

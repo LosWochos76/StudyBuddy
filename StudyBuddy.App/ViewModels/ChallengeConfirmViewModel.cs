@@ -11,7 +11,6 @@ using Xamarin.Essentials;
 using Xamarin.Forms;
 using System.Threading.Tasks;
 
-
 namespace StudyBuddy.App.ViewModels
 {
     public class ChallengeConfirmViewModel
@@ -39,6 +38,7 @@ namespace StudyBuddy.App.ViewModels
             var recipients = await api.Users.GetFriends();
             Friends.AddRange(recipients.Objects);
         }
+
         private void OnConfirm()
         {
             if (challenge.Prove == ChallengeProve.ByTrust)
@@ -64,6 +64,7 @@ namespace StudyBuddy.App.ViewModels
         {
             // to be programmed
         }
+
         private async void AcceptByTrust()
         {
             var answer = await dialog.ShowMessage(

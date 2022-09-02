@@ -13,7 +13,6 @@ namespace StudyBuddy.App.ViewModels
             OnPropertyChanged("Users");
         }
 
-
         public RangeObservableCollection<UserViewModel> Users { get; set; }
         public event PropertyChangedEventHandler PropertyChanged;
 

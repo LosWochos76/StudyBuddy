@@ -4,7 +4,7 @@ import { environment } from 'src/environments/environment';
 import { AuthorizationService } from './authorization.service';
 import { LoggingService } from './loging.service';
 import { Request } from '../model/request';
-import { RequestList } from '../model/requestlist';
+import { RequestList } from '../model/request.list';
 
 @Injectable({
   providedIn: 'root'

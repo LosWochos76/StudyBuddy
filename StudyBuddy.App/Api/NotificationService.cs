@@ -21,7 +21,6 @@ namespace StudyBuddy.App.Api
             client = new HttpClient(Helper.GetInsecureHandler());
         }
 
-
         public async Task<IEnumerable<Notification>> GetAllMyNotifications()
         {
             var rh = new WebRequestHelper(api.Authentication.Token);
@@ -30,8 +29,14 @@ namespace StudyBuddy.App.Api
             return content;
         }
 
-        public async Task<IEnumerable<NewsViewModel>> GetMyNotificationFeed(NotificationFilter filter)
+        public async Task<IEnumerable<NewsViewModel>> GetMyNotificationFeed(int skip)
         {
+            var filter = new NotificationFilter()
+            {
+                Start = skip,
+                Count = 10
+            };
+
             var rh = new WebRequestHelper(api.Authentication.Token);
             var content = await rh.Get<IEnumerable<Notification>>(base_url + "Notification/Feed", filter);
             if (content == null)

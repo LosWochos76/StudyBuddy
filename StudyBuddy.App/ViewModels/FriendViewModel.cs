@@ -52,6 +52,7 @@ namespace StudyBuddy.App.ViewModels
 
             await Navigation.Pop();
         }
+
         private void LoadCharts()
         {
             var pointsEntries = new[]

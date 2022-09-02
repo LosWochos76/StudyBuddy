@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Google.Api.Gax;
 using NETCore.Encrypt;
 using SkiaSharp;
 using SkiaSharp.QrCode;
@@ -43,9 +44,6 @@ namespace StudyBuddy.BusinessLogic
                     obj.Owner = backend.Repository.Users.ById(obj.OwnerID);
                 }
             }
-
-            var message = "Loading " + objects.Count() + " Objects with Skip = " + filter.Start;
-            backend.Logging.LogInfo(message);
 
             return new ChallengeList() { Count = count, Objects = objects };
         }
@@ -195,10 +193,7 @@ namespace StudyBuddy.BusinessLogic
             if (challenge == null)
                 throw new Exception("Object is null!");
 
-            backend.Repository.Challenges.AddAcceptance(challenge_id, backend.CurrentUser.ID);
-            OnChallengeAccepted(challenge, backend.CurrentUser);
-            backend.BusinessEventService.TriggerEvent(this, new BusinessEventArgs(BusinessEventType.ChallengeAccepted, challenge));
-
+            Accept(challenge, backend.CurrentUser);
             return challenge;
         }
 
@@ -215,16 +210,18 @@ namespace StudyBuddy.BusinessLogic
             {
                 var expected_coordinates = GeoCoordinate.FromString(challenge.ProveAddendum);
                 var delivered_coordinates = GeoCoordinate.FromString(prove_addendum);
-                return expected_coordinates.IsInRadius(delivered_coordinates);
+                if (expected_coordinates.IsInRadius(delivered_coordinates))
+                {
+                    Accept(challenge, backend.CurrentUser);
+                    return true;
+                }
             }
 
             if (challenge.Prove == ChallengeProve.ByKeyword)
             {
                 if (prove_addendum.ToLower().Equals(challenge.ProveAddendum.ToLower()))
                 {
-                    backend.Repository.Challenges.AddAcceptance(challenge_id, backend.CurrentUser.ID);
-                    OnChallengeAccepted(challenge, backend.CurrentUser);
-                    backend.BusinessEventService.TriggerEvent(this, new BusinessEventArgs(BusinessEventType.ChallengeAccepted, challenge));
+                    Accept(challenge, backend.CurrentUser);
                     return true;
                 }
             }
@@ -253,9 +250,7 @@ namespace StudyBuddy.BusinessLogic
             if (user == null)
                 throw new Exception("Object is null!");
 
-            backend.Repository.Challenges.AddAcceptance(challenge_id, user_id);
-            OnChallengeAccepted(challenge, user);
-            backend.BusinessEventService.TriggerEvent(this, new BusinessEventArgs(BusinessEventType.ChallengeAccepted, challenge));
+            Accept(challenge, user);
         }
 
         public void Accept(int challenge_id)
@@ -270,29 +265,34 @@ namespace StudyBuddy.BusinessLogic
             if (challenge.Prove != ChallengeProve.ByTrust)
                 throw new Exception("You need to provide a prove!");
 
-            backend.Repository.Challenges.AddAcceptance(challenge_id, backend.CurrentUser.ID);
-            OnChallengeAccepted(challenge, backend.CurrentUser);
+            Accept(challenge, backend.CurrentUser);
+        }
+
+        private void Accept(Challenge challenge, User user)
+        {
+            backend.Logging.LogDebug(String.Format("User {0} accepted challenge {1}.", user.ID, challenge.ID));
+            backend.Repository.Challenges.AddAcceptance(challenge.ID, user.ID);
+            OnChallengeAccepted(challenge, user);
             backend.BusinessEventService.TriggerEvent(this, new BusinessEventArgs(BusinessEventType.ChallengeAccepted, challenge));
         }
 
-        private void OnChallengeAccepted(Challenge obj, User current_user)
+        private void OnChallengeAccepted(Challenge challenge, User user)
         {
-            var filter = new GameBadgeFilter() { Count = int.MaxValue };
-            var badges_of_user = backend.GameBadgeService.GetReceivedBadgesOfUser(current_user.ID, filter);
-            var badges = backend.Repository.GameBadges.GetBadgesForChallenge(obj.ID);
+            backend.NotificationService.UserAcceptedChallenge(user, challenge);
 
+            // Check, if user received a badge:
+            var filter = new GameBadgeFilter() { Count = int.MaxValue };
+            var badges_of_user = backend.GameBadgeService.GetReceivedBadgesOfUser(user.ID, filter);
+            var badges = backend.Repository.GameBadges.GetBadgesForChallenge(challenge.ID);
             foreach (var badge in badges)
             {
                 if (!IsInList(badges_of_user.Objects, badge))
                 {
-                    var success_rate = backend.GameBadgeService.GetSuccessRate(badge.ID, current_user.ID);
+                    var success_rate = backend.GameBadgeService.GetSuccessRate(badge.ID, user.ID);
                     if (success_rate.Success >= badge.RequiredCoverage)
                     {
-                        backend.Repository.GameBadges.AddBadgeToUser(current_user.ID, badge.ID);
-                        // ToDo: Neuigkeit erzeugen! 
-                        
-                        backend.NotificationService.CreateNotificationForUser(current_user.ID, "ChallengeAccepted",  $"{current_user.Firstname} {current_user.Lastname} hat die Challenge {obj.Name} abgeschlossen.", badge.ID);
-
+                        backend.Repository.GameBadges.AddBadgeToUser(user.ID, badge.ID);
+                        backend.NotificationService.UserReceivedBadge(user, badge);
                     }
                 }
             }

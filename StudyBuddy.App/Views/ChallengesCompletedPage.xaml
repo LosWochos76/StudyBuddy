@@ -28,7 +28,6 @@
             SearchCommand="{Binding SearchCommand}"
             Text="{Binding SearchText}"
             Visual="Material" />
-        <ActivityIndicator IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}" />
         <RefreshView Command="{Binding RefreshCommand}" IsRefreshing="{Binding IsRefreshing}">
             <CollectionView
                 ItemsSource="{Binding Challenges}"

@@ -5,9 +5,15 @@ namespace StudyBuddy.BusinessLogic
 {
     public interface INotificationService
     {
-        void CreateNotificationForUser(int userId, string title, string body, int? badgeId = null);
+        NotificationList GetAll(NotificationFilter filter);
+        Notification ById(int id);
+        void Delete(int id);
+
         IEnumerable<Notification> GetNotificationFeedForUser(int userId, NotificationFilter filter);
         IEnumerable<Notification> GetNotificationFromUser(int userId);
-        public Notification GetNotificationById(int notificationId);
+
+        void CreateNotificationForUser(int userId, string title, string body, int? badgeId = null);
+        void UserAcceptedChallenge(User user, Challenge challenge);
+        void UserReceivedBadge(User user, GameBadge badge);
     }
 }

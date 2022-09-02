@@ -41,8 +41,6 @@ namespace StudyBuddy.App.ViewModels
         public RangeObservableCollection<CommentViewModel> Comments { get; set; } = new();
         public RangeObservableCollection<UserViewModel> LikedUsers { get; set; } = new();
         public Notification Notification { get; }
-
-
         public GameBadgeViewModel GameBadgeViewModel { get; set; }
         private bool BadgeLoaded { get; set; } = false; 
         public bool ShowImage => this.Notification.BadgeId.HasValue && BadgeLoaded;
@@ -99,7 +97,6 @@ namespace StudyBuddy.App.ViewModels
             }
         }
 
-
         public string FormattedBody => Notification.Body + " am " + Notification.Created.ToShortDateString();
         public UserViewModel NotificationOwner => UserViewModel.FromModel(Notification.Owner);
 
@@ -116,7 +113,6 @@ namespace StudyBuddy.App.ViewModels
         }
 
         public string Body => Notification.Body;
-
         public bool ShowBody => !string.IsNullOrEmpty(Notification.Body);
 
         public string LikeButtonText

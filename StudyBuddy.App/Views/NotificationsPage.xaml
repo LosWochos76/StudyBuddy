@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
@@ -14,8 +14,8 @@
                      Command="{Binding RefreshCommand}">
             <CollectionView x:Name="NotificationCollectionView"
                             ItemsSource="{Binding News}"
-                            RemainingItemsThreshold="{Binding NewsRemainingItemsThreshold}"
-                            RemainingItemsThresholdReachedCommand="{Binding NewsRemainingItemsThresholdReachedCommand}"
+                            RemainingItemsThreshold="{Binding ItemThreshold}"
+                            RemainingItemsThresholdReachedCommand="{Binding LoadMoreCommand}"
                             SelectedItem="{Binding NewsSelectedItem}"
                             SelectionMode="Single"
                             SelectionChangedCommand="{Binding NewsDetailCommand}"

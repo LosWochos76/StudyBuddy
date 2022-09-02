@@ -5,7 +5,7 @@ using StudyBuddy.Model.Filter;
 
 namespace StudyBuddy.Persistence
 {
-    public class CommentsRepository
+    class CommentsRepository : ICommentsRepository
     {
         private readonly string connection_string;
         private readonly CommentConverter converter = new CommentConverter();
@@ -58,8 +58,15 @@ namespace StudyBuddy.Persistence
             qh.AddParameter(":owner_id", insert.OwnerId);
             qh.AddParameter(":notification_id", insert.NotificationId);
             qh.AddParameter(":text", insert.Text);
-            qh.ExecuteScalar(
-                "insert into comments (owner_id, notification_id, text) values (:owner_id, :notification_id, :text)");
+            qh.ExecuteScalar("insert into comments (owner_id, notification_id, text) values (:owner_id, :notification_id, :text)");
+        }
+
+        public void DeleteAllForNotification(int notification_id)
+        {
+            var qh = new QueryHelper(connection_string);
+            var sql = "delete from comments where notification_id=:notification_id";
+            qh.AddParameter(":notification_id", notification_id);
+            qh.ExecuteNonQuery(sql);
         }
     }
 }

@@ -45,7 +45,6 @@
     </ContentPage.ToolbarItems>
     <StackLayout>
         <SearchBar SearchCommand="{Binding SearchCommand}" Text="{Binding SearchText}" Visual="Material"/>
-        <ActivityIndicator IsVisible="{Binding IsBusy}" IsRunning="{Binding IsBusy}" />
         <RefreshView IsRefreshing="{Binding IsRefreshing}" 
                      Command="{Binding RefreshCommand}">
             <CollectionView ItemsSource="{Binding Challenges}"

@@ -6,6 +6,9 @@
         <input type="text" class="form-control" id="name" formControlName="name" [ngClass]="{
             'is-invalid': form.controls.name.invalid && form.controls.name.dirty,
             'is-valid': form.controls.name.valid && form.controls.name.dirty}">
+        <div *ngIf="form.controls.name.hasError('invalidname')">
+            <small class="text-danger">Der Name darf nicht leer sein!</small>
+        </div>
     </div>
     <div class="mb-3">
         <label class="form-label" for="name">Beschreibung:</label>
@@ -27,6 +30,9 @@
             <option value="0.9">90%</option>
             <option value="1">100%</option>
         </select>
+        <div *ngIf="form.controls.required_coverage.hasError('invalidcoverage')">
+            <small class="text-danger">Bitte wählen eine Abdeckung aus!</small>
+        </div>
     </div>
     <br>
     <div class="col-md">
@@ -49,6 +55,9 @@
             <option value="fa-solid,f091,#c0c0c0">trophysilver</option>
             <option value="fa-solid,f091,#FFD700">trophygold</option>
         </select>
+        <div *ngIf="form.controls.icon_key.hasError('invalidiconkey')">
+            <small class="text-danger">Bitte wählen Sie ein Icon aus!</small>
+        </div>
     </div>
     <br>
     <div class="mb-3">
@@ -56,6 +65,9 @@
         <input type="text" class="form-control" id="tags" formControlName="tags" [ngClass]="{
             'is-invalid': form.controls.tags.invalid && form.controls.tags.dirty,
             'is-valid': form.controls.tags.valid && form.controls.tags.dirty}">
+        <div *ngIf="form.controls.tags.hasError('invalidtags')">
+            <small class="text-danger">Es müssen Tags vergeben werden, über welche die passenden Herausforderungen gefunden werden können!</small>
+        </div>
     </div>
     <div class="mb-3" *ngIf="user.isAdmin()">
         <label class="form-label" for="category">Besitzer:</label>

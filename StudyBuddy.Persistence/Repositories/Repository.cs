@@ -17,9 +17,6 @@ namespace StudyBuddy.Persistence
             CreateRepositories();
         }
 
-        public NotificationUserMetadataRepository NotificationUserMetadataRepository { get; private set; }
-        public CommentsRepository CommentsRepository { get; private set; }
-
         public IUserRepository Users { get; private set; }
         public IChallengeRepository Challenges { get; private set; }
         public IGameBadgeRepository GameBadges { get; private set; }
@@ -27,10 +24,12 @@ namespace StudyBuddy.Persistence
         public ITagRepository Tags { get; private set; }
         public ILoggingRepository Logging { get; private set; }
         public IFcmTokenRepository FcmTokens { get; private set; }
-        public INotificationRepository Notifications { get; private set; }
         public IBusinessEventRepository BusinessEvents { get; private set; }
         public IStatisticsRepository StatisticsRepository { get; private set; }
         public IImageRepository Images { get; private set; }
+        public ICommentsRepository CommentsRepository { get; private set; }
+        public INotificationRepository Notifications { get; private set; }
+        public INotificationUserMetadataRepository NotificationUserMetadataRepository { get; private set; }
 
         private void CreateRepositories()
         {

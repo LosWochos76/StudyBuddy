@@ -133,7 +133,7 @@ namespace StudyBuddy.App.ViewModels
             if (user_id != null && user_id.ID != 0)
             {
                 dialog.ShowError("Es existiert bereits ein Nutzer mit diesem Spitznamen! " +
-                    "Es kann kein weiterer Nutzer mit dem selben Spitznamen egistriert werden!", "Fehler!", "Ok", null);
+                    "Es kann kein weiterer Nutzer mit dem selben Spitznamen registriert werden!", "Fehler!", "Ok", null);
                 return;
             }
 

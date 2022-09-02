@@ -3,7 +3,7 @@ using StudyBuddy.Model;
 
 namespace StudyBuddy.Persistence
 {
-    public class NotificationUserMetadataRepository
+    class NotificationUserMetadataRepository : INotificationUserMetadataRepository
     {
         private readonly string connection_string;
         private NotificationUserMetaDataConverter converter = new NotificationUserMetaDataConverter();
@@ -14,7 +14,7 @@ namespace StudyBuddy.Persistence
 
             CreateTable();
         }
-        
+
         private void CreateTable()
         {
             var qh = new QueryHelper(connection_string);
@@ -120,8 +120,7 @@ namespace StudyBuddy.Persistence
         public IEnumerable<NotificationUserMetadata> GetAll()
         {
             var qh = new QueryHelper(connection_string);
-            var sql =
-                "select id, notification_id, owner_id, liked, seen, shared, created, updated from notification_user_metadata";
+            var sql = "select id, notification_id, owner_id, liked, seen, shared, created, updated from notification_user_metadata";
             var set = qh.ExecuteQuery(sql);
             return converter.Multiple(set);
         }
@@ -133,6 +132,14 @@ namespace StudyBuddy.Persistence
                 "from notification_user_metadata where seen=false ";
             var set = qh.ExecuteQuery(sql);
             return converter.Multiple(set);
+        }
+
+        public void DeleteAllForNotification(int notification_id)
+        {
+            var qh = new QueryHelper(connection_string);
+            var sql = "delete from notification_user_metadata where notification_id=:notification_id";
+            qh.AddParameter(":notification_id", notification_id);
+            qh.ExecuteNonQuery(sql);
         }
     }
 }

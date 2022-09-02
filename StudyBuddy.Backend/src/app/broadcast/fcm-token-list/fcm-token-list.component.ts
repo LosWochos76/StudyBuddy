@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FcmTokenList } from 'src/app/model/fcmtokenlist';
+import { FcmTokenList } from 'src/app/model/fcmtoken.list';
 import { FcmTokenService } from 'src/app/services/fcm-token.service';
 import { UserService } from 'src/app/services/user.service';
 

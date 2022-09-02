@@ -26,7 +26,8 @@ export class RouteGuardService implements CanActivate {
             state.url == "/businessevent" ||
             state.url == "/sendemail" ||
             state.url == "/tokens" ||
-            state.url == "/broadcast"
+            state.url == "/broadcast" ||
+            state.url == "/notification"
             )
             this.router.navigate(['/challenge']);
       }

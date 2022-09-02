@@ -2,7 +2,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { EventEmitter, Injectable, Output } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import { GameBadge } from '../model/gamebadge';
-import { GameBadgeList } from '../model/gamebadgelist';
+import { GameBadgeList } from '../model/gamebadge.list';
 import { AuthorizationService } from './authorization.service';
 import { LoggingService } from './loging.service';
 

@@ -23,7 +23,7 @@ namespace StudyBuddy.BusinessLogic.Services
             {
                 if (before.Liked == false && upsert.Liked == true)
                 {
-                    var notification = _backend.NotificationService.GetNotificationById(upsert.NotificationId);
+                    var notification = _backend.NotificationService.ById(upsert.NotificationId);
                     _backend.PushNotificationService.SendUserLikedNotification(notification.OwnerId);
                 }
             }

@@ -21,6 +21,7 @@ namespace StudyBuddy.App.ViewModels
         public IAsyncCommand DetailsCommand { get; }
         public bool IsRefreshing { get; set; }
         public int Skip { get; set; }
+        public bool IsBusy { get; set; } = false;
 
         private string _searchText = string.Empty;
         public string SearchText
@@ -43,19 +44,20 @@ namespace StudyBuddy.App.ViewModels
             }
         }
 
-        private int _itemTreshold = 1;
+        private int item_treshold = 1;
         public int ItemThreshold
         {
-            get { return _itemTreshold; } set { _itemTreshold = value; NotifyPropertyChanged(); }
-        }
-
-        private bool _isBusy;
-        public bool IsBusy
-        {
-            get { return _isBusy; } set { _isBusy = value; NotifyPropertyChanged(); }
+            get
+            {
+                return item_treshold;
+            }
+            set
+            {
+                item_treshold = value;
+                NotifyPropertyChanged();
+            }
         }
         
-
         public TotalBadgeViewModel(IApi api, IDialogService dialog, INavigationService navigation) : base(api, dialog, navigation)
         {
             Badges = new RangeObservableCollection<GameBadge>();
@@ -66,15 +68,14 @@ namespace StudyBuddy.App.ViewModels
         }
         private async Task ShowDetails()
         {
-            
             if (SelectedBadge == null)
                 return;
 
             await Navigation.Push(new BadgeDetailsPage(await api.Badges.GetById(SelectedBadge.ID)));
             SelectedBadge = null;
             NotifyPropertyChanged(nameof(SelectedBadge));
-            
         }
+
         public async Task Refresh()
         {
             Badges.Clear();
@@ -83,12 +84,14 @@ namespace StudyBuddy.App.ViewModels
             IsRefreshing = false;
             NotifyPropertyChanged(nameof(IsRefreshing));
         }
+
         private async Task LoadBadges()
         {
             if (IsBusy)
                 return;
-            IsBusy = true;
-            
+            else
+                IsBusy = true;
+
             try
             {
                 ItemThreshold = 1;

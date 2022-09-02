@@ -18,7 +18,8 @@ namespace StudyBuddy.App.ViewModels
         public IAsyncCommand DetailsCommand { get; }
         public bool IsRefreshing { get; set; } = false;
         public int Skip { get; set; }
-        
+        public bool IsBusy { get; set; } = false;
+
         private string _searchText = string.Empty;
         public string SearchText 
         {
@@ -41,11 +42,18 @@ namespace StudyBuddy.App.ViewModels
         }
         
         private int _itemTreshold = 1;
-        public int ItemThreshold { get { return _itemTreshold; } set { _itemTreshold = value; NotifyPropertyChanged(); } }
-        
-        private bool _isBusy = false;
-        public bool IsBusy { get { return _isBusy; } set { _isBusy = value; NotifyPropertyChanged(); } }
-        
+        public int ItemThreshold
+        {
+            get
+            {
+                return _itemTreshold;
+            }
+            set
+            {
+                _itemTreshold = value;
+                NotifyPropertyChanged();
+            }
+        }
         
         public ChallengesCompletedViewModel(IApi api, IDialogService dialog, INavigationService navigation) : base(api, dialog, navigation)
         {
@@ -57,6 +65,7 @@ namespace StudyBuddy.App.ViewModels
 
             api.ChallengeAccepted += async (sender, e) => { await LoadChallenges(); };
         }
+
         private async Task ShowDetails()
         {
             if (SelectedChallenge == null)
@@ -79,8 +88,8 @@ namespace StudyBuddy.App.ViewModels
         {
             if (IsBusy)
                 return;
-
-            IsBusy = true;
+            else
+                IsBusy = true;
 
             try
             {

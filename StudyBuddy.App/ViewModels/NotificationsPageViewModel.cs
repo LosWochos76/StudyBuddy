@@ -1,10 +1,11 @@
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Input;
 using StudyBuddy.App.Api;
 using StudyBuddy.App.Misc;
 using StudyBuddy.Model;
-using TinyIoC;
+using Xamarin.CommunityToolkit.ObjectModel;
 using Xamarin.Forms;
 
 namespace StudyBuddy.App.ViewModels
@@ -12,154 +13,75 @@ namespace StudyBuddy.App.ViewModels
     public class NotificationsPageViewModel : ViewModelBase
     {
         public IApi Api;
-        public CollectionView NotificationCollectionView;
-
-        public NotificationsPageViewModel(IApi api, IDialogService dialog, INavigationService navigation) : base(api,
-            dialog, navigation)
-        {
-            RefreshCommand = new Command(Refresh);
-            AcceptRequestCommand = new Command<RequestViewModel>(AcceptRequest);
-            DenyRequestCommand = new Command<RequestViewModel>(DenyRequest);
-            NewsDetailCommand = new Command(() => { });
-            NewsRemainingItemsThresholdReachedCommand = new Command(LoadNews);
-            Api = api;
-        }
-
         public Command<NewsViewModel> OpenCommentsCommands { get; set; }
-
-        public bool NewsIsSelected { get; set; } = true;
-
-        public bool RequestsIsSelected
-        {
-            get => NewsIsSelected;
-            set => NewsIsSelected = !value;
-        }
-
-        public RangeObservableCollection<NewsViewModel> News { get; } = new();
-        public RangeObservableCollection<RequestViewModel> Requests { get; } = new();
-
+        public RangeObservableCollection<NewsViewModel> News { get; } = new RangeObservableCollection<NewsViewModel>();
         public ICommand RefreshCommand { get; set; }
-        public bool IsRefreshing { get; set; }
-
-
-        public int NewsCount { get; } = 10;
-        public int NewsStart { get; set; }
+        public ICommand LoadMoreCommand { get; set; }
         public ICommand RefreshNewsCommand { get; }
-        public bool NewsIsRefreshing { get; set; }
-        public int NewsRemainingItemsThreshold { get; set; } = 20;
-        public bool IsLoadingNews { get; set; }
+        public bool IsRefreshing { get; set; }
+        public int Skip { get; set; }
+        public bool IsBusy { get; set; } = false;
+
+        private int item_treshold = 1;
+        public int ItemThreshold
+        {
+            get { return item_treshold; }
+            set
+            {
+                item_treshold = value;
+                NotifyPropertyChanged();
+            }
+        }
 
         public ICommand NewsDetailCommand { get; set; }
         public NewsViewModel NewsSelectedItem { get; set; }
         public ICommand NewsRemainingItemsThresholdReachedCommand { get; set; }
 
-
-        public ICommand AcceptRequestCommand { get; set; }
-        public ICommand DenyRequestCommand { get; set; }
-
-
-        private void Refresh()
+        public NotificationsPageViewModel(IApi api, IDialogService dialog, INavigationService navigation) : base(api, dialog, navigation)
         {
-            LoadNews();
-            ReloadRequests();
+            RefreshCommand = new AsyncCommand(Refresh);
+            NewsDetailCommand = new Command(() => { });
+            LoadMoreCommand = new AsyncCommand(LoadNews);
+            Api = api;
+        }
 
+        private async Task Refresh()
+        {
+            News.Clear();
+            Skip = 0;
+            await LoadNews();
             IsRefreshing = false;
-            NotifyPropertyChanged("IsRefreshing");
+            NotifyPropertyChanged(nameof(IsRefreshing));
         }
 
-        private async void ReloadRequests()
+        public async Task LoadNews()
         {
-            var response = await api.Requests.ForMe();
-            if (response is null)
+            if (IsBusy)
                 return;
+            else
+                IsBusy = true;
 
-            Requests.Clear();
-            Requests.AddRange(response.Objects);
-            api.ImageService.GetProfileImages(Requests);
-        }
-
-        public async void AcceptRequest(RequestViewModel rvm)
-        {
-            var answer = await dialog.ShowMessage(
-                "Wollen Sie die " + rvm.TypeString + " annehmen?",
-                "Anfrage annehmen?",
-                "Ja", "Nein", null);
-
-            if (!answer)
-                return;
-
-            var result = await api.Requests.Accept(rvm);
-            if (!result)
+            try
             {
-                dialog.ShowError("Ein Fehler ist aufgetreten!", "Fehler!", "Ok", null);
-                return;
+                ItemThreshold = 1;
+                var news = await api.Notifications.GetMyNotificationFeed(Skip);
+                if (news.Count() == 0)
+                {
+                    ItemThreshold = -1;
+                    return;
+                }
+
+                News.AddRange(news);
+                Skip += 10;
             }
-
-            ReloadRequests();
-        }
-
-        public async void DenyRequest(RequestViewModel rvm)
-        {
-            var answer = await dialog.ShowMessage(
-                "Wollen Sie die " + rvm.TypeString + " ablehnen?",
-                "Anfrage ablehnen?",
-                "Ja", "Nein", null);
-
-            if (!answer)
-                return;
-
-            var result = await api.Requests.Deny(rvm);
-            if (!result)
+            catch (ApiException e)
             {
-                dialog.ShowError("Ein Fehler ist aufgetreten!", "Fehler!", "Ok", null);
-                return;
+                dialog.ShowError(e, "Ein Fehler ist aufgetreten!", "Ok", null);
             }
-
-            ReloadRequests();
-
-            if (rvm.Type == RequestType.Friendship)
-                TinyIoCContainer.Current.Resolve<FriendsViewModel>().RefreshCommand.Execute(null);
-        }
-
-        public async void LoadNews()
-        {
-            if (IsLoadingNews)
+            finally
             {
-                return;
+                IsBusy = false;
             }
-
-            IsLoadingNews = true;
-
-            var filter = new NotificationFilter()
-            {
-                Start = NewsStart,
-                Count = NewsCount
-            };
-            
-            var response = await this.api.Notifications.GetMyNotificationFeed(filter);
-
-            if (response.Count() == 0)
-            {
-                NewsRemainingItemsThreshold = -1;
-                return;
-            }
-
-            if (response.Count() < filter.Count)
-            {
-                NewsRemainingItemsThreshold = -1;
-            }
-
-            if (response is null)
-            {
-                IsLoadingNews = false;
-                return;
-            }
-           
-            News.AddRange(response);
-            NewsStart += 10;
-            IsLoadingNews = false;
-
-
         }
     }
 }

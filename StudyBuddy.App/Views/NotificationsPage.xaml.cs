@@ -15,6 +15,7 @@ namespace StudyBuddy.App.Views
         public NotificationsPage()
         {
             InitializeComponent();
+
             On<iOS>().SetUseSafeArea(true);
             ViewModel = TinyIoCContainer.Current.Resolve<NotificationsPageViewModel>();
             BindingContext = ViewModel;
@@ -23,20 +24,7 @@ namespace StudyBuddy.App.Views
         protected override void OnAppearing()
         {
             base.OnAppearing();
-
-            if (BindingContext is NotificationsPageViewModel vm)
-                vm.RefreshCommand.Execute(null);
-
-
-            NotificationCollectionView.Scrolled += (sender, args) =>
-            {
-                var index = args.FirstVisibleItemIndex;
-                var notification = ViewModel.News[index];
-
-                if (notification.Notification.Seen) return;
-
-                ViewModel.Api.NotificationUserMetadataService.SetNotificationToSeen(notification);
-            };
+            ViewModel.RefreshCommand.Execute(null);
         }
     }
 }

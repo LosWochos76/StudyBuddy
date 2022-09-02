@@ -30,6 +30,8 @@ export class UserEditComponent implements OnInit {
       lastname: new FormControl("", [Validators.required, Validators.minLength(3)]),
       nickname: new FormControl("", [Validators.required, Validators.minLength(3)]),
       role: new FormControl(1),
+      emailconfirmed: new FormControl(false),
+      accountactive: new FormControl(false),
       friends: new FormControl([])
     });
   };
@@ -47,6 +49,8 @@ export class UserEditComponent implements OnInit {
       firstname: this.obj.firstname,
       lastname: this.obj.lastname,
       nickname: this.obj.nickname,
+      emailconfirmed: this.obj.emailconfirmed,
+      accountactive: this.obj.accountactive,
       role: this.obj.role,
       friends: await this.service.getFriendIds(this.id)
     });

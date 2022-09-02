@@ -1,0 +1,25 @@
+<br>
+<h1>Benachrichtigungen von Benutzern verwalten</h1>
+
+<button class="btn btn-danger" [disabled]="!isSelected()" (click)="onDelete()">Löschen</button>&nbsp;
+<br>
+<br>
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Besitzer</th>
+            <th scope="col">Titel</th>
+            <th scope="col">Erzeugt am</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let obj of objects | paginate: { itemsPerPage: 10, currentPage: page, totalItems: total }; index as i" (click)="onSelect(obj)" [class.table-info]="obj == selected">
+            <th scope="row">{{(page-1) * 10 + i + 1}}</th>
+            <td>{{obj.owner_id }}</td>
+            <td>{{obj.title}}</td>
+            <td>{{obj.created | date:'YYYY-MM-dd'}}</td>
+        </tr>
+    </tbody>
+</table>
+<pagination-controls (pageChange)="onTableDataChange($event)"></pagination-controls>

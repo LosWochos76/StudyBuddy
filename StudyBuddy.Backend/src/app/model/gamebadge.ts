@@ -5,9 +5,9 @@ export class GameBadge {
     name:string = "";
     owner_id:number = 0;
     created:string;
-    required_coverage:number;
+    required_coverage:number = 1;
     description:string = "";
-    iconkey:string = "";
+    iconkey:string = "fa-solid,f559,#bf8970";
     tags:string = "";
     owner:User = null;
     received:string;
@@ -23,6 +23,7 @@ export class GameBadge {
         this.required_coverage = +values.required_coverage;
         this.tags = values.tags;
         this.iconkey = values.icon_key;
+        
         if (values.hasOwnProperty('owner_id')) 
             this.owner_id = +values.owner_id;
     }
@@ -58,5 +59,19 @@ export class GameBadge {
             "tags": this.tags,
             "iconKey": this.iconkey
         };
+    }
+
+    hasName():boolean {
+        if(this.name === "")
+            return false;
+        else
+            return true;
+    }
+
+    hasTags():boolean {
+        if(this.tags === "")
+            return false;
+        else
+            return true;
     }
 }

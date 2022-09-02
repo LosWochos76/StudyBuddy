@@ -8,6 +8,6 @@ namespace StudyBuddy.App.Api
     public interface INotificationService
     {
         Task<IEnumerable<Notification>> GetAllMyNotifications();
-        Task<IEnumerable<NewsViewModel>> GetMyNotificationFeed(NotificationFilter filter);
+        Task<IEnumerable<NewsViewModel>> GetMyNotificationFeed(int skip);
     }
 }

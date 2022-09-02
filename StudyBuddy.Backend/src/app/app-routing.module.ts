@@ -19,8 +19,8 @@ import { RegisterUserComponent } from './user/register-user/register-user.compon
 import { UserEditComponent } from './user/user-edit/user-edit.component';
 import { UserListComponent } from './user/user-list/user-list.component';
 import { UserSettingsComponent } from './user/user-settings/user-settings.component';
-import { NotificationBroadcastComponent } from "./notification/notification-broadcast/notification-broadcast.component";
-import { FcmTokenListComponent } from './notification/fcm-token-list/fcm-token-list.component';
+import { BroadcastComponent } from "./broadcast/broadcast/broadcast.component";
+import { FcmTokenListComponent } from './broadcast/fcm-token-list/fcm-token-list.component';
 import { LoggingListComponent } from './misc/logging-list/logging-list.component';
 import { GameBadgeSuccessComponent } from './gamebadge/game-badge-success/game-badge-success.component';
 import { BusinessEventListComponent } from './businessevent/businessevent-list/businessevent-list.component';
@@ -32,6 +32,7 @@ import { NotverifiedComponent } from './authentication/notverified/notverified.c
 import { VerifyemailComponent } from './authentication/verifyemail/verifyemail.component';
 import { RecoverComponent } from './authentication/recover/recover.component';
 import { SendEmailComponent } from './user/send-email/send-email.component';
+import { NotificationListComponent } from './notification/notification-list/notification-list.component';
 
 const routes: Routes = [
   { path: 'register', component: RegisterUserComponent },
@@ -48,7 +49,7 @@ const routes: Routes = [
   { path: 'userinfo/:id', component: UserInfoComponent, canActivate: [RouteGuardService] },
   { path: 'usersettings', component: UserSettingsComponent, canActivate: [RouteGuardService] },
   { path: 'request', component: RequestListComponent, canActivate: [RouteGuardService] },
-  { path: 'broadcast', component: NotificationBroadcastComponent, canActivate: [RouteGuardService] },
+  { path: 'broadcast', component: BroadcastComponent, canActivate: [RouteGuardService] },
   { path: 'tokens', component: FcmTokenListComponent, canActivate: [RouteGuardService] },
   { path: 'request/:id', component: RequestEditComponent, canActivate: [RouteGuardService] },
   { path: 'tag', component: TagListComponent, canActivate: [RouteGuardService] },
@@ -64,6 +65,7 @@ const routes: Routes = [
   { path: 'businessevent', component: BusinessEventListComponent, canActivate: [RouteGuardService] },
   { path: 'businessevent/:id', component: BusinessEventEditComponent, canActivate: [RouteGuardService] },
   { path: 'sendemail', component: SendEmailComponent, canActivate: [RouteGuardService] },
+  { path: 'notification', component: NotificationListComponent, canActivate: [RouteGuardService] },
   { path: '', redirectTo: 'challenge', pathMatch: 'full' },
   { path: '**', component: PageNotFoundComponent }
 ];

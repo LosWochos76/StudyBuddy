@@ -2,7 +2,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { EventEmitter, Injectable, Output } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import { BusinessEvent } from '../model/businessevent';
-import { BusinessEventList } from '../model/businesseventlist';
+import { BusinessEventList } from '../model/businessevent.list';
 import { AuthorizationService } from './authorization.service';
 import { LoggingService } from './loging.service';
 

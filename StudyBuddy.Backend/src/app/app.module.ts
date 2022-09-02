@@ -32,8 +32,8 @@ import { RequestListComponent } from './request/request-list/request-list.compon
 import { TagListComponent } from './tag/tag-list/tag-list.component';
 import { TagEditComponent } from './tag/tag-edit/tag-edit.component';
 import { ChallengeSuccessComponent } from './challenge/challenge-success/challenge-success.component';
-import { NotificationBroadcastComponent } from './notification/notification-broadcast/notification-broadcast.component';
-import { FcmTokenListComponent } from './notification/fcm-token-list/fcm-token-list.component';
+import { BroadcastComponent } from './broadcast/broadcast/broadcast.component';
+import { FcmTokenListComponent } from './broadcast/fcm-token-list/fcm-token-list.component';
 import { LoggingListComponent } from './misc/logging-list/logging-list.component';
 import { GameBadgeSuccessComponent } from './gamebadge/game-badge-success/game-badge-success.component';
 import { BusinessEventListComponent } from './businessevent/businessevent-list/businessevent-list.component';
@@ -49,6 +49,7 @@ import { NotverifiedComponent } from './authentication/notverified/notverified.c
 import { VerifyemailComponent } from './authentication/verifyemail/verifyemail.component';
 import { RecoverComponent } from './authentication/recover/recover.component';
 import { SendEmailComponent } from './user/send-email/send-email.component';
+import { NotificationListComponent } from './notification/notification-list/notification-list.component';
 
 @NgModule({
   declarations: [
@@ -75,7 +76,7 @@ import { SendEmailComponent } from './user/send-email/send-email.component';
     TagListComponent,
     TagEditComponent,
     ChallengeSuccessComponent,
-    NotificationBroadcastComponent,
+    BroadcastComponent,
     FcmTokenListComponent,
     LoggingListComponent,
     GameBadgeSuccessComponent,
@@ -87,7 +88,8 @@ import { SendEmailComponent } from './user/send-email/send-email.component';
     NotverifiedComponent,
     VerifyemailComponent,
     RecoverComponent,
-    SendEmailComponent
+    SendEmailComponent,
+    NotificationListComponent
   ],
   imports: [
     BrowserModule,

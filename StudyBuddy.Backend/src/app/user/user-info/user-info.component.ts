@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Challenge } from 'src/app/model/challenge';
-import { ChallengeList } from 'src/app/model/challengelist';
-import { GameBadgeList } from 'src/app/model/gamebadgelist';
+import { ChallengeList } from 'src/app/model/challenge.list';
+import { GameBadgeList } from 'src/app/model/gamebadge.list';
 import { User } from 'src/app/model/user';
 import { ChallengeService } from 'src/app/services/challenge.service';
 import { GameBadgeService } from 'src/app/services/gamebadge.service';

@@ -75,7 +75,6 @@ export class UserService {
 
   async save(obj: User) {
     let data = obj.toApi();
-    console.log(data);
     let result = null;
     this.logger.debug("Saving User");
 
@@ -212,7 +211,6 @@ export class UserService {
       }).toPromise().then(res => {
         return res['status'] == 'ok';
       }).catch(res => {
-        console.log(res);
         return false;
       });
 

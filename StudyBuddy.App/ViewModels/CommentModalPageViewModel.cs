@@ -24,8 +24,6 @@ namespace StudyBuddy.App.ViewModels
         }
 
         public CollectionView CommentCollectionView { get; set; }
-
-
         public Command CreateCommentCommand { get; set; }
 
         public string CreateCommentText
@@ -38,11 +36,8 @@ namespace StudyBuddy.App.ViewModels
             }
         }
 
-
         public RangeObservableCollection<CommentViewModel> Comments => _newsViewModel.Comments;
-
         public event PropertyChangedEventHandler PropertyChanged;
-
 
         public void CreateComment()
         {

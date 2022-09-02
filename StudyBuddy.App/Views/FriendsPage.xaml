@@ -29,7 +29,6 @@
     <ContentPage.Content>
     <StackLayout>
         <SearchBar SearchCommand="{Binding SearchCommand}" Text="{Binding SearchText}" />
-        <ActivityIndicator IsVisible="{Binding IsBusy}" IsRunning="{Binding IsBusy}" />
         <RefreshView IsRefreshing="{Binding IsRefreshing}"
                      Command="{Binding RefreshCommand}">
             <CollectionView ItemsSource="{Binding Friends}"

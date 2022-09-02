@@ -24,10 +24,10 @@ namespace StudyBuddy.BusinessLogic
                 .Select(token => token.Token)
                 .ToList();
 
-            var message = new MulticastMessage
+            var message = new MulticastMessage()
             {
                 Tokens = fcmTokens,
-                Notification =
+                Notification = new Notification()
                 {
                     Title = obj.Title,
                     Body = obj.Body

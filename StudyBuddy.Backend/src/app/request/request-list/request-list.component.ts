@@ -32,7 +32,6 @@ export class RequestListComponent implements OnInit {
       var result = await this.service.getAll(this.page)
       this.objects = result.objects;
       this.total = result.count;
-
     });
 
     this.loadUserCache();

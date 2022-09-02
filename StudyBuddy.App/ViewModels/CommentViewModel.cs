@@ -15,10 +15,7 @@ namespace StudyBuddy.App.ViewModels
         }
 
         public string Text => _comment.Text;
-
         public UserViewModel Owner => UserViewModel.FromModel(_comment.Owner);
-
-
         public event PropertyChangedEventHandler PropertyChanged;
 
         [NotifyPropertyChangedInvocator]

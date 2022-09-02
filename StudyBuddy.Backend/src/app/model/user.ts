@@ -6,7 +6,8 @@ export class User {
     password: string;
     email: string;
     role: number = 1;
-    emailconfirmed: boolean;
+    emailconfirmed: boolean = false;
+    accountactive: boolean = false;
 
     constructor() {
         this.id = 0;
@@ -47,6 +48,7 @@ export class User {
         result.email = obj['email'];
         result.role = obj['role'];
         result.emailconfirmed = obj['emailConfirmed'];
+        result.accountactive = obj['accountActive'];
         return result;
     }
 
@@ -58,7 +60,9 @@ export class User {
             "nickname": this.nickname,
             "email": this.email,
             "password": this.password,
-            "role": this.role
+            "role": this.role,
+            "emailConfirmed": this.emailconfirmed,
+            "accountActive": this.accountactive
         };
     }
 
@@ -70,6 +74,12 @@ export class User {
         this.firstname = values.firstname;
         this.lastname = values.lastname;
         this.nickname = values.nickname.toLowerCase();
+
+        if (values.hasOwnProperty('emailconfirmed'))
+            this.emailconfirmed = values.emailconfirmed;
+        
+        if (values.hasOwnProperty('accountactive'))
+            this.accountactive = values.accountactive;
 
         if (values.hasOwnProperty('password'))
             this.password = values.password;

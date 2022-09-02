@@ -27,7 +27,6 @@ namespace StudyBuddy.Api
             return Json(backend.ChallengeService.All(filter));
         }
 
-
         [Route("/User/{user_id}/AcceptedChallenges/")]
         [HttpGet]
         public IActionResult AcceptedChallenged(int user_id, [FromQuery] ChallengeFilter filter)

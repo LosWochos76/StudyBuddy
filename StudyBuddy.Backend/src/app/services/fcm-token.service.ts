@@ -3,7 +3,7 @@ import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { environment } from 'src/environments/environment';
 import { AuthorizationService } from './authorization.service';
 import { FcmToken } from '../model/fcmToken';
-import { FcmTokenList } from '../model/fcmtokenlist';
+import { FcmTokenList } from '../model/fcmtoken.list';
 
 @Injectable({
   providedIn: 'root'

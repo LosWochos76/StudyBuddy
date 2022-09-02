@@ -19,6 +19,7 @@ namespace StudyBuddy.App.ViewModels
         public IAsyncCommand FriendshipRequestCommand { get; set; }
         public bool IsRefreshing { get; set; }
         public int Skip { get; set; }
+        public bool IsBusy { get; set; } = false;
 
         private string _searchText = string.Empty;
         public string SearchText
@@ -51,17 +52,6 @@ namespace StudyBuddy.App.ViewModels
             }
         }
 
-        private bool _isBusy;
-        public bool IsBusy
-        {
-            get { return _isBusy; }
-            set
-            {
-                _isBusy = value;
-                NotifyPropertyChanged(nameof(IsBusy));
-            }
-        }
-
         public AddFriendViewModel(IApi api, IDialogService dialog, INavigationService navigation) : base(api, dialog, navigation)
         {
             Users = new RangeObservableCollection<UserViewModel>();
@@ -90,8 +80,8 @@ namespace StudyBuddy.App.ViewModels
         {
             if (IsBusy)
                 return;
-
-            IsBusy = true;
+            else
+                IsBusy = true;
 
             try
             {
@@ -105,7 +95,6 @@ namespace StudyBuddy.App.ViewModels
 
                 Users.AddRange(friends.Objects);
                 api.ImageService.GetProfileImages(friends.Objects);
-                
                 Skip += 10;
             }
             catch (ApiException e)

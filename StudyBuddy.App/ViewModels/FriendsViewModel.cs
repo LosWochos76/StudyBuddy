@@ -21,6 +21,7 @@ namespace StudyBuddy.App.ViewModels
         public bool IsRefreshing { get; set; } = false;
         public int Skip { get; set; }
         public UserViewModel SelectedUser { get; set; }
+        public bool IsBusy { get; set; } = false;
 
         private string search_text = string.Empty;
         public string SearchText
@@ -53,17 +54,6 @@ namespace StudyBuddy.App.ViewModels
                 NotifyPropertyChanged();
             }
         }
-        private bool is_busy;
-        public bool IsBusy
-        {
-            get { return is_busy; }
-            set
-            {
-                is_busy = value;
-                NotifyPropertyChanged(nameof(IsBusy));
-            }
-        }
-
 
         public FriendsViewModel(IApi api, IDialogService dialog, INavigationService navigation) : base(api, dialog, navigation)
         {
@@ -109,8 +99,8 @@ namespace StudyBuddy.App.ViewModels
         {
             if (IsBusy)
                 return;
-
-            IsBusy = true;
+            else
+                IsBusy = true;
 
             try
             {

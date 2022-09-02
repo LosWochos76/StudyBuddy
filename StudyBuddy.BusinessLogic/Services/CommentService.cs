@@ -23,7 +23,7 @@ namespace StudyBuddy.BusinessLogic.Services
         {
 
 
-            var notification = backend.NotificationService.GetNotificationById(insert.NotificationId);
+            var notification = backend.NotificationService.ById(insert.NotificationId);
             backend.PushNotificationService.SendUserCommentNotification(notification.OwnerId);
 
             backend.Repository.CommentsRepository.Insert(new CommentInsert

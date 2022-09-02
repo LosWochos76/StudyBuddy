@@ -20,7 +20,7 @@ export class GameBadgeEditComponent implements OnInit {
   obj: GameBadge = null;
   form: FormGroup;
   user: User = null;
-    all_users: User[] = [];
+  all_users: User[] = [];
 
   constructor(
     private logger: LoggingService,
@@ -35,9 +35,9 @@ export class GameBadgeEditComponent implements OnInit {
     this.form = new FormGroup({
       name: new FormControl("", [Validators.required, Validators.minLength(3)]),
       description: new FormControl(""),
-        required_coverage: new FormControl("", [Validators.required]),
-        icon_key: new FormControl("awardbronze", [Validators.required]),
-        tags: new FormControl("", [Validators.required])
+      required_coverage: new FormControl("", [Validators.required]),
+      icon_key: new FormControl("", [Validators.required]),
+      tags: new FormControl("", [Validators.required])
     });
 
     if (this.user.isAdmin())
@@ -46,7 +46,7 @@ export class GameBadgeEditComponent implements OnInit {
 
   async ngOnInit() {
     this.id = this.route.snapshot.params['id'];
-    let tags = "";
+
     if (this.id != 0) {
       this.obj = await this.service.byId(this.id);
     } else {
@@ -57,40 +57,44 @@ export class GameBadgeEditComponent implements OnInit {
     if (this.user.isAdmin())
       this.all_users = (await this.user_service.getAll()).objects;
 
-    if (this.user.isAdmin()) {
-      this.form.setValue({
-        name: this.obj.name,
-        description: this.obj.description,
-          required_coverage: this.obj.required_coverage,
-          icon_key: this.obj.iconkey,
-        tags: this.obj.tags,
-          owner_id: this.obj.owner_id
-      });
-    } else {
-      this.form.setValue({
-        name: this.obj.name,
-        description: this.obj.description,
-          required_coverage: this.obj.required_coverage,
-          icon_key: this.obj.iconkey,
-          tags: this.obj.tags
-      });
-    }
+    let values = {
+      name: this.obj.name,
+      description: this.obj.description,
+      required_coverage: this.obj.required_coverage,
+      icon_key: this.obj.iconkey,
+      tags: this.obj.tags
+    };
+
+    if (this.user.isAdmin)
+      values['owner_id'] = this.obj.owner_id;
+    
+    this.form.setValue(values);
   }
 
   async onSubmit() {
     this.logger.debug("Trying to save a GameBadge!");
     this.obj.copyValues(this.form.value);
 
+    if (!this.obj.hasName())
+      this.form.controls.name.setErrors({ 'invalidname': true });
+    else
+      this.form.controls.name.setErrors(null);
+
+    if (!this.obj.hasTags())
+      this.form.controls.tags.setErrors({ 'invalidtags': true });
+    else
+      this.form.controls.tags.setErrors(null);
+
     if (this.form.invalid) {
       this.logger.debug("Data is invalid!");
       return;
-      }
+    }
+
     await this.service.save(this.obj);
     this.navigation.goBack("/gamebadge");
   }
 
   onCancel() {
     this.navigation.goBack("/gamebadge");
-    }
-
+  }
 }
