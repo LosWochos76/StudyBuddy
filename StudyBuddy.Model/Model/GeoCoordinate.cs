@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Globalization;
 
-namespace StudyBuddy.BusinessLogic
+namespace StudyBuddy.Model
 {
     public class GeoCoordinate
     {

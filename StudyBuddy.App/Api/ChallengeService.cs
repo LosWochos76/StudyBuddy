@@ -83,5 +83,21 @@ namespace StudyBuddy.App.Api
 
             return status;
         }
+
+        public async Task<AcceptChallengeByLocationResultDTO> AcceptWithLocation(ChallengeViewModel cvm, GeoCoordinate location)
+        {
+            var rh = new WebRequestHelper(api.Authentication.Token);
+            var data = new AcceptChallengeByLocationRequestDTO()
+            {
+                ChallengeID = cvm.ID,
+                UserPosition = location
+            };
+
+            var result = await rh.Load<AcceptChallengeByLocationResultDTO>(base_url + "Challenge/AcceptWithLocation", HttpMethod.Post, data);
+            if (result.Success)
+                api.RaiseChallengeAcceptedEvent(this, cvm);
+
+            return result;
+        }
     }
 }

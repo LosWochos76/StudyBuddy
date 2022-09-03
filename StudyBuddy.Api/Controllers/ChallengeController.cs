@@ -123,6 +123,14 @@ namespace StudyBuddy.Api
             return Json(backend.ChallengeService.AcceptWithAddendum(challenge_id, prove_addendum));
         }
 
+        [Route("/Challenge/AcceptWithLocation/")]
+        [HttpPost]
+        public IActionResult AcceptWithLocation([FromBody] AcceptChallengeByLocationRequestDTO obj)
+        {
+            logger.LogInformation("ChallengeController.AcceptWithAddendum");
+            return Json(backend.ChallengeService.AcceptWithLocation(obj));
+        }
+
         [Route("/Challenge/{challenge_id}/Accept/")]
         [HttpPost]
         public IActionResult Accept(int challenge_id)

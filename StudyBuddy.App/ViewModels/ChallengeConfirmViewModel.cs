@@ -10,6 +10,7 @@ using TinyIoC;
 using Xamarin.Essentials;
 using Xamarin.Forms;
 using System.Threading.Tasks;
+using Microcharts;
 
 namespace StudyBuddy.App.ViewModels
 {
@@ -116,14 +117,6 @@ namespace StudyBuddy.App.ViewModels
 
         private async void AcceptByLocation()
         {
-            var answer = await dialog.ShowMessage(
-                "Willst du die Herausforderung wirklich abschließen, indem deina aktuelle Geo-Position gecheckt wird?",
-                "Herausforderung abschließen?",
-                "Ja", "Nein", null);
-
-            if (!answer)
-                return;
-
             Location location = null;
             try
             {
@@ -140,12 +133,27 @@ namespace StudyBuddy.App.ViewModels
                 return;
             }
 
-            var prove_addendum = location.Latitude + ";" + location.Longitude;
-            bool result = await api.Challenges.AcceptWithAddendum(challenge, prove_addendum);
+            var message = string.Format("Willst du die Herausforderung wirklich abschließen, " +
+                "indem du deine aktuelle Position ({0:F4}x{1:F4}) meldest?", location.Latitude, location.Longitude);
 
-            if (!result)
+            var answer = await dialog.ShowMessage( message, "Herausforderung abschließen?", "Ja", "Nein", null);
+            if (!answer)
+                return;
+
+            var geo = new GeoCoordinate()
             {
-                dialog.ShowError("Ein Fehler ist aufgetreten! Wahrscheinlich hast du nicht die richtige Position!", "Fehler!", "Ok", null);
+                Latitude = location.Latitude,
+                Longitude = location.Longitude
+            };
+
+            var result = await api.Challenges.AcceptWithLocation(challenge, geo);
+            if (!result.Success)
+            {
+                var distance = result.UserPosition.Distance(result.TargetPosition);
+                message = string.Format("Du darfst nicht weiter, als {0:F2}m von deinem Ziel entfernt sein! Aktuell sind es aber noch {1:F2}m!",
+                    result.TargetPosition.Radius, distance);
+
+                dialog.ShowError(message, "Fehler!", "Ok", null);
                 return;
             }
 

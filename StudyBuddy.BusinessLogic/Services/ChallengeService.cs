@@ -229,6 +229,43 @@ namespace StudyBuddy.BusinessLogic
             return false;
         }
 
+        public AcceptChallengeByLocationResultDTO AcceptWithLocation(AcceptChallengeByLocationRequestDTO obj)
+        {
+            if (obj == null)
+                throw new Exception("Object is null!");
+
+            if (backend.CurrentUser == null)
+                throw new UnauthorizedAccessException("Unauthorized!");
+
+            var challenge = backend.Repository.Challenges.ById(obj.ChallengeID);
+            if (challenge == null)
+                throw new Exception("Object is null!");
+
+            if (challenge.Prove != ChallengeProve.ByLocation)
+                throw new Exception("Prove is wrong!");
+
+            var expected_coordinates = GeoCoordinate.FromString(challenge.ProveAddendum);
+            if (expected_coordinates.IsInRadius(obj.UserPosition))
+            {
+                Accept(challenge, backend.CurrentUser);
+                return new AcceptChallengeByLocationResultDTO()
+                {
+                    Success = true,
+                    UserPosition = obj.UserPosition,
+                    TargetPosition = expected_coordinates
+                };
+            }
+            else
+            {
+                return new AcceptChallengeByLocationResultDTO()
+                {
+                    Success = false,
+                    UserPosition = obj.UserPosition,
+                    TargetPosition = expected_coordinates
+                };
+            }
+        }
+
         public void RemoveAcceptance(int challenge_id, int user_id)
         {
             if (backend.CurrentUser == null || !backend.CurrentUser.IsAdmin)
