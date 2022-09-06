@@ -97,7 +97,8 @@ namespace StudyBuddy.App.ViewModels
                 Email = u.Email,
                 Role = u.Role,
                 AccountActive = u.AccountActive,
-                EmailConfirmed = u.EmailConfirmed
+                EmailConfirmed = u.EmailConfirmed,
+                Password = u.Password
             };
         }
 
