@@ -8,12 +8,11 @@ using StudyBuddy.Model.Filter;
 
 namespace StudyBuddy.App.Api
 {
-    public class CommentService
+    public class CommentService : ICommentService
     {
         private readonly IApi api;
         private readonly string base_url;
         private readonly HttpClient client;
-
 
         public CommentService(IApi api, string base_url)
         {

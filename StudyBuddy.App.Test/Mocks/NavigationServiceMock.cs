@@ -2,7 +2,7 @@
 using StudyBuddy.App.Misc;
 using Xamarin.Forms;
 
-namespace StudyBuddy.Test.Mocks
+namespace StudyBuddy.App.Test.Mocks
 {
     public class NavigationServiceMock : INavigationService
     {

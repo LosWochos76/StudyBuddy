@@ -100,16 +100,20 @@ namespace StudyBuddy.Persistence
             var qh = new QueryHelper(connection_string);
 
             if (!qh.TableExists("notifications"))
+            {
                 qh.ExecuteNonQuery(
                     "create table notifications (" +
                     "id serial primary key, " +
-                    "badge_id int , " +
+                    "badge_id int, " +
                     "owner_id int not null, " +
                     "title text, " +
                     "body text, " +
-                    "created timestamp default current_timestamp, " +
-                    "updated timestamp default current_timestamp " +
+                    "created date, " +
+                    "updated date " +
                     ")");
+
+                rh.SetRevision(3);
+            }
 
             if (rh.GetRevision() == 1)
             {
@@ -126,15 +130,6 @@ namespace StudyBuddy.Persistence
                 qh.ExecuteNonQuery("ALTER TABLE notifications ALTER COLUMN updated type date");
                 rh.SetRevision(3);
             }
-            
-            if (rh.GetRevision() == 3)
-            {
-                qh.ExecuteNonQuery("ALTER TABLE notifications ADD FOREIGN KEY (owner_id) REFERENCES users(id);");
-                qh.ExecuteNonQuery("ALTER TABLE notifications ADD FOREIGN KEY (badge_id) REFERENCES game_badges(id);");
-
-                rh.SetRevision(4);
-            }
-            
         }
 
         public void Delete(int id)

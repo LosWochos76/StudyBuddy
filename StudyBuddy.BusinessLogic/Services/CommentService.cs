@@ -5,7 +5,7 @@ using StudyBuddy.Model.Filter;
 
 namespace StudyBuddy.BusinessLogic.Services
 {
-    public class CommentService
+    class CommentService : ICommentService
     {
         private readonly IBackend backend;
 
@@ -21,8 +21,6 @@ namespace StudyBuddy.BusinessLogic.Services
 
         public void CreateComment(CommentInsert insert)
         {
-
-
             var notification = backend.NotificationService.ById(insert.NotificationId);
             backend.PushNotificationService.SendUserCommentNotification(notification.OwnerId);
 
@@ -33,7 +31,5 @@ namespace StudyBuddy.BusinessLogic.Services
                 Text = insert.Text
             });
         }
-
-
     }
 }

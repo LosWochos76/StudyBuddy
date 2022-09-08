@@ -1,10 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Challenge } from 'src/app/model/challenge';
+import { GameBadgeList } from 'src/app/model/gamebadge.list';
 import { User } from 'src/app/model/user';
 import { AuthorizationService } from 'src/app/services/authorization.service';
 import { ChallengeService } from 'src/app/services/challenge.service';
+import { GameBadgeService } from 'src/app/services/gamebadge.service';
 import { LoggingService } from 'src/app/services/loging.service';
+import { NavigationService } from 'src/app/services/navigation.service';
 import { UserService } from 'src/app/services/user.service';
 
 @Component({
@@ -19,20 +22,26 @@ export class ChallengeSuccessComponent implements OnInit {
   selected: User = null;
   current_user: User = null;
   all_users: User[] = [];
+  possible_game_badges: GameBadgeList = new GameBadgeList();
 
   constructor(
     private logger: LoggingService,
     private route: ActivatedRoute,
     private user_service: UserService,
     private challenge_service: ChallengeService,
+    private gamebadge_service: GameBadgeService,
     private router: Router,
-    private auth: AuthorizationService,) { 
+    private auth: AuthorizationService,
+    private navigation: NavigationService) {
+      navigation.startSaveHistory(); 
       this.current_user = this.auth.getUser();
     }
 
   async ngOnInit() {
     this.id = this.route.snapshot.params['id'];
     this.challenge = await this.challenge_service.byId(this.id);
+    this.possible_game_badges = await this.gamebadge_service.getBadgesForChallenge(this.id);
+
     await this.loadObjects();
   }
 
@@ -74,11 +83,15 @@ export class ChallengeSuccessComponent implements OnInit {
   }
 
   goBack() {
-    this.router.navigate(['challenge']);
+    this.navigation.goBack("/challenge");
   }
 
   async onAddUser(user_id:number) {
     await this.challenge_service.addAcceptance(this.id, user_id);
     await this.loadObjects();
+  }
+
+  onGotoBadge(badge_id:number) {
+    this.router.navigate(['/gamebadge/', badge_id]);
   }
 }

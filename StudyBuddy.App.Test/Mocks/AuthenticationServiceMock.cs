@@ -1,8 +1,9 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using StudyBuddy.App.Api;
 using StudyBuddy.App.ViewModels;
 
-namespace StudyBuddy.Test.Mocks
+namespace StudyBuddy.App.Test.Mocks
 {
     public class AuthenticationServiceMock : IAuthenticationService
     {
@@ -12,23 +13,15 @@ namespace StudyBuddy.Test.Mocks
         public UserViewModel CurrentUser { get; private set; }
         public bool IsLoggedIn => Token != string.Empty;
 
-        public Task<bool> Login(UserCredentials credentials)
+        public async Task<bool> LoginFromJson(string content)
         {
-            return Task.Run(() =>
+            var result = await Login(new UserCredentials()
             {
-                CurrentUser = new UserViewModel() { ID = 1, Firstname = "Test", Lastname = "Test" };
-                Token = "secret_token";
-
-                if (LoginStateChanged != null)
-                    LoginStateChanged(this, new LoginStateChangedArgs(true, CurrentUser, Token));
-
-                return true;
+                EMail="alexander.stuckenholz@hshl.de",
+                Password = "secret"
             });
-        }
 
-        public Task<bool> LoginFromJson(string content)
-        {
-            return Login(null);
+            return result == 1;
         }
 
         public void Logout()
@@ -45,6 +38,26 @@ namespace StudyBuddy.Test.Mocks
         public async Task<bool> SendPasswortResetMail(string email)
         {
             return true;
+        }
+
+        public async Task<int> Login(UserCredentials credentials)
+        {
+            if (string.IsNullOrEmpty(credentials.EMail))
+                throw new Exception("Missing Email!");
+
+            if (string.IsNullOrEmpty(credentials.Password))
+                throw new Exception("Missing Password!");
+
+            return await Task.Run(() =>
+            {
+                CurrentUser = new UserViewModel() { ID = 1, Firstname = "Test", Lastname = "Test" };
+                Token = "secret_token";
+
+                if (LoginStateChanged != null)
+                    LoginStateChanged(this, new LoginStateChangedArgs(true, CurrentUser, Token));
+
+                return 0;
+            });
         }
     }
 }

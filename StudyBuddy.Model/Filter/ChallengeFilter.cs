@@ -15,7 +15,7 @@ namespace StudyBuddy.Model
         public bool OnlyAccepted { get; set; } = false;
         public int CurrentUserId { get; set; } = 0;
         
-        public bool WithTags { get; set; } = false;
+        public bool WithTags { get; set; } = true;
         public bool WithOwner { get; set; } = false;
     }
 }

@@ -1,8 +1,9 @@
 using System.Threading.Tasks;
+using StudyBuddy.App.Api;
 using StudyBuddy.App.ViewModels;
 using Xunit;
 
-namespace StudyBuddy.Test
+namespace StudyBuddy.App.Test
 {
     public class ChallengesViewModelTest : ViewModelBaseTest
     {
@@ -15,39 +16,26 @@ namespace StudyBuddy.Test
         }
 
         [Fact]
-        public async void Initial_Load()
+        public async void Load()
         {
+            // Arange
+            var credentials = new UserCredentials() { EMail = "admin@admin.de", Password = "secret" };
+            await api.Authentication.Login(credentials);
+
+            // Act1
             Assert.Empty(vm.Challenges);
-            await api.Authentication.Login(null);
-
-            Assert.NotEmpty(vm.Challenges);
-        }
-
-        [Fact]
-        public async void Load_More()
-        {
-            await api.Authentication.Login(null);
-            Assert.NotEmpty(vm.Challenges);
-
             await vm.LoadMoreCommand.ExecuteAsync();
-            Assert.Equal(20, vm.Skip);
 
-            for (int i=0; i<20; i++)
-                await vm.LoadMoreCommand.ExecuteAsync();
-
-            Assert.Equal(-1, vm.ItemThreshold);
-        }
-
-        [Fact]
-        public async void Perform_Search()
-        {
-            await api.Authentication.Login(null);
+            // Assert
             Assert.NotEmpty(vm.Challenges);
+            Assert.Equal(10, vm.Challenges.Count);
 
-            vm.SearchText = "22";
-            await Task.Delay(2000);
+            // Act2
+            await vm.LoadMoreCommand.ExecuteAsync();
 
-            Assert.Single(vm.Challenges);
+            // Assert
+            Assert.NotEmpty(vm.Challenges);
+            Assert.Equal(20, vm.Challenges.Count);
         }
     }
 }

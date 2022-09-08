@@ -13,10 +13,12 @@
         <None Remove="Repositories\" />
         <None Remove="Misc\" />
         <None Remove="Converters\" />
+        <None Remove="Transport\" />
     </ItemGroup>
     <ItemGroup>
         <Folder Include="Misc\" />
         <Folder Include="Converters\" />
+        <Folder Include="Transport\" />
     </ItemGroup>
     <PropertyGroup>
         <TargetFramework>net6.0</TargetFramework>

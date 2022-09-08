@@ -1,10 +1,11 @@
 ﻿using System;
 using System.ComponentModel;
+using StudyBuddy.App;
 using StudyBuddy.App.Api;
 using StudyBuddy.App.Interfaces;
 using StudyBuddy.App.ViewModels;
 
-namespace StudyBuddy.Test.Mocks
+namespace StudyBuddy.App.Test.Mocks
 {
     public class ApiMock : IApi
     {
@@ -12,6 +13,7 @@ namespace StudyBuddy.Test.Mocks
         {
             Authentication = new AuthenticationServiceMock();
             Challenges = new ChallengeServiceMock();
+            Preferences = new PreferencesServiceMock();
         }
 
         public IAuthenticationService Authentication { get; }
@@ -22,16 +24,15 @@ namespace StudyBuddy.Test.Mocks
         public IRequestService Requests { get; }
         public ILoggingService Logging { get; }
         public INotificationService Notifications { get; }
-        public NotificationUserMetadataService NotificationUserMetadataService { get; }
+        public INotificationUserMetadataService NotificationUserMetadataService { get; }
         public IStatisticsService Statistics { get; }
         public IImageService ImageService { get; set; }
-        public CommentService CommentService { get; set; }
-
+        public ICommentService CommentService { get; set; }
+        public IPreferencesService Preferences { get; set; }
         public Version AppVersion { get; } = new Version(0, 0, 0, 0);
         public Version ApiVersion { get; } = new Version(0, 0, 0, 0);
 
         public event EventHandler<ChallengeViewModel> ChallengeAccepted;
-
         public void RaiseChallengeAcceptedEvent(object sender, ChallengeViewModel challenge)
         {
             if (ChallengeAccepted != null)
@@ -39,7 +40,6 @@ namespace StudyBuddy.Test.Mocks
         }
 
         public event EventHandler<RequestStateChangedEventArgs> RequestStateChanged;
-
         public void RaiseRequestStateChanged(object sender, RequestStateChangedEventArgs args)
         {
             if (RequestStateChanged != null)

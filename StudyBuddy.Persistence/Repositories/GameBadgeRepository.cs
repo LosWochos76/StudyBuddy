@@ -152,7 +152,7 @@ namespace StudyBuddy.Persistence
                 ":badge_id as badge_id, " +
                 ":user_id as user_id, " +
                 "(select count(*) as overall_challenge_count from " +
-                "   (select id from challenges " +
+                "   (select distinct id from challenges " +
                 "       inner join tags_challenges tc on id = tc.challenge_id " +
                 "       inner join tags_badges tb on tc.tag_id = tb.tag_id " +
                 "       where tb.badge_id = :badge_id " +

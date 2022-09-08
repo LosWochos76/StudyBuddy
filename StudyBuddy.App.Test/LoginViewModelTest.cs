@@ -1,7 +1,7 @@
 ﻿using StudyBuddy.App.ViewModels;
 using Xunit;
 
-namespace StudyBuddy.Test
+namespace StudyBuddy.App.Test
 {
     public class LoginViewModelTest : ViewModelBaseTest
     {

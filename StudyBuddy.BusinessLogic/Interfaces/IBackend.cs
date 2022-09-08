@@ -22,8 +22,8 @@ namespace StudyBuddy.BusinessLogic
         ILoggingService Logging { get; }
         INotificationService NotificationService { get; }
         IImageService ImageService { get; }
-        NotificationUserMetadataService NotificationUserMetadataService { get; }
-        CommentService CommentService { get; }
+        INotificationUserMetadataService NotificationUserMetadataService { get; }
+        ICommentService CommentService { get; }
 
         void SetCurrentUserFromToken(string token);
     }

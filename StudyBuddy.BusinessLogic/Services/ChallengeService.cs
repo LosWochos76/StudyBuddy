@@ -97,6 +97,7 @@ namespace StudyBuddy.BusinessLogic
                 throw new UnauthorizedAccessException("Unauthorized!");
 
             backend.Repository.Challenges.Insert(obj);
+
             foreach (var tag in backend.TagService.CreateOrFindMultiple(obj.Tags).Objects)
                 backend.Repository.Tags.AddTagForChallenge(tag.ID, obj.ID);
 
@@ -316,11 +317,15 @@ namespace StudyBuddy.BusinessLogic
         private void OnChallengeAccepted(Challenge challenge, User user)
         {
             backend.NotificationService.UserAcceptedChallenge(user, challenge);
+            CheckIfUserEarnedGameBadge(challenge, user);
+        }
 
-            // Check, if user received a badge:
+        private void CheckIfUserEarnedGameBadge(Challenge challenge, User user)
+        {
             var filter = new GameBadgeFilter() { Count = int.MaxValue };
             var badges_of_user = backend.GameBadgeService.GetReceivedBadgesOfUser(user.ID, filter);
             var badges = backend.Repository.GameBadges.GetBadgesForChallenge(challenge.ID);
+
             foreach (var badge in badges)
             {
                 if (!IsInList(badges_of_user.Objects, badge))

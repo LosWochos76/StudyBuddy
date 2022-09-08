@@ -6,7 +6,7 @@ using StudyBuddy.App.Api;
 using StudyBuddy.App.ViewModels;
 using StudyBuddy.Model;
 
-namespace StudyBuddy.Test.Mocks
+namespace StudyBuddy.App.Test.Mocks
 {
     public class ChallengeServiceMock : IChallengeService
     {
@@ -14,18 +14,20 @@ namespace StudyBuddy.Test.Mocks
 
         public ChallengeServiceMock()
         {
-            for (int i=0; i<100; i++)
+            for (int i = 0; i < 100; i++)
+            {
                 challenges.Add(new ChallengeViewModel()
                 {
-                    ID = i+1,
+                    ID = i + 1,
                     Category = RandomEnumValue<ChallengeCategory>(),
-                    Name = "Test-Challenge " + (i+1).ToString(),
+                    Name = "Test-Challenge " + (i + 1).ToString(),
                     Points = _R.Next(1, 100),
                     OwnerID = _R.Next(1, 10),
                     ValidityStart = DateTime.Now.Date,
                     ValidityEnd = DateTime.Now.Date.AddDays(1),
                     Prove = RandomEnumValue<ChallengeProve>()
                 });
+            }
         }
 
         static Random _R = new Random();
@@ -63,14 +65,6 @@ namespace StudyBuddy.Test.Mocks
         {
         }
 
-        public Task<IEnumerable<ChallengeViewModel>> ForToday(string search_string = "", int skip = 0)
-        {
-            return Task.Run(() =>
-            {
-                return challenges.Where(c => (c.Name + c.Description + c.Tags).Contains(search_string)).Skip(skip).Take(10);
-            });
-        }
-
         public Task<IEnumerable<ChallengeViewModel>> GetAcceptedChallenges()
         {
             throw new NotImplementedException();
@@ -84,12 +78,24 @@ namespace StudyBuddy.Test.Mocks
             });
         }
 
-        Task<ChallengeListViewModel> IChallengeService.ForToday(string search_string, int skip)
+        public async Task<ChallengeListViewModel> ForToday(string search_string, int skip)
+        {
+            return await Task.Run(() =>
+            {
+                return new ChallengeListViewModel()
+                {
+                    Objects = this.challenges.Skip(skip).Take(10),
+                    Count = this.challenges.Count
+                };
+            });
+        }
+
+        public Task<ChallengeListViewModel> Accepted(string search_string = "", int skip = 0)
         {
             throw new NotImplementedException();
         }
 
-        public Task<ChallengeListViewModel> Accepted(string search_string = "", int skip = 0)
+        public Task<AcceptChallengeByLocationResultDTO> AcceptWithLocation(ChallengeViewModel cvm, GeoCoordinate location)
         {
             throw new NotImplementedException();
         }

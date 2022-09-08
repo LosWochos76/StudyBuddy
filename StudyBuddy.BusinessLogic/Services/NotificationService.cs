@@ -73,8 +73,7 @@ namespace StudyBuddy.BusinessLogic
 
             foreach (var notification in notifications)
             {
-                notification.LikedUsers =
-                    backend.Repository.Users.GetAllLikersForNotification(notification.Id).ToList();
+                notification.LikedUsers = backend.Repository.Users.GetAllLikersForNotification(notification.Id).ToList();
                 notification.Comments = backend.Repository.CommentsRepository.All(new CommentFilter
                 {
                     NotificationId = notification.Id

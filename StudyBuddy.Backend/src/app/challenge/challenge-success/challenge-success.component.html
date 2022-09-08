@@ -2,7 +2,7 @@
 <h1>Erfolg von Herausforderung</h1>
 <p>Die Herausforderung '{{challenge.name}}' wurde bislang von {{objects.length}} Nutzer(n) angenommen.</p>
 <button class="btn btn-primary" (click)="goBack()">Zurück</button>&nbsp;
-<button class="btn btn-danger" [disabled]="!isSelected()" (click)="onRemove()" *ngIf="current_user.isAdmin()">Entfernen</button>
+<button class="btn btn-danger" [disabled]="!isSelected()" (click)="onRemove()" *ngIf="current_user.isAdmin()">Nutzer entfernen</button>
 <br>
 <br>
 <table class="table table-bordered">
@@ -35,3 +35,24 @@
     <br>
     <button type="submit" class="btn btn-primary" (click)="onAddUser(select.value)">Nutzer hinzufügen</button>
 </div>
+
+<hr class="border-2 border-top border-primary">
+<h2>Abzeichen der Herausforderung</h2>
+<p>Die Herausforderung '{{challenge.name}}' kann bis zu {{possible_game_badges.count}} Abzeichen vergeben.</p>
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Abzeichen</th>
+            <th scope="col">Abdeckung</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let obj of possible_game_badges.objects; index as i" (dblclick)="onGotoBadge(obj.id)">
+            <th scope="row">{{i + 1}}</th>
+            <td>{{obj.name}}</td>
+            <td>{{obj.required_coverage | percent }}</td>
+        </tr>
+    </tbody>
+</table>

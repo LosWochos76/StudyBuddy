@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using StudyBuddy.App.Misc;
 
-namespace StudyBuddy.Test.Mocks
+namespace StudyBuddy.App.Test.Mocks
 {
     public class DialogServiceMock : IDialogService
     {

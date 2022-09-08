@@ -129,4 +129,15 @@ export class GameBadgeService {
         headers: new HttpHeaders({ Authorization: this.auth.getToken() })
       }).toPromise();
   }
+
+  async getBadgesForChallenge(challenge_id: number) {
+    this.logger.debug("Getting possible challenges for badge");
+
+    let result = await this.http.get(this.url + "Challenge/" + challenge_id + "/Badge/",
+    {
+      headers: new HttpHeaders({ Authorization: this.auth.getToken() })
+    }).toPromise();
+
+    return GameBadgeList.fromResult(result);
+  }
 }

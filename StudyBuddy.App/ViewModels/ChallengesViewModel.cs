@@ -35,12 +35,12 @@ namespace StudyBuddy.App.ViewModels
                     return;
 
                 search_text = value ?? string.Empty;
-                Preferences.Set("SearchText", search_text);
+                api.Preferences.Set("SearchText", search_text);
 
                 Task.Run(async () =>
                 {
                     string SearchText = search_text;
-                    await Task.Delay(1000);
+                    await Task.Delay(500);
 
                     if (search_text == SearchText)
                         await Refresh();
@@ -68,7 +68,7 @@ namespace StudyBuddy.App.ViewModels
             ScanQrCodeCommand = new AsyncCommand(ScanQrCode);
             RefreshCommand = new AsyncCommand(Refresh);
 
-            this.search_text = Preferences.Get("SearchText", String.Empty);
+            this.search_text = api.Preferences.Get("SearchText", String.Empty);
             api.ChallengeAccepted += async (sender, e) => { await LoadChallenges(); };
         }
 

@@ -9,9 +9,13 @@ namespace StudyBuddy.BusinessLogic
     {
         private readonly JwtToken jwt = new JwtToken();
 
-        public Backend()
+        public Backend() : this(new Repository())
         {
-            Repository = new Repository();
+        }
+
+        public Backend(IRepository repository)
+        {
+            Repository = repository;
             AuthenticationService = new AuthenticationService(this);
             ChallengeService = new ChallengeService(this);
             FcmTokenService = new FcmTokenService(this);
@@ -44,8 +48,8 @@ namespace StudyBuddy.BusinessLogic
         public INotificationService NotificationService { get; }
         public IStatisticsService StatisticsService { get; set; }
         public IImageService ImageService { get; set; }
-        public NotificationUserMetadataService NotificationUserMetadataService { get; }
-        public CommentService CommentService { get; }
+        public INotificationUserMetadataService NotificationUserMetadataService { get; }
+        public ICommentService CommentService { get; }
 
         public void SetCurrentUserFromToken(string token)
         {

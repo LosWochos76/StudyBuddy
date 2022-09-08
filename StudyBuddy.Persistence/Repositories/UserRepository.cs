@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Text;
 using SimpleHashing.Net;
@@ -300,6 +301,8 @@ namespace StudyBuddy.Persistence
                     "nickname varchar(100) not null, " +
                     "email varchar(100) not null, " +
                     "password_hash varchar(100), " +
+                    "emailconfirmed BOOLEAN DEFAULT false, " +
+                    "accountactive BOOLEAN DEFAULT true, " +
                     "role int not null)");
 
                 Insert(new User
@@ -314,7 +317,7 @@ namespace StudyBuddy.Persistence
                     AccountActive = true
                 });
 
-                rh.SetRevision(2);
+                rh.SetRevision(4);
             }
 
             if (!qh.TableExists("friends"))
@@ -334,22 +337,14 @@ namespace StudyBuddy.Persistence
                 qh.ExecuteNonQuery("alter table users " +
                                    "drop column if exists program_id," +
                                    "drop column if exists enrolled_in_term_id");
-
                 rh.SetRevision(2);
             }
             
             if (rh.GetRevision() == 2)
             {
-                qh.ExecuteNonQuery(
-                    "ALTER TABLE users ADD COLUMN emailconfirmed BOOLEAN DEFAULT false");
-
+                qh.ExecuteNonQuery("ALTER TABLE users ADD COLUMN emailconfirmed BOOLEAN DEFAULT false");
+                qh.ExecuteNonQuery("ALTER TABLE users ADD COLUMN accountactive BOOLEAN DEFAULT true");
                 rh.SetRevision(3);
-            }
-            if (rh.GetRevision() == 3)
-            {
-                qh.ExecuteNonQuery(
-                    "ALTER TABLE users ADD COLUMN accountactive BOOLEAN DEFAULT true");
-                rh.SetRevision(4);
             }
 
             qh.ExecuteNonQuery("begin;\n" +

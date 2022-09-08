@@ -6,12 +6,11 @@ using StudyBuddy.Model;
 
 namespace StudyBuddy.App.Api
 {
-    public class NotificationUserMetadataService
+    public class NotificationUserMetadataService : INotificationUserMetadataService
     {
         private readonly IApi api;
         private readonly string base_url;
         private readonly HttpClient client;
-
 
         public NotificationUserMetadataService(IApi api, string base_url)
         {

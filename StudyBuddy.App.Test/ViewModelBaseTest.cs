@@ -1,6 +1,6 @@
-﻿using StudyBuddy.Test.Mocks;
+﻿using StudyBuddy.App.Test.Mocks;
 
-namespace StudyBuddy.Test
+namespace StudyBuddy.App.Test
 {
     public class ViewModelBaseTest
     {

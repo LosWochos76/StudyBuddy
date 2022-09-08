@@ -6,15 +6,23 @@ namespace StudyBuddy.Persistence
     {
         private readonly string connection_string;
 
-        public Repository()
+        public Repository(string connection_string)
         {
-            connection_string = string.Format("Host={0};Username={1};Password={2};Database={3}",
+            this.connection_string = connection_string;
+            CreateRepositories();
+        }
+
+        public Repository() : this(GetDefaultConnectionString())
+        {
+        }
+
+        private static string GetDefaultConnectionString()
+        {
+            return string.Format("Host={0};Username={1};Password={2};Database={3}",
                 Environment.GetOrDefault("POSTGRESQL_HOST", "localhost"),
                 Environment.GetOrDefault("POSTGRESQL_USER", "postgres"),
                 Environment.GetOrDefault("POSTGRESQL_PASSWORD", "secret"),
                 Environment.GetOrDefault("POSTGRESQL_DATABASE", "postgres"));
-
-            CreateRepositories();
         }
 
         public IUserRepository Users { get; private set; }

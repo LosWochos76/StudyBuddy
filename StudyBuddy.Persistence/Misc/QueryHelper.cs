@@ -4,7 +4,7 @@ using Npgsql;
 
 namespace StudyBuddy.Persistence
 {
-    internal class QueryHelper
+    public class QueryHelper
     {
         private readonly string connection_string;
         private readonly Dictionary<string, object> parameters = new Dictionary<string, object>();
