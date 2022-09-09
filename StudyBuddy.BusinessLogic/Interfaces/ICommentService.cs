@@ -6,7 +6,7 @@ namespace StudyBuddy.BusinessLogic
 {
     public interface ICommentService
     {
-        void CreateComment(CommentInsert insert);
+        Comment Insert(Comment insert);
         IEnumerable<Comment> GetAll(CommentFilter filter);
     }
 }

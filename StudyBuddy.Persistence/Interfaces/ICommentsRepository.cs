@@ -7,7 +7,7 @@ namespace StudyBuddy.Persistence
     public interface ICommentsRepository
     {
         IEnumerable<Comment> All(CommentFilter filter);
-        void Insert(CommentInsert insert);
+        Comment Insert(Comment insert);
         void DeleteAllForNotification(int notification_id);
     }
 }

@@ -98,7 +98,6 @@ namespace StudyBuddy.Persistence
             qh.ExecuteNonQuery(sql);
         }
 
-
         public NotificationUserMetadata FindNotificationUserMetadata(NotificationUserMetadataUpsert upsert)
         {
             return FindNotificationUserMetadata(upsert.NotificationId, upsert.OwnerId);

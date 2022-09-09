@@ -20,7 +20,6 @@ namespace StudyBuddy.App.ViewModels
         {
             get
             {
-
                 string[] str = IconKey.Split(",", StringSplitOptions.RemoveEmptyEntries);
                 char[] chars = str[1].Split(new[] { @"\u" }, StringSplitOptions.RemoveEmptyEntries)
                     .Select(c => (char)Convert.ToInt32(c, 16))

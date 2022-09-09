@@ -25,6 +25,19 @@ namespace StudyBuddy.App.ViewModels
         public int Skip { get; set; } = 0;
         public bool IsBusy { get; set; } = false;
 
+        public ChallengesViewModel(IApi api) : base(api)
+        {
+            Challenges = new RangeObservableCollection<ChallengeViewModel>();
+            LoadMoreCommand = new AsyncCommand(LoadChallenges);
+            SearchCommand = new AsyncCommand(Refresh);
+            DetailsCommand = new AsyncCommand(ShowDetails);
+            ScanQrCodeCommand = new AsyncCommand(ScanQrCode);
+            RefreshCommand = new AsyncCommand(Refresh);
+
+            this.search_text = api.Device.GetPreference("SearchText", String.Empty);
+            api.ChallengeAccepted += async (sender, e) => { await LoadChallenges(); };
+        }
+
         private string search_text = string.Empty;
         public string SearchText
         {
@@ -35,7 +48,7 @@ namespace StudyBuddy.App.ViewModels
                     return;
 
                 search_text = value ?? string.Empty;
-                api.Preferences.Set("SearchText", search_text);
+                api.Device.SetPreference("SearchText", search_text);
 
                 Task.Run(async () =>
                 {
@@ -59,19 +72,6 @@ namespace StudyBuddy.App.ViewModels
             }
         }
 
-        public ChallengesViewModel(IApi api, IDialogService dialog, INavigationService navigation) : base(api, dialog, navigation)
-        {
-            Challenges = new RangeObservableCollection<ChallengeViewModel>();
-            LoadMoreCommand = new AsyncCommand(LoadChallenges);
-            SearchCommand = new AsyncCommand(Refresh);
-            DetailsCommand = new AsyncCommand(ShowDetails);
-            ScanQrCodeCommand = new AsyncCommand(ScanQrCode);
-            RefreshCommand = new AsyncCommand(Refresh);
-
-            this.search_text = api.Preferences.Get("SearchText", String.Empty);
-            api.ChallengeAccepted += async (sender, e) => { await LoadChallenges(); };
-        }
-
         private async Task Refresh()
         {
             Challenges.Clear();
@@ -83,7 +83,7 @@ namespace StudyBuddy.App.ViewModels
 
         private async Task LoadChallenges()
         {
-            if (IsBusy)
+                if (IsBusy)
                 return;
             else
                 IsBusy = true;
@@ -103,7 +103,7 @@ namespace StudyBuddy.App.ViewModels
             }
             catch (ApiException e)
             {
-                dialog.ShowError(e, "Ein Fehler ist aufgetreten!", "Ok", null);
+                api.Device.ShowError(e, "Ein Fehler ist aufgetreten!", "Ok", null);
             }
             finally
             {
@@ -116,7 +116,7 @@ namespace StudyBuddy.App.ViewModels
             if (SelectedChallenge == null)
                 return;
             
-            await Navigation.Push(new ChallengeDetailsPage(SelectedChallenge));
+            await api.Device.PushPage(new ChallengeDetailsPage(SelectedChallenge));
             SelectedChallenge = null;
             NotifyPropertyChanged(nameof(SelectedChallenge));
         }

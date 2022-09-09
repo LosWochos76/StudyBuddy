@@ -15,9 +15,9 @@ namespace StudyBuddy.App.Views
         {
             InitializeComponent();
 
+            api = TinyIoCContainer.Current.Resolve<IApi>();
             view_model = TinyIoCContainer.Current.Resolve<ChallengesViewModel>();
             BindingContext = view_model;
-            api = TinyIoCContainer.Current.Resolve<IApi>();
         }
 
         protected override void OnAppearing()

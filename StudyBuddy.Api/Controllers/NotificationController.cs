@@ -31,8 +31,7 @@ namespace StudyBuddy.Api.Controllers
         public IActionResult NotificationFeed([FromQuery] NotificationFilter filter)
         {
             logger.LogInformation("NotificationController.NotificationFeed");
-            var userId = backend.CurrentUser.ID;
-            var notifications = backend.NotificationService.GetNotificationFeedForUser(userId, filter);
+            var notifications = backend.NotificationService.GetNotificationsForFriends(filter);
             return Json(notifications);
         }
 

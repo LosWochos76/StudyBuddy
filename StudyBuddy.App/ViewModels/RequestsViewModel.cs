@@ -18,7 +18,7 @@ namespace StudyBuddy.App.ViewModels
         public bool IsRefreshing { get; set; } = false;
         public bool IsBusy { get; set; }
 
-        public RequestsViewModel(IApi api, IDialogService dialog, INavigationService navigation) : base(api, dialog, navigation)
+        public RequestsViewModel(IApi api) : base(api)
         {
             Requests = new RangeObservableCollection<RequestViewModel>();
             RefreshCommand = new AsyncCommand(Refresh);
@@ -53,7 +53,7 @@ namespace StudyBuddy.App.ViewModels
             }
             catch(ApiException e)
             {
-                dialog.ShowError(e, "Ein Fehler ist aufgetreten!", "Ok", null);
+                api.Device.ShowError(e, "Ein Fehler ist aufgetreten!", "Ok", null);
             }
             finally
             {
@@ -63,7 +63,7 @@ namespace StudyBuddy.App.ViewModels
 
         public async void AcceptRequest(RequestViewModel rvm)
         {
-            var answer = await dialog.ShowMessage(
+            var answer = await api.Device.ShowMessage(
                 "Wollen Sie die " + rvm.TypeString + " annehmen?",
                 "Anfrage annehmen?",
                 "Ja", "Nein", null);
@@ -74,7 +74,7 @@ namespace StudyBuddy.App.ViewModels
             var result = await api.Requests.Accept(rvm);
             if (!result)
             {
-                dialog.ShowError("Ein Fehler ist aufgetreten!", "Fehler!", "Ok", null);
+                api.Device.ShowError("Ein Fehler ist aufgetreten!", "Fehler!", "Ok", null);
                 return;
             }
 
@@ -83,7 +83,7 @@ namespace StudyBuddy.App.ViewModels
 
         public async void DenyRequest(RequestViewModel rvm)
         {
-            var answer = await dialog.ShowMessage(
+            var answer = await api.Device.ShowMessage(
                 "Wollen Sie die " + rvm.TypeString + " ablehnen?",
                 "Anfrage ablehnen?",
                 "Ja", "Nein", null);
@@ -94,16 +94,11 @@ namespace StudyBuddy.App.ViewModels
             var result = await api.Requests.Deny(rvm);
             if (!result)
             {
-                dialog.ShowError("Ein Fehler ist aufgetreten!", "Fehler!", "Ok", null);
+                api.Device.ShowError("Ein Fehler ist aufgetreten!", "Fehler!", "Ok", null);
                 return;
             }
 
             await Refresh();
-
-            if (rvm.Type == Model.RequestType.Friendship)
-            {
-                TinyIoCContainer.Current.Resolve<FriendsViewModel>().RefreshCommand.Execute(null);
-            }
         }
     }
 }

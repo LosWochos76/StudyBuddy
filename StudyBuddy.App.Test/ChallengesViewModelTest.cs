@@ -1,24 +1,18 @@
-using System.Threading.Tasks;
 using StudyBuddy.App.Api;
+using StudyBuddy.App.Test.Mocks;
 using StudyBuddy.App.ViewModels;
 using Xunit;
 
 namespace StudyBuddy.App.Test
 {
-    public class ChallengesViewModelTest : ViewModelBaseTest
+    public class ChallengesViewModelTest
     {
-        private ChallengesViewModel vm;
-
-        public ChallengesViewModelTest()
-        {
-            InitMocks();
-            vm = new ChallengesViewModel(api, dialog, navigation);
-        }
-
         [Fact]
         public async void Load()
         {
             // Arange
+            var api = new ApiMock();
+            var vm = new ChallengesViewModel(api);
             var credentials = new UserCredentials() { EMail = "admin@admin.de", Password = "secret" };
             await api.Authentication.Login(credentials);
 

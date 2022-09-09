@@ -21,6 +21,15 @@ namespace StudyBuddy.App.ViewModels
         public int Skip { get; set; }
         public bool IsBusy { get; set; } = false;
 
+        public AddFriendViewModel(IApi api) : base(api)
+        {
+            Users = new RangeObservableCollection<UserViewModel>();
+            LoadMoreCommand = new AsyncCommand(LoadNotFriends);
+            SearchCommand = new AsyncCommand(LoadNotFriends);
+            RefreshCommand = new AsyncCommand(Refresh);
+            FriendshipRequestCommand = new AsyncCommand(FriendshipRequest);
+        }
+
         private string _searchText = string.Empty;
         public string SearchText
         {
@@ -52,15 +61,6 @@ namespace StudyBuddy.App.ViewModels
             }
         }
 
-        public AddFriendViewModel(IApi api, IDialogService dialog, INavigationService navigation) : base(api, dialog, navigation)
-        {
-            Users = new RangeObservableCollection<UserViewModel>();
-            LoadMoreCommand = new AsyncCommand(LoadNotFriends);
-            SearchCommand = new AsyncCommand(LoadNotFriends);
-            RefreshCommand = new AsyncCommand(Refresh);
-            FriendshipRequestCommand = new AsyncCommand(FriendshipRequest);
-
-        }
         private void Authentication_LoginStateChanged(object sender, LoginStateChangedArgs args)
         {
             if (args.IsLoggedIn)
@@ -99,7 +99,7 @@ namespace StudyBuddy.App.ViewModels
             }
             catch (ApiException e)
             {
-                dialog.ShowError(e, "Ein Fehler ist aufgetreten!", "Ok", null);
+                api.Device.ShowError(e, "Ein Fehler ist aufgetreten!", "Ok", null);
             }
             finally
             {
@@ -112,10 +112,10 @@ namespace StudyBuddy.App.ViewModels
             if (SelectedUser == null)
                 return;
 
-            if(!SelectedUser.RequestedForFriendship)
+            if (!SelectedUser.RequestedForFriendship)
             {
                 var answer = false;
-                await dialog.ShowMessage(
+                await api.Device.ShowMessage(
                     "Wollen Sie eine Anfrage stellen, um " + SelectedUser.Name + " als Freund hinzuzufügen?",
                     "Freund hinzufügen?",
                     "Ja", "Nein", a => { answer = a; });
@@ -132,14 +132,14 @@ namespace StudyBuddy.App.ViewModels
                 NotifyPropertyChanged(nameof(SelectedUser));
                 if (!result)
                 {
-                    dialog.ShowError("Ein Fehler ist aufgetreten!", "Fehler!", "Ok", null);
+                    api.Device.ShowError("Ein Fehler ist aufgetreten!", "Fehler!", "Ok", null);
                     return;
                 }
             }
             else if (SelectedUser.RequestedForFriendship)
             {
                 var answer = false;
-                await dialog.ShowMessage(
+                await api.Device.ShowMessage(
                     "Wollen Sie die Anfrage and " + SelectedUser.Name + " löschen?",
                     "Freundschaftsanfrage löschen?",
                     "Ja", "Nein", a => { answer = a; });
@@ -157,12 +157,14 @@ namespace StudyBuddy.App.ViewModels
                 NotifyPropertyChanged(nameof(SelectedUser));
                 if (!result)
                 {
-                    dialog.ShowError("Ein Fehler ist aufgetreten!", "Fehler!", "Ok", null);
+                    api.Device.ShowError("Ein Fehler ist aufgetreten!", "Fehler!", "Ok", null);
                     return;
                 }
             }
-            else dialog.ShowError("Ein Fehler ist aufgetreten.", "Fehler", "Ok", null);
+            else
+            {
+                api.Device.ShowError("Ein Fehler ist aufgetreten.", "Fehler", "Ok", null);
+            }
         }
-
     }
 }

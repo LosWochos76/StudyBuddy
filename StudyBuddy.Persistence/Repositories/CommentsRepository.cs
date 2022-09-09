@@ -52,13 +52,19 @@ namespace StudyBuddy.Persistence
             return converter.Multiple(set);
         }
 
-        public void Insert(CommentInsert insert)
+        public Comment Insert(Comment obj)
         {
             var qh = new QueryHelper(connection_string);
-            qh.AddParameter(":owner_id", insert.OwnerId);
-            qh.AddParameter(":notification_id", insert.NotificationId);
-            qh.AddParameter(":text", insert.Text);
-            qh.ExecuteScalar("insert into comments (owner_id, notification_id, text) values (:owner_id, :notification_id, :text)");
+            qh.AddParameter(":owner_id", obj.OwnerId);
+            qh.AddParameter(":notification_id", obj.NotificationId);
+            qh.AddParameter(":text", obj.Text);
+            qh.AddParameter(":created", obj.Created);
+            qh.AddParameter("updated", obj.Updated);
+
+            obj.Id = qh.ExecuteScalar("insert into comments (owner_id, notification_id, text, created, updated) " +
+                "values (:owner_id, :notification_id, :text, :created, :updated) RETURNING id");
+
+            return obj;
         }
 
         public void DeleteAllForNotification(int notification_id)

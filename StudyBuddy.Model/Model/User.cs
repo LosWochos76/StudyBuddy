@@ -4,18 +4,18 @@ namespace StudyBuddy.Model
 {
     public class User : Entity
     {
-        public string Firstname { get; set; }
-        public string Lastname { get; set; }
-        public string Nickname { get; set; }
-        public string Password { get; set; }
+        public string Firstname { get; set; } = string.Empty;
+        public string Lastname { get; set; } = string.Empty;
+        public string Nickname { get; set; } = string.Empty;
+        public string Password { get; set; } = string.Empty;
 
         [JsonIgnore]
-        public string PasswordHash { get; set; }
+        public string PasswordHash { get; set; } = string.Empty;
 
-        public string Email { get; set; }
+        public string Email { get; set; } = string.Empty;
         public Role Role { get; set; } = Role.Student;
-        public bool EmailConfirmed { get; set; }
-        public bool AccountActive { get; set; }
+        public bool EmailConfirmed { get; set; } = false;
+        public bool AccountActive { get; set; } = false;
 
         [JsonIgnore]
         public bool IsAdmin => Role == Role.Admin;
@@ -27,7 +27,7 @@ namespace StudyBuddy.Model
         public bool IsInstructor => Role == Role.Instructor;
 
         // Is only loaded in certain contexts
-        public int CommonFriends { get; set; }
-        public Request FriendshipRequest { get; set; }
+        public int CommonFriends { get; set; } = 0;
+        public Request FriendshipRequest { get; set; } = null;
     }
 }

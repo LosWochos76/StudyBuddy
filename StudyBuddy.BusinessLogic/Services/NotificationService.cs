@@ -21,27 +21,10 @@ namespace StudyBuddy.BusinessLogic
             return backend.Repository.Notifications.ById(notificationId);
         }
 
-        public void CreateNotificationForUser(int userId, string title, string body, int? badgeId = null)
+        public IEnumerable<Notification> GetNotificationFromUser(int user_id)
         {
-            var notification = new Notification
-            {
-                OwnerId = userId,
-                Title = title,
-                Body = body,
-                BadgeId = badgeId
-            };
-
-            backend.Repository.Notifications.Insert(notification);
-        }
-
-        public IEnumerable<Notification> GetNotificationFromUser(int userId)
-        {
-            var response = backend.Repository.Notifications.GetAll(new NotificationFilter
-            {
-                OwnerId = userId
-            });
-
-            return response;
+            var filter = new NotificationFilter { UserID = user_id };
+            return backend.Repository.Notifications.GetAll(filter);
         }
 
         public NotificationList GetAll(NotificationFilter filter)
@@ -49,7 +32,7 @@ namespace StudyBuddy.BusinessLogic
             if (backend.CurrentUser == null)
                 throw new UnauthorizedAccessException("Unauthorized!");
 
-            if (!backend.CurrentUser.IsAdmin && filter.OwnerId.HasValue && filter.OwnerId!=backend.CurrentUser.ID)
+            if (!backend.CurrentUser.IsAdmin && filter.UserID.HasValue && filter.UserID!=backend.CurrentUser.ID)
                 throw new UnauthorizedAccessException("Unauthorized!");
 
             if (filter == null)
@@ -62,25 +45,37 @@ namespace StudyBuddy.BusinessLogic
             };
         }
 
-        public IEnumerable<Notification> GetNotificationFeedForUser(int userId, NotificationFilter filter)
+        public IEnumerable<Notification> GetNotificationsForFriends(NotificationFilter filter)
         {
-            var notifications = backend.Repository.Notifications.GetUserNotificationsFeed(new NotificationFilter
-            {
-                OwnerId = userId,
-                Start = filter.Start,
-                Count = filter.Count
-            });
+            if (filter == null || !filter.UserID.HasValue)
+                throw new Exception("Missing parameters!");
 
-            foreach (var notification in notifications)
+            if (backend.CurrentUser == null)
+                throw new Exception("Unauthorized!");
+
+            if (!backend.CurrentUser.IsAdmin && backend.CurrentUser.ID != filter.UserID.Value)
+                throw new Exception("Unauthorized!");
+
+            var notifications = backend.Repository.Notifications.GetNotificationsForFriends(filter);
+            foreach (var obj in notifications)
             {
-                notification.LikedUsers = backend.Repository.Users.GetAllLikersForNotification(notification.Id).ToList();
-                notification.Comments = backend.Repository.CommentsRepository.All(new CommentFilter
+                if (filter.WithOwner)
+                    obj.Owner = backend.Repository.Users.ById(obj.OwnerId);
+
+                if (filter.WithLikedUsers)
+                    obj.LikedUsers = backend.Repository.Users.GetAllLikersForNotification(obj.Id);
+
+                if (filter.WithComments)
                 {
-                    NotificationId = notification.Id
-                }).ToList();
-            }
+                    var cf = new CommentFilter { NotificationId = obj.Id };
+                    obj.Comments = backend.Repository.CommentsRepository.All(cf);
+                }
 
-            return notifications;
+                if (obj.BadgeId.HasValue && filter.WithBadge)
+                    obj.Badge = backend.Repository.GameBadges.ById(obj.BadgeId.Value);
+
+                yield return obj;
+            }
         }
 
         public void UserAcceptedChallenge(User user, Challenge challenge)
@@ -93,10 +88,9 @@ namespace StudyBuddy.BusinessLogic
 
             var notification = new Notification()
             {
-                Created = DateTime.Now,
-                Updated = DateTime.Now,
-                Title = "ChallengeAccepted",
-                Body = String.Format("{0} {1} hat die Herausforderung '{2}' abgeschlossen.", user.Firstname, user.Lastname, challenge.Name),
+                Title = "Herausforderung abgeschlossen",
+                Body = String.Format("{0} {1} hat die Herausforderung '{2}' abgeschlossen.",
+                    user.Firstname, user.Lastname, challenge.Name),
                 OwnerId = user.ID
             };
 
@@ -113,10 +107,9 @@ namespace StudyBuddy.BusinessLogic
 
             var notification = new Notification()
             {
-                Created = DateTime.Now,
-                Updated = DateTime.Now,
-                Title = "BadgeReceived",
-                Body = String.Format("{0} {1} hat das Abzeichen '{2}' erhalten.", user.Firstname, user.Lastname, badge.Name),
+                Title = "Abzeichen erhalten",
+                Body = String.Format("{0} {1} hat das Abzeichen '{2}' erhalten.",
+                    user.Firstname, user.Lastname, badge.Name),
                 OwnerId = user.ID
             };
 

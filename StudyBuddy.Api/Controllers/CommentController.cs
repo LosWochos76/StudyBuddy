@@ -16,20 +16,15 @@ namespace StudyBuddy.Api.Controllers
         }
 
         [HttpPost]
-        public IActionResult CreateComment([FromBody] CommentInsert insert)
+        public IActionResult Insert([FromBody] Comment insert)
         {
-            backend.CommentService.CreateComment(insert);
-
-            // backend.PushNotificationService.SendUserCommentNotification(insert.);
-
-            return Ok();
+            return Json(backend.CommentService.Insert(insert));
         }
 
         [HttpGet]
-        public IActionResult GetAllLikes([FromQuery] CommentFilter filter)
+        public IActionResult GetAll([FromQuery] CommentFilter filter)
         {
-            var likes = backend.CommentService.GetAll(filter);
-            return Ok(likes);
+            return Json(backend.CommentService.GetAll(filter));
         }
     }
 }

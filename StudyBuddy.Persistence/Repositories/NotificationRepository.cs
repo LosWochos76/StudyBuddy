@@ -23,9 +23,9 @@ namespace StudyBuddy.Persistence
             qh.AddParameter(":max", filter.Count);
             qh.AddParameter(":from", filter.Start);
 
-            if (filter.OwnerId.HasValue)
+            if (filter.UserID.HasValue)
             {
-                qh.AddParameter(":owner_id", filter.OwnerId.Value);
+                qh.AddParameter(":owner_id", filter.UserID.Value);
                 sql += " and (owner_id=:owner_id) ";
             }
 
@@ -39,9 +39,9 @@ namespace StudyBuddy.Persistence
             var qh = new QueryHelper(connection_string);
             var sql = "select count(*) from notifications where true";
 
-            if (filter.OwnerId.HasValue)
+            if (filter.UserID.HasValue)
             {
-                qh.AddParameter(":owner_id", filter.OwnerId.Value);
+                qh.AddParameter(":owner_id", filter.UserID.Value);
                 sql += " and (owner_id=:owner_id)";
             }
 
@@ -59,7 +59,8 @@ namespace StudyBuddy.Persistence
             qh.AddParameter(":updated", obj.Updated);
 
             obj.Id = qh.ExecuteScalar(
-                "insert into notifications (owner_id, badge_id ,title, body, created , updated) values (:owner_id, :badge_id ,:title, :body, :created , :updated) returning id");
+                "insert into notifications (owner_id, badge_id ,title, body, created, updated) " +
+                "values (:owner_id, :badge_id ,:title, :body, :created, :updated) returning id");
         }
 
         public Notification ById(int id)
@@ -68,27 +69,23 @@ namespace StudyBuddy.Persistence
             qh.AddParameter(":notification_id", id);
 
             var set = qh.ExecuteQuery(
-                "select id, badge_id , owner_id, title, body, created, updated from  notifications where id = :notification_id");
+                "select id, badge_id, owner_id, title, body, created, updated from notifications where id = :notification_id");
 
             return converter.Single(set);
         }
 
-        public IEnumerable<Notification> GetUserNotificationsFeed(NotificationFilter filter)
+        public IEnumerable<Notification> GetNotificationsForFriends(NotificationFilter filter)
         {
             var qh = new QueryHelper(connection_string);
-            qh.AddParameter(":user_id", filter.OwnerId);
+            qh.AddParameter(":owner_id", filter.UserID);
             qh.AddParameter(":from", filter.Start);
             qh.AddParameter(":max", filter.Count);
 
-            var sql =
-                "select distinct on (n.id) n.id, n.badge_id ,n.owner_id, n.title, n.body, n.created, n.updated, " +
-                "u.firstname, u.lastname, u.nickname, " +
-                "md.liked, md.seen, md.shared " +
-                "from friends as f " +
-                "inner join users as u on f.user_a = :user_id " +
-                "inner join (select distinct on (id) id, badge_id ,owner_id, title, body, created, updated from notifications order by id limit :max offset :from) as n on u.id = n.owner_id " +
-                "left outer join notification_user_metadata  as md on md.owner_id = :user_id and md.notification_id = n.id " +
-                "order by n.id, n.created desc";   
+            var sql = "select id,owner_id,body,created,updated,badge_id from notifications " +
+                "inner join friends on owner_id = user_a " +
+                "where user_b = :owner_id " +
+                "order by created desc " +
+                "limit :max offset :from";
 
             var set = qh.ExecuteQuery(sql);
             return converter.Multiple(set);

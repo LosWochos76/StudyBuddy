@@ -20,6 +20,17 @@ namespace StudyBuddy.App.ViewModels
         public int Skip { get; set; }
         public bool IsBusy { get; set; } = false;
 
+        public ChallengesCompletedViewModel(IApi api) : base(api)
+        {
+            Challenges = new RangeObservableCollection<ChallengeViewModel>();
+            LoadMoreCommand = new AsyncCommand(LoadChallenges);
+            SearchCommand = new AsyncCommand(Refresh);
+            RefreshCommand = new AsyncCommand(Refresh);
+            DetailsCommand = new AsyncCommand(ShowDetails);
+
+            api.ChallengeAccepted += async (sender, e) => { await LoadChallenges(); };
+        }
+
         private string _searchText = string.Empty;
         public string SearchText 
         {
@@ -54,24 +65,13 @@ namespace StudyBuddy.App.ViewModels
                 NotifyPropertyChanged();
             }
         }
-        
-        public ChallengesCompletedViewModel(IApi api, IDialogService dialog, INavigationService navigation) : base(api, dialog, navigation)
-        {
-            Challenges = new RangeObservableCollection<ChallengeViewModel>();
-            LoadMoreCommand = new AsyncCommand(LoadChallenges);
-            SearchCommand = new AsyncCommand(Refresh);
-            RefreshCommand = new AsyncCommand(Refresh);
-            DetailsCommand = new AsyncCommand(ShowDetails);
-
-            api.ChallengeAccepted += async (sender, e) => { await LoadChallenges(); };
-        }
 
         private async Task ShowDetails()
         {
             if (SelectedChallenge == null)
                 return;
             
-            await Navigation.Push(new ChallengeCompletedDetailsPage(SelectedChallenge));
+            await api.Device.PushPage(new ChallengeCompletedDetailsPage(SelectedChallenge));
             SelectedChallenge = null;
             NotifyPropertyChanged(nameof(SelectedChallenge));
         }
@@ -106,7 +106,7 @@ namespace StudyBuddy.App.ViewModels
             }
             catch (ApiException e)
             {
-                dialog.ShowError(e, "Ein Fehler ist aufgetreten!", "Ok", null);
+                api.Device.ShowError(e, "Ein Fehler ist aufgetreten!", "Ok", null);
             }
             finally
             {

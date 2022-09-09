@@ -3,8 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using StudyBuddy.App.Api;
-using StudyBuddy.App.Misc;
-using StudyBuddy.Model;
+using StudyBuddy.App.Views;
 using Xamarin.CommunityToolkit.ObjectModel;
 using Xamarin.Forms;
 
@@ -12,15 +11,21 @@ namespace StudyBuddy.App.ViewModels
 {
     public class NotificationsPageViewModel : ViewModelBase
     {
-        public IApi Api;
-        public Command<NewsViewModel> OpenCommentsCommands { get; set; }
-        public RangeObservableCollection<NewsViewModel> News { get; } = new RangeObservableCollection<NewsViewModel>();
-        public ICommand RefreshCommand { get; set; }
-        public ICommand LoadMoreCommand { get; set; }
-        public ICommand RefreshNewsCommand { get; }
+        public RangeObservableCollection<NotificationViewModel> Notifications { get; } = new RangeObservableCollection<NotificationViewModel>();
         public bool IsRefreshing { get; set; }
         public int Skip { get; set; }
         public bool IsBusy { get; set; } = false;
+        public ICommand RefreshCommand { get; set; }
+        public ICommand LoadMoreCommand { get; set; }
+        public ICommand RefreshNewsCommand { get; }
+        public ICommand OpenCommentsCommands { get; set; }
+
+        public NotificationsPageViewModel(IApi api) : base(api)
+        {
+            RefreshCommand = new AsyncCommand(Refresh);
+            LoadMoreCommand = new AsyncCommand(LoadNews);
+            OpenCommentsCommands = new Command<NotificationViewModel>(OpenComments);
+        }
 
         private int item_treshold = 1;
         public int ItemThreshold
@@ -33,21 +38,9 @@ namespace StudyBuddy.App.ViewModels
             }
         }
 
-        public ICommand NewsDetailCommand { get; set; }
-        public NewsViewModel NewsSelectedItem { get; set; }
-        public ICommand NewsRemainingItemsThresholdReachedCommand { get; set; }
-
-        public NotificationsPageViewModel(IApi api, IDialogService dialog, INavigationService navigation) : base(api, dialog, navigation)
-        {
-            RefreshCommand = new AsyncCommand(Refresh);
-            NewsDetailCommand = new Command(() => { });
-            LoadMoreCommand = new AsyncCommand(LoadNews);
-            Api = api;
-        }
-
         private async Task Refresh()
         {
-            News.Clear();
+            Notifications.Clear();
             Skip = 0;
             await LoadNews();
             IsRefreshing = false;
@@ -64,24 +57,29 @@ namespace StudyBuddy.App.ViewModels
             try
             {
                 ItemThreshold = 1;
-                var news = await api.Notifications.GetMyNotificationFeed(Skip);
-                if (news.Count() == 0)
+                var objects = await api.Notifications.GetNotificationsForFriends(Skip);
+                if (objects.Count() == 0)
                 {
                     ItemThreshold = -1;
                     return;
                 }
 
-                News.AddRange(news);
+                Notifications.AddRange(objects);
                 Skip += 10;
             }
             catch (ApiException e)
             {
-                dialog.ShowError(e, "Ein Fehler ist aufgetreten!", "Ok", null);
+                api.Device.ShowError(e, "Ein Fehler ist aufgetreten!", "Ok", null);
             }
             finally
             {
                 IsBusy = false;
             }
+        }
+
+        private void OpenComments(NotificationViewModel notification)
+        {
+            api.Device.PushPage(new CommentModalPage(notification));
         }
     }
 }

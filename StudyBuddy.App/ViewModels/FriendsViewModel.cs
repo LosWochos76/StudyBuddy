@@ -23,6 +23,16 @@ namespace StudyBuddy.App.ViewModels
         public UserViewModel SelectedUser { get; set; }
         public bool IsBusy { get; set; } = false;
 
+        public FriendsViewModel(IApi api) : base(api)
+        {
+            Friends = new RangeObservableCollection<UserViewModel>();
+            LoadMoreCommand = new AsyncCommand(LoadFriends);
+            SearchCommand = new AsyncCommand(Refresh);
+            RefreshCommand = new AsyncCommand(Refresh);
+            DetailsCommand = new AsyncCommand(Details);
+            AddFriendCommand = new AsyncCommand(AddFriend);
+        }
+
         private string search_text = string.Empty;
         public string SearchText
         {
@@ -53,37 +63,6 @@ namespace StudyBuddy.App.ViewModels
                 item_treshold = value;
                 NotifyPropertyChanged();
             }
-        }
-
-        public FriendsViewModel(IApi api, IDialogService dialog, INavigationService navigation) : base(api, dialog, navigation)
-        {
-            Friends = new RangeObservableCollection<UserViewModel>();
-            LoadMoreCommand = new AsyncCommand(LoadFriends);
-            SearchCommand = new AsyncCommand(Refresh);
-            RefreshCommand = new AsyncCommand(Refresh);
-            DetailsCommand = new AsyncCommand(Details);
-            AddFriendCommand = new AsyncCommand(AddFriend);
-
-            api.Authentication.LoginStateChanged += Authentication_LoginStateChanged;
-            api.FriendshipStateChanged += Api_FriendshipStateChanged;
-            api.RequestStateChanged += Api_RequestStateChanged;
-        }
-
-        private void Api_RequestStateChanged(object sender, RequestStateChangedEventArgs e)
-        {
-            if (e.Request.Type == Model.RequestType.Friendship)
-                RefreshCommand.Execute(null);
-        }
-
-        private void Api_FriendshipStateChanged(object sender, FriendshipStateChangedEventArgs e)
-        {
-            RefreshCommand.Execute(null);
-        }
-
-        private void Authentication_LoginStateChanged(object sender, LoginStateChangedArgs args)
-        {
-            if (args.IsLoggedIn)
-                RefreshCommand.Execute(null);
         }
 
         private async Task Refresh()
@@ -118,7 +97,7 @@ namespace StudyBuddy.App.ViewModels
             }
             catch (ApiException e)
             {
-                dialog.ShowError(e, "Ein Fehler ist aufgetreten!", "Ok", null);
+                api.Device.ShowError(e, "Ein Fehler ist aufgetreten!", "Ok", null);
             }
             finally
             {
@@ -132,7 +111,7 @@ namespace StudyBuddy.App.ViewModels
                 return;
 
             var userStatistics = await api.Statistics.GetUserStatisticsForUser(SelectedUser.ID);
-            await Navigation.Push(new FriendPage(SelectedUser, userStatistics));
+            await api.Device.PushPage(new FriendPage(SelectedUser, userStatistics));
             SelectedUser = null;
             NotifyPropertyChanged(nameof(SelectedUser));
         }

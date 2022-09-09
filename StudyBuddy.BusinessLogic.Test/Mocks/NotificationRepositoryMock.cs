@@ -34,7 +34,7 @@ namespace StudyBuddy.BusinessLogic.Test.Mocks
             return objects.Count;
         }
 
-        public IEnumerable<Notification> GetUserNotificationsFeed(NotificationFilter filter)
+        public IEnumerable<Notification> GetNotificationsForFriends(NotificationFilter filter)
         {
             throw new NotImplementedException();
         }

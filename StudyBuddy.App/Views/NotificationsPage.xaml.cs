@@ -1,3 +1,4 @@
+using StudyBuddy.App.Api;
 using StudyBuddy.App.ViewModels;
 using TinyIoC;
 using Xamarin.Forms;
@@ -10,21 +11,25 @@ namespace StudyBuddy.App.Views
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class NotificationsPage : ContentPage
     {
-        private readonly NotificationsPageViewModel ViewModel;
+        private readonly IApi api;
+        private readonly NotificationsPageViewModel view_model;
 
         public NotificationsPage()
         {
             InitializeComponent();
-
             On<iOS>().SetUseSafeArea(true);
-            ViewModel = TinyIoCContainer.Current.Resolve<NotificationsPageViewModel>();
-            BindingContext = ViewModel;
+
+            this.api = TinyIoCContainer.Current.Resolve<IApi>();
+            this.view_model = TinyIoCContainer.Current.Resolve<NotificationsPageViewModel>();
+            BindingContext = view_model;
         }
 
         protected override void OnAppearing()
         {
             base.OnAppearing();
-            ViewModel.RefreshCommand.Execute(null);
+
+            if (api.Authentication.IsLoggedIn)
+                view_model.RefreshCommand.Execute(null);
         }
     }
 }

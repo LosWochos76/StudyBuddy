@@ -1,11 +1,10 @@
 ﻿using System.Linq;
-using StudyBuddy.App.Api;
-using StudyBuddy.App.Misc;
-using StudyBuddy.App.Views;
-using StudyBuddy.Model;
 using System.Threading.Tasks;
 using Microcharts;
 using SkiaSharp;
+using StudyBuddy.App.Api;
+using StudyBuddy.App.Views;
+using StudyBuddy.Model;
 using Xamarin.CommunityToolkit.ObjectModel;
 using Xamarin.Forms;
 
@@ -37,24 +36,12 @@ namespace StudyBuddy.App.ViewModels
         public IAsyncCommand TotalBadgeCommand { get; set; }
         public IAsyncCommand BadgeDetailsCommand { get; set; }
 
-        public Color ThemeColor 
-        { 
-            get 
-            { 
-                switch (Application.Current.UserAppTheme)
-                {
-                    case OSAppTheme.Light: return Color.FromHex("#F2F2F7");
-                    case OSAppTheme.Dark: return Color.Transparent;
-                    default: return Color.Transparent;
-                }
-            }
-        }
-
-        public StatisticsViewModel(IApi api, IDialogService dialog, INavigationService navigation) : base(api, dialog, navigation)
+        public StatisticsViewModel(IApi api) : base(api)
         {
             TotalChallengesCommand = new AsyncCommand(ShowCompletedChallenges);
             TotalBadgeCommand = new AsyncCommand(ShowTotalBadge);
             RefreshCommand = new AsyncCommand(RefreshView);
+
             BadgeDetailsCommand = new AsyncCommand(execute: async () =>
             {
                 await ShowBadgeDetails();
@@ -68,19 +55,32 @@ namespace StudyBuddy.App.ViewModels
             });
         }
 
+        public Color ThemeColor 
+        { 
+            get 
+            { 
+                switch (Application.Current.UserAppTheme)
+                {
+                    case OSAppTheme.Light: return Color.FromHex("#F2F2F7");
+                    case OSAppTheme.Dark: return Color.Transparent;
+                    default: return Color.Transparent;
+                }
+            }
+        }
+
         private async Task ShowCompletedChallenges()
         {
-            await Navigation.Push(new ChallengesCompletedPage());
+            await api.Device.PushPage(new ChallengesCompletedPage());
         }
 
         private async Task ShowTotalBadge()
         {
-            await Navigation.Push(new TotalBadgePage());
+            await api.Device.PushPage(new TotalBadgePage());
         }
 
         private async Task ShowBadgeDetails()
         {
-            await Navigation.Push(new BadgeDetailsPage(LastBadge));
+            await api.Device.PushPage(new BadgeDetailsPage(LastBadge));
         }
         
         private async Task RefreshView()

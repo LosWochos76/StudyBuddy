@@ -5,7 +5,7 @@ namespace StudyBuddy.App.ViewModels
 {
     public class QrCodeViewModel : ViewModelBase
     {
-        public QrCodeViewModel(IApi api, IDialogService dialog, INavigationService navigation) : base(api, dialog, navigation)
+        public QrCodeViewModel(IApi api) : base(api)
         {
         }
 
@@ -14,25 +14,25 @@ namespace StudyBuddy.App.ViewModels
             if (!text.StartsWith("qr:"))
                 return;
 
-            var answer = await dialog.ShowMessage(
+            var answer = await api.Device.ShowMessage(
                 "StudyBuddy QR-Code gefunden! Wollen Sie die Herausforderung annehmen?",
                 "Herausforderung annehmen?",
                 "Ja", "Nein", null);
 
             if (!answer)
             {
-                await Navigation.GoTo("//ChallengesPage");
+                await api.Device.GoToPath("//ChallengesPage");
                 return;
             }
 
             var cvm = await api.Challenges.AcceptFromQrCode(text);
             if (cvm == null)
             {
-                dialog.ShowError("Ein Fehler ist aufgetreten!", "Fehler!", "Ok", null);
+                api.Device.ShowError("Ein Fehler ist aufgetreten!", "Fehler!", "Ok", null);
                 return;
             }
 
-            await Navigation.GoTo("//StatisticsPage");
+            await api.Device.GoToPath("//StatisticsPage");
         }
     }
 }

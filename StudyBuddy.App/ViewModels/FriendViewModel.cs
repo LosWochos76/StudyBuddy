@@ -18,7 +18,7 @@ namespace StudyBuddy.App.ViewModels
         public BarChart TotalPointsChart { get { return _totalPointsChart; } set { _totalPointsChart = value; NotifyPropertyChanged(); } }
         private BarChart _totalPointsChart;
 
-        public FriendViewModel(IApi api, IDialogService dialog, INavigationService navigation, UserViewModel obj, UserStatistics userStatistics) : base(api, dialog, navigation)
+        public FriendViewModel(IApi api, UserViewModel obj, UserStatistics userStatistics) : base(api)
         {
             User = obj;
             UserStatistics = userStatistics;
@@ -29,12 +29,12 @@ namespace StudyBuddy.App.ViewModels
 
         private async Task ShowCompletedChallenges()
         {
-            await Navigation.Push(new StatisticPage());
+            await api.Device.PushPage(new StatisticPage());
         }
 
         public async Task RemoveFriend()
         {
-            var answer = await dialog.ShowMessage(
+            var answer = await api.Device.ShowMessage(
                 "Wollen Sie " + User.Firstname + " als Freund entfernen?",
                 "Freund entfernen?",
                 "Ja", "Nein", null);
@@ -46,11 +46,11 @@ namespace StudyBuddy.App.ViewModels
 
             if (!result)
             {
-                dialog.ShowError("Fehler!", "Der Freund konnte nicht entfernt werden!", "Ok", null);
+                api.Device.ShowError("Fehler!", "Der Freund konnte nicht entfernt werden!", "Ok", null);
                 return;
             }
 
-            await Navigation.Pop();
+            await api.Device.PopPage();
         }
 
         private void LoadCharts()

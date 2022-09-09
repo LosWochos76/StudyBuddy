@@ -11,5 +11,6 @@ namespace StudyBuddy.Persistence
         void Insert(Notification obj);
         void Delete(int id);
 
-        IEnumerable<Notification> GetUserNotificationsFeed(NotificationFilter filter);    }
+        IEnumerable<Notification> GetNotificationsForFriends(NotificationFilter filter);
+    }
 }

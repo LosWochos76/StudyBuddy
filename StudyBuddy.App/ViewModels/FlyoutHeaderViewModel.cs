@@ -11,7 +11,7 @@ namespace StudyBuddy.App.ViewModels
         public int FriendsCount { get; set; }
         public Command ProfileCommand { get; }
 
-        public FlyoutHeaderViewModel(IApi api, IDialogService dialog, INavigationService navigation) : base(api, dialog, navigation)
+        public FlyoutHeaderViewModel(IApi api) : base(api)
         {
             ProfileCommand = new Command(Profile);
             api.Authentication.LoginStateChanged += Authentication_LoginStateChanged;
@@ -20,7 +20,7 @@ namespace StudyBuddy.App.ViewModels
 
         private void Profile()
         {
-            Navigation.Push(new ProfilePage());
+            api.Device.PushPage(new ProfilePage());
         }
 
         private async void Authentication_LoginStateChanged(object sender, LoginStateChangedArgs args)

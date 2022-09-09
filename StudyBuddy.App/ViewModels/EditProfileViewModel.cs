@@ -1,9 +1,6 @@
-﻿using StudyBuddy.App.Api;
-using StudyBuddy.App.Misc;
-using StudyBuddy.App.Views;
-using StudyBuddy.Model;
-using System.Text.RegularExpressions;
+﻿using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using StudyBuddy.App.Api;
 using Xamarin.CommunityToolkit.ObjectModel;
 using Xamarin.Forms;
 
@@ -14,7 +11,7 @@ namespace StudyBuddy.App.ViewModels
         public Command ConfirmCommand { get; }
         public AsyncCommand CancelCommand { get; }
 
-        public EditProfileViewModel(IApi api, IDialogService dialog, INavigationService navigation) : base(api, dialog, navigation)
+        public EditProfileViewModel(IApi api) : base(api)
         {
             _firstname = api.Authentication.CurrentUser.Firstname;
             _lastname = api.Authentication.CurrentUser.Lastname;
@@ -177,7 +174,7 @@ namespace StudyBuddy.App.ViewModels
                 }
                 else
                 {
-                    dialog.ShowError(
+                    api.Device.ShowError(
                         "Die Änderungen konnten nicht gespeichert werden!",
                         "Achtung!",
                         "Ok",
@@ -187,17 +184,17 @@ namespace StudyBuddy.App.ViewModels
             }
             catch(ApiException e)
             {
-                dialog.ShowError(e, "Ein Fehler ist aufgetreten!", "Ok", null);
+                api.Device.ShowError(e, "Ein Fehler ist aufgetreten!", "Ok", null);
             }
             finally
             {
-                await Navigation.Pop();
+                await api.Device.PopPage();
             }
         }
 
         public async Task Decline()
         {
-            await Navigation.Pop();
+            await api.Device.PopPage();
         }
     }
 }

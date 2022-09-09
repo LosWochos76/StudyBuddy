@@ -49,5 +49,7 @@ public class GameBadgeRepositoryTest : BaseTest
         Assert.Equal(1, success_rate.BadgeId);
         Assert.Equal(2, success_rate.OverallChallengeCount);
         Assert.Equal(2, success_rate.AcceptedChallengeCount);
+
+        Drop();
     }
 }

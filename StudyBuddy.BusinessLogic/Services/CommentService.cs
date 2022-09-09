@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using StudyBuddy.Model;
@@ -19,17 +20,20 @@ namespace StudyBuddy.BusinessLogic.Services
             return backend.Repository.CommentsRepository.All(filter);
         }
 
-        public void CreateComment(CommentInsert insert)
+        public Comment Insert(Comment obj)
         {
-            var notification = backend.NotificationService.ById(insert.NotificationId);
-            backend.PushNotificationService.SendUserCommentNotification(notification.OwnerId);
+            if (obj is null)
+                throw new Exception("Object is null!");
 
-            backend.Repository.CommentsRepository.Insert(new CommentInsert
-            {
-                OwnerId = backend.CurrentUser.ID,
-                NotificationId = insert.NotificationId,
-                Text = insert.Text
-            });
+            if (backend.CurrentUser == null)
+                throw new Exception("Unauthorized!");
+
+            if (!backend.CurrentUser.IsAdmin && obj.OwnerId != backend.CurrentUser.ID)
+                throw new Exception("Unauthorized!");
+
+            var notification = backend.NotificationService.ById(obj.NotificationId);
+            backend.PushNotificationService.SendUserCommentNotification(notification.OwnerId);
+            return backend.Repository.CommentsRepository.Insert(obj);
         }
     }
 }

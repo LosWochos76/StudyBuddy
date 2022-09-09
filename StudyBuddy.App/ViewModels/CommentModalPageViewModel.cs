@@ -1,5 +1,6 @@
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using StudyBuddy.App.Annotations;
 using StudyBuddy.App.Api;
@@ -11,15 +12,19 @@ namespace StudyBuddy.App.ViewModels
 {
     public class CommentModalPageViewModel : INotifyPropertyChanged
     {
-        private readonly IApi _api;
-        private readonly NewsViewModel _newsViewModel;
+        private readonly IApi api;
+        private readonly NotificationViewModel notification;
         private string _createCommentText = "";
+        private RangeObservableCollection<CommentViewModel> comments;
 
-        public CommentModalPageViewModel(NewsViewModel viewModel, CollectionView commentCollectionView)
+        public CommentModalPageViewModel(IApi api, NotificationViewModel notification, CollectionView commentCollectionView)
         {
+            this.api = TinyIoCContainer.Current.Resolve<IApi>();
+            this.notification = notification;
             CommentCollectionView = commentCollectionView;
-            _newsViewModel = viewModel;
-            _api = TinyIoCContainer.Current.Resolve<IApi>();
+            comments = new RangeObservableCollection<CommentViewModel>();
+            comments.AddRange(notification.Comments.ToList());
+
             CreateCommentCommand = new Command(CreateComment);
         }
 
@@ -36,24 +41,13 @@ namespace StudyBuddy.App.ViewModels
             }
         }
 
-        public RangeObservableCollection<CommentViewModel> Comments => _newsViewModel.Comments;
+        public RangeObservableCollection<CommentViewModel> Comments => comments;
         public event PropertyChangedEventHandler PropertyChanged;
 
-        public void CreateComment()
+        public async void CreateComment()
         {
-            _api.CommentService.Create(new CommentInsert
-            {
-                NotificationId = _newsViewModel.Id,
-                Text = CreateCommentText
-            });
-
-            Comments.Add(new CommentViewModel(new Comment
-            {
-                Owner = _api.Authentication.CurrentUser,
-                Text = CreateCommentText,
-                NotificationId = _newsViewModel.Id
-            }));
-
+            var comment = await api.Notifications.AddComment(notification, CreateCommentText);
+            Comments.Add(comment);
             CommentCollectionView.ScrollTo(Comments.Count - 1);
             CreateCommentText = "";
         }

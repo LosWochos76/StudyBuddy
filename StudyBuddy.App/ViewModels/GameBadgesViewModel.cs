@@ -19,6 +19,14 @@ namespace StudyBuddy.App.ViewModels
         public int Skip { get; set; }
         public bool IsBusy { get; set; } = false;
 
+        public GameBadgesViewModel(IApi api) : base(api)
+        {
+            Badges = new RangeObservableCollection<GameBadgeViewModel>();
+            SearchCommand = new AsyncCommand(Refresh);
+            RefreshCommand = new AsyncCommand(Refresh);
+            DetailsCommand = new AsyncCommand(ShowDetails);
+        }
+
         private string search_text = string.Empty;
         public string SearchText
         {
@@ -51,20 +59,13 @@ namespace StudyBuddy.App.ViewModels
             }
         }
 
-        public GameBadgesViewModel(IApi api, IDialogService dialog, INavigationService navigation) : base(api, dialog, navigation)
-        {
-            Badges = new RangeObservableCollection<GameBadgeViewModel>();
-            SearchCommand = new AsyncCommand(Refresh);
-            RefreshCommand = new AsyncCommand(Refresh);
-            DetailsCommand = new AsyncCommand(ShowDetails);
-        }
         private async Task ShowDetails()
         {
             
             if (SelectedBadge == null)
                 return;
 
-            await Navigation.Push(new BadgeDetailsPage(await api.Badges.GetById(SelectedBadge.ID)));
+            await api.Device.PushPage(new BadgeDetailsPage(await api.Badges.GetById(SelectedBadge.ID)));
             SelectedBadge = null;
             NotifyPropertyChanged(nameof(SelectedBadge));
             
@@ -100,7 +101,7 @@ namespace StudyBuddy.App.ViewModels
             }
             catch (ApiException e)
             {
-                dialog.ShowError(e, "Ein Fehler ist aufgetreten!", "Ok", null);
+                api.Device.ShowError(e, "Ein Fehler ist aufgetreten!", "Ok", null);
             }
             finally
             {

@@ -10,7 +10,18 @@ namespace StudyBuddy.App.ViewModels
 {
     public class LoginViewModel : ViewModelBase
     {
-        public LoginViewModel(IApi api, IDialogService dialog, INavigationService navigation) : base(api, dialog, navigation)
+        public IAsyncCommand LoginCommand { get; }
+        public ICommand RegisterCommand { get; }
+        public IAsyncCommand PasswordForgottenCommand { get; }
+        public ICommand ImprintCommand { get; }
+        public ICommand InfoCommand { get; }
+        public ICommand RecoverCommand { get; }
+        public string EMail { get; set; }
+        public string Password { get; set; }
+        public string ApiVersionAsString { get => api.ApiVersion.ToString(); }
+        public string AppVersionAsString { get => api.AppVersion.ToString(); }
+
+        public LoginViewModel(IApi api) : base(api)
         {
             LoginCommand = new AsyncCommand(Login, () => { return IsEMailValid && IsPasswordValid; });
             RegisterCommand = new Command(Register);
@@ -24,18 +35,6 @@ namespace StudyBuddy.App.ViewModels
                     NotifyPropertyChanged("ApiVersionAsString");
             };
         }
-
-        public IAsyncCommand LoginCommand { get; }
-        public ICommand RegisterCommand { get; }
-        public IAsyncCommand PasswordForgottenCommand { get; }
-        public ICommand ImprintCommand { get; }
-        public ICommand InfoCommand { get; }
-        public ICommand RecoverCommand { get; }
-        public string EMail { get; set; }
-        public string Password { get; set; }
-
-        public string ApiVersionAsString { get => api.ApiVersion.ToString(); }
-        public string AppVersionAsString { get => api.AppVersion.ToString(); }
 
         private bool is_email_valid = false;
         public bool IsEMailValid
@@ -65,17 +64,17 @@ namespace StudyBuddy.App.ViewModels
 
         private void Info()
         {
-            dialog.OpenBrowser("https://gameucation.eu/");
+            api.Device.OpenBrowser("https://gameucation.eu/");
         }
 
         private async void Register()
         {
-            await Navigation.Push(new RegisterPage());
+            await api.Device.PushPage(new RegisterPage());
         }
 
         private async Task PasswordForgotten()
         {
-            var answer = await dialog.ShowMessage(
+            var answer = await api.Device.ShowMessage(
                 "Wollen Sie eine E-Mail an '" + EMail + "' schicken, um das Passwort zurückzusetzen?",
                 "Passwort zurücksetzen?",
                 "Ja", "Nein", null);
@@ -85,46 +84,47 @@ namespace StudyBuddy.App.ViewModels
 
             answer = await api.Authentication.SendPasswortResetMail(EMail);
             if (!answer)
-                dialog.ShowError("Ein Fehler ist aufgetreten!", "Fehler!", "Ok", null);
+                api.Device.ShowError("Ein Fehler ist aufgetreten!", "Fehler!", "Ok", null);
             else
-                dialog.ShowMessage("Eine E-Mail zum zurücksetzen des Passworts wurde verschickt.", "Passwort zurücksetzen");
+                api.Device.ShowMessage("Eine E-Mail zum zurücksetzen des Passworts wurde verschickt.", "Passwort zurücksetzen");
         }
 
         private void Imprint()
         {
-            dialog.OpenBrowser("https://gameucation.eu/impressum/");
+            api.Device.OpenBrowser("https://gameucation.eu/impressum/");
         }
 
         private async Task Login()
         {
             var uc = new UserCredentials { EMail = EMail, Password = Password };
             var result = await api.Authentication.Login(uc);
+
             switch(result)
             {
                 case 0:
-                    await Navigation.GoTo("//ChallengesPage");
+                    await api.Device.GoToPath("//ChallengesPage");
                     break;
                 case 1:
                     var url = "https://backend.gameucation.eu/login/verificationrequired;email=";
                     var link = url + uc.EMail;
-                    dialog.OpenBrowser(link);
+                    api.Device.OpenBrowser(link);
                     break;
                 case 2:
-                    dialog.ShowMessageBox("E-Mail-Aresse oder Passwort ist falsch!", "Achtung!");
+                    api.Device.ShowMessageBox("E-Mail-Aresse oder Passwort ist falsch!", "Achtung!");
                     break;
                 case 3:
-                    dialog.ShowMessageBox("Es konnte kein Konto mit dieser E-Mail-Adresse gefunden werden.", "Achtung!");
+                    api.Device.ShowMessageBox("Es konnte kein Konto mit dieser E-Mail-Adresse gefunden werden.", "Achtung!");
                     break;
                 case 4:
-                    dialog.ShowMessageBox("Anmeldung nicht erfolgreich! Zugangsdaten korrekt?", "Achtung!");
+                    api.Device.ShowMessageBox("Anmeldung nicht erfolgreich! Zugangsdaten korrekt?", "Achtung!");
                     await api.Logging.LogError("Invalid API response for login with " + uc.EMail);
                     break;
                 case 5:
-                    dialog.ShowMessageBox("Anmeldung nicht erfolgreich! Zugangsdaten korrekt?", "Achtung!");
+                    api.Device.ShowMessageBox("Anmeldung nicht erfolgreich! Zugangsdaten korrekt?", "Achtung!");
                     await api.Logging.LogError("Issue in loginfromjson, no Token/User or Token invalid");
                     break;
                 default:
-                    dialog.ShowMessageBox("Anmeldung nicht erfolgreich! Zugangsdaten korrekt?", "Achtung!");
+                    api.Device.ShowMessageBox("Anmeldung nicht erfolgreich! Zugangsdaten korrekt?", "Achtung!");
                     await api.Logging.LogError("Undocumented error");
                     break;
             }

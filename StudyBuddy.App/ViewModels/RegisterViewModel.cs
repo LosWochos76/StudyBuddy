@@ -10,7 +10,16 @@ namespace StudyBuddy.App.ViewModels
 {
     public class RegisterViewModel : ViewModelBase
     {
-        public RegisterViewModel(IApi api, IDialogService dialog, INavigationService navigation) : base(api, dialog, navigation)
+        public IAsyncCommand RegisterCommand { get; }
+        public IAsyncCommand DeclineCommand { get; }
+        public string Firstname { get; set; }
+        public string Lastname { get; set; }
+        public string Nickname { get; set; }
+        public string EMail { get; set; }
+        public string Password { get; set; }
+        public string PasswordRepeat { get; set; }
+
+        public RegisterViewModel(IApi api) : base(api)
         {
             RegisterCommand = new AsyncCommand(Register, () =>
             {
@@ -23,16 +32,6 @@ namespace StudyBuddy.App.ViewModels
 
             DeclineCommand = new AsyncCommand(Decline);
         }
-
-        public IAsyncCommand RegisterCommand { get; }
-        public IAsyncCommand DeclineCommand { get; }
-
-        public string Firstname { get; set; }
-        public string Lastname { get; set; }
-        public string Nickname { get; set; }
-        public string EMail { get; set; }
-        public string Password { get; set; }
-        public string PasswordRepeat { get; set; }
 
         private bool is_firstname_valid = false;
         public bool IsFirstnameValid
@@ -111,20 +110,20 @@ namespace StudyBuddy.App.ViewModels
         {
             if (Password != PasswordRepeat)
             {
-                dialog.ShowError("Passwort und Passwort-Wiederholung stimmen nicht überein!", "Fehler!", "Ok", null);
+                api.Device.ShowError("Passwort und Passwort-Wiederholung stimmen nicht überein!", "Fehler!", "Ok", null);
                 return;
             }
 
             if (!EMail.ToLower().EndsWith("@hshl.de") && !EMail.ToLower().EndsWith("@stud.hshl.de"))
             {
-                dialog.ShowError("Aktuell können nur E-Mail-Adressen der Hochschule Hamm-Lippstadt genutzt werden!", "Fehler!", "Ok", null);
+                api.Device.ShowError("Aktuell können nur E-Mail-Adressen der Hochschule Hamm-Lippstadt genutzt werden!", "Fehler!", "Ok", null);
                 return;
             }
 
             var user_id = await api.Users.IdByEmail(EMail);
             if (user_id != null && user_id.ID != 0)
             {
-                dialog.ShowError("Es existiert bereits ein Nutzer mit dieser E-Mail! " +
+                api.Device.ShowError("Es existiert bereits ein Nutzer mit dieser E-Mail! " +
                     "Es kann kein weiterer Nutzer mit der selben E-Mail-Adresse registriert werden!", "Fehler!", "Ok", null);
                 return;
             }
@@ -132,7 +131,7 @@ namespace StudyBuddy.App.ViewModels
             user_id = await api.Users.IdByNickname(Nickname);
             if (user_id != null && user_id.ID != 0)
             {
-                dialog.ShowError("Es existiert bereits ein Nutzer mit diesem Spitznamen! " +
+                api.Device.ShowError("Es existiert bereits ein Nutzer mit diesem Spitznamen! " +
                     "Es kann kein weiterer Nutzer mit dem selben Spitznamen registriert werden!", "Fehler!", "Ok", null);
                 return;
             }
@@ -147,19 +146,19 @@ namespace StudyBuddy.App.ViewModels
 
             if (result == null)
             {
-                dialog.ShowError("Bei der Registrierung ist ein Fehler aufgetreten! Bitte versuchen Sie es später noch einmal!", "Fehler!", "Ok", null);
+                api.Device.ShowError("Bei der Registrierung ist ein Fehler aufgetreten! Bitte versuchen Sie es später noch einmal!", "Fehler!", "Ok", null);
                 return;
             }
 
-            dialog.ShowMessage("Deine Registrierung war erfolgreich! Bitte klicke auf den Link in der Bestätigungsmail, die du erhalten hast. " +
+            api.Device.ShowMessage("Deine Registrierung war erfolgreich! Bitte klicke auf den Link in der Bestätigungsmail, die du erhalten hast. " +
                 "Danach kannst du dich in der App einloggen!", "Herzlich willkommen bei Gameucation!");
 
-            await Navigation.Pop();
+            await api.Device.PopPage();
         }
 
         public async Task Decline()
         {
-            await Navigation.Pop();
+            await api.Device.PopPage();
         }
     }
 }

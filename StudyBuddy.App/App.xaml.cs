@@ -41,10 +41,7 @@ namespace StudyBuddy.App
 
         private void SetupServices()
         {
-            TinyIoCContainer.Current.Register<INavigationService>(new NagigationService());
             TinyIoCContainer.Current.Register<IApi>(new ApiFacade());
-            TinyIoCContainer.Current.Register<IDialogService>(new DialogService());
-            TinyIoCContainer.Current.Register<INavigationService>(new NagigationService());
             TinyIoCContainer.Current.Register(TinyIoCContainer.Current.Resolve<ThemeViewModel>());
             TinyIoCContainer.Current.Register(TinyIoCContainer.Current.Resolve<LoginViewModel>());
             TinyIoCContainer.Current.Register(TinyIoCContainer.Current.Resolve<MainViewModel>());
