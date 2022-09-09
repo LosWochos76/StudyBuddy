@@ -19,7 +19,7 @@ namespace StudyBuddy.App.ViewModels
         private readonly IApi api;
         public event PropertyChangedEventHandler PropertyChanged;
         public new UserViewModel Owner { get; set; }
-        public new List<UserViewModel> LikedUsers { get; set; } = new List<UserViewModel>();
+        public new IEnumerable<UserViewModel> LikedUsers { get; set; } = new List<UserViewModel>();
         public new List<CommentViewModel> Comments { get; set; } = new List<CommentViewModel>();
         public bool HasBadge => BadgeId.HasValue;
         public new GameBadgeViewModel Badge { get; set; }
@@ -81,33 +81,12 @@ namespace StudyBuddy.App.ViewModels
         public async void Like()
         {
             Liked = !Liked;
-            await api.Notifications.Like(this);
-            var currentUser = api.Authentication.CurrentUser;
-            var foundUser = LikedUsers.Find(user => user.ID == currentUser.ID);
+            await api.Notifications.Like(this, Liked);
+            LikedUsers = await api.Users.Likers(Id);
 
-
-            // TODO: Refactor this: change the place of the following logic
-            // maye put this in the "Liked" setter or
-            // "UsersWhoLikedText" setter
-
-            // if user liked
-            if (Liked)
-            {
-                // and is not in liked list
-                if (foundUser is not null)
-                    return;
-
-                LikedUsers.Add(currentUser);
-            }
-            else
-            {
-                if (foundUser is null)
-                    return;
-
-                LikedUsers.Remove(foundUser);
-            }
-
+            NotifyPropertyChanged("LikedUsers");
             NotifyPropertyChanged("UsersWhoLikedText");
+            NotifyPropertyChanged("LikeButtonText");
         }
 
         public void Share()

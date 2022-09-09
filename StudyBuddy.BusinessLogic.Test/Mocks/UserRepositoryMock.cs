@@ -8,20 +8,29 @@ namespace StudyBuddy.BusinessLogic.Test.Mocks
 {
     public class UserRepositoryMock : IUserRepository
     {
+        private ChallengeRepositoryMock challenges;
+        private NotificationUserMetadataRepositoryMock meta_data;
         private List<User> objects = new List<User>();
+        private HashSet<Tuple<int, int>> friends = new HashSet<Tuple<int, int>>();
 
-        public UserRepositoryMock()
+        public UserRepositoryMock(
+            ChallengeRepositoryMock challenges,
+            NotificationUserMetadataRepositoryMock meta_data)
         {
+            this.challenges = challenges;
+            this.meta_data = meta_data;
         }
 
         public void AddFriend(int user_id, int friend_id)
         {
-            throw new NotImplementedException();
+            friends.Add(new Tuple<int, int>(user_id, friend_id));
+            friends.Add(new Tuple<int, int>(friend_id, user_id));
         }
 
         public void AddFriends(int user_id, int[] friend_ids)
         {
-            throw new NotImplementedException();
+            foreach (var friend_id in friend_ids)
+                AddFriend(user_id, friend_id);
         }
 
         public IEnumerable<User> All(UserFilter filter)
@@ -56,7 +65,9 @@ namespace StudyBuddy.BusinessLogic.Test.Mocks
 
         public IEnumerable<User> GetAllLikersForNotification(int notification_id)
         {
-            throw new NotImplementedException();
+            foreach (var n in meta_data.AllForNotification(notification_id))
+                if (n.Liked)
+                    yield return ById(n.OwnerId);
         }
 
         public IEnumerable<User> GetAllUsersHavingBadge(int badge_id)
@@ -79,14 +90,24 @@ namespace StudyBuddy.BusinessLogic.Test.Mocks
             throw new NotImplementedException();
         }
 
+        private List<User> AllFriends(int user_id)
+        {
+            return friends
+                .Where(obj => obj.Item1 == user_id)
+                .Select(obj => ById(obj.Item2))
+                .ToList();
+        }
+
         public IEnumerable<User> GetFriends(FriendFilter filter)
         {
-            throw new NotImplementedException();
+            return AllFriends(filter.UserId)
+                .Skip(filter.Start)
+                .Take(filter.Count);
         }
 
         public int GetFriendsCount(FriendFilter filter)
         {
-            throw new NotImplementedException();
+            return AllFriends(filter.UserId).Count;
         }
 
         public IEnumerable<User> GetNotFriends(FriendFilter filter)

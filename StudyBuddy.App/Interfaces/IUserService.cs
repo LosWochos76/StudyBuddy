@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using StudyBuddy.App.ViewModels;
 using StudyBuddy.Model;
 
@@ -15,5 +16,6 @@ namespace StudyBuddy.App.Api
         Task<UserId> IdByEmail(string email);
         Task<UserId> IdByNickname(string nickname);
         Task<UserViewModel> Register(UserViewModel new_user);
+        Task<IEnumerable<UserViewModel>> Likers(int notification_id);
     }
 }

@@ -15,7 +15,7 @@ namespace StudyBuddy.Api.Controllers
         }
 
         [HttpPost]
-        public IActionResult UpsertLike([FromBody] NotificationUserMetadataUpsert like)
+        public IActionResult UpsertLike([FromBody] NotificationUserMetadata like)
         {
             backend.NotificationUserMetadataService.Upsert(like);
             return Ok();

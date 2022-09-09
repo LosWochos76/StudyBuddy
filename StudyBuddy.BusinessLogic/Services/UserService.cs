@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using FirebaseAdmin.Messaging;
 using StudyBuddy.BusinessLogic.Parameters;
@@ -274,6 +275,18 @@ namespace StudyBuddy.BusinessLogic
 
             var user = backend.Repository.Users.ById(mail.RecipientID);
             MailKitHelper.SendMailAsync(user.Email, mail.Subject, mail.Message);
+        }
+
+        public IEnumerable<User> GetAllLikersForNotification(int notification_id)
+        {
+            if (backend.CurrentUser is null)
+                throw new Exception("Unauthorized!");
+
+            var notification = backend.Repository.Notifications.ById(notification_id);
+            if (notification is null)
+                throw new Exception("Object is null!");
+
+            return backend.Repository.Users.GetAllLikersForNotification(notification_id);
         }
     }
 }

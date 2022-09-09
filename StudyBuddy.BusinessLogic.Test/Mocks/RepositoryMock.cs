@@ -9,15 +9,21 @@ namespace StudyBuddy.BusinessLogic.Test.Mocks
         {
             Logging = new LoggingRepositoryMock();
             BusinessEvents = new BusinessEventRepositoryMock();
-            Users = new UserRepositoryMock();
-            Notifications = new NotificationRepositoryMock();
+            CommentsRepository = new CommentRepositoryMock();
 
             var tag_repository = new TagRepositoryMock();
             Tags = tag_repository;
 
+            var nmdr = new NotificationUserMetadataRepositoryMock();
+            NotificationUserMetadataRepository = nmdr;
+
             var challenge_repository = new ChallengeRepositoryMock(tag_repository);
             Challenges = challenge_repository;
 
+            var user_repository = new UserRepositoryMock(challenge_repository, nmdr);
+            Users = user_repository;
+
+            Notifications = new NotificationRepositoryMock(user_repository);
             GameBadges = new GameBadgeRepositoryMock(tag_repository, challenge_repository);
         }
 

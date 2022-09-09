@@ -7,6 +7,6 @@ namespace StudyBuddy.BusinessLogic
     {
         IEnumerable<NotificationUserMetadata> GetAll();
         IEnumerable<NotificationUserMetadata> GetAllUnseen();
-        void Upsert(NotificationUserMetadataUpsert upsert);
+        void Upsert(NotificationUserMetadata obj);
     }
 }

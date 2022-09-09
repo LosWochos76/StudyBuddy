@@ -8,9 +8,7 @@ namespace StudyBuddy.BusinessLogic
         NotificationList GetAll(NotificationFilter filter);
         Notification ById(int id);
         void Delete(int id);
-
         IEnumerable<Notification> GetNotificationsForFriends(NotificationFilter filter);
-        IEnumerable<Notification> GetNotificationFromUser(int userId);
 
         void UserAcceptedChallenge(User user, Challenge challenge);
         void UserReceivedBadge(User user, GameBadge badge);

@@ -13,21 +13,18 @@ namespace StudyBuddy.BusinessLogic.Services
             this.backend = backend;
         }
 
-        public void Upsert(NotificationUserMetadataUpsert upsert)
+        public void Upsert(NotificationUserMetadata obj)
         {
-            upsert.OwnerId = backend.CurrentUser.ID;
-            var before = backend.Repository.NotificationUserMetadataRepository.FindNotificationUserMetadata(upsert);
+            obj.OwnerId = backend.CurrentUser.ID;
+            var before = backend.Repository.NotificationUserMetadataRepository.FindNotificationUserMetadata(obj);
 
-            if (before != null)
+            if (before != null && before.Liked == false && obj.Liked == true)
             {
-                if (before.Liked == false && upsert.Liked == true)
-                {
-                    var notification = backend.NotificationService.ById(upsert.NotificationId);
-                    backend.PushNotificationService.SendUserLikedNotification(notification.OwnerId);
-                }
+                var notification = backend.NotificationService.ById(obj.NotificationId);
+                backend.PushNotificationService.SendUserLikedNotification(notification.OwnerId);
             }
 
-            backend.Repository.NotificationUserMetadataRepository.Upsert(upsert);
+            backend.Repository.NotificationUserMetadataRepository.Upsert(obj);
         }
 
         public IEnumerable<NotificationUserMetadata> GetAll()

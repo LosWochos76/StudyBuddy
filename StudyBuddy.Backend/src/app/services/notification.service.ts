@@ -24,17 +24,19 @@ export class NotificationService {
 
     this.logger.debug("Loading all notifications");
 
-    var query = {};
+    var query = { 'withOwner':true };
     if (page != -1) {
       query['start'] = (page - 1) * 10;
       query['count'] = 10;
     }
 
-    let result = await this.http.get(this.url + "v2/Notification",
+    let result = await this.http.get(this.url + "Notification",
       {
         params: query,
         headers: new HttpHeaders({ Authorization: this.auth.getToken() })
       }).toPromise();
+
+    console.log(result);
 
     return NotificationList.fromResult(result);
   }

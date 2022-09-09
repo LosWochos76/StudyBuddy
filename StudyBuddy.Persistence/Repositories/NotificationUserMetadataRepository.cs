@@ -32,82 +32,49 @@ namespace StudyBuddy.Persistence
                     ")");
         }
 
-        public void Upsert(NotificationUserMetadataUpsert upsert)
+        public void Upsert(NotificationUserMetadata obj)
         {
-            var metadata = FindNotificationUserMetadata(upsert);
+            var metadata = FindNotificationUserMetadata(obj);
             if (metadata is null)
-            {
-                Insert(new NotificationUserMetadataInsert
-                {
-                    NotificationId = upsert.NotificationId,
-                    OwnerId = upsert.OwnerId,
-                    Liked = upsert.Liked,
-                    Seen = upsert.Seen,
-                    Shared = upsert.Shared
-                });
-            }
+                Insert(obj);
             else
-            {
-                Update(new NotificationUserMetadataUpdate
-                {
-                    Id = metadata.Id,
-                    Liked = upsert.Liked,
-                    Seen = upsert.Seen,
-                    Shared = upsert.Shared
-                });
-            }
+                Update(obj);
         }
 
-        public void Insert(NotificationUserMetadataInsert insert)
+        public void Insert(NotificationUserMetadata insert)
         {
             var qh = new QueryHelper(connection_string);
             qh.AddParameter(":notificationId", insert.NotificationId);
             qh.AddParameter(":ownerId", insert.OwnerId);
-            qh.AddParameter(":liked", insert.Liked ?? false);
-            qh.AddParameter(":seen", insert.Seen ?? false);
-            qh.AddParameter(":shared", insert.Shared ?? false);
+            qh.AddParameter(":liked", insert.Liked);
+            qh.AddParameter(":seen", insert.Seen);
+            qh.AddParameter(":shared", insert.Shared);
             qh.ExecuteNonQuery("insert into notification_user_metadata (notification_id, owner_id, " +
                 "liked, seen, shared) values (:notificationId, :ownerId, :liked, :seen, :shared) returning id");
         }
 
-        public void Update(NotificationUserMetadataUpdate update)
+        public void Update(NotificationUserMetadata update)
         {
             var qh = new QueryHelper(connection_string);
-            var sql = "update notification_user_metadata set ";
-
-            if (update.Liked is not null)
-            {
-                qh.AddParameter(":liked", update.Liked);
-                sql += "liked=:liked, ";
-            }
-
-            if (update.Seen is not null)
-            {
-                qh.AddParameter(":seen", update.Seen);
-                sql += "seen=:seen, ";
-            }
-
-            if (update.Shared is not null)
-            {
-                qh.AddParameter(":shared", update.Shared);
-                sql += "shared=:shared, ";
-            }
-
+            qh.AddParameter(":liked", update.Liked);
+            qh.AddParameter(":seen", update.Seen);
+            qh.AddParameter(":shared", update.Shared);
             qh.AddParameter(":id", update.Id);
-            sql += "id=:id where id=:id";
+            var sql = "update notification_user_metadata set " +
+                "liked=:liked, seen=:seen, shared=:shared where id=:id";
             qh.ExecuteNonQuery(sql);
         }
 
-        public NotificationUserMetadata FindNotificationUserMetadata(NotificationUserMetadataUpsert upsert)
+        public NotificationUserMetadata FindNotificationUserMetadata(NotificationUserMetadata obj)
         {
-            return FindNotificationUserMetadata(upsert.NotificationId, upsert.OwnerId);
+            return FindNotificationUserMetadata(obj.NotificationId, obj.OwnerId);
         }
 
-        public NotificationUserMetadata FindNotificationUserMetadata(int notificationId, int ownerId)
+        public NotificationUserMetadata FindNotificationUserMetadata(int notification_id, int owner_id)
         {
             var qh = new QueryHelper(connection_string);
-            qh.AddParameter(":notification_id", notificationId);
-            qh.AddParameter(":owner_id", ownerId);
+            qh.AddParameter(":notification_id", notification_id);
+            qh.AddParameter(":owner_id", owner_id);
 
             var sql = "select id, notification_id, owner_id, liked, seen, shared, created, " +
                 "updated from notification_user_metadata where notification_id=:notification_id and owner_id=:owner_id";
@@ -128,7 +95,7 @@ namespace StudyBuddy.Persistence
         {
             var qh = new QueryHelper(connection_string);
             var sql = "select id, notification_id, owner_id, liked, seen, shared, created, updated " +
-                "from notification_user_metadata where seen=false ";
+                "from notification_user_metadata where seen=false";
             var set = qh.ExecuteQuery(sql);
             return converter.Multiple(set);
         }

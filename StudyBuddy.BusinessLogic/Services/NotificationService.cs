@@ -21,10 +21,22 @@ namespace StudyBuddy.BusinessLogic
             return backend.Repository.Notifications.ById(notificationId);
         }
 
-        public IEnumerable<Notification> GetNotificationFromUser(int user_id)
+        private void FillObject(Notification obj, NotificationFilter filter)
         {
-            var filter = new NotificationFilter { UserID = user_id };
-            return backend.Repository.Notifications.GetAll(filter);
+            if (filter.WithOwner)
+                obj.Owner = backend.Repository.Users.ById(obj.OwnerId);
+
+            if (filter.WithLikedUsers)
+                obj.LikedUsers = backend.Repository.Users.GetAllLikersForNotification(obj.Id);
+
+            if (filter.WithComments)
+            {
+                var cf = new CommentFilter { NotificationId = obj.Id };
+                obj.Comments = backend.Repository.CommentsRepository.All(cf);
+            }
+
+            if (obj.BadgeId.HasValue && filter.WithBadge)
+                obj.Badge = backend.Repository.GameBadges.ById(obj.BadgeId.Value);
         }
 
         public NotificationList GetAll(NotificationFilter filter)
@@ -38,10 +50,14 @@ namespace StudyBuddy.BusinessLogic
             if (filter == null)
                 filter = new NotificationFilter();
 
+            var objects = backend.Repository.Notifications.GetAll(filter);
+            foreach (var obj in objects)
+                FillObject(obj, filter);
+
             return new NotificationList()
             {
                 Count = backend.Repository.Notifications.GetCount(filter),
-                Objects = backend.Repository.Notifications.GetAll(filter)
+                Objects = objects
             };
         }
 
@@ -59,21 +75,7 @@ namespace StudyBuddy.BusinessLogic
             var notifications = backend.Repository.Notifications.GetNotificationsForFriends(filter);
             foreach (var obj in notifications)
             {
-                if (filter.WithOwner)
-                    obj.Owner = backend.Repository.Users.ById(obj.OwnerId);
-
-                if (filter.WithLikedUsers)
-                    obj.LikedUsers = backend.Repository.Users.GetAllLikersForNotification(obj.Id);
-
-                if (filter.WithComments)
-                {
-                    var cf = new CommentFilter { NotificationId = obj.Id };
-                    obj.Comments = backend.Repository.CommentsRepository.All(cf);
-                }
-
-                if (obj.BadgeId.HasValue && filter.WithBadge)
-                    obj.Badge = backend.Repository.GameBadges.ById(obj.BadgeId.Value);
-
+                FillObject(obj, filter);
                 yield return obj;
             }
         }

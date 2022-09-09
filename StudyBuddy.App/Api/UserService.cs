@@ -1,4 +1,5 @@
-﻿using System.Net.Http;
+﻿using System.Collections.Generic;
+using System.Net.Http;
 using System.Threading.Tasks;
 using StudyBuddy.App.Misc;
 using StudyBuddy.App.ViewModels;
@@ -99,6 +100,12 @@ namespace StudyBuddy.App.Api
         {
             var rh = new WebRequestHelper();
             return await rh.Post<UserViewModel>(base_url + "User/", UserViewModel.ToModel(new_user));
+        }
+
+        public async Task<IEnumerable<UserViewModel>> Likers(int notification_id)
+        {
+            var rh = new WebRequestHelper(api.Authentication.Token);
+            return await rh.Load<IEnumerable<UserViewModel>>(base_url + "Notification/" + notification_id + "/Likers", HttpMethod.Get);
         }
     }
 }

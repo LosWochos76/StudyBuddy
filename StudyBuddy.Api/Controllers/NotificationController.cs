@@ -16,16 +16,6 @@ namespace StudyBuddy.Api.Controllers
             this.logger = logger;
         }
         
-        [Route("/Notification/")]
-        [HttpGet]
-        public IActionResult GetAllForUser()
-        {
-            logger.LogInformation("NotificationController.GetAllForUser");
-            var userId = backend.CurrentUser.ID;
-            var notifications = backend.NotificationService.GetNotificationFromUser(userId);
-            return Json(notifications);
-        }
-        
         [Route("/Notification/Feed")]
         [HttpGet]
         public IActionResult NotificationFeed([FromQuery] NotificationFilter filter)
@@ -35,13 +25,12 @@ namespace StudyBuddy.Api.Controllers
             return Json(notifications);
         }
 
-        [Route("/v2/Notification/")]
+        [Route("/Notification/")]
         [HttpGet]
         public IActionResult GetAll([FromQuery] NotificationFilter filter)
         {
             logger.LogInformation("NotificationController.GetAll");
-            var notifications = backend.NotificationService.GetAll(filter);
-            return Json(notifications);
+            return Json(backend.NotificationService.GetAll(filter));
         }
 
         [Route("/Notification/{id}")]
@@ -59,6 +48,14 @@ namespace StudyBuddy.Api.Controllers
         {
             logger.LogInformation("NotificationController.ById");
             return Json(backend.NotificationService.ById(id));
+        }
+
+        [Route("/Notification/{id}/Likers")]
+        [HttpGet]
+        public IActionResult GetAllLikersForNotification(int id)
+        {
+            logger.LogInformation("NotificationController.GetAllLikersForNotification");
+            return Json(backend.UserService.GetAllLikersForNotification(id));
         }
     }
 }

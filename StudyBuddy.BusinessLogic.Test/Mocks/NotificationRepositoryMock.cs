@@ -8,10 +8,12 @@ namespace StudyBuddy.BusinessLogic.Test.Mocks
 {
     public class NotificationRepositoryMock : INotificationRepository
     {
+        private UserRepositoryMock users;
         private List<Notification> objects = new List<Notification>();
 
-        public NotificationRepositoryMock()
+        public NotificationRepositoryMock(UserRepositoryMock users)
         {
+            this.users = users;
         }
 
         public Notification ById(int id)
@@ -36,7 +38,12 @@ namespace StudyBuddy.BusinessLogic.Test.Mocks
 
         public IEnumerable<Notification> GetNotificationsForFriends(NotificationFilter filter)
         {
-            throw new NotImplementedException();
+            var friend_filter = new FriendFilter() { UserId=filter.UserID.Value };
+            var friends = this.users.GetFriends(friend_filter);
+
+            foreach (var f in friends)
+                foreach (var n in this.objects.FindAll(obj => obj.OwnerId == f.ID))
+                    yield return n;
         }
 
         public void Insert(Notification obj)

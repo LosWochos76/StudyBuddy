@@ -1,4 +1,5 @@
-﻿using StudyBuddy.BusinessLogic.Parameters;
+﻿using System.Collections.Generic;
+using StudyBuddy.BusinessLogic.Parameters;
 using StudyBuddy.Model;
 
 namespace StudyBuddy.BusinessLogic
@@ -34,5 +35,6 @@ namespace StudyBuddy.BusinessLogic
 
         // Misc
         void SendMailToUser(MailDto mail);
+        IEnumerable<User> GetAllLikersForNotification(int notification_id);
     }
 }

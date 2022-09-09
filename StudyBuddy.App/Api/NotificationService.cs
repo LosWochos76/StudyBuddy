@@ -43,35 +43,30 @@ namespace StudyBuddy.App.Api
             return content;
         }
 
-        private async Task<NotificationUserMetadata> Upsert(NotificationUserMetadataUpsert notificationUserMetadataUpsert)
+        private async Task<NotificationUserMetadata> Upsert(NotificationUserMetadata notificationUserMetadataUpsert)
         {
             var rh = new WebRequestHelper(api.Authentication.Token);
             var response = await rh.Post<NotificationUserMetadata>(base_url + "NotificationUserMetadata", notificationUserMetadataUpsert);
             return response;
         }
 
-        public async Task<NotificationUserMetadata> Like(NotificationViewModel obj)
+        public async Task<NotificationUserMetadata> Like(NotificationViewModel obj, bool liked)
         {
-            var upsert = new NotificationUserMetadataUpsert
+            return await Upsert(new NotificationUserMetadata
             {
+                OwnerId = obj.OwnerId,
                 NotificationId = obj.Id,
-                Liked = obj.Liked
-            };
-
-            var response = await Upsert(upsert);
-            return response;
+                Liked = liked
+            });
         }
 
         public async Task<NotificationUserMetadata> HasSeen(NotificationViewModel obj)
         {
-            var upsert = new NotificationUserMetadataUpsert
+            return await Upsert(new NotificationUserMetadata
             {
                 NotificationId = obj.Id,
                 Seen = true
-            };
-
-            var response = await Upsert(upsert);
-            return response;
+            });
         }
 
         public async Task<CommentViewModel> AddComment(NotificationViewModel notification, string comment_text)
@@ -83,22 +78,7 @@ namespace StudyBuddy.App.Api
             };
 
             var rh = new WebRequestHelper(api.Authentication.Token);
-            var response = await rh.Post<CommentViewModel>(base_url + "Comment", ci);
-            return response;
-        }
-
-        public async Task<IEnumerable<CommentViewModel>> GetAllCommentsForNotification(CommentFilter filter)
-        {
-            var rh = new WebRequestHelper(api.Authentication.Token);
-            var comments = await rh.Get<IEnumerable<Comment>>(base_url + "Comment", filter);
-            if (comments == null)
-                return null;
-
-            var result = new List<CommentViewModel>();
-            foreach (var comment in comments)
-                result.Add(new CommentViewModel(comment));
-
-            return result;
+            return await rh.Post<CommentViewModel>(base_url + "Comment", ci);
         }
     }
 }

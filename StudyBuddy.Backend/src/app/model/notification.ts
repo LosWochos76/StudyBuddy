@@ -32,7 +32,6 @@ export class Notification {
         result.liked = obj['liked'];
         result.seen = obj['seen'];
         result.shared = obj['shared'];
-
         return result;
     }
 

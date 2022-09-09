@@ -107,7 +107,6 @@ namespace StudyBuddy.Api
         public IActionResult AddFriend(int user_id, int friend_id)
         {
             logger.LogInformation("UserController.AddFriend");
-
             backend.UserService.AddFriend(user_id, friend_id);
             return Json(new {Status = "ok"});
         }
@@ -117,7 +116,6 @@ namespace StudyBuddy.Api
         public IActionResult RemoveFriend(int user_id, int friend_id)
         {
             logger.LogInformation("UserController.RemoveFriend");
-
             backend.UserService.RemoveFriend(user_id, friend_id);
             return Json(new {Status = "ok"});
         }
@@ -127,7 +125,6 @@ namespace StudyBuddy.Api
         public IActionResult RemoveFriends(int id)
         {
             logger.LogInformation("UserController.RemoveFriends");
-
             backend.UserService.RemoveFriends(id);
             return Json(new {Status = "ok"});
         }
@@ -137,7 +134,6 @@ namespace StudyBuddy.Api
         public IActionResult SetFriends([FromBody] MultipleFriendsParameter parameter)
         {
             logger.LogInformation("UserController.SetFriend");
-
             backend.UserService.SetFriends(parameter);
             return Json(new {Status = "ok"});
         }
@@ -147,7 +143,6 @@ namespace StudyBuddy.Api
         public IActionResult GetCountOfCommonFriends(int user_a_id, int user_b_id)
         {
             logger.LogInformation("UserController.GetCountOfCommonFriends");
-
             var result = backend.UserService.GetCountOfCommonFriends(user_a_id, user_b_id);
             return Json(result);
         }
@@ -157,7 +152,6 @@ namespace StudyBuddy.Api
         public IActionResult GetAllUsersThatAcceptedChallenge(int challenge_id)
         {
             logger.LogInformation("UserController.GetAllUsersThatAcceptedChallenge");
-
             var result = backend.UserService.GetAllUsersThatAcceptedChallenge(challenge_id);
             return Json(result);
         }
@@ -167,7 +161,6 @@ namespace StudyBuddy.Api
         public IActionResult GetAllUsersHavingBadge(int badge_id)
         {
             logger.LogInformation("UserController.GetAllUsersHavingBadge");
-
             return Json(backend.UserService.GetAllUsersHavingBadge(badge_id));
         }
 
