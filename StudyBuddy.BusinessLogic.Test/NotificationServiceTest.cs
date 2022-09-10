@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using StudyBuddy.BusinessLogic.Test.Mocks;
 using StudyBuddy.Model;
 using Xunit;
@@ -8,8 +7,15 @@ namespace StudyBuddy.BusinessLogic.Test
 {
     public class NotificationServiceTest
     {
-        [Fact]
-        public void GetNotificationsForFriendsTest()
+        private IBackend backend;
+        private NotificationFilter filter = new NotificationFilter()
+        {
+            UserID = 1,
+            WithOwner = true,
+            WithLikedUsers = true
+        };
+
+        public NotificationServiceTest()
         {
             // Arrange
             var repository = new RepositoryMock();
@@ -18,16 +24,14 @@ namespace StudyBuddy.BusinessLogic.Test
             repository.Users.AddFriend(1, 2);
             repository.Notifications.Insert(new Notification() { Id = 1, OwnerId = 1 });
             repository.Notifications.Insert(new Notification() { Id = 2, OwnerId = 2 });
-            var backend = new Backend(repository);
+            backend = new Backend(repository);
             backend.CurrentUser = repository.Users.ById(1);
+        }
 
+        [Fact]
+        public void GetNotificationsForFriendsTest_With_Owner()
+        {
             // Act
-            var filter = new NotificationFilter()
-            {
-                UserID = 1,
-                WithOwner = true,
-                WithLikedUsers=true
-            };
             var objects = backend.NotificationService.GetNotificationsForFriends(filter);
 
             // Assert
@@ -35,25 +39,34 @@ namespace StudyBuddy.BusinessLogic.Test
             var notifications = objects.ToList();
             Assert.Equal(1, notifications.Count);
             Assert.NotNull(notifications[0].Owner);
+            Assert.Equal(2, notifications[0].Owner.ID);
             Assert.Empty(notifications[0].LikedUsers);
+        }
 
-            // Act2
+        [Fact]
+        public void GetNotificationsForFriendsTest_With_Comment()
+        {
+            // Act
             backend.CommentService.Insert(new Comment() { Id = 1, NotificationId = 1 });
-            objects = backend.NotificationService.GetNotificationsForFriends(filter);
+            var objects = backend.NotificationService.GetNotificationsForFriends(filter);
 
-            // Assert2
+            // Assert
             Assert.NotNull(objects);
-            notifications = objects.ToList();
+            var notifications = objects.ToList();
             Assert.NotNull(notifications[0].Comments);
+        }
 
-            // Act3
+        [Fact]
+        public void GetNotificationsForFriendsTest_With_Liked_User()
+        {
+            // Act
             var nmd = new NotificationUserMetadata() { OwnerId = 1, NotificationId = 2, Liked = true };
             backend.NotificationUserMetadataService.Upsert(nmd);
-            objects = backend.NotificationService.GetNotificationsForFriends(filter);
+            var objects = backend.NotificationService.GetNotificationsForFriends(filter);
 
-            // Assert3
+            // Assert
             Assert.NotNull(objects);
-            notifications = objects.ToList();
+            var notifications = objects.ToList();
             Assert.NotNull(notifications[0].LikedUsers);
             var users = notifications[0].LikedUsers.ToList();
             Assert.Equal(1, users[0].ID);

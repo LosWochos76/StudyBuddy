@@ -21,9 +21,9 @@ namespace StudyBuddy.Persistence
         public User ById(int id)
         {
             var qh = new QueryHelper(connection_string, new { id });
-            var set = qh.ExecuteQuery("SELECT id,firstname,lastname,nickname," +
+            var sql = qh.ExecuteQuery("SELECT id,firstname,lastname,nickname," +
                 "email,password_hash,role,emailconfirmed,accountactive FROM users where id=:id");
-            return converter.Single(set);
+            return converter.Single(sql);
         }
 
         public IEnumerable<User> All(UserFilter filter)
@@ -269,7 +269,7 @@ namespace StudyBuddy.Persistence
         {
             var qh = new QueryHelper(connection_string);
             qh.AddParameters(new {user_a_id, user_b_id});
-            return qh.ExecuteQueryToSingleInt("select common_friends(:user_a_i, :user_b_id)");
+            return qh.ExecuteQueryToSingleInt("select common_friends(:user_a_id, :user_b_id)");
         }
 
         public IEnumerable<User> GetAllLikersForNotification(int notificationId)

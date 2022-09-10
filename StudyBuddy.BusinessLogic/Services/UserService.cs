@@ -103,6 +103,9 @@ namespace StudyBuddy.BusinessLogic
 
         public User Insert(User obj)
         {
+            if (backend.CurrentUser is null)
+                obj.Role = Role.Student;
+
             backend.Repository.Users.Insert(obj);
             backend.AuthenticationService.SendMail(obj.Email, false);
             backend.BusinessEventService.TriggerEvent(this,

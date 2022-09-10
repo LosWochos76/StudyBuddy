@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using SimpleHashing.Net;
 using StudyBuddy.Model;
 using StudyBuddy.Persistence;
 
@@ -12,6 +13,7 @@ namespace StudyBuddy.BusinessLogic.Test.Mocks
         private NotificationUserMetadataRepositoryMock meta_data;
         private List<User> objects = new List<User>();
         private HashSet<Tuple<int, int>> friends = new HashSet<Tuple<int, int>>();
+        private readonly SimpleHash simpleHash = new SimpleHash();
 
         public UserRepositoryMock(
             ChallengeRepositoryMock challenges,
@@ -122,7 +124,10 @@ namespace StudyBuddy.BusinessLogic.Test.Mocks
 
         public void Insert(User obj)
         {
-            obj.ID = GetCount(null) + 1;
+            if (obj.ID == 0)
+                obj.ID = GetCount(null) + 1;
+
+            obj.PasswordHash = simpleHash.Compute(obj.Password);
             objects.Add(obj);
         }
 

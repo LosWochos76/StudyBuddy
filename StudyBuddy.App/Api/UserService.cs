@@ -90,6 +90,7 @@ namespace StudyBuddy.App.Api
             return await rh.Load<UserId>(base_url + "User/UserIdByEmail/" + email, HttpMethod.Get);
         }
 
+        // TODo: Die Klasse UserId ist doch wohl ein Scherz, oder?!?
         public async Task<UserId> IdByNickname(string nickname)
         {
             var rh = new WebRequestHelper();
