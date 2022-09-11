@@ -9,8 +9,7 @@ namespace StudyBuddy.App.Api
     public interface INotificationService
     {
         Task<IEnumerable<NotificationViewModel>> GetNotificationsForFriends(int skip);
-        Task<NotificationUserMetadata> Like(NotificationViewModel news, bool liked);
-        Task<NotificationUserMetadata> HasSeen(NotificationViewModel news);
-        Task<CommentViewModel> AddComment(NotificationViewModel notification, string comment_text);
+        Task<NotificationUserMetadata> Like(NotificationViewModel obj, bool liked);
+        Task<NotificationUserMetadata> Share(NotificationViewModel obj);
     }
 }

@@ -67,27 +67,6 @@ namespace StudyBuddy.BusinessLogic
             }
         }
 
-        public void SendNewNotificationsAvailable()
-        {
-            var metadatas = backend.NotificationUserMetadataService.GetAllUnseen().ToList();
-            var users = backend.Repository.Users.All(new UserFilter()).ToList();
-
-            users.ForEach(user =>
-            {
-                var userMetaDatas = metadatas.FindAll(userMetadata => userMetadata.OwnerId == user.ID);
-                if (userMetaDatas.Count == 0)
-                    return;
-
-                var text = $"Sie haben {userMetaDatas.Count} neue Benachrichtigungen.";
-                var fcmTokens = backend.Repository.FcmTokens.GetForUser(user.ID).Select(token => token.Token).ToList();
-
-                backend.PushNotificationService.SendMessage(fcmTokens, "Gameucation", text,  new PushNotificationData()
-                {
-                    PushNotificationType = PushNotificationTypes.NewNotifications
-                });
-            });
-        }
-
         public void SendUserLikedNotification(int userId)
         {
             if (backend.CurrentUser.ID == userId) return;

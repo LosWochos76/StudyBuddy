@@ -18,13 +18,11 @@ namespace StudyBuddy.App.ViewModels
         public ICommand RefreshCommand { get; set; }
         public ICommand LoadMoreCommand { get; set; }
         public ICommand RefreshNewsCommand { get; }
-        public ICommand OpenCommentsCommands { get; set; }
 
         public NotificationsPageViewModel(IApi api) : base(api)
         {
             RefreshCommand = new AsyncCommand(Refresh);
             LoadMoreCommand = new AsyncCommand(LoadNews);
-            OpenCommentsCommands = new Command<NotificationViewModel>(OpenComments);
         }
 
         private int item_treshold = 1;
@@ -75,11 +73,6 @@ namespace StudyBuddy.App.ViewModels
             {
                 IsBusy = false;
             }
-        }
-
-        private void OpenComments(NotificationViewModel notification)
-        {
-            api.Device.PushPage(new CommentModalPage(notification));
         }
     }
 }

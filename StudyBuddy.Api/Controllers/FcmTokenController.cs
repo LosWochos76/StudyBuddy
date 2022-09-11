@@ -25,7 +25,7 @@ namespace StudyBuddy.Api
 
         [Route("/FcmToken/")]
         [HttpPost]
-        public IActionResult Insert([FromBody] FcmTokenSaveDto obj)
+        public IActionResult Insert([FromBody] FcmToken obj)
         {
             return Json(backend.FcmTokenService.Save(obj));
         }

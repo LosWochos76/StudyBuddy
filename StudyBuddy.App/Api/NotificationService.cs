@@ -30,7 +30,6 @@ namespace StudyBuddy.App.Api
                 Count = 10,
                 UserID = api.Authentication.CurrentUser.ID,
                 WithOwner = true,
-                WithComments = true,
                 WithLikedUsers = true,
                 WithBadge = true
             };
@@ -60,25 +59,14 @@ namespace StudyBuddy.App.Api
             });
         }
 
-        public async Task<NotificationUserMetadata> HasSeen(NotificationViewModel obj)
+        public async Task<NotificationUserMetadata> Share(NotificationViewModel obj)
         {
             return await Upsert(new NotificationUserMetadata
             {
+                OwnerId = obj.OwnerId,
                 NotificationId = obj.Id,
-                Seen = true
+                Shared = true
             });
-        }
-
-        public async Task<CommentViewModel> AddComment(NotificationViewModel notification, string comment_text)
-        {
-            var ci = new Comment()
-            {
-                NotificationId = notification.Id,
-                Text = comment_text
-            };
-
-            var rh = new WebRequestHelper(api.Authentication.Token);
-            return await rh.Post<CommentViewModel>(base_url + "Comment", ci);
         }
     }
 }

@@ -1,0 +1,26 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="StudyBuddy.App.Views.AppTooOldPage">
+    <ContentPage.Content>
+        <StackLayout 
+            VerticalOptions="Center"
+            HorizontalOptions="Center">
+            <Label Text="Huch!"
+                   FontSize="28"
+                   HorizontalOptions="Center"/>
+            <Label Text="Da ist etwas schief gelaufen.&#10;&#10;Die App ist leider zu alt!&#10;&#10;Bitte installieren Sie die neuste Version aus dem App-Store!"
+                   FontSize="20"
+                   Margin="24,24,24,54"/>
+            <Button Text="App schließen"
+                    Clicked="ButtonRestart_OnClicked"
+                    Margin="24,0,24,0"
+                    FontAttributes="Bold"
+                    FontSize="17"
+                    HeightRequest="45"
+                    BackgroundColor="{StaticResource PrimaryAccent}"
+                    TextColor="{StaticResource WindowBackgroundColor}"/>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

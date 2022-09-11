@@ -30,7 +30,6 @@ namespace StudyBuddy.BusinessLogic
             StatisticsService = new StatisticsService(this);
             ImageService = new ImageService(this);
             NotificationUserMetadataService = new NotificationUserMetadataService(this);
-            CommentService = new CommentService(this);
         }
 
         public IRepository Repository { get; }
@@ -49,7 +48,6 @@ namespace StudyBuddy.BusinessLogic
         public IStatisticsService StatisticsService { get; set; }
         public IImageService ImageService { get; set; }
         public INotificationUserMetadataService NotificationUserMetadataService { get; }
-        public ICommentService CommentService { get; }
 
         public void SetCurrentUserFromToken(string token)
         {

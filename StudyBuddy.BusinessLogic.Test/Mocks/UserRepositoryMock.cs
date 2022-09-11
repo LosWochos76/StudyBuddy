@@ -68,7 +68,7 @@ namespace StudyBuddy.BusinessLogic.Test.Mocks
         public IEnumerable<User> GetAllLikersForNotification(int notification_id)
         {
             foreach (var n in meta_data.AllForNotification(notification_id))
-                if (n.Liked)
+                if (n.Liked.HasValue && n.Liked.Value)
                     yield return ById(n.OwnerId);
         }
 

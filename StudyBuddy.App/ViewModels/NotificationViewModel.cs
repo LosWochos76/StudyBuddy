@@ -9,6 +9,7 @@ using StudyBuddy.App.Api;
 using StudyBuddy.App.Views;
 using StudyBuddy.Model;
 using TinyIoC;
+using Xamarin.CommunityToolkit.ObjectModel;
 using Xamarin.Essentials;
 using Xamarin.Forms;
 
@@ -20,39 +21,46 @@ namespace StudyBuddy.App.ViewModels
         public event PropertyChangedEventHandler PropertyChanged;
         public new UserViewModel Owner { get; set; }
         public new IEnumerable<UserViewModel> LikedUsers { get; set; } = new List<UserViewModel>();
-        public new List<CommentViewModel> Comments { get; set; } = new List<CommentViewModel>();
         public bool HasBadge => BadgeId.HasValue;
         public new GameBadgeViewModel Badge { get; set; }
-        public ICommand OpenLikesUsersModalCommand { get; set; }
-        public ICommand OpenCommentsCommand { get; set; }
         public ICommand LikeCommand { get; set; }
-        public string NumberOfCommentsText => $"{Comments.Count()} Kommentare";
+        public ICommand ShareCommand { get; set; }
 
         public NotificationViewModel()
         {
             api = TinyIoCContainer.Current.Resolve<IApi>();
-            OpenLikesUsersModalCommand = new Command(OpenLikedUsers);
-            OpenCommentsCommand = new Command(OpenComments);
-            LikeCommand = new Command(Like);
+            LikeCommand = new AsyncCommand(Like);
+            ShareCommand = new AsyncCommand(Share);
+        }
+
+        private bool DidILikeIt
+        {
+            get
+            {
+                return LikedUsers
+                    .ToList()
+                    .Any(obj => obj.ID == api.Authentication.CurrentUser.ID);
+            }
         }
 
         public string UsersWhoLikedText
         {
             get
             {
-                var users = LikedUsers;
-                if (users.Count() == 0)
+                int count = LikedUsers.Count();
+                if (count == 0)
                     return "";
 
-                if (users.Count() == 1)
+                if (DidILikeIt)
                 {
-                    var user = users.First();
-                    return $"{user.Firstname} {user.Lastname} gefällt das.";
+                    if (count > 1)
+                        return $"Dir und {count - 1} anderen gefällt das.";
+                    else
+                        return "Dir gefällt das.";
                 }
                 else
                 {
-                    var user = users.First();
-                    return $"{user.Firstname} {user.Lastname} und {users.Count() - 1} anderen gefällt das.";
+                    return $"{count} Nutzern gefällt das.";
                 }
             }
         }
@@ -61,27 +69,24 @@ namespace StudyBuddy.App.ViewModels
         {
             get
             {
-                if (Liked)
+                if (DidILikeIt)
                     return "👍 Like";
 
                 return "👍🏻 Like";
             }
         }
 
+        public object TTinyIoCContainer { get; }
+
         private void OpenLikedUsers()
         {
             api.Device.PushPage(new NotificationsLikedUsersModalPage(this));
         }
 
-        private void OpenComments()
+        public async Task Like()
         {
-            api.Device.PushPage(new CommentModalPage(this));
-        }
-
-        public async void Like()
-        {
-            Liked = !Liked;
-            await api.Notifications.Like(this, Liked);
+            bool did_i_like_it = DidILikeIt;
+            await api.Notifications.Like(this, !DidILikeIt);
             LikedUsers = await api.Users.Likers(Id);
 
             NotifyPropertyChanged("LikedUsers");
@@ -89,9 +94,10 @@ namespace StudyBuddy.App.ViewModels
             NotifyPropertyChanged("LikeButtonText");
         }
 
-        public void Share()
+        public async Task Share()
         {
-            api.Device.Share(Title, Body);
+            await api.Notifications.Share(this);
+            await api.Device.Share(Title, Body);
         }
 
         protected void NotifyPropertyChanged([CallerMemberName] string propertyName = "")

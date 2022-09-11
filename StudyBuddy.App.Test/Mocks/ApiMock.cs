@@ -46,6 +46,7 @@ namespace StudyBuddy.App.Test.Mocks
 
         public event EventHandler<FriendshipStateChangedEventArgs> FriendshipStateChanged;
         public event PropertyChangedEventHandler PropertyChanged;
+        public event AppIsTooOldEventHandler AppIsTooOld;
 
         public void RaiseFriendsChanged(object sender, FriendshipStateChangedEventArgs args)
         {

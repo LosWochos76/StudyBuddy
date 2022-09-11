@@ -5,7 +5,7 @@ namespace StudyBuddy.BusinessLogic
     public interface IFcmTokenService
     {
         FcmTokenList GetAll(FcmTokenFilter filter);
-        FcmToken Save(FcmTokenSaveDto fcmToken);
+        FcmToken Save(FcmToken fcmToken);
         void DeleteOldTokens();
     }
 }

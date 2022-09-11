@@ -36,7 +36,7 @@ namespace StudyBuddy.Persistence
 
             var set = qh.ExecuteQuery(
                 "SELECT id,token,user_id,created,last_seen " +
-                "FROM fcm_tokens order by created where user_id=:user_id");
+                "FROM fcm_tokens where user_id=:user_id order by created desc");
 
             return converter.Multiple(set);
         }

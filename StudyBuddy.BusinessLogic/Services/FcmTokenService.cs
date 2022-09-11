@@ -28,7 +28,7 @@ namespace StudyBuddy.BusinessLogic
             };  
         }
 
-        public FcmToken Save(FcmTokenSaveDto obj)
+        public FcmToken Save(FcmToken obj)
         {
             if (backend.CurrentUser == null)
                 throw new Exception("Unauthorized!");
@@ -36,10 +36,9 @@ namespace StudyBuddy.BusinessLogic
             if (obj == null)
                 throw new Exception("Object is null!");
 
-            var token = obj.ToFcmToken();
-            token.UserID = backend.CurrentUser.ID;
-            backend.Repository.FcmTokens.Save(token);
-            return token;
+            obj.UserID = backend.CurrentUser.ID;
+            backend.Repository.FcmTokens.Save(obj);
+            return obj;
         }
 
         public void DeleteOldTokens()

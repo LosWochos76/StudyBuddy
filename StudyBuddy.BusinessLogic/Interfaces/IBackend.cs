@@ -23,7 +23,6 @@ namespace StudyBuddy.BusinessLogic
         INotificationService NotificationService { get; }
         IImageService ImageService { get; }
         INotificationUserMetadataService NotificationUserMetadataService { get; }
-        ICommentService CommentService { get; }
 
         void SetCurrentUserFromToken(string token);
     }

@@ -4,13 +4,13 @@ namespace StudyBuddy.Model
 {
     public class NotificationUserMetadata
     {
-        public int Id { get; set; }
-        public int NotificationId { get; set; }
-        public int OwnerId { get; set; }
-        public bool Liked { get; set; } = false;
-        public bool Seen { get; set; } = false;
-        public bool Shared { get; set; } = false;
-        public DateTime Created { get; set; }
-        public DateTime Updated { get; set; }
+        public int Id { get; set; } = 0;
+        public int NotificationId { get; set; } = 0;
+        public int OwnerId { get; set; } = 0;
+        public bool? Liked { get; set; }
+        public bool? Seen { get; set; }
+        public bool? Shared { get; set; }
+        public DateTime Created { get; set; } = DateTime.Now;
+        public DateTime Updated { get; set; } = DateTime.Now;
     }
 }

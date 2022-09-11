@@ -12,11 +12,8 @@ namespace StudyBuddy.App.Api
 {
     public class ApiFacade : IApi
     {
-        //private readonly string base_url = "https://api.gameucation.eu/";
-        //private readonly string base_url = "https://studybuddy.hshl.de/";
-        private readonly string base_url = "https://localhost:5001/";
-        //private readonly string base_url = "https://10.0.2.2:5001/";
-        //private readonly string base_url = "http://192.168.0.199:58947/";
+        private readonly string base_url = "https://api.gameucation.eu/";
+        //private readonly string base_url = "https://localhost:5001/";
 
         public ApiFacade()
         {
@@ -32,10 +29,10 @@ namespace StudyBuddy.App.Api
             Statistics = new StatisticsService(this, base_url);
             ImageService = new ImageService(this, base_url);
 
-            CheckVersion();
+            LoadApiVersion();
         }
 
-        public Version AppVersion { get; } = new(1, 5, 0, 0);
+        public Version AppVersion { get; } = new(1, 10, 0, 0);
         public Version ApiVersion { get; private set; } = new(0, 0, 0, 0);
         public IStatisticsService Statistics { get; }
         public IAuthenticationService Authentication { get; }
@@ -70,22 +67,14 @@ namespace StudyBuddy.App.Api
                 ChallengeAccepted(sender, challenge);
         }
 
-        public async Task LoadApiVersion()
+        private async Task LoadApiVersion()
         {
             var rh = new WebRequestHelper();
             ApiVersion = await rh.Get<Version>(base_url + "ApiVersion", HttpMethod.Get);
             NotifyPropertyChanged("ApiVersion");
-        }
 
-        private async void CheckVersion()
-        {
-            await LoadApiVersion();
-            if (ApiVersion > AppVersion)
-            {
-                await Logging.LogError("App too old!");
-                Device.ShowError("App zu alt!", "Diese Version der App ist zu alt! Bitte updaten!", "Ok", null);
-                throw new Exception("App is too old! Please update!");
-            }
+            if (ApiVersion > AppVersion && AppIsTooOld is not null)
+                AppIsTooOld(this, new AppIsTooOldEventArgs() { AppVersion = AppVersion, ApiVersion = ApiVersion });
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -93,5 +82,7 @@ namespace StudyBuddy.App.Api
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
+
+        public event AppIsTooOldEventHandler AppIsTooOld;
     }
 }

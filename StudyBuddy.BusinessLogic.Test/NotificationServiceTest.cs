@@ -44,19 +44,6 @@ namespace StudyBuddy.BusinessLogic.Test
         }
 
         [Fact]
-        public void GetNotificationsForFriendsTest_With_Comment()
-        {
-            // Act
-            backend.CommentService.Insert(new Comment() { Id = 1, NotificationId = 1 });
-            var objects = backend.NotificationService.GetNotificationsForFriends(filter);
-
-            // Assert
-            Assert.NotNull(objects);
-            var notifications = objects.ToList();
-            Assert.NotNull(notifications[0].Comments);
-        }
-
-        [Fact]
         public void GetNotificationsForFriendsTest_With_Liked_User()
         {
             // Act

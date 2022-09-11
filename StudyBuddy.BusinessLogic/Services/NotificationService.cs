@@ -29,12 +29,6 @@ namespace StudyBuddy.BusinessLogic
             if (filter.WithLikedUsers)
                 obj.LikedUsers = backend.Repository.Users.GetAllLikersForNotification(obj.Id);
 
-            if (filter.WithComments)
-            {
-                var cf = new CommentFilter { NotificationId = obj.Id };
-                obj.Comments = backend.Repository.CommentsRepository.All(cf);
-            }
-
             if (obj.BadgeId.HasValue && filter.WithBadge)
                 obj.Badge = backend.Repository.GameBadges.ById(obj.BadgeId.Value);
         }
@@ -124,7 +118,6 @@ namespace StudyBuddy.BusinessLogic
                 throw new Exception("Unauthorized!");
 
             backend.Repository.NotificationUserMetadataRepository.DeleteAllForNotification(notification_id);
-            backend.Repository.CommentsRepository.DeleteAllForNotification(notification_id);
             backend.Repository.Notifications.Delete(notification_id);
         }
     }

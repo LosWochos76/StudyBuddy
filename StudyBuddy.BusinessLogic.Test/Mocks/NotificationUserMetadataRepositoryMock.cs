@@ -25,12 +25,7 @@ namespace StudyBuddy.BusinessLogic.Test.Mocks
             objects.RemoveAll(obj => obj.NotificationId == notification_id);
         }
 
-        public NotificationUserMetadata FindNotificationUserMetadata(NotificationUserMetadata obj)
-        {
-            return FindNotificationUserMetadata(obj.NotificationId, obj.OwnerId);
-        }
-
-        public NotificationUserMetadata FindNotificationUserMetadata(int notificationId, int ownerId)
+        public NotificationUserMetadata FindByNotificationAndOwner(int notificationId, int ownerId)
         {
             return objects
                 .Where(obj => obj.NotificationId == notificationId && obj.OwnerId == ownerId)
@@ -40,11 +35,6 @@ namespace StudyBuddy.BusinessLogic.Test.Mocks
         public IEnumerable<NotificationUserMetadata> GetAll()
         {
             return objects;
-        }
-
-        public IEnumerable<NotificationUserMetadata> GetAllUnseen()
-        {
-            return objects.Where(obj => !obj.Seen);
         }
 
         public void Insert(NotificationUserMetadata obj)
@@ -59,20 +49,6 @@ namespace StudyBuddy.BusinessLogic.Test.Mocks
         {
             int pos = objects.FindIndex(o => o.Id == obj.Id);
             objects[pos] = obj;
-        }
-
-        public void Upsert(NotificationUserMetadata obj)
-        {
-            var old = FindNotificationUserMetadata(obj);
-            if (old is null)
-            {
-                Insert(obj);
-            }
-            else
-            {
-                obj.Id = old.Id;
-                Update(obj);
-            }
         }
     }
 }

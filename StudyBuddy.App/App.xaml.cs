@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Net;
+using System.Threading.Tasks;
 using StudyBuddy.App.Api;
 using StudyBuddy.App.Misc;
 using StudyBuddy.App.ViewModels;
@@ -16,27 +17,32 @@ namespace StudyBuddy.App
         {
             InitializeComponent();
 
-            if (App_HasConnection() && Api_Reachable())
-            {
-                SetupServices();
+            if (!CheckConnection())
+                return;
+
+            SetupServices();
+            var api = TinyIoCContainer.Current.Resolve<IApi>();
+            api.AppIsTooOld += Api_AppIsTooOld;
+
+            if (api.AppVersion >= api.ApiVersion)
                 MainPage = new MainPage();
-            }
-            else
-            {
-                MainPage = new NoConnectionPage();
-                if (Api_Reachable())
-                {
-                    Current.MainPage.DisplayAlert("Achtung!",
-                        $"Es wurde keine Internetverbindung gefunden!\nVerbindungstyp: {Connectivity.NetworkAccess.ToString()}",
-                        "Ok"); 
-                }
-                else
-                {
-                    Current.MainPage.DisplayAlert("Achtung!",
-                        $"Die API ist leider nicht erreichbar!",
-                        "Ok"); 
-                }
-            }
+        }
+
+        private void Api_AppIsTooOld(object source, AppIsTooOldEventArgs args)
+        {
+            MainPage = new AppTooOldPage();
+        }
+
+        private bool CheckConnection()
+        {
+            var has_connection = App_HasConnection();
+            var api_reachable = Api_Reachable();
+
+            if (has_connection && api_reachable)
+                return true;
+
+            MainPage = new NoConnectionPage();
+            return false;
         }
 
         private void SetupServices()

@@ -9,7 +9,6 @@ namespace StudyBuddy.BusinessLogic.Test.Mocks
         {
             Logging = new LoggingRepositoryMock();
             BusinessEvents = new BusinessEventRepositoryMock();
-            CommentsRepository = new CommentRepositoryMock();
 
             var tag_repository = new TagRepositoryMock();
             Tags = tag_repository;
@@ -39,6 +38,5 @@ namespace StudyBuddy.BusinessLogic.Test.Mocks
         public IBusinessEventRepository BusinessEvents { get; set; }
         public IImageRepository Images { get; set; }
         public INotificationUserMetadataRepository NotificationUserMetadataRepository { get; set; }
-        public ICommentsRepository CommentsRepository { get; set; }
     }
 }

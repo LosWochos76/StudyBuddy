@@ -5,14 +5,13 @@ namespace StudyBuddy.Persistence
 {
     public interface INotificationUserMetadataRepository
     {
+        // Basic CRUD
         IEnumerable<NotificationUserMetadata> GetAll();
         void Insert(NotificationUserMetadata obj);
         void Update(NotificationUserMetadata obj);
-        void Upsert(NotificationUserMetadata obj);
-        void DeleteAllForNotification(int notification_id);
 
-        IEnumerable<NotificationUserMetadata> GetAllUnseen();
-        NotificationUserMetadata FindNotificationUserMetadata(NotificationUserMetadata obj);
-        NotificationUserMetadata FindNotificationUserMetadata(int notificationId, int ownerId);
+        // Misc
+        NotificationUserMetadata FindByNotificationAndOwner(int notification_id, int owner_id);
+        void DeleteAllForNotification(int notification_id);
     }
 }

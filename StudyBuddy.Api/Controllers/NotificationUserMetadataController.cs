@@ -15,17 +15,16 @@ namespace StudyBuddy.Api.Controllers
         }
 
         [HttpPost]
-        public IActionResult UpsertLike([FromBody] NotificationUserMetadata like)
+        public IActionResult Upsert([FromBody] NotificationUserMetadata obj)
         {
-            backend.NotificationUserMetadataService.Upsert(like);
+            backend.NotificationUserMetadataService.Upsert(obj);
             return Ok();
         }
 
         [HttpGet]
         public IActionResult GetAllLikes()
         {
-            var likes = backend.NotificationUserMetadataService.GetAll();
-            return Ok(likes);
+            return Ok(backend.NotificationUserMetadataService.GetAll());
         }
     }
 }
