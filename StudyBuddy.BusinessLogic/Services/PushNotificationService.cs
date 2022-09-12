@@ -44,7 +44,7 @@ namespace StudyBuddy.BusinessLogic
             }
         }
 
-        public async void SendMessage(IEnumerable<string> tokens, string title, string body, PushNotificationData pushNotificationData = null)
+        public async void SendMessage(IEnumerable<string> tokens, string title, string body, PushNotificationData pushNotificationData)
         {
             var message = new MulticastMessage
             {
@@ -67,6 +67,26 @@ namespace StudyBuddy.BusinessLogic
             }
         }
 
+        public void SendUserAcceptedChallenge(User user, Challenge challenge)
+        {
+            var friends = this.backend.UserService.GetAllFriends(new FriendFilter()
+            {
+                UserId = user.ID
+            });
+
+            var tokens = friends.Objects.SelectMany(friend =>
+                    this.backend.Repository.FcmTokens.GetForUser(friend.ID).Select(token => token.Token)
+            );
+            
+            string title = "Gameucation";
+            string body = $"{user.Firstname} {user.Lastname} hat die Herausforderung {challenge.Name} abgeschlossen.";
+            
+            this.backend.PushNotificationService.SendMessage(tokens, title, body, new PushNotificationData()
+            {
+                PushNotificationType = PushNotificationTypes.ChallengeAccepted
+            });
+        }
+
         public void SendUserLikedNotification(int userId)
         {
             if (backend.CurrentUser.ID == userId) return;
@@ -74,25 +94,14 @@ namespace StudyBuddy.BusinessLogic
             var user = backend.Repository.Users.ById(userId);
             var fcmTokens = backend.Repository.FcmTokens.GetForUser(user.ID).Select(token => token.Token);
             
-            backend.PushNotificationService.SendMessage(fcmTokens, "Gameucation", $"{this.backend.CurrentUser.Firstname} {this.backend.CurrentUser.Lastname} gefällt Ihr Beitrag.", new PushNotificationData()
+            string title = "Gameucation";
+            string body = $"{this.backend.CurrentUser.Firstname} {this.backend.CurrentUser.Lastname} gefällt Ihr Beitrag.";
+            
+            backend.PushNotificationService.SendMessage(fcmTokens, title, body, new PushNotificationData()
             {
                 PushNotificationType = PushNotificationTypes.Liked
             });
         }
-
-        public void SendUserCommentNotification(int userId)
-        {
-            if (backend.CurrentUser.ID == userId)
-                return;
-
-            var user = backend.Repository.Users.ById(userId);
-            var fcmTokens = backend.Repository.FcmTokens.GetForUser(user.ID).Select(token => token.Token);
-
-            backend.PushNotificationService.SendMessage(fcmTokens, "Gameucation",
-            $"{this.backend.CurrentUser.Firstname} {this.backend.CurrentUser.Lastname} hat ihren Beitrag kommentiert.", new PushNotificationData()
-            {
-                PushNotificationType = PushNotificationTypes.Comment
-            });
-        }
+        
     }
 }

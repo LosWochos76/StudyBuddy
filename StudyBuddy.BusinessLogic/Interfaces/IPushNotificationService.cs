@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using StudyBuddy.Model;
 
 namespace StudyBuddy.BusinessLogic
 {
@@ -7,6 +8,6 @@ namespace StudyBuddy.BusinessLogic
         void BroadcastMessage(PushNotificationBroadcastDto obj);
         void SendMessage(IEnumerable<string> tokens, string title, string body, PushNotificationData pushNotificationData = null);
         void SendUserLikedNotification(int userId);
-        void SendUserCommentNotification(int userId);
+        void SendUserAcceptedChallenge(User user, Challenge challenge);
     }
 }
