@@ -4,6 +4,8 @@ namespace StudyBuddy.Model.Enum
     {
         Normal,
         Liked,
-        ChallengeAccepted
+        ChallengeAccepted,
+        FriendShipRequest,
+        FriendShipAccepted
     }
 }

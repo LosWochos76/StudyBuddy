@@ -103,5 +103,35 @@ namespace StudyBuddy.BusinessLogic
             });
         }
         
+        public void SendFriendShipRequestNotification(int senderId, int recipentId)
+        {
+
+            var senderUser = backend.Repository.Users.ById(senderId);
+            var fcmTokens = backend.Repository.FcmTokens.GetForUser(recipentId).Select(token => token.Token);
+            
+            string title = "Gameucation";
+            string body = $"{senderUser.Firstname} {senderUser.Lastname} möchte Ihr Freund sein.";
+            
+            backend.PushNotificationService.SendMessage(fcmTokens, title, body, new PushNotificationData()
+            {
+                PushNotificationType = PushNotificationTypes.FriendShipRequest
+            });
+        }
+        
+        public void SendFriendShipAcceptedNotification(int senderId, int recipentId)
+        {
+
+            var recipentUser = backend.Repository.Users.ById(recipentId);
+            var fcmTokens = backend.Repository.FcmTokens.GetForUser(senderId).Select(token => token.Token);
+            
+            string title = "Gameucation";
+            string body = $"{recipentUser.Firstname} {recipentUser.Lastname} ist nun ihr Freund.";
+            
+            backend.PushNotificationService.SendMessage(fcmTokens, title, body, new PushNotificationData()
+            {
+                PushNotificationType = PushNotificationTypes.FriendShipAccepted
+            });
+        }
+        
     }
 }
