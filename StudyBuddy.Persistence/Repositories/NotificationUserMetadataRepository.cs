@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using StudyBuddy.Model;
+using StudyBuddy.Model.Filter;
 
 namespace StudyBuddy.Persistence
 {
@@ -89,10 +90,20 @@ namespace StudyBuddy.Persistence
             return converter.Single(set);
         }
 
-        public IEnumerable<NotificationUserMetadata> GetAll()
+        public IEnumerable<NotificationUserMetadata> GetAll(
+            NotificationUserMetadataFilter filter)
         {
             var qh = new QueryHelper(connection_string);
-            var sql = "select id, notification_id, owner_id, liked, seen, shared, created, updated from notification_user_metadata";
+            var sql = "select id, notification_id, owner_id, liked, seen, shared, created, updated from notification_user_metadata where true ";
+            qh.AddParameter(":max", filter.Count);
+            qh.AddParameter(":from", filter.Start);
+
+            if (filter.NotificationId.HasValue)
+            {
+                qh.AddParameter(":notification_id", filter.NotificationId.Value);
+                sql += " and (notification_id=:notification_id) ";
+            }
+            
             var set = qh.ExecuteQuery(sql);
             return converter.Multiple(set);
         }
@@ -103,6 +114,27 @@ namespace StudyBuddy.Persistence
             var sql = "delete from notification_user_metadata where notification_id=:notification_id";
             qh.AddParameter(":notification_id", notification_id);
             qh.ExecuteNonQuery(sql);
+        }
+        
+        
+        public int GetCount(NotificationUserMetadataFilter filter)
+        {
+            var qh = new QueryHelper(connection_string);
+            var sql = "select count(*) from notification_user_metadata where true";
+
+            if (filter.NotificationId.HasValue)
+            {
+                qh.AddParameter(":notification_id", filter.NotificationId.Value);
+                sql += " and (notification_id=:notification_id)";
+            }
+
+            return qh.ExecuteQueryToSingleInt(sql);
+        }
+        
+        public void Delete(int id)
+        {
+            var qh = new QueryHelper(connection_string);
+            qh.Delete("notification_user_metadata", "id", id);
         }
     }
 }

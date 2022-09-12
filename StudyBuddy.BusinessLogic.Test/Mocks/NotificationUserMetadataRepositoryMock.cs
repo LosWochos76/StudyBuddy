@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using StudyBuddy.Model;
+using StudyBuddy.Model.Filter;
 using StudyBuddy.Persistence;
 using Xunit;
 
@@ -25,6 +26,16 @@ namespace StudyBuddy.BusinessLogic.Test.Mocks
             objects.RemoveAll(obj => obj.NotificationId == notification_id);
         }
 
+        public int GetCount(NotificationUserMetadataFilter filter)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Delete(int id)
+        {
+            throw new NotImplementedException();
+        }
+
         public NotificationUserMetadata FindByNotificationAndOwner(int notificationId, int ownerId)
         {
             return objects
@@ -32,7 +43,8 @@ namespace StudyBuddy.BusinessLogic.Test.Mocks
                 .FirstOrDefault();
         }
 
-        public IEnumerable<NotificationUserMetadata> GetAll()
+        public IEnumerable<NotificationUserMetadata> GetAll(
+            NotificationUserMetadataFilter notificationUserMetadataFilter)
         {
             return objects;
         }

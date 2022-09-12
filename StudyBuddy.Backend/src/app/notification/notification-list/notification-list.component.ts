@@ -80,4 +80,14 @@ export class NotificationListComponent implements OnInit {
     this.service.remove(this.selected.id);
     this.selected = null;
   }
+
+  onEdit() {
+    console.log("Hello World", this.selected);
+    
+    if (!this.isSelected())
+      return;
+
+    this.logger.debug("User wants to edit a Challenge");
+    this.router.navigate(['/notification/', this.selected.id]);
+  }
 }

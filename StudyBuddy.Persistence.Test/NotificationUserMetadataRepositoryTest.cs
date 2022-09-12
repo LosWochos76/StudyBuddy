@@ -15,11 +15,11 @@ namespace StudyBuddy.Persistence.Test
             repository.Users.Insert(new User() { ID = 2 });
             repository.Notifications.Insert(new Notification() { Id = 1, OwnerId = 1 });
             repository.Notifications.Insert(new Notification() { Id = 1, OwnerId = 2 });
-            repository.NotificationUserMetadataRepository.Insert(new NotificationUserMetadata() { Id = 1, OwnerId = 1, NotificationId = 1 });
-            repository.NotificationUserMetadataRepository.Insert(new NotificationUserMetadata() { Id = 1, OwnerId = 2, NotificationId = 2 });
+            repository.NotificationUserMetadata.Insert(new NotificationUserMetadata() { Id = 1, OwnerId = 1, NotificationId = 1 });
+            repository.NotificationUserMetadata.Insert(new NotificationUserMetadata() { Id = 1, OwnerId = 2, NotificationId = 2 });
 
             // Act
-            var obj = repository.NotificationUserMetadataRepository.FindByNotificationAndOwner(1, 1);
+            var obj = repository.NotificationUserMetadata.FindByNotificationAndOwner(1, 1);
 
             // Asert
             Assert.NotNull(obj);
@@ -38,12 +38,12 @@ namespace StudyBuddy.Persistence.Test
 
             // Arrange
             repository.Notifications.Insert(new Notification() { Id = 1, OwnerId = 1 });
-            repository.NotificationUserMetadataRepository.Insert(new NotificationUserMetadata() { Id = 1, OwnerId = 1, NotificationId = 1 });
-            var obj = repository.NotificationUserMetadataRepository.FindByNotificationAndOwner(1, 1);
+            repository.NotificationUserMetadata.Insert(new NotificationUserMetadata() { Id = 1, OwnerId = 1, NotificationId = 1 });
+            var obj = repository.NotificationUserMetadata.FindByNotificationAndOwner(1, 1);
 
             // Act
             obj.Shared = true;
-            repository.NotificationUserMetadataRepository.Update(obj);
+            repository.NotificationUserMetadata.Update(obj);
 
             // Asert
             Assert.NotNull(obj);

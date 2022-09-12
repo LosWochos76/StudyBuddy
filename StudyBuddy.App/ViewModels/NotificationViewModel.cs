@@ -86,7 +86,7 @@ namespace StudyBuddy.App.ViewModels
         public async Task Like()
         {
             bool did_i_like_it = DidILikeIt;
-            await api.Notifications.Like(this, !DidILikeIt);
+            await api.NotificationUserMetadataService.Like(this, !DidILikeIt);
             LikedUsers = await api.Users.Likers(Id);
 
             NotifyPropertyChanged("LikedUsers");
@@ -96,7 +96,7 @@ namespace StudyBuddy.App.ViewModels
 
         public async Task Share()
         {
-            await api.Notifications.Share(this);
+            await api.NotificationUserMetadataService.Share(this);
             await api.Device.Share(Title, Body);
         }
 

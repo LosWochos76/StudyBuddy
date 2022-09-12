@@ -33,6 +33,7 @@ import { VerifyemailComponent } from './authentication/verifyemail/verifyemail.c
 import { RecoverComponent } from './authentication/recover/recover.component';
 import { SendEmailComponent } from './user/send-email/send-email.component';
 import { NotificationListComponent } from './notification/notification-list/notification-list.component';
+import { NotificationEditComponent } from './notification/notification-edit/notification-edit.component';
 
 const routes: Routes = [
   { path: 'register', component: RegisterUserComponent },
@@ -66,6 +67,7 @@ const routes: Routes = [
   { path: 'businessevent/:id', component: BusinessEventEditComponent, canActivate: [RouteGuardService] },
   { path: 'sendemail', component: SendEmailComponent, canActivate: [RouteGuardService] },
   { path: 'notification', component: NotificationListComponent, canActivate: [RouteGuardService] },
+  { path: 'notification/:id', component: NotificationEditComponent, canActivate: [RouteGuardService] },
   { path: '', redirectTo: 'challenge', pathMatch: 'full' },
   { path: '**', component: PageNotFoundComponent }
 ];

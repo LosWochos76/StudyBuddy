@@ -26,6 +26,7 @@ namespace StudyBuddy.App.Api
             Badges = new BadgeService(this, base_url);
             Requests = new RequestService(this, base_url);
             Notifications = new NotificationService(this, base_url);
+            NotificationUserMetadataService = new NotificationUserMetadataService(this, base_url);
             Statistics = new StatisticsService(this, base_url);
             ImageService = new ImageService(this, base_url);
 
@@ -43,6 +44,7 @@ namespace StudyBuddy.App.Api
         public IRequestService Requests { get; }
         public ILoggingService Logging { get; }
         public INotificationService Notifications { get; }
+        public INotificationUserMetadataService NotificationUserMetadataService { get; }
         public IImageService ImageService { get; set; }
         public IDeviceService Device { get; set; }
 
