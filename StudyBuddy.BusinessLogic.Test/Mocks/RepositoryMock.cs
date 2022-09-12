@@ -14,7 +14,7 @@ namespace StudyBuddy.BusinessLogic.Test.Mocks
             Tags = tag_repository;
 
             var nmdr = new NotificationUserMetadataRepositoryMock();
-            NotificationUserMetadataRepository = nmdr;
+            NotificationUserMetadata = nmdr;
 
             var challenge_repository = new ChallengeRepositoryMock(tag_repository);
             Challenges = challenge_repository;
@@ -37,6 +37,6 @@ namespace StudyBuddy.BusinessLogic.Test.Mocks
         public IStatisticsRepository StatisticsRepository { get; set; }
         public IBusinessEventRepository BusinessEvents { get; set; }
         public IImageRepository Images { get; set; }
-        public INotificationUserMetadataRepository NotificationUserMetadataRepository { get; set; }
+        public INotificationUserMetadataRepository NotificationUserMetadata { get; set; }
     }
 }

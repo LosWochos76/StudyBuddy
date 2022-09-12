@@ -18,6 +18,7 @@ namespace StudyBuddy.App.Api
         IStatisticsService Statistics { get; }
         IImageService ImageService { get; }
         INotificationService Notifications { get; }
+        INotificationUserMetadataService NotificationUserMetadataService { get; }
         IDeviceService Device { get; }
 
         Version AppVersion { get; }

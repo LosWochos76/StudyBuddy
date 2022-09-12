@@ -24,6 +24,7 @@ namespace StudyBuddy.App.Test.Mocks
         public IRequestService Requests { get; }
         public ILoggingService Logging { get; }
         public INotificationService Notifications { get; }
+        public INotificationUserMetadataService NotificationUserMetadataService { get; }
         public IStatisticsService Statistics { get; }
         public IImageService ImageService { get; set; }
         public IDeviceService Device { get; set; }

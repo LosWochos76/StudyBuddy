@@ -118,7 +118,7 @@ namespace StudyBuddy.BusinessLogic
             if (backend.CurrentUser == null || !backend.CurrentUser.IsAdmin)
                 throw new Exception("Unauthorized!");
 
-            backend.Repository.NotificationUserMetadataRepository.DeleteAllForNotification(notification_id);
+            backend.Repository.NotificationUserMetadata.DeleteAllForNotification(notification_id);
             backend.Repository.Notifications.Delete(notification_id);
         }
     }

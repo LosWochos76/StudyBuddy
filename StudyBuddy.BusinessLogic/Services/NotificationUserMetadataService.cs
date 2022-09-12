@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using StudyBuddy.Model;
+using StudyBuddy.Model.Filter;
 
 namespace StudyBuddy.BusinessLogic.Services
 {
@@ -23,7 +24,7 @@ namespace StudyBuddy.BusinessLogic.Services
                 throw new Exception("Object is null!");
 
             obj.OwnerId = backend.CurrentUser.ID;
-            var existing = backend.Repository.NotificationUserMetadataRepository.FindByNotificationAndOwner(obj.NotificationId, obj.OwnerId);
+            var existing = backend.Repository.NotificationUserMetadata.FindByNotificationAndOwner(obj.NotificationId, obj.OwnerId);
             if (existing is not null)
             {
                 if (existing.Liked == false && obj.Liked == true)
@@ -34,18 +35,34 @@ namespace StudyBuddy.BusinessLogic.Services
 
                 obj.Id = existing.Id;
                 obj.Created = existing.Created;
-                backend.Repository.NotificationUserMetadataRepository.Update(obj);
+                backend.Repository.NotificationUserMetadata.Update(obj);
             }
             else
             {
-                backend.Repository.NotificationUserMetadataRepository.Insert(obj);
+                backend.Repository.NotificationUserMetadata.Insert(obj);
             }
         }
 
-        public IEnumerable<NotificationUserMetadata> GetAll()
+        public NotificationUserMetadataList GetAll(NotificationUserMetadataFilter filter)
         {
-            var response = backend.Repository.NotificationUserMetadataRepository.GetAll();
-            return response;
+            if (backend.CurrentUser is null)
+                throw new Exception("Unauthorized!");
+            
+            return new NotificationUserMetadataList()
+            {
+                Count = backend.Repository.NotificationUserMetadata.GetCount(filter),
+                Objects = backend.Repository.NotificationUserMetadata.GetAll(filter)
+            };
         }
+
+        public void Delete(int id)
+        {
+            
+            if (!backend.CurrentUser.IsAdmin)
+                throw new Exception("Unauthorized!");
+            
+            this.backend.Repository.NotificationUserMetadata.Delete(id);
+        }
+
     }
 }

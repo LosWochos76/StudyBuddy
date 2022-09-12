@@ -1,0 +1,39 @@
+<br>
+<h1>Benachrichtigungen Metadaten</h1>
+
+<button class="btn btn-danger" [disabled]="!isSelected()" (click)="onDelete()">Löschen</button>&nbsp;
+<br>
+<br>
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Id</th>
+            <th scope="col">Notification Id</th>
+            <th scope="col">Owner Id</th>
+            <th scope="col">Liked</th>
+            <th scope="col">Seen</th>
+            <th scope="col">Shared</th>
+            <th scope="col">Created</th>
+            <th scope="col">Updated</th>
+
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let obj of objects | paginate: { itemsPerPage: 10, currentPage: page, totalItems: total }; index as i" (click)="onSelect(obj)" (dblclick)="onEdit(obj)" [class.table-info]="obj == selected">
+            <th scope="row">{{(page-1) * 10 + i + 1}}</th>
+            <td>{{obj.id }}</td>
+            <td>{{obj.notificationId}}</td>
+            <td>
+                <a [routerLink]="['/', 'user' , obj.ownerId]">{{obj.ownerId}}</a>
+            </td>
+            <td>{{obj.liked}}</td>
+            <td>{{obj.liked}}</td>
+            <td>{{obj.shared}}</td>
+            <td>{{obj.created | date:'YYYY-MM-dd'}}</td>
+            <td>{{obj.Updated | date:'YYYY-MM-dd'}}</td>
+        </tr>
+    </tbody>
+</table>
+<pagination-controls (pageChange)="onTableDataChange($event)"></pagination-controls>
+

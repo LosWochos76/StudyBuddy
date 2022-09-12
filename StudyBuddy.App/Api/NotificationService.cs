@@ -42,31 +42,6 @@ namespace StudyBuddy.App.Api
             return content;
         }
 
-        private async Task<NotificationUserMetadata> Upsert(NotificationUserMetadata notificationUserMetadataUpsert)
-        {
-            var rh = new WebRequestHelper(api.Authentication.Token);
-            var response = await rh.Post<NotificationUserMetadata>(base_url + "NotificationUserMetadata", notificationUserMetadataUpsert);
-            return response;
-        }
-
-        public async Task<NotificationUserMetadata> Like(NotificationViewModel obj, bool liked)
-        {
-            return await Upsert(new NotificationUserMetadata
-            {
-                OwnerId = obj.OwnerId,
-                NotificationId = obj.Id,
-                Liked = liked
-            });
-        }
-
-        public async Task<NotificationUserMetadata> Share(NotificationViewModel obj)
-        {
-            return await Upsert(new NotificationUserMetadata
-            {
-                OwnerId = obj.OwnerId,
-                NotificationId = obj.Id,
-                Shared = true
-            });
-        }
+ 
     }
 }

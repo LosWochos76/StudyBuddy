@@ -50,6 +50,8 @@ import { VerifyemailComponent } from './authentication/verifyemail/verifyemail.c
 import { RecoverComponent } from './authentication/recover/recover.component';
 import { SendEmailComponent } from './user/send-email/send-email.component';
 import { NotificationListComponent } from './notification/notification-list/notification-list.component';
+import { NotificationEditComponent } from './notification/notification-edit/notification-edit.component';
+import { NotificationUserMetadataListComponent } from './notification-user-metadata-list/notification-metadata-list/notification-user-metadata-list.component';
 
 @NgModule({
   declarations: [
@@ -89,7 +91,9 @@ import { NotificationListComponent } from './notification/notification-list/noti
     VerifyemailComponent,
     RecoverComponent,
     SendEmailComponent,
-    NotificationListComponent
+    NotificationListComponent,
+    NotificationEditComponent,
+    NotificationUserMetadataListComponent
   ],
   imports: [
     BrowserModule,
