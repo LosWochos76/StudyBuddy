@@ -63,11 +63,11 @@ namespace StudyBuddy.App
         {
             if (App_HasConnection() && Api_Reachable())
             {
-                if (!Current.Properties.ContainsKey("Login"))
+                var api = TinyIoCContainer.Current.Resolve<IApi>();
+                if (!api.Device.HasPreference("Login"))
                     return;
 
-                var content = Preferences.Get("Login", String.Empty);
-                var api = TinyIoCContainer.Current.Resolve<IApi>();
+                var content = api.Device.GetPreference("Login", string.Empty);
                 var result = await api.Authentication.LoginFromJson(content);
 
                 if (result)

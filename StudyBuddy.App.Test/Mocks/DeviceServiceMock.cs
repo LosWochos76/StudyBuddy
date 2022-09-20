@@ -45,6 +45,11 @@ namespace StudyBuddy.App.Test.Mocks
             preferences[key] = value;
         }
 
+        public bool HasPreference(string key)
+        {
+            return preferences.ContainsKey(key);
+        }
+
         public Task<string> DisplayPrompt(string message, string title)
         {
             return Task.Run(() => { return string.Empty; });

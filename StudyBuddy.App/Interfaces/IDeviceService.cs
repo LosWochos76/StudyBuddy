@@ -11,6 +11,7 @@ namespace StudyBuddy.App.Api
         Task PopPage();
         string GetPreference(string key, string default_value);
         void SetPreference(string key, string value);
+        bool HasPreference(string key);
         void ShowError(string message, string title, string buttonText, Action afterHideCallback);
         void ShowError(Exception error, string title, string buttonText, Action afterHideCallback);
         void ShowMessage(string message, string title);

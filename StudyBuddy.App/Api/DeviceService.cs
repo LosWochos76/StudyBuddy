@@ -18,6 +18,11 @@ namespace StudyBuddy.App.Api
             Preferences.Set(key, value);
         }
 
+        public bool HasPreference(string key)
+        {
+            return Preferences.ContainsKey(key);
+        }
+
         public async Task GoToPath(string path)
         {
             Shell.Current.FlyoutIsPresented = false;
