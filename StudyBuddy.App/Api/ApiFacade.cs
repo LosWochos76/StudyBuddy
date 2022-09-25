@@ -14,6 +14,7 @@ namespace StudyBuddy.App.Api
     {
         private readonly string base_url = "https://api.gameucation.eu/";
         //private readonly string base_url = "https://localhost:5001/";
+        //private readonly string base_url = "https://10.0.2.2:5001/"; //this is required for local android debugging
 
         public ApiFacade()
         {

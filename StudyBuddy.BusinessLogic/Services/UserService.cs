@@ -4,6 +4,7 @@ using System.Linq;
 using FirebaseAdmin.Messaging;
 using StudyBuddy.BusinessLogic.Parameters;
 using StudyBuddy.Model;
+using StudyBuddy.Model.Enum;
 
 namespace StudyBuddy.BusinessLogic
 {
@@ -57,18 +58,18 @@ namespace StudyBuddy.BusinessLogic
             if (user == null)
             {
                 backend.Logging.LogDebug($"User with email {data.Email} not found!");
-                return new LoginResult(3);
+                return new LoginResult() { Status = LoginStatus.UserNotFound };
             }
 
             if (!backend.AuthenticationService.CheckPasswordResetToken(data.Token, user.PasswordHash))
             {
                 backend.Logging.LogDebug($"Invalid password reset token for User with email {data.Email}!");
-                return new LoginResult(8);
+                return new LoginResult() { Status = LoginStatus.InvalidToken };
             }
 
             user.Password = data.Password;
             backend.Repository.Users.Update(user);
-            return new LoginResult(0);
+            return new LoginResult() { Status = LoginStatus.Success };
         }
 
         public LoginResult VerifyEmail(VerifyEmailData data)
@@ -80,18 +81,18 @@ namespace StudyBuddy.BusinessLogic
             if (user == null)
             {
                 backend.Logging.LogDebug($"User with email {data.Email} not found!");
-                return new LoginResult(3);
+                return new LoginResult() { Status = LoginStatus.UserNotFound };
             }
 
             if (!backend.AuthenticationService.CheckPasswordResetToken(data.Token, user.PasswordHash))
             {
                 backend.Logging.LogDebug($"Invalid verification token for user with email {data.Email}!");
-                return new LoginResult(8);
+                return new LoginResult() { Status = LoginStatus.InvalidToken };
             }
             
             user.EmailConfirmed = true;
             backend.Repository.Users.Update(user);
-            return new LoginResult(0);
+            return new LoginResult() { Status = LoginStatus.Success };
         }
 
         public User EnableAccount(User obj)

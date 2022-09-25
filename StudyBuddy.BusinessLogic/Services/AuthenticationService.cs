@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.WebUtilities;
 using SimpleHashing.Net;
 using StudyBuddy.Model;
+using StudyBuddy.Model.Enum;
 using System;
 using System.Collections.Generic;
 
@@ -25,31 +26,31 @@ namespace StudyBuddy.BusinessLogic
             if (user == null)
             {
                 backend.Logging.LogDebug($"User with email {uc.EMail} not found!");
-                return new LoginResult(3);
+                return new LoginResult() { Status = LoginStatus.UserNotFound };
             }
 
             if (!user.AccountActive)
             {
                 backend.Logging.LogDebug($"User with email {uc.EMail} is disabled.");
-                return new LoginResult(7);
+                return new LoginResult() { Status = LoginStatus.AccountDisabled };
             }
 
             if (!simpleHash.Verify(uc.Password, user.PasswordHash))
             {
                 backend.Logging.LogDebug($"Wrong password for {uc.EMail}!");
-                return new LoginResult(2);
+                return new LoginResult() { Status = LoginStatus.IncorrectCredentials };
             }
 
             if (!user.EmailConfirmed)
             {
                 backend.Logging.LogDebug($"User with email {user.Email} is not verified.");
-                return new LoginResult(1);
+                return new LoginResult() { Status = LoginStatus.EmailNotVerified };
             }
 
             backend.Logging.LogDebug("Successfull login");
             user.PasswordHash = null;
             var jwt = new JwtToken();
-            return new LoginResult(0, jwt.FromUser(user.ID), user);
+            return new LoginResult(jwt.FromUser(user.ID), user) { Status = LoginStatus.Success };
         }
 
         public void SendMail(string email, bool forgotpassword)

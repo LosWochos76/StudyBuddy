@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using StudyBuddy.App.Api;
 using StudyBuddy.App.ViewModels;
+using StudyBuddy.Model.Enum;
 
 namespace StudyBuddy.App.Test.Mocks
 {
@@ -20,8 +21,10 @@ namespace StudyBuddy.App.Test.Mocks
                 EMail="alexander.stuckenholz@hshl.de",
                 Password = "secret"
             });
-
-            return result == 1;
+            if (result == LoginStatus.Success)
+                return true;
+            else
+                return false;
         }
 
         public void Logout()
@@ -40,7 +43,7 @@ namespace StudyBuddy.App.Test.Mocks
             return true;
         }
 
-        public async Task<int> Login(UserCredentials credentials)
+        public async Task<LoginStatus> Login(UserCredentials credentials)
         {
             if (string.IsNullOrEmpty(credentials.EMail))
                 throw new Exception("Missing Email!");
@@ -56,7 +59,7 @@ namespace StudyBuddy.App.Test.Mocks
                 if (LoginStateChanged != null)
                     LoginStateChanged(this, new LoginStateChangedArgs(true, CurrentUser, Token));
 
-                return 0;
+                return LoginStatus.Success;
             });
         }
     }

@@ -4,6 +4,7 @@ using Microsoft.Extensions.Logging;
 using StudyBuddy.BusinessLogic;
 using StudyBuddy.BusinessLogic.Parameters;
 using StudyBuddy.Model;
+using StudyBuddy.Model.Enum;
 
 namespace StudyBuddy.Api
 {
@@ -41,7 +42,7 @@ namespace StudyBuddy.Api
         {
             logger.LogInformation("AuthenticationController.SendPasswortResetMail");
             backend.AuthenticationService.SendMail(email, true);
-            return Json(new LoginResult(0));
+            return Json(new LoginResult() { Status = LoginStatus.Success });
         }
 
         [Route("/Login/ResetPassword/")]
@@ -58,7 +59,7 @@ namespace StudyBuddy.Api
         {
             logger.LogInformation("AuthenticationController.SendVerificationMail");
             backend.AuthenticationService.SendMail(email, false);
-            return Json(new LoginResult(0)); 
+            return Json(new LoginResult() { Status = LoginStatus.Success }); 
         }
 
         [Route("/Login/VerifyEmail")]
@@ -77,7 +78,7 @@ namespace StudyBuddy.Api
 
             User user = backend.Repository.Users.ByEmailAllAccounts(uc.EMail);
             LoginResult response = backend.AuthenticationService.Login(uc);
-            if (response.Status != 7)
+            if (response.Status != LoginStatus.AccountDisabled)
                 return Json(response);
 
             User updatedUser = backend.UserService.EnableAccount(user);
@@ -85,7 +86,7 @@ namespace StudyBuddy.Api
             {
                 response.User = null;
                 response.Token = null;
-                response.Status = 6;
+                response.Status = LoginStatus.UndocumentedError;
                 return Json(response);
             }
 

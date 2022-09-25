@@ -3,6 +3,7 @@ using System.Windows.Input;
 using StudyBuddy.App.Api;
 using StudyBuddy.App.Misc;
 using StudyBuddy.App.Views;
+using StudyBuddy.Model.Enum;
 using Xamarin.CommunityToolkit.ObjectModel;
 using Xamarin.Forms;
 
@@ -101,25 +102,25 @@ namespace StudyBuddy.App.ViewModels
 
             switch(result)
             {
-                case 0:
+                case LoginStatus.Success:
                     await api.Device.GoToPath("//ChallengesPage");
                     break;
-                case 1:
+                case LoginStatus.EmailNotVerified:
                     var url = "https://backend.gameucation.eu/login/verificationrequired;email=";
                     var link = url + uc.EMail;
                     api.Device.OpenBrowser(link);
                     break;
-                case 2:
+                case LoginStatus.IncorrectCredentials:
                     api.Device.ShowMessageBox("E-Mail-Aresse oder Passwort ist falsch!", "Achtung!");
                     break;
-                case 3:
+                case LoginStatus.UserNotFound:
                     api.Device.ShowMessageBox("Es konnte kein Konto mit dieser E-Mail-Adresse gefunden werden.", "Achtung!");
                     break;
-                case 4:
+                case LoginStatus.InvalidApiResponse:
                     api.Device.ShowMessageBox("Anmeldung nicht erfolgreich! Zugangsdaten korrekt?", "Achtung!");
                     await api.Logging.LogError("Invalid API response for login with " + uc.EMail);
                     break;
-                case 5:
+                case LoginStatus.NoToken:
                     api.Device.ShowMessageBox("Anmeldung nicht erfolgreich! Zugangsdaten korrekt?", "Achtung!");
                     await api.Logging.LogError("Issue in loginfromjson, no Token/User or Token invalid");
                     break;

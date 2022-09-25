@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using StudyBuddy.App.ViewModels;
+using StudyBuddy.Model.Enum;
 
 namespace StudyBuddy.App.Api
 {
@@ -27,7 +28,7 @@ namespace StudyBuddy.App.Api
         string Token { get; }
         UserViewModel CurrentUser { get; }
         bool IsLoggedIn { get; }
-        Task<int> Login(UserCredentials credentials);
+        Task<LoginStatus> Login(UserCredentials credentials);
         Task<bool> LoginFromJson(string content);
         void Logout();
         event LoginStateChangedHandler LoginStateChanged;

@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using StudyBuddy.App.Misc;
 using StudyBuddy.App.ViewModels;
 using StudyBuddy.Model;
+using StudyBuddy.Model.Enum;
 using Xamarin.Essentials;
 using Xamarin.Forms;
 
@@ -28,14 +29,14 @@ namespace StudyBuddy.App.Api
         public string Token { get; private set; } = string.Empty;
         public UserViewModel CurrentUser { get; private set; }
 
-        public async Task<int> Login(UserCredentials credentials)
+        public async Task<LoginStatus> Login(UserCredentials credentials)
         {
             try
             {
                 var rh = new WebRequestHelper();
                 LoginResult response = await rh.Post<LoginResult>(base_url + "Login", credentials);
                 if (response == null)
-                    return 4;
+                    return LoginStatus.InvalidApiResponse;
 
                 if (response.Status != 0)
                     return response.Status;
@@ -44,14 +45,14 @@ namespace StudyBuddy.App.Api
                 var result = await LoginFromJson(jsonstring);
 
                 if (!result)
-                    return 5;
+                    return LoginStatus.NoToken;
                 else
                     return response.Status;
                  
             }
             catch (Exception exp)
             {
-                return 6;
+                return LoginStatus.UndocumentedError;
             }
         }
 
