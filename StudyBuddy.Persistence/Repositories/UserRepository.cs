@@ -137,10 +137,12 @@ namespace StudyBuddy.Persistence
             qh.AddParameter(":user_id", filter.UserId);
             qh.AddParameter(":from", filter.Start);
             qh.AddParameter(":max", filter.Count);
+            qh.AddParameter(":onlyActive", filter.OnlyActiveAccounts);
+            qh.AddParameter(":onlyConfirmed", filter.OnlyConfirmedAccounts);
 
             var sql = new StringBuilder("select id,firstname,lastname,nickname,email,password_hash,role," +
                 "emailconfirmed,accountactive,common_friends(id, :user_id) from friends " +
-                "inner join users on user_b = id where accountactive = true and user_a=:user_id ");
+                "inner join users on user_b = id where accountactive=:onlyActive and emailconfirmed=:onlyConfirmed and user_a=:user_id ");
 
             if (!string.IsNullOrEmpty(filter.SearchText))
             {
@@ -149,6 +151,31 @@ namespace StudyBuddy.Persistence
             }
 
             sql.Append("order by lastname,firstname,nickname limit :max offset :from");
+            var set = qh.ExecuteQuery(sql.ToString());
+            return converter.Multiple(set);
+        }
+
+        public IEnumerable<User> GetNotFriends(FriendFilter filter)
+        {
+            var qh = new QueryHelper(connection_string);
+            qh.AddParameter(":user_id", filter.UserId);
+            qh.AddParameter(":from", filter.Start);
+            qh.AddParameter(":max", filter.Count);
+            qh.AddParameter(":onlyActive", filter.OnlyActiveAccounts);
+            qh.AddParameter(":onlyConfirmed", filter.OnlyConfirmedAccounts);
+
+            var sql = new StringBuilder("select id,firstname,lastname,nickname,email,password_hash,role," +
+                "emailconfirmed,accountactive,common_friends(id,:user_id) from users " +
+                "where accountactive=:onlyActive and emailconfirmed=:onlyConfirmed and " +
+                "id not in (select user_b from friends where user_a=:user_id) and id!=:user_id ");
+
+            if (!string.IsNullOrEmpty(filter.SearchText))
+            {
+                qh.AddParameter(":search_text", "%" + filter.SearchText + "%");
+                sql.Append(" and (firstname ilike :search_text or lastname ilike :search_text or email ilike :search_text)");
+            }
+
+            sql.Append(" order by lastname,firstname,nickname limit :max offset :from");
             var set = qh.ExecuteQuery(sql.ToString());
             return converter.Multiple(set);
         }
@@ -167,29 +194,6 @@ namespace StudyBuddy.Persistence
             }
 
             return qh.ExecuteQueryToSingleInt(sql);
-        }
-
-        public IEnumerable<User> GetNotFriends(FriendFilter filter)
-        {
-            var qh = new QueryHelper(connection_string);
-            qh.AddParameter(":user_id", filter.UserId);
-            qh.AddParameter(":from", filter.Start);
-            qh.AddParameter(":max", filter.Count);
-
-            var sql = new StringBuilder("select id,firstname,lastname,nickname,email,password_hash,role," +
-                "emailconfirmed,accountactive,common_friends(id,:user_id) from users " +
-                "where accountactive = true and " +
-                "id not in (select user_b from friends where user_a=:user_id) and id!=:user_id ");
-
-            if (!string.IsNullOrEmpty(filter.SearchText))
-            {
-                qh.AddParameter(":search_text", "%" + filter.SearchText + "%");
-                sql.Append(" and (firstname ilike :search_text or lastname ilike :search_text or email ilike :search_text)");
-            }
-
-            sql.Append(" order by lastname,firstname,nickname limit :max offset :from");
-            var set = qh.ExecuteQuery(sql.ToString());
-            return converter.Multiple(set);
         }
 
         public int GetNotFriendsCount(FriendFilter filter)
