@@ -9,6 +9,7 @@ namespace StudyBuddy.App.Api
     {
         Task<UserListViewModel> GetFriends(string search_string = "", int skip = 0);
         Task<UserListViewModel> GetNotFriends(string search_string = "", int skip = 0);
+        Task<int> GetCommonFriends(UserViewModel friend);
         Task<bool> RemoveFriend(UserViewModel uvm);
         Task<UserViewModel> GetById(int user_id);
         Task<int> GetFriendsCount();

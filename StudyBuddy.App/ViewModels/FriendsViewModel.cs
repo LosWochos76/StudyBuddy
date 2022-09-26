@@ -49,7 +49,7 @@ namespace StudyBuddy.App.ViewModels
                     await Task.Delay(1000);
 
                     if (search_text == SearchText)
-                        Refresh();
+                        await Refresh();
                 });
             }
         }
@@ -90,8 +90,11 @@ namespace StudyBuddy.App.ViewModels
                     ItemThreshold = -1;
                     return;
                 }
-
                 Friends.AddRange(friends.Objects);
+                foreach (UserViewModel friend in friends.Objects)
+                {
+                    friend.CountOfCommonFriends = await api.Users.GetCommonFriends(friend);
+                }
                 await api.ImageService.GetProfileImages(friends.Objects);
                 Skip += 10;
             }

@@ -94,7 +94,12 @@ namespace StudyBuddy.App.ViewModels
                 }
 
                 Users.AddRange(friends.Objects);
-                api.ImageService.GetProfileImages(friends.Objects);
+
+                foreach (UserViewModel friend in friends.Objects)
+                {
+                    friend.CountOfCommonFriends = await api.Users.GetCommonFriends(friend);
+                }
+                await api.ImageService.GetProfileImages(friends.Objects);
                 Skip += 10;
             }
             catch (ApiException e)

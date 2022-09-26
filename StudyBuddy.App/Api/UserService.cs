@@ -42,7 +42,15 @@ namespace StudyBuddy.App.Api
             var rh = new WebRequestHelper(api.Authentication.Token);
             return await rh.Get<UserListViewModel>(base_url + "User/" + currentUserId + "/Friends/", filter);
         }
-
+        public async Task<int> GetCommonFriends(UserViewModel friend)
+        {
+            var filter = new FriendFilter()
+            {
+            };
+            var currentUserId = api.Authentication.CurrentUser.ID;
+            var rh = new WebRequestHelper(api.Authentication.Token);
+            return await rh.Get<int>(base_url + "User/" + currentUserId + "/CountOfCommonFriends/" + friend.ID, filter);
+        }
         public async Task<UserListViewModel> GetNotFriends(string search_string = "", int skip = 0)
         {
             var filter = new FriendFilter()

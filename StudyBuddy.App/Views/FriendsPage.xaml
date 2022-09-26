@@ -99,7 +99,7 @@
                                                    VerticalOptions="Center"
                                                    Padding="20,10,0,10" />
                                             <Label Style="{StaticResource TagLabel}"
-                                                   Text="{Binding CountOfCommonFriends, StringFormat='{0} gemeinsame Freunde'}"
+                                                   Text="{Binding CountOfCommonFriends, StringFormat='{0:D} gemeinsame Freunde'}"
                                                    Padding="20,0,0,10"
                                                    FontSize="Small" />
                                         </StackLayout>
