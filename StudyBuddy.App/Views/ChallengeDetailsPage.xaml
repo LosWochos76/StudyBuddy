@@ -67,9 +67,11 @@
                             <Label Text="Beschreibung:"
                                    FontAttributes="Bold"
                                    FontSize="19"></Label>
-                            <Label  Margin="0,0,0,10"
+                            <ScrollView>
+                                <Label  Margin="0,0,0,10"
                                     Text="{Binding Description}"
                                     FontSize="18"></Label>
+                            </ScrollView>
                             <StackLayout>
                                 <Label HorizontalOptions="StartAndExpand"
                                        FontSize="18">
