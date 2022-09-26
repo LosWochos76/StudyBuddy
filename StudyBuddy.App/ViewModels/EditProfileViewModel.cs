@@ -112,6 +112,18 @@ namespace StudyBuddy.App.ViewModels
             }
         }
 
+        private bool _nicknameInvalid;
+        public bool NicknameInvalid
+        {
+            get => _nicknameInvalid;
+            set
+            {
+                _nicknameInvalid = value;
+                NotifyPropertyChanged(nameof(NicknameInvalid));
+                ConfirmCommand.ChangeCanExecute();
+            }
+        }
+
         private bool _passwordNotValid;
         public bool PasswordNotValid
         {
@@ -136,6 +148,18 @@ namespace StudyBuddy.App.ViewModels
             }
         }
 
+        private bool _passwordInvalid = false;
+        public bool PasswordInvalid
+        {
+            get => _passwordInvalid;
+            set 
+            {
+                _passwordInvalid = value;
+                NotifyPropertyChanged(nameof(PasswordInvalid));
+                ConfirmCommand.ChangeCanExecute();
+            }
+        }
+
         public string PasswordCriteria
         {
             get { return "Password muss enhalten:\n-Mindestens 1 Zahl\n-Mindestens 1 Kleinbuchstaben\n-Mindestens 1 Großbuchstaben\n-Mindestens 8 Zeichen"; }
@@ -146,7 +170,7 @@ namespace StudyBuddy.App.ViewModels
             get { return new Regex("(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z]).{8,}"); }
         }
 
-        public bool ConfirmAllowed() => !_firstnameNotValid && !_lastnameNotValid && !_nicknameNotValid && !_passwordNotValid;
+        public bool ConfirmAllowed() => !_firstnameNotValid && !_lastnameNotValid && !_nicknameNotValid && !_passwordConfirmNotValid;
 
         private async void Update()
         {
@@ -162,15 +186,36 @@ namespace StudyBuddy.App.ViewModels
                 user.Lastname = _lastname.Trim();
                 user.Nickname = _nickname.Trim();
 
+                var user_id = await api.Users.IdByNickname(Nickname);
+                if (user_id != null && user_id.ID != 0)
+                {
+                    NicknameInvalid = true;
+                    return;
+                }
+                NicknameInvalid = false;
+                if (PasswordNotValid)
+                {
+                    PasswordInvalid = true;
+                    return;
+                }
+                PasswordNotValid = false;
+                if (_password != _passwordConfirm)
+                {
+                    PasswordConfirmNotValid = true;
+                    return;
+                }
+                PasswordConfirmNotValid = false;
                 if (!string.IsNullOrEmpty(_password) && _password == _passwordConfirm)
                     user.Password = _password.Trim();
-
+                
+                
                 var result = await api.Users.Update(user);
                 if (result)
                 {
                     api.Authentication.CurrentUser.Firstname = user.Firstname;
                     api.Authentication.CurrentUser.Lastname = user.Lastname;
                     api.Authentication.CurrentUser.Nickname = user.Nickname;
+                    await api.Device.PopPage();
                 }
                 else
                 {
@@ -180,15 +225,11 @@ namespace StudyBuddy.App.ViewModels
                         "Ok",
                         null);
                 }
-
+                
             }
             catch(ApiException e)
             {
                 api.Device.ShowError(e, "Ein Fehler ist aufgetreten!", "Ok", null);
-            }
-            finally
-            {
-                await api.Device.PopPage();
             }
         }
 

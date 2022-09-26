@@ -77,6 +77,9 @@
                 <Label Text="Nickname darf nicht länger als 100 Zeichen sein."
                        TextColor="Red"
                        IsVisible="{Binding NicknameNotValid}"></Label>
+                <Label Text="Nickname bereits vergeben."
+                       TextColor="Red"
+                       IsVisible="{Binding NicknameInvalid}"></Label>
                 <Label Text="Passwort:"
                        FontAttributes="Bold"
                        FontSize="16"></Label>
@@ -90,12 +93,11 @@
                         <xct:TextValidationBehavior Flags="ValidateOnUnfocusing"
                                                     IsNotValid="{Binding PasswordNotValid}"
                                                     RegexPattern="{Binding PasswordPattern}">
-                            
                         </xct:TextValidationBehavior>
                     </Entry.Behaviors>
                 </Entry>
                 <Label Text="{Binding PasswordCriteria}"
-                       IsVisible="{Binding PasswordNotValid}"
+                       IsVisible="{Binding PasswordInvalid}"
                        TextColor="Red">
                 </Label>
                 <Label Text="Passwort bestätigen:"
