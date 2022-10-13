@@ -39,6 +39,10 @@ export class ChallengeService {
     if (text != "")
       query['SearchText'] = text;
 
+    console.log(this.auth.getUser());
+    console.log(this.auth.getUser().isTeacher());
+    console.log(query);
+
     let result = await this.http.get(this.url + "Challenge",
       {
         params: query,

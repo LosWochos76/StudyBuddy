@@ -34,6 +34,11 @@
             <br>
             <button class="btn btn-warning" (click)="onPasswordReset()">Passwort vergessen</button>
         </div>
+        <div *ngIf="login_error == 999">
+            <div class="alert alert-danger" role="alert">
+                Als Student kann man sich nicht in das Backend von Gameuction einloggen!
+            </div>
+        </div>
         <div *ngIf="login_error == 7">
             <div class="alert alert-danger" role="alert">
                 Der Benutzer ist deaktiviert. 

@@ -1,6 +1,7 @@
-import { Component, ComponentRef, OnInit, ViewContainerRef } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { LoginStatus } from 'src/app/model/loginresult';
 import { AuthorizationService } from 'src/app/services/authorization.service';
 import { LoggingService } from 'src/app/services/loging.service';
 
@@ -25,11 +26,11 @@ export class LoginComponent implements OnInit {
     });
 
     this.auth.changed.subscribe((result) => {
-      if (result == 0) {
+      if (result == LoginStatus.Success) {
         this.router.navigate(['/challenge']);
       }
 
-      if (result == 1) {
+      if (result == LoginStatus.EmailNotVerified) {
         this.router.navigate(['/login/verificationrequired', {
           email: this.form.controls.email.value
         }])
@@ -46,20 +47,8 @@ export class LoginComponent implements OnInit {
     let password = this.form.controls.password.value;
     let result = await this.auth.login(email, password);
 
-    if (result.status == 3) {
-      this.logger.debug("No User found.");
-      this.login_error = 3;
-    }
-
-    if (result.status == 2) {
-      this.logger.debug("Wrong credentials!")
-      this.login_error = 2;
-    }
-
-    if (result.status == 7) {
-      this.logger.debug("User disabled!")
-      this.login_error = 7;
-    }
+    if (result.status != 0)
+      this.login_error = result.status;
   }
 
   async onPasswordReset() {

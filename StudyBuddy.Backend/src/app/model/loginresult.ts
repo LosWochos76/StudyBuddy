@@ -1,9 +1,22 @@
 ﻿
 import { User } from "./user";
 
+export enum LoginStatus {
+    Success = 0,
+    EmailNotVerified = 1,
+    IncorrectCredentials = 2,
+    UserNotFound = 3,
+    InvalidApiResponse = 4,
+    NoToken = 5,
+    UndocumentedError = 6,
+    AccountDisabled = 7,
+    InvalidToken = 8,
+    IsStudent = 999
+}
+
 export class LoginResult {
     public user: User;
-    public status: number;
+    public status: LoginStatus;
     public token: string;
 
     constructor() { }
@@ -19,8 +32,8 @@ export class LoginResult {
 
     static fromApi(obj): LoginResult {
         let result = new LoginResult();
-        result.user = obj['user'];
-        result.status = obj['status'];
+        result.user = obj['user'] != null ? User.fromApi(obj['user']) : null;
+        result.status = obj['status'] as LoginStatus;
         result.token = obj['token'];
         return result;
     }
