@@ -73,6 +73,9 @@
             <Button Text="Neuen Account erstellen" Command="{Binding RegisterCommand}" 
                     BackgroundColor="{StaticResource PrimaryAccent}"
                     TextColor="{StaticResource WindowBackgroundColor}"/>
+            <Button Text="E-Mail Adresse bestätigen" Command="{Binding VerifyEmailCommand}" 
+                    BackgroundColor="{StaticResource PrimaryAccent}"
+                    TextColor="{StaticResource WindowBackgroundColor}"/>
             <Label HorizontalOptions="CenterAndExpand">
                 <Label.FormattedText>
                     <FormattedString>

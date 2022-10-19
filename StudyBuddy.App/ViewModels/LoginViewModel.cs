@@ -17,6 +17,7 @@ namespace StudyBuddy.App.ViewModels
         public ICommand ImprintCommand { get; }
         public ICommand InfoCommand { get; }
         public ICommand RecoverCommand { get; }
+        public ICommand VerifyEmailCommand { get; }
         public string EMail { get; set; }
         public string Password { get; set; }
         public string ApiVersionAsString { get => api.ApiVersion.ToString(); }
@@ -29,6 +30,7 @@ namespace StudyBuddy.App.ViewModels
             PasswordForgottenCommand = new AsyncCommand(PasswordForgotten, () => { return IsEMailValid; });
             ImprintCommand = new Command(Imprint);
             InfoCommand = new Command(Info);
+            VerifyEmailCommand = new Command(VerifyEmail);
 
             api.PropertyChanged += (sender, e) =>
             {
@@ -72,7 +74,10 @@ namespace StudyBuddy.App.ViewModels
         {
             await api.Device.PushPage(new RegisterPage());
         }
-
+        public async void VerifyEmail()
+        {
+            await api.Device.PushPage(new VerifyEmailPage());
+        }
         private async Task PasswordForgotten()
         {
             var answer = await api.Device.ShowMessage(

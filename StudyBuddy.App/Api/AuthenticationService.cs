@@ -114,5 +114,16 @@ namespace StudyBuddy.App.Api
 
             return status.IsOk;
         }
+
+        public async Task<bool> SendVerificationMail(string email)
+        {
+            var rh = new WebRequestHelper();
+            var status = await rh.Load<RequestResult>(base_url + "Login/SendVerificationMail", HttpMethod.Post, email);
+
+            if (status == null)
+                return false;
+
+            return status.IsOk;
+        }
     }
 }

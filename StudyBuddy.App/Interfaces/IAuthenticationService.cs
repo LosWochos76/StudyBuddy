@@ -34,5 +34,6 @@ namespace StudyBuddy.App.Api
         event LoginStateChangedHandler LoginStateChanged;
         Task<bool> IsTokenValid(string token);
         Task<bool> SendPasswortResetMail(string email);
+        Task<bool> SendVerificationMail(string email);
     }
 }
