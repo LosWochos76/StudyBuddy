@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Net.Http;
 using System.Threading.Tasks;
 using StudyBuddy.App.Api;
 using StudyBuddy.App.ViewModels;
+using StudyBuddy.Model;
 using StudyBuddy.Model.Enum;
 
 namespace StudyBuddy.App.Test.Mocks
@@ -61,6 +63,10 @@ namespace StudyBuddy.App.Test.Mocks
 
                 return LoginStatus.Success;
             });
+        }
+        public async Task<bool> SendVerificationMail(string email)
+        {
+            return true;
         }
     }
 }

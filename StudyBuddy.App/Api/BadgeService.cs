@@ -28,9 +28,8 @@ namespace StudyBuddy.App.Api
             return await rh.Get<GameBadgeListViewModel>(_baseUrl + "GameBadge", filter);
         }
 
-        public async Task<GameBadgeListViewModel> BadgesReceived(string search_string = "", int skip = 0)
+        public async Task<GameBadgeListViewModel> BadgesReceived(int user_id, string search_string = "", int skip = 0)
         {
-            var user_id = _api.Authentication.CurrentUser.ID;
             var filter = new GameBadgeFilter(search_string, skip);
             var rh = new WebRequestHelper(_api.Authentication.Token);
             return await rh.Get<GameBadgeListViewModel>(_baseUrl + "User/" + user_id + "/GameBadge", filter);

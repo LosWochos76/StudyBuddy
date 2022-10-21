@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using Microcharts;
 using SkiaSharp;
@@ -31,7 +32,7 @@ namespace StudyBuddy.App.ViewModels
         public int TotalBadges { get { return _totalBadges; } set { _totalBadges = value; NotifyPropertyChanged(); } }
         
         public bool IsRefreshing { get; set; }
-        public IAsyncCommand RefreshCommand { get; }
+        public IAsyncCommand<int> RefreshCommand { get; }
         public IAsyncCommand TotalChallengesCommand { get; set; }
         public IAsyncCommand TotalBadgeCommand { get; set; }
         public IAsyncCommand BadgeDetailsCommand { get; set; }
@@ -40,7 +41,7 @@ namespace StudyBuddy.App.ViewModels
         {
             TotalChallengesCommand = new AsyncCommand(ShowCompletedChallenges);
             TotalBadgeCommand = new AsyncCommand(ShowTotalBadge);
-            RefreshCommand = new AsyncCommand(RefreshView);
+            RefreshCommand = new AsyncCommand<int>(RefreshView);
 
             BadgeDetailsCommand = new AsyncCommand(execute: async () =>
             {
@@ -83,19 +84,21 @@ namespace StudyBuddy.App.ViewModels
             await api.Device.PushPage(new BadgeDetailsPage(LastBadge));
         }
         
-        private async Task RefreshView()
+        private async Task RefreshView(int user_id)
         {
-            await Refresh();
+            await Refresh(user_id);
             IsRefreshing = false;
             NotifyPropertyChanged(nameof(IsRefreshing));
         }
 
-        public async Task Refresh()
+        public async Task Refresh(int user_id)
         {
             GameBadgeViewModel emptybadge = new GameBadgeViewModel{ Name = "Verdiene Abzeichen", IconKey = "fa-solid,f70c,#3700B3" };
+            if (user_id == 0)
+                user_id = api.Authentication.CurrentUser.ID;
             try
             {
-                var badges = await api.Badges.BadgesReceived();
+                var badges = await api.Badges.BadgesReceived(user_id);
                 if (badges.Count < 1)
                 {
                     LastBadge = emptybadge;
@@ -108,7 +111,7 @@ namespace StudyBuddy.App.ViewModels
                     TotalBadges = badges.Count;
                     BadgeDetailsCommand.CanExecute(true);
                 }
-                UserStatistics = await api.Statistics.GetUserStatistics();
+                UserStatistics = await api.Statistics.GetUserStatisticsForUser(user_id);
             }
             catch (System.Exception)
             {

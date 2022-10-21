@@ -3,6 +3,7 @@
     Title="Statistiken"
     Visual="dafault"
     x:Class="StudyBuddy.App.Views.StatisticPage"
+    x:Name="statistics_page"
     x:DataType="viewmodels:StatisticsViewModel"
     xmlns="http://xamarin.com/schemas/2014/forms"
     xmlns:fontAwesome="clr-namespace:StudyBuddy.App"

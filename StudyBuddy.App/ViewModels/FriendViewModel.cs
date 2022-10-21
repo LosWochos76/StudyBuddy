@@ -29,7 +29,7 @@ namespace StudyBuddy.App.ViewModels
 
         private async Task ShowCompletedChallenges()
         {
-            await api.Device.PushPage(new StatisticPage());
+            await api.Device.PushPage(new StatisticPage(User));
         }
 
         public async Task RemoveFriend()

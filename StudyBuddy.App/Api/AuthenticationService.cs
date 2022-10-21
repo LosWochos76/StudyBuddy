@@ -107,12 +107,12 @@ namespace StudyBuddy.App.Api
         public async Task<bool> SendPasswortResetMail(string email)
         {
             var rh = new WebRequestHelper();
-            var status = await rh.Load<RequestResult>(base_url + "Login/SendPasswortResetMail", HttpMethod.Post, email);
+            var response = await rh.Load<LoginResult>(base_url + "Login/SendPasswortResetMail", HttpMethod.Post, email);
 
-            if (status == null)
+            if (response.Status != 0)
                 return false;
 
-            return status.IsOk;
+            return true;
         }
 
         public async Task<bool> SendVerificationMail(string email)
