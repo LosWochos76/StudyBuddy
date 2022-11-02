@@ -19,7 +19,7 @@ namespace StudyBuddy.App.ViewModels
         }
 
         private RequestViewModel request;
-        public RequestViewModel FriendshipRequest
+        public new RequestViewModel FriendshipRequest
         {
             get { return request; }
             set

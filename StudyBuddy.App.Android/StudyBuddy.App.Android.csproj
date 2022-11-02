@@ -62,7 +62,7 @@
     <Reference Include="System.Numerics.Vectors" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Plugin.FirebasePushNotification" Version="3.4.25" />
+    <PackageReference Include="Plugin.FirebasePushNotification" Version="3.4.35" />
     <PackageReference Include="Xam.Plugin.Media">
       <Version>5.0.1</Version>
     </PackageReference>
@@ -74,9 +74,6 @@
     <PackageReference Include="Xamarin.GooglePlayServices.Base" Version="118.1.0" />
     <PackageReference Include="ZXing.Net.Mobile.Forms">
       <Version>3.1.0-beta2</Version>
-    </PackageReference>
-    <PackageReference Include="Xamarin.Build.Download">
-      <Version>0.11.3</Version>
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
