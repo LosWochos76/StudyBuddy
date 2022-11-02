@@ -67,13 +67,25 @@
                     </FormattedString>
                 </Label.FormattedText>
             </Label>
+            <Label HorizontalTextAlignment="Center" VerticalOptions="Start">
+                <Label.FormattedText>
+                    <FormattedString>
+                        <FormattedString.Spans>
+                            <Span Text="E-Mail bestätigen?"
+                                    TextColor="#0A84FF" TextDecorations="Underline">
+                                <Span.GestureRecognizers>
+                                    <TapGestureRecognizer 
+                                        Command="{Binding SendVerificationMailCommand}" />
+                                </Span.GestureRecognizers>
+                            </Span>
+                        </FormattedString.Spans>
+                    </FormattedString>
+                </Label.FormattedText>
+            </Label>
         </StackLayout>
 
         <StackLayout VerticalOptions="EndAndExpand" Padding="10,0,10,20">
             <Button Text="Neuen Account erstellen" Command="{Binding RegisterCommand}" 
-                    BackgroundColor="{StaticResource PrimaryAccent}"
-                    TextColor="{StaticResource WindowBackgroundColor}"/>
-            <Button Text="E-Mail Adresse bestätigen" Command="{Binding VerifyEmailCommand}" 
                     BackgroundColor="{StaticResource PrimaryAccent}"
                     TextColor="{StaticResource WindowBackgroundColor}"/>
             <Label HorizontalOptions="CenterAndExpand">

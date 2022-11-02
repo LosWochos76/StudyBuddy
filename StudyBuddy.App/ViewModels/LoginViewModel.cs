@@ -14,6 +14,7 @@ namespace StudyBuddy.App.ViewModels
         public IAsyncCommand LoginCommand { get; }
         public ICommand RegisterCommand { get; }
         public IAsyncCommand PasswordForgottenCommand { get; }
+        public IAsyncCommand SendVerificationMailCommand { get; }
         public ICommand ImprintCommand { get; }
         public ICommand InfoCommand { get; }
         public ICommand RecoverCommand { get; }
@@ -28,6 +29,7 @@ namespace StudyBuddy.App.ViewModels
             LoginCommand = new AsyncCommand(Login, () => { return IsEMailValid && IsPasswordValid; });
             RegisterCommand = new Command(Register);
             PasswordForgottenCommand = new AsyncCommand(PasswordForgotten, () => { return IsEMailValid; });
+            SendVerificationMailCommand = new AsyncCommand(ResendEmail, () => { return IsEMailValid; });
             ImprintCommand = new Command(Imprint);
             InfoCommand = new Command(Info);
             VerifyEmailCommand = new Command(VerifyEmail);
@@ -93,6 +95,23 @@ namespace StudyBuddy.App.ViewModels
                 api.Device.ShowError("Ein Fehler ist aufgetreten!", "Fehler!", "Ok", null);
             else
                 api.Device.ShowMessage("Eine E-Mail zum zurücksetzen des Passworts wurde verschickt.", "Passwort zurücksetzen");
+        }
+
+        private async Task ResendEmail()
+        {
+            var answer = await api.Device.ShowMessage(
+                "Wollen Sie eine E-Mail an '" + EMail + "' schicken, um das Konto zu bestätigen?",
+                "E-Mail bestätigen?",
+                "Ja", "Nein", null);
+
+            if (!answer)
+                return;
+
+            answer = await api.Authentication.SendVerificationMail(EMail);
+            if (!answer)
+                api.Device.ShowError("Ein Fehler ist aufgetreten!", "Fehler!", "Ok", null);
+            else
+                api.Device.ShowMessage("Eine E-Mail zu Bestätigung des Accounts wurde verschickt.", "E-Mail bestätigen");
         }
 
         private void Imprint()
