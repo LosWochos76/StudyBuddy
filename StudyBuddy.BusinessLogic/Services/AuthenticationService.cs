@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.WebUtilities;
 using SimpleHashing.Net;
+using SkiaSharp;
 using StudyBuddy.Model;
 using StudyBuddy.Model.Enum;
 using System;
@@ -51,6 +52,74 @@ namespace StudyBuddy.BusinessLogic
             user.PasswordHash = null;
             var jwt = new JwtToken();
             return new LoginResult(jwt.FromUser(user.ID), user) { Status = LoginStatus.Success };
+        }
+
+        public bool CheckForValidMail(string email)
+        {
+            bool flag = true;
+
+            if (string.IsNullOrEmpty(email))
+                flag = false;
+                //throw new Exception("No email-adress given!");
+
+
+            var obj = backend.Repository.Users.ByEmailActiveAccounts(email);
+            if (obj == null)
+                flag = false;
+                //throw new Exception("User not found!");
+
+            return flag;
+        }
+
+        public string GenerateUserToken(string email)
+        {
+            var obj = backend.Repository.Users.ByEmailActiveAccounts(email);
+            var key = obj.PasswordHash;
+            var jwt = new JwtToken();
+
+            var token = jwt.PasswordResetToken(obj.ID, key);
+
+            return token;
+        }
+
+        public void SendVerificationMail(string email)
+        {
+            if (CheckForValidMail(email))
+            {
+                string baseurl = "https://backend.gameucation.eu/login/verifyemail";
+                string subject = "E-Mail Adresse bestätigen";
+
+                var param = new Dictionary<string, string>
+                {
+                {"token", GenerateUserToken(email) },
+                {"email", email }
+                };
+
+                Uri link = new Uri(QueryHelpers.AddQueryString(baseurl, param));
+                string message = "Guten Tag,<br> um die E-Mail-Adresse Ihres Gameucation Kontos zu bestätigen <a href='" + link.ToString() + "'>hier</a> klicken.";
+
+                MailKitHelper.SendMailAsync(email, subject, message);
+            }    
+        }
+
+        public void SendPasswordResetMail(string email)
+        {
+            if (CheckForValidMail(email))
+            { 
+                string baseurl = "https://backend.gameucation.eu/login/resetpassword";
+                string subject = "Passwort zurücksetzen";
+
+                var param = new Dictionary<string, string>
+                    {
+                        {"token", GenerateUserToken(email) },
+                        {"email", email }
+                    };
+
+                Uri link = new Uri(QueryHelpers.AddQueryString(baseurl, param));
+                string message = "Guten Tag,<br> um das Passwort Ihres Gameucation Kontos zurückzusetzen <a href='" + link.ToString() + "'>hier</a> klicken.";
+
+                MailKitHelper.SendMailAsync(email, subject, message);
+            }
         }
 
         public void SendMail(string email, bool forgotpassword)
