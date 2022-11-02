@@ -34,7 +34,7 @@ namespace StudyBuddy.App.Api
             LoadApiVersion();
         }
 
-        public Version AppVersion { get; } = new(1, 10, 0, 0);
+        public Version AppVersion { get; } = new(1, 11, 0, 0);
         public Version ApiVersion { get; private set; } = new(0, 0, 0, 0);
         public IStatisticsService Statistics { get; }
         public IAuthenticationService Authentication { get; }
