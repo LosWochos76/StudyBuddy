@@ -47,5 +47,28 @@ namespace StudyBuddy.BusinessLogic.Test
             Assert.False(backend.AuthenticationService.CheckForValidMail("unit@test.de"));
             Assert.True(backend.AuthenticationService.CheckForValidMail("test@test.de"));
         }
+        [Fact]
+        public void CheckTokenTest()
+        {
+            var user1 = new User() { ID = 1, Email = "test@test.de", Password = "test", AccountActive = true };
+
+            user1 = backend.UserService.Insert(user1);
+
+            string token1 = backend.AuthenticationService.GenerateUserToken(user1.Email);
+
+            Assert.False(backend.AuthenticationService.CheckToken("TestTokenString"));
+            Assert.True(!backend.AuthenticationService.CheckToken(token1));
+        }
+        [Fact]
+        public void CheckPasswordResetTokenTest()
+        {
+            var user1 = new User() { ID = 1, Email = "test@test.de", Password = "test", AccountActive = true };
+
+            user1 = backend.UserService.Insert(user1);
+
+            string token1 = backend.AuthenticationService.GenerateUserToken(user1.Email);
+
+            Assert.True(backend.AuthenticationService.CheckPasswordResetToken(token1, user1.PasswordHash));
+        }
     }
 }
