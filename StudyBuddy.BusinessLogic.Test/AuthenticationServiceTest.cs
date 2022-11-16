@@ -1,6 +1,5 @@
 ﻿using StudyBuddy.BusinessLogic.Test.Mocks;
 using StudyBuddy.Model;
-using System;
 using Xunit;
 
 namespace StudyBuddy.BusinessLogic.Test
@@ -26,7 +25,7 @@ namespace StudyBuddy.BusinessLogic.Test
 
             string token1 = backend.AuthenticationService.GenerateUserToken(user1.Email);
             string token2 = backend.AuthenticationService.GenerateUserToken(user2.Email);
-            
+
             Assert.NotNull(token1);
             Assert.NotEmpty(token1);
             Assert.NotNull(token2);
@@ -43,7 +42,10 @@ namespace StudyBuddy.BusinessLogic.Test
             user1 = backend.UserService.Insert(user1);
             user2 = backend.UserService.Insert(user2);
 
+            Assert.NotEmpty(user1.Email);
+            Assert.NotEmpty(user2.Email);
             Assert.False(backend.AuthenticationService.CheckForValidMail("unit@test.de"));
+            Assert.True(backend.AuthenticationService.CheckForValidMail("test@test.de"));
         }
     }
 }

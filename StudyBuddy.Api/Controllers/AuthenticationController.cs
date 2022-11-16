@@ -41,7 +41,8 @@ namespace StudyBuddy.Api
         public IActionResult SendPasswortResetMail([FromBody] string email)
         {
             logger.LogInformation("AuthenticationController.SendPasswortResetMail");
-            backend.AuthenticationService.SendMail(email, true);
+            //backend.AuthenticationService.SendMail(email, true);
+            backend.AuthenticationService.SendPasswordResetMail(email);
             return Json(new LoginResult() { Status = LoginStatus.Success });
         }
 
@@ -58,7 +59,8 @@ namespace StudyBuddy.Api
         public IActionResult SendVerificationMail([FromBody] string email)
         {
             logger.LogInformation("AuthenticationController.SendVerificationMail");
-            backend.AuthenticationService.SendMail(email, false);
+            //backend.AuthenticationService.SendMail(email, false);
+            backend.AuthenticationService.SendVerificationMail(email);
             return Json(new LoginResult() { Status = LoginStatus.Success }); 
         }
 

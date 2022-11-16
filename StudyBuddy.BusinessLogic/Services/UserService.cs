@@ -108,7 +108,7 @@ namespace StudyBuddy.BusinessLogic
                 obj.Role = Role.Student;
 
             backend.Repository.Users.Insert(obj);
-            backend.AuthenticationService.SendMail(obj.Email, false);
+            backend.AuthenticationService.SendVerificationMail(obj.Email);
             backend.BusinessEventService.TriggerEvent(this,
                 new BusinessEventArgs(BusinessEventType.UserRegistered, obj));
 

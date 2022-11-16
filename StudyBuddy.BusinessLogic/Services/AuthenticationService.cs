@@ -121,47 +121,6 @@ namespace StudyBuddy.BusinessLogic
                 MailKitHelper.SendMailAsync(email, subject, message);
             }
         }
-
-        public void SendMail(string email, bool forgotpassword)
-        {
-            if (string.IsNullOrEmpty(email))
-                throw new Exception("No email-adress given!");
-
-            var obj = backend.Repository.Users.ByEmailActiveAccounts(email);
-            if (obj == null)
-                throw new Exception("User not found!");
-
-            var key = obj.PasswordHash;
-            var jwt = new JwtToken();
-            var token = jwt.PasswordResetToken(obj.ID, key);
-            var param = new Dictionary<string, string>
-            {
-                {"token", token },
-                {"email", email }
-            };
-
-            string baseurl;
-            string subject;
-            string message;
-
-            if (forgotpassword)
-            {
-                baseurl = "https://backend.gameucation.eu/login/resetpassword";
-                subject = "Passwort zurücksetzen";
-                Uri link = new Uri(QueryHelpers.AddQueryString(baseurl, param));
-                message = "Guten Tag,<br> um das Passwort Ihres Gameucation Kontos zurückzusetzen <a href='" + link.ToString() + "'>hier</a> klicken.";
-            }
-            else
-            {
-                baseurl = "https://backend.gameucation.eu/login/verifyemail";
-                subject = "E-Mail Adresse bestätigen";
-                Uri link = new Uri(QueryHelpers.AddQueryString(baseurl, param));
-                message = "Guten Tag,<br> um die E-Mail-Adresse Ihres Gameucation Kontos zu bestätigen <a href='" + link.ToString() + "'>hier</a> klicken.";
-            }
-
-            MailKitHelper.SendMailAsync(email, subject, message);
-        }
-
         public bool CheckToken(string token)
         {
             var jwt = new JwtToken();
