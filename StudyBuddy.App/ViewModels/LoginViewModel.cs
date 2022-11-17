@@ -32,7 +32,6 @@ namespace StudyBuddy.App.ViewModels
             SendVerificationMailCommand = new AsyncCommand(ResendEmail, () => { return IsEMailValid; });
             ImprintCommand = new Command(Imprint);
             InfoCommand = new Command(Info);
-            VerifyEmailCommand = new Command(VerifyEmail);
 
             api.PropertyChanged += (sender, e) =>
             {
@@ -75,10 +74,6 @@ namespace StudyBuddy.App.ViewModels
         private async void Register()
         {
             await api.Device.PushPage(new RegisterPage());
-        }
-        public async void VerifyEmail()
-        {
-            await api.Device.PushPage(new VerifyEmailPage());
         }
         private async Task PasswordForgotten()
         {

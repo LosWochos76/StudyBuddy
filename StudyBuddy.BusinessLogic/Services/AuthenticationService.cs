@@ -106,7 +106,7 @@ namespace StudyBuddy.BusinessLogic
         {
             if (CheckForValidMail(email))
             { 
-                string baseurl = "https://backend.gameucation.eu/login/resetpassword";
+                string baseurl = "https://api.gameucation.eu/login/generatepassword";
                 string subject = "Passwort zurücksetzen";
 
                 var param = new Dictionary<string, string>

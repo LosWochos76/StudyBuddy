@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using FirebaseAdmin.Messaging;
+using StudyBuddy.BusinessLogic.Misc;
 using StudyBuddy.BusinessLogic.Parameters;
 using StudyBuddy.Model;
 using StudyBuddy.Model.Enum;
@@ -69,6 +70,33 @@ namespace StudyBuddy.BusinessLogic
 
             user.Password = data.Password;
             backend.Repository.Users.Update(user);
+            return new LoginResult() { Status = LoginStatus.Success };
+        }
+
+        public LoginResult GeneratePassword(ResetPasswordData data)
+        {
+            if (data == null)
+                throw new Exception("No data passed to resetpassword function!");
+
+            User user = backend.Repository.Users.ByEmailAllAccounts(data.Email);
+            if (user == null)
+            {
+                backend.Logging.LogDebug($"User with email {data.Email} not found!");
+                return new LoginResult() { Status = LoginStatus.UserNotFound };
+            }
+
+            if (!backend.AuthenticationService.CheckPasswordResetToken(data.Token, user.PasswordHash))
+            {
+                backend.Logging.LogDebug($"Invalid password reset token for User with email {data.Email}!");
+                return new LoginResult() { Status = LoginStatus.InvalidToken };
+            }
+
+            user.Password = PasswordGenerator.GetUniqueKey(8);
+            backend.Repository.Users.Update(user);
+
+            string subject = "Ihr neues Gameucation-Passwort";
+            string message = "Guten Tag " + user.Nickname + ",<br> das neue Passwort ihres Kontos lautet: " + user.Password + "<br> Bitte ändern Sie das Password aus Sicherheitsgründen umgehend.";
+            MailKitHelper.SendMailAsync(user.Email, subject, message);
             return new LoginResult() { Status = LoginStatus.Success };
         }
 

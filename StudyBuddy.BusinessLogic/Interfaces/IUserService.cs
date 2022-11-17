@@ -12,6 +12,7 @@ namespace StudyBuddy.BusinessLogic
         User Insert(User obj);
         User Update(User obj);
         LoginResult ResetPassword(ResetPasswordData data);
+        LoginResult GeneratePassword(ResetPasswordData data);
         LoginResult VerifyEmail(VerifyEmailData data);
         User EnableAccount(User obj);
         void Delete(int user_id);
