@@ -30,9 +30,9 @@ namespace StudyBuddy.BusinessLogic.Test
             Assert.NotEmpty(token1);
             Assert.NotNull(token2);
             Assert.NotEmpty(token2);
-
             Assert.NotEqual(token1, token2);
         }
+
         [Fact]
         public void CheckForValidMailTest()
         {
@@ -47,6 +47,7 @@ namespace StudyBuddy.BusinessLogic.Test
             Assert.False(backend.AuthenticationService.CheckForValidMail("unit@test.de"));
             Assert.True(backend.AuthenticationService.CheckForValidMail("test@test.de"));
         }
+
         [Fact]
         public void CheckTokenTest()
         {
@@ -59,6 +60,7 @@ namespace StudyBuddy.BusinessLogic.Test
             Assert.False(backend.AuthenticationService.CheckToken("TestTokenString"));
             Assert.True(!backend.AuthenticationService.CheckToken(token1));
         }
+
         [Fact]
         public void CheckPasswordResetTokenTest()
         {
