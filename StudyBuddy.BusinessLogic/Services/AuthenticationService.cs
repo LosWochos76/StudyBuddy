@@ -56,71 +56,58 @@ namespace StudyBuddy.BusinessLogic
 
         public bool CheckForValidMail(string email)
         {
-            bool flag = true;
-
             if (string.IsNullOrEmpty(email))
-                flag = false;
-                //throw new Exception("No email-adress given!");
+                return false;
 
+            if (backend.Repository.Users.ByEmailActiveAccounts(email) is null)
+                return false;
 
-            var obj = backend.Repository.Users.ByEmailActiveAccounts(email);
-            if (obj == null)
-                flag = false;
-                //throw new Exception("User not found!");
-
-            return flag;
+            return true;
         }
 
         public string GenerateUserToken(string email)
         {
             var obj = backend.Repository.Users.ByEmailActiveAccounts(email);
-            var key = obj.PasswordHash;
             var jwt = new JwtToken();
-
-            var token = jwt.PasswordResetToken(obj.ID, key);
-
-            return token;
+            return jwt.PasswordResetToken(obj.ID, obj.PasswordHash);
         }
 
         public void SendVerificationMail(string email)
         {
-            if (CheckForValidMail(email))
+            if (!CheckForValidMail(email))
+                return;
+
+            string baseurl = "https://backend.gameucation.eu/login/verifyemail";
+            string subject = "E-Mail Adresse bestätigen";
+            var param = new Dictionary<string, string>
             {
-                string baseurl = "https://backend.gameucation.eu/login/verifyemail";
-                string subject = "E-Mail Adresse bestätigen";
+                { "token", GenerateUserToken(email) },
+                { "email", email }
+            };
 
-                var param = new Dictionary<string, string>
-                {
-                {"token", GenerateUserToken(email) },
-                {"email", email }
-                };
-
-                Uri link = new Uri(QueryHelpers.AddQueryString(baseurl, param));
-                string message = "Guten Tag,<br> um die E-Mail-Adresse Ihres Gameucation Kontos zu bestätigen <a href='" + link.ToString() + "'>hier</a> klicken.";
-
-                MailKitHelper.SendMailAsync(email, subject, message);
-            }    
+            Uri link = new Uri(QueryHelpers.AddQueryString(baseurl, param));
+            string message = "Guten Tag,<br> um die E-Mail-Adresse Ihres Gameucation Kontos zu bestätigen <a href='" + link.ToString() + "'>hier</a> klicken.";
+            MailKitHelper.SendMailAsync(email, subject, message);
         }
 
         public void SendPasswordResetMail(string email)
         {
-            if (CheckForValidMail(email))
-            { 
-                string baseurl = "https://api.gameucation.eu/login/generatepassword";
-                string subject = "Passwort zurücksetzen";
+            if (!CheckForValidMail(email))
+                return;
 
-                var param = new Dictionary<string, string>
-                    {
-                        {"token", GenerateUserToken(email) },
-                        {"email", email }
-                    };
+            string baseurl = "https://api.gameucation.eu/login/generatepassword";
+            string subject = "Passwort zurücksetzen";
+            var param = new Dictionary<string, string>
+            {
+                { "token", GenerateUserToken(email) },
+                { "email", email }
+            };
 
-                Uri link = new Uri(QueryHelpers.AddQueryString(baseurl, param));
-                string message = "Guten Tag,<br> um das Passwort Ihres Gameucation Kontos zurückzusetzen <a href='" + link.ToString() + "'>hier</a> klicken.";
-
-                MailKitHelper.SendMailAsync(email, subject, message);
-            }
+            Uri link = new Uri(QueryHelpers.AddQueryString(baseurl, param));
+            string message = "Guten Tag,<br> um das Passwort Ihres Gameucation Kontos zurückzusetzen <a href='" + link.ToString() + "'>hier</a> klicken.";
+            MailKitHelper.SendMailAsync(email, subject, message);
         }
+
         public bool CheckToken(string token)
         {
             var jwt = new JwtToken();
