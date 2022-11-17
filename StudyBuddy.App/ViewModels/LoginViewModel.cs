@@ -76,10 +76,12 @@ namespace StudyBuddy.App.ViewModels
         {
             await api.Device.PushPage(new RegisterPage());
         }
+
         public async void VerifyEmail()
         {
             await api.Device.PushPage(new VerifyEmailPage());
         }
+
         private async Task PasswordForgotten()
         {
             var answer = await api.Device.ShowMessage(
