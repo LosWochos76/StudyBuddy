@@ -40,14 +40,12 @@ import { BusinessEventListComponent } from './businessevent/businessevent-list/b
 import { BusinessEventEditComponent } from './businessevent/businessevent-edit/businessevent-edit.component';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { ForgotpasswordComponent } from './authentication/forgotpassword/forgotpassword.component';
-import { ResetpasswordComponent } from './authentication/resetpassword/resetpassword.component';
 import { UserInfoComponent } from './user/user-info/user-info.component';
 import { NavigationService } from './services/navigation.service';
 import { UserStatisticsService } from './services/userstatistics.service';
 import { NgxEchartsModule } from 'ngx-echarts';
 import { NotverifiedComponent } from './authentication/notverified/notverified.component';
 import { VerifyemailComponent } from './authentication/verifyemail/verifyemail.component';
-import { RecoverComponent } from './authentication/recover/recover.component';
 import { SendEmailComponent } from './user/send-email/send-email.component';
 import { NotificationListComponent } from './notification/notification-list/notification-list.component';
 import { NotificationEditComponent } from './notification/notification-edit/notification-edit.component';
@@ -86,11 +84,9 @@ import { FormsModule } from '@angular/forms';
     BusinessEventListComponent,
     BusinessEventEditComponent,
     ForgotpasswordComponent,
-    ResetpasswordComponent,
     UserInfoComponent,
     NotverifiedComponent,
     VerifyemailComponent,
-    RecoverComponent,
     SendEmailComponent,
     NotificationListComponent,
     NotificationEditComponent,

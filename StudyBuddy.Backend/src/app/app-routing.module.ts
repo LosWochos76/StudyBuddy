@@ -26,11 +26,9 @@ import { GameBadgeSuccessComponent } from './gamebadge/game-badge-success/game-b
 import { BusinessEventListComponent } from './businessevent/businessevent-list/businessevent-list.component';
 import { BusinessEventEditComponent } from './businessevent/businessevent-edit/businessevent-edit.component';
 import { ForgotpasswordComponent } from './authentication/forgotpassword/forgotpassword.component';
-import { ResetpasswordComponent } from './authentication/resetpassword/resetpassword.component';
 import { UserInfoComponent } from './user/user-info/user-info.component';
 import { NotverifiedComponent } from './authentication/notverified/notverified.component';
 import { VerifyemailComponent } from './authentication/verifyemail/verifyemail.component';
-import { RecoverComponent } from './authentication/recover/recover.component';
 import { SendEmailComponent } from './user/send-email/send-email.component';
 import { NotificationListComponent } from './notification/notification-list/notification-list.component';
 import { NotificationEditComponent } from './notification/notification-edit/notification-edit.component';
@@ -57,10 +55,8 @@ const routes: Routes = [
   { path: 'tag/:id', component: TagEditComponent, canActivate: [RouteGuardService] },
   { path: 'login', component: LoginComponent },
   { path: 'login/forgotpassword', component: ForgotpasswordComponent },
-  { path: 'login/resetpassword', component: ResetpasswordComponent },
   { path: 'login/verificationrequired', component: NotverifiedComponent },
   { path: 'login/verifyemail', component: VerifyemailComponent },
-  { path: 'recover', component: RecoverComponent },
   { path: 'logout', component: LogoutComponent },
   { path: 'logging', component: LoggingListComponent, canActivate: [RouteGuardService] },
   { path: 'businessevent', component: BusinessEventListComponent, canActivate: [RouteGuardService] },
