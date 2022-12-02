@@ -12,7 +12,7 @@
     <button class="btn btn-danger" [disabled]="!isSelected()" (click)="onDelete()">Löschen</button>
   </div>
   <div class="col-2">
-    <input type="text" class="form-control" (keyup)="onKeySearch($event)">
+    <input type="text" name="filter" [(ngModel)]="form.filter" (ngModelChange)="applyFilter()" placeholder="Suchen..." autocomplete="off" autofocus class="filter"/>
   </div>
 </div>
 <br>
@@ -28,9 +28,9 @@
     </tr>
   </thead>
   <tbody>
-    <tr *ngFor="let obj of objects | paginate: { itemsPerPage: 10, currentPage: page, totalItems: total }; index as i"
+    <tr *ngFor="let obj of objects | paginate:config; index as i"
       (click)="onSelect(obj)" (dblclick)="onEdit(obj)" [class.table-info]="obj == selected">
-      <th scope="row">{{(page-1) * 10 + i + 1}}</th>
+      <th scope="row">{{(config.currentPage-1) * 10 + i + 1}}</th>
       <td>
         <fa-icon [icon]="getCategorgyIcon(obj)"></fa-icon>&nbsp;{{obj.name}}
       </td>

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { Challenge } from 'src/app/model/challenge';
 import { User } from 'src/app/model/user';
 import { AuthorizationService } from 'src/app/services/authorization.service';
@@ -14,41 +14,65 @@ import { NavigationService } from 'src/app/services/navigation.service';
   styleUrls: ['./challenge-list.component.css']
 })
 export class ChallengeListComponent implements OnInit {
-  page = 1;
-  total = 0;
-  objects: Challenge[] = [];
-  selected: Challenge = null;
-  timeout: any = null;
-  user: User = null;
-  image;
+    form: {
+        filter: string;
+    };
+    config: any;
+    objects: Challenge[] = [];
+    selected: Challenge = null;
+    timeout: any = null;
+    user: User = null;
+    image;
 
-  constructor(
-    private logger: LoggingService,
-    private navigation: NavigationService,
-    private service: ChallengeService,
-    private router: Router,
-    private auth: AuthorizationService) {
-    this.navigation.startSaveHistory();
-    this.user = this.auth.getUser();
-  }
+    constructor(
+        private logger: LoggingService,
+        private navigation: NavigationService,
+        private service: ChallengeService,
+        private router: Router,
+        private activatedRoute: ActivatedRoute,
+        private auth: AuthorizationService) {
+        this.navigation.startSaveHistory();
+        this.activatedRoute = activatedRoute;
+        this.router = router;
+        this.user = this.auth.getUser();
+        this.form = {
+            filter: (activatedRoute.snapshot.params.filter || "")
+        };
+        this.config = {
+            currentPage: 1,
+            itemsPerPage: 10,
+            totalItems: 0
+        };
+        this.router.navigate([{ filter: this.form.filter }], { queryParams: { page: this.config.currentPage } })
+      
+    }
 
-  async ngOnInit() {
-    var result = await this.service.getAll(this.page);
-    this.objects = result.objects;
-    this.total = result.count;
+    async ngOnInit() {
+        this.router.navigate([{ filter: this.form.filter }], { queryParams: { page: this.config.currentPage } })
+        this.activatedRoute.queryParams.subscribe(
+            params => this.config.currentPage = params['page'] ? params['page'] : 1);
+        var result = await this.service.getAll(this.config.currentPage, this.form.filter);
+        this.objects = result.objects;
+        this.config.totalItems = result.count;
+        this.service.changed.subscribe(async () => {
+            var result = await this.service.getAll(this.config.currentPage, this.form.filter);
+            this.objects = result.objects;
+            this.config.totalItems = result.count;
+        });
+    }
 
-    this.service.changed.subscribe(async () => {
-      var result = await this.service.getAll(this.page);
-      this.objects = result.objects;
-      this.total = result.count;
-    });
-  }
-
-  async onTableDataChange(event) {
-    this.page = event;
-    var fullList = await this.service.getAll(event);
-    this.objects = fullList.objects;
-  }
+    async onTableDataChange(event) {
+        this.config.currentPage = event;
+        var fullList = await this.service.getAll(event, this.form.filter);
+        this.objects = fullList.objects;
+        this.router.navigate([{ filter: this.form.filter }],
+            {
+                queryParams: { page: event },
+                relativeTo: this.activatedRoute,
+                replaceUrl: true
+            }
+        );
+    }
 
   onSelect(obj: Challenge) {
     this.selected = obj;
@@ -94,27 +118,38 @@ export class ChallengeListComponent implements OnInit {
     this.logger.debug("User wants to create a clone of a challenge");
     this.router.navigate(['challenge/create_series/', this.selected.id]);
   }
-
-  onKeySearch(event: any) {
-    clearTimeout(this.timeout);
-    var $this = this;
-    this.timeout = setTimeout(function () {
-      if (event.keyCode != 13) {
-        $this.onSearch(event.target.value);
-      }
-    }, 1000);
+  public applyFilter() {
+        this.onSearch(this.form.filter);
+        this.applyFilterToRoute();
   }
 
-  private async onSearch(text: string) {
-    var result = await this.service.getAll(this.page, text);
-    this.objects = result.objects;
-    this.total = result.count;
+  private async onSearch(filter: string) {
+        clearTimeout(this.timeout);
+        var $this = this;
+        this.timeout = setTimeout(async function () {
+            var result = await $this.service.getAll(this.Page, filter);
+            $this.objects = result.objects;
+            $this.config.totalItems = result.count;
+            
+        }, 1000);
+    
+  }
+
+  private applyFilterToRoute() : void {
+      this.router.navigate([{ filter: this.form.filter }],
+          {
+                queryParams: { page: this.config.currentPage },
+                relativeTo: this.activatedRoute,
+                replaceUrl: true
+            }
+        );
+        document.title = `Search: ${this.form.filter}`;
   }
 
   isQrCodeable() {
     return (this.selected != null && this.selected.prove == 2);
   }
-
+   
   async getQrCodeImage() {
     let blob = await this.service.getQrCode(this.selected.id);
 

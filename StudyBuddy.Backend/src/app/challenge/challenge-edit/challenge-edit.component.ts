@@ -9,6 +9,7 @@ import { LoggingService } from 'src/app/services/loging.service';
 import { NavigationService } from 'src/app/services/navigation.service';
 import { UserService } from 'src/app/services/user.service';
 
+
 @Component({
   selector: 'app-challenge-edit',
   templateUrl: './challenge-edit.component.html',
@@ -144,10 +145,10 @@ export class ChallengeEditComponent implements OnInit {
     }
 
     await this.service.save(this.obj);
-    this.navigation.goBack("/challenge");
+    this.navigation.goBack();
   }
 
   onCancel() {
-    this.navigation.goBack("/challenge");
+    this.navigation.goBack();
   }
 }
