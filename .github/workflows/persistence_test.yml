@@ -22,6 +22,8 @@ jobs:
         dotnet-version: 6.0.x
     - name: Install Persistence dependencies (Nuget)
       run: nuget restore ./StudyBuddy.Persistence/StudyBuddy.Persistence.csproj
+    - name: Install PersistenceTest dependencies (Nuget)
+      run: nuget restore ./StudyBuddy.Persistence.Test/StudyBuddy.Persistence.Test.csproj
     - name: Install Model dependencies (Nuget)
       run: nuget restore ./StudyBuddy.Model/StudyBuddy.Model.csproj
     - name: Build DB
