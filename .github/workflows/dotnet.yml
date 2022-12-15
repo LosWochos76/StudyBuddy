@@ -23,6 +23,6 @@ jobs:
     - name: Restore dependencies
       run: dotnet restore
     - name: Build
-      run: dotnet build ./StudyBuddy.BusinessLogic.csproj --no-restore
+      run: dotnet build ./StudyBuddy.BusinessLogic/StudyBuddy.BusinessLogic.csproj --no-restore
     - name: Test
-      run: dotnet test ./StudyBuddy.BusinessLogic.Test.csproj --no-build --verbosity normal
+      run: dotnet test ./StudyBuddy.BusinessLogic.Test/StudyBuddy.BusinessLogic.Test.csproj --no-build --verbosity normal
