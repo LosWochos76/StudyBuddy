@@ -1,7 +1,7 @@
 # This workflow will build a .NET project
 # For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-net
 
-name: .NET
+name: BusinessLogic Test
 
 on:
   push:
@@ -22,8 +22,6 @@ jobs:
         dotnet-version: 6.0.x
     - name: Restore dependencies
       run: dotnet restore .
-    - name: Install Nugets
-      run: nuget restore ./StudyBuddy.BusinessLogic.Test/StudyBuddy.BusinessLogic.Test.csproj
     - name: Build BusinessLogic
       run: dotnet build ./StudyBuddy.BusinessLogic/StudyBuddy.BusinessLogic.csproj --no-restore
     - name: Build Test
