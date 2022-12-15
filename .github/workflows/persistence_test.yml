@@ -36,5 +36,6 @@ jobs:
     - name: Run Test
       run: dotnet test ./StudyBuddy.Persistence.Test/StudyBuddy.Persistence.Test.csproj --no-build --verbosity normal
     - name: Stop containers
+      working-directory: ./Docker/development
       if: always()
       run: docker-compose -f "docker-compose.yml" down
