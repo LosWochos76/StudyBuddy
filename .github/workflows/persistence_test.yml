@@ -20,8 +20,10 @@ jobs:
       uses: actions/setup-dotnet@v3
       with:
         dotnet-version: 6.0.x
-    - name: Install dependencies (Nuget)
-      run: nuget restore ./StudyBuddy.Persistence/StudyBuddy.Persistence.csproj, ./StudyBuddy.Model
+    - name: Install Persistence dependencies (Nuget)
+      run: nuget restore ./StudyBuddy.Persistence/StudyBuddy.Persistence.csproj
+    - name: Install Model dependencies (Nuget)
+      run: nuget restore ./StudyBuddy.Model
     - name: Build DB
       working-directory: ./Docker/development
       run: docker-compose -f "docker-compose.yml" up -d --build
