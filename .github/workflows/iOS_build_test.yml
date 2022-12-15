@@ -25,7 +25,7 @@ jobs:
         dotnet-version: '6.0.x'
 
     - name: Install dependencies
-      run: nuget restore <sln_file_path>
+      run: nuget restore .
 
     - name: Build
       run: msbuild <csproj_file_path> /p:Configuration=Debug /p:Platform=iPhoneSimulator /t:Rebuild
