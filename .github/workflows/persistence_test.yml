@@ -26,5 +26,7 @@ jobs:
       run: dotnet build ./StudyBuddy.Persistence/StudyBuddy.Persistence.csproj --no-restore
     - name: Build Test
       run: dotnet build ./StudyBuddy.Persistence.Test/StudyBuddy.Persistence.Test.csproj --no-restore
+    - name: Build DB
+      run: docker-compose up -d 
     - name: Run Test
       run: dotnet test ./StudyBuddy.Persistence.Test/StudyBuddy.Persistence.Test.csproj --no-build --verbosity normal
