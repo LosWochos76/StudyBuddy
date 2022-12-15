@@ -20,7 +20,9 @@ jobs:
       uses: actions/setup-dotnet@v3
       with:
         dotnet-version: 6.0.x
-    - name: Build BusinessLogic
+    - name: Install dependencies (Nuget)
+      run: nuget restore .
+    - name: Build Persistence
       run: dotnet build ./StudyBuddy.Persistence/StudyBuddy.Persistence.csproj --no-restore
     - name: Build Test
       run: dotnet build ./StudyBuddy.Persistence.Test/StudyBuddy.Persistence.Test.csproj --no-restore
