@@ -3,23 +3,22 @@ name: Build Xamarin.Android app
 on: [push]
 
 jobs:
-  build:
+  build-project:
 
     runs-on: macos-latest
 
     steps:
-    - uses: actions/checkout@v3
-    - name: Set default Xamarin SDK versions
-      run: |
-        $VM_ASSETS/select-xamarin-sdk-v2.sh --mono=6.10 --android=12.0
+      - uses: actions/checkout@v2
+      - name: Set default Xamarin SDK versions
+        run: |
+          $VM_ASSETS/select-xamarin-sdk-v2.sh --mono=6.10 --android=12.0
+      - name: Setup .NET Core SDK 6.0.x
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: '6.0.x'
 
-    - name: Setup .NET Core SDK 6.0.x
-      uses: actions/setup-dotnet@v3
-      with:
-        dotnet-version: '6.0.x'
+      - name: Install dependencies
+        run: nuget restore .
 
-    - name: Install dependencies
-      run: nuget restore <sln_file_path>
-
-    - name: Build
-      run: msbuild <csproj_file_path> /t:PackageForAndroid /p:Configuration=Debug
+      - name: Build
+        run:  msbuild ./StudyBuddy.App.Android/StudyBuddy.App.Android.csproj /t:PackageForAndroid /p:Configuration=Debug /p:OutputPath=bin/Debug
