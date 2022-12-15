@@ -23,7 +23,7 @@ jobs:
     - name: Install Persistence dependencies (Nuget)
       run: nuget restore ./StudyBuddy.Persistence/StudyBuddy.Persistence.csproj
     - name: Install Model dependencies (Nuget)
-      run: nuget restore ./StudyBuddy.Model
+      run: nuget restore ./StudyBuddy.Model/StudyBuddy.Model.csproj
     - name: Build DB
       working-directory: ./Docker/development
       run: docker-compose -f "docker-compose.yml" up -d --build
