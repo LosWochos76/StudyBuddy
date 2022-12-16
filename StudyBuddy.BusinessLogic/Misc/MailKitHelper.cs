@@ -31,7 +31,7 @@ namespace StudyBuddy.BusinessLogic
                 var mail = new EmailService(provider);
                 mail.Send(mailTo, subject, message, true);
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 return false;
             }

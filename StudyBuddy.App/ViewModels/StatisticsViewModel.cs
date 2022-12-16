@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System.Collections.ObjectModel;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Microcharts;
@@ -30,18 +31,24 @@ namespace StudyBuddy.App.ViewModels
         
         private int _totalBadges;
         public int TotalBadges { get { return _totalBadges; } set { _totalBadges = value; NotifyPropertyChanged(); } }
-        
+        public int UserID { get { return 0; } }
         public bool IsRefreshing { get; set; }
         public IAsyncCommand<int> RefreshCommand { get; }
         public IAsyncCommand TotalChallengesCommand { get; set; }
         public IAsyncCommand TotalBadgeCommand { get; set; }
         public IAsyncCommand BadgeDetailsCommand { get; set; }
+        public ObservableRangeCollection<RankEntry> RankEntries { get; set; } = new ObservableRangeCollection<RankEntry>();
 
         public StatisticsViewModel(IApi api) : base(api)
         {
             TotalChallengesCommand = new AsyncCommand(ShowCompletedChallenges);
             TotalBadgeCommand = new AsyncCommand(ShowTotalBadge);
-            RefreshCommand = new AsyncCommand<int>(RefreshView);
+            RefreshCommand = new AsyncCommand<int>(execute: async (int args)  =>
+            {
+                if (args == 0)
+                    args = api.Authentication.CurrentUser.ID;
+                await RefreshView(args);
+            });
 
             BadgeDetailsCommand = new AsyncCommand(execute: async () =>
             {
@@ -93,9 +100,7 @@ namespace StudyBuddy.App.ViewModels
 
         public async Task Refresh(int user_id)
         {
-            GameBadgeViewModel emptybadge = new GameBadgeViewModel{ Name = "Verdiene Abzeichen", IconKey = "fa-solid,f70c,#3700B3" };
-            if (user_id == 0)
-                user_id = api.Authentication.CurrentUser.ID;
+            GameBadgeViewModel emptybadge = new() { Name = "Verdiene Abzeichen", IconKey = "fa-solid,f70c,#3700B3" };
             try
             {
                 var badges = await api.Badges.BadgesReceived(user_id);
@@ -112,6 +117,8 @@ namespace StudyBuddy.App.ViewModels
                     BadgeDetailsCommand.CanExecute(true);
                 }
                 UserStatistics = await api.Statistics.GetUserStatisticsForUser(user_id);
+                RankEntries.Clear();
+                RankEntries.AddRange(UserStatistics.FriendsRank);
             }
             catch (System.Exception)
             {
@@ -168,6 +175,7 @@ namespace StudyBuddy.App.ViewModels
             };
 
             TotalChallengesChart = new DonutChart {Entries = challengesEntries, BackgroundColor = new SKColor(0,0,0,0)};
+
         }
     }
 }

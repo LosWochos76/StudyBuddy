@@ -1,172 +1,299 @@
 ﻿<?xml version="1.0" encoding="UTF-8" ?>
-<ContentPage
-    Title="Statistiken"
-    Visual="dafault"
-    x:Class="StudyBuddy.App.Views.StatisticPage"
-    x:Name="statistics_page"
-    x:DataType="viewmodels:StatisticsViewModel"
-    xmlns="http://xamarin.com/schemas/2014/forms"
-    xmlns:fontAwesome="clr-namespace:StudyBuddy.App"
-    xmlns:microcharts="clr-namespace:Microcharts.Forms;assembly=Microcharts.Forms"
-    xmlns:viewmodels="clr-namespace:StudyBuddy.App.ViewModels"
-    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml">
+<ContentPage Title="Statistiken"
+             Visual="dafault"
+             x:Class="StudyBuddy.App.Views.StatisticPage"
+             x:Name="statistics_page"
+             x:DataType="viewmodels:StatisticsViewModel"
+             xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:fontAwesome="clr-namespace:StudyBuddy.App"
+             xmlns:microcharts="clr-namespace:Microcharts.Forms;assembly=Microcharts.Forms"
+             xmlns:viewmodels="clr-namespace:StudyBuddy.App.ViewModels"
+             xmlns:models="clr-namespace:StudyBuddy.Model;assembly=StudyBuddy.Model"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml">
     <ContentPage.Resources>
         <ResourceDictionary>
-            <Style TargetType="Label" x:Key="TitleLabelStyle">
-                <Setter Property="FontSize" Value="20" />
-                <Setter Property="FontAttributes" Value="Bold" />
-                <Setter Property="VerticalTextAlignment" Value="Start" />
+            <Style TargetType="Label"
+                   x:Key="TitleLabelStyle">
+                <Setter Property="FontSize"
+                        Value="20" />
+                <Setter Property="FontAttributes"
+                        Value="Bold" />
+                <Setter Property="VerticalTextAlignment"
+                        Value="Start" />
             </Style>
-            
-            <Style TargetType="Label" x:Key="PointsLabelStyle">
-                <Setter Property="FontSize" Value="30" />
-                <Setter Property="FontAttributes" Value="Bold" />
-                <Setter Property="VerticalTextAlignment" Value="Start" />
+            <Style TargetType="Label"
+                   x:Key="PointsLabelStyle">
+                <Setter Property="FontSize"
+                        Value="30" />
+                <Setter Property="FontAttributes"
+                        Value="Bold" />
+                <Setter Property="VerticalTextAlignment"
+                        Value="Start" />
             </Style>
-            
-            <Style TargetType="Label" x:Key="SmallLabelStyle">
-                <Setter Property="HorizontalOptions" Value="Center" />
-                <Setter Property="TextColor" Value="#828282" />
-                <Setter Property="VerticalOptions" Value="End" />
-                <Setter Property="FontSize" Value="11" />
+            <Style TargetType="Label"
+                   x:Key="SmallLabelStyle">
+                <Setter Property="HorizontalOptions"
+                        Value="Center" />
+                <Setter Property="TextColor"
+                        Value="#828282" />
+                <Setter Property="VerticalOptions"
+                        Value="End" />
+                <Setter Property="FontSize"
+                        Value="11" />
             </Style>
-
-            <Style TargetType="Frame" x:Key="FrameStyle">
-                <Setter Property="CornerRadius" Value="15"/>
-                <Setter Property="BorderColor" Value="{OnPlatform Android={StaticResource SystemGray4}, iOS={StaticResource Transparent}}"/>
-                <Setter Property="BackgroundColor" Value="{AppThemeBinding Dark={StaticResource SystemGray5Dark}, Light={StaticResource WindowBackgroundColor}}"/>
-                <Setter Property="HasShadow" Value="True"/>
+            <Style TargetType="Frame"
+                   x:Key="FrameStyle">
+                <Setter Property="CornerRadius"
+                        Value="15" />
+                <Setter Property="BorderColor"
+                        Value="{OnPlatform Android={StaticResource SystemGray4}, iOS={StaticResource Transparent}}" />
+                <Setter Property="BackgroundColor"
+                        Value="{AppThemeBinding Dark={StaticResource SystemGray5Dark}, Light={StaticResource WindowBackgroundColor}}" />
+                <Setter Property="HasShadow"
+                        Value="True" />
             </Style>
         </ResourceDictionary>
     </ContentPage.Resources>
-    <RefreshView Command="{Binding RefreshCommand}" IsRefreshing="{Binding IsRefreshing}">
+    <RefreshView Command="{Binding RefreshCommand}"
+                 CommandParameter="{Binding UserID}"
+                 IsRefreshing="{Binding IsRefreshing}">
         <ScrollView>
-            <StackLayout Margin="15,10,15,0" Orientation="Vertical">
-                <Label Style="{StaticResource TitleLabelStyle}" Text="Abgeschlossene Herausforderungen" />
+            <StackLayout Margin="15,10,15,0"
+                         Orientation="Vertical">
+                <Label Style="{StaticResource TitleLabelStyle}"
+                       Text="Abgeschlossene Herausforderungen" />
                 <Frame Style="{StaticResource FrameStyle}">
                     <Grid>
-                        <StackLayout HorizontalOptions="Start" Orientation="Vertical">
-                            <Label FontSize="18" Text="Netzwerken" TextColor="#5856D6" />
-                            <Label Style="{StaticResource PointsLabelStyle}" Text="{Binding UserStatistics.TotalNetworkChallengesCount}" />
-                            <Label FontSize="18" Text="Organisieren" TextColor="#5AC8FA" />
-                            <Label Style="{StaticResource PointsLabelStyle}" Text="{Binding UserStatistics.TotalOrganizingChallengesCount}" />
-                            <Label FontSize="18" Text="Lernen" TextColor="#007AFF" />
-                            <Label Style="{StaticResource PointsLabelStyle}" Text="{Binding UserStatistics.TotalLearningChallengesCount}" />
+                        <StackLayout HorizontalOptions="Start"
+                                     Orientation="Vertical">
+                            <Label FontSize="18"
+                                   Text="Netzwerken"
+                                   TextColor="#5856D6" />
+                            <Label Style="{StaticResource PointsLabelStyle}"
+                                   Text="{Binding UserStatistics.TotalNetworkChallengesCount}" />
+                            <Label FontSize="18"
+                                   Text="Organisieren"
+                                   TextColor="#5AC8FA" />
+                            <Label Style="{StaticResource PointsLabelStyle}"
+                                   Text="{Binding UserStatistics.TotalOrganizingChallengesCount}" />
+                            <Label FontSize="18"
+                                   Text="Lernen"
+                                   TextColor="#007AFF" />
+                            <Label Style="{StaticResource PointsLabelStyle}"
+                                   Text="{Binding UserStatistics.TotalLearningChallengesCount}" />
                         </StackLayout>
-                        <StackLayout
-                            HorizontalOptions="End"
-                            Orientation="Vertical"
-                            VerticalOptions="Center">
-                            <microcharts:ChartView
-                                Chart="{Binding TotalChallengesChart}"
-                                HeightRequest="180"
-                                WidthRequest="180" />
+                        <StackLayout HorizontalOptions="End"
+                                     Orientation="Vertical"
+                                     VerticalOptions="Center">
+                            <microcharts:ChartView Chart="{Binding TotalChallengesChart}"
+                                                   HeightRequest="180"
+                                                   WidthRequest="180" />
                         </StackLayout>
-                        <Label Style="{StaticResource SmallLabelStyle}" Text="Klicken Sie hier, um weitere Details anzuzeigen" />
+                        <Label Style="{StaticResource SmallLabelStyle}"
+                               Text="Klicken Sie hier, um weitere Details anzuzeigen" />
                     </Grid>
                     <Frame.GestureRecognizers>
                         <TapGestureRecognizer Command="{Binding TotalChallengesCommand}" />
                     </Frame.GestureRecognizers>
                 </Frame>
-                <Label Style="{StaticResource TitleLabelStyle}" Text="Gesamtpunktzahl" />
-                <Frame HeightRequest="90" Style="{StaticResource FrameStyle}">
+                <Label Style="{StaticResource TitleLabelStyle}"
+                       Text="Gesamtpunktzahl" />
+                <Frame HeightRequest="90"
+                       Style="{StaticResource FrameStyle}">
                     <Grid>
-                        <Label
-                            HorizontalOptions="Start"
-                            HorizontalTextAlignment="Start"
-                            Style="{StaticResource PointsLabelStyle}"
-                            Text="{Binding UserStatistics.TotalPoints}"
-                            VerticalTextAlignment="Center" />
-                        <StackLayout HorizontalOptions="End" VerticalOptions="End">
-                            <microcharts:ChartView
-                                Chart="{Binding TotalPointsChart}"
-                                HeightRequest="90"
-                                WidthRequest="220" />
+                        <Label HorizontalOptions="Start"
+                               HorizontalTextAlignment="Start"
+                               Style="{StaticResource PointsLabelStyle}"
+                               Text="{Binding UserStatistics.TotalPoints}"
+                               VerticalTextAlignment="Center" />
+                        <StackLayout HorizontalOptions="End"
+                                     VerticalOptions="End">
+                            <microcharts:ChartView Chart="{Binding TotalPointsChart}"
+                                                   HeightRequest="90"
+                                                   WidthRequest="220" />
                         </StackLayout>
                     </Grid>
                 </Frame>
-                <Label Style="{StaticResource TitleLabelStyle}" Text="Abzeichen" />
+                <Label Style="{StaticResource TitleLabelStyle}"
+                       Text="Abzeichen" />
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition />
                         <ColumnDefinition />
                     </Grid.ColumnDefinitions>
-                    <Frame 
-                        Grid.Column="0"
-                        HeightRequest="80"
-                        HorizontalOptions="Fill"
-                        Style="{StaticResource FrameStyle}">
+                    <Frame Grid.Column="0"
+                           HeightRequest="80"
+                           HorizontalOptions="Fill"
+                           Style="{StaticResource FrameStyle}">
                         <StackLayout Orientation="Vertical">
-                            <Image
-                                HeightRequest="60"
-                                HorizontalOptions="Center"
-                                VerticalOptions="Start"
-                                WidthRequest="60">
+                            <Image HeightRequest="60"
+                                   HorizontalOptions="Center"
+                                   VerticalOptions="Start"
+                                   WidthRequest="60">
                                 <Image.Source>
                                     <FontImageSource FontFamily="{StaticResource FontAwesomeSolid}"
                                                      Glyph="{Binding LastBadge.Icon}"
-                                                     Color="{Binding LastBadge.IconColor}">
-                                    </FontImageSource>
+                                                     Color="{Binding LastBadge.IconColor}"></FontImageSource>
                                 </Image.Source>
                             </Image>
-                            <Label MaxLines="2" LineBreakMode="TailTruncation" Style="{StaticResource SmallLabelStyle}" Text="{Binding LastBadge.Name}"/>
+                            <Label MaxLines="2"
+                                   LineBreakMode="TailTruncation"
+                                   Style="{StaticResource SmallLabelStyle}"
+                                   Text="{Binding LastBadge.Name}" />
                         </StackLayout>
                         <Frame.GestureRecognizers>
                             <TapGestureRecognizer Command="{Binding BadgeDetailsCommand}" />
                         </Frame.GestureRecognizers>
                     </Frame>
-                    <Frame
-                        Grid.Column="1"
-                        HeightRequest="80"
-                        HorizontalOptions="Fill"
-                        Style="{StaticResource FrameStyle}">
+                    <Frame Grid.Column="1"
+                           HeightRequest="80"
+                           HorizontalOptions="Fill"
+                           Style="{StaticResource FrameStyle}">
                         <StackLayout Orientation="Vertical">
-                            <Label
-                                HorizontalOptions="Center"
-                                VerticalOptions="Start"
-                                FontSize="36"
-                                FontAttributes="Bold"
-                                Text="{Binding TotalBadges}" />
-                            <Label Style="{StaticResource SmallLabelStyle}" Text="Gesamt" />
+                            <Label HorizontalOptions="Center"
+                                   VerticalOptions="Start"
+                                   FontSize="36"
+                                   FontAttributes="Bold"
+                                   Text="{Binding TotalBadges}" />
+                            <Label Style="{StaticResource SmallLabelStyle}"
+                                   Text="Gesamt" />
                         </StackLayout>
                         <Frame.GestureRecognizers>
                             <TapGestureRecognizer Command="{Binding TotalBadgeCommand}" />
                         </Frame.GestureRecognizers>
                     </Frame>
                 </Grid>
-                <Label Style="{StaticResource TitleLabelStyle}" IsVisible="{Binding HasValue}" Text="Wöchentliche Herausforderungen" />
-                <Frame Style="{StaticResource FrameStyle}" IsVisible="{Binding HasValue}" Margin="0,0,0,20">
+                <Label Style="{StaticResource TitleLabelStyle}"
+                       IsVisible="{Binding HasValue}"
+                       Text="Wöchentliche Herausforderungen" />
+                <Frame Style="{StaticResource FrameStyle}"
+                       IsVisible="{Binding HasValue}"
+                       Margin="0,0,0,20">
                     <Grid>
-                        <StackLayout
-                            HorizontalOptions="Start"
-                            Orientation="Vertical"
-                            VerticalOptions="Center">
-                            <Label
-                                HorizontalTextAlignment="Start"
-                                Style="{StaticResource PointsLabelStyle}"
-                                Text="{Binding UserStatistics.ThisWeekChallengeCount}" />
-                            <Label Style="{StaticResource SmallLabelStyle}" Text="Diese Woche" />
+                        <StackLayout HorizontalOptions="Start"
+                                     Orientation="Vertical"
+                                     VerticalOptions="Center">
+                            <Label HorizontalTextAlignment="Start"
+                                   Style="{StaticResource PointsLabelStyle}"
+                                   Text="{Binding UserStatistics.ThisWeekChallengeCount}" />
+                            <Label Style="{StaticResource SmallLabelStyle}"
+                                   Text="Diese Woche" />
                         </StackLayout>
-                        <Image HorizontalOptions="Center" VerticalOptions="Center">
+                        <Image HorizontalOptions="Center"
+                               VerticalOptions="Center">
                             <Image.Source>
-                                <FontImageSource
-                                    Color="#828282"
-                                    FontFamily="{StaticResource FontAwesomeSolid}"
-                                    Glyph="{x:Static fontAwesome:FontAwesomeIcons.LongArrowAltRight}"
-                                    Size="Large" />
+                                <FontImageSource Color="#828282"
+                                                 FontFamily="{StaticResource FontAwesomeSolid}"
+                                                 Glyph="{x:Static fontAwesome:FontAwesomeIcons.LongArrowAltRight}"
+                                                 Size="Large" />
                             </Image.Source>
                         </Image>
-                        <StackLayout
-                            HorizontalOptions="End"
-                            Orientation="Vertical"
-                            VerticalOptions="Center">
-                            <Label
-                                HorizontalTextAlignment="Start"
-                                Style="{StaticResource PointsLabelStyle}"
-                                Text="{Binding UserStatistics.LastWeekChallengeCount}" />
-                            <Label Style="{StaticResource SmallLabelStyle}" Text="Letzte Woche" />
+                        <StackLayout HorizontalOptions="End"
+                                     Orientation="Vertical"
+                                     VerticalOptions="Center">
+                            <Label HorizontalTextAlignment="Start"
+                                   Style="{StaticResource PointsLabelStyle}"
+                                   Text="{Binding UserStatistics.LastWeekChallengeCount}" />
+                            <Label Style="{StaticResource SmallLabelStyle}"
+                                   Text="Letzte Woche" />
                         </StackLayout>
                     </Grid>
+                </Frame>
+                <Label Style="{StaticResource TitleLabelStyle}"
+                       Text="Ranking" />
+                <Frame Style="{StaticResource FrameStyle}">
+                    <Grid>
+                        <CollectionView ItemsSource="{Binding RankEntries}"
+                                        SelectionMode="None"
+                                        ItemsUpdatingScrollMode="KeepItemsInView"
+                                        HeightRequest="450">
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate x:DataType="models:RankEntry">
+                                    
+                                    <Grid x:Name="Item"
+                                          Padding="0,0,0,0">
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="*" />
+                                        </Grid.RowDefinitions>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*" />
+                                        </Grid.ColumnDefinitions>
+                                        <Frame CornerRadius="10"
+                                               Margin="5"
+                                               Padding="0"
+                                               HeightRequest="80"
+                                               HasShadow="True"
+                                               HorizontalOptions="FillAndExpand"
+                                               VerticalOptions="FillAndExpand"
+                                               BorderColor="{OnPlatform Android={StaticResource SystemGray4}, iOS={StaticResource Transparent}}"
+                                               BackgroundColor="{StaticResource PrimaryAccent}">
+                                            <Grid BackgroundColor="Transparent"
+                                                  Padding="0">
+                                                <Grid.RowDefinitions>
+                                                    <RowDefinition Height="*" />
+                                                    <RowDefinition Height="*" />
+                                                </Grid.RowDefinitions>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="70" />
+                                                    <ColumnDefinition Width="*" />
+                                                </Grid.ColumnDefinitions>
+                                                <StackLayout Grid.RowSpan="2"
+                                                             VerticalOptions="Center"
+                                                             Padding="8,0,2,0">
+                                                    <Label FontSize="30" HorizontalOptions="Center">
+                                                        <Label.FormattedText>
+                                                            <FormattedString>
+                                                                <Span Text="#"/>
+                                                                <Span Text="{Binding Rank}"/>
+                                                            </FormattedString>
+                                                        </Label.FormattedText>
+                                                    </Label>
+                                                </StackLayout>
+                                                <Frame Grid.Row="0"
+                                                       Grid.RowSpan="2"
+                                                       Grid.Column="1"
+                                                       Grid.ColumnSpan="2"
+                                                       HasShadow="False"
+                                                       CornerRadius="10"
+                                                       Padding="0,0,0,0">
+                                                    <StackLayout>
+                                                        <Label Text="{Binding Nickname}"
+                                                               HeightRequest="50"
+                                                               FontSize="30"
+                                                               FontAttributes="Bold"
+                                                               VerticalOptions="CenterAndExpand"
+                                                               HorizontalOptions="Center"
+                                                               Padding="12,5,12,0" />
+                                                        <StackLayout Orientation="Horizontal"
+                                                                     Padding="25,0,12,10">
+                                                            <Label HorizontalOptions="Fill"
+                                                                   VerticalOptions="Center"
+                                                                   Text="Punkte gesamt:" 
+                                                                   FontSize="15"
+                                                                   FontAttributes="Bold" />
+                                                            <Label HorizontalOptions="CenterAndExpand"
+                                                                   Text="{Binding TotalPoints}"
+                                                                   FontSize="15"
+                                                                   FontAttributes="Bold" />
+                                                        </StackLayout>
+                                                    </StackLayout>
+                                                </Frame>
+                                            </Grid>
+                                        </Frame>
+                                    </Grid>
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+                            <CollectionView.EmptyView>
+                                <StackLayout Padding="12">
+                                    <Label HorizontalOptions="Center"
+                                           Text="Keine Challenges" />
+                                </StackLayout>
+                            </CollectionView.EmptyView>
+                        </CollectionView>
+                    </Grid>
+                    <Frame.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding TotalChallengesCommand}" />
+                    </Frame.GestureRecognizers>
                 </Frame>
             </StackLayout>
         </ScrollView>

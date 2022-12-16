@@ -1,4 +1,7 @@
 ﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
 
 namespace StudyBuddy.Model
 {
@@ -15,10 +18,10 @@ namespace StudyBuddy.Model
             TotalNetworkChallengesPoints +
             TotalOrganizingChallengesPoints +
             TotalLearningChallengesPoints;
-        public IEnumerable<RankEntry> FriendsRank { get; set; }
+        public List<RankEntry> FriendsRank { get; set; }
         public int LastWeekChallengeCount { get; set; }
         public int ThisWeekChallengeCount { get; set; }
         public int LastMonthChallengeCount { get; set; }
         public int ThisMonthChallengeCount { get; set; }
-    }
+}
 }
