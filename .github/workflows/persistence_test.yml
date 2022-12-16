@@ -1,0 +1,41 @@
+# This workflow will build a .NET project
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-net
+
+name: Persistence Test
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: 6.0.x
+    - name: Install Persistence dependencies (Nuget)
+      run: nuget restore ./StudyBuddy.Persistence/StudyBuddy.Persistence.csproj
+    - name: Install PersistenceTest dependencies (Nuget)
+      run: nuget restore ./StudyBuddy.Persistence.Test/StudyBuddy.Persistence.Test.csproj
+    - name: Install Model dependencies (Nuget)
+      run: nuget restore ./StudyBuddy.Model/StudyBuddy.Model.csproj
+    - name: Build DB
+      working-directory: ./Docker/development
+      run: docker-compose -f "docker-compose.yml" up -d --build
+    - name: Build Persistence
+      run: dotnet build ./StudyBuddy.Persistence/StudyBuddy.Persistence.csproj --no-restore
+    - name: Build Test
+      run: dotnet build ./StudyBuddy.Persistence.Test/StudyBuddy.Persistence.Test.csproj --no-restore
+    - name: Run Test
+      run: dotnet test ./StudyBuddy.Persistence.Test/StudyBuddy.Persistence.Test.csproj --no-build --verbosity normal
+    - name: Stop containers
+      working-directory: ./Docker/development
+      if: always()
+      run: docker-compose -f "docker-compose.yml" down

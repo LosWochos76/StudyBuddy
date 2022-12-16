@@ -1,0 +1,27 @@
+name: App Test
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+
+    runs-on: windows-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: 6.0.x
+    - name: Restore dependencies
+      run: dotnet restore .
+    - name: Build BusinessLogic
+      run: dotnet build ./StudyBuddy.App/StudyBuddy.App.csproj --no-restore
+    - name: Build Test
+      run: dotnet build ./StudyBuddy.App.Test/StudyBuddy.App.Test.csproj --no-restore
+    - name: Run Test
+      run: dotnet test ./StudyBuddy.App.Test/StudyBuddy.App.Test.csproj --no-build --verbosity normal
