@@ -53,7 +53,7 @@
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Um ein Profilbild auszuwählen benötigt StudyBuddy Zugriff auf die Photos.</string>
 	<key>CFBundleShortVersionString</key>
-	<string>1.11</string>
+	<string>1.12</string>
 	<key>CFBundleIdentifier</key>
 	<string>de.gameucation</string>
 	<key>CFBundleDisplayName</key>
