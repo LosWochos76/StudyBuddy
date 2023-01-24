@@ -71,7 +71,7 @@
 
             <Style TargetType="SearchBar">
                 <Setter Property="TextColor"
-                        Value="{StaticResource TextColor}" />
+                        Value="{OnPlatform Android={StaticResource TextColor}, iOS={AppThemeBinding Dark={StaticResource TextColorDark}, Light={StaticResource TextColor}}}" />
                 <Setter Property="BackgroundColor"
                         Value="{OnPlatform Android={AppThemeBinding Dark={StaticResource TextColorDark}, 
                                 Light={StaticResource WindowBackgroundColor}}, iOS={StaticResource Transparent}}" />
