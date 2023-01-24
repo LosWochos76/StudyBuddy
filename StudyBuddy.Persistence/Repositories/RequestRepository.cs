@@ -23,7 +23,7 @@ namespace StudyBuddy.Persistence
             qh.AddParameter(":from", filter.Start);
             qh.AddParameter(":max", filter.Count);
 
-            var sql = new StringBuilder("select id,created,sender_id,recipient_id,type,challenge_id from requests where true ");
+            var sql = new StringBuilder("select id,created,sender_id,recipient_id,type,challenge_id from requests where true");
 
             if (filter.OnlyForSender.HasValue)
             {
@@ -34,7 +34,7 @@ namespace StudyBuddy.Persistence
             if (filter.OnlyForRecipient.HasValue)
             {
                 qh.AddParameter(":recipient_id", filter.OnlyForRecipient.Value);
-                sql.Append(" and (recipient_id=:recipient_id)");
+                sql.Append(" and (recipient_id=:recipient_id) and exists (select * from users where id=sender_id)");
             }
 
             if (filter.OnlyForType.HasValue)
