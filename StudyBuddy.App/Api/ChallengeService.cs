@@ -42,6 +42,7 @@ namespace StudyBuddy.App.Api
             var filter = new ChallengeFilter()
             {
                 OnlyAccepted = true,
+                WithDate = true,
                 SearchText = search_string,
                 Count = 10,
                 Start = skip

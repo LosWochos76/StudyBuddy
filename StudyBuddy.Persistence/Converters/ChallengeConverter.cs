@@ -20,6 +20,7 @@ namespace StudyBuddy.Persistence
             obj.SeriesParentID = set.GetInt(row, "series_parent_id");
             obj.Tags = set.GetString(row, "tags_of_challenge");
             obj.ProveAddendum = set.GetString(row, "prove_addendum");
+            obj.DateAccepted = set.GetDateTime(row, "dateaccepted");
             return obj;
         }
     }

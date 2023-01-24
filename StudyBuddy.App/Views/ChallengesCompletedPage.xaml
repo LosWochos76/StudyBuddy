@@ -111,7 +111,8 @@
                                                                 FontFamily="{StaticResource FontAwesomeSolid}"
                                                                 FontSize="14"
                                                                 Text="{x:Static fontAwesome:FontAwesomeIcons.HourglassEnd}" />
-                                                            <Span FontSize="15" Text="{Binding ValidityEndText}" />
+                                                            <Span FontSize="15"
+                                                                  Text="{Binding DateAccepted, StringFormat='{0:MM.dd.yyyy}'}" />
                                                         </FormattedString>
                                                     </Label.FormattedText>
                                                 </Label>

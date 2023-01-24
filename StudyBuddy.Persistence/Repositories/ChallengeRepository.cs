@@ -34,10 +34,22 @@ namespace StudyBuddy.Persistence
             var qh = new QueryHelper(connection_string);
             qh.AddParameter(":max", filter.Count);
             qh.AddParameter(":from", filter.Start);
-            
-            var sql = new StringBuilder("select id,name,description,points,validity_start,validity_end,category," +
-                "owner_id,created,prove,series_parent_id,tags_of_challenge(id),prove_addendum from challenges where true ");
 
+            var sqlPlaceholder = "select id,name,description,points,validity_start,validity_end,category," +
+                "owner_id,challenges.created,prove,series_parent_id,tags_of_challenge(id),prove_addendum";
+
+            if(filter.WithDate)
+            {
+                sqlPlaceholder += ", challenge_acceptance.created as dateaccepted from challenges" +
+                    " left join challenge_acceptance on challenges.id = challenge_acceptance.challenge_id where true";
+            }
+            else if(!filter.WithDate)
+            {
+                sqlPlaceholder += " from challenges where true ";
+            }
+
+
+            var sql = new StringBuilder(sqlPlaceholder);
             ApplyFilter(qh, sql, filter);
             sql.Append(" order by validity_start,validity_end,created,name limit :max offset :from");
             var set = qh.ExecuteQuery(sql.ToString());

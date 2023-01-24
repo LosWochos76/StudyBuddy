@@ -17,5 +17,6 @@ namespace StudyBuddy.Model
         
         public bool WithTags { get; set; } = true;
         public bool WithOwner { get; set; } = false;
+        public bool WithDate { get; set; } = false;
     }
 }

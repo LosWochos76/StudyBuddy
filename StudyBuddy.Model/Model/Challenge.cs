@@ -14,6 +14,7 @@ namespace StudyBuddy.Model
         public DateTime Created { get; set; } = DateTime.Now.Date;
         public ChallengeProve Prove { get; set; } = ChallengeProve.ByTrust;
         public string ProveAddendum { get; set; } = String.Empty;
+        public DateTime DateAccepted { get; set; } = DateTime.Now.Date;
         public int SeriesParentID { get; set; } = 0;
         public string Tags { get; set; } = String.Empty;
 
