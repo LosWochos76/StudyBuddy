@@ -88,7 +88,7 @@ namespace StudyBuddy.Persistence
                     "count(case when created > NOW() - interval '1 week' and created < NOW() then 1 end) as count_current_week, " +
                     "count(case when created > NOW() - interval '2 month' and created < NOW() - interval '1 month' then 1 end) as count_last_month, " +
                     "count(case when created > NOW() - interval '1 month' and created < NOW() then 1 end) as count_this_month " +
-                    "from challenge_acceptance where user_id = :user_id";
+                    "from challenge_acceptance where user_id = :user_id and exists (select * from challenges where id = challenge_id)";
 
             var set = qh.ExecuteQuery(sql);
             obj.LastWeekChallengeCount = set.GetInt(0, "count_last_week");
