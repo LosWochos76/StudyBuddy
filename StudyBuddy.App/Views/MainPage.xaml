@@ -1,10 +1,10 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
-
 <Shell xmlns="http://xamarin.com/schemas/2014/forms"
        xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
        xmlns:local="clr-namespace:StudyBuddy.App.Views"
        xmlns:fontAwesome="clr-namespace:StudyBuddy.App"
        xmlns:viewmodels="clr-namespace:StudyBuddy.App.ViewModels"
+       xmlns:badge="clr-namespace:Xam.Shell.Badge;assembly=Xam.Shell.Badge"
        x:DataType="viewmodels:MainViewModel"
        x:Class="StudyBuddy.App.Views.MainPage"
        FlyoutBehavior="Flyout">
@@ -245,7 +245,8 @@
                     Glyph="{x:Static fontAwesome:FontAwesomeIcons.Bell}" />
             </Tab.Icon>
         </Tab>
-        <Tab>
+        <Tab badge:Badge.Text="{Binding Count}"
+             badge:Badge.BackgroundColor="red">
             <ShellContent ContentTemplate="{DataTemplate local:RequestsPage}" Route="RequestsPage" />
             <Tab.Icon>
                 <FontImageSource FontFamily="{StaticResource FontAwesomeSolid}"

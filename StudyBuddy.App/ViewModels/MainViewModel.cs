@@ -1,7 +1,9 @@
-﻿using System.Windows.Input;
+﻿using System.Threading.Tasks;
+using System.Windows.Input;
 using StudyBuddy.App.Api;
 using StudyBuddy.App.Misc;
 using StudyBuddy.App.Views;
+using Xamarin.CommunityToolkit.ObjectModel;
 using Xamarin.Forms;
 
 namespace StudyBuddy.App.ViewModels
@@ -14,7 +16,20 @@ namespace StudyBuddy.App.ViewModels
         public ICommand LogoutCommand { get; set; }
         public Command AddFriendsCommand { get; }
         public Command OpenBrowserCommand { get; }
-
+        public AsyncCommand GetRequestCountCommand { get; }
+        string _count = string.Empty;
+        public string Count
+        {
+            get => _count;
+            set
+            {
+                if (_count != value)
+                {
+                    _count = value;
+                    NotifyPropertyChanged(nameof(Count));
+                }
+            }
+        }
         public MainViewModel(IApi api) : base(api)
         {
             ProfileCommand = new Command(Profile);
@@ -23,6 +38,7 @@ namespace StudyBuddy.App.ViewModels
             ThemeCommand = new Command(Theme);
             OpenBrowserCommand = new Command<string>((x) => OpenBrowser(x));
             AddFriendsCommand = new Command(AddFriends);
+            GetRequestCountCommand = new AsyncCommand(GetRequestsCount);
         }
 
         private void Theme(object obj)
@@ -54,6 +70,19 @@ namespace StudyBuddy.App.ViewModels
         {
             api.Authentication.Logout();
             api.Device.GoToPath("//LoginPage");
+        }
+
+        private async Task GetRequestsCount()
+        {
+            var requests = await api.Requests.ForMe();
+            if (requests.Count == 0)
+            {
+                Count = string.Empty;
+            }
+            else
+            {
+                Count = requests.Count.ToString();
+            }
         }
     }
 }

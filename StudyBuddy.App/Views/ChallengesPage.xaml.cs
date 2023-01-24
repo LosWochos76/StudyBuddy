@@ -9,6 +9,7 @@ namespace StudyBuddy.App.Views
     public partial class ChallengesPage
     {
         private readonly ChallengesViewModel view_model;
+        private readonly MainViewModel request_model;
         private readonly IApi api;
 
         public ChallengesPage()
@@ -17,6 +18,8 @@ namespace StudyBuddy.App.Views
 
             api = TinyIoCContainer.Current.Resolve<IApi>();
             view_model = TinyIoCContainer.Current.Resolve<ChallengesViewModel>();
+            request_model = TinyIoCContainer.Current.Resolve<MainViewModel>();
+
             BindingContext = view_model;
         }
 
@@ -25,7 +28,11 @@ namespace StudyBuddy.App.Views
             base.OnAppearing();
 
             if (api.Authentication.IsLoggedIn)
+            {
                 view_model.RefreshCommand.Execute(null);
+                request_model.GetRequestCountCommand.ExecuteAsync();
+            }
+                
         }
     }
 }

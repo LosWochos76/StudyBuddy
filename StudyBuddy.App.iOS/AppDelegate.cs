@@ -5,6 +5,7 @@ using Foundation;
 using KeyboardOverlap.Forms.Plugin.iOSUnified;
 using Plugin.FirebasePushNotification;
 using UIKit;
+using Xam.Shell.Badge.iOS;
 
 namespace App.iOS
 {
@@ -28,6 +29,7 @@ namespace App.iOS
             KeyboardOverlapRenderer.Init ();
             global::Xamarin.Forms.FormsMaterial.Init();
             ZXing.Net.Mobile.Forms.iOS.Platform.Init();
+            BottomBar.Init();
             LoadApplication(new StudyBuddy.App.App());
             
 
