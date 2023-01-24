@@ -6,5 +6,6 @@ namespace StudyBuddy.Model
         public bool WithOwner { get; set; } = false;
         public bool WithLikedUsers { get; set; } = false;
         public bool WithBadge { get; set; } = false;
+        public bool OrderAscending { get; set; } = false;
     }
 }

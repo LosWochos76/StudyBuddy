@@ -20,6 +20,7 @@ namespace StudyBuddy.Persistence
         {
             var qh = new QueryHelper(connection_string);
             var sql = "select id, badge_id, owner_id, title, body, created, updated from notifications where true ";
+
             qh.AddParameter(":max", filter.Count);
             qh.AddParameter(":from", filter.Start);
 
@@ -28,7 +29,15 @@ namespace StudyBuddy.Persistence
                 qh.AddParameter(":owner_id", filter.UserID.Value);
                 sql += " and (owner_id=:owner_id) ";
             }
-
+            if(filter.OrderAscending)
+            {
+                sql += "order by created asc ";
+            }
+            else if (!filter.OrderAscending)
+            {
+                sql += "order by created desc ";
+            }
+            
             sql += "limit :max offset :from";
             var set = qh.ExecuteQuery(sql);
             return converter.Multiple(set);

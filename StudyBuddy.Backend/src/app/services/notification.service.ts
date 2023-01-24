@@ -29,6 +29,7 @@ export class NotificationService {
       query['start'] = (page - 1) * 10;
       query['count'] = 10;
     }
+      query['orderascending'] = false;
 
     let result = await this.http.get(this.url + "Notification",
       {
