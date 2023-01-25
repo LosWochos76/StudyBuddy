@@ -29,6 +29,8 @@ namespace StudyBuddy.App.ViewModels
         private async Task Refresh()
         {
             Requests.Clear();
+            var vm = TinyIoCContainer.Current.Resolve<MainViewModel>();
+            await vm.GetRequestCountCommand.ExecuteAsync();
             await LoadRequests();
             IsRefreshing = false;
             NotifyPropertyChanged(nameof(IsRefreshing));
