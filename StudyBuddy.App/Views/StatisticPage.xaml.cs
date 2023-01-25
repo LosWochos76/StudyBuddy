@@ -11,11 +11,13 @@ namespace StudyBuddy.App.Views
     {
         private readonly StatisticsViewModel view_model;
         private readonly int user_id;
+        private readonly IApi _api;
 
         public StatisticPage()
         {
             InitializeComponent();
-            user_id = 0;
+            _api = TinyIoCContainer.Current.Resolve<IApi>();
+            user_id = _api.Authentication.CurrentUser.ID;
             BindingContext = TinyIoCContainer.Current.Resolve<StatisticsViewModel>();
         }
 
