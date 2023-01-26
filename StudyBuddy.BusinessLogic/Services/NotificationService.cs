@@ -113,6 +113,25 @@ namespace StudyBuddy.BusinessLogic
             backend.Repository.Notifications.Insert(notification);
         }
 
+        public void UserMadeFriend(User userA, User userB)
+        {
+            if (backend.CurrentUser == null)
+                throw new Exception("Unauthorized!");
+
+            if (!backend.CurrentUser.IsAdmin && backend.CurrentUser.ID != userA.ID)
+                throw new Exception("Unauthorized!");
+
+            var notification = new Notification()
+            {
+                Title = "Freundschaft geschlossen",
+                Body = String.Format("{0} {1} und {2} {3} sind jetzt befreundet.",
+                userA.Firstname, userA.Lastname, userB.Firstname, userB.Lastname),
+                OwnerId=userA.ID
+            };
+
+            backend.Repository.Notifications.Insert(notification);
+        }
+
         public void Delete(int notification_id)
         {
             if (backend.CurrentUser == null || !backend.CurrentUser.IsAdmin)

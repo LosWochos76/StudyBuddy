@@ -12,5 +12,6 @@ namespace StudyBuddy.BusinessLogic
 
         void UserAcceptedChallenge(User user, Challenge challenge);
         void UserReceivedBadge(User user, GameBadge badge);
+        void UserMadeFriend(User userA, User userB);
     }
 }

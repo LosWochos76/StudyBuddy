@@ -108,7 +108,8 @@ namespace StudyBuddy.BusinessLogic
                 backend.Repository.Users.AddFriend(obj.SenderID, obj.RecipientID);
                 var friend = backend.Repository.Users.ById(obj.RecipientID);
                 backend.BusinessEventService.TriggerEvent(this, new BusinessEventArgs(BusinessEventType.FriendAdded, friend) { CurrentUser = user });
-                this.backend.PushNotificationService.SendFriendShipAcceptedNotification(obj.SenderID, obj.RecipientID);
+                backend.NotificationService.UserMadeFriend(user, friend);
+                backend.PushNotificationService.SendFriendShipAcceptedNotification(obj.SenderID, obj.RecipientID);
             }
             else if (obj.Type == RequestType.ChallengeAcceptance)
             {
