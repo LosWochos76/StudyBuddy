@@ -1,11 +1,15 @@
 ﻿using Plugin.Media;
 using Plugin.Media.Abstractions;
 using StudyBuddy.App.Api;
+using StudyBuddy.App.Interfaces;
+using StudyBuddy.App.Misc;
 using StudyBuddy.App.ViewModels;
 using System;
 using System.IO;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 using TinyIoC;
+using Xamarin.Essentials;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -15,18 +19,20 @@ namespace StudyBuddy.App.Views
     {
         public ProfileViewModel ViewModel { get; set; }
 
+        readonly IPermissionHandler _permissionHandler;
+
         public ProfilePage()
         {
             InitializeComponent();
-
+            _permissionHandler = TinyIoCContainer.Current.Resolve<IPermissionHandler>();
             ViewModel = TinyIoCContainer.Current.Resolve<ProfileViewModel>();
             BindingContext = ViewModel;
         }
 
-        uint duration = 100;
-        double openY = (Device.RuntimePlatform == "Android") ? 20 : 60;
-        double lastPanY = 0;
-        bool isBackdropTapEnabled = true;
+        readonly uint _duration = 100;
+        readonly double _openY = (Device.RuntimePlatform == "Android") ? 20 : 60;
+        double _lastPanY = 0;
+        bool _isBackdropTapEnabled = true;
 
         private async void ProfileImage_Tapped(object sender, EventArgs e)
         {
@@ -40,8 +46,8 @@ namespace StudyBuddy.App.Views
         {
             await Task.WhenAll
             (
-                Backdrop.FadeTo(1, length: duration),
-                BottomToolbar.TranslateTo(0, openY, length: duration, easing: Easing.SinIn)
+                Backdrop.FadeTo(1, length: _duration),
+                BottomToolbar.TranslateTo(0, _openY, length: _duration, easing: Easing.SinIn)
             );
 
             Backdrop.InputTransparent = false;
@@ -51,15 +57,15 @@ namespace StudyBuddy.App.Views
         {
             await Task.WhenAll
             (
-                Backdrop.FadeTo(0, length: duration),
-                BottomToolbar.TranslateTo(0, 260, length: duration, easing: Easing.SinIn)
+                Backdrop.FadeTo(0, length: _duration),
+                BottomToolbar.TranslateTo(0, 260, length: _duration, easing: Easing.SinIn)
             );
             Backdrop.InputTransparent = true;
         }
 
         private async void TapGestureRecognizer_Tapped1(System.Object sender, System.EventArgs e)
         {
-            if (isBackdropTapEnabled)
+            if (_isBackdropTapEnabled)
             {
                 await CloseDrawer();
             }
@@ -69,20 +75,20 @@ namespace StudyBuddy.App.Views
         {
             if (e.StatusType == GestureStatus.Running)
             {
-                isBackdropTapEnabled = false;
-                lastPanY = e.TotalY;
+                _isBackdropTapEnabled = false;
+                _lastPanY = e.TotalY;
 
                 if (e.TotalY > 0)
-                    BottomToolbar.TranslationY = openY + e.TotalY;
+                    BottomToolbar.TranslationY = _openY + e.TotalY;
             }
             else if (e.StatusType == GestureStatus.Completed)
             {
-                if (lastPanY < 110)
+                if (_lastPanY < 110)
                     await OpenDrawer();
                 else
                     await CloseDrawer();
 
-                isBackdropTapEnabled = true;
+                _isBackdropTapEnabled = true;
             }
         }
 
@@ -90,6 +96,11 @@ namespace StudyBuddy.App.Views
         {
             await CloseDrawer();
             await CrossMedia.Current.Initialize();
+
+            if(!await _permissionHandler.CheckStoragePermission())
+            {
+                return;
+            }
 
             if (!CrossMedia.Current.IsPickPhotoSupported)
             {
@@ -117,6 +128,11 @@ namespace StudyBuddy.App.Views
         {
             await CloseDrawer();
             await CrossMedia.Current.Initialize();
+
+            if (!await _permissionHandler.CheckCameraPermission())
+            {
+                return;
+            }
 
             if (!CrossMedia.Current.IsCameraAvailable || !CrossMedia.Current.IsTakePhotoSupported)
             {

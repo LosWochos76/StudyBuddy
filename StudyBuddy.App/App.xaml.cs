@@ -2,6 +2,7 @@
 using System.Net;
 using System.Threading.Tasks;
 using StudyBuddy.App.Api;
+using StudyBuddy.App.Interfaces;
 using StudyBuddy.App.Misc;
 using StudyBuddy.App.ViewModels;
 using StudyBuddy.App.Views;
@@ -57,6 +58,7 @@ namespace StudyBuddy.App
             TinyIoCContainer.Current.Register(TinyIoCContainer.Current.Resolve<FriendsViewModel>());
             TinyIoCContainer.Current.Register(TinyIoCContainer.Current.Resolve<FlyoutHeaderViewModel>());
             TinyIoCContainer.Current.Register(TinyIoCContainer.Current.Resolve<RegisterViewModel>());
+            TinyIoCContainer.Current.Register<IPermissionHandler>(new PermissionHandler());
         }
 
         protected override async void OnStart()

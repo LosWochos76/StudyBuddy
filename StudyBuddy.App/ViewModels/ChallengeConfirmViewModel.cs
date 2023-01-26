@@ -4,8 +4,10 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using StudyBuddy.App.Api;
+using StudyBuddy.App.Interfaces;
 using StudyBuddy.App.Views;
 using StudyBuddy.Model;
+using TinyIoC;
 using Xamarin.Essentials;
 using Xamarin.Forms;
 
@@ -17,9 +19,10 @@ namespace StudyBuddy.App.ViewModels
         public RangeObservableCollection<UserViewModel> Friends { get; set; }
         public UserViewModel SelectedFriend { get; set; }
         public ICommand ConfirmChallenge { get; }
-
+        readonly IPermissionHandler _permissionHandler;
         public ChallengeConfirmViewModel(IApi api, ChallengeViewModel challenge) : base(api)
         {
+            _permissionHandler = TinyIoCContainer.Current.Resolve<IPermissionHandler>();
             this.challenge = challenge;
             ConfirmChallenge = new Command(OnConfirm);
 
@@ -79,9 +82,11 @@ namespace StudyBuddy.App.ViewModels
             await api.Device.GoToPath("//StatisticsPage");
         }
 
-        private void AcceptByQrCode()
+        private async void AcceptByQrCode()
         {
-            api.Device.PushPage(new QrCodePage());
+            if (!await _permissionHandler.CheckCameraPermission())
+                return;
+            await api.Device.PushPage(new QrCodePage());
         }
 
         private async void AcceptByFriend()
