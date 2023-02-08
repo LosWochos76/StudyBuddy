@@ -22,6 +22,12 @@ namespace StudyBuddy.BusinessLogic.Test.Mocks
             var user_repository = new UserRepositoryMock(challenge_repository, nmdr);
             Users = user_repository;
 
+            Requests = new RequestRepositoryMock();
+
+            FcmTokens = new FcmTokenRepositoryMock();
+
+            StatisticsRepository = new StatisticsRepsitoryMock();
+
             Notifications = new NotificationRepositoryMock(user_repository);
             GameBadges = new GameBadgeRepositoryMock(tag_repository, challenge_repository);
         }

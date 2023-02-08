@@ -66,7 +66,7 @@ namespace StudyBuddy.BusinessLogic
 
             var other = backend.Repository.Requests.FindSimilar(obj);
             if (other != null)
-                return other;
+               return other;
 
             backend.Repository.Requests.Insert(obj);
             

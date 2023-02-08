@@ -13,17 +13,25 @@ namespace StudyBuddy.BusinessLogic.Test
         [Fact]
         public void EncodeTest()
         {
+            //Arrange
             var teststring = "L";
+
+            //Act
             var checkstring = Base64.Encode(teststring);
 
+            //Assert
             Assert.Equal("TA==", checkstring);
         }
         [Fact]
         public void DecodeTest() 
         {
+            //Arrange
             var teststring = "TA==";
+
+            //Act
             var checkstring = Base64.Decode(teststring);
 
+            //Assert
             Assert.Equal("L", checkstring);
         }
 

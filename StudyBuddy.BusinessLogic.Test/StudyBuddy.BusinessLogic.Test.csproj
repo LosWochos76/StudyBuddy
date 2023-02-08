@@ -20,13 +20,23 @@
     </PackageReference>
   </ItemGroup>
 
+<ItemGroup>
+  <PackageReference Include="coverlet.collector" Version="3.2.0">
+    <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    <PrivateAssets>all</PrivateAssets>
+  </PackageReference>
+  <PackageReference Include="ReportGenerator" Version="5.1.15" />
+  <PackageReference Include="xunit" Version="2.4.1" />
+  <PackageReference Include="xunit.runner.visualstudio" Version="2.4.3">
+    <PrivateAssets>all</PrivateAssets>
+    <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+  </PackageReference>
+</ItemGroup>
+
   <ItemGroup>
     <ProjectReference Include="..\StudyBuddy.BusinessLogic\StudyBuddy.BusinessLogic.csproj" />
   </ItemGroup>
   <ItemGroup>
     <None Remove="Mocks\" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Mocks\" />
   </ItemGroup>
 </Project>

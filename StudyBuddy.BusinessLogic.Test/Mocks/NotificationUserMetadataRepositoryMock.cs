@@ -28,19 +28,17 @@ namespace StudyBuddy.BusinessLogic.Test.Mocks
 
         public int GetCount(NotificationUserMetadataFilter filter)
         {
-            throw new NotImplementedException();
+            return objects.Count;
         }
 
         public void Delete(int id)
         {
-            throw new NotImplementedException();
+            objects.RemoveAll(obj => obj.Id == id);
         }
 
         public NotificationUserMetadata FindByNotificationAndOwner(int notificationId, int ownerId)
         {
-            return objects
-                .Where(obj => obj.NotificationId == notificationId && obj.OwnerId == ownerId)
-                .FirstOrDefault();
+            return objects.Where(obj => obj.NotificationId == notificationId && obj.OwnerId == ownerId).FirstOrDefault();
         }
 
         public IEnumerable<NotificationUserMetadata> GetAll(
