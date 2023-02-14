@@ -71,12 +71,11 @@ namespace StudyBuddy.Persistence
             qh.AddParameter(":role", (int) obj.Role);
             qh.AddParameter(":emailconfirmed", false);
             qh.AddParameter(":accountactive", true);
-            qh.AddParameter(":created", DateTime.Now);
 
             obj.ID = qh.ExecuteScalar(
                 "insert into users " +
-                "(created,firstname,lastname,nickname,email,password_hash,role,emailconfirmed,accountactive,created) values " +
-                "(:created,:firstname,:lastname,:nickname,:email,:password_hash,:role,:emailconfirmed,:accountactive,:created) RETURNING id");
+                "(created,firstname,lastname,nickname,email,password_hash,role,emailconfirmed,accountactive) values " +
+                "(:created,:firstname,:lastname,:nickname,:email,:password_hash,:role,:emailconfirmed,:accountactive) RETURNING id");
         }
 
         public void Update(User obj)

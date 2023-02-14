@@ -17,12 +17,12 @@ namespace StudyBuddy.Persistence.Test
             repository.Users.Insert(new User() { ID = 2, Role = Role.Student });
             repository.Users.Insert(new User() { ID = 3, Role = Role.Student });
             repository.Users.AddFriend(1, 2);
-            repository.Notifications.Insert(new Notification() { Id = 1, OwnerId = 1 });
-            repository.Notifications.Insert(new Notification() { Id = 2, OwnerId = 1 });
-            repository.Notifications.Insert(new Notification() { Id = 1, OwnerId = 2 });
-            repository.Notifications.Insert(new Notification() { Id = 2, OwnerId = 2 });
-            repository.Notifications.Insert(new Notification() { Id = 1, OwnerId = 3 });
-            repository.Notifications.Insert(new Notification() { Id = 2, OwnerId = 3 });
+            repository.Notifications.Insert(new Notification() { ID = 1, OwnerId = 1 });
+            repository.Notifications.Insert(new Notification() { ID = 2, OwnerId = 1 });
+            repository.Notifications.Insert(new Notification() { ID = 1, OwnerId = 2 });
+            repository.Notifications.Insert(new Notification() { ID = 2, OwnerId = 2 });
+            repository.Notifications.Insert(new Notification() { ID = 1, OwnerId = 3 });
+            repository.Notifications.Insert(new Notification() { ID = 2, OwnerId = 3 });
 
             // Act
             var filter = new NotificationFilter() { UserID = 1 };

@@ -23,22 +23,24 @@ namespace StudyBuddy.BusinessLogic.Test
             backend = new Backend(repository);
             backend.CurrentUser = repository.Users.ById(1);
         }
+
         [Fact]
         public void getAllTest()
         {
-            backend.Repository.NotificationUserMetadata.Insert(new NotificationUserMetadata() { Id = 1});
-            backend.Repository.NotificationUserMetadata.Insert(new NotificationUserMetadata() { Id = 2});
+            backend.Repository.NotificationUserMetadata.Insert(new NotificationUserMetadata() { ID = 1});
+            backend.Repository.NotificationUserMetadata.Insert(new NotificationUserMetadata() { ID = 2});
             var filter = new NotificationUserMetadataFilter();
 
             var result = backend.NotificationUserMetadataService.GetAll(filter);
             
             Assert.Equal(2, result.Count);
         }
+
         [Fact]
         public void DeleteTest()
         {
-            backend.Repository.NotificationUserMetadata.Insert(new NotificationUserMetadata() { Id = 1 });
-            backend.Repository.NotificationUserMetadata.Insert(new NotificationUserMetadata() { Id = 2 });
+            backend.Repository.NotificationUserMetadata.Insert(new NotificationUserMetadata() { ID = 1 });
+            backend.Repository.NotificationUserMetadata.Insert(new NotificationUserMetadata() { ID = 2 });
             var filter = new NotificationUserMetadataFilter();
             var bevor = backend.NotificationUserMetadataService.GetAll(filter);
 

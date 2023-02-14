@@ -33,7 +33,7 @@ namespace StudyBuddy.BusinessLogic.Test.Mocks
 
         public void Delete(int id)
         {
-            objects.RemoveAll(obj => obj.Id == id);
+            objects.RemoveAll(obj => obj.ID == id);
         }
 
         public NotificationUserMetadata FindByNotificationAndOwner(int notificationId, int ownerId)
@@ -41,23 +41,22 @@ namespace StudyBuddy.BusinessLogic.Test.Mocks
             return objects.Where(obj => obj.NotificationId == notificationId && obj.OwnerId == ownerId).FirstOrDefault();
         }
 
-        public IEnumerable<NotificationUserMetadata> GetAll(
-            NotificationUserMetadataFilter notificationUserMetadataFilter)
+        public IEnumerable<NotificationUserMetadata> GetAll(NotificationUserMetadataFilter notificationUserMetadataFilter)
         {
             return objects;
         }
 
         public void Insert(NotificationUserMetadata obj)
         {
-            if (obj.Id == 0)
-                obj.Id = this.objects.Count + 1;
+            if (obj.ID == 0)
+                obj.ID = this.objects.Count + 1;
 
             this.objects.Add(obj);
         }
 
         public void Update(NotificationUserMetadata obj)
         {
-            int pos = objects.FindIndex(o => o.Id == obj.Id);
+            int pos = objects.FindIndex(o => o.ID == obj.ID);
             objects[pos] = obj;
         }
     }
