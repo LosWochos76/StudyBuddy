@@ -7,8 +7,8 @@ namespace StudyBuddy.Persistence
         public override Notification Convert(DataSet set, int row)
         {
             var obj = new Notification();
-
-            obj.Id = set.GetInt(row, "id");
+            obj.ID = set.GetInt(row, "id");
+            obj.Created = set.GetDateTime(row, "created");
             obj.BadgeId = set.GetInt(row, "badge_id");
             obj.OwnerId = set.GetInt(row, "owner_id");
             obj.Title = set.GetString(row, "title");

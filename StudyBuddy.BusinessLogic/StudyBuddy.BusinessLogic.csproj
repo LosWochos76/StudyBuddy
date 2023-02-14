@@ -29,7 +29,7 @@
     <ItemGroup>
         <PackageReference Include="FirebaseAdmin" Version="2.3.0" />
         <PackageReference Include="Microsoft.AspNetCore.WebUtilities" Version="2.2.0" />
-        <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.26.0" />
+        <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.26.1" />
         <PackageReference Include="NETCore.MailKit" Version="2.1.0" />
         <PackageReference Include="NETCore.Encrypt" Version="2.1.1" />
         <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Scripting" Version="4.4.0" />

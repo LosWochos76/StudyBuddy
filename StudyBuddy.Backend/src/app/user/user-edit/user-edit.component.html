@@ -1,5 +1,5 @@
 <br>
-<h1>Benutzer bearbeiten</h1>
+<h1>Benutzer bearbeiten (registriert am {{(obj.created|date:'dd.MM.yyyy')}})</h1>
 <form [formGroup]="form" (ngSubmit)="onSubmit()">
     <div class="row g-3">
         <div class="col-md">
@@ -49,7 +49,7 @@
             <label class="form-check-label" for="accountactive">Account aktiv</label>
         </div>
     </div>
-    <div class="row g-1" >
+    <div class="row g-1">
         <div class="mb-3">
             <label for="members">Freunde:</label>
             <app-user-select formControlName="friends"></app-user-select>

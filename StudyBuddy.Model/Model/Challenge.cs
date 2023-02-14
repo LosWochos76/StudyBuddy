@@ -11,7 +11,6 @@ namespace StudyBuddy.Model
         public DateTime ValidityEnd { get; set; } = DateTime.Now.Date;
         public ChallengeCategory Category { get; set; } = ChallengeCategory.Learning;
         public int OwnerID { get; set; } = 0;
-        public DateTime Created { get; set; } = DateTime.Now.Date;
         public ChallengeProve Prove { get; set; } = ChallengeProve.ByTrust;
         public string ProveAddendum { get; set; } = String.Empty;
         public DateTime DateAccepted { get; set; } = DateTime.Now.Date;

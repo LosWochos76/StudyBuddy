@@ -8,6 +8,7 @@ namespace StudyBuddy.Persistence
         {
             var obj = new FcmToken();
             obj.ID = set.GetInt(row, "id");
+            obj.Created = set.GetDateTime(row, "created");
             obj.Token = set.GetString(row, "token");
             obj.UserID = set.GetInt(row, "user_id");
             obj.Created = set.GetDateTime(row, "created");

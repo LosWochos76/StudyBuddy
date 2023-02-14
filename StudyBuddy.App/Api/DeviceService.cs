@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
+using StudyBuddy.Model;
 using Xamarin.Essentials;
 using Xamarin.Forms;
 
@@ -123,6 +125,26 @@ namespace StudyBuddy.App.Api
                 Title = title,
                 Text = body
             });
+        }
+
+        public async Task<GeoCoordinate> GetLocation()
+        {
+            try
+            {
+                Xamarin.Essentials.Location location = await Geolocation.GetLastKnownLocationAsync();
+                if (location != null)
+                    return new GeoCoordinate() { Longitude = location.Longitude, Latitude = location.Latitude };
+
+                var request = new GeolocationRequest(GeolocationAccuracy.Medium, TimeSpan.FromSeconds(10));
+                var cts = new CancellationTokenSource();
+                location = await Geolocation.GetLocationAsync(request, cts.Token);
+                return new GeoCoordinate() { Longitude = location.Longitude, Latitude = location.Latitude };
+            }
+            catch
+            {
+            }
+
+            return null;
         }
     }
 }

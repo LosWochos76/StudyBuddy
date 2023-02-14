@@ -8,6 +8,7 @@ namespace StudyBuddy.Persistence
         {
             var obj = new Tag();
             obj.ID = set.GetInt(row, "id");
+            obj.Created = set.GetDateTime(row, "created");
             obj.Name = set.GetString(row, "name");
             return obj;
         }

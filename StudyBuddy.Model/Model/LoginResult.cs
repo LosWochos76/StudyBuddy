@@ -11,9 +11,7 @@ namespace StudyBuddy.Model
 
         public LoginResult()
         {
-            
         }
-
 
         public LoginResult(string token, User user)
         {

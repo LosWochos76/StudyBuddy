@@ -14,7 +14,7 @@ import { UserService } from 'src/app/services/user.service';
 })
 export class UserEditComponent implements OnInit {
   id: number = 0;
-  obj: User = null;
+  obj: User = new User();
   form: FormGroup;
 
   constructor(
@@ -41,8 +41,6 @@ export class UserEditComponent implements OnInit {
 
     if (this.id != 0) {
       this.obj = await this.service.byId(this.id);
-    } else {
-      this.obj = new User();
     }
 
     this.form.setValue({

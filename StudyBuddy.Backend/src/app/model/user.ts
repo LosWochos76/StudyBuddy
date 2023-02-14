@@ -1,5 +1,6 @@
 export class User {
     id: number;
+    created: string = '0000-00-00';
     firstname: string;
     lastname: string;
     nickname: string;
@@ -42,6 +43,7 @@ export class User {
     static fromApi(obj): User {
         let result = new User();
         result.id = obj['id'];
+        result.created = obj['created'];
         result.firstname = obj['firstname'];
         result.lastname = obj['lastname'];
         result.nickname = obj['nickname'];
@@ -67,7 +69,9 @@ export class User {
     }
 
     fullName() {
-        return this.firstname + " " + this.lastname + " (" + this.nickname + ")";
+        return this.firstname + " " +
+            this.lastname +
+            " (" + this.nickname + ")";
     }
 
     copyValues(values) {
@@ -77,7 +81,7 @@ export class User {
 
         if (values.hasOwnProperty('emailconfirmed'))
             this.emailconfirmed = values.emailconfirmed;
-        
+
         if (values.hasOwnProperty('accountactive'))
             this.accountactive = values.accountactive;
 

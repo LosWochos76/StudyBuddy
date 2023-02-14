@@ -10,6 +10,7 @@ namespace StudyBuddy.Persistence
         {
             var obj = new User();
             obj.ID = set.GetInt(row, "id");
+            obj.Created = set.GetDateTime(row, "created");
             obj.Firstname = set.GetString(row, "firstname");
             obj.Lastname = set.GetString(row, "lastname");
             obj.Nickname = set.GetString(row, "nickname");
