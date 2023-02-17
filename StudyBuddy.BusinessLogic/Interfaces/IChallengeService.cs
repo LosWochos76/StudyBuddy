@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using StudyBuddy.Model;
 
 namespace StudyBuddy.BusinessLogic
@@ -26,5 +27,22 @@ namespace StudyBuddy.BusinessLogic
         // Misc
         void CreateSeries(CreateSeriesParameter param);
         ChallengeList GetChallengesOfBadge(int badge_id);
+
+        // Events
+        event ChallengeCompletedEventHandler ChallengeCompleted;
+    }
+
+    public delegate void ChallengeCompletedEventHandler(object sender, ChallengeCompletedEventArgs e);
+
+    public class ChallengeCompletedEventArgs : EventArgs
+    {
+        public Challenge Challenge { get; set; }
+        public User User { get; set; }
+
+        public ChallengeCompletedEventArgs(Challenge c, User u)
+        {
+            Challenge = c;
+            User = u;
+        }
     }
 }

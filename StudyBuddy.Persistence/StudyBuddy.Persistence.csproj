@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk" ToolsVersion="15.0">
 
     <ItemGroup>
-        <PackageReference Include="Npgsql" Version="7.0.1" />
+        <PackageReference Include="Npgsql" Version="7.0.2" />
         <PackageReference Include="SimpleHashing.Net" Version="2.1.0" />
     </ItemGroup>
 

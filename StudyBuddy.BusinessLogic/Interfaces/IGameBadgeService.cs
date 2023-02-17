@@ -16,5 +16,7 @@ namespace StudyBuddy.BusinessLogic
         void AddBadgeToUser(int user_id, int badge_id);
         void RemoveBadgeFromUser(int user_id, int badge_id);
         GameBadgeList GetReceivedBadgesOfUser(int user_id, GameBadgeFilter filter);
+
+        bool CheckIfUserEarnedGameBadgeAfterChallengeCompleted(User user, Challenge challenge);
     }
 }
