@@ -1,4 +1,5 @@
-﻿using System.Text.Json.Serialization;
+﻿using System;
+using System.Text.Json.Serialization;
 
 namespace StudyBuddy.Model
 {
@@ -16,6 +17,7 @@ namespace StudyBuddy.Model
         public Role Role { get; set; } = Role.Student;
         public bool EmailConfirmed { get; set; } = false;
         public bool AccountActive { get; set; } = false;
+        public DateTime Created { get; set; }
 
         [JsonIgnore]
         public bool IsAdmin => Role == Role.Admin;

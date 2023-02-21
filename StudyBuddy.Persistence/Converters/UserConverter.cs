@@ -19,6 +19,7 @@ namespace StudyBuddy.Persistence
             obj.EmailConfirmed = set.GetBool(row, "emailconfirmed");
             obj.AccountActive = set.GetBool(row, "accountactive");
             obj.CommonFriends = set.GetInt(row, "commonfriends");
+            obj.Created = set.GetDateTime(row, "datecreated");
             return obj;
         }
     }

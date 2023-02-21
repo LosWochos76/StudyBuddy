@@ -5,11 +5,15 @@ namespace StudyBuddy.Persistence
 {
     internal class StatisticsRepository : IStatisticsRepository
     {
-        private readonly string connection_string;
+        private readonly string _connection_string;
+        private readonly UserConverter _userObjectConverter = new();
+        private readonly ChallengeConverter _challengeConverter = new();
+        private readonly GameBadgeConverter _badgeConverter = new();
+        private readonly GameObjectStatisticsConverter _gameObjectStatisticsConverter = new();
 
         public StatisticsRepository(string connection_string)
         {
-            this.connection_string = connection_string;
+            this._connection_string = connection_string;
         }
 
         public UserStatistics GetUserStatistics(int user_id)
@@ -23,7 +27,7 @@ namespace StudyBuddy.Persistence
 
         private void FillWithPoints(UserStatistics obj)
         {
-            var qh = new QueryHelper(connection_string);
+            var qh = new QueryHelper(_connection_string);
             qh.AddParameter(":user_id", obj.UserId);
 
             var sql = "select category, sum(points) as points, count(category) as challenge_count from challenge_acceptance " +
@@ -56,7 +60,7 @@ namespace StudyBuddy.Persistence
 
         private void FillWithRankingWithFriends(UserStatistics obj)
         {
-            var qh = new QueryHelper(connection_string);
+            var qh = new QueryHelper(_connection_string);
             qh.AddParameter(":user_id", obj.UserId);
 
             var sql = "select total_rank, nickname, total_points from(Select user_id, us.nickname, sum(points) as total_points, RANK() over " +
@@ -80,7 +84,7 @@ namespace StudyBuddy.Persistence
 
         private void FillWithChallengeHistory(UserStatistics obj)
         {
-            var qh = new QueryHelper(connection_string);
+            var qh = new QueryHelper(_connection_string);
             qh.AddParameter(":user_id", obj.UserId);
 
             var sql = "Select " +
@@ -95,6 +99,89 @@ namespace StudyBuddy.Persistence
             obj.ThisWeekChallengeCount = set.GetInt(0, "count_current_week");
             obj.LastMonthChallengeCount = set.GetInt(0, "count_last_month");
             obj.ThisMonthChallengeCount = set.GetInt(0, "count_this_month");
+        }
+
+        public IEnumerable<User> GetUsersWithDateCreated(bool orderAscending)
+        {
+            var qh = new QueryHelper(_connection_string);
+            var sql = "Select u.id, l.occurence as datecreated from logging as l " +
+                "inner join users as u " +
+                "on l.user_id = u.id " +
+                "where message = 'Saving User'";
+            if (orderAscending)
+            {
+                sql += " order by l.occurence asc";
+            }
+            else
+            {
+                sql += " order by l.occurence desc";
+            }
+            var set = qh.ExecuteQuery(sql);
+            return _userObjectConverter.Multiple(set);
+        }
+
+        public IEnumerable<Challenge> GetChallengeStatistic(bool orderAscending)
+        {
+            var qh = new QueryHelper(_connection_string);
+            var sql = "Select id, points, category, created from challenges";
+            if (orderAscending)
+            {
+                sql += " order by created asc";
+            }
+            else
+            {
+                sql += " order by created desc";
+            }
+            var set = qh.ExecuteQuery(sql);
+            return _challengeConverter.Multiple(set);
+        }
+
+        public IEnumerable<GameBadge> GetBadgeStatistic(bool orderAscending)
+        {
+            var qh = new QueryHelper(_connection_string);
+            var sql = "Select id, owner_id, created from game_badges";
+            if (orderAscending)
+            {
+                sql += " order by created asc";
+            }
+            else
+            {
+                sql += " order by created desc";
+            }
+            var set = qh.ExecuteQuery(sql);
+            return _badgeConverter.Multiple(set);
+        }
+
+        public IEnumerable<GameObjectStatistics> GetChallengeCompletionStatistics(bool orderAscending)
+        {
+            var qh = new QueryHelper(_connection_string);
+            var sql = "Select * from challenge_acceptance";
+            if (orderAscending)
+            {
+                sql += " order by created asc";
+            }
+            else
+            {
+                sql += " order by created desc";
+            }
+            var set = qh.ExecuteQuery(sql);
+            return _gameObjectStatisticsConverter.Multiple(set);
+        }
+
+        public IEnumerable<GameObjectStatistics> GetBadgeCompletionStatistics(bool orderAscending)
+        {
+            var qh = new QueryHelper(_connection_string);
+            var sql = "Select * from users_badges";
+            if (orderAscending)
+            {
+                sql += " order by created asc";
+            }
+            else
+            {
+                sql += " order by created desc";
+            }
+            var set = qh.ExecuteQuery(sql);
+            return _gameObjectStatisticsConverter.Multiple(set);
         }
     }
 }

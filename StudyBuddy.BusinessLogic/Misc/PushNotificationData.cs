@@ -13,7 +13,7 @@ namespace StudyBuddy.BusinessLogic
         {
             var dictonary = new Dictionary<string, string>();
             dictonary.Add("PushNotificationType", this.PushNotificationType.ToString());
-            if (this.PagePath.HasValue)
+            if (!string.IsNullOrEmpty(PagePath.Value))
             {
                 dictonary.Add("PagePath", this.PagePath.Value);
             }

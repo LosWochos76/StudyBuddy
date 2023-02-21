@@ -17,7 +17,6 @@
     </ItemGroup>
     <ItemGroup>
         <Folder Include="Misc\" />
-        <Folder Include="Converters\" />
         <Folder Include="Transport\" />
     </ItemGroup>
     <PropertyGroup>
