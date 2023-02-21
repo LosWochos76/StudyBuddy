@@ -27,7 +27,7 @@ namespace StudyBuddy.BusinessLogic
                 obj.Owner = backend.Repository.Users.ById(obj.OwnerId);
 
             if (filter.WithLikedUsers)
-                obj.LikedUsers = backend.Repository.Users.GetAllLikersForNotification(obj.Id);
+                obj.LikedUsers = backend.Repository.Users.GetAllLikersForNotification(obj.ID);
 
             if (obj.BadgeId.HasValue && filter.WithBadge)
                 obj.Badge = backend.Repository.GameBadges.ById(obj.BadgeId.Value);
@@ -91,7 +91,7 @@ namespace StudyBuddy.BusinessLogic
             };
 
             backend.Repository.Notifications.Insert(notification);
-            backend.PushNotificationService.SendUserAcceptedChallenge(user, challenge);
+            //backend.PushNotificationService.SendUserAcceptedChallenge(user, challenge);
         }
 
         public void UserReceivedBadge(User user, GameBadge badge)

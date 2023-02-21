@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using StudyBuddy.Model;
 using StudyBuddy.Model.Filter;
 
@@ -33,7 +31,7 @@ namespace StudyBuddy.BusinessLogic.Services
                     backend.PushNotificationService.SendUserLikedNotification(notification.OwnerId);
                 }
 
-                obj.Id = existing.Id;
+                obj.ID = existing.ID;
                 obj.Created = existing.Created;
                 backend.Repository.NotificationUserMetadata.Update(obj);
             }

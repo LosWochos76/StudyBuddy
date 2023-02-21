@@ -112,10 +112,10 @@ namespace StudyBuddy.BusinessLogic
             string title = "Gameucation";
             string body = $"{senderUser.Firstname} {senderUser.Lastname} möchte Ihr Freund sein.";
             
-            backend.PushNotificationService.SendMessage(fcmTokens, title, body, new PushNotificationData()
+            /*backend.PushNotificationService.SendMessage(fcmTokens, title, body, new PushNotificationData()
             {
                 PushNotificationType = PushNotificationTypes.FriendShipRequest
-            });
+            });*/
         }
         
         public void SendFriendShipAcceptedNotification(int senderId, int recipentId)

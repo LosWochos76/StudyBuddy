@@ -23,7 +23,7 @@ namespace StudyBuddy.Persistence
             var qh = new QueryHelper(connection_string);
             qh.AddParameter(":id", id);
             var set = qh.ExecuteQuery(
-                "SELECT id,name FROM tags where id=:id");
+                "SELECT id,created,name FROM tags where id=:id");
 
             return converter.Single(set);
         }
@@ -33,7 +33,7 @@ namespace StudyBuddy.Persistence
             var qh = new QueryHelper(connection_string);
             qh.AddParameter(":name", name.ToLower());
             var set = qh.ExecuteQuery(
-                "SELECT id,name FROM tags where name=:name");
+                "SELECT id,created,name FROM tags where name=:name");
 
             return converter.Single(set);
         }
@@ -51,7 +51,7 @@ namespace StudyBuddy.Persistence
             qh.AddParameter(":from", filter.Start);
 
             var sql = qh.ExecuteQuery(
-                "SELECT id,name FROM tags order by name limit :max offset :from");
+                "SELECT id,created,name FROM tags order by name limit :max offset :from");
 
             return converter.Multiple(sql);
         }
@@ -66,15 +66,15 @@ namespace StudyBuddy.Persistence
         public void Insert(Tag obj)
         {
             var qh = new QueryHelper(connection_string);
-            qh.AddParameters(new {name = obj.Name.ToLower().Replace("#", "")});
-            obj.ID = qh.ExecuteScalar(
-                "insert into tags (name) values (:name) RETURNING id");
+            qh.AddParameter(":name", obj.Name.ToLower().Replace("#", ""));
+            qh.AddParameter(":created", obj.Created);
+            obj.ID = qh.ExecuteScalar("insert into tags (created,name) values (:created,:name) RETURNING id");
         }
 
         public void Update(Tag obj)
         {
             var qh = new QueryHelper(connection_string);
-            qh.AddParameters(new {id = obj.ID, name = obj.Name.ToLower().Replace("#", "")});
+            qh.AddParameter(":name", obj.Name.ToLower().Replace("#", ""));
             qh.ExecuteNonQuery("update tags set name=:name where id=:id");
         }
 
@@ -89,7 +89,8 @@ namespace StudyBuddy.Persistence
         public void AddTagForChallenge(int tag_id, int challenge_id)
         {
             var qh = new QueryHelper(connection_string);
-            qh.AddParameters(new {tag_id, challenge_id});
+            qh.AddParameter(":tag_id", tag_id);
+            qh.AddParameter(":challenge_id", challenge_id);
             qh.ExecuteNonQuery(
                 "insert into tags_challenges(challenge_id, tag_id) " +
                 "values(:challenge_id, :tag_id) ON CONFLICT DO NOTHING;");
@@ -100,7 +101,7 @@ namespace StudyBuddy.Persistence
             var qh = new QueryHelper(connection_string);
             qh.AddParameter(":challenge_id", challenge_id);
             var sql = qh.ExecuteQuery(
-                "select id,name from tags inner join tags_challenges on tags_challenges.tag_id=id where challenge_id=:challenge_id");
+                "select id,created,name from tags inner join tags_challenges on tags_challenges.tag_id=id where challenge_id=:challenge_id");
             return converter.Multiple(sql);
         }
 
@@ -126,7 +127,7 @@ namespace StudyBuddy.Persistence
             var qh = new QueryHelper(connection_string);
             qh.AddParameter(":badge_id", badge_id);
             var sql = qh.ExecuteQuery(
-                "select id,name from tags inner join tags_badges on tags_badges.tag_id=id where badge_id=:badge_id");
+                "select id,created,name from tags inner join tags_badges on tags_badges.tag_id=id where badge_id=:badge_id");
             return converter.Multiple(sql);
         }
 
@@ -139,13 +140,24 @@ namespace StudyBuddy.Persistence
 
         private void CreateTable()
         {
+            var rh = new RevisionHelper(connection_string, "tags");
             var qh = new QueryHelper(connection_string);
 
             if (!qh.TableExists("tags"))
+            {
                 qh.ExecuteNonQuery(
                     "create table tags (" +
                     "id serial primary key, " +
+                    "created date not null, " +
                     "name varchar(50) not null);");
+                rh.SetRevision(2);
+            }
+
+            if (rh.GetRevision() == 1)
+            {
+                qh.ExecuteNonQuery("ALTER TABLE tags ADD COLUMN created date DEFAULT '2000-01-01'");
+                rh.SetRevision(2);
+            }
         }
 
         private void CreateChallengeTagsTable()

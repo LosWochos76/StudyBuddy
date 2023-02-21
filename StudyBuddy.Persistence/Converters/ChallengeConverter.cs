@@ -8,6 +8,7 @@ namespace StudyBuddy.Persistence
         {
             var obj = new Challenge();
             obj.ID = set.GetInt(row, "id");
+            obj.Created = set.GetDateTime(row, "created");
             obj.Name = set.GetString(row, "name");
             obj.Description = set.GetString(row, "description");
             obj.Points = set.GetInt(row, "points");
@@ -15,7 +16,6 @@ namespace StudyBuddy.Persistence
             obj.ValidityEnd = set.GetDateTime(row, "validity_end");
             obj.Category = (ChallengeCategory)set.GetInt(row, "category");
             obj.OwnerID = set.GetInt(row, "owner_id");
-            obj.Created = set.GetDateTime(row, "created");
             obj.Prove = (ChallengeProve)set.GetInt(row, "prove");
             obj.SeriesParentID = set.GetInt(row, "series_parent_id");
             obj.Tags = set.GetString(row, "tags_of_challenge");

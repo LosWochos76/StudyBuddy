@@ -27,7 +27,37 @@ public class ChallengeServiceTest
         Assert.NotNull(tags);
         Assert.Equal(2, tags.Count);
     }
+    [Fact]
+    public void DeleteTest()
+    {
+        var repository = new RepositoryMock();
+        repository.Users.Insert(new User() { ID = 1, Email = "admin@admin.de", Role = Role.Admin, AccountActive = true, EmailConfirmed = true });
+        var backend = new Backend(repository);
+        backend.CurrentUser = repository.Users.ById(1);
+        backend.ChallengeService.Insert(new Challenge { ID = 1, Name = "test" });
 
+        backend.ChallengeService.Delete(1);
+        var result = backend.ChallengeService.All(new ChallengeFilter());
+
+        Assert.Equal(0, result.Count);
+    }
+    [Fact]
+    public void AllTest()
+    {
+        var repository = new RepositoryMock();
+        var backend = new Backend(repository);
+        repository.Users.Insert(new User() { ID = 1, Email = "admin@admin.de", Role = Role.Admin, AccountActive = true, EmailConfirmed = true });
+        var filter = new ChallengeFilter();
+        backend.CurrentUser = repository.Users.ById(1);
+        backend.ChallengeService.Insert(new Challenge { ID = 1, Name = "test1"});
+        backend.ChallengeService.Insert(new Challenge { ID = 2, Name = "test2" });
+
+        var result = backend.ChallengeService.All(filter);
+
+        Assert.NotNull(result);
+        Assert.Equal(2, result.Count);
+        Assert.Equal((Challenge)result.Objects.First(), backend.ChallengeService.GetById(1));
+    }
     [Fact]
     public void GetByIdTest()
     {
@@ -50,7 +80,35 @@ public class ChallengeServiceTest
         Assert.Equal("Test Challenge", challenge.Name);
         Assert.Equal("#tag1 #tag2", challenge.Tags); // This is important!
     }
+    [Fact]
+    public void GetChallengesofBadgeTest()
+    {
+        var repository = new RepositoryMock();
+        repository.Users.Insert(new User() { ID = 1, Email = "admin@admin.de", Role = Role.Admin, AccountActive = true, EmailConfirmed = true });
+        repository.Challenges.Insert(new Challenge() { ID = 1, Name = "Test Challenge"});
+        repository.GameBadges.Insert(new GameBadge() { ID = 1, Name = "TestBadge"});
+        var backend = new Backend(repository);
+        backend.CurrentUser = repository.Users.ById(1);
 
+        var result = backend.ChallengeService.GetChallengesOfBadge(1);
+
+        Assert.Equal(0, result.Count);
+    }
+    [Fact]
+    public void RemoveAcceptanceTest()
+    {
+        var repository = new RepositoryMock();
+        repository.Users.Insert(new User() { ID = 1, Email = "admin@admin.de", Role = Role.Admin, AccountActive = true, EmailConfirmed = true });
+        repository.Challenges.Insert(new Challenge() { ID = 1, Name = "Test Challenge" });
+        var backend = new Backend(repository);
+        backend.CurrentUser = repository.Users.ById(1);
+        backend.ChallengeService.AddAcceptance(1, 1);
+
+        backend.ChallengeService.RemoveAcceptance(1, 1);    
+        var result = repository.GameBadges.GetReceivedBadgesOfUser(1, null).ToList();
+
+        Assert.Empty(result);
+    }
     [Fact]
     public void AddAcceptanceTest()
     {
@@ -74,6 +132,6 @@ public class ChallengeServiceTest
         // Assert
         var badges = repository.GameBadges.GetReceivedBadgesOfUser(1, null).ToList();
         Assert.NotNull(badges);
-        Assert.Equal(1, badges.Count);
+        Assert.Single(badges);
     }
 }

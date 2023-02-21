@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using StudyBuddy.Model;
 using Xamarin.Forms;
 
 namespace StudyBuddy.App.Api
@@ -21,5 +22,6 @@ namespace StudyBuddy.App.Api
         Task<bool> ShowMessage(string message, string title, string buttonConfirmText, string buttonCancelText, Action<bool> afterHideCallback);
         Task<string> DisplayPrompt(string message, string title);
         Task Share(string title, string body);
+        Task<GeoCoordinate> GetLocation();
     }
 }

@@ -1,8 +1,11 @@
-﻿using StudyBuddy.BusinessLogic.Test.Mocks;
+﻿using Microsoft.IdentityModel.Tokens;
+using StudyBuddy.BusinessLogic.Test.Mocks;
 using StudyBuddy.Model;
 using System;
 using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using Xunit;
@@ -12,11 +15,12 @@ namespace StudyBuddy.BusinessLogic.Test
     public class JwtTokenTest
     {
         private IBackend backend;
-        
+    
         public JwtTokenTest() 
         {
             var repository = new RepositoryMock();
             backend = new Backend(repository);
+            
         }
         [Fact]
         public void PasswordResetTokenTest()
@@ -44,7 +48,7 @@ namespace StudyBuddy.BusinessLogic.Test
             user = backend.UserService.Insert(user);
 
             var UT = jwt.FromUser(user.ID);
-
+            
             Assert.Equal(2, jwt.FromToken(UT));
         }
     }

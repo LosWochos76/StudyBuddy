@@ -14,6 +14,7 @@ namespace StudyBuddy.BusinessLogic
     class ChallengeService : IChallengeService
     {
         private readonly IBackend backend;
+        public event ChallengeCompletedEventHandler ChallengeCompleted;
 
         public ChallengeService(IBackend backend)
         {
@@ -246,25 +247,17 @@ namespace StudyBuddy.BusinessLogic
                 throw new Exception("Prove is wrong!");
 
             var expected_coordinates = GeoCoordinate.FromString(challenge.ProveAddendum);
-            if (expected_coordinates.IsInRadius(obj.UserPosition))
-            {
+            var is_in_radius = expected_coordinates.IsInRadius(obj.UserPosition);
+
+            if (is_in_radius)
                 Accept(challenge, backend.CurrentUser);
-                return new AcceptChallengeByLocationResultDTO()
-                {
-                    Success = true,
-                    UserPosition = obj.UserPosition,
-                    TargetPosition = expected_coordinates
-                };
-            }
-            else
+
+            return new AcceptChallengeByLocationResultDTO()
             {
-                return new AcceptChallengeByLocationResultDTO()
-                {
-                    Success = false,
-                    UserPosition = obj.UserPosition,
-                    TargetPosition = expected_coordinates
-                };
-            }
+                Success = is_in_radius,
+                UserPosition = obj.UserPosition,
+                TargetPosition = expected_coordinates
+            };
         }
 
         public void RemoveAcceptance(int challenge_id, int user_id)
@@ -310,43 +303,13 @@ namespace StudyBuddy.BusinessLogic
         {
             backend.Logging.LogDebug(String.Format("User {0} accepted challenge {1}.", user.ID, challenge.ID));
             backend.Repository.Challenges.AddAcceptance(challenge.ID, user.ID);
-            OnChallengeAccepted(challenge, user);
-            backend.BusinessEventService.TriggerEvent(this, new BusinessEventArgs(BusinessEventType.ChallengeAccepted, challenge));
+            RaiseChallengeCompletedEvent(challenge, user);
         }
 
-        private void OnChallengeAccepted(Challenge challenge, User user)
+        private void RaiseChallengeCompletedEvent(Challenge c, User u)
         {
-            backend.NotificationService.UserAcceptedChallenge(user, challenge);
-            CheckIfUserEarnedGameBadge(challenge, user);
-        }
-
-        private void CheckIfUserEarnedGameBadge(Challenge challenge, User user)
-        {
-            var filter = new GameBadgeFilter() { Count = int.MaxValue };
-            var badges_of_user = backend.GameBadgeService.GetReceivedBadgesOfUser(user.ID, filter);
-            var badges = backend.Repository.GameBadges.GetBadgesForChallenge(challenge.ID);
-
-            foreach (var badge in badges)
-            {
-                if (!IsInList(badges_of_user.Objects, badge))
-                {
-                    var success_rate = backend.GameBadgeService.GetSuccessRate(badge.ID, user.ID);
-                    if (success_rate.Success >= badge.RequiredCoverage)
-                    {
-                        backend.Repository.GameBadges.AddBadgeToUser(user.ID, badge.ID);
-                        backend.NotificationService.UserReceivedBadge(user, badge);
-                    }
-                }
-            }
-        }
-
-        private bool IsInList(IEnumerable<GameBadge> list, GameBadge badge)
-        {
-            foreach (var b in list)
-                if (b.ID.Equals(badge.ID))
-                    return true;
-
-            return false;
+            if (ChallengeCompleted is not null)
+                ChallengeCompleted(this, new ChallengeCompletedEventArgs(c, u));
         }
     }
 }

@@ -31,5 +31,18 @@ namespace StudyBuddy.App.Test
             Assert.Equal(vm.Password, m.Password);
             Assert.Equal(vm.Role, m.Role);
         }
+        [Fact]
+        public void FromModelTest()
+        {
+            var user = new User() { ID  = 1, Firstname = "Test", Lastname = "User", Role = Role.Student};
+
+            var result = UserViewModel.FromModel(user);
+
+            Assert.NotNull(result);
+            Assert.Equal(user.ID, result.ID);
+            Assert.Equal(user.Firstname, result.Firstname);
+            Assert.Equal(user.Lastname, result.Lastname);
+            Assert.Equal(user.Role, result.Role);
+        }
     }
 }

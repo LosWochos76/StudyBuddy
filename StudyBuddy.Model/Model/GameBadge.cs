@@ -5,7 +5,6 @@ namespace StudyBuddy.Model
     public class GameBadge : Entity
     {
         public int OwnerID { get; set; } = 0;
-        public DateTime Created { get; set; } = DateTime.Now.Date;
         public string Name { get; set; } = string.Empty;
         public double RequiredCoverage { get; set; } = 0.5;
         public string Description { get; set; } = string.Empty;

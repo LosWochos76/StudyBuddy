@@ -7,7 +7,7 @@ namespace StudyBuddy.Persistence
         public override NotificationUserMetadata Convert(DataSet set, int row)
         {
             var obj = new NotificationUserMetadata();
-            obj.Id = set.GetInt(row, "id");
+            obj.ID = set.GetInt(row, "id");
             obj.NotificationId = set.GetInt(row, "notification_id");
             obj.OwnerId = set.GetInt(row, "owner_id");
             obj.Liked = set.GetBool(row, "liked");

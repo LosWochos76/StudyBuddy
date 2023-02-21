@@ -18,12 +18,12 @@ namespace StudyBuddy.BusinessLogic.Test.Mocks
 
         public Notification ById(int id)
         {
-            return objects.Where(obj => obj.Id == id).FirstOrDefault();
+            return objects.Where(obj => obj.ID == id).FirstOrDefault();
         }
 
         public void Delete(int id)
         {
-            objects.RemoveAll(obj => obj.Id == id);
+            objects.RemoveAll(obj => obj.ID == id);
         }
 
         public IEnumerable<Notification> GetAll(NotificationFilter filter)
@@ -48,8 +48,8 @@ namespace StudyBuddy.BusinessLogic.Test.Mocks
 
         public void Insert(Notification obj)
         {
-            if (obj.Id == 0)
-                obj.Id = GetCount(null) + 1;
+            if (obj.ID == 0)
+                obj.ID = GetCount(null) + 1;
 
             objects.Add(obj);
         }

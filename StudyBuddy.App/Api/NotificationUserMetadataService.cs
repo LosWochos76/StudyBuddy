@@ -32,7 +32,7 @@ namespace StudyBuddy.App.Api
             return await Upsert(new NotificationUserMetadata
             {
                 OwnerId = obj.OwnerId,
-                NotificationId = obj.Id,
+                NotificationId = obj.ID,
                 Liked = liked
             });
         }
@@ -42,7 +42,7 @@ namespace StudyBuddy.App.Api
             return await Upsert(new NotificationUserMetadata
             {
                 OwnerId = obj.OwnerId,
-                NotificationId = obj.Id,
+                NotificationId = obj.ID,
                 Shared = true
             });
         }

@@ -67,7 +67,7 @@ namespace StudyBuddy.Persistence
             qh.AddParameter(":created", obj.Created);
             qh.AddParameter(":updated", obj.Updated);
 
-            obj.Id = qh.ExecuteScalar(
+            obj.ID = qh.ExecuteScalar(
                 "insert into notifications (owner_id, badge_id ,title, body, created, updated) " +
                 "values (:owner_id, :badge_id ,:title, :body, :created, :updated) returning id");
         }

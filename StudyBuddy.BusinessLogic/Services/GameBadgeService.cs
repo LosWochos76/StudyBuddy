@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using StudyBuddy.Model;
 
@@ -139,6 +140,41 @@ namespace StudyBuddy.BusinessLogic
                 Count = objects.Count(),
                 Objects = objects
             };
+        }
+
+        public bool CheckIfUserEarnedGameBadgeAfterChallengeCompleted(User user, Challenge challenge)
+        {
+            var filter = new GameBadgeFilter() { Count = int.MaxValue };
+            var badges_of_user = GetReceivedBadgesOfUser(user.ID, filter);
+            var badges = backend.Repository.GameBadges.GetBadgesForChallenge(challenge.ID);
+            var result = false;
+
+            foreach (var badge in badges)
+            {
+                if (!IsInList(badges_of_user.Objects, badge))
+                {
+                    var success_rate = backend.GameBadgeService.GetSuccessRate(badge.ID, user.ID);
+                    if (success_rate.Success >= badge.RequiredCoverage)
+                    {
+                        backend.Repository.GameBadges.AddBadgeToUser(user.ID, badge.ID);
+                        backend.NotificationService.UserReceivedBadge(user, badge);
+                        result = true;
+
+                        // ToDo: Raise Event!
+                    }
+                }
+            }
+
+            return result;
+        }
+
+        private bool IsInList(IEnumerable<GameBadge> list, GameBadge badge)
+        {
+            foreach (var b in list)
+                if (b.ID.Equals(badge.ID))
+                    return true;
+
+            return false;
         }
     }
 }

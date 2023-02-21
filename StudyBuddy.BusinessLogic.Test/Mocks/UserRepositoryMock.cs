@@ -133,12 +133,14 @@ namespace StudyBuddy.BusinessLogic.Test.Mocks
 
         public void RemoveFriend(int user_id, int friend_id)
         {
+            
             throw new NotImplementedException();
         }
 
         public void RemoveFriends(int user_id)
         {
-            throw new NotImplementedException();
+            //todo
+            //throw new NotImplementedException();
         }
 
         public void Save(User obj)

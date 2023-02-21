@@ -13,17 +13,17 @@ namespace StudyBuddy.Persistence.Test
 
             // Arrange
             repository.Users.Insert(new User() { ID = 2 });
-            repository.Notifications.Insert(new Notification() { Id = 1, OwnerId = 1 });
-            repository.Notifications.Insert(new Notification() { Id = 1, OwnerId = 2 });
-            repository.NotificationUserMetadata.Insert(new NotificationUserMetadata() { Id = 1, OwnerId = 1, NotificationId = 1 });
-            repository.NotificationUserMetadata.Insert(new NotificationUserMetadata() { Id = 1, OwnerId = 2, NotificationId = 2 });
+            repository.Notifications.Insert(new Notification() { ID = 1, OwnerId = 1 });
+            repository.Notifications.Insert(new Notification() { ID = 1, OwnerId = 2 });
+            repository.NotificationUserMetadata.Insert(new NotificationUserMetadata() { ID = 1, OwnerId = 1, NotificationId = 1 });
+            repository.NotificationUserMetadata.Insert(new NotificationUserMetadata() { ID = 1, OwnerId = 2, NotificationId = 2 });
 
             // Act
             var obj = repository.NotificationUserMetadata.FindByNotificationAndOwner(1, 1);
 
             // Asert
             Assert.NotNull(obj);
-            Assert.Equal(1, obj.Id);
+            Assert.Equal(1, obj.ID);
             Assert.Equal(false, obj.Liked);
             Assert.Equal(false, obj.Shared);
             Assert.Equal(false, obj.Seen);
@@ -37,8 +37,8 @@ namespace StudyBuddy.Persistence.Test
             Create();
 
             // Arrange
-            repository.Notifications.Insert(new Notification() { Id = 1, OwnerId = 1 });
-            repository.NotificationUserMetadata.Insert(new NotificationUserMetadata() { Id = 1, OwnerId = 1, NotificationId = 1 });
+            repository.Notifications.Insert(new Notification() { ID = 1, OwnerId = 1 });
+            repository.NotificationUserMetadata.Insert(new NotificationUserMetadata() { ID = 1, OwnerId = 1, NotificationId = 1 });
             var obj = repository.NotificationUserMetadata.FindByNotificationAndOwner(1, 1);
 
             // Act
@@ -47,7 +47,7 @@ namespace StudyBuddy.Persistence.Test
 
             // Asert
             Assert.NotNull(obj);
-            Assert.Equal(1, obj.Id);
+            Assert.Equal(1, obj.ID);
             Assert.Equal(false, obj.Liked);
             Assert.Equal(true, obj.Shared);
             Assert.Equal(false, obj.Seen);

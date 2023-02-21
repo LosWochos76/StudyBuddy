@@ -9,6 +9,7 @@ namespace StudyBuddy.Persistence
         {
             var obj = new PersistentImage();
             obj.ID = set.GetInt(row, "id");
+            obj.Created = set.GetDateTime(row, "created");
             obj.UserID = set.GetInt(row, "user_id");
             obj.Name = set.GetString(row, "name");
             obj.Length = set.GetLong(row, "length");

@@ -20,6 +20,7 @@ namespace StudyBuddy.App.ViewModels
         public UserViewModel SelectedFriend { get; set; }
         public ICommand ConfirmChallenge { get; }
         readonly IPermissionHandler _permissionHandler;
+
         public ChallengeConfirmViewModel(IApi api, ChallengeViewModel challenge) : base(api)
         {
             _permissionHandler = TinyIoCContainer.Current.Resolve<IPermissionHandler>();
@@ -52,14 +53,6 @@ namespace StudyBuddy.App.ViewModels
 
             if (challenge.Prove == ChallengeProve.ByKeyword)
                 AcceptByKeyword();
-            
-            if (challenge.Prove == ChallengeProve.BySystem)
-                AcceptBySystem();
-        }
-
-        private async void AcceptBySystem()
-        {
-            // to be programmed
         }
 
         private async void AcceptByTrust()
@@ -117,16 +110,7 @@ namespace StudyBuddy.App.ViewModels
 
         private async void AcceptByLocation()
         {
-            Location location = null;
-            try
-            {
-                location = await Geolocation.GetLocationAsync();
-            }
-            catch (Exception e)
-            {
-                await api.Logging.LogError(e.ToString());
-            }
-
+            var location = await api.Device.GetLocation();
             if (location == null)
             {
                 api.Device.ShowError("Ein Fehler ist aufgetreten! Deine Geo-Koordinaten konnten nicht bestimmt werden!", "Fehler!", "Ok", null);
@@ -140,13 +124,7 @@ namespace StudyBuddy.App.ViewModels
             if (!answer)
                 return;
 
-            var geo = new GeoCoordinate()
-            {
-                Latitude = location.Latitude,
-                Longitude = location.Longitude
-            };
-
-            var result = await api.Challenges.AcceptWithLocation(challenge, geo);
+            var result = await api.Challenges.AcceptWithLocation(challenge, location);
             if (!result.Success)
             {
                 var distance = result.UserPosition.Distance(result.TargetPosition);

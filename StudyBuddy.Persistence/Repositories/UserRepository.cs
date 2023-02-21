@@ -21,7 +21,7 @@ namespace StudyBuddy.Persistence
         public User ById(int id)
         {
             var qh = new QueryHelper(connection_string, new { id });
-            var sql = qh.ExecuteQuery("SELECT id,firstname,lastname,nickname," +
+            var sql = qh.ExecuteQuery("SELECT id,created,firstname,lastname,nickname," +
                 "email,password_hash,role,emailconfirmed,accountactive FROM users where id=:id");
             return converter.Single(sql);
         }
@@ -31,7 +31,7 @@ namespace StudyBuddy.Persistence
             var qh = new QueryHelper(connection_string);
             qh.AddParameter(":from", filter.Start);
             qh.AddParameter(":max", filter.Count);
-            var set = qh.ExecuteQuery("SELECT id,firstname,lastname,nickname,email,password_hash,role,emailconfirmed,accountactive " +
+            var set = qh.ExecuteQuery("SELECT id,created,firstname,lastname,nickname,email,password_hash,role,emailconfirmed,accountactive " +
                 "FROM users order by lastname,firstname,nickname limit :max offset :from");
             return converter.Multiple(set);
         }
@@ -45,7 +45,7 @@ namespace StudyBuddy.Persistence
         public User ByEmailActiveAccounts(string email)
         {
             var qh = new QueryHelper(connection_string, new {email});
-            var set = qh.ExecuteQuery("SELECT id,firstname,lastname,nickname,email,password_hash,role,emailconfirmed,accountactive " +
+            var set = qh.ExecuteQuery("SELECT id,created,firstname,lastname,nickname,email,password_hash,role,emailconfirmed,accountactive " +
                 "FROM users where accountactive = true and lower(email)=lower(:email)");
             return converter.Single(set);
         }
@@ -54,7 +54,7 @@ namespace StudyBuddy.Persistence
         {
             var qh = new QueryHelper(connection_string, new { email });
             var set = qh.ExecuteQuery(
-                "SELECT id,firstname,lastname,nickname,email,password_hash,role,emailconfirmed,accountactive " +
+                "SELECT id,created,firstname,lastname,nickname,email,password_hash,role,emailconfirmed,accountactive " +
                 "FROM users where lower(email)=lower(:email)");
             return converter.Single(set);
         }
@@ -62,6 +62,7 @@ namespace StudyBuddy.Persistence
         public void Insert(User obj)
         {
             var qh = new QueryHelper(connection_string);
+            qh.AddParameter(":created", obj.Created);
             qh.AddParameter(":firstname", obj.Firstname);
             qh.AddParameter(":lastname", obj.Lastname);
             qh.AddParameter(":nickname", obj.Nickname.ToLower());
@@ -73,8 +74,8 @@ namespace StudyBuddy.Persistence
 
             obj.ID = qh.ExecuteScalar(
                 "insert into users " +
-                "(firstname,lastname,nickname,email,password_hash,role,emailconfirmed,accountactive) values " +
-                "(:firstname,:lastname,:nickname,:email,:password_hash,:role,:emailconfirmed,:accountactive) RETURNING id");
+                "(created,firstname,lastname,nickname,email,password_hash,role,emailconfirmed,accountactive) values " +
+                "(:created,:firstname,:lastname,:nickname,:email,:password_hash,:role,:emailconfirmed,:accountactive) RETURNING id");
         }
 
         public void Update(User obj)
@@ -124,7 +125,7 @@ namespace StudyBuddy.Persistence
             qh.AddParameter(":nickname", nickname);
 
             var set = qh.ExecuteQuery(
-                "SELECT id,firstname,lastname,nickname," +
+                "SELECT id,created,firstname,lastname,nickname," +
                 "email,password_hash,role,emailconfirmed,accountactive FROM " +
                 "users where lower(nickname)=lower(:nickname)");
 
@@ -140,7 +141,7 @@ namespace StudyBuddy.Persistence
             qh.AddParameter(":onlyActive", filter.OnlyActiveAccounts);
             qh.AddParameter(":onlyConfirmed", filter.OnlyConfirmedAccounts);
 
-            var sql = new StringBuilder("select id,firstname,lastname,nickname,email,password_hash,role," +
+            var sql = new StringBuilder("select id,created,firstname,lastname,nickname,email,password_hash,role," +
                 "emailconfirmed,accountactive,common_friends(id, :user_id) from friends " +
                 "inner join users on user_b = id where accountactive=:onlyActive and emailconfirmed=:onlyConfirmed and user_a=:user_id ");
 
@@ -164,7 +165,7 @@ namespace StudyBuddy.Persistence
             qh.AddParameter(":onlyActive", filter.OnlyActiveAccounts);
             qh.AddParameter(":onlyConfirmed", filter.OnlyConfirmedAccounts);
 
-            var sql = new StringBuilder("select id,firstname,lastname,nickname,email,password_hash,role," +
+            var sql = new StringBuilder("select id,created,firstname,lastname,nickname,email,password_hash,role," +
                 "emailconfirmed,accountactive,common_friends(id,:user_id) from users " +
                 "where accountactive=:onlyActive and emailconfirmed=:onlyConfirmed and " +
                 "id not in (select user_b from friends where user_a=:user_id) and id!=:user_id ");
@@ -245,7 +246,7 @@ namespace StudyBuddy.Persistence
         {
             var qh = new QueryHelper(connection_string);
             qh.AddParameter(":challenge_id", challenge_id);
-            var sql = "SELECT id,firstname,lastname,nickname,email,password_hash,role,emailconfirmed," +
+            var sql = "SELECT id,created,firstname,lastname,nickname,email,password_hash,role,emailconfirmed," +
                 "accountactive FROM challenge_acceptance " +
                 "inner join users on user_id=id " +
                 "where challenge_id=:challenge_id " +
@@ -259,7 +260,7 @@ namespace StudyBuddy.Persistence
         {
             var qh = new QueryHelper(connection_string);
             qh.AddParameter(":badge_id", badge_id);
-            var sql = "SELECT id,firstname,lastname,nickname,email,password_hash,role," +
+            var sql = "SELECT id,created,firstname,lastname,nickname,email,password_hash,role," +
                 "emailconfirmed,accountactive FROM users_badges " +
                 "inner join users on user_id=id " +
                 "where badge_id=:badge_id " +
@@ -281,7 +282,7 @@ namespace StudyBuddy.Persistence
             var qh = new QueryHelper(connection_string);
             qh.AddParameter(":notification_id", notificationId);
 
-            var sql = "select u.id,u.firstname,u.lastname,u.nickname,u.email,u.password_hash," +
+            var sql = "select u.id,u.created,u.firstname,u.lastname,u.nickname,u.email,u.password_hash," +
                 "u.role,u.emailconfirmed,u.accountactive from users as u  " +
                 "inner join notification_user_metadata as md on u.id = md.owner_id and liked = true " +
                 "and md.notification_id = :notification_id";
@@ -300,6 +301,7 @@ namespace StudyBuddy.Persistence
                 qh.ExecuteNonQuery(
                     "create table users (" +
                     "id serial primary key, " +
+                    "created date not null, " +
                     "firstname varchar(100) not null, " +
                     "lastname varchar(100) not null, " +
                     "nickname varchar(100) not null, " +
@@ -321,7 +323,7 @@ namespace StudyBuddy.Persistence
                     AccountActive = true
                 });
 
-                rh.SetRevision(4);
+                rh.SetRevision(5);
             }
 
             if (!qh.TableExists("friends"))
@@ -349,6 +351,12 @@ namespace StudyBuddy.Persistence
                 qh.ExecuteNonQuery("ALTER TABLE users ADD COLUMN emailconfirmed BOOLEAN DEFAULT false");
                 qh.ExecuteNonQuery("ALTER TABLE users ADD COLUMN accountactive BOOLEAN DEFAULT true");
                 rh.SetRevision(3);
+            }
+
+            if (rh.GetRevision() == 4)
+            {
+                qh.ExecuteNonQuery("ALTER TABLE users ADD COLUMN created DATE DEFAULT '2000-01-01'");
+                rh.SetRevision(5);
             }
 
             qh.ExecuteNonQuery("begin;\n" +

@@ -87,7 +87,7 @@ namespace StudyBuddy.App.ViewModels
         {
             bool did_i_like_it = DidILikeIt;
             await api.NotificationUserMetadataService.Like(this, !DidILikeIt);
-            LikedUsers = await api.Users.Likers(Id);
+            LikedUsers = await api.Users.Likers(ID);
 
             NotifyPropertyChanged("LikedUsers");
             NotifyPropertyChanged("UsersWhoLikedText");

@@ -52,7 +52,7 @@ namespace StudyBuddy.Persistence
         public void Update(NotificationUserMetadata obj)
         {
             var qh = new QueryHelper(connection_string);
-            qh.AddParameter(":id", obj.Id);
+            qh.AddParameter(":id", obj.ID);
             qh.AddParameter(":created", obj.Created);
             qh.AddParameter(":updated", obj.Updated);
             var sql = "update notification_user_metadata set created=:created, updated=:updated ";
