@@ -1,5 +1,4 @@
-﻿using CsvHelper;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using StudyBuddy.BusinessLogic;
 using StudyBuddy.Model;
 using System.Globalization;
@@ -29,25 +28,25 @@ namespace StudyBuddy.Api.Controllers
         {
             StringBuilder stringBuilder = new();
 
-            var challengeStatistics = backend.StatisticsService.GetChallengeStatistic(orderAscending);
+            IEnumerable<Challenge> challengeStatistics = backend.StatisticsService.GetChallengeStatistic(orderAscending);
             stringBuilder.AppendLine("ChallengeID,Points,Category,DateCreatedChallenge");
-            foreach (var challengeObj in challengeStatistics)
+            foreach (Challenge challengeObj in challengeStatistics)
             {
                 stringBuilder.AppendLine($"{challengeObj.ID},{challengeObj.Points},{challengeObj.Category},{challengeObj.Created}");
             }
             stringBuilder.Append(System.Environment.NewLine);
 
-            var badgeStatistics = backend.StatisticsService.GetBadgeStatistics(orderAscending);
+            IEnumerable<GameBadge> badgeStatistics = backend.StatisticsService.GetBadgeStatistics(orderAscending);
             stringBuilder.AppendLine("BadgeID,CreatorID,Created");
-            foreach (var badgeObj in badgeStatistics)
+            foreach (GameBadge badgeObj in badgeStatistics)
             {
                 stringBuilder.AppendLine($"{badgeObj.ID},{badgeObj.OwnerID},{badgeObj.Created}");
             }
             stringBuilder.Append(System.Environment.NewLine);
 
-            var userStatistics = backend.StatisticsService.GetUsersWithDateCreated(orderAscending);
+            IEnumerable<User> userStatistics = backend.StatisticsService.GetUsersWithDateCreated(orderAscending);
             stringBuilder.AppendLine("UserID,DateCreatedUser");
-            foreach (var userObj in userStatistics)
+            foreach (User userObj in userStatistics)
             {
                 stringBuilder.AppendLine($"{userObj.ID},{userObj.Created}");
             }
@@ -61,17 +60,17 @@ namespace StudyBuddy.Api.Controllers
         {
             StringBuilder stringBuilder = new();
 
-            var challengeCompletionStatistics = backend.StatisticsService.GetChallengeCompletionStatistics(orderAscending);
+            IEnumerable<GameObjectStatistics> challengeCompletionStatistics = backend.StatisticsService.GetChallengeCompletionStatistics(orderAscending);
             stringBuilder.AppendLine("UserID,ChallengeID,DateCompleted");
-            foreach (var obj in challengeCompletionStatistics)
+            foreach (GameObjectStatistics obj in challengeCompletionStatistics)
             {
                 stringBuilder.AppendLine($"{obj.UserID},{obj.ItemID},{obj.DateCompleted}");
             }
             stringBuilder.Append(System.Environment.NewLine);
 
-            var badgeCompletionStatistics = backend.StatisticsService.GetBadgeCompletionStatistics(orderAscending);
+            IEnumerable<GameObjectStatistics> badgeCompletionStatistics = backend.StatisticsService.GetBadgeCompletionStatistics(orderAscending);
             stringBuilder.AppendLine("UserID,BadgeID,DateCompleted");
-            foreach (var obj in badgeCompletionStatistics)
+            foreach (GameObjectStatistics obj in badgeCompletionStatistics)
             {
                 stringBuilder.AppendLine($"{obj.UserID},{obj.ItemID},{obj.DateCompleted}");
             }
