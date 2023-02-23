@@ -21,6 +21,7 @@ namespace StudyBuddy.BusinessLogic.Test
 
             Assert.Empty(result["PagePath"]);
         }
+
         [Fact]
         public void todataTest_defaultType()
         {
@@ -32,6 +33,7 @@ namespace StudyBuddy.BusinessLogic.Test
             Assert.Empty(result["PagePath"]);
             Assert.Equal("Normal", result["PushNotificationType"]);
         }
+
         [Fact]
         public void todataTest()
         {

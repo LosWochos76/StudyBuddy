@@ -23,6 +23,7 @@ namespace StudyBuddy.BusinessLogic.Test
             repository.Users.Insert(new User() { ID = 2 });
             backend.CurrentUser = repository.Users.ById(1);
         }
+
         [Fact]
         public void InsertTest()
         {
@@ -35,6 +36,7 @@ namespace StudyBuddy.BusinessLogic.Test
             Assert.Equal(RequestType.Friendship, result.Type);
 
         }
+
         [Fact]
         public void DeleteTest()
         {
@@ -49,14 +51,20 @@ namespace StudyBuddy.BusinessLogic.Test
             Assert.NotNull(bevor);
             Assert.NotEqual(bevor.Count, after.Count);
         }
+
         [Fact]
         public void AcceptTest()
         {
             backend.RequestService.Insert(new Request() { ID = 1, SenderID = 2, RecipientID = backend.CurrentUser.ID, Type = RequestType.Friendship });
+            var friends = backend.UserService.GetAllFriends(new FriendFilter() { UserId = 2, Count = int.MaxValue });
+            Assert.Equal(0, friends.Count);
 
             backend.RequestService.Accept(1);
 
             Assert.Null(backend.RequestService.GetById(1));
+            friends = backend.UserService.GetAllFriends(new FriendFilter() { UserId = 2, Count = int.MaxValue });
+            Assert.Equal(1, friends.Count);
+            Assert.Equal(1, friends.Objects.First().ID);
         }
 
         [Fact]
@@ -73,6 +81,7 @@ namespace StudyBuddy.BusinessLogic.Test
             Assert.Equal(1, result1.ID);
             Assert.Equal(2, result2.ID);
         }
+
         [Fact]
         public void AllTest()
         {
