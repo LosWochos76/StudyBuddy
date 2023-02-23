@@ -9,6 +9,7 @@ namespace StudyBuddy.BusinessLogic
         void SendMessage(IEnumerable<string> tokens, string title, string body, PushNotificationData pushNotificationData = null);
         void SendUserLikedNotification(int userId);
         void SendUserAcceptedChallenge(User user, Challenge challenge);
+        void SendUserReceivedBadge(User user, GameBadge badge);
         public void SendFriendShipRequestNotification(int senderId, int recipentId);
         public void SendFriendShipAcceptedNotification(int senderId, int recipentId);
     }

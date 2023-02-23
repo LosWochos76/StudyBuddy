@@ -91,7 +91,6 @@ namespace StudyBuddy.BusinessLogic
             };
 
             backend.Repository.Notifications.Insert(notification);
-            //backend.PushNotificationService.SendUserAcceptedChallenge(user, challenge);
         }
 
         public void UserReceivedBadge(User user, GameBadge badge)

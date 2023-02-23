@@ -9,6 +9,8 @@ namespace StudyBuddy.BusinessLogic
     {
         private readonly IBackend backend;
 
+        public event BadgeReceivedEventHandler BadgeReceived;
+
         public GameBadgeService(IBackend backend)
         {
             this.backend = backend;
@@ -157,10 +159,8 @@ namespace StudyBuddy.BusinessLogic
                     if (success_rate.Success >= badge.RequiredCoverage)
                     {
                         backend.Repository.GameBadges.AddBadgeToUser(user.ID, badge.ID);
-                        backend.NotificationService.UserReceivedBadge(user, badge);
+                        RaiseBadgeReceivedEvent(badge, user);
                         result = true;
-
-                        // ToDo: Raise Event!
                     }
                 }
             }
@@ -175,6 +175,12 @@ namespace StudyBuddy.BusinessLogic
                     return true;
 
             return false;
+        }
+
+        private void RaiseBadgeReceivedEvent(GameBadge gb, User u)
+        {
+            if (BadgeReceived is not null)
+                BadgeReceived(this, new BadgeReceivedEventArgs(gb, u));
         }
     }
 }

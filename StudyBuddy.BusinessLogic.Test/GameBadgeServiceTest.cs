@@ -18,6 +18,7 @@ namespace StudyBuddy.BusinessLogic.Test
             var repository = new RepositoryMock();
             backend = new Backend(repository);
         }
+
         [Fact]
         public void InsertTest()
         {
@@ -29,6 +30,7 @@ namespace StudyBuddy.BusinessLogic.Test
             Assert.NotNull(result);
             Assert.Equal("testbadge", result.Name);
         }
+
         [Fact]
         public void DeleteTest()
         {
@@ -42,6 +44,7 @@ namespace StudyBuddy.BusinessLogic.Test
 
             Assert.Null(result);
         }
+
         [Fact]
         public void UpdateTest()
         {
@@ -55,6 +58,7 @@ namespace StudyBuddy.BusinessLogic.Test
             Assert.NotNull(result);
 
         }
+
         [Fact]
         public void GetByIdTest()
         {
@@ -69,6 +73,7 @@ namespace StudyBuddy.BusinessLogic.Test
             Assert.Equal("testbadge1", result1.Name);
             Assert.Equal("testbadge2", result2.Name);
         }
+
         [Fact]
         public void AllTest()
         {
@@ -82,6 +87,7 @@ namespace StudyBuddy.BusinessLogic.Test
 
             Assert.Equal(2, result.Count);
         }
+
         [Fact]
         public void AddBadgeToUserTest()
         {

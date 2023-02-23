@@ -9,6 +9,10 @@ namespace StudyBuddy.BusinessLogic
     {
         private readonly IBackend backend;
 
+        public event RequestEventHandler RequestCreated;
+        public event RequestEventHandler RequestAccepted;
+        public event RequestEventHandler RequestDenied;
+
         public RequestService(IBackend backend)
         {
             this.backend = backend;
@@ -69,6 +73,7 @@ namespace StudyBuddy.BusinessLogic
                return other;
 
             backend.Repository.Requests.Insert(obj);
+            RaiseRequestCreatedEvent(obj);
             
             if (obj.Type == RequestType.Friendship)
             {
@@ -118,10 +123,8 @@ namespace StudyBuddy.BusinessLogic
                 backend.BusinessEventService.TriggerEvent(this, new BusinessEventArgs(BusinessEventType.ChallengeAccepted, challenge) { CurrentUser = user });
             }
 
+            RaiseRequestAcceptedEvent(obj);
             backend.Repository.Requests.Delete(id);
-
-            // ToDo: Erzeugen einer Neuigkeit! Push Benachrichtigung
-
         }
 
         public void Deny(int id)
@@ -133,7 +136,26 @@ namespace StudyBuddy.BusinessLogic
             if (backend.CurrentUser == null || !backend.CurrentUser.IsAdmin && backend.CurrentUser.ID != obj.RecipientID)
                 throw new Exception("Unauthorized!");
 
+            RaiseRequestDeniedEvent(obj);
             backend.Repository.Requests.Delete(id);
+        }
+
+        private void RaiseRequestCreatedEvent(Request r)
+        {
+            if (RequestCreated is not null)
+                RequestCreated(this, new RequestEventArgs(r));
+        }
+
+        private void RaiseRequestAcceptedEvent(Request r)
+        {
+            if (RequestAccepted is not null)
+                RequestAccepted(this, new RequestEventArgs(r));
+        }
+
+        private void RaiseRequestDeniedEvent(Request r)
+        {
+            if (RequestDenied is not null)
+                RequestDenied(this, new RequestEventArgs(r));
         }
     }
 }

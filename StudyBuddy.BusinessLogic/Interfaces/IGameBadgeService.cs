@@ -1,4 +1,5 @@
-﻿using StudyBuddy.Model;
+﻿using System;
+using StudyBuddy.Model;
 
 namespace StudyBuddy.BusinessLogic
 {
@@ -18,5 +19,22 @@ namespace StudyBuddy.BusinessLogic
         GameBadgeList GetReceivedBadgesOfUser(int user_id, GameBadgeFilter filter);
 
         bool CheckIfUserEarnedGameBadgeAfterChallengeCompleted(User user, Challenge challenge);
+
+        // Events
+        event BadgeReceivedEventHandler BadgeReceived;
+    }
+
+    public delegate void BadgeReceivedEventHandler(object sender, BadgeReceivedEventArgs e);
+
+    public class BadgeReceivedEventArgs : EventArgs
+    {
+        public GameBadge GameBadge { get; set; }
+        public User User { get; set; }
+
+        public BadgeReceivedEventArgs(GameBadge gb, User u)
+        {
+            GameBadge = gb;
+            User = u;
+        }
     }
 }

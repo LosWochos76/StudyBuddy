@@ -27,6 +27,7 @@ public class ChallengeServiceTest
         Assert.NotNull(tags);
         Assert.Equal(2, tags.Count);
     }
+
     [Fact]
     public void DeleteTest()
     {
@@ -41,6 +42,7 @@ public class ChallengeServiceTest
 
         Assert.Equal(0, result.Count);
     }
+
     [Fact]
     public void AllTest()
     {
@@ -58,6 +60,7 @@ public class ChallengeServiceTest
         Assert.Equal(2, result.Count);
         Assert.Equal((Challenge)result.Objects.First(), backend.ChallengeService.GetById(1));
     }
+
     [Fact]
     public void GetByIdTest()
     {
@@ -80,6 +83,7 @@ public class ChallengeServiceTest
         Assert.Equal("Test Challenge", challenge.Name);
         Assert.Equal("#tag1 #tag2", challenge.Tags); // This is important!
     }
+
     [Fact]
     public void GetChallengesofBadgeTest()
     {
@@ -94,9 +98,11 @@ public class ChallengeServiceTest
 
         Assert.Equal(0, result.Count);
     }
+
     [Fact]
     public void RemoveAcceptanceTest()
     {
+        // Arrange
         var repository = new RepositoryMock();
         repository.Users.Insert(new User() { ID = 1, Email = "admin@admin.de", Role = Role.Admin, AccountActive = true, EmailConfirmed = true });
         repository.Challenges.Insert(new Challenge() { ID = 1, Name = "Test Challenge" });
@@ -104,13 +110,16 @@ public class ChallengeServiceTest
         backend.CurrentUser = repository.Users.ById(1);
         backend.ChallengeService.AddAcceptance(1, 1);
 
+        // Act
         backend.ChallengeService.RemoveAcceptance(1, 1);    
         var result = repository.GameBadges.GetReceivedBadgesOfUser(1, null).ToList();
 
+        // Test
         Assert.Empty(result);
     }
+
     [Fact]
-    public void AddAcceptanceTest()
+    public void User_receives_Badge_if_coverage_is_met_test()
     {
         // Arrange
         var repository = new RepositoryMock();
@@ -125,11 +134,15 @@ public class ChallengeServiceTest
         repository.Tags.AddTagForBadge(2, 1);
         var backend = new Backend(repository);
         backend.CurrentUser = repository.Users.ById(1);
+        GameBadge badge_received = null;
+        backend.GameBadgeService.BadgeReceived += (obj, eventArgs) => { badge_received = eventArgs.GameBadge; };
 
         // Act
         backend.ChallengeService.AddAcceptance(1, 1);
 
         // Assert
+        Assert.NotNull(badge_received);
+        Assert.Equal(1, badge_received.ID);
         var badges = repository.GameBadges.GetReceivedBadgesOfUser(1, null).ToList();
         Assert.NotNull(badges);
         Assert.Single(badges);

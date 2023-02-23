@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using FirebaseAdmin.Messaging;
+using Org.BouncyCastle.Asn1.Cmp;
 using StudyBuddy.Model;
 using StudyBuddy.Model.Enum;
 using Notification = FirebaseAdmin.Messaging.Notification;
@@ -67,20 +68,37 @@ namespace StudyBuddy.BusinessLogic
             }
         }
 
-        public void SendUserAcceptedChallenge(User user, Challenge challenge)
+        private IEnumerable<string> GetFriendTokens(User user)
         {
             var friends = this.backend.UserService.GetAllFriends(new FriendFilter()
             {
+                Count = int.MaxValue,
                 UserId = user.ID
             });
 
-            var tokens = friends.Objects.SelectMany(friend =>
+            return friends.Objects.SelectMany(friend =>
                     this.backend.Repository.FcmTokens.GetForUser(friend.ID).Select(token => token.Token)
             );
+        }
+
+        public void SendUserAcceptedChallenge(User user, Model.Challenge challenge)
+        {
+            var tokens = GetFriendTokens(user);
+            var title = "Gameucation";
+            var body = $"{user.Firstname} {user.Lastname} hat die Herausforderung '{challenge.Name}' abgeschlossen.";
             
-            string title = "Gameucation";
-            string body = $"{user.Firstname} {user.Lastname} hat die Herausforderung {challenge.Name} abgeschlossen.";
-            
+            this.backend.PushNotificationService.SendMessage(tokens, title, body, new PushNotificationData()
+            {
+                PushNotificationType = PushNotificationTypes.ChallengeAccepted
+            });
+        }
+
+        public void SendUserReceivedBadge(User user, GameBadge badge)
+        {
+            var tokens = GetFriendTokens(user);
+            var title = "Gameucation";
+            var body = $"{user.Firstname} {user.Lastname} hat das Abzeichen '{badge.Name}' erhalten.";
+
             this.backend.PushNotificationService.SendMessage(tokens, title, body, new PushNotificationData()
             {
                 PushNotificationType = PushNotificationTypes.ChallengeAccepted
@@ -93,7 +111,6 @@ namespace StudyBuddy.BusinessLogic
 
             var user = backend.Repository.Users.ById(userId);
             var fcmTokens = backend.Repository.FcmTokens.GetForUser(user.ID).Select(token => token.Token);
-            
             string title = "Gameucation";
             string body = $"{this.backend.CurrentUser.Firstname} {this.backend.CurrentUser.Lastname} gefällt Ihr Beitrag.";
             
@@ -105,33 +122,28 @@ namespace StudyBuddy.BusinessLogic
         
         public void SendFriendShipRequestNotification(int senderId, int recipentId)
         {
-
             var senderUser = backend.Repository.Users.ById(senderId);
-            var fcmTokens = backend.Repository.FcmTokens.GetForUser(recipentId).Select(token => token.Token);
+            var tokens = backend.Repository.FcmTokens.GetForUser(recipentId).Select(token => token.Token);
+            var title = "Gameucation";
+            var body = $"{senderUser.Firstname} {senderUser.Lastname} möchte Ihr Freund sein.";
             
-            string title = "Gameucation";
-            string body = $"{senderUser.Firstname} {senderUser.Lastname} möchte Ihr Freund sein.";
-            
-            /*backend.PushNotificationService.SendMessage(fcmTokens, title, body, new PushNotificationData()
+            backend.PushNotificationService.SendMessage(tokens, title, body, new PushNotificationData()
             {
                 PushNotificationType = PushNotificationTypes.FriendShipRequest
-            });*/
+            });
         }
         
         public void SendFriendShipAcceptedNotification(int senderId, int recipentId)
         {
-
             var recipentUser = backend.Repository.Users.ById(recipentId);
             var fcmTokens = backend.Repository.FcmTokens.GetForUser(senderId).Select(token => token.Token);
-            
-            string title = "Gameucation";
-            string body = $"{recipentUser.Firstname} {recipentUser.Lastname} ist nun ihr Freund.";
+            var title = "Gameucation";
+            var body = $"{recipentUser.Firstname} {recipentUser.Lastname} ist nun ihr Freund.";
             
             backend.PushNotificationService.SendMessage(fcmTokens, title, body, new PushNotificationData()
             {
                 PushNotificationType = PushNotificationTypes.FriendShipAccepted
             });
         }
-        
     }
 }

@@ -51,6 +51,10 @@ namespace StudyBuddy.BusinessLogic
             NotificationUserMetadataService = new NotificationUserMetadataService(this);
 
             ChallengeService.ChallengeCompleted += ChallengeService_ChallengeCompleted;
+            GameBadgeService.BadgeReceived += GameBadgeService_BadgeReceived;
+            RequestService.RequestCreated += RequestService_RequestCreated;
+            RequestService.RequestAccepted += RequestService_RequestAccepted;
+            RequestService.RequestDenied += RequestService_RequestDenied;
         }
 
         public void SetCurrentUserFromToken(string token)
@@ -67,6 +71,25 @@ namespace StudyBuddy.BusinessLogic
             NotificationService.UserAcceptedChallenge(e.User, e.Challenge);
             GameBadgeService.CheckIfUserEarnedGameBadgeAfterChallengeCompleted(e.User, e.Challenge);
             BusinessEventService.TriggerEvent(this, new BusinessEventArgs(BusinessEventType.ChallengeAccepted, e.Challenge));
+            PushNotificationService.SendUserAcceptedChallenge(e.User, e.Challenge);
+        }
+
+        private void GameBadgeService_BadgeReceived(object sender, BadgeReceivedEventArgs e)
+        {
+            NotificationService.UserReceivedBadge(e.User, e.GameBadge);
+            BusinessEventService.TriggerEvent(this, new BusinessEventArgs(BusinessEventType.BadgeReceived, e.GameBadge));
+        }
+
+        private void RequestService_RequestCreated(object sender, RequestEventArgs e)
+        {
+        }
+
+        private void RequestService_RequestAccepted(object sender, RequestEventArgs e)
+        {
+        }
+
+        private void RequestService_RequestDenied(object sender, RequestEventArgs e)
+        {
         }
     }
 }
