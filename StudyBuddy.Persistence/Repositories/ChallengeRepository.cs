@@ -45,7 +45,7 @@ namespace StudyBuddy.Persistence
             }
             else if(!filter.WithDate)
             {
-                sqlPlaceholder += " from challenges where true ";
+                sqlPlaceholder += " from challenges where true";
             }
 
 

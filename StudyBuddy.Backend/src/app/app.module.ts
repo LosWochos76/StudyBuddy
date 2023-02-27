@@ -23,6 +23,8 @@ import { CreateSeriesComponent } from './challenge/create-series/create-series.c
 import { GameBadgeListComponent } from './gamebadge/game-badge-list/game-badge-list.component';
 import { GameBadgeEditComponent } from './gamebadge/game-badge-edit/game-badge-edit.component';
 import { GameBadgeService } from './services/gamebadge.service';
+import { GameObjectStatisticsComponent } from './statistics/gameobjectstatistics/gameobjectstatistics.component';
+import { ItemCompletionStatisticsComponent } from './statistics/itemcompletionstatistics/itemcompletionstatistics.component';
 import { ChallengeSelectComponent } from './challenge/challenge-select/challenge-select.component';
 import { UserSettingsComponent } from './user/user-settings/user-settings.component';
 import { RequestService } from './services/request.service';
@@ -70,6 +72,8 @@ import { FormsModule } from '@angular/forms';
     CreateSeriesComponent,
     GameBadgeListComponent,
     GameBadgeEditComponent,
+    GameObjectStatisticsComponent,
+    ItemCompletionStatisticsComponent,
     ChallengeSelectComponent,
     UserSettingsComponent,
     RequestEditComponent,

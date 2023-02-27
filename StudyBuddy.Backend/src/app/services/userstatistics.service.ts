@@ -15,4 +15,30 @@ export class UserStatisticsService {
         private logger: LoggingService,
         private http: HttpClient,
         private auth: AuthorizationService) { }
+
+    GetGameObjectStatistics(orderAsc: boolean = true) {
+
+        var query = {};
+        query["orderAscending"] = orderAsc;
+
+        return this.http.get(this.url + "Statistics/GetGameObjectStatistics",
+            {
+                params: query,
+                headers: new HttpHeaders({ Authorization: this.auth.getToken() }),
+                observe:'response',
+                responseType: 'blob'
+            })
+    }
+    GetItemCompletionStatistics(orderAsc: boolean = true) {
+        var query = {};
+        query["orderAscending"] = orderAsc;
+
+        return this.http.get(this.url + "Statistics/GetItemCompletionStatistics",
+            {
+                params: query,
+                headers: new HttpHeaders({ Authorization: this.auth.getToken() }),
+                observe: 'response',
+                responseType: 'blob'
+            })
+    }
 }

@@ -13,7 +13,6 @@ export class LogoutComponent implements OnInit {
     current_user: User = null;
 
   constructor(
-    private logger:LoggingService,
     private auth:AuthorizationService,
     private router:Router) {
       this.auth.changed.subscribe((result) => {

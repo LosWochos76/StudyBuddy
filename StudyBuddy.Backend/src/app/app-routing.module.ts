@@ -23,6 +23,8 @@ import { BroadcastComponent } from "./broadcast/broadcast/broadcast.component";
 import { FcmTokenListComponent } from './broadcast/fcm-token-list/fcm-token-list.component';
 import { LoggingListComponent } from './misc/logging-list/logging-list.component';
 import { GameBadgeSuccessComponent } from './gamebadge/game-badge-success/game-badge-success.component';
+import { GameObjectStatisticsComponent } from './statistics/gameobjectstatistics/gameobjectstatistics.component';
+import { ItemCompletionStatisticsComponent } from './statistics/itemcompletionstatistics/itemcompletionstatistics.component';
 import { BusinessEventListComponent } from './businessevent/businessevent-list/businessevent-list.component';
 import { BusinessEventEditComponent } from './businessevent/businessevent-edit/businessevent-edit.component';
 import { ForgotpasswordComponent } from './authentication/forgotpassword/forgotpassword.component';
@@ -43,6 +45,8 @@ const routes: Routes = [
   { path: 'gamebadge', component: GameBadgeListComponent, canActivate: [RouteGuardService] },
   { path: 'gamebadge/:id', component: GameBadgeEditComponent, canActivate: [RouteGuardService] },
   { path: 'gamebadgesuccess/:id', component: GameBadgeSuccessComponent, canActivate: [RouteGuardService] },
+  { path: 'gameobjectstatistics', component: GameObjectStatisticsComponent, canActivate: [RouteGuardService] },
+  { path: 'itemcompletionstatistics', component: ItemCompletionStatisticsComponent, canActivate: [RouteGuardService] },
   { path: 'user', component: UserListComponent, canActivate: [RouteGuardService] },
   { path: 'user/:id', component: UserEditComponent, canActivate: [RouteGuardService] },
   { path: 'userinfo/:id', component: UserInfoComponent, canActivate: [RouteGuardService] },

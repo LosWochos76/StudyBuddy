@@ -19,7 +19,7 @@ namespace StudyBuddy.Api
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddCors(options => options.AddPolicy("all",
-                policy => policy.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader()
+                policy => policy.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader().WithExposedHeaders("content-disposition")
             ));
 
             services.AddControllers(options => { options.Filters.Add(typeof(JsonExceptionFilter)); });

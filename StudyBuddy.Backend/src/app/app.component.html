@@ -6,35 +6,45 @@
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-        <li class="nav-item dropdown" *ngIf="is_logged_in && current_user.isAdmin()">
-          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown"
-            aria-expanded="false">
-            Administration
-          </a>
-          <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-            <li><a class="dropdown-item" routerLink="user">Benutzer</a></li>
-            <li><a class="dropdown-item" routerLink="request">Anfragen</a></li>
-            <li><a class="dropdown-item" routerLink="notification">Benachrichtigungen</a></li>
-            <li><a class="dropdown-item" routerLink="tag">Tags</a></li>
-            <li><a class="dropdown-item" routerLink="broadcast">Push-Nachricht verschicken</a></li>
-            <li><a class="dropdown-item" routerLink="sendemail">Email verschicken</a></li>
-            <li><a class="dropdown-item" routerLink="tokens">Push-Nachrich Tokens</a></li>
-            <li><a class="dropdown-item" routerLink="logging">Logging</a></li>
-            <li><a class="dropdown-item" routerLink="businessevent">Events</a></li>
-          </ul>
-        </li>
-        <li class="nav-item dropdown" *ngIf="is_logged_in">
-          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown"
-            aria-expanded="false">
-            Spielelemente
-          </a>
-          <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-            <li><a class="dropdown-item" routerLink="challenge">Herausforderungen</a></li>
-            <li><a class="dropdown-item" routerLink="gamebadge">Abzeichen</a></li>
-          </ul>
-        </li>
-      </ul>
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item dropdown" *ngIf="is_logged_in && current_user.isAdmin()">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown"
+                   aria-expanded="false">
+                    Administration
+                </a>
+                <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <li><a class="dropdown-item" routerLink="user">Benutzer</a></li>
+                    <li><a class="dropdown-item" routerLink="request">Anfragen</a></li>
+                    <li><a class="dropdown-item" routerLink="notification">Benachrichtigungen</a></li>
+                    <li><a class="dropdown-item" routerLink="tag">Tags</a></li>
+                    <li><a class="dropdown-item" routerLink="broadcast">Push-Nachricht verschicken</a></li>
+                    <li><a class="dropdown-item" routerLink="sendemail">Email verschicken</a></li>
+                    <li><a class="dropdown-item" routerLink="tokens">Push-Nachrich Tokens</a></li>
+                    <li><a class="dropdown-item" routerLink="logging">Logging</a></li>
+                    <li><a class="dropdown-item" routerLink="businessevent">Events</a></li>
+                </ul>
+            </li>
+            <li class="nav-item dropdown" *ngIf="is_logged_in">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown"
+                   aria-expanded="false">
+                    Spielelemente
+                </a>
+                <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <li><a class="dropdown-item" routerLink="challenge">Herausforderungen</a></li>
+                    <li><a class="dropdown-item" routerLink="gamebadge">Abzeichen</a></li>
+                </ul>
+            </li>
+            <li class="nav-item dropdown" *ngIf="is_logged_in">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown"
+                   aria-expanded="false">
+                    Statistiken
+                </a>
+                <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <li><a class="dropdown-item" routerLink="gameobjectstatistics">Statistik Spielobjekte</a></li>
+                    <li><a class="dropdown-item" routerLink="itemcompletionstatistics">Statistik Abschl&uuml;sse</a></li>
+                </ul>
+            </li>
+        </ul>
       <ul class="navbar-nav mr-auto mb-2 mb-lg-0" *ngIf="is_logged_in">
         <li class="nav-item">
           <a class="nav-link active" aria-current="page" routerLink="usersettings">Einstellungen</a>

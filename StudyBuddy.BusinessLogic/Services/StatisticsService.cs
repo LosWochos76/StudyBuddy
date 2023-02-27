@@ -24,24 +24,34 @@ namespace StudyBuddy.BusinessLogic.Services
 
         public IEnumerable<User> GetUsersWithDateCreated(bool orderAscending)
         {
+            if (backend.CurrentUser == null)
+                throw new UnauthorizedAccessException("Unauthorized!");
             return backend.Repository.StatisticsRepository.GetUsersWithDateCreated(orderAscending);
         }
         public IEnumerable<Challenge> GetChallengeStatistic(bool orderAscending)
         {
+            if (backend.CurrentUser == null)
+                throw new UnauthorizedAccessException("Unauthorized!");
             return backend.Repository.StatisticsRepository.GetChallengeStatistic(orderAscending);
         }
 
         public IEnumerable<GameBadge> GetBadgeStatistics(bool orderAscending)
         {
+            if (backend.CurrentUser == null)
+                throw new UnauthorizedAccessException("Unauthorized!");
             return backend.Repository.StatisticsRepository.GetBadgeStatistic(orderAscending);
         }
 
         public IEnumerable<GameObjectStatistics> GetChallengeCompletionStatistics(bool orderAscending)
         {
+            if (backend.CurrentUser == null)
+                throw new UnauthorizedAccessException("Unauthorized!");
             return backend.Repository.StatisticsRepository.GetChallengeCompletionStatistics(orderAscending);
         }
         public IEnumerable<GameObjectStatistics> GetBadgeCompletionStatistics(bool orderAscending)
         {
+            if (backend.CurrentUser == null)
+                throw new UnauthorizedAccessException("Unauthorized!");
             return backend.Repository.StatisticsRepository.GetBadgeCompletionStatistics(orderAscending);
         }
     }
