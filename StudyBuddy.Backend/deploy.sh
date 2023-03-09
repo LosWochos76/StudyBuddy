@@ -1,14 +1,13 @@
 #!/bin/sh
 ng build --configuration production
-firebase deploy
 
 zip dist.zip dist/*
-sftp root@gameucation.eu <<EOF
+sftp root@www.gameucation.de <<EOF
 put dist.zip
 exit
 EOF
 
-ssh root@gameucation.eu <<EOF
+ssh root@www.gameucation.de <<EOF
 unzip dist.zip
 cd backend
 rm *
