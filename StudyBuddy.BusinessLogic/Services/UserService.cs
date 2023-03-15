@@ -95,8 +95,10 @@ namespace StudyBuddy.BusinessLogic
             backend.Repository.Users.Update(user);
 
             string subject = "Ihr neues Gameucation-Passwort";
-            string message = "Guten Tag " + user.Nickname + ",<br> das neue Passwort ihres Kontos lautet: " + user.Password + "<br> Bitte ändern Sie das Password aus Sicherheitsgründen umgehend.";
+            string message = "Guten Tag " + user.Nickname + ",<br> das neue Passwort ihres Kontos lautet: " +
+                user.Password + "<br> Bitte ändern Sie das Password aus Sicherheitsgründen umgehend.";
             MailKitHelper.SendMailAsync(user.Email, subject, message);
+
             return new LoginResult() { Status = LoginStatus.Success };
         }
 

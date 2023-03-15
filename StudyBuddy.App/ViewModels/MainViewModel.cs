@@ -1,7 +1,6 @@
 ﻿using System.Threading.Tasks;
 using System.Windows.Input;
 using StudyBuddy.App.Api;
-using StudyBuddy.App.Misc;
 using StudyBuddy.App.Views;
 using Xamarin.CommunityToolkit.ObjectModel;
 using Xamarin.Forms;
@@ -15,8 +14,10 @@ namespace StudyBuddy.App.ViewModels
         public ICommand ThemeCommand { get; set; }
         public ICommand LogoutCommand { get; set; }
         public Command AddFriendsCommand { get; }
-        public Command OpenBrowserCommand { get; }
+        public AsyncCommand AboutCommand { get; }
+        public AsyncCommand PrivacyNoticeCommand { get; }
         public AsyncCommand GetRequestCountCommand { get; }
+
         string _count = string.Empty;
         public string Count
         {
@@ -36,7 +37,8 @@ namespace StudyBuddy.App.ViewModels
             FriendsCommand = new Command(Friends);
             LogoutCommand = new Command(Logout);
             ThemeCommand = new Command(Theme);
-            OpenBrowserCommand = new Command<string>((x) => OpenBrowser(x));
+            AboutCommand = new AsyncCommand(About);
+            PrivacyNoticeCommand = new AsyncCommand(PrivacyNotice);
             AddFriendsCommand = new Command(AddFriends);
             GetRequestCountCommand = new AsyncCommand(GetRequestsCount);
         }
@@ -46,9 +48,14 @@ namespace StudyBuddy.App.ViewModels
             api.Device.PushPage(new ThemePage());
         }
 
-        public void OpenBrowser(string str)
+        public Task About()
         {
-            api.Device.OpenBrowser(str);
+            return api.Device.OpenBrowser(Settings.WebUrl);
+        }
+
+        public Task PrivacyNotice()
+        {
+            return api.Device.OpenBrowser(Settings.WebUrl + "datenschutzerklaerung");
         }
 
         private void AddFriends()

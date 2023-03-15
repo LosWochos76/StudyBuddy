@@ -77,7 +77,7 @@ namespace StudyBuddy.BusinessLogic
             if (!CheckForValidMail(email))
                 return;
 
-            string baseurl = "https://backend.gameucation.eu/login/verifyemail";
+            string baseurl = Settings.BackendUrl + "/login/verifyemail";
             string subject = "E-Mail Adresse bestätigen";
             var param = new Dictionary<string, string>
             {
@@ -95,7 +95,7 @@ namespace StudyBuddy.BusinessLogic
             if (!CheckForValidMail(email))
                 return;
 
-            string baseurl = "https://api.gameucation.eu/login/generatepassword";
+            string baseurl = Settings.ApiUrl + "/login/generatepassword";
             string subject = "Passwort zurücksetzen";
             var param = new Dictionary<string, string>
             {

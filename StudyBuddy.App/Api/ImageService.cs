@@ -13,13 +13,11 @@ namespace StudyBuddy.App.Api
     public class ImageService : IImageService
     {
         private readonly IApi api;
-        private readonly string base_url;
         private readonly HttpClient client;
 
-        public ImageService(IApi api, string base_url)
+        public ImageService(IApi api)
         {
             this.api = api;
-            this.base_url = base_url;
             client = new HttpClient(Helper.GetInsecureHandler());
         }
 
@@ -35,7 +33,7 @@ namespace StudyBuddy.App.Api
             }
 
             var rh = new WebRequestHelper(api.Authentication.Token);
-            var result = await rh.Load<PersistentImage>(base_url + "Image/OfUser", HttpMethod.Post, pi);
+            var result = await rh.Load<PersistentImage>(Settings.ApiUrl + "Image/OfUser", HttpMethod.Post, pi);
             user.ProfileImage = ImageSource.FromStream(() => new MemoryStream(result.Content));
 
             return true;
@@ -47,7 +45,7 @@ namespace StudyBuddy.App.Api
                 return false;
 
             var rh = new WebRequestHelper(api.Authentication.Token);
-            var result = await rh.Load<PersistentImage>(base_url + "Image/OfUser/" + user.ID, HttpMethod.Get);
+            var result = await rh.Load<PersistentImage>(Settings.ApiUrl + "Image/OfUser/" + user.ID, HttpMethod.Get);
             if (result == null)
                 return false;
 

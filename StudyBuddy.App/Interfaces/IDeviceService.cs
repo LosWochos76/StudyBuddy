@@ -18,7 +18,7 @@ namespace StudyBuddy.App.Api
         void ShowMessage(string message, string title);
         void ShowMessage(string message, string title, string buttonText, Action afterHideCallback);
         void ShowMessageBox(string message, string title);
-        void OpenBrowser(string url);
+        Task OpenBrowser(string url);
         Task<bool> ShowMessage(string message, string title, string buttonConfirmText, string buttonCancelText, Action<bool> afterHideCallback);
         Task<string> DisplayPrompt(string message, string title);
         Task Share(string title, string body);

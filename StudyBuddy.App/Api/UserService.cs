@@ -10,13 +10,11 @@ namespace StudyBuddy.App.Api
     public class UserService : IUserService
     {
         private readonly IApi api;
-        private readonly string base_url;
         private readonly HttpClient client;
 
-        public UserService(IApi api, string base_url)
+        public UserService(IApi api)
         {
             this.api = api;
-            this.base_url = base_url;
             client = new HttpClient(Helper.GetInsecureHandler());
         }
 
@@ -25,7 +23,7 @@ namespace StudyBuddy.App.Api
             var filter = new FriendFilter() { };
             var currentUserId = api.Authentication.CurrentUser.ID;
             var rh = new WebRequestHelper(api.Authentication.Token);
-            var result = await rh.Get<UserListViewModel>(base_url + "User/" + currentUserId + "/Friends/", filter);
+            var result = await rh.Get<UserListViewModel>(Settings.ApiUrl + "User/" + currentUserId + "/Friends/", filter);
             return result.Count;
         }
 
@@ -40,7 +38,7 @@ namespace StudyBuddy.App.Api
 
             var currentUserId = api.Authentication.CurrentUser.ID;
             var rh = new WebRequestHelper(api.Authentication.Token);
-            return await rh.Get<UserListViewModel>(base_url + "User/" + currentUserId + "/Friends/", filter);
+            return await rh.Get<UserListViewModel>(Settings.ApiUrl + "User/" + currentUserId + "/Friends/", filter);
         }
         public async Task<int> GetCommonFriends(UserViewModel friend)
         {
@@ -49,7 +47,7 @@ namespace StudyBuddy.App.Api
             };
             var currentUserId = api.Authentication.CurrentUser.ID;
             var rh = new WebRequestHelper(api.Authentication.Token);
-            return await rh.Get<int>(base_url + "User/" + currentUserId + "/CountOfCommonFriends/" + friend.ID, filter);
+            return await rh.Get<int>(Settings.ApiUrl + "User/" + currentUserId + "/CountOfCommonFriends/" + friend.ID, filter);
         }
         public async Task<UserListViewModel> GetNotFriends(string search_string = "", int skip = 0)
         {
@@ -63,7 +61,7 @@ namespace StudyBuddy.App.Api
 
             var currentUserId = api.Authentication.CurrentUser.ID;
             var rh = new WebRequestHelper(api.Authentication.Token);
-            return await rh.Get<UserListViewModel>(base_url + "User/" + currentUserId + "/NotFriends/", filter);
+            return await rh.Get<UserListViewModel>(Settings.ApiUrl + "User/" + currentUserId + "/NotFriends/", filter);
         }
 
         public async Task<bool> RemoveFriend(UserViewModel uvm)
@@ -71,7 +69,7 @@ namespace StudyBuddy.App.Api
             var current_user = api.Authentication.CurrentUser;
 
             var rh = new WebRequestHelper(api.Authentication.Token);
-            var content = await rh.Load<RequestResult>(base_url + "User/" + current_user.ID + "/Friend/" + uvm.ID, HttpMethod.Delete);
+            var content = await rh.Load<RequestResult>(Settings.ApiUrl + "User/" + current_user.ID + "/Friend/" + uvm.ID, HttpMethod.Delete);
             if (content == null)
                 return false;
 
@@ -82,39 +80,39 @@ namespace StudyBuddy.App.Api
         public async Task<UserViewModel> GetById(int user_id)
         {
             var rh = new WebRequestHelper(api.Authentication.Token);
-            return await rh.Load<UserViewModel>(base_url + "User/" + user_id, HttpMethod.Get);
+            return await rh.Load<UserViewModel>(Settings.ApiUrl + "User/" + user_id, HttpMethod.Get);
         }
 
         public async Task<bool> Update(UserViewModel uvm)
         {
             var rh = new WebRequestHelper(api.Authentication.Token);
-            var content = await rh.Put<User>(base_url + "User/" + uvm.ID, UserViewModel.ToModel(uvm));
+            var content = await rh.Put<User>(Settings.ApiUrl + "User/" + uvm.ID, UserViewModel.ToModel(uvm));
             return content != null;
         }
 
         public async Task<UserId> IdByEmail(string email)
         {
             var rh = new WebRequestHelper();
-            return await rh.Load<UserId>(base_url + "User/UserIdByEmail/" + email, HttpMethod.Get);
+            return await rh.Load<UserId>(Settings.ApiUrl + "User/UserIdByEmail/" + email, HttpMethod.Get);
         }
 
         // TODo: Die Klasse UserId ist doch wohl ein Scherz, oder?!?
         public async Task<UserId> IdByNickname(string nickname)
         {
             var rh = new WebRequestHelper();
-            return await rh.Load<UserId>(base_url + "User/UserIdByNickname/" + nickname, HttpMethod.Get);
+            return await rh.Load<UserId>(Settings.ApiUrl + "User/UserIdByNickname/" + nickname, HttpMethod.Get);
         }
 
         public async Task<UserViewModel> Register(UserViewModel new_user)
         {
             var rh = new WebRequestHelper();
-            return await rh.Post<UserViewModel>(base_url + "User/", UserViewModel.ToModel(new_user));
+            return await rh.Post<UserViewModel>(Settings.ApiUrl + "User/", UserViewModel.ToModel(new_user));
         }
 
         public async Task<IEnumerable<UserViewModel>> Likers(int notification_id)
         {
             var rh = new WebRequestHelper(api.Authentication.Token);
-            return await rh.Load<IEnumerable<UserViewModel>>(base_url + "Notification/" + notification_id + "/Likers", HttpMethod.Get);
+            return await rh.Load<IEnumerable<UserViewModel>>(Settings.ApiUrl + "Notification/" + notification_id + "/Likers", HttpMethod.Get);
         }
     }
 }

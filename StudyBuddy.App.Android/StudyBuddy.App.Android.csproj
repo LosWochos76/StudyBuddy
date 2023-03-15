@@ -72,12 +72,11 @@
     <PackageReference Include="Xam.Shell.Badge">
       <Version>1.0.22</Version>
     </PackageReference>
-    <PackageReference Include="Xamarin.Forms" Version="5.0.0.2545" />
-    <PackageReference Include="Xamarin.Essentials" Version="1.7.4" />
+    <PackageReference Include="Xamarin.Forms" Version="5.0.0.2578" />
+    <PackageReference Include="Xamarin.Essentials" Version="1.7.5" />
     <PackageReference Include="Xamarin.Forms.Visual.Material">
-      <Version>5.0.0.2545</Version>
+      <Version>5.0.0.2578</Version>
     </PackageReference>
-    <PackageReference Include="Xamarin.GooglePlayServices.Base" Version="118.1.0" />
     <PackageReference Include="ZXing.Net.Mobile.Forms">
       <Version>3.1.0-beta2</Version>
     </PackageReference>

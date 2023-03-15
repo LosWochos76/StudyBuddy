@@ -53,17 +53,21 @@ namespace StudyBuddy.Api
             var result = backend.UserService.GeneratePassword(data);
 
             if (result.Status != 0)
+            {
                 return new ContentResult
                 {
                     Content = "<p> Es ist ein Fehler aufgetreten.</p>",
                     ContentType = "text/html; charset=utf-8"
                 };
-
-            return new ContentResult
+            }
+            else
             {
-                Content = "<p>Das Passwort wurde erfolgreich zurückgesetzt. In kürze erhalten Sie eine E-Mail mit dem neuen Passwort.</p>",
-                ContentType = "text/html; charset=utf-8"
-            };
+                return new ContentResult
+                {
+                    Content = "<p>Das Passwort wurde erfolgreich zurÃ¼ckgesetzt. In KÃ¼rze erhalten Sie eine E-Mail mit dem neuen Passwort.</p>",
+                    ContentType = "text/html; charset=utf-8"
+                };
+            }
         }
 
         [Route("/Login/ResetPassword/")]

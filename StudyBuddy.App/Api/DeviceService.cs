@@ -108,9 +108,9 @@ namespace StudyBuddy.App.Api
                 "OK");
         }
 
-        public void OpenBrowser(string url)
+        public Task OpenBrowser(string url)
         {
-            Launcher.OpenAsync(new Uri(url));
+            return Launcher.OpenAsync(new Uri(url));
         }
 
         public async Task<string> DisplayPrompt(string message, string title)

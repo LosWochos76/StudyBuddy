@@ -12,23 +12,20 @@ namespace StudyBuddy.App.Api
 {
     public class ApiFacade : IApi
     {
-        private readonly string base_url = "https://api.gameucation.de/";
-        //private readonly string base_url = "https://localhost:5001/";
-
         public ApiFacade()
         {
             Device = new DeviceService();
-            Logging = new LoggingService(this, base_url);
-            Authentication = new AuthenticationService(this, base_url);
-            Challenges = new ChallengeService(this, base_url);
-            FcmTokens = new FcmTokenService(this, base_url);
-            Users = new UserService(this, base_url);
-            Badges = new BadgeService(this, base_url);
-            Requests = new RequestService(this, base_url);
-            Notifications = new NotificationService(this, base_url);
-            NotificationUserMetadataService = new NotificationUserMetadataService(this, base_url);
-            Statistics = new StatisticsService(this, base_url);
-            ImageService = new ImageService(this, base_url);
+            Logging = new LoggingService(this);
+            Authentication = new AuthenticationService(this);
+            Challenges = new ChallengeService(this);
+            FcmTokens = new FcmTokenService(this);
+            Users = new UserService(this);
+            Badges = new BadgeService(this);
+            Requests = new RequestService(this);
+            Notifications = new NotificationService(this);
+            NotificationUserMetadataService = new NotificationUserMetadataService(this);
+            Statistics = new StatisticsService(this);
+            ImageService = new ImageService(this);
 
             LoadApiVersion();
         }
@@ -72,7 +69,7 @@ namespace StudyBuddy.App.Api
         private async Task LoadApiVersion()
         {
             var rh = new WebRequestHelper();
-            ApiVersion = await rh.Get<Version>(base_url + "ApiVersion", HttpMethod.Get);
+            ApiVersion = await rh.Get<Version>(Settings.ApiUrl + "ApiVersion", HttpMethod.Get);
             NotifyPropertyChanged("ApiVersion");
 
             if (ApiVersion > AppVersion && AppIsTooOld is not null)

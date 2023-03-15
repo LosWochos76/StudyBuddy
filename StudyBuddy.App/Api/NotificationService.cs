@@ -12,13 +12,11 @@ namespace StudyBuddy.App.Api
     public class NotificationService : INotificationService
     {
         private readonly IApi api;
-        private readonly string base_url;
         private readonly HttpClient client;
 
-        public NotificationService(IApi api, string base_url)
+        public NotificationService(IApi api)
         {
             this.api = api;
-            this.base_url = base_url;
             client = new HttpClient(Helper.GetInsecureHandler());
         }
 
@@ -35,13 +33,11 @@ namespace StudyBuddy.App.Api
             };
 
             var rh = new WebRequestHelper(api.Authentication.Token);
-            var content = await rh.Get<IEnumerable<NotificationViewModel>>(base_url + "Notification/Feed", filter);
+            var content = await rh.Get<IEnumerable<NotificationViewModel>>(Settings.ApiUrl + "Notification/Feed", filter);
             if (content == null)
                 return new List<NotificationViewModel>();
 
             return content;
         }
-
- 
     }
 }

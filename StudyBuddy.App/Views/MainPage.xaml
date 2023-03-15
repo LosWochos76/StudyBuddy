@@ -181,8 +181,7 @@
         </Shell.MenuItemTemplate>
     </MenuItem>
 
-    <MenuItem Command="{Binding OpenBrowserCommand}"
-              CommandParameter="https://gameucation.eu/">
+    <MenuItem Command="{Binding AboutCommand}">
         <Shell.MenuItemTemplate>
             <DataTemplate>
                 <Grid ColumnDefinitions="0.2*,0.8*"
@@ -202,8 +201,7 @@
         </Shell.MenuItemTemplate>
     </MenuItem>
 
-    <MenuItem Command="{Binding OpenBrowserCommand}"
-              CommandParameter="https://gameucation.eu/datenschutzerklaerung/">
+    <MenuItem Command="{Binding PrivacyNoticeCommand}">
         <Shell.MenuItemTemplate>
             <DataTemplate>
                 <Grid ColumnDefinitions="0.2*,0.8*"

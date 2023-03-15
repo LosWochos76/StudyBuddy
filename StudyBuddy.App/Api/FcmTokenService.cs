@@ -11,13 +11,11 @@ namespace StudyBuddy.App.Api
     public class FcmTokenService : IFcmTokenService
     {
         private readonly IApi api;
-        private readonly string base_url;
         private readonly HttpClient client;
 
-        public FcmTokenService(IApi api, string base_url)
+        public FcmTokenService(IApi api)
         {
             this.api = api;
-            this.base_url = base_url;
             client = new HttpClient(Helper.GetInsecureHandler());
 
             api.Authentication.LoginStateChanged += (sender, args) =>
@@ -48,7 +46,7 @@ namespace StudyBuddy.App.Api
                 Token = fcmToken
             };
 
-            var requestMessage = new HttpRequestMessage(HttpMethod.Post, base_url + "FcmToken");
+            var requestMessage = new HttpRequestMessage(HttpMethod.Post, Settings.ApiUrl + "FcmToken");
             requestMessage.Headers.Add("Authorization", api.Authentication.Token);
             requestMessage.Content =
                 new StringContent(JsonSerializer.Serialize(payload), Encoding.UTF8, "application/json");

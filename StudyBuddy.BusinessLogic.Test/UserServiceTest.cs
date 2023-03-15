@@ -20,6 +20,7 @@ namespace StudyBuddy.BusinessLogic.Test
             backend = new Backend(repository);
             backend.CurrentUser = repository.Users.ById(1);
         }
+
         [Fact]
         public void GetAllTest()
         {
@@ -30,6 +31,7 @@ namespace StudyBuddy.BusinessLogic.Test
             Assert.NotNull(result);
             Assert.Equal(2, result.Count);
         }
+
         [Fact]
         public void GetByIdTest()
         { 
@@ -55,6 +57,7 @@ namespace StudyBuddy.BusinessLogic.Test
             Assert.NotNull(result);
             Assert.Equal(LoginStatus.Success, result.Status);
         }
+
         [Fact]
         public void GeneratePasswordTest()
         {
@@ -68,6 +71,7 @@ namespace StudyBuddy.BusinessLogic.Test
             Assert.NotNull(result);
             Assert.NotEqual("password", user.Password);
         }
+
         [Fact]
         public void VerifyEmailTest()
         {

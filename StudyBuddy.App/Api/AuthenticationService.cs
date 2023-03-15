@@ -15,13 +15,11 @@ namespace StudyBuddy.App.Api
     internal class AuthenticationService : IAuthenticationService
     {
         private IApi api;
-        private readonly string base_url;
         private readonly HttpClient client;
 
-        public AuthenticationService(IApi api, string base_url)
+        public AuthenticationService(IApi api)
         {
             this.api = api;
-            this.base_url = base_url;
             client = new HttpClient(Helper.GetInsecureHandler());
         }
 
@@ -34,7 +32,7 @@ namespace StudyBuddy.App.Api
             try
             {
                 var rh = new WebRequestHelper();
-                LoginResult response = await rh.Post<LoginResult>(base_url + "Login", credentials);
+                LoginResult response = await rh.Post<LoginResult>(Settings.ApiUrl + "Login", credentials);
                 if (response == null)
                     return LoginStatus.InvalidApiResponse;
 
@@ -101,13 +99,13 @@ namespace StudyBuddy.App.Api
         public async Task<bool> IsTokenValid(string token)
         {
             var rh = new WebRequestHelper();
-            return await rh.Put<bool>(base_url + "Login", token);
+            return await rh.Put<bool>(Settings.ApiUrl + "Login", token);
         }
 
         public async Task<bool> SendPasswortResetMail(string email)
         {
             var rh = new WebRequestHelper();
-            var response = await rh.Load<LoginResult>(base_url + "Login/SendPasswortResetMail", HttpMethod.Post, email);
+            var response = await rh.Load<LoginResult>(Settings.ApiUrl + "Login/SendPasswortResetMail", HttpMethod.Post, email);
 
             if (response.Status != 0)
                 return false;
@@ -118,7 +116,7 @@ namespace StudyBuddy.App.Api
         public async Task<bool> SendVerificationMail(string email)
         {
             var rh = new WebRequestHelper();
-            var response = await rh.Load<LoginResult>(base_url + "Login/SendVerificationMail", HttpMethod.Post, email);
+            var response = await rh.Load<LoginResult>(Settings.ApiUrl + "Login/SendVerificationMail", HttpMethod.Post, email);
 
             if (response.Status != 0)
                 return false;

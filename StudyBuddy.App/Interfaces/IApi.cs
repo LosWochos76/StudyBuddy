@@ -1,6 +1,5 @@
 ﻿using System;
 using System.ComponentModel;
-using System.Threading.Tasks;
 using StudyBuddy.App.Interfaces;
 using StudyBuddy.App.ViewModels;
 
@@ -33,6 +32,6 @@ namespace StudyBuddy.App.Api
         event EventHandler<FriendshipStateChangedEventArgs> FriendshipStateChanged;
         void RaiseFriendsChanged(object sender, FriendshipStateChangedEventArgs args);
 
-        public event AppIsTooOldEventHandler AppIsTooOld;
+        event AppIsTooOldEventHandler AppIsTooOld;
     }
 }

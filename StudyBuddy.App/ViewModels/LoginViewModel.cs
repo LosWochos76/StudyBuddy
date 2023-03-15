@@ -68,13 +68,14 @@ namespace StudyBuddy.App.ViewModels
 
         private void Info()
         {
-            api.Device.OpenBrowser("https://gameucation.eu/");
+            api.Device.OpenBrowser(Settings.ApiUrl);
         }
 
         private async void Register()
         {
             await api.Device.PushPage(new RegisterPage());
         }
+
         private async Task PasswordForgotten()
         {
             var answer = await api.Device.ShowMessage(
@@ -111,7 +112,7 @@ namespace StudyBuddy.App.ViewModels
 
         private void Imprint()
         {
-            api.Device.OpenBrowser("https://gameucation.eu/impressum/");
+            api.Device.OpenBrowser(Settings.WebUrl + "impressum/");
         }
 
         private async Task Login()
@@ -125,7 +126,7 @@ namespace StudyBuddy.App.ViewModels
                     await api.Device.GoToPath("//ChallengesPage");
                     break;
                 case LoginStatus.EmailNotVerified:
-                    var url = "https://backend.gameucation.eu/login/verificationrequired;email=";
+                    var url = Settings.ApiUrl + "/login/verificationrequired;email=";
                     var link = url + uc.EMail;
                     api.Device.OpenBrowser(link);
                     break;

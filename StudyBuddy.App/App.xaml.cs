@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Net;
-using System.Threading.Tasks;
 using StudyBuddy.App.Api;
 using StudyBuddy.App.Interfaces;
 using StudyBuddy.App.Misc;
@@ -18,32 +17,20 @@ namespace StudyBuddy.App
         {
             InitializeComponent();
 
-            if (!CheckConnection())
-                return;
+            if (!AppHasInternetConnection || !IsApiReachable)
+            {
+                MainPage = new NoConnectionPage();
+            }
+            else
+            {
+                SetupServices();
 
-            SetupServices();
-            var api = TinyIoCContainer.Current.Resolve<IApi>();
-            api.AppIsTooOld += Api_AppIsTooOld;
+                var api = TinyIoCContainer.Current.Resolve<IApi>();
+                api.AppIsTooOld += (object source, AppIsTooOldEventArgs args) => { MainPage = new AppTooOldPage(); };
 
-            if (api.AppVersion >= api.ApiVersion)
-                MainPage = new MainPage();
-        }
-
-        private void Api_AppIsTooOld(object source, AppIsTooOldEventArgs args)
-        {
-            MainPage = new AppTooOldPage();
-        }
-
-        private bool CheckConnection()
-        {
-            var has_connection = App_HasConnection();
-            var api_reachable = Api_Reachable();
-
-            if (has_connection && api_reachable)
-                return true;
-
-            MainPage = new NoConnectionPage();
-            return false;
+                if (api.AppVersion >= api.ApiVersion)
+                    MainPage = new MainPage();
+            }
         }
 
         private void SetupServices()
@@ -63,22 +50,22 @@ namespace StudyBuddy.App
 
         protected override async void OnStart()
         {
-            if (App_HasConnection() && Api_Reachable())
-            {
-                var api = TinyIoCContainer.Current.Resolve<IApi>();
-                if (!api.Device.HasPreference("Login"))
-                    return;
+            if (!AppHasInternetConnection || !IsApiReachable)
+                return;
 
-                var content = api.Device.GetPreference("Login", string.Empty);
-                var result = await api.Authentication.LoginFromJson(content);
+            var api = TinyIoCContainer.Current.Resolve<IApi>();
+            if (!api.Device.HasPreference("Login"))
+                return;
 
-                if (result)
-                    await Shell.Current.GoToAsync("//ChallengesPage");
-                else
-                    Preferences.Remove("Login");
+            var content = api.Device.GetPreference("Login", string.Empty);
+            var result = await api.Authentication.LoginFromJson(content);
 
-                OnResume();
-            }
+            if (result)
+                await Shell.Current.GoToAsync("//ChallengesPage");
+            else
+                Preferences.Remove("Login");
+
+            OnResume();
         }
 
         protected override void OnSleep()
@@ -95,43 +82,51 @@ namespace StudyBuddy.App
             RequestedThemeChanged += App_RequestedThemeChanged;
         }
 
-        private bool Api_Reachable()
+        private bool IsApiReachable
         {
-            var url = "https://api.gameucation.eu/";
-            var reachable = false;
-            try
+            get
             {
-                HttpWebRequest myHttpWebRequest = (HttpWebRequest)WebRequest.Create(url);
-                HttpWebResponse myHttpWebResponse = (HttpWebResponse)myHttpWebRequest.GetResponse();
-                if (myHttpWebResponse.StatusCode == HttpStatusCode.OK)
-                    reachable = true;
-                myHttpWebResponse.Close();
+                var reachable = false;
+
+                try
+                {
+                    var request = (HttpWebRequest)WebRequest.Create(Settings.ApiUrl);
+                    using (var response = (HttpWebResponse)request.GetResponse())
+                    {
+                        reachable = response.StatusCode == HttpStatusCode.OK;
+                    }
+                }
+                catch (WebException e)
+                {
+                    //Current.MainPage.DisplayAlert("Achtung!",$"\r\nWebException Raised. The following error occurred : {0},{e.Status}", "Ok");
+                }
+                catch (Exception e)
+                {
+                    //Current.MainPage.DisplayAlert("Achtung!",$"\nThe following Exception was raised : {0} , {e.Message}", "Ok");
+                }
+
+                return reachable;
             }
-            catch(WebException e)
-            {
-                //Current.MainPage.DisplayAlert("Achtung!",$"\r\nWebException Raised. The following error occurred : {0},{e.Status}", "Ok");
-            }
-            catch(Exception e)
-            {
-                //Current.MainPage.DisplayAlert("Achtung!",$"\nThe following Exception was raised : {0} , {e.Message}", "Ok");
-            }
-            return reachable;
         }
 
-        private bool App_HasConnection()
+        private bool AppHasInternetConnection
         {
-            var internet = Connectivity.NetworkAccess;
-            if (internet == NetworkAccess.None || internet == NetworkAccess.Unknown ||
-                internet == NetworkAccess.Local || internet == NetworkAccess.ConstrainedInternet)
-                return false;
-            return true;
+            get
+            {
+                var internet = Connectivity.NetworkAccess;
+                if (internet == NetworkAccess.None || internet == NetworkAccess.Unknown ||
+                    internet == NetworkAccess.Local || internet == NetworkAccess.ConstrainedInternet)
+                    return false;
+
+                return true;
+            }
         }
 
         private void App_ConnectivityChanged(object sender, ConnectivityChangedEventArgs e)
         {
             MainThread.BeginInvokeOnMainThread(() =>
             {
-                if (!App_HasConnection())
+                if (!AppHasInternetConnection)
                     Current.MainPage.DisplayAlert("Achtung!",
                         $"Es wurde keine Internetverbindung gefunden!\nVerbindungstyp: {e.NetworkAccess.ToString()}",
                         "Ok");

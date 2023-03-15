@@ -1,5 +1,4 @@
-﻿using System;
-using System.Net.Http;
+﻿using System.Net.Http;
 using System.Threading.Tasks;
 using StudyBuddy.App.Misc;
 using StudyBuddy.Model;
@@ -9,20 +8,18 @@ namespace StudyBuddy.App.Api
     public class LoggingService : ILoggingService
     {
         private readonly IApi api;
-        private readonly string base_url;
         private readonly HttpClient client;
 
-        public LoggingService(IApi api, string base_url)
+        public LoggingService(IApi api)
         {
             this.api = api;
-            this.base_url = base_url;
             client = new HttpClient(Helper.GetInsecureHandler());
         }
 
         public async Task Log(LogMessage message)
         {
             var rh = new WebRequestHelper(api.Authentication.Token);
-            var content = await rh.Load<RequestResult>(base_url + "Logging/", HttpMethod.Post, message);
+            var content = await rh.Load<RequestResult>(Settings.ApiUrl + "Logging/", HttpMethod.Post, message);
         }
 
         public async Task LogDebug(string message)

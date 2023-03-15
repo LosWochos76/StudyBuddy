@@ -31,17 +31,13 @@ export class VerifyemailComponent implements OnInit {
             token: this._token,
             email: this._email
         }
+
         let result = this.service.verifyEmail(verifyEmailData);
-        if (result)
+        if (result) {
             this.showSuccess = true; //logik in service verlegen
-        else {
+        } else {
             this.logger.debug(`Verification for ${this._email} failed.`)
             this.showError = true;
         }
-            
-    }
-
-    async toLogin() {
-        this.router.navigate(['login']);
     }
 }

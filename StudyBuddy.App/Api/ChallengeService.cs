@@ -9,18 +9,16 @@ namespace StudyBuddy.App.Api
     internal class ChallengeService : IChallengeService
     {
         private readonly IApi api;
-        private readonly string base_url;
 
-        public ChallengeService(IApi api, string base_url)
+        public ChallengeService(IApi api)
         {
             this.api = api;
-            this.base_url = base_url;
         }
 
         private async Task<ChallengeListViewModel> All(ChallengeFilter filter)
         {
             var rh = new WebRequestHelper(api.Authentication.Token);
-            return await rh.Get<ChallengeListViewModel>(base_url + "Challenge", filter);
+            return await rh.Get<ChallengeListViewModel>(Settings.ApiUrl + "Challenge", filter);
         }
 
         public async Task<ChallengeListViewModel> ForToday(string search_string = "", int skip = 0)
@@ -54,19 +52,19 @@ namespace StudyBuddy.App.Api
         public async Task<ChallengeViewModel> AcceptFromQrCode(string code)
         {
             var rh = new WebRequestHelper(api.Authentication.Token);
-            return await rh.Load<ChallengeViewModel>(base_url + "Challenge/AcceptFromQrCode", HttpMethod.Post, code);
+            return await rh.Load<ChallengeViewModel>(Settings.ApiUrl + "Challenge/AcceptFromQrCode", HttpMethod.Post, code);
         }
 
         public async Task<ChallengeViewModel> GetById(int challenge_id)
         {
             var rh = new WebRequestHelper(api.Authentication.Token);
-            return await rh.Load<ChallengeViewModel>(base_url + "Challenge/" + challenge_id, HttpMethod.Get);
+            return await rh.Load<ChallengeViewModel>(Settings.ApiUrl + "Challenge/" + challenge_id, HttpMethod.Get);
         }
 
         public async Task<bool> Accept(ChallengeViewModel cvm)
         {
             var rh = new WebRequestHelper(api.Authentication.Token);
-            var status = await rh.Load<RequestResult>(base_url + "Challenge/" + cvm.ID + "/Accept", HttpMethod.Post);
+            var status = await rh.Load<RequestResult>(Settings.ApiUrl + "Challenge/" + cvm.ID + "/Accept", HttpMethod.Post);
             if (status == null)
                 return false;
 
@@ -77,7 +75,7 @@ namespace StudyBuddy.App.Api
         public async Task<bool> AcceptWithAddendum(ChallengeViewModel cvm, string prove_addendum)
         {
             var rh = new WebRequestHelper(api.Authentication.Token);
-            var status = await rh.Load<bool>(base_url + "Challenge/" + cvm.ID + "/AcceptWithAddendum", HttpMethod.Post, prove_addendum);
+            var status = await rh.Load<bool>(Settings.ApiUrl + "Challenge/" + cvm.ID + "/AcceptWithAddendum", HttpMethod.Post, prove_addendum);
 
             if (status)
                 api.RaiseChallengeAcceptedEvent(this, cvm);
@@ -94,7 +92,7 @@ namespace StudyBuddy.App.Api
                 UserPosition = location
             };
 
-            var result = await rh.Load<AcceptChallengeByLocationResultDTO>(base_url + "Challenge/AcceptWithLocation", HttpMethod.Post, data);
+            var result = await rh.Load<AcceptChallengeByLocationResultDTO>(Settings.ApiUrl + "Challenge/AcceptWithLocation", HttpMethod.Post, data);
             if (result.Success)
                 api.RaiseChallengeAcceptedEvent(this, cvm);
 
